@@ -1,0 +1,38 @@
+[
+  {
+    "id": "pl1",
+    "skuCode": "ELE-SAM-S23-BLK",
+    "itemName": "S23 Black - 256GB",
+    "standardPurchaseRate": 62000,
+    "standardSalesRate": 74999,
+    "retailerPrice": 71000,
+    "wholesalerPrice": 68000,
+    "consumerPrice": 74999,
+    "effectiveFrom": "2024-01-01",
+    "sampleSetId": "priceList"
+  },
+  {
+    "id": "pl2",
+    "skuCode": "FUR-CHR-MSH-BLU",
+    "itemName": "Mesh Office Chair - Cobalt",
+    "standardPurchaseRate": 5200,
+    "standardSalesRate": 8990,
+    "retailerPrice": 8200,
+    "wholesalerPrice": 7500,
+    "consumerPrice": 8990,
+    "effectiveFrom": "2024-01-01",
+    "sampleSetId": "priceList"
+  },
+  {
+    "id": "pl3",
+    "skuCode": "DELL-LAT-5420-S",
+    "itemName": "Dell Latitude 5420",
+    "standardPurchaseRate": 54000,
+    "standardSalesRate": 72000,
+    "retailerPrice": 68000,
+    "wholesalerPrice": 65000,
+    "consumerPrice": 72000,
+    "effectiveFrom": "2024-02-01",
+    "sampleSetId": "priceList"
+  }
+]

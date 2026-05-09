@@ -1,0 +1,12 @@
+[
+    {
+        "id": "cn-1",
+        "type": "Credit Note",
+        "date": { "value": "2024-04-15" },
+        "partyName": { "value": "Alpha Co" },
+        "amount": { "value": "500" },
+        "ledger": { "value": "Sales Return" },
+        "narration": { "value": "Goods returned by customer" },
+        "items": []
+    }
+]

@@ -1,0 +1,23 @@
+{
+    "name": "GSTR-3B Summary",
+    "description": "Monthly Return Data",
+    "outward_supplies": {
+        "taxable": 3500000.00,
+        "cgst": 310000.00,
+        "sgst": 310000.00,
+        "igst": 90000.00
+    },
+    "eligible_itc": {
+        "import_goods": 50000.00,
+        "import_services": 20000.00,
+        "inward_supplies": 450000.00
+    },
+    "exempted_nil_rated": {
+        "inter_state": 15000.00,
+        "intra_state": 4000.00
+    },
+    "payment_of_tax": {
+        "paid_through_itc": 450000.00,
+        "paid_in_cash": 260000.00
+    }
+}

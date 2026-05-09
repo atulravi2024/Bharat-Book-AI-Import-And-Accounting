@@ -1,0 +1,6 @@
+[
+  { "id": "sg1", "name": "Finished Goods", "description": "Ready for sale items and completed products" },
+  { "id": "sg2", "name": "Raw Materials", "description": "Input materials for production processes" },
+  { "id": "sg3", "name": "Consumables", "description": "Maintenance, repair, and office consumables" },
+  { "id": "sg4", "name": "Work in Progress", "description": "Semi-finished products in the production line" }
+]

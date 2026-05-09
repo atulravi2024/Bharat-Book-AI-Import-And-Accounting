@@ -1,0 +1,5 @@
+[
+  { "id": "cc1", "name": "Marketing Department", "category": "General", "description": "Corporate marketing and advertising costs" },
+  { "id": "cc2", "name": "Project Alpha", "category": "Projects", "description": "Ongoing infrastructure project" },
+  { "id": "cc3", "name": "Sales Team - North", "category": "Sales", "description": "Northern region sales operations" }
+]

@@ -1,0 +1,56 @@
+
+import React from 'react';
+import { InfoIcon } from '../icons/IconComponents';
+
+interface PrivacySettingsProps {
+    toggles: {
+        anonymousReporting: boolean;
+    };
+    handleToggle: (key: any) => void;
+}
+
+export const PrivacySettings: React.FC<PrivacySettingsProps> = ({ toggles, handleToggle }) => {
+    return (
+        <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-premium-slate-100 relative">
+            <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-6 flex items-center">
+                <InfoIcon className="mr-3 text-blue-600" /> Privacy & Compliance
+            </h3>
+            <div className="space-y-6">
+                <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                    <h4 className="font-bold text-gray-900 text-sm mb-4 uppercase tracking-widest">Data Retention</h4>
+                    <div className="space-y-4">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <p className="text-xs text-gray-800 font-bold">Keep audit logs for</p>
+                                <p className="text-[10px] text-gray-500 font-medium max-w-sm mt-1">Duration to retain history of who uploaded maps and when AI changed its classification confidence.</p>
+                            </div>
+                            <select className="bg-white border border-gray-200 rounded-lg text-xs font-bold p-2.5 focus:ring-1 focus:ring-blue-100">
+                                <option>1 Year</option>
+                                <option>3 Years</option>
+                                <option>7 Years (Statutory)</option>
+                                <option>10 Years (Extended)</option>
+                                <option>Permanent</option>
+                            </select>
+                        </div>
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4 border-t border-gray-100">
+                            <div>
+                                <p className="text-xs text-gray-800 font-bold">Anonymous usage reporting</p>
+                                <p className="text-[10px] text-gray-500 font-medium max-w-sm mt-1">Help improve the AI models by securely sharing purely structure-level extraction logic (no PII or custom data).</p>
+                            </div>
+                            <div onClick={() => handleToggle('anonymousReporting')} className={`${toggles.anonymousReporting ? 'bg-blue-600' : 'bg-gray-300'} w-10 h-5 rounded-full relative cursor-pointer transition-all`}>
+                                <div className={`bg-white w-3 h-3 rounded-full absolute top-1 ${toggles.anonymousReporting ? 'right-1' : 'left-1'} shadow-sm transition-all`}></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="p-5 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                    <div>
+                        <p className="font-bold text-gray-900 text-sm">Export Enterprise Data</p>
+                        <p className="text-xs text-gray-500 font-medium mt-1">Download all your records in standard JSON/CSV format.</p>
+                    </div>
+                    <button className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl text-xs font-bold hover:bg-gray-100 transition-colors">Request Export</button>
+                </div>
+            </div>
+        </div>
+    );
+};

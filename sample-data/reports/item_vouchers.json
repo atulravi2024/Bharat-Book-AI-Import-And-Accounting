@@ -1,0 +1,23 @@
+[
+    {
+        "id": "itm-1",
+        "type": "Purchase",
+        "date": { "value": "2024-04-20" },
+        "partyName": { "value": "Global Tech Suppliers" },
+        "amount": { "value": "250000" },
+        "items": [
+            { "name": { "value": "Laptop Dell Latitude" }, "rate": { "value": "45000" }, "quantity": { "value": "5" }, "uom": { "value": "Nos" }, "taxRate": { "value": "18" }, "total": { "value": "225000" } },
+            { "name": { "value": "Logitech Mouse" }, "rate": { "value": "500" }, "quantity": { "value": "50" }, "uom": { "value": "Nos" }, "taxRate": { "value": "12" }, "total": { "value": "25000" } }
+        ]
+    },
+    {
+        "id": "itm-2",
+        "type": "Sales",
+        "date": { "value": "2024-04-22" },
+        "partyName": { "value": "New Age Solutions" },
+        "amount": { "value": "55000" },
+        "items": [
+            { "name": { "value": "Laptop Dell Latitude" }, "rate": { "value": "55000" }, "quantity": { "value": "1" }, "uom": { "value": "Nos" }, "taxRate": { "value": "18" }, "total": { "value": "55000" } }
+        ]
+    }
+]

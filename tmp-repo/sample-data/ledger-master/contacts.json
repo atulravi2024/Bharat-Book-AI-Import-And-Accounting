@@ -1,0 +1,28 @@
+[
+  { 
+    "id": "con1", 
+    "name": "Arjun Sharma", 
+    "contactType": "External", 
+    "role": "Procurement Manager", 
+    "email": "arjun@reliance.com", 
+    "phone": "9876543210", 
+    "linkedParty": "Reliance Industries Ltd" 
+  },
+  { 
+    "id": "con2", 
+    "name": "Priya Verma", 
+    "contactType": "External", 
+    "role": "Accountant", 
+    "email": "priya@tcsmumbai.com", 
+    "phone": "9123456789", 
+    "linkedParty": "Tata Consultancy Services" 
+  },
+  { 
+    "id": "con3", 
+    "name": "Suresh Raina", 
+    "contactType": "Internal", 
+    "role": "Inventory Supervisor", 
+    "designation": "Manager", 
+    "department": "Warehouse" 
+  }
+]

@@ -1,0 +1,15 @@
+[
+    {
+        "id": "raw-bnk-1",
+        "type": "Bank Statement",
+        "isSample": true,
+        "sampleSetId": "raw_bank",
+        "date": { "value": "2024-04-05" },
+        "narration": { "value": "NEFT/XYZ/TRANSFER" },
+        "depositAmount": { "value": "15000" },
+        "amount": { "value": "15000" },
+        "closingBalance": { "value": "539550" },
+        "origin": "bank",
+        "items": []
+    }
+]

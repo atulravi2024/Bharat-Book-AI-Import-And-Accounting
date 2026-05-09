@@ -1,0 +1,13 @@
+[
+    {
+        "id": "pr-1",
+        "type": "Purchase",
+        "date": { "value": "2024-04-11" },
+        "partyName": { "value": "Beta Inc" },
+        "amount": { "value": "5000" },
+        "ledger": { "value": "Purchase A/c" },
+        "paymentMode": { "value": "BANK" },
+        "narration": { "value": "Purchase via Bank" },
+        "items": []
+    }
+]

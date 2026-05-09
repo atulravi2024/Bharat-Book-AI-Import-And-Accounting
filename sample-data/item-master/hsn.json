@@ -1,0 +1,8 @@
+[
+  { "id": "hsn1", "code": "8471", "rate": 18, "type": "Goods", "description": "Automatic data processing machines and units thereof" },
+  { "id": "hsn2", "code": "8517", "rate": 12, "type": "Goods", "description": "Telephone sets, including smartphones and other voice/image transmission apparatus" },
+  { "id": "hsn3", "code": "9403", "rate": 18, "type": "Goods", "description": "Other furniture and parts thereof" },
+  { "id": "hsn4", "code": "4819", "rate": 12, "type": "Goods", "description": "Cartons, boxes, cases, bags and other packing containers, of paper" },
+  { "id": "hsn5", "code": "9983", "rate": 18, "type": "Services", "description": "Other professional, technical and business services" },
+  { "id": "hsn6", "code": "8518", "rate": 18, "type": "Goods", "description": "Microphones, loudspeakers, headphones" }
+]

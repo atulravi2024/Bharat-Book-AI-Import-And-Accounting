@@ -1,0 +1,39 @@
+[
+    {
+        "id": "bnk-1",
+        "type": "Bank Statement",
+        "isSample": true,
+        "sampleSetId": "bank_vouchers",
+        "date": { "value": "2024-04-01" },
+        "narration": { "value": "ATM WITHDRAWAL - BANK" },
+        "withdrawalAmount": { "value": "10000" },
+        "amount": { "value": "10000" },
+        "closingBalance": { "value": "450000" },
+        "origin": "bank",
+        "items": []
+    },
+    {
+        "id": "bnk-2",
+        "type": "Bank Statement",
+        "isSample": true,
+        "sampleSetId": "bank_vouchers",
+        "date": { "value": "2024-04-02" },
+        "narration": { "value": "UPI/93201923/GROCERY STORE" },
+        "withdrawalAmount": { "value": "450" },
+        "amount": { "value": "450" },
+        "closingBalance": { "value": "449550" },
+        "origin": "bank",
+        "items": []
+    },
+    {
+        "id": "bnk-3",
+        "type": "Bank Statement",
+        "date": { "value": "2024-04-03" },
+        "narration": { "value": "TRF-FROM-SALARY-DEPT" },
+        "depositAmount": { "value": "75000" },
+        "amount": { "value": "75000" },
+        "closingBalance": { "value": "524550" },
+        "origin": "bank",
+        "items": []
+    }
+]

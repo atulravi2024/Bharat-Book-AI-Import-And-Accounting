@@ -1,0 +1,28 @@
+[
+  { 
+    "id": "b1", 
+    "name": "HDFC Bank Current Account", 
+    "group": "Bank Accounts", 
+    "openingBalance": 1250000, 
+    "balanceType": "Debit",
+    "bankDetails": {
+      "accountNo": "50200012345678",
+      "ifsc": "HDFC0000123",
+      "bankName": "HDFC Bank",
+      "branchName": "Fort Branch, Mumbai"
+    }
+  },
+  { 
+    "id": "b2", 
+    "name": "SBI Savings Account", 
+    "group": "Bank Accounts", 
+    "openingBalance": 45000, 
+    "balanceType": "Debit",
+    "bankDetails": {
+      "accountNo": "33445566778",
+      "ifsc": "SBIN0000456",
+      "bankName": "State Bank of India",
+      "branchName": "Connaught Place, Delhi"
+    }
+  }
+]
