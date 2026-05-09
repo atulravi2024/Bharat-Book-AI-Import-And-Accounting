@@ -282,24 +282,24 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Financial Reports</h1>
-          <p className="text-gray-500">Analyze your business health with AI-generated insights</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Financial Reports</h1>
+          <p className="text-gray-500 dark:text-gray-400">Analyze your business health with AI-generated insights</p>
         </div>
-        <div className="flex items-center space-x-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100">
-           <button 
+        <div className="flex items-center space-x-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700">
+           <button
              onClick={() => setDateRangeMode(m => m === 'fy' ? 'custom' : 'fy')}
-             className="flex items-center space-x-2 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg mr-2"
+             className="flex items-center space-x-2 text-xs font-bold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-3 py-1.5 rounded-lg mr-2"
            >
              <Calendar size={14} />
              <span>{dateRangeMode === 'fy' ? 'FY Period' : 'Custom Period'}</span>
            </button>
-           
+
            {dateRangeMode === 'custom' && (
              <>
-               <div className="flex items-center px-3 border-r">
-                 <input 
-                  type="date" 
-                  className="text-xs font-medium outline-none text-gray-600" 
+               <div className="flex items-center px-3 border-r border-gray-200 dark:border-gray-600">
+                 <input
+                  type="date"
+                  className="text-xs font-medium outline-none text-gray-600 dark:text-gray-300 bg-transparent" 
                   value={dateRange.from}
                   onChange={e => setDateRange(prev => ({ ...prev, from: e.target.value }))}
                  />

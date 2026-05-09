@@ -348,22 +348,22 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">GST Reports</h1>
-          <p className="text-gray-500">View and analyze your Goods and Services Tax compliance</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">GST Reports</h1>
+          <p className="text-gray-500 dark:text-gray-400">View and analyze your Goods and Services Tax compliance</p>
         </div>
-        <div className="flex bg-white items-center p-1 md:p-1.5 rounded-lg border border-gray-200 shadow-sm w-fit">
-           <div className="flex items-center px-2 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-bold text-gray-600 bg-gray-50 rounded-md whitespace-nowrap">
+        <div className="flex bg-white dark:bg-gray-800 items-center p-1 md:p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-none w-fit">
+           <div className="flex items-center px-2 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-md whitespace-nowrap">
                <Calendar size={14} className="mr-1.5 text-gray-400 hidden sm:block" />
-               {quickDateOption === 'currentMonth' ? 'Current Month' : 
-                quickDateOption === 'lastMonth' ? 'Last Month' : 
-                quickDateOption === 'currentYear' ? 'Current Year' : 
-                quickDateOption === 'lastYear' ? 'Last Year' : 
+               {quickDateOption === 'currentMonth' ? 'Current Month' :
+                quickDateOption === 'lastMonth' ? 'Last Month' :
+                quickDateOption === 'currentYear' ? 'Current Year' :
+                quickDateOption === 'lastYear' ? 'Last Year' :
                 'Custom Period'}
            </div>
            <div className="flex items-center px-2">
-             <input 
-              type="date" 
-              className="text-[10px] sm:text-xs font-medium outline-none text-gray-700 bg-transparent cursor-pointer" 
+             <input
+              type="date"
+              className="text-[10px] sm:text-xs font-medium outline-none text-gray-700 dark:text-gray-300 bg-transparent cursor-pointer"
               value={dateRange.from}
               onChange={e => {
                   setQuickDateOption(null);
