@@ -6,13 +6,15 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Outfit", sans-serif;
-  
+
   --color-premium-slate-50: #f8fafc;
   --color-premium-slate-100: #f1f5f9;
   --color-premium-slate-200: #e2e8f0;
   --color-premium-blue-500: #3b82f6;
   --color-premium-blue-600: #2563eb;
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer utilities {
   .text-transform-uppercase, .text-transform-uppercase * { text-transform: uppercase !important; }
