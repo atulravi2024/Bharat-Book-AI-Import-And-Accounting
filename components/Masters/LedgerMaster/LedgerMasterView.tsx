@@ -162,8 +162,8 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-6 animate-in fade-in duration-500">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="flex border-b border-gray-200 bg-gray-50 overflow-x-auto scrollbar-none justify-between items-center pr-4">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-x-auto scrollbar-none justify-between items-center pr-4">
                     <div className="flex">
                         {[
                             { id: 'parties', label: 'Customers' },
@@ -175,11 +175,11 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
                             { id: 'warehouses', label: 'Locations' },
                             { id: 'costCenters', label: 'Cost Centers' },
                         ].map(tab => (
-                            <button 
+                            <button
                                 key={tab.id}
                                 id={`ledger-master-tab-${tab.id}`}
                                 onClick={() => setActiveTab(tab.id as MasterTab)}
-                                className={`px-6 py-4 text-sm font-bold transition-all relative whitespace-nowrap ${activeTab === tab.id ? 'text-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}
+                                className={`px-6 py-4 text-sm font-bold transition-all relative whitespace-nowrap ${activeTab === tab.id ? 'text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-700' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
                             >
                                 {tab.label}
                                 {activeTab === tab.id && <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600"></div>}
