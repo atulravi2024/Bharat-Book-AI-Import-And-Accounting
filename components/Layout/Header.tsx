@@ -17,6 +17,11 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
   const { theme, toggleTheme } = useTheme();
 
+  const handleToggle = () => {
+    console.log('Theme toggle clicked, current theme:', theme);
+    toggleTheme();
+  };
+
   return (
     <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-premium-slate-100 dark:border-gray-700 sticky top-0 z-10">
       <div className="mx-auto px-4 sm:px-6 lg:px-10">
@@ -60,11 +65,11 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
               <NotificationsIcon className="scale-110" />
             </button>
             <button
-              onClick={toggleTheme}
+              onClick={handleToggle}
               className="w-12 h-12 flex items-center justify-center rounded-2xl text-gray-400 hover:bg-premium-slate-50 dark:hover:bg-gray-700 hover:text-amber-500 transition-all"
               title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
             >
-              {theme === 'light' ? <MoonIcon className="scale-110" /> : <SunIcon className="scale-110" />}
+              <span className="text-xl">{theme === 'light' ? '🌙' : '☀️'}</span>
             </button>
             <div className="h-8 w-px bg-premium-slate-100 dark:bg-gray-600 mx-2"></div>
             <button className="flex items-center p-1 rounded-2xl text-gray-500 hover:bg-premium-slate-50 dark:hover:bg-gray-700 transition-all border border-transparent hover:border-premium-slate-100 dark:hover:border-gray-500">
