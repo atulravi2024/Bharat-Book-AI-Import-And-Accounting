@@ -25,6 +25,17 @@ import { ItemEditModal } from './components/ItemEditModal';
 import { InventoryEditModal } from './components/InventoryEditModal';
 import { InventoryHelpModal } from './components/InventoryHelpModal';
 
+// Safe JSON parse helper
+const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
+  if (!jsonString) return defaultValue;
+  try {
+    return JSON.parse(jsonString) as T;
+  } catch (e) {
+    console.error('JSON parse error:', e);
+    return defaultValue;
+  }
+};
+
 interface InventoryEntryViewProps {
   defaultType?: string;
   itemMasters?: any[];
@@ -472,7 +483,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
       isDraft,
       createdAt: new Date().toISOString()
     };
-    const saved = JSON.parse(localStorage.getItem('bharat_book_inventory_entries') || '[]');
+    const saved = safeJsonParse(localStorage.getItem('bharat_book_inventory_entries'), [] as any[]);
     if (currentRecordId && saved.some((v: any) => v.id === currentRecordId)) {
         const idx = saved.findIndex((v: any) => v.id === currentRecordId);
         saved[idx] = entry;
@@ -678,7 +689,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
     const allEntriesRaw = localStorage.getItem('bharat_book_inventory_entries');
     if (!allEntriesRaw) return;
     
-    const allEntries = JSON.parse(allEntriesRaw) as any[];
+    const allEntries = safeJsonParse(allEntriesRaw, [] as any[]);
     const ofType = allEntries.filter(v => v.type === activeTab);
 
     if (ofType.length === 0) {
@@ -886,7 +897,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
   const handleConfirmDelete = () => {
     const savedStr = localStorage.getItem('bharat_book_inventory_entries');
     if (savedStr) {
-      let saved: any[] = JSON.parse(savedStr);
+      let saved: any[] = safeJsonParse(savedStr, [] as any[]);
       saved = saved.filter((v: any) => v.id !== currentRecordId);
       localStorage.setItem('bharat_book_inventory_entries', JSON.stringify(saved));
     }

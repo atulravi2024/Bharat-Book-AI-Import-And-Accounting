@@ -707,7 +707,7 @@ export const DebitNoteVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType,
       createdAt: initialVoucher?.createdAt || new Date().toISOString()
     };
     
-    const saved = JSON.parse(localStorage.getItem('bharat_book_all_vouchers') || '[]');
+    const saved = safeJsonParse(localStorage.getItem('bharat_book_all_vouchers'), [] as any[]);
     const lookupId = currentRecordId || initialVoucher?.id;
     if (lookupId && saved.some((v: any) => v.id === lookupId)) {
         const idx = saved.findIndex((v: any) => v.id === lookupId);
@@ -1752,12 +1752,13 @@ export const DebitNoteVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType,
                     }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px]" />
                   </td>
                   <td className="px-4 py-2">
-                    <input type="number" placeholder="0.00" step="0.01" value={row.rateWithTax || ''} onChange={(e) => { 
-                      const r = [...rows]; r[index].rateWithTax = e.target.value; 
+                    <input type="number" placeholder="0.00" step="0.01" value={row.rateWithTax || ''} onChange={(e) => {
+                      const r = [...rows]; r[index].rateWithTax = e.target.value;
                       const tax = parseFloat(r[index].tax || '18');
                       const rwt = parseFloat(e.target.value) || 0;
-                      r[index].rate = (rwt / (1 + tax / 100)).toFixed(2);
-                      setRows(r); 
+                      const divisor = 1 + tax / 100;
+                      r[index].rate = divisor !== 0 ? (rwt / divisor).toFixed(2) : '0';
+                      setRows(r);
                     }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[90px]" />
                   </td>
                   <td className="px-4 py-2">

@@ -19,6 +19,17 @@ import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { Notification, NotificationType } from '../../../ui/Notification';
 
+// Safe JSON parse helper
+const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
+  if (!jsonString) return defaultValue;
+  try {
+    return JSON.parse(jsonString) as T;
+  } catch (e) {
+    console.error('JSON parse error:', e);
+    return defaultValue;
+  }
+};
+
 interface VoucherEntryViewProps {
   defaultType?: string;
   initialVoucher?: any;
@@ -693,7 +704,7 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
       createdAt: initialVoucher?.createdAt || new Date().toISOString()
     };
     
-    const saved = JSON.parse(localStorage.getItem('bharat_book_all_vouchers') || '[]');
+    const saved = safeJsonParse(localStorage.getItem('bharat_book_all_vouchers'), [] as any[]);
     const lookupId = currentRecordId || initialVoucher?.id;
     if (lookupId && saved.some((v: any) => v.id === lookupId)) {
         const idx = saved.findIndex((v: any) => v.id === lookupId);

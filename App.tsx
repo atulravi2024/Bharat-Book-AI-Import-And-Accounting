@@ -38,6 +38,17 @@ const STOCK_GROUP_MASTERS_KEY = 'bharat_book_stock_group_masters';
 const COST_CENTER_MASTERS_KEY = 'bharat_book_cost_center_masters';
 const ACCOUNT_GROUP_MASTERS_KEY = 'bharat_book_account_group_masters';
 
+// Safe JSON parse helper - returns default value on parse failure
+const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
+  if (!jsonString) return defaultValue;
+  try {
+    return JSON.parse(jsonString) as T;
+  } catch (e) {
+    console.error('JSON parse error:', e);
+    return defaultValue;
+  }
+};
+
 const App: React.FC = () => {
   const [view, setView] = useState<MainView>(() => {
     const saved = localStorage.getItem('bharat_book_navigation_defaults');
@@ -85,8 +96,7 @@ const App: React.FC = () => {
   const [inventoryEntryActiveTab, setInventoryEntryActiveTab] = useState<string | null>(() => getSubPageForView('inventory-entry'));
   const [settingsActiveTab, setSettingsActiveTab] = useState<string | null>(() => getSubPageForView('settings'));
   const [activeSamples, setActiveSamples] = useState<string[]>(() => {
-    const saved = localStorage.getItem('bharat_book_active_samples');
-    return saved ? JSON.parse(saved) : ['ledgers', 'items', 'parties'];
+    return safeJsonParse(localStorage.getItem('bharat_book_active_samples'), ['ledgers', 'items', 'parties']);
   });
   
   useEffect(() => {
@@ -103,9 +113,7 @@ const App: React.FC = () => {
   const [vouchers, setVouchers] = useState<ParsedVoucher[]>([]);
   const [editingVoucher, setEditingVoucher] = useState<any | null>(null);
   const [allVouchers, setAllVouchers] = useState<ParsedVoucher[]>(() => {
-    const saved = localStorage.getItem(ALL_VOUCHERS_KEY);
-    if (saved) return JSON.parse(saved);
-    return [];
+    return safeJsonParse(localStorage.getItem(ALL_VOUCHERS_KEY), [] as ParsedVoucher[]);
   });
   const [voucherType, setVoucherType] = useState<VoucherType>(VoucherType.Purchase);
   const [parsingSettings, setParsingSettings] = useState<ParsingSettings | undefined>(undefined);
@@ -113,60 +121,27 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [hasDraft, setHasDraft] = useState(false);
   
-  const [partyMasters, setPartyMasters] = useState(() => {
-    const saved = localStorage.getItem(PARTY_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
-  
-  const [ledgerMasters, setLedgerMasters] = useState(() => {
-    const saved = localStorage.getItem(LEDGER_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [partyMasters, setPartyMasters] = useState(() => safeJsonParse(localStorage.getItem(PARTY_MASTERS_KEY), []));
 
-  const [itemMasters, setItemMasters] = useState(() => {
-    const saved = localStorage.getItem(ITEM_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [ledgerMasters, setLedgerMasters] = useState(() => safeJsonParse(localStorage.getItem(LEDGER_MASTERS_KEY), []));
 
-  const [uomMasters, setUomMasters] = useState(() => {
-    const saved = localStorage.getItem(UOM_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [itemMasters, setItemMasters] = useState(() => safeJsonParse(localStorage.getItem(ITEM_MASTERS_KEY), []));
 
-  const [gstMasters, setGstMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(GST_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [uomMasters, setUomMasters] = useState(() => safeJsonParse(localStorage.getItem(UOM_MASTERS_KEY), []));
 
-  const [brandMasters, setBrandMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(BRAND_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [gstMasters, setGstMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(GST_MASTERS_KEY), []));
 
-  const [categoryMasters, setCategoryMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(CATEGORY_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [brandMasters, setBrandMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(BRAND_MASTERS_KEY), []));
 
-  const [gradeMasters, setGradeMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(GRADE_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [categoryMasters, setCategoryMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(CATEGORY_MASTERS_KEY), []));
 
-  const [assertionCategoryMasters, setAssertionCategoryMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(ASSERTION_CATEGORY_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [gradeMasters, setGradeMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(GRADE_MASTERS_KEY), []));
 
-  const [assertionCodeMasters, setAssertionCodeMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(ASSERTION_CODE_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [assertionCategoryMasters, setAssertionCategoryMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(ASSERTION_CATEGORY_MASTERS_KEY), []));
 
-  const [contactMasters, setContactMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(CONTACT_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [assertionCodeMasters, setAssertionCodeMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(ASSERTION_CODE_MASTERS_KEY), []));
+
+  const [contactMasters, setContactMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(CONTACT_MASTERS_KEY), []));
 
   // Ensure active samples are loaded on mount and cleanup legacy hard-coded data
   useEffect(() => {
@@ -182,7 +157,7 @@ const App: React.FC = () => {
             let hasAnyData = false;
             keysToClear.forEach(key => {
                 const data = localStorage.getItem(key);
-                if (data && JSON.parse(data).length > 0) hasAnyData = true;
+                if (data && safeJsonParse(data, []).length > 0) hasAnyData = true;
             });
 
             if (hasAnyData) {
@@ -231,65 +206,21 @@ const App: React.FC = () => {
     reloadSamples();
   }, []);
 
-  const [skuMasters, setSkuMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem('bharat_book_sku_masters');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [skuMasters, setSkuMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_sku_masters'), []));
 
-  const [priceListMasters, setPriceListMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem('bharat_book_price_list_masters');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [priceListMasters, setPriceListMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_price_list_masters'), []));
 
-  const [weightMasters, setWeightMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem('bharat_book_weight_masters');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [weightMasters, setWeightMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_weight_masters'), []));
 
-  const [volumeMasters, setVolumeMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem('bharat_book_volume_masters');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [volumeMasters, setVolumeMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_volume_masters'), []));
 
-  const [colorMasters, setColorMasters] = useState<ColorMaster[]>(() => {
-    try {
-      const saved = localStorage.getItem('bharat_book_color_masters');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.error('Error parsing color masters:', e);
-      return [];
-    }
-  });
+  const [colorMasters, setColorMasters] = useState<ColorMaster[]>(() => safeJsonParse(localStorage.getItem('bharat_book_color_masters'), [] as ColorMaster[]));
 
-  const [sizeMasters, setSizeMasters] = useState<SizeMaster[]>(() => {
-    try {
-      const saved = localStorage.getItem('bharat_book_size_masters');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.error('Error parsing size masters:', e);
-      return [];
-    }
-  });
+  const [sizeMasters, setSizeMasters] = useState<SizeMaster[]>(() => safeJsonParse(localStorage.getItem('bharat_book_size_masters'), [] as SizeMaster[]));
 
-  const [variantMasters, setVariantMasters] = useState<any[]>(() => {
-    try {
-      const saved = localStorage.getItem('bharat_book_variant_masters');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.error('Error parsing variant masters:', e);
-      return [];
-    }
-  });
+  const [variantMasters, setVariantMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_variant_masters'), []));
 
-  const [dimensionMasters, setDimensionMasters] = useState<DimensionMaster[]>(() => {
-    try {
-      const saved = localStorage.getItem('bharat_book_dimension_masters');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.error('Error parsing dimension masters:', e);
-      return [];
-    }
-  });
+  const [dimensionMasters, setDimensionMasters] = useState<DimensionMaster[]>(() => safeJsonParse(localStorage.getItem('bharat_book_dimension_masters'), [] as DimensionMaster[]));
 
   useEffect(() => {
     localStorage.setItem('bharat_book_sku_masters', JSON.stringify(skuMasters));
@@ -323,25 +254,13 @@ const App: React.FC = () => {
     localStorage.setItem('bharat_book_dimension_masters', JSON.stringify(dimensionMasters));
   }, [dimensionMasters]);
 
-  const [warehouseMasters, setWarehouseMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(WAREHOUSE_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [warehouseMasters, setWarehouseMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(WAREHOUSE_MASTERS_KEY), []));
 
-  const [stockGroupMasters, setStockGroupMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(STOCK_GROUP_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [stockGroupMasters, setStockGroupMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(STOCK_GROUP_MASTERS_KEY), []));
 
-  const [costCenterMasters, setCostCenterMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(COST_CENTER_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [costCenterMasters, setCostCenterMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(COST_CENTER_MASTERS_KEY), []));
 
-  const [accountGroupMasters, setAccountGroupMasters] = useState<any[]>(() => {
-    const saved = localStorage.getItem(ACCOUNT_GROUP_MASTERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [accountGroupMasters, setAccountGroupMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(ACCOUNT_GROUP_MASTERS_KEY), []));
 
   useEffect(() => {
     localStorage.setItem(PARTY_MASTERS_KEY, JSON.stringify(partyMasters));
@@ -438,20 +357,13 @@ const App: React.FC = () => {
   };
 
   const resumeDraft = () => {
-    const savedDraft = localStorage.getItem(DRAFT_KEY);
-    if (savedDraft) {
-      try {
-        const draft = JSON.parse(savedDraft);
-        setVouchers(draft.vouchers);
-        setVoucherType(draft.voucherType);
-        if (draft.parsingSettings) setParsingSettings(draft.parsingSettings);
-        setStep('correction');
-        setHasDraft(false);
-      } catch (e) {
-        console.error("Failed to parse draft", e);
-        localStorage.removeItem(DRAFT_KEY);
-        setHasDraft(false);
-      }
+    const draft = safeJsonParse(localStorage.getItem(DRAFT_KEY), null);
+    if (draft) {
+      setVouchers(draft.vouchers || []);
+      setVoucherType(draft.voucherType || VoucherType.Purchase);
+      if (draft.parsingSettings) setParsingSettings(draft.parsingSettings);
+      setStep('correction');
+      setHasDraft(false);
     }
   };
 
