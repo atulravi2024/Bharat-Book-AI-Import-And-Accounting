@@ -160,10 +160,10 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-x-hidden">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Item Reports</h1>
-          <p className="text-gray-500 font-medium uppercase text-[10px] tracking-wider mt-1">Inventory movement and rate analysis</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Item Reports</h1>
+          <p className="text-gray-500 font-medium uppercase text-[10px] tracking-wider mt-1 dark:text-gray-400">Inventory movement and rate analysis</p>
         </div>
-        <div className="flex items-center space-x-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100">
+        <div className="flex items-center space-x-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100 dark:bg-gray-800 dark:border-gray-800">
            <div className="flex items-center px-3 border-r">
              <Calendar size={16} className="text-gray-400 mr-2" />
              <input 
@@ -186,7 +186,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
       </header>
 
       {/* Sub-page Navigation Tabs */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-800">
         <div className="flex border-b overflow-x-auto whitespace-nowrap bg-gray-50/50 scrollbar-none">
           {[
             { id: 'summary', label: 'Stock Summary', icon: List },
@@ -254,7 +254,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
             />
           )}
 
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg text-[10px] text-gray-500 italic">
+          <div className="mt-4 p-4 bg-gray-50 rounded-lg text-[10px] text-gray-500 italic dark:bg-gray-900 dark:text-gray-400">
             * All data is processed in real-time from your vouchers. Report updates automatically as new data is imported.
           </div>
         </div>

@@ -67,9 +67,9 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
   return (
     <>
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4 animate-in fade-in duration-200">
-        <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl p-0 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200">
-          <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50">
-            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl p-0 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200 dark:bg-gray-800">
+          <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
+            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2 dark:text-white">
               <ClipboardList size={20} className="text-blue-500" /> {title}
             </h3>
             <div className="flex items-center gap-2">
@@ -87,7 +87,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
           
           <div className="overflow-y-auto flex-1 p-2">
             {historyDocs.length === 0 ? (
-              <div className="text-sm text-gray-500 py-16 text-center">
+              <div className="text-sm text-gray-500 py-16 text-center dark:text-gray-400">
                 <p>No saved entries found in local history.</p>
               </div>
             ) : (
@@ -99,18 +99,18 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
                       onSelectRecord(doc);
                       onClose();
                     }}
-                    className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-xl hover:shadow-md hover:border-blue-200 cursor-pointer transition-all group"
+                    className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-xl hover:shadow-md hover:border-blue-200 cursor-pointer transition-all group dark:bg-gray-800 dark:border-gray-800"
                   >
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-bold text-gray-900">
+                        <span className="font-bold text-gray-900 dark:text-white">
                            {doc.header?.voucherNumber || doc.header?.entryNumber || 'Draft Entry'}
                         </span>
-                        <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-md font-medium uppercase tracking-wider">
+                        <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-md font-medium uppercase tracking-wider dark:bg-gray-800 dark:text-gray-300">
                            {doc.type || 'Unknown'}
                         </span>
                       </div>
-                      <div className="text-xs text-gray-500 font-medium">
+                      <div className="text-xs text-gray-500 font-medium dark:text-gray-400">
                         Date: {doc.header?.voucherDate || doc.header?.entryDate || 'N/A'} • 
                         Items: {doc.rows?.filter((r: any) => r.item).length || 0}
                       </div>
@@ -124,7 +124,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
                       >
                         <Trash2 size={16} />
                       </button>
-                      <div className="w-px h-4 bg-gray-200"></div>
+                      <div className="w-px h-4 bg-gray-200 dark:bg-gray-700"></div>
                       <button className="flex items-center text-xs font-bold text-blue-600 hover:text-blue-700 p-2">
                         Load <ArrowRight size={14} className="ml-1" />
                       </button>

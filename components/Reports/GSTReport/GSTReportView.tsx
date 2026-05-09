@@ -373,7 +373,7 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
              <span className="mx-1 sm:mx-2 text-gray-300">-</span>
              <input 
               type="date" 
-              className="text-[10px] sm:text-xs font-medium outline-none text-gray-700 bg-transparent cursor-pointer" 
+              className="text-[10px] sm:text-xs font-medium outline-none text-gray-700 bg-transparent cursor-pointer dark:text-gray-200" 
               value={dateRange.to}
               onChange={e => {
                   setQuickDateOption(null);
@@ -384,10 +384,10 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
         </div>
       </header>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6 dark:bg-gray-800 dark:border-gray-800">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
             <div className="flex flex-col">
-              <h2 className="text-lg font-bold text-gray-800 flex items-center">
+              <h2 className="text-lg font-bold text-gray-800 flex items-center dark:text-gray-100">
                 <FileText className="mr-2 text-blue-600" size={20} />
                 {activeTab === 'summary' && 'GSTR1 Summary'}
                 {activeTab === 'filing' && 'GSTR-1 Filing'}
@@ -400,74 +400,74 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                 {activeTab === 'others_report' && 'Other GST Reports'}
                 {activeTab === 'generate_gst' && 'Generate GST Report'}
               </h2>
-              <div className="flex bg-gray-100 p-1 rounded-lg mt-3 w-full gap-1 overflow-x-auto scrollbar-none">
+              <div className="flex bg-gray-100 p-1 rounded-lg mt-3 w-full gap-1 overflow-x-auto scrollbar-none dark:bg-gray-800">
                 <button 
                     id="gst-tab-generate_gst"
                     onClick={() => handleTabChange('generate_gst')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'generate_gst' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'generate_gst' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     Generate GST
                 </button>
                 <button 
                     id="gst-tab-summary"
                     onClick={() => handleTabChange('summary')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'summary' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'summary' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR1 Summary
                 </button>
                 <button 
                     id="gst-tab-filing"
                     onClick={() => handleTabChange('filing')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'filing' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'filing' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR1 Filing
                 </button>
                 <button 
                     id="gst-tab-invoice_detail"
                     onClick={() => handleTabChange('invoice_detail')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'invoice_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'invoice_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR1 Invoice
                 </button>
                 <button 
                     id="gst-tab-hsn_detail"
                     onClick={() => handleTabChange('hsn_detail')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'hsn_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'hsn_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR1 HSN
                 </button>
                 <button 
                     id="gst-tab-gstr2b_report"
                     onClick={() => handleTabChange('gstr2b_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr2b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr2b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR-2B
                 </button>
                 <button 
                     id="gst-tab-gstr3b_report"
                     onClick={() => handleTabChange('gstr3b_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr3b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr3b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR-3B
                 </button>
                 <button 
                     id="gst-tab-gstr9_report"
                     onClick={() => handleTabChange('gstr9_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR-9
                 </button>
                 <button 
                     id="gst-tab-gstr9c_report"
                     onClick={() => handleTabChange('gstr9c_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9c_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9c_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR-9C
                 </button>
                 <button 
                     id="gst-tab-others_report"
                     onClick={() => handleTabChange('others_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'others_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'others_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     Others
                 </button>
@@ -476,14 +476,14 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
             <div className="flex space-x-2 self-start md:self-center">
               <button 
                 onClick={handleExport}
-                className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors"
+                className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300"
                 title="Download Report"
               >
                 <Download size={18} />
               </button>
               <button 
                 onClick={() => window.print()}
-                className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors"
+                className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300"
                 title="Print Report"
               >
                 <Printer size={18} />
@@ -501,9 +501,9 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
         {activeTab === 'gstr9c_report' && <GSTR9CReport useSampleData={useSampleData} onToggleSampleData={setUseSampleData} />}
         {activeTab === 'others_report' && <OtherGSTReports useSampleData={useSampleData} onToggleSampleData={setUseSampleData} />}
         {activeTab === 'generate_gst' && (
-          <div className="p-6 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+          <div className="p-6 bg-gray-50 rounded-xl border border-dashed border-gray-300 dark:bg-gray-900 dark:border-gray-600">
             <div className="mb-4">
-                <h3 className="font-bold text-gray-800">Generate GST Report</h3>
+                <h3 className="font-bold text-gray-800 dark:text-gray-100">Generate GST Report</h3>
             </div>
             <select
                 value={quickDateOption || ''}
@@ -512,7 +512,7 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                          setQuickDate(e.target.value as any);
                     }
                 }}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 block"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 block dark:border-gray-700 dark:bg-gray-800"
             >
                 <option value="">Select Period</option>
                 <option value="currentMonth">Current Month</option>
@@ -523,7 +523,7 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
             <select
                 value={selectedReportType}
                 onChange={(e) => setSelectedReportType(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6 block"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6 block dark:border-gray-700 dark:bg-gray-800"
             >
                 <option value="GSTR-1">GSTR-1</option>
                 <option value="GSTR-2B">GSTR-2B</option>
@@ -552,7 +552,7 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
               >
                   Export
               </button>
-              <label className="flex items-center justify-center space-x-1 cursor-pointer bg-white px-2 py-2 rounded-lg border shadow-sm truncate">
+              <label className="flex items-center justify-center space-x-1 cursor-pointer bg-white px-2 py-2 rounded-lg border shadow-sm truncate dark:bg-gray-800">
                   <input 
                       type="checkbox" 
                       checked={useSampleData} 
@@ -568,11 +568,11 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                       }}
                       className="rounded text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-xs font-bold text-gray-700">Samples</span>
+                  <span className="text-xs font-bold text-gray-700 dark:text-gray-200">Samples</span>
               </label>
             </div>
 
-            <p className="text-sm text-gray-500 mt-4">Generate GST filing reports based on the selected period and company criteria.</p>
+            <p className="text-sm text-gray-500 mt-4 dark:text-gray-400">Generate GST filing reports based on the selected period and company criteria.</p>
           </div>
         )}
       </div>

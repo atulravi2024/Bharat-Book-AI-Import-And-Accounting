@@ -1030,11 +1030,11 @@ const App: React.FC = () => {
     if (view !== 'import') {
         return (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-6 dark:bg-gray-800">
                     <InfoIcon className="text-4xl text-gray-400" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-800 uppercase tracking-widest">{view}</h2>
-                <p className="text-gray-500 mt-2 max-w-sm">This module is currently in development. Please use the "Import" tool to process your records.</p>
+                <h2 className="text-2xl font-bold text-gray-800 uppercase tracking-widest dark:text-gray-100">{view}</h2>
+                <p className="text-gray-500 mt-2 max-w-sm dark:text-gray-400">This module is currently in development. Please use the "Import" tool to process your records.</p>
                 <button 
                     onClick={() => setView('import')}
                     className="mt-8 px-6 py-2 bg-blue-600 text-white rounded-lg font-bold shadow-lg"
@@ -1060,7 +1060,7 @@ const App: React.FC = () => {
                   <span className="text-sm font-medium">You have an unsaved draft from a previous session.</span>
                 </div>
                 <div className="flex space-x-3">
-                  <button onClick={clearDraft} className="text-xs text-gray-500 hover:text-gray-700 font-medium">Discard</button>
+                  <button onClick={clearDraft} className="text-xs text-gray-500 hover:text-gray-700 font-medium dark:text-gray-400">Discard</button>
                   <button onClick={resumeDraft} className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors">
                     <UndoIcon className="mr-2 text-sm" /> Resume Draft
                   </button>

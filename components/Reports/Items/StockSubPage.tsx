@@ -91,8 +91,8 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
     <div className="animate-in fade-in duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <div>
-          <h2 className="text-lg font-bold text-gray-800">{title}</h2>
-          {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
+          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{title}</h2>
+          {description && <p className="text-sm text-gray-500 mt-1 dark:text-gray-400">{description}</p>}
         </div>
         <div className="flex space-x-2">
           <div className="relative group">
@@ -102,19 +102,19 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
               placeholder="Search items..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[200px]"
+              className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[200px] dark:border-gray-700"
             />
           </div>
           <button 
             onClick={onExport}
-            className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors"
+            className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300"
             title="Download Report"
           >
             <Download size={18} />
           </button>
           <button 
             onClick={() => window.print()}
-            className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors"
+            className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300"
             title="Print Report"
           >
             <Printer size={18} />
@@ -123,10 +123,10 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
       </div>
 
       {reportData.length > 0 ? (
-        <div className="overflow-x-auto border border-gray-100 rounded-xl">
+        <div className="overflow-x-auto border border-gray-100 rounded-xl dark:border-gray-800">
           <table className="w-full text-sm text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
+              <tr className="bg-gray-50 border-b border-gray-100 dark:bg-gray-900 dark:border-gray-800">
                 <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest">Item Name</th>
                 <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest">Category</th>
                 <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest text-right">In</th>
@@ -139,10 +139,10 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
             <tbody>
               {reportData.map((item, idx) => (
                 <tr key={idx} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                  <td className="px-4 py-3 font-bold text-gray-800">{item.name}</td>
-                  <td className="px-4 py-3 text-xs text-gray-500 font-medium uppercase tracking-wide">{item.category}</td>
-                  <td className="px-4 py-3 text-right text-gray-600 font-mono">{item.stockIn}</td>
-                  <td className="px-4 py-3 text-right text-gray-600 font-mono">{item.stockOut}</td>
+                  <td className="px-4 py-3 font-bold text-gray-800 dark:text-gray-100">{item.name}</td>
+                  <td className="px-4 py-3 text-xs text-gray-500 font-medium uppercase tracking-wide dark:text-gray-400">{item.category}</td>
+                  <td className="px-4 py-3 text-right text-gray-600 font-mono dark:text-gray-300">{item.stockIn}</td>
+                  <td className="px-4 py-3 text-right text-gray-600 font-mono dark:text-gray-300">{item.stockOut}</td>
                   <td className={`px-4 py-3 text-right font-bold font-mono ${item.currentStock < 0 ? 'text-red-500' : 'text-blue-600'}`}>
                     {item.currentStock} {item.uom}
                   </td>
@@ -158,8 +158,8 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
              <Filter className="text-blue-600" size={32} />
           </div>
-          <h3 className="text-xl font-bold text-gray-800 mb-2">{title} Ready for Processing</h3>
-          <p className="text-gray-500 max-w-sm">
+          <h3 className="text-xl font-bold text-gray-800 mb-2 dark:text-gray-100">{title} Ready for Processing</h3>
+          <p className="text-gray-500 max-w-sm dark:text-gray-400">
             No transaction data found for this report type. Connect your live ERP or upload more vouchers to populate this data.
           </p>
           <button className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">

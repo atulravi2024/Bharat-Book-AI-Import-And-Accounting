@@ -314,7 +314,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                 </nav>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative dark:bg-gray-800 dark:border-gray-700">
                 {selectedIds.length > 0 && (
                     <div className="absolute top-0 inset-x-0 bg-blue-600 text-white p-3 z-30 flex items-center justify-between animate-in slide-in-from-top duration-300">
                         <div className="flex items-center text-sm font-bold">
@@ -329,7 +329,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                         </div>
                     </div>
                 )}
-                <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4 dark:border-gray-800">
                     <div className="relative flex-1 max-w-md">
                         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input 
@@ -337,7 +337,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                             placeholder="Search by Party or Import ID..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all text-sm"
+                            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all text-sm dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         />
                     </div>
                     <div className="flex items-center space-x-2">
@@ -346,13 +346,13 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                 </div>
 
                 <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200" style={{ minWidth: '1100px' }}>
-                        <thead className="bg-gray-50 text-gray-400">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700" style={{ minWidth: '1100px' }}>
+                        <thead className="bg-gray-50 text-gray-400 dark:bg-gray-900">
                             <tr>
                                 <th className="px-6 py-4 text-left">
                                     <input 
                                         type="checkbox" 
-                                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4 dark:border-gray-600"
                                         checked={selectedIds.length === filteredVouchers.length && filteredVouchers.length > 0}
                                         onChange={toggleSelectAll}
                                     />
@@ -367,7 +367,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                 <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-widest">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-100">
+                        <tbody className="bg-white divide-y divide-gray-100 dark:bg-gray-800 dark:divide-gray-800">
                             {filteredVouchers.length > 0 ? (
                                 filteredVouchers.map((voucher) => (
                                     <React.Fragment key={voucher.id}>
@@ -378,7 +378,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                 <div className="flex items-center space-x-3">
                                                     <input 
                                                         type="checkbox" 
-                                                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                                                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4 dark:border-gray-600"
                                                         checked={selectedIds.includes(voucher.id)}
                                                         onChange={() => toggleSelect(voucher.id)}
                                                     />
@@ -393,7 +393,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-blue-600 font-bold">
                                                 {voucher.tempImportId ? `#${voucher.tempImportId}` : `#${voucher.id.includes('copy') ? 'COPY' : (voucher.id.split('-')[1] || '---')}`}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium dark:text-gray-300">
                                                 {String(voucher.date?.value || '-')}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-medium">
@@ -406,7 +406,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                         voucher.paymentMode.value === 'Cheque' ? 'bg-amber-50 text-amber-700 border border-amber-100' :
                                                         voucher.paymentMode.value === 'Auto Debit' ? 'bg-red-50 text-red-700 border border-red-100' :
                                                         'bg-gray-100 text-gray-700 border border-gray-200'
-                                                    }`}>
+                                                    } dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700`}>
                                                         {voucher.paymentMode.value}
                                                     </span>
                                                 ) : (
@@ -415,7 +415,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="flex items-center space-x-2">
-                                                    <div className="flex items-center text-sm font-bold text-gray-800">
+                                                    <div className="flex items-center text-sm font-bold text-gray-800 dark:text-gray-100">
                                                         {String(voucher.partyName?.value || voucher.narration?.value || voucher.fromAccount?.value || 'N/A')}
                                                         <ConfidenceIndicator confidence={voucher.partyName?.confidence || voucher.fromAccount?.confidence} />
                                                     </div>
@@ -426,7 +426,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                     )}
                                                 </div>
                                                 <div className="flex items-center space-x-2 mt-0.5">
-                                                    <div className="flex items-center text-[10px] text-gray-500 font-semibold">
+                                                    <div className="flex items-center text-[10px] text-gray-500 font-semibold dark:text-gray-400">
                                                         {String(voucher.ledger?.value || voucher.debitLedger?.value || voucher.toAccount?.value || '-')}
                                                         <ConfidenceIndicator confidence={voucher.ledger?.confidence || voucher.debitLedger?.confidence || voucher.toAccount?.confidence} />
                                                     </div>
@@ -437,7 +437,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                     )}
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-gray-900 font-mono flex justify-end items-center">
+                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-gray-900 font-mono flex justify-end items-center dark:text-white">
                                                 ₹{Number(voucher.amount?.value || voucher.withdrawalAmount?.value || voucher.depositAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                                                 <ConfidenceIndicator confidence={voucher.amount?.confidence || voucher.withdrawalAmount?.confidence || voucher.depositAmount?.confidence} />
                                             </td>
@@ -451,7 +451,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                     <button 
                                                         onClick={() => onView(voucher)}
                                                         title="View Detail"
-                                                        className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors"
+                                                        className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors dark:hover:bg-gray-600 dark:text-gray-400"
                                                     >
                                                         <VisibilityIcon />
                                                     </button>
@@ -465,14 +465,14 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                     <button 
                                                         onClick={() => onDuplicate(voucher)}
                                                         title="Duplicate"
-                                                        className="p-1.5 rounded-full hover:bg-blue-50 text-gray-500 hover:text-blue-700 transition-colors"
+                                                        className="p-1.5 rounded-full hover:bg-blue-50 text-gray-500 hover:text-blue-700 transition-colors dark:text-gray-400"
                                                     >
                                                         <ContentCopyIcon />
                                                     </button>
                                                     <button 
                                                         onClick={() => setSelectedAuditVoucher(voucher)}
                                                         title="Audit Trail"
-                                                        className="p-1.5 rounded-full hover:bg-blue-50 text-gray-500 hover:text-blue-700 transition-colors"
+                                                        className="p-1.5 rounded-full hover:bg-blue-50 text-gray-500 hover:text-blue-700 transition-colors dark:text-gray-400"
                                                     >
                                                         <HistoryIcon />
                                                     </button>
@@ -502,20 +502,20 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                                 <h4 className="text-[11px] font-black text-blue-600 uppercase tracking-widest mb-2 flex items-center">
                                                                     <CheckCircleIcon size={14} className="mr-2" /> AI Summary & Synthesis
                                                                 </h4>
-                                                                <p className="text-sm text-gray-700 leading-relaxed font-medium">
+                                                                <p className="text-sm text-gray-700 leading-relaxed font-medium dark:text-gray-200">
                                                                     {getAiInsights(voucher).summary}
                                                                 </p>
                                                             </div>
                                                             <div className="grid grid-cols-3 gap-3">
                                                                 {Object.entries(getAiInsights(voucher).keyExtraction || {}).map(([k, val]) => (
-                                                                    <div key={k} className="bg-white p-2 rounded-lg border border-blue-50">
+                                                                    <div key={k} className="bg-white p-2 rounded-lg border border-blue-50 dark:bg-gray-800">
                                                                         <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">{k}</p>
-                                                                        <p className="text-[11px] font-bold text-gray-900">{val}</p>
+                                                                        <p className="text-[11px] font-bold text-gray-900 dark:text-white">{val}</p>
                                                                     </div>
                                                                 ))}
                                                             </div>
                                                         </div>
-                                                        <div className="w-full lg:w-1/3 bg-white p-4 rounded-xl border border-blue-100 shadow-sm self-start">
+                                                        <div className="w-full lg:w-1/3 bg-white p-4 rounded-xl border border-blue-100 shadow-sm self-start dark:bg-gray-800">
                                                             <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 flex items-center">
                                                                 <WarningIcon size={12} className="mr-2 text-amber-500" /> Discrepancies Noted
                                                             </h4>
@@ -556,18 +556,18 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
 
             {selectedAuditVoucher && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-                        <div className="p-6 border-b flex justify-between items-center bg-gray-50">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200 dark:bg-gray-800">
+                        <div className="p-6 border-b flex justify-between items-center bg-gray-50 dark:bg-gray-900">
                             <div className="flex items-center">
                                 <HistoryIcon className="text-blue-600 mr-3 text-2xl" />
                                 <div>
-                                    <h3 className="text-lg font-bold text-gray-800">Audit Trail</h3>
+                                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Audit Trail</h3>
                                     <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">
                                         Entry #{selectedAuditVoucher.id.includes('copy') ? 'COPY' : (selectedAuditVoucher.id.split('-')[1] || '---')}
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => setSelectedAuditVoucher(null)} className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all">
+                            <button onClick={() => setSelectedAuditVoucher(null)} className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all dark:hover:bg-gray-600">
                                 <CancelIcon />
                             </button>
                         </div>
@@ -577,7 +577,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                     {selectedAuditVoucher.auditLogs && selectedAuditVoucher.auditLogs.length > 0 ? (
                                         [...selectedAuditVoucher.auditLogs].reverse().map((log, idx) => (
                                             <div key={log.id} className="relative flex items-start group">
-                                                <div className="absolute left-0 mt-1.5 w-10 h-10 rounded-full bg-white border-2 border-blue-100 flex items-center justify-center z-10 group-hover:border-blue-500 transition-colors shadow-sm">
+                                                <div className="absolute left-0 mt-1.5 w-10 h-10 rounded-full bg-white border-2 border-blue-100 flex items-center justify-center z-10 group-hover:border-blue-500 transition-colors shadow-sm dark:bg-gray-800">
                                                     {log.action === 'Created' ? <CheckCircleIcon className="text-green-500 text-lg" /> :
                                                      log.action === 'Duplicated' ? <ContentCopyIcon className="text-blue-500 text-lg" /> :
                                                      <HistoryIcon className="text-gray-400 text-lg" />}
@@ -588,14 +588,14 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                             log.action === 'Created' ? 'bg-green-50 text-green-700 border-green-100' :
                                                             log.action === 'Duplicated' ? 'bg-blue-50 text-blue-700 border-blue-100' :
                                                             'bg-gray-50 text-gray-700 border-gray-100'
-                                                        }`}>
+                                                        } dark:bg-gray-900 dark:text-gray-200 dark:border-gray-800`}>
                                                             {log.action}
                                                         </span>
                                                         <span className="text-[10px] font-bold text-gray-400 uppercase">{log.timestamp}</span>
                                                     </div>
-                                                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                                                        <div className="text-sm font-bold text-gray-800 mb-1">{log.details}</div>
-                                                        <div className="flex items-center text-xs text-gray-500 font-medium">
+                                                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+                                                        <div className="text-sm font-bold text-gray-800 mb-1 dark:text-gray-100">{log.details}</div>
+                                                        <div className="flex items-center text-xs text-gray-500 font-medium dark:text-gray-400">
                                                             <AccountIcon className="mr-1 text-base opacity-40" /> {log.user}
                                                         </div>
                                                     </div>
@@ -611,10 +611,10 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="p-4 bg-gray-50 border-t flex justify-end">
+                        <div className="p-4 bg-gray-50 border-t flex justify-end dark:bg-gray-900">
                             <button 
                                 onClick={() => setSelectedAuditVoucher(null)}
-                                className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-50 transition-all shadow-sm"
+                                className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-50 transition-all shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
                             >
                                 Close Trail
                             </button>
@@ -626,18 +626,18 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
             {/* Custom Delete Confirmation Modal */}
             {deleteConfirmation?.isOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 dark:bg-gray-800">
                         <div className="p-6 text-center">
                             <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <DeleteIcon className="text-3xl" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-800">Confirm Deletion</h3>
-                            <p className="text-gray-500 text-sm mt-2">{deleteConfirmation.message}</p>
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Confirm Deletion</h3>
+                            <p className="text-gray-500 text-sm mt-2 dark:text-gray-400">{deleteConfirmation.message}</p>
                         </div>
-                        <div className="flex border-t border-gray-100">
+                        <div className="flex border-t border-gray-100 dark:border-gray-800">
                             <button 
                                 onClick={() => setDeleteConfirmation(null)}
-                                className="flex-1 px-4 py-4 text-sm font-bold text-gray-500 hover:bg-gray-50 transition-colors border-r border-gray-100"
+                                className="flex-1 px-4 py-4 text-sm font-bold text-gray-500 hover:bg-gray-50 transition-colors border-r border-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:border-gray-800"
                             >
                                 Cancel
                             </button>

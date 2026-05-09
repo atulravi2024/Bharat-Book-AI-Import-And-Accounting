@@ -421,11 +421,11 @@ export const DataExplorer: React.FC = () => {
 
     return (
         <div className="flex flex-col gap-6">
-            <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-6 lg:p-8">
+            <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-800">
                 <div className="flex flex-row items-center gap-6">
                     {/* Header */}
                     <div className="flex flex-col gap-1 w-64">
-                         <h3 className="font-bold text-gray-900 flex items-center text-xl">
+                         <h3 className="font-bold text-gray-900 flex items-center text-xl dark:text-white">
                             <CodeIcon className="mr-2 text-blue-600 w-6 h-6" />
                             System Browser
                         </h3>
@@ -439,21 +439,21 @@ export const DataExplorer: React.FC = () => {
                             placeholder="Search database..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder:text-gray-400 font-medium"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder:text-gray-400 font-medium dark:bg-gray-900 dark:border-gray-700"
                         />
                     </div>
 
                     {/* Refresh */}
                 </div>
 
-                <div className="flex flex-row items-center gap-6 mt-6 pt-6 border-t border-gray-100">
+                <div className="flex flex-row items-center gap-6 mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
                     {/* Filter Section */}
                     <div className="flex flex-col gap-2 w-40">
                          <div className="relative">
                             <select
                                 value={filterType}
                                 onChange={(e) => setFilterType(e.target.value as any)}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-[11px] font-black text-gray-600 appearance-none cursor-pointer focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase tracking-wider pr-8"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-[11px] font-black text-gray-600 appearance-none cursor-pointer focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase tracking-wider pr-8 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                             >
                                 <option value="all">All Items</option>
                                 <option value="file">Server Files</option>
@@ -480,7 +480,7 @@ export const DataExplorer: React.FC = () => {
                             <select
                                 value={fileTypeFilter}
                                 onChange={(e) => setFileTypeFilter(e.target.value)}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-[11px] font-black text-gray-600 appearance-none cursor-pointer focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase tracking-wider pr-8"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-[11px] font-black text-gray-600 appearance-none cursor-pointer focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase tracking-wider pr-8 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                             >
                                 <option value="All">All Types</option>
                                 <option value="JSON">JSON</option>
@@ -508,7 +508,7 @@ export const DataExplorer: React.FC = () => {
                             <select
                                 value={sortOrder}
                                 onChange={(e) => setSortOrder(e.target.value as any)}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-[11px] font-black text-gray-600 appearance-none cursor-pointer focus:ring-2 focus:ring-indigo-500 outline-none transition-all uppercase tracking-wider pr-8"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-[11px] font-black text-gray-600 appearance-none cursor-pointer focus:ring-2 focus:ring-indigo-500 outline-none transition-all uppercase tracking-wider pr-8 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                             >
                                 <option value="name-asc">Alphabetical (A-Z)</option>
                                 <option value="name-desc">Alphabetical (Z-A)</option>
@@ -536,9 +536,9 @@ export const DataExplorer: React.FC = () => {
             </div>
 
             {/* Section 2: Browser & Preview Panel */}
-            <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden flex flex-col md:flex-row min-h-[700px]">
+            <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden flex flex-col md:flex-row min-h-[700px] dark:bg-gray-800 dark:border-gray-800">
                 {/* Sidebar with Keys */}
-                <div className="w-full md:w-80 bg-gray-50/50 border-r border-gray-100 flex flex-col max-h-[700px]">
+                <div className="w-full md:w-80 bg-gray-50/50 border-r border-gray-100 flex flex-col max-h-[700px] dark:border-gray-800">
                     <div className="flex-1 overflow-y-auto p-4 space-y-4">
                         {groupedKeys.map(group => (
                             <div key={group.title} className="space-y-1">
@@ -558,7 +558,7 @@ export const DataExplorer: React.FC = () => {
                                                     <button
                                                         key={key}
                                                         onClick={() => handleKeySelect(key)}
-                                                        className={`w-full text-left p-3 rounded-xl text-[12px] font-medium transition-all truncate flex items-center justify-between border ${selectedKey === key ? 'bg-white text-blue-600 border-blue-100 shadow-sm ring-1 ring-blue-50/50' : 'bg-transparent text-gray-500 border-transparent hover:bg-white hover:border-gray-100 hover:text-gray-900 group'}`}
+                                                        className={`w-full text-left p-3 rounded-xl text-[12px] font-medium transition-all truncate flex items-center justify-between border ${selectedKey === key ? 'bg-white text-blue-600 border-blue-100 shadow-sm ring-1 ring-blue-50/50' : 'bg-transparent text-gray-500 border-transparent hover:bg-white hover:border-gray-100 hover:text-gray-900 group'} dark:bg-gray-800 dark:text-gray-400`}
                                                     >
                                                         <span className="truncate">
                                                             {key.startsWith('/') 
@@ -575,7 +575,7 @@ export const DataExplorer: React.FC = () => {
                         ))}
                         
                         {keys.length === 0 && (
-                            <div className="p-8 text-center bg-white rounded-3xl border border-dashed border-gray-200">
+                            <div className="p-8 text-center bg-white rounded-3xl border border-dashed border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                                 <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">No application data found.</p>
                             </div>
                         )}
@@ -583,8 +583,8 @@ export const DataExplorer: React.FC = () => {
                 </div>
 
                 {/* Viewer Content */}
-                <div id="data-viewer-container" className="flex-1 flex flex-col min-w-0 bg-white">
-                    <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10 h-[90px]">
+                <div id="data-viewer-container" className="flex-1 flex flex-col min-w-0 bg-white dark:bg-gray-800">
+                    <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10 h-[90px] dark:border-gray-800 dark:bg-gray-800">
                         <div className="min-w-0 flex-1 mr-4">
                             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                                 {selectedKey && (
@@ -592,12 +592,12 @@ export const DataExplorer: React.FC = () => {
                                         <span className={`text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-tighter shadow-sm border ${selectedKey.startsWith('/') ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>
                                             {selectedKey.startsWith('/') ? 'FILE' : 'STORAGE'}
                                         </span>
-                                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-tighter bg-gray-50 text-gray-400 border border-gray-100">
+                                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-tighter bg-gray-50 text-gray-400 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
                                             {fileType}
                                         </span>
                                     </>
                                 )}
-                                <h4 className="font-bold text-gray-900 truncate text-base ml-1">
+                                <h4 className="font-bold text-gray-900 truncate text-base ml-1 dark:text-white">
                                     {selectedKey ? (selectedKey.startsWith('/') ? selectedKey.split('/').pop() : selectedKey.replace('bharat_book_', '')) : 'Entry Viewer'}
                                 </h4>
                             </div>
@@ -606,12 +606,12 @@ export const DataExplorer: React.FC = () => {
                                     <>
                                         <div className="flex items-center gap-1.5 grayscale opacity-70">
                                             <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Source:</span>
-                                            <span className="text-[10px] font-bold text-gray-500">{storageSource}</span>
+                                            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400">{storageSource}</span>
                                         </div>
-                                        <div className="h-2 w-2 rounded-full bg-gray-200"></div>
+                                        <div className="h-2 w-2 rounded-full bg-gray-200 dark:bg-gray-700"></div>
                                         <div className="flex items-center gap-1.5 grayscale opacity-70">
                                             <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Tier:</span>
-                                            <span className="text-[10px] font-bold text-gray-500">{logicTier}</span>
+                                            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400">{logicTier}</span>
                                         </div>
                                     </>
                                 )}
@@ -623,7 +623,7 @@ export const DataExplorer: React.FC = () => {
                                 onClick={handleCopy}
                                 disabled={!jsonContent}
                                 title="Copy Content"
-                                className={`p-2.5 rounded-xl transition-all border ${copySuccess ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-gray-50 text-gray-400 border-gray-100 hover:bg-white hover:text-blue-600 hover:border-blue-100'} disabled:opacity-30 disabled:pointer-events-none`}
+                                className={`p-2.5 rounded-xl transition-all border ${copySuccess ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-gray-50 text-gray-400 border-gray-100 hover:bg-white hover:text-blue-600 hover:border-blue-100'} disabled:opacity-30 disabled:pointer-events-none dark:bg-gray-900 dark:border-gray-800`}
                             >
                                 {copySuccess ? <CheckCircleIcon className="w-5 h-5" /> : <ContentCopyIcon className="w-5 h-5" />}
                             </button>

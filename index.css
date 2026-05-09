@@ -36,6 +36,12 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #cbd5e1;
   }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4b5563; /* gray-600 */
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #6b7280; /* gray-500 */
+  }
 }
 
 body {
@@ -44,6 +50,15 @@ body {
 
 .dark body {
   @apply bg-gray-900;
+}
+
+@layer base {
+  .dark input,
+  .dark textarea,
+  .dark select {
+    @apply bg-gray-800 border-gray-700 text-white;
+    color-scheme: dark;
+  }
 }
 
 @media print {

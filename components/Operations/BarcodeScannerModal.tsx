@@ -82,16 +82,16 @@ export const BarcodeScannerModal: React.FC<BarcodeScannerModalProps> = ({ isOpen
 
   return (
     <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4 w-full h-full">
-      <div className="bg-white rounded-[2rem] shadow-xl w-full max-w-lg overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 max-h-[98dvh] sm:max-h-[90vh]">
-          <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-white shrink-0 sticky top-0 z-10">
+      <div className="bg-white rounded-[2rem] shadow-xl w-full max-w-lg overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 max-h-[98dvh] sm:max-h-[90vh] dark:bg-gray-800">
+          <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-white shrink-0 sticky top-0 z-10 dark:border-gray-800 dark:bg-gray-800">
             <div>
-              <h3 className="text-xl font-black text-gray-800 flex items-center gap-2 tracking-tight">
+              <h3 className="text-xl font-black text-gray-800 flex items-center gap-2 tracking-tight dark:text-gray-100">
                 <ScanBarcode size={24} className="text-purple-600" />
                 Select & Scan Barcode
               </h3>
-              <p className="text-sm font-medium text-gray-500 mt-1">Point your camera or upload an image.</p>
+              <p className="text-sm font-medium text-gray-500 mt-1 dark:text-gray-400">Point your camera or upload an image.</p>
             </div>
-            <button onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500/20 active:scale-95 bg-gray-50">
+            <button onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500/20 active:scale-95 bg-gray-50 dark:bg-gray-900">
               <X size={20} className="stroke-[3]" />
             </button>
           </div>
@@ -107,8 +107,8 @@ export const BarcodeScannerModal: React.FC<BarcodeScannerModalProps> = ({ isOpen
             "></div>
             
             <div className="mt-8 flex flex-col items-center">
-              <div className="w-full h-px bg-gray-100 mb-6 relative">
-                 <span className="absolute left-1/2 -translate-x-1/2 -top-2.5 bg-white px-4 text-xs font-black text-gray-400 uppercase tracking-widest">Manual Entry & Demo</span>
+              <div className="w-full h-px bg-gray-100 mb-6 relative dark:bg-gray-800">
+                 <span className="absolute left-1/2 -translate-x-1/2 -top-2.5 bg-white px-4 text-xs font-black text-gray-400 uppercase tracking-widest dark:bg-gray-800">Manual Entry & Demo</span>
               </div>
               
               <div className="w-full grid grid-cols-1 gap-4">
@@ -122,7 +122,7 @@ export const BarcodeScannerModal: React.FC<BarcodeScannerModalProps> = ({ isOpen
                       value={manualInput}
                       onChange={(e) => setManualInput(e.target.value)}
                       placeholder="Type barcode manually..."
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && manualInput) {
                           onScan(manualInput);

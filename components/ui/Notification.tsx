@@ -44,7 +44,7 @@ export const Notification: React.FC<NotificationProps> = ({ message, type, isOpe
           <div className={`p-4 rounded-2xl border shadow-xl flex items-center justify-between gap-3 ${colors[type]}`}>
             <div className="flex items-center gap-3">
               {icons[type]}
-              <p className="text-sm font-bold text-gray-800">{message}</p>
+              <p className="text-sm font-bold text-gray-800 dark:text-gray-100">{message}</p>
             </div>
             <button onClick={onClose} className="p-1 hover:bg-white/50 rounded-lg transition-colors">
               <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />

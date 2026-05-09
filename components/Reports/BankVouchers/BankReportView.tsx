@@ -266,11 +266,11 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
         <div className="h-full flex flex-col animate-in fade-in duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4 flex-shrink-0">
                 <div>
-                    <h1 className="text-xl font-bold text-gray-800 flex items-center">
+                    <h1 className="text-xl font-bold text-gray-800 flex items-center dark:text-gray-100">
                         <BankIcon className="mr-3 text-indigo-600" />
                         Bank Report
                     </h1>
-                    <p className="text-gray-500 text-xs mt-0.5">Manage bank statement reports, classification, and reconciliation</p>
+                    <p className="text-gray-500 text-xs mt-0.5 dark:text-gray-400">Manage bank statement reports, classification, and reconciliation</p>
                 </div>
                 <div className="flex flex-wrap gap-3">
                     <button 
@@ -281,14 +281,14 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
                     </button>
                     <button 
                         onClick={handleBulkExport}
-                        className="flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-50 transition-all"
+                        className="flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-50 transition-all dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
                     >
                         <DownloadIcon className="mr-2 text-gray-400" /> Export
                     </button>
                 </div>
             </div>
 
-            <div className="mb-2 border-b border-gray-200 flex-shrink-0 overflow-x-auto overflow-y-hidden custom-scrollbar">
+            <div className="mb-2 border-b border-gray-200 flex-shrink-0 overflow-x-auto overflow-y-hidden custom-scrollbar dark:border-gray-700">
                 <nav className="-mb-px flex space-x-8 min-w-max px-2" aria-label="Tabs">
                     {['bank', 'auto-matched', 'missing-masters', 'unidentify', 'classify', 'reconcile'].map((tab) => (
                         <button
@@ -304,7 +304,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
                                     ? 'border-indigo-500 text-indigo-600' 
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }
-                            `}
+                             dark:text-gray-400`}
                         >
                             {tab === 'bank' ? 'Raw Bank' : tab === 'classify' ? 'To Classify' : tab === 'reconcile' ? 'Reconcile' : tab === 'auto-matched' ? 'Auto-Matched' : tab === 'missing-masters' ? 'Missing Masters' : 'Unidentify'}
                         </button>
@@ -313,7 +313,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
             </div>
             
             {activeTab !== 'reconcile' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 relative flex-1 flex flex-col min-h-0">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 relative flex-1 flex flex-col min-h-0 dark:bg-gray-800 dark:border-gray-700">
                     {selectedIds.length > 0 && (
                         <div className="absolute top-0 inset-x-0 bg-indigo-600 text-white p-3 z-30 flex items-center justify-between animate-in slide-in-from-top duration-300">
                             <div className="flex items-center text-sm font-bold">
@@ -328,7 +328,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
                             </div>
                         </div>
                     )}
-                    <div className="p-4 border-b border-gray-100 flex-shrink-0 flex items-center justify-between">
+                    <div className="p-4 border-b border-gray-100 flex-shrink-0 flex items-center justify-between dark:border-gray-800">
                         <div className="relative max-w-md w-full">
                             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input 
@@ -336,7 +336,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
                                 placeholder="Search statements..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all text-sm"
+                                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all text-sm dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                             />
                         </div>
                         <button 
@@ -346,7 +346,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
                                 isRunningAI || vouchers.length === 0
                                     ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' 
                                     : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border-indigo-200 shadow-sm active:scale-95'
-                            }`}
+                            } dark:bg-gray-800 dark:border-gray-700`}
                         >
                            {isRunningAI ? (
                                <>

@@ -308,7 +308,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
                  <ArrowRight size={14} className="text-gray-300 mr-3" />
                  <input 
                   type="date" 
-                  className="text-xs font-medium outline-none text-gray-600" 
+                  className="text-xs font-medium outline-none text-gray-600 dark:text-gray-300" 
                   value={dateRange.to}
                   onChange={e => setDateRange(prev => ({ ...prev, to: e.target.value }))}
                  />
@@ -316,7 +316,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
              </>
            )}
            {dateRangeMode === 'fy' && (
-             <div className="flex items-center px-3 text-xs font-bold text-gray-700">
+             <div className="flex items-center px-3 text-xs font-bold text-gray-700 dark:text-gray-200">
                 {dateRange.from} <ArrowRight size={14} className="mx-2 text-gray-300" /> {dateRange.to}
              </div>
            )}
@@ -324,7 +324,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
       </header>
 
       {/* Report Tabs */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-800">
         <div className="flex border-b overflow-x-auto whitespace-nowrap bg-gray-50/50 scrollbar-none">
           {[
             { id: 'pl', label: 'Profit & Loss', icon: <TrendingUpIcon /> },
@@ -343,7 +343,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
                 activeTab === tab.id 
                 ? 'border-blue-600 text-blue-600 bg-white' 
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-100/50'
-              }`}
+              } dark:bg-gray-800 dark:text-gray-400`}
             >
               {tab.icon && <span className="mr-2">{tab.icon}</span>}
               {tab.label}
@@ -353,7 +353,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
 
         <div className="p-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-4">
-              <h2 className="text-lg font-bold text-gray-800">
+              <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">
                 {activeTab === 'pl' && 'Income Statement (P&L)'}
                 {activeTab === 'bs' && 'Balance Sheet (Position Statement)'}
                 {activeTab === 'cash_flow' && 'Cash Flow Statement'}
@@ -365,14 +365,14 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
               <div className="flex space-x-2">
                 <button 
                   onClick={handleExport}
-                  className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors"
+                  className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300"
                   title="Download Report"
                 >
                   <Download size={18} />
                 </button>
                 <button 
                   onClick={() => window.print()}
-                  className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors"
+                  className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300"
                   title="Print Report"
                 >
                   <Printer size={18} />

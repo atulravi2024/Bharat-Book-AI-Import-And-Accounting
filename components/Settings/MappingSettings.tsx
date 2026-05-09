@@ -118,8 +118,8 @@ export const MappingSettings: React.FC<MappingSettingsProps> = ({
     const isSectionOpen = (section: string) => activeSection === section;
 
     return (
-        <div className="bg-white w-full border-t border-b border-gray-100 relative overflow-hidden">
-            <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest my-6 flex items-center px-4">
+        <div className="bg-white w-full border-t border-b border-gray-100 relative overflow-hidden dark:bg-gray-800 dark:border-gray-800">
+            <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest my-6 flex items-center px-4 dark:text-white">
                 <SettingsIcon className="mr-3 text-blue-600" /> Mapping & Narration Parsing
             </h3>
 

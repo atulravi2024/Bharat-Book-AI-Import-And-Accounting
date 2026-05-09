@@ -73,11 +73,11 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
 
     return (
         <div className="overflow-x-auto overflow-y-visible flex-1">
-            <table className="min-w-full divide-y divide-gray-200" style={{ minWidth: '1000px' }}>
-                <thead className="bg-gray-50 text-gray-400">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700" style={{ minWidth: '1000px' }}>
+                <thead className="bg-gray-50 text-gray-400 dark:bg-gray-900">
                     <tr>
                         <th className="px-6 py-4 text-left w-10">
-                            <input type="checkbox" className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4" checked={selectedIds.length === filteredVouchers.length && filteredVouchers.length > 0} onChange={toggleSelectAll} />
+                            <input type="checkbox" className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4 dark:border-gray-600" checked={selectedIds.length === filteredVouchers.length && filteredVouchers.length > 0} onChange={toggleSelectAll} />
                         </th>
                         <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">Import ID</th>
                         <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">Date</th>
@@ -89,7 +89,7 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                         <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-widest">Actions</th>
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-100">
+                <tbody className="bg-white divide-y divide-gray-100 dark:bg-gray-800 dark:divide-gray-800">
                     {filteredVouchers.map(v => {
                         const isMapped = hasLedgerOrParty(v);
                         const name = mappedName(v);
@@ -97,12 +97,12 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                             <React.Fragment key={v.id}>
                                 <tr className={`${isMapped ? 'bg-indigo-50/10' : 'hover:bg-indigo-50/30'} transition-colors ${expandedId === v.id ? 'bg-indigo-50/40' : ''}`}>
                                     <td className="px-6 py-4">
-                                        <input type="checkbox" className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4" checked={selectedIds.includes(v.id)} onChange={() => toggleSelect(v.id)} />
+                                        <input type="checkbox" className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4 dark:border-gray-600" checked={selectedIds.includes(v.id)} onChange={() => toggleSelect(v.id)} />
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-indigo-600 font-bold cursor-pointer" onClick={() => setExpandedId(expandedId === v.id ? null : v.id)}>
                                         {v.tempImportId ? `#${v.tempImportId}` : `#${String(v.id || '').includes('copy') ? 'COPY' : (String(v.id || '').split('-')[1] || '---')}`}
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                                    <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap dark:text-gray-300">
                                         {String(v.date?.value || '-')}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-400 whitespace-nowrap">
@@ -115,7 +115,7 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                                                 v.paymentMode.value === 'Cheque' ? 'bg-amber-50 text-amber-700 border border-amber-100' :
                                                 v.paymentMode.value === 'Auto Debit' ? 'bg-red-50 text-red-700 border border-red-100' :
                                                 'bg-gray-100 text-gray-700 border border-gray-200'
-                                            }`}>
+                                            } dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700`}>
                                                 {v.paymentMode.value}
                                             </span>
                                         ) : (
@@ -132,7 +132,7 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                                                 <span className="text-[10px] text-gray-400 font-medium truncate max-w-[150px]">{v.narration?.value}</span>
                                             </div>
                                         ) : (
-                                            <span className="text-gray-800">{String(v.narration?.value || 'N/A')}</span>
+                                            <span className="text-gray-800 dark:text-gray-100">{String(v.narration?.value || 'N/A')}</span>
                                         )}
                                     </td>
                                     <td className="px-6 py-4 text-right text-sm font-bold text-red-600 font-mono whitespace-nowrap">
@@ -161,28 +161,28 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                                             <button 
                                                 onClick={() => setExpandedId(expandedId === v.id ? null : v.id)}
                                                 title="Expand Details"
-                                                className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+                                                className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 transition-colors dark:hover:bg-gray-600 dark:text-gray-400"
                                             >
                                                 <MoreHorizIcon />
                                             </button>
                                             <button 
                                                 onClick={() => onView(v)}
                                                 title="View & Edit Full Voucher"
-                                                className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+                                                className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 transition-colors dark:hover:bg-gray-600 dark:text-gray-400"
                                             >
                                                 <EditIcon />
                                             </button>
                                             <button 
                                                 onClick={() => onDuplicate(v)}
                                                 title="Duplicate"
-                                                className="p-1.5 rounded-full hover:bg-indigo-50 text-gray-500 hover:text-indigo-600 transition-colors"
+                                                className="p-1.5 rounded-full hover:bg-indigo-50 text-gray-500 hover:text-indigo-600 transition-colors dark:text-gray-400"
                                             >
                                                 <ContentCopyIcon />
                                             </button>
                                             <button 
                                                 onClick={() => setSelectedAuditVoucher(v)}
                                                 title="Audit Trail"
-                                                className="p-1.5 rounded-full hover:bg-indigo-50 text-gray-500 hover:text-indigo-600 transition-colors"
+                                                className="p-1.5 rounded-full hover:bg-indigo-50 text-gray-500 hover:text-indigo-600 transition-colors dark:text-gray-400"
                                             >
                                                 <HistoryIcon />
                                             </button>
@@ -203,7 +203,7 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                                                 <div className="space-y-4">
                                                     <div>
                                                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Narration</label>
-                                                        <p className="text-sm text-gray-800 bg-white p-3 rounded-lg border border-gray-200">{v.narration?.value || 'N/A'}</p>
+                                                        <p className="text-sm text-gray-800 bg-white p-3 rounded-lg border border-gray-200 dark:text-gray-100 dark:bg-gray-800 dark:border-gray-700">{v.narration?.value || 'N/A'}</p>
                                                     </div>
                                                     <div>
                                                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">AI Discrepancies</label>
@@ -227,7 +227,7 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                                                 <div className="space-y-4">
                                                     <div>
                                                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Transaction Type</label>
-                                                        <p className="text-sm font-bold text-gray-800">{v.type}</p>
+                                                        <p className="text-sm font-bold text-gray-800 dark:text-gray-100">{v.type}</p>
                                                     </div>
                                                     <div>
                                                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Extracted Party</label>
@@ -241,7 +241,7 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                                                 <div className="space-y-4">
                                                     <div>
                                                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">REF / Invoice Number</label>
-                                                        <p className="text-sm font-mono text-gray-700 bg-gray-100 p-2 rounded inline-block">{v.referenceNo?.value || 'N/A'}</p>
+                                                        <p className="text-sm font-mono text-gray-700 bg-gray-100 p-2 rounded inline-block dark:text-gray-200 dark:bg-gray-800">{v.referenceNo?.value || 'N/A'}</p>
                                                     </div>
                                                     <div>
                                                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Client-Side Validation</label>

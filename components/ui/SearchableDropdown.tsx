@@ -26,7 +26,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   placeholder = 'Search...',
   label,
   className = '',
-  buttonClassName = 'w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 transition-all',
+  buttonClassName = 'w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus-within:bg-gray-700',
   labelKey
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -163,7 +163,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
       {isOpen && createPortal(
         <div 
           id="searchable-dropdown-menu"
-          className="absolute z-[9999] bg-white border border-gray-100 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1"
+          className="absolute z-[9999] bg-white border border-gray-100 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1 dark:bg-gray-800 dark:border-gray-800"
           style={{ top: menuCoords.top + 4, left: menuCoords.left, width: menuCoords.width }}
         >
           <div className="max-h-60 overflow-y-auto p-1">
@@ -177,7 +177,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
                       : (value === getId(opt) || value === getLabel(opt))
                       ? 'bg-blue-50 text-blue-700 font-bold'
                       : 'text-gray-700 hover:bg-gray-50'
-                  }`}
+                  } dark:text-gray-200 dark:hover:bg-gray-700`}
                   onClick={() => {
                     onChange(getLabel(opt));
                     setIsOpen(false);
@@ -193,7 +193,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
                 </div>
               ))
             ) : (
-              <div className="px-4 py-3 text-sm text-gray-500 text-center">No results found</div>
+              <div className="px-4 py-3 text-sm text-gray-500 text-center dark:text-gray-400">No results found</div>
             )}
           </div>
         </div>,

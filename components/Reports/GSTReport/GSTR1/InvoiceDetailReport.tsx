@@ -73,12 +73,12 @@ export const InvoiceDetailReport: React.FC<InvoiceDetailReportProps> = ({ vouche
       
       {/* Search and Filters */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-2">
-        <div className="flex bg-gray-100 p-1 rounded-lg w-fit">
+        <div className="flex bg-gray-100 p-1 rounded-lg w-fit dark:bg-gray-800">
           {['Both', 'Party', 'Invoice'].map((opt) => (
             <button
               key={opt}
               onClick={() => setViewFilter(opt as any)}
-              className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-bold tracking-tighter transition-all ${viewFilter === opt ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+              className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-bold tracking-tighter transition-all ${viewFilter === opt ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
             >
               {opt === 'Both' ? 'Show All' : opt + ' Wise'}
             </button>
@@ -89,7 +89,7 @@ export const InvoiceDetailReport: React.FC<InvoiceDetailReportProps> = ({ vouche
             <input 
                 type="text" 
                 placeholder="Search Invoice, Party, or Narration..." 
-                className="pl-10 pr-4 py-2 border rounded-lg text-sm bg-gray-50 focus:bg-white transition-all outline-none md:w-80"
+                className="pl-10 pr-4 py-2 border rounded-lg text-sm bg-gray-50 focus:bg-white transition-all outline-none md:w-80 dark:bg-gray-900 dark:focus:bg-gray-700"
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
             />
@@ -100,14 +100,14 @@ export const InvoiceDetailReport: React.FC<InvoiceDetailReportProps> = ({ vouche
       {(viewFilter === 'Both' || viewFilter === 'Party') && (
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black text-gray-500 uppercase tracking-widest px-1">Party-wise Aggregated Details</h3>
+            <h3 className="text-xs font-black text-gray-500 uppercase tracking-widest px-1 dark:text-gray-400">Party-wise Aggregated Details</h3>
             <span className="text-[10px] font-bold text-gray-400">{partyWiseData.length} Parties matching</span>
           </div>
-          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm dark:bg-gray-800 dark:border-gray-800">
             <div className="overflow-x-auto">
                 <table className="w-full text-xs text-left">
                     <thead>
-                        <tr className="bg-gray-50 text-gray-400 font-bold uppercase border-b border-gray-100">
+                        <tr className="bg-gray-50 text-gray-400 font-bold uppercase border-b border-gray-100 dark:bg-gray-900 dark:border-gray-800">
                             <th className="px-4 py-3">Party Name</th>
                             <th className="px-4 py-3 text-center">Inv Count</th>
                             <th className="px-4 py-3 text-right">Taxable Value</th>
@@ -118,7 +118,7 @@ export const InvoiceDetailReport: React.FC<InvoiceDetailReportProps> = ({ vouche
                         {partyWiseData.map((d, i) => (
                             <tr key={i} className="hover:bg-gray-50/80 transition-colors group">
                                 <td className="px-4 py-3">
-                                    <div className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight">{d.party}</div>
+                                    <div className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight dark:text-white">{d.party}</div>
                                 </td>
                                 <td className="px-4 py-3 text-center font-bold bg-gray-50/30 text-blue-600">{d.count}</td>
                                 <td className="px-4 py-3 text-right font-mono">₹{d.taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
@@ -136,10 +136,10 @@ export const InvoiceDetailReport: React.FC<InvoiceDetailReportProps> = ({ vouche
       {(viewFilter === 'Both' || viewFilter === 'Invoice') && (
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black text-gray-500 uppercase tracking-widest px-1">GSTR1 Invoice level Report</h3>
+            <h3 className="text-xs font-black text-gray-500 uppercase tracking-widest px-1 dark:text-gray-400">GSTR1 Invoice level Report</h3>
             <span className="text-[10px] font-bold text-gray-400">{filteredVouchers.length} Invoices Found</span>
           </div>
-          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-md">
+          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-md dark:bg-gray-800 dark:border-gray-800">
               <div className="overflow-x-auto">
                   <table className="w-full text-xs text-left">
                       <thead>
@@ -151,7 +151,7 @@ export const InvoiceDetailReport: React.FC<InvoiceDetailReportProps> = ({ vouche
                               <th className="px-4 py-4 text-right border-r border-gray-800 text-green-400">GST</th>
                           </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-100">
+                      <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                           {filteredVouchers.map(v => {
                                const isCreditNote = v.type === VoucherType.CreditNote;
                                const sign = isCreditNote ? -1 : 1;
@@ -168,10 +168,10 @@ export const InvoiceDetailReport: React.FC<InvoiceDetailReportProps> = ({ vouche
 
                                return (
                                   <tr key={v.id} className="hover:bg-blue-50/30 transition-colors">
-                                      <td className="px-4 py-3 whitespace-nowrap text-gray-500 font-medium">{String(v.date?.value || '-')}</td>
-                                      <td className="px-4 py-3 font-mono font-bold text-gray-900">{String(v.invoiceNumber?.value || v.id.split('-')[0])}</td>
+                                      <td className="px-4 py-3 whitespace-nowrap text-gray-500 font-medium dark:text-gray-400">{String(v.date?.value || '-')}</td>
+                                      <td className="px-4 py-3 font-mono font-bold text-gray-900 dark:text-white">{String(v.invoiceNumber?.value || v.id.split('-')[0])}</td>
                                       <td className="px-4 py-3">
-                                          <div className="font-bold text-gray-800 uppercase tracking-tight">{String(v.partyName?.value || '-')}</div>
+                                          <div className="font-bold text-gray-800 uppercase tracking-tight dark:text-gray-100">{String(v.partyName?.value || '-')}</div>
                                           <div className="text-[10px] text-gray-400 truncate max-w-xs">{String(v.narration?.value || '-')}</div>
                                       </td>
                                       <td className="px-4 py-3 text-right font-mono">₹{taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
@@ -182,7 +182,7 @@ export const InvoiceDetailReport: React.FC<InvoiceDetailReportProps> = ({ vouche
                       </tbody>
                   </table>
                   {filteredVouchers.length === 0 && (
-                    <div className="p-12 text-center text-gray-400 font-medium bg-white">
+                    <div className="p-12 text-center text-gray-400 font-medium bg-white dark:bg-gray-800">
                       No invoices match the current search filters.
                     </div>
                   )}

@@ -103,13 +103,13 @@ export const VoucherNumberingSettings: React.FC = () => {
     ];
 
     return (
-        <div className="bg-white rounded-3xl pb-6 shadow-xl shadow-gray-200/40 border border-gray-100 flex flex-col h-full overflow-hidden">
+        <div className="bg-white rounded-3xl pb-6 shadow-xl shadow-gray-200/40 border border-gray-100 flex flex-col h-full overflow-hidden dark:bg-gray-800 dark:border-gray-800">
             <div className="flex justify-between items-start mb-8 p-6 md:p-8 pb-0">
                 <div>
-                    <h2 className="text-2xl font-black text-gray-800 flex items-center">
+                    <h2 className="text-2xl font-black text-gray-800 flex items-center dark:text-gray-100">
                         <SettingsIcon className="mr-3 text-blue-600" /> Voucher Numbering Settings
                     </h2>
-                    <p className="text-gray-500 text-sm mt-2 font-medium">Configure automatic voucher numbering for different transaction types.</p>
+                    <p className="text-gray-500 text-sm mt-2 font-medium dark:text-gray-400">Configure automatic voucher numbering for different transaction types.</p>
                 </div>
                 <button 
                     onClick={handleSave}
@@ -124,7 +124,7 @@ export const VoucherNumberingSettings: React.FC = () => {
             <div className="space-y-8 px-0">
                 {voucherGroups.map((group, gIdx) => (
                     <div key={gIdx} className="space-y-0">
-                        <h3 className="text-lg font-black text-gray-800 border-b border-gray-200 px-6 md:px-8 py-3 bg-gray-50 uppercase tracking-wide">{group.title}</h3>
+                        <h3 className="text-lg font-black text-gray-800 border-b border-gray-200 px-6 md:px-8 py-3 bg-gray-50 uppercase tracking-wide dark:text-gray-100 dark:border-gray-700 dark:bg-gray-900">{group.title}</h3>
                         <div className="flex flex-col">
                             {group.types.map((type, idx) => {
                                 const currentSettings = settings[type.id] || defaultSettings[type.id as keyof typeof defaultSettings];
@@ -132,7 +132,7 @@ export const VoucherNumberingSettings: React.FC = () => {
                                 const isLast = idx === group.types.length - 1;
                                 
                                 return (
-                                    <div key={type.id} className={`bg-white hover:bg-gray-50 transition-colors border-b border-gray-100 ${isLast ? '' : ''}`}>
+                                    <div key={type.id} className={`bg-white hover:bg-gray-50 transition-colors border-b border-gray-100 ${isLast ? '' : ''} dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-800`}>
                                         <div 
                                             className="w-full px-6 md:px-8 py-4 flex items-center justify-between cursor-pointer"
                                             onClick={(e) => toggleCollapse(type.id, e)}
@@ -141,11 +141,11 @@ export const VoucherNumberingSettings: React.FC = () => {
                                                 <button className="text-gray-400 hover:text-blue-600 transition-colors">
                                                     {isCollapsed ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
                                                 </button>
-                                                <h4 className="text-md font-bold text-gray-800 tracking-wide">{type.label}</h4>
+                                                <h4 className="text-md font-bold text-gray-800 tracking-wide dark:text-gray-100">{type.label}</h4>
                                             </div>
                                             <div className="flex items-center">
                                                 <label className="flex items-center space-x-2 cursor-pointer z-10" onClick={(e) => e.stopPropagation()}>
-                                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mr-2">Auto Generate</span>
+                                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mr-2 dark:text-gray-400">Auto Generate</span>
                                                     <input 
                                                         type="checkbox" 
                                                         className="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
@@ -158,59 +158,59 @@ export const VoucherNumberingSettings: React.FC = () => {
                                         
                                         {!isCollapsed && (
                                             <div className="px-6 md:px-8 pb-6 animate-in fade-in slide-in-from-top-2 duration-200 cursor-default">
-                                                <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                                                <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
                                                     {currentSettings.autoGenerate ? (
                                                         <>
                                                             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                                                                 <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1">Prefix</label>
+                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Prefix</label>
                                                                     <input 
                                                                         type="text" 
                                                                         value={currentSettings.prefix || ''}
                                                                         onChange={(e) => handleSettingChange(type.id, 'prefix', e.target.value)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
                                                                         placeholder="e.g. SAL/"
                                                                     />
                                                                 </div>
                                                                 <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1">Starting No.</label>
+                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Starting No.</label>
                                                                     <input 
                                                                         type="number" 
                                                                         value={currentSettings.startAt || 1}
                                                                         onChange={(e) => handleSettingChange(type.id, 'startAt', parseInt(e.target.value) || 1)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
                                                                         placeholder="1"
                                                                         min="1"
                                                                     />
                                                                 </div>
                                                                 <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1">Zero Padding</label>
+                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Zero Padding</label>
                                                                     <input 
                                                                         type="number" 
                                                                         value={currentSettings.padding !== undefined ? currentSettings.padding : 3}
                                                                         onChange={(e) => handleSettingChange(type.id, 'padding', parseInt(e.target.value) || 0)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
                                                                         placeholder="3"
                                                                         min="0"
                                                                         max="10"
                                                                     />
                                                                 </div>
                                                                 <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1">Suffix</label>
+                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Suffix</label>
                                                                     <input 
                                                                         type="text" 
                                                                         value={currentSettings.suffix || ''}
                                                                         onChange={(e) => handleSettingChange(type.id, 'suffix', e.target.value)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
                                                                         placeholder="e.g. /23-24"
                                                                     />
                                                                 </div>
                                                                 <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1">Restart</label>
+                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Restart</label>
                                                                     <select 
                                                                         value={currentSettings.resetPattern || 'yearly'}
                                                                         onChange={(e) => handleSettingChange(type.id, 'resetPattern', e.target.value)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
                                                                     >
                                                                         {resetPatterns.map(pattern => (
                                                                             <option key={pattern.id} value={pattern.id}>{pattern.label}</option>

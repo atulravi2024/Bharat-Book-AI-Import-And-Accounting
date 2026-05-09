@@ -187,19 +187,19 @@ export const CalculatorModal: React.FC<CalculatorModalProps> = ({ isOpen, onClos
       <div className={`fixed inset-0 bg-black/20 ${!isMaximized && 'md:hidden'}`} onClick={onClose}></div>
       
       <div className={`bg-[#f3f3f3] flex flex-col shadow-2xl relative transition-all duration-200 border border-gray-300 md:rounded-lg
-          ${isMaximized ? 'w-full h-full md:rounded-none' : 'w-full h-full md:w-[320px] md:h-[520px]'}`}>
+          ${isMaximized ? 'w-full h-full md:rounded-none' : 'w-full h-full md:w-[320px] md:h-[520px]'} dark:border-gray-600`}>
         
         {/* Title bar */}
-        <div className="flex justify-between items-center px-2 py-2 bg-white/50 backdrop-blur-sm">
-           <div className="text-xs font-semibold select-none ml-2 text-gray-700">Calculator</div>
+        <div className="flex justify-between items-center px-2 py-2 bg-white/50 backdrop-blur-sm dark:bg-gray-800/50">
+           <div className="text-xs font-semibold select-none ml-2 text-gray-700 dark:text-gray-200">Calculator</div>
            <div className="flex">
-              <button className="p-2 hover:bg-gray-200 rounded text-gray-600 hidden md:block">
+              <button className="p-2 hover:bg-gray-200 rounded text-gray-600 hidden md:block dark:text-gray-300">
                 <Minus size={14} />
               </button>
-              <button className="p-2 hover:bg-gray-200 rounded text-gray-600 hidden md:block" onClick={() => setIsMaximized(!isMaximized)}>
+              <button className="p-2 hover:bg-gray-200 rounded text-gray-600 hidden md:block dark:text-gray-300" onClick={() => setIsMaximized(!isMaximized)}>
                 {isMaximized ? <Minimize2 size={14} /> : <Square size={14} />}
               </button>
-              <button className="p-2 hover:bg-red-500 hover:text-white rounded text-gray-600 transition-colors" onClick={onClose}>
+              <button className="p-2 hover:bg-red-500 hover:text-white rounded text-gray-600 transition-colors dark:text-gray-300" onClick={onClose}>
                 <X size={14} />
               </button>
            </div>
@@ -207,10 +207,10 @@ export const CalculatorModal: React.FC<CalculatorModalProps> = ({ isOpen, onClos
 
         {/* Display */}
         <div className="flex-none px-4 pt-4 pb-2 flex flex-col justify-end text-right">
-          <div className="min-h-[24px] text-gray-500 text-sm font-medium tracking-wider select-text overflow-hidden text-ellipsis whitespace-nowrap">
+          <div className="min-h-[24px] text-gray-500 text-sm font-medium tracking-wider select-text overflow-hidden text-ellipsis whitespace-nowrap dark:text-gray-400">
             {equation}
           </div>
-          <div className="text-5xl font-semibold text-gray-900 tracking-tight leading-none mt-2 select-text overflow-hidden text-ellipsis whitespace-nowrap">
+          <div className="text-5xl font-semibold text-gray-900 tracking-tight leading-none mt-2 select-text overflow-hidden text-ellipsis whitespace-nowrap dark:text-white">
             {display}
           </div>
         </div>

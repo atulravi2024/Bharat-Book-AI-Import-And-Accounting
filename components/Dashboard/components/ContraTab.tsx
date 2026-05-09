@@ -12,7 +12,7 @@ export const ContraTab = ({ stats, isDemo }: any) => {
                 <KPIComponent label="Bank Liquidity" val="Optimal" sub="Balanced accounts" icon={ShieldCheck} color="text-blue-600" bg="bg-blue-50" isDemo={isDemo} />
                 <KPIComponent label="Internal Flow" val="Active" sub="High frequency" icon={Activity} color="text-emerald-600" bg="bg-emerald-50" isDemo={isDemo} />
             </div>
-            <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 h-[400px] relative">
+            <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 h-[400px] relative dark:bg-gray-800 dark:border-gray-700">
                 {isDemo && <div className="absolute top-6 right-8 z-10"><span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 border border-amber-600 animate-pulse">Demo Projection</span></div>}
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={stats.trendData}>

@@ -25,22 +25,22 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
 }) => {
   return (
     <div className="flex flex-col gap-6 mt-6">
-          <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[20] ${collapsedSections.narration ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'}`}>
+          <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[20] ${collapsedSections.narration ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
              <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.narration ? '' : 'mb-3'}`} onClick={() => toggleSection('narration')}>
                <label className="text-xs font-black text-gray-400 uppercase tracking-widest cursor-pointer">Narration (Optional)</label>
-               <button className="text-gray-400 hover:text-gray-600 transition-colors">
+               <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
                  <ChevronUp size={20} className={`transform transition-transform duration-300 ${collapsedSections.narration ? 'rotate-180' : ''}`} />
                </button>
              </div>
              {!collapsedSections.narration && (
                <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                 <textarea value={headerDetails.narration} onChange={(e) => handleHeaderChange('narration', e.target.value)} placeholder="Enter narration or description of the transaction..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-h-[100px] resize-y"></textarea>
+                 <textarea value={headerDetails.narration} onChange={(e) => handleHeaderChange('narration', e.target.value)} placeholder="Enter narration or description of the transaction..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-h-[100px] resize-y dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"></textarea>
                </div>
              )}
           </div>
 
         <div className="w-full">
-          <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[15] ${collapsedSections.taxableAdjustments ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'}`}>
+          <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[15] ${collapsedSections.taxableAdjustments ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
             <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.taxableAdjustments ? '' : 'mb-6'}`} onClick={() => toggleSection('taxableAdjustments')}>
               <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Taxable Adjustment</h3>
               <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -58,7 +58,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Discount %" 
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         value={headerDetails.voucherDiscountPct || ''}
                         onChange={(e) => handleHeaderChange('voucherDiscountPct', e.target.value)}
                       />
@@ -70,7 +70,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Amount" 
-                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         value={headerDetails.voucherDiscountAmount || ''}
                         onChange={(e) => handleHeaderChange('voucherDiscountAmount', e.target.value)}
                       />
@@ -96,7 +96,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                             type="number" 
                             step="0.01" 
                             placeholder="Pct %" 
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                             value={headerDetails.taxableOtherAdjustmentPct || ''}
                             onChange={(e) => handleHeaderChange('taxableOtherAdjustmentPct', e.target.value)}
                           />
@@ -108,7 +108,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                             type="number" 
                             step="0.01" 
                             placeholder="Amount" 
-                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                             value={headerDetails.taxableOtherAdjustment || ''}
                             onChange={(e) => handleHeaderChange('taxableOtherAdjustment', e.target.value)}
                           />
@@ -122,7 +122,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
         </div>
 
         <div className="w-full">
-          <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[12] ${collapsedSections.nonTaxableAdjustments ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'}`}>
+          <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[12] ${collapsedSections.nonTaxableAdjustments ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
             <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.nonTaxableAdjustments ? '' : 'mb-6'}`} onClick={() => toggleSection('nonTaxableAdjustments')}>
               <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Non-Taxable Adjustment</h3>
               <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -140,7 +140,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Discount %" 
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         value={headerDetails.nonTaxableVoucherDiscountPct || ''}
                         onChange={(e) => handleHeaderChange('nonTaxableVoucherDiscountPct', e.target.value)}
                       />
@@ -152,7 +152,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Amount" 
-                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         value={headerDetails.nonTaxableVoucherDiscountAmount || ''}
                         onChange={(e) => handleHeaderChange('nonTaxableVoucherDiscountAmount', e.target.value)}
                       />
@@ -177,7 +177,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                             type="number" 
                             step="0.01" 
                             placeholder="Pct %" 
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                             value={headerDetails.nonTaxableOtherAdjustmentPct || ''}
                             onChange={(e) => handleHeaderChange('nonTaxableOtherAdjustmentPct', e.target.value)}
                           />
@@ -189,7 +189,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                             type="number" 
                             step="0.01" 
                             placeholder="Amount" 
-                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                             value={headerDetails.nonTaxableOtherAdjustment || ''}
                             onChange={(e) => handleHeaderChange('nonTaxableOtherAdjustment', e.target.value)}
                           />
@@ -203,7 +203,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
         </div>
 
         <div className="w-full">
-          <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[11] ${collapsedSections.rounding ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'}`}>
+          <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[11] ${collapsedSections.rounding ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
             <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.rounding ? '' : 'mb-6'}`} onClick={() => toggleSection('rounding')}>
               <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Rounding Off</h3>
               <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -217,7 +217,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                 <div className="flex-1">
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Rounding Type</label>
                   <select 
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all appearance-none cursor-pointer"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                     value={headerDetails.roundingType || 'auto'}
                     onChange={(e) => handleHeaderChange('roundingType', e.target.value)}
                   >
@@ -236,7 +236,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                       type="number" 
                       step="0.01" 
                       placeholder="Amount" 
-                      className={`w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all ${headerDetails.roundingType !== 'manual' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all ${headerDetails.roundingType !== 'manual' ? 'opacity-50 cursor-not-allowed' : ''} dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700`}
                       value={headerDetails.roundingValue || ''}
                       onChange={(e) => handleHeaderChange('roundingValue', e.target.value)}
                       disabled={headerDetails.roundingType !== 'manual'}
@@ -250,7 +250,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
         </div>
         
         <div className="w-full">
-          <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[10] ${collapsedSections.summary ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'}`}>
+          <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[10] ${collapsedSections.summary ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
             <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.summary ? '' : 'mb-6'}`} onClick={() => toggleSection('summary')}>
               <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Summary</h3>
               <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -282,28 +282,28 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
               const MetricBox = ({ label, value, type = 'default', subtitle, tooltip }: any) => {
                 const getColors = () => {
                    switch(type) {
-                     case 'positive': return 'bg-gradient-to-b from-white to-emerald-50/30 border-emerald-200/70 shadow-[0_2px_8px_-4px_rgba(16,185,129,0.2)] hover:shadow-[0_4px_12px_-4px_rgba(16,185,129,0.3)] hover:border-emerald-300';
-                     case 'negative': return 'bg-gradient-to-b from-white to-rose-50/30 border-rose-200/70 shadow-[0_2px_8px_-4px_rgba(244,63,94,0.2)] hover:shadow-[0_4px_12px_-4px_rgba(244,63,94,0.3)] hover:border-rose-300';
-                     case 'primary': return 'bg-gradient-to-b from-blue-50 to-blue-100/50 border-blue-200/70 shadow-[0_2px_8px_-4px_rgba(59,130,246,0.2)] hover:shadow-[0_4px_12px_-4px_rgba(59,130,246,0.3)] hover:border-blue-300';
-                     default: return 'bg-gradient-to-b from-white to-gray-50/50 border-gray-200/70 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-4px_rgba(0,0,0,0.1)] hover:border-gray-300';
+                     case 'positive': return 'bg-gradient-to-b from-white to-emerald-50/30 border-emerald-200/70 shadow-[0_2px_8px_-4px_rgba(16,185,129,0.2)] hover:shadow-[0_4px_12px_-4px_rgba(16,185,129,0.3)] hover:border-emerald-300 dark:from-gray-700 dark:to-gray-800 dark:border-emerald-800/60 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_10px_-4px_rgba(16,185,129,0.4)] dark:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_6px_15px_-4px_rgba(16,185,129,0.6)] dark:hover:border-emerald-600/80';
+                     case 'negative': return 'bg-gradient-to-b from-white to-rose-50/30 border-rose-200/70 shadow-[0_2px_8px_-4px_rgba(244,63,94,0.2)] hover:shadow-[0_4px_12px_-4px_rgba(244,63,94,0.3)] hover:border-rose-300 dark:from-gray-700 dark:to-gray-800 dark:border-rose-800/60 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_10px_-4px_rgba(244,63,94,0.4)] dark:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_6px_15px_-4px_rgba(244,63,94,0.6)] dark:hover:border-rose-600/80';
+                     case 'primary': return 'bg-gradient-to-b from-blue-50 to-blue-100/50 border-blue-200/70 shadow-[0_2px_8px_-4px_rgba(59,130,246,0.2)] hover:shadow-[0_4px_12px_-4px_rgba(59,130,246,0.3)] hover:border-blue-300 dark:from-gray-700 dark:to-gray-800 dark:border-blue-800/60 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_10px_-4px_rgba(59,130,246,0.4)] dark:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_6px_15px_-4px_rgba(59,130,246,0.6)] dark:hover:border-blue-600/80';
+                     default: return 'bg-gradient-to-b from-white to-gray-50/50 border-gray-200/70 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-4px_rgba(0,0,0,0.1)] hover:border-gray-300 dark:from-gray-700 dark:to-gray-800 dark:border-gray-600 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_4px_10px_-4px_rgba(0,0,0,0.6)] dark:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_15px_-4px_rgba(0,0,0,0.8)] dark:hover:border-gray-500';
                    }
                 };
                 
                 const getLabelColors = () => {
                   switch(type) {
-                    case 'primary': return 'text-blue-600/70';
-                    case 'positive': return 'text-emerald-600/70';
-                    case 'negative': return 'text-rose-500/70';
-                    default: return 'text-gray-500';
+                    case 'primary': return 'text-blue-600/70 dark:text-blue-400';
+                    case 'positive': return 'text-emerald-600/70 dark:text-emerald-400';
+                    case 'negative': return 'text-rose-500/70 dark:text-rose-400';
+                    default: return 'text-gray-500 dark:text-gray-400';
                   }
                 }
 
                 const getValueColors = () => {
                   switch(type) {
-                    case 'primary': return 'text-blue-800';
-                    case 'positive': return 'text-emerald-700';
-                    case 'negative': return 'text-rose-600';
-                    default: return 'text-gray-800';
+                    case 'primary': return 'text-blue-800 dark:text-blue-300';
+                    case 'positive': return 'text-emerald-700 dark:text-emerald-300';
+                    case 'negative': return 'text-rose-600 dark:text-rose-300';
+                    default: return 'text-gray-800 dark:text-gray-100';
                   }
                 }
 
@@ -330,7 +330,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                           Object.keys(qtyByUnit).length > 0 ? (
                             <div className="flex flex-col gap-0.5">
                               {Object.entries(qtyByUnit).map(([unit, qty]) => (
-                                <span key={unit} className="text-gray-800 font-black text-sm leading-tight inline-flex items-center justify-center gap-1">
+                                <span key={unit} className="text-gray-800 font-black text-sm leading-tight inline-flex items-center justify-center gap-1 dark:text-gray-100">
                                   {qty} <span className="text-[10px] text-gray-400 font-bold">{unit}</span>
                                 </span>
                               ))}
@@ -418,7 +418,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
 
                   </div>
                   
-                  <div className="pt-6 border-t border-dashed border-gray-200">
+                  <div className="pt-6 border-t border-dashed border-gray-200 dark:border-gray-700">
                     <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-2xl border border-blue-500 shadow-xl shadow-blue-500/20 text-white flex justify-between items-center group cursor-default transition-all duration-300 hover:shadow-blue-500/30 hover:-translate-y-0.5">
                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-500/20 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4"></div>

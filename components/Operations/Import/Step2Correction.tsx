@@ -97,7 +97,7 @@ const EditableField: React.FC<{
               onChange={(e) => setCurrentValue(e.target.value)}
               onBlur={handleBlur}
               autoFocus
-              className={`w-full p-1.5 border ${borderColor} rounded-md text-sm outline-none bg-white transition-all min-h-[80px] resize-y`}
+              className={`w-full p-1.5 border ${borderColor} rounded-md text-sm outline-none bg-white transition-all min-h-[80px] resize-y dark:bg-gray-800`}
             />
           ) : (
             <input
@@ -107,10 +107,10 @@ const EditableField: React.FC<{
               onBlur={handleBlur}
               onKeyDown={handleKeyDown}
               autoFocus
-              className={`w-full p-1.5 border ${borderColor} rounded-md text-sm outline-none bg-white transition-all`}
+              className={`w-full p-1.5 border ${borderColor} rounded-md text-sm outline-none bg-white transition-all dark:bg-gray-800`}
             />
           )}
-          {suffix && <span className="ml-1 text-gray-500 text-xs font-semibold">{suffix}</span>}
+          {suffix && <span className="ml-1 text-gray-500 text-xs font-semibold dark:text-gray-400">{suffix}</span>}
         </div>
         {field.isMismatch && field.suggestion && (
           <div className="mt-1 flex items-center text-[10px] text-red-600 font-medium leading-tight">
@@ -127,7 +127,7 @@ const EditableField: React.FC<{
       <div className={`flex justify-between items-center cursor-pointer p-1.5 rounded-md border border-transparent transition-all ${bgMain} ${field.isMismatch ? 'border-red-200' : 'hover:border-blue-300'}`}>
         <div className="flex items-center space-x-2 overflow-hidden w-full">
           {field.isMismatch && <ErrorIcon className="text-red-500 scale-75 shrink-0" />}
-          <span className={`text-sm truncate font-medium ${field.isMismatch ? 'text-red-700' : 'text-gray-900'}`}>
+          <span className={`text-sm truncate font-medium ${field.isMismatch ? 'text-red-700' : 'text-gray-900'} dark:text-white`}>
             {field.value}{suffix ? ` ${suffix}` : ''}
           </span>
           {!hideConfidence && <ConfidencePill confidence={field.confidence} compact />}
@@ -218,7 +218,7 @@ const TransactionTypeSelect: React.FC<{
   if (!isEditing) {
     return (
       <div 
-        className={`w-full px-3 py-2 border ${field.isMismatch ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-blue-300 bg-white hover:bg-gray-50'} cursor-pointer rounded-md text-sm transition-all flex items-center justify-between group`}
+        className={`w-full px-3 py-2 border ${field.isMismatch ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-blue-300 bg-white hover:bg-gray-50'} cursor-pointer rounded-md text-sm transition-all flex items-center justify-between group dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700`}
         onClick={() => {
           setIsEditing(true);
           setShowDropdown(true);
@@ -226,7 +226,7 @@ const TransactionTypeSelect: React.FC<{
         }}
       >
         <div className="flex flex-col">
-          <span className="text-gray-900 font-medium truncate">{field.value || <span className="text-gray-400 italic">Select...</span>}</span>
+          <span className="text-gray-900 font-medium truncate dark:text-white">{field.value || <span className="text-gray-400 italic">Select...</span>}</span>
           {isLowConfidence && suggestions.length > 0 && (
              <span className="text-[10px] text-amber-600 font-bold mt-0.5 max-w-[150px] truncate leading-tight">AI expects: {suggestions[0].val}</span>
           )}
@@ -245,11 +245,11 @@ const TransactionTypeSelect: React.FC<{
         onChange={(e) => setSearchTerm(e.target.value)}
         onFocus={() => setShowDropdown(true)}
         onKeyDown={handleKeyDown}
-        className={`w-full px-3 py-2 border border-blue-400 rounded-md text-sm outline-none shadow-[0_0_0_3px_rgba(59,130,246,0.1)] bg-white`}
+        className={`w-full px-3 py-2 border border-blue-400 rounded-md text-sm outline-none shadow-[0_0_0_3px_rgba(59,130,246,0.1)] bg-white dark:bg-gray-800`}
         placeholder="Type or select..."
       />
       {showDropdown && (
-        <div className="absolute z-[100] top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto w-full custom-scrollbar">
+        <div className="absolute z-[100] top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto w-full custom-scrollbar dark:bg-gray-800 dark:border-gray-700">
           {suggestions.length > 0 && (
             <div className="bg-indigo-50/50 pb-1">
               <div className="px-3 py-1.5 text-[10px] font-black text-indigo-800 uppercase tracking-widest bg-indigo-100/50 border-b border-indigo-100 mb-1 flex items-center">
@@ -262,7 +262,7 @@ const TransactionTypeSelect: React.FC<{
                   onMouseDown={() => handleSelect(s.val)}
                 >
                   <span className="text-sm font-bold text-indigo-900">{s.val}</span>
-                  <span className="text-[10px] text-indigo-600 font-medium bg-white px-2 py-0.5 rounded-full shadow-sm">{s.reason}</span>
+                  <span className="text-[10px] text-indigo-600 font-medium bg-white px-2 py-0.5 rounded-full shadow-sm dark:bg-gray-800">{s.reason}</span>
                 </div>
               ))}
             </div>
@@ -273,7 +273,7 @@ const TransactionTypeSelect: React.FC<{
               {filteredRemaining.map((opt, idx) => (
                 <div 
                   key={`opt-${idx}`}
-                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm font-medium text-gray-700 transition-colors mx-1 rounded-lg"
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm font-medium text-gray-700 transition-colors mx-1 rounded-lg dark:hover:bg-gray-600 dark:text-gray-200"
                   onMouseDown={() => handleSelect(opt)}
                 >
                   {opt}
@@ -281,7 +281,7 @@ const TransactionTypeSelect: React.FC<{
               ))}
             </div>
           )}
-          <div className="p-2 border-t border-gray-100 bg-gray-50/80 mt-1 sticky bottom-0">
+          <div className="p-2 border-t border-gray-100 bg-gray-50/80 mt-1 sticky bottom-0 dark:border-gray-800">
              <div 
                className="text-[11px] font-bold text-blue-600 hover:text-blue-800 cursor-pointer flex items-center justify-center p-1.5 hover:bg-blue-100 rounded-lg transition-colors uppercase tracking-wider"
                onMouseDown={() => handleSelect(searchTerm)}
@@ -535,7 +535,7 @@ const MasterSelectField: React.FC<{
   if (isEditing) {
     return (
       <div ref={wrapperRef} className="relative z-30">
-        <div className="flex items-center border border-blue-500 rounded-md bg-white shadow-md overflow-hidden relative">
+        <div className="flex items-center border border-blue-500 rounded-md bg-white shadow-md overflow-hidden relative dark:bg-gray-800">
           <SearchIcon className="ml-2 text-blue-400 shrink-0 z-10" />
           
           <div className="flex-1 relative h-9">
@@ -557,7 +557,7 @@ const MasterSelectField: React.FC<{
               onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
               autoFocus
-              className="absolute inset-0 w-full px-2 py-2 outline-none text-sm bg-transparent placeholder-gray-400 z-10"
+              className="absolute inset-0 w-full px-2 py-2 outline-none text-sm bg-transparent placeholder-gray-400 z-10 dark:placeholder-gray-500"
               placeholder={`Search or type ${label}...`}
             />
           </div>
@@ -573,7 +573,7 @@ const MasterSelectField: React.FC<{
         </div>
         
         {showDropdown && !pendingCreateName && (
-          <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-2xl max-h-64 overflow-y-auto z-50 scrollbar-thin">
+          <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-2xl max-h-64 overflow-y-auto z-50 scrollbar-thin dark:bg-gray-800 dark:border-gray-700">
             <div ref={listRef}>
               {filteredMasters.length > 0 ? (
                 filteredMasters.map((m, idx) => {
@@ -587,7 +587,7 @@ const MasterSelectField: React.FC<{
                       onMouseEnter={() => setActiveIndex(idx)}
                       className={`p-2.5 cursor-pointer text-sm flex justify-between items-center transition-colors border-l-2 ${
                         isActive ? 'bg-blue-50 border-blue-500 text-blue-700' : 'hover:bg-gray-50 border-transparent text-gray-700'
-                      } ${isCurrent ? 'font-bold' : ''}`}
+                      } ${isCurrent ? 'font-bold' : ''} dark:hover:bg-gray-700 dark:text-gray-200`}
                     >
                       <HighlightedText text={name} highlight={searchTerm} />
                       {isCurrent && <CheckCircleIcon className="text-blue-500 text-sm" />}
@@ -605,7 +605,7 @@ const MasterSelectField: React.FC<{
               <div 
                 onClick={() => handleSelect(searchTerm.trim())}
                 onMouseEnter={() => setActiveIndex(-1)}
-                className={`p-3 border-t bg-gray-50 hover:bg-green-50 cursor-pointer text-sm font-semibold text-green-700 flex items-center transition-all ${activeIndex === -1 && searchTerm.trim() ? 'bg-green-50 ring-1 ring-inset ring-green-200' : ''}`}
+                className={`p-3 border-t bg-gray-50 hover:bg-green-50 cursor-pointer text-sm font-semibold text-green-700 flex items-center transition-all ${activeIndex === -1 && searchTerm.trim() ? 'bg-green-50 ring-1 ring-inset ring-green-200' : ''} dark:bg-gray-900`}
               >
                 <AddIcon className="mr-2 text-sm" />
                 Create and link "{searchTerm}"
@@ -615,20 +615,20 @@ const MasterSelectField: React.FC<{
         )}
 
         {pendingCreateName && (
-          <div className="absolute top-full left-0 w-full mt-1 bg-white border border-blue-200 rounded-md shadow-2xl z-50 p-4 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="absolute top-full left-0 w-full mt-1 bg-white border border-blue-200 rounded-md shadow-2xl z-50 p-4 animate-in fade-in slide-in-from-top-2 duration-200 dark:bg-gray-800">
             <div className="flex items-start mb-3">
               <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3 shrink-0">
                 <AddIcon className="text-lg" />
               </div>
               <div>
                 <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Confirm Creation</h4>
-                <p className="text-sm text-gray-800 font-bold leading-tight">Create "{pendingCreateName}" in {label} Masters?</p>
+                <p className="text-sm text-gray-800 font-bold leading-tight dark:text-gray-100">Create "{pendingCreateName}" in {label} Masters?</p>
               </div>
             </div>
             <div className="flex gap-2 mt-4">
               <button 
                 onClick={() => { setPendingCreateName(null); setShowDropdown(true); }}
-                className="flex-1 py-2 px-3 border border-gray-200 rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-2 px-3 border border-gray-200 rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-50 transition-colors dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700"
               >
                 Go Back
               </button>
@@ -658,7 +658,7 @@ const MasterSelectField: React.FC<{
       <div className={`flex justify-between items-center cursor-pointer p-1.5 rounded-md border transition-all ${borderColor} ${bgMain}`}>
         <div className="flex items-center space-x-2 overflow-hidden">
           {field.isMismatch && <ErrorIcon className="text-red-500 scale-75 shrink-0" />}
-          <span className={`text-sm font-medium truncate ${field.isMismatch ? 'text-red-700' : 'text-gray-900'}`}>{field.value}</span>
+          <span className={`text-sm font-medium truncate ${field.isMismatch ? 'text-red-700' : 'text-gray-900'} dark:text-white`}>{field.value}</span>
           {isMasterLinked && !field.isMismatch && (
              <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-100 uppercase shrink-0 flex items-center">
                 <CheckCircleIcon className="mr-1 scale-75" />
@@ -757,7 +757,7 @@ const TaxRateCombobox: React.FC<{
   if (isEditing) {
     return (
       <div ref={wrapperRef} className="relative z-30">
-        <div className="flex flex-col relative bg-white">
+        <div className="flex flex-col relative bg-white dark:bg-gray-800">
            <div className="flex items-center">
             <input
               type="number"
@@ -773,13 +773,13 @@ const TaxRateCombobox: React.FC<{
               autoFocus
               className={`w-full p-1 border ${error ? 'border-red-500' : 'border-blue-500 rounded-md'} text-sm pr-6 focus:outline-none`}
             />
-            <span className="absolute right-2 text-gray-500 text-xs pointer-events-none">%</span>
+            <span className="absolute right-2 text-gray-500 text-xs pointer-events-none dark:text-gray-400">%</span>
           </div>
           {error && <span className="absolute top-10 w-40 mt-1 text-[10px] text-red-500 bg-red-50 border border-red-200 px-1 py-0.5 rounded shadow-sm z-50">{error}</span>}
         </div>
         
         {showDropdown && !error && (
-          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
             {filteredRates.length > 0 ? (
               filteredRates.map(rate => (
                 <div 
@@ -815,7 +815,7 @@ const TaxRateCombobox: React.FC<{
 
   return (
     <div className="group relative" onClick={() => { setIsEditing(true); setCurrentValue(String(field.value)); }}>
-      <div className={`flex justify-between items-center cursor-pointer p-1 rounded-md hover:bg-gray-100 border border-transparent hover:${borderColor}`}>
+      <div className={`flex justify-between items-center cursor-pointer p-1 rounded-md hover:bg-gray-100 border border-transparent hover:${borderColor} dark:hover:bg-gray-600`}>
         <div className="flex items-center space-x-2 overflow-hidden">
           <span className="text-sm truncate">
             {field.value}%
@@ -865,7 +865,7 @@ const TaxTypeCombobox: React.FC<{
   if (isEditing) {
     return (
       <div ref={wrapperRef} className="relative z-30">
-        <div className="flex flex-col relative bg-white">
+        <div className="flex flex-col relative bg-white dark:bg-gray-800">
            <div className="flex items-center">
             <input
               type="text"
@@ -875,12 +875,12 @@ const TaxTypeCombobox: React.FC<{
               onFocus={() => setShowDropdown(true)}
               className={`w-full p-1 border border-blue-500 rounded-md text-sm cursor-pointer focus:outline-none`}
             />
-            <ExpandMoreIcon className="absolute right-1 text-gray-500 text-sm pointer-events-none" />
+            <ExpandMoreIcon className="absolute right-1 text-gray-500 text-sm pointer-events-none dark:text-gray-400" />
           </div>
         </div>
         
         {showDropdown && (
-          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
             {COMMON_TYPES.map(type => (
               <div 
                 key={type} 
@@ -905,9 +905,9 @@ const TaxTypeCombobox: React.FC<{
 
   return (
     <div className="group relative" onClick={() => { setIsEditing(true); setCurrentValue(String(field.value)); }}>
-      <div className={`flex justify-between items-center cursor-pointer p-1 rounded-md hover:bg-gray-100 border border-transparent hover:${borderColor}`}>
+      <div className={`flex justify-between items-center cursor-pointer p-1 rounded-md hover:bg-gray-100 border border-transparent hover:${borderColor} dark:hover:bg-gray-600`}>
         <div className="flex items-center space-x-2 overflow-hidden">
-          <span className="text-sm font-medium text-gray-700 truncate">
+          <span className="text-sm font-medium text-gray-700 truncate dark:text-gray-200">
             {field.value}
           </span>
           <ConfidencePill confidence={field.confidence} compact />
@@ -974,7 +974,7 @@ const UomCombobox: React.FC<{
   if (isEditing) {
     return (
       <div ref={wrapperRef} className="relative z-30">
-        <div className="flex flex-col relative bg-white">
+        <div className="flex flex-col relative bg-white dark:bg-gray-800">
             <input
               type="text"
               value={currentValue}
@@ -991,7 +991,7 @@ const UomCombobox: React.FC<{
         </div>
         
         {showDropdown && (
-          <div className="absolute top-full left-0 mt-1 w-full min-w-[80px] bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto z-50">
+          <div className="absolute top-full left-0 mt-1 w-full min-w-[80px] bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto z-50 dark:bg-gray-800 dark:border-gray-700">
             {filteredUnits.length > 0 ? (
               filteredUnits.map(unit => (
                 <div 
@@ -1023,10 +1023,10 @@ const UomCombobox: React.FC<{
 
   return (
     <div className="group relative" onClick={() => { setIsEditing(true); setCurrentValue(String(field.value)); }}>
-      <div className={`flex justify-between items-center cursor-pointer p-1 rounded-md border transition-all ${field.isMismatch ? 'bg-red-50 border-red-500' : 'border-transparent hover:bg-gray-100'}`}>
+      <div className={`flex justify-between items-center cursor-pointer p-1 rounded-md border transition-all ${field.isMismatch ? 'bg-red-50 border-red-500' : 'border-transparent hover:bg-gray-100'} dark:hover:bg-gray-600`}>
         <div className="flex items-center space-x-1.5 overflow-hidden">
           {field.isMismatch && <ErrorIcon className="text-red-500 scale-75 shrink-0" />}
-          <span className={`text-sm font-medium truncate ${field.isMismatch ? 'text-red-700' : 'text-gray-700'}`}>
+          <span className={`text-sm font-medium truncate ${field.isMismatch ? 'text-red-700' : 'text-gray-700'} dark:text-gray-200`}>
             {field.value || <span className="text-gray-300 italic">Nil</span>}
           </span>
         </div>
@@ -1105,13 +1105,13 @@ const ItemNameCombobox: React.FC<{
               onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
               autoFocus
-              className={`w-full p-1.5 border ${field.isMismatch ? 'border-red-500' : 'border-blue-500'} rounded-md text-sm focus:outline-none bg-white`}
+              className={`w-full p-1.5 border ${field.isMismatch ? 'border-red-500' : 'border-blue-500'} rounded-md text-sm focus:outline-none bg-white dark:bg-gray-800`}
               placeholder="Item name..."
             />
         </div>
         
         {showDropdown && filteredSuggestions.length > 0 && (
-          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto z-50">
+          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto z-50 dark:bg-gray-800 dark:border-gray-700">
             {filteredSuggestions.map(s => (
               <div 
                 key={s} 
@@ -1138,10 +1138,10 @@ const ItemNameCombobox: React.FC<{
 
   return (
     <div className="group relative w-full" onClick={() => { setIsEditing(true); setCurrentValue(String(field.value)); }}>
-      <div className={`flex justify-between items-center cursor-pointer p-1.5 rounded-md border transition-all ${field.isMismatch ? 'bg-red-50 border-red-500' : 'border-transparent hover:bg-gray-100'}`}>
+      <div className={`flex justify-between items-center cursor-pointer p-1.5 rounded-md border transition-all ${field.isMismatch ? 'bg-red-50 border-red-500' : 'border-transparent hover:bg-gray-100'} dark:hover:bg-gray-600`}>
         <div className="flex items-center space-x-2 overflow-hidden flex-1">
           {field.isMismatch && <ErrorIcon className="text-red-500 scale-75 shrink-0" />}
-          <span className={`text-sm font-medium truncate ${field.isMismatch ? 'text-red-700' : 'text-gray-900'}`}>
+          <span className={`text-sm font-medium truncate ${field.isMismatch ? 'text-red-700' : 'text-gray-900'} dark:text-white`}>
             {field.value || <span className="text-gray-300 italic">No name</span>}
           </span>
         </div>
@@ -1876,7 +1876,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
 
    return (
     <div className="h-full flex flex-col">
-      <div className="bg-white p-3 sm:p-4 rounded-xl shadow-md flex-1 flex flex-col min-h-0 overflow-hidden">
+      <div className="bg-white p-3 sm:p-4 rounded-xl shadow-md flex-1 flex flex-col min-h-0 overflow-hidden dark:bg-gray-800">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 flex-shrink-0 gap-3">
           <div className="flex items-center">
              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 text-white rounded-xl flex flex-col items-center justify-center mr-3 sm:mr-4 shadow-lg shadow-blue-100 shrink-0">
@@ -1884,15 +1884,15 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                 <span className="text-base sm:text-lg font-black" style={{ fontSize: activeVoucher?.tempImportId ? '0.75rem' : '1.125rem' }}>{activeVoucher?.tempImportId || `#${activeVoucherIndex + 1}`}</span>
              </div>
              <div>
-                <h2 className="text-lg sm:text-xl font-bold text-gray-800 leading-tight">Banking Verification</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 leading-tight dark:text-gray-100">Banking Verification</h2>
                 <div className="flex items-center mt-0.5 space-x-2 sm:space-x-3">
-                   <p className="text-gray-500 text-[10px] sm:text-xs">
+                   <p className="text-gray-500 text-[10px] sm:text-xs dark:text-gray-400">
                      {activeTab === 'unmap' ? 'Entries where no valid name was extracted' : 
                       activeTab === 'missing' ? 'Entries with extracted names but no master match (>75%)' : 
                       'Entries automatically matched with existing masters'}
                    </p>
                    {vouchers.length > 1 && (
-                      <div className="hidden sm:flex items-center bg-gray-100 px-2 py-0.5 rounded-full border border-gray-200">
+                      <div className="hidden sm:flex items-center bg-gray-100 px-2 py-0.5 rounded-full border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                         <span className="text-[10px] font-bold text-gray-400 uppercase mr-2 tracking-wider">Progress</span>
                         <div className="flex items-center space-x-1">
                            {(vouchers || []).map((v, i) => (
@@ -1912,7 +1912,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
               saveStatus === 'saved' 
                 ? 'bg-green-100 text-green-700' 
                 : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-            }`}
+            } dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700`}
           >
             {saveStatus === 'saving' ? (
               <span className="flex items-center">
@@ -1929,24 +1929,24 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
         </div>
 
         {/* THREE STAGE TABS */}
-        <div className="flex border-b border-gray-200 mb-4 bg-gray-50 rounded-t-lg p-1">
+        <div className="flex border-b border-gray-200 mb-4 bg-gray-50 rounded-t-lg p-1 dark:border-gray-700 dark:bg-gray-900">
           <button 
             onClick={() => setActiveTab('unmap')}
-            className={`flex-1 py-2 px-4 text-xs font-bold rounded-md transition-all flex items-center justify-center gap-2 ${activeTab === 'unmap' ? 'bg-white border shadow-sm text-red-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`flex-1 py-2 px-4 text-xs font-bold rounded-md transition-all flex items-center justify-center gap-2 ${activeTab === 'unmap' ? 'bg-white border shadow-sm text-red-600' : 'text-gray-500 hover:text-gray-700'} dark:bg-gray-800 dark:text-gray-400`}
           >
             <div className={`w-2 h-2 rounded-full ${categorizedVouchers.unmap.length > 0 ? 'bg-red-500 animate-pulse' : 'bg-gray-300'}`} />
             UNMAP ({categorizedVouchers.unmap.length})
           </button>
           <button 
             onClick={() => setActiveTab('missing')}
-            className={`flex-1 py-2 px-4 text-xs font-bold rounded-md transition-all flex items-center justify-center gap-2 ${activeTab === 'missing' ? 'bg-white border shadow-sm text-amber-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`flex-1 py-2 px-4 text-xs font-bold rounded-md transition-all flex items-center justify-center gap-2 ${activeTab === 'missing' ? 'bg-white border shadow-sm text-amber-600' : 'text-gray-500 hover:text-gray-700'} dark:bg-gray-800 dark:text-gray-400`}
           >
             <div className={`w-2 h-2 rounded-full ${categorizedVouchers.missing.length > 0 ? 'bg-amber-500' : 'bg-gray-300'}`} />
             MISSING MASTER ({categorizedVouchers.missing.length})
           </button>
           <button 
             onClick={() => setActiveTab('automate')}
-            className={`flex-1 py-2 px-4 text-xs font-bold rounded-md transition-all flex items-center justify-center gap-2 ${activeTab === 'automate' ? 'bg-white border shadow-sm text-green-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`flex-1 py-2 px-4 text-xs font-bold rounded-md transition-all flex items-center justify-center gap-2 ${activeTab === 'automate' ? 'bg-white border shadow-sm text-green-600' : 'text-gray-500 hover:text-gray-700'} dark:bg-gray-800 dark:text-gray-400`}
           >
             <div className={`w-2 h-2 rounded-full ${categorizedVouchers.automate.length > 0 ? 'bg-green-500' : 'bg-gray-300'}`} />
             AUTOMATE ({categorizedVouchers.automate.length})
@@ -1954,7 +1954,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
         </div>
 
         {tabVouchers.length > 0 && (
-            <div className="border-b border-gray-100 mb-4 overflow-x-auto scrollbar-none flex-shrink-0 bg-white p-1 rounded-lg">
+            <div className="border-b border-gray-100 mb-4 overflow-x-auto scrollbar-none flex-shrink-0 bg-white p-1 rounded-lg dark:border-gray-800 dark:bg-gray-800">
                 <nav className="flex space-x-2" aria-label="Tabs">
                     {tabVouchers.map((voucher, index) => {
                         const hasError = Object.values(voucher || {}).some(field => typeof field === 'object' && field !== null && !Array.isArray(field) && (field as any).isMismatch) ||
@@ -1968,7 +1968,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                 isActive 
                                 ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
                                 : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
-                              }`}
+                              } dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`}
                           >
                               {voucher.tempImportId || `#${vouchers.findIndex(v => v.id === voucher.id) + 1}`}
                               {hasError && <span className="ml-2 w-1.5 h-1.5 bg-red-400 rounded-full inline-block animate-ping"></span>}
@@ -1980,18 +1980,18 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
         )}
         
         {activeVoucher && (
-            <div className="overflow-x-auto flex-1 min-h-0 bg-white border border-gray-100 rounded-lg shadow-inner overflow-y-auto scrollbar-thin">
-            <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+            <div className="overflow-x-auto flex-1 min-h-0 bg-white border border-gray-100 rounded-lg shadow-inner overflow-y-auto scrollbar-thin dark:bg-gray-800 dark:border-gray-800">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-900">
                     <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Field</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Extracted Value</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI Confidence</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Field</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Extracted Value</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">AI Confidence</th>
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                     <tr className="bg-blue-50/10">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 capitalize">Import ID</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 capitalize dark:text-white">Import ID</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700 font-bold font-mono text-base">
                             {activeVoucher.tempImportId || `${activeVoucher.type.substring(0, 3).toUpperCase()}-${(activeVoucherIndex + 1).toString().padStart(4, '0')}`}
                         </td>
@@ -2000,7 +2000,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                         </td>
                     </tr>
                     <tr className="bg-blue-50/30">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 capitalize">Voucher Type</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 capitalize dark:text-white">Voucher Type</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <div className="flex flex-wrap gap-2">
                                 {[VoucherType.Receipt, VoucherType.Payment, VoucherType.Contra].map(t => (
@@ -2011,7 +2011,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                             activeVoucher.type === t 
                                             ? 'bg-indigo-600 border-indigo-600 text-white' 
                                             : 'bg-white border-gray-200 text-gray-500 hover:border-indigo-300 hover:text-indigo-600'
-                                        }`}
+                                        } dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400`}
                                     >
                                         {t}
                                     </button>
@@ -2024,8 +2024,8 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                     </tr>
                     {hasItemsAndTax && (
                     <tr className="bg-gray-50/50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 capitalize">Total Taxable Amount</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-bold">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 capitalize dark:text-white">Total Taxable Amount</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-bold dark:text-gray-200">
                             ₹{totalTaxableAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 italic">
@@ -2060,12 +2060,12 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                           
                           return (
                             <tr key={key} className={`transition-colors relative ${isMismatch ? 'bg-red-50/50' : ''}`}>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 capitalize flex items-center relative">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 capitalize flex items-center relative dark:text-white">
                                   {isMismatch && <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500" title="Validation mismatch" />}
                                   {isMismatch && <ErrorIcon className="text-red-500 scale-75 mr-2" />}
                                   {key.replace(/([A-Z])/g, ' $1')}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/2">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/2 dark:text-gray-400">
                                     {key === 'partyName' ? (
                                       <div className="flex flex-col gap-1">
                                         <MasterSelectField 
@@ -2087,7 +2087,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                         <select 
                                             value={String(field.value)}
                                             onChange={(e) => handleFieldChange(activeVoucher.id, key, e.target.value)}
-                                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-md text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none"
+                                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-md text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-gray-800 dark:border-gray-700"
                                         >
                                             <option value="">Select bank...</option>
                                             {(ledgerMasters || []).filter(m => m.group === 'Bank Accounts').map(m => m.name).map(item => (
@@ -2100,7 +2100,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                         <select 
                                             value={String(field.value)}
                                             onChange={(e) => handleFieldChange(activeVoucher.id, key, e.target.value)}
-                                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-md text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none"
+                                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-md text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-gray-800 dark:border-gray-700"
                                         >
                                             <option value="Intra-State">Intra-State (Local)</option>
                                             <option value="Inter-State">Inter-State (Outside)</option>
@@ -2159,9 +2159,9 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                     {(taxAnalysis || []).map((group) => {
                     const isExpanded = expandedRateGroups[group.rate];
                     return (
-                      <div key={group.rate} className="bg-white rounded-md border border-blue-100 shadow-sm transition-all hover:shadow-md overflow-hidden">
+                      <div key={group.rate} className="bg-white rounded-md border border-blue-100 shadow-sm transition-all hover:shadow-md overflow-hidden dark:bg-gray-800">
                         <div 
-                          className="p-4 cursor-pointer hover:bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                          className="p-4 cursor-pointer hover:bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4 dark:hover:bg-gray-700"
                           onClick={() => toggleRateGroup(group.rate)}
                         >
                           <div className="flex items-center">
@@ -2176,8 +2176,8 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                           
                           <div className="flex items-center space-x-8">
                             <div className="text-right">
-                              <div className="text-[10px] text-gray-500 uppercase font-semibold">Taxable Value</div>
-                              <div className="text-sm font-medium text-gray-900">₹{group.taxableValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
+                              <div className="text-[10px] text-gray-500 uppercase font-semibold dark:text-gray-400">Taxable Value</div>
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">₹{group.taxableValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
                             </div>
                             <div className="text-right bg-blue-50 px-3 py-1 rounded">
                               <div className="text-[10px] text-blue-500 uppercase font-bold">Tax Amount</div>
@@ -2187,20 +2187,20 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                         </div>
 
                         {isExpanded && (
-                          <div className="border-t border-gray-100 bg-gray-50/50 p-4">
+                          <div className="border-t border-gray-100 bg-gray-50/50 p-4 dark:border-gray-800">
                             <table className="min-w-full text-xs">
                               <thead>
-                                <tr className="text-gray-400 uppercase font-bold border-b border-gray-200">
+                                <tr className="text-gray-400 uppercase font-bold border-b border-gray-200 dark:border-gray-700">
                                   <th className="text-left pb-2 font-semibold">Item Description</th>
                                   <th className="text-right pb-2 font-semibold font-mono">Taxable Amt</th>
                                   <th className="text-right pb-2 font-semibold font-mono">Tax Amt</th>
                                 </tr>
                               </thead>
-                              <tbody className="divide-y divide-gray-100">
+                              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                                 {(group.items || []).map((item, idx) => (
                                   <tr key={idx} className="hover:bg-white transition-colors">
-                                    <td className="py-2 text-gray-700">{item.name}</td>
-                                    <td className="py-2 text-right text-gray-600 font-mono">₹{item.taxable.toFixed(2)}</td>
+                                    <td className="py-2 text-gray-700 dark:text-gray-200">{item.name}</td>
+                                    <td className="py-2 text-right text-gray-600 font-mono dark:text-gray-300">₹{item.taxable.toFixed(2)}</td>
                                     <td className="py-2 text-right text-blue-600 font-bold font-mono">₹{item.tax.toFixed(2)}</td>
                                   </tr>
                                 ))}
@@ -2219,7 +2219,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
             {hasItemsAndTax && activeVoucher.items && activeVoucher.items.length > 0 && (
               <>
             <div className="flex items-center justify-between my-6">
-              <h3 className="text-lg font-bold text-gray-800">Items Details</h3>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Items Details</h3>
               {activeVoucher.items.filter(item => Object.values(item || {}).some(f => (f as any).isMismatch)).length > 0 && (
                 <span className="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold flex items-center animate-pulse">
                   <ErrorIcon className="mr-1 text-sm" />
@@ -2227,21 +2227,21 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                 </span>
               )}
             </div>
-             <table className="min-w-full divide-y divide-gray-200">
-                 <thead className="bg-gray-50">
+             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                 <thead className="bg-gray-50 dark:bg-gray-900">
                     <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rate</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tax Type</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tax %</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tax Amt</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                          <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Item Name</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Qty</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Unit</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Rate</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Tax Type</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Tax %</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Tax Amt</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Total</th>
+                          <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Actions</th>
                     </tr>
                 </thead>
-                 <tbody className="bg-white divide-y divide-gray-200">
+                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                     {(activeVoucher.items || []).map((item, index) => {
                         const rowHasError = Object.values(item || {}).some(field => typeof field === 'object' && field !== null && (field as VoucherField).isMismatch);
                         const currentTaxType = String(item.taxType?.value || 'CGST/SGST');
@@ -2295,36 +2295,36 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                  />
                                  
                                  {/* Detailed Tax Breakdown Popover */}
-                                 <div className="absolute left-0 top-full mt-1 hidden group-hover:block z-30 bg-white border border-gray-200 shadow-2xl rounded-xl p-0 w-64 transform translate-y-1 overflow-hidden">
-                                   <div className="bg-gray-50 px-3 py-2 border-b border-gray-100 flex justify-between items-center">
-                                     <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Detailed Tax Breakdown</div>
+                                 <div className="absolute left-0 top-full mt-1 hidden group-hover:block z-30 bg-white border border-gray-200 shadow-2xl rounded-xl p-0 w-64 transform translate-y-1 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                                   <div className="bg-gray-50 px-3 py-2 border-b border-gray-100 flex justify-between items-center dark:bg-gray-900 dark:border-gray-800">
+                                     <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Detailed Tax Breakdown</div>
                                    </div>
                                                         <div className="p-3 space-y-3">
                                       <div className="flex justify-between text-xs">
-                                        <span className="text-gray-500 font-medium">Taxable Value</span>
-                                        <span className="font-mono text-gray-800">₹{safeRound(safeNum(item.quantity?.value) * safeNum(item.rate?.value)).toFixed(2)}</span>
+                                        <span className="text-gray-500 font-medium dark:text-gray-400">Taxable Value</span>
+                                        <span className="font-mono text-gray-800 dark:text-gray-100">₹{safeRound(safeNum(item.quantity?.value) * safeNum(item.rate?.value)).toFixed(2)}</span>
                                       </div>
                                       
                                       {currentTaxType === 'CGST/SGST' ? (
-                                        <div className="pt-2 border-t border-gray-100">
+                                        <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
                                           <div className="text-[10px] font-semibold text-gray-400 uppercase mb-2">Intra-State Supply</div>
                                           <div className="space-y-1.5">
                                             <div className="flex justify-between text-xs items-center">
-                                              <span className="text-gray-600">CGST ({(safeNum(item.taxRate?.value) / 2).toFixed(1)}%)</span>
-                                              <span className="font-mono text-gray-700">₹{(safeNum(item.tax?.value) / 2).toFixed(2)}</span>
+                                              <span className="text-gray-600 dark:text-gray-300">CGST ({(safeNum(item.taxRate?.value) / 2).toFixed(1)}%)</span>
+                                              <span className="font-mono text-gray-700 dark:text-gray-200">₹{(safeNum(item.tax?.value) / 2).toFixed(2)}</span>
                                             </div>
                                             <div className="flex justify-between text-xs items-center">
-                                              <span className="text-gray-600">SGST ({(safeNum(item.taxRate?.value) / 2).toFixed(1)}%)</span>
-                                              <span className="font-mono text-gray-700">₹{(safeNum(item.tax?.value) / 2).toFixed(2)}</span>
+                                              <span className="text-gray-600 dark:text-gray-300">SGST ({(safeNum(item.taxRate?.value) / 2).toFixed(1)}%)</span>
+                                              <span className="font-mono text-gray-700 dark:text-gray-200">₹{(safeNum(item.tax?.value) / 2).toFixed(2)}</span>
                                             </div>
                                           </div>
                                         </div>
                                       ) : (
-                                        <div className="pt-2 border-t border-gray-100">
+                                        <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
                                           <div className="text-[10px] font-semibold text-gray-400 uppercase mb-2">Inter-State Supply</div>
                                           <div className="flex justify-between text-xs items-center">
-                                            <span className="text-gray-600">IGST ({safeNum(item.taxRate?.value).toFixed(1)}%)</span>
-                                            <span className="font-mono text-gray-700">₹{safeNum(item.tax?.value).toFixed(2)}</span>
+                                            <span className="text-gray-600 dark:text-gray-300">IGST ({safeNum(item.taxRate?.value).toFixed(1)}%)</span>
+                                            <span className="font-mono text-gray-700 dark:text-gray-200">₹{safeNum(item.tax?.value).toFixed(2)}</span>
                                           </div>
                                         </div>
                                       )}
@@ -2349,7 +2349,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                             </td>
                             <td className="px-6 py-4">
                                 <div className="flex items-center space-x-2">
-                                  <div className="text-sm font-bold text-gray-900">₹{Number(item.total?.value || 0).toFixed(2)}</div>
+                                  <div className="text-sm font-bold text-gray-900 dark:text-white">₹{Number(item.total?.value || 0).toFixed(2)}</div>
                                   <ConfidencePill confidence={item.total?.confidence || Confidence.High} compact />
                                 </div>
                             </td>
@@ -2357,7 +2357,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                <div className="relative inline-block text-left">
                                  <button
                                    onClick={() => setActiveRowMenuIndex(activeRowMenuIndex === index ? null : index)}
-                                   className="p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600 focus:outline-none"
+                                   className="p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600 focus:outline-none dark:hover:bg-gray-600"
                                  >
                                    <MoreHorizIcon />
                                  </button>
@@ -2368,11 +2368,11 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                        className="fixed inset-0 z-40" 
                                        onClick={() => setActiveRowMenuIndex(null)}
                                      />
-                                     <div className="absolute right-0 bottom-full mb-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 transform origin-bottom-right">
+                                     <div className="absolute right-0 bottom-full mb-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 transform origin-bottom-right dark:bg-gray-800">
                                        <div className="py-1" role="menu" aria-orientation="vertical">
                                          <button
                                            onClick={() => handleDuplicateItem(index)}
-                                           className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+                                           className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors dark:text-gray-200"
                                            role="menuitem"
                                          >
                                            <ContentCopyIcon className="mr-3 scale-75 text-blue-500" />
@@ -2413,17 +2413,17 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                  <div />
                )}
 
-               <div className="w-full md:w-80 bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+               <div className="w-full md:w-80 bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-900 dark:border-gray-700">
                  {hasItemsAndTax && (
                    <>
                      <div className="flex justify-between text-sm py-1.5">
-                       <span className="text-gray-600 font-medium tracking-wide">Total Taxable Value</span>
-                       <span className="font-mono font-bold text-gray-900">₹{totalTaxableAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                       <span className="text-gray-600 font-medium tracking-wide dark:text-gray-300">Total Taxable Value</span>
+                       <span className="font-mono font-bold text-gray-900 dark:text-white">₹{totalTaxableAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                      </div>
-                     <div className="flex flex-col border-b border-dashed border-gray-300">
+                     <div className="flex flex-col border-b border-dashed border-gray-300 dark:border-gray-600">
                         <div className="flex justify-between text-sm py-1.5">
-                          <span className="text-gray-600 font-medium tracking-wide">Total Tax Amount</span>
-                          <span className="font-mono font-bold text-gray-900">₹{Number(activeVoucher.tax?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-gray-600 font-medium tracking-wide dark:text-gray-300">Total Tax Amount</span>
+                          <span className="font-mono font-bold text-gray-900 dark:text-white">₹{Number(activeVoucher.tax?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         </div>
                         <div className="flex flex-col pb-2 pl-4 gap-0.5">
                           {hasIgst ? (
@@ -2433,11 +2433,11 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                             </div>
                           ) : (
                             <>
-                              <div className="flex justify-between text-[11px] text-gray-500 font-mono">
+                              <div className="flex justify-between text-[11px] text-gray-500 font-mono dark:text-gray-400">
                                 <span>CGST</span>
                                 <span>₹{totalCgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                               </div>
-                              <div className="flex justify-between text-[11px] text-gray-500 font-mono">
+                              <div className="flex justify-between text-[11px] text-gray-500 font-mono dark:text-gray-400">
                                 <span>SGST</span>
                                 <span>₹{totalSgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                               </div>
@@ -2448,7 +2448,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                    </>
                  )}
                  <div className="flex justify-between text-sm sm:text-base py-2 mt-1">
-                   <span className="text-gray-900 font-bold tracking-wide">Total Voucher Amount</span>
+                   <span className="text-gray-900 font-bold tracking-wide dark:text-white">Total Voucher Amount</span>
                    <span className={`${
                      String(activeVoucher.amount?.value || activeVoucher.withdrawalAmount?.value || activeVoucher.depositAmount?.value || 0).length > 8 ? 'text-sm' : 'text-base'
                    } font-mono font-bold text-blue-700 transition-all duration-300`}>₹{Number(activeVoucher.amount?.value || activeVoucher.withdrawalAmount?.value || activeVoucher.depositAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
@@ -2456,26 +2456,26 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                </div>
              </div>
              
-             <details className="mx-4 mb-4 mt-6 border border-gray-200 rounded-lg bg-white shadow-sm shrink-0">
-                <summary className="px-4 py-3 text-sm font-bold text-gray-700 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none flex items-center rounded-t-lg">
-                  <HistoryIcon className="text-gray-500 mr-2" />
+             <details className="mx-4 mb-4 mt-6 border border-gray-200 rounded-lg bg-white shadow-sm shrink-0 dark:border-gray-700 dark:bg-gray-800">
+                <summary className="px-4 py-3 text-sm font-bold text-gray-700 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none flex items-center rounded-t-lg dark:text-gray-200 dark:bg-gray-900 dark:hover:bg-gray-600">
+                  <HistoryIcon className="text-gray-500 mr-2 dark:text-gray-400" />
                   Audit Log History
                 </summary>
-                <div className="p-4 border-t border-gray-200 space-y-3 max-h-[300px] overflow-y-auto">
+                <div className="p-4 border-t border-gray-200 space-y-3 max-h-[300px] overflow-y-auto dark:border-gray-700">
                   {(activeVoucher.auditLogs || []).length > 0 ? (
                     activeVoucher.auditLogs!.map((log) => (
-                      <div key={log.id} className="text-xs text-gray-700 bg-gray-50 p-2.5 rounded-lg border border-gray-200 flex flex-col gap-1.5 shadow-sm">
-                        <div className="flex justify-between items-center text-gray-900 font-bold border-b border-gray-200 pb-1 mb-1">
+                      <div key={log.id} className="text-xs text-gray-700 bg-gray-50 p-2.5 rounded-lg border border-gray-200 flex flex-col gap-1.5 shadow-sm dark:text-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                        <div className="flex justify-between items-center text-gray-900 font-bold border-b border-gray-200 pb-1 mb-1 dark:text-white dark:border-gray-700">
                            <div className="flex items-center space-x-2">
                              <span>{log.author}</span>
-                             <span className="font-mono text-[10px] text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded">{new Date(log.timestamp).toLocaleString()}</span>
+                             <span className="font-mono text-[10px] text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded dark:text-gray-400 dark:bg-gray-700">{new Date(log.timestamp).toLocaleString()}</span>
                            </div>
                            <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider">{log.action}</span>
                         </div>
                         <div className="flex flex-col gap-1 ml-1">
                           {(log.changes || []).map((change, idx) => (
                              <div key={idx} className="flex gap-2 items-center w-full">
-                               <span className="font-bold text-gray-700 capitalize min-w-[100px] shrink-0 truncate">{change.field.replace(/([A-Z])/g, ' $1')}:</span>
+                               <span className="font-bold text-gray-700 capitalize min-w-[100px] shrink-0 truncate dark:text-gray-200">{change.field.replace(/([A-Z])/g, ' $1')}:</span>
                                <span className="text-red-500 line-through max-w-[200px] truncate" title={String(change.oldValue || '(Empty)')}>{String(change.oldValue || '(Empty)')}</span>
                                <span className="text-gray-400 font-bold">&rarr;</span>
                                <span className="text-green-600 font-medium max-w-[200px] truncate" title={String(change.newValue || '(Empty)')}>{String(change.newValue || '(Empty)')}</span>
@@ -2485,7 +2485,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                       </div>
                     ))
                   ) : (
-                    <div className="text-sm text-gray-500 py-4 text-center italic">No modifications have been recorded for this voucher yet.</div>
+                    <div className="text-sm text-gray-500 py-4 text-center italic dark:text-gray-400">No modifications have been recorded for this voucher yet.</div>
                   )}
                 </div>
              </details>
@@ -2498,7 +2498,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
         <div className="flex justify-between">
           <button
             onClick={onBack}
-            className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+            className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
           >
             <ArrowBackIcon className="mr-2" />
             Back

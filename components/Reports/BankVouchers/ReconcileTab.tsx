@@ -83,14 +83,14 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
                 className={`p-3 border rounded-lg mb-3 shadow-sm transition-all cursor-pointer ${
                     isMatched ? (discrepancies.length > 0 ? 'border-amber-400 bg-amber-50' : 'border-green-300 bg-green-50') : 
                     isSelected ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200' : 'border-gray-200 bg-white hover:border-indigo-300'
-                }`}
+                } dark:border-gray-700 dark:bg-gray-800`}
             >
                 <div className="flex justify-between items-start mb-2">
-                    <span className="text-xs font-bold text-gray-500">{v.date?.value}</span>
-                    <span className="text-sm font-black text-gray-800">₹{Number(v.amount?.value || 0).toLocaleString('en-IN')}</span>
+                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">{v.date?.value}</span>
+                    <span className="text-sm font-black text-gray-800 dark:text-gray-100">₹{Number(v.amount?.value || 0).toLocaleString('en-IN')}</span>
                 </div>
                 <div className="text-sm font-bold text-indigo-700">{v.partyName?.value || v.ledger?.value || 'Unknown Party'}</div>
-                <div className="text-xs text-gray-600 mt-1 line-clamp-1">{v.narration?.value}</div>
+                <div className="text-xs text-gray-600 mt-1 line-clamp-1 dark:text-gray-300">{v.narration?.value}</div>
                 
                 {isMatched && (
                     <div className="mt-2 text-xs font-bold flex flex-col gap-1 text-green-600">
@@ -108,22 +108,22 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
 
     return (
         <div className="flex flex-col h-full h-full min-h-0 overflow-hidden bg-gray-50/50 p-2">
-            <div className="mb-4 flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <div className="mb-4 flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                 <div>
-                     <h2 className="text-lg font-bold text-gray-800">Reconciliation Workspace</h2>
-                     <p className="text-xs text-gray-500 mt-1">Match bank transactions with book entries or create direct taxable adjustment entries.</p>
+                     <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Reconciliation Workspace</h2>
+                     <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">Match bank transactions with book entries or create direct taxable adjustment entries.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <button 
                         onClick={handleAutoMatchAll}
-                        className="px-4 py-2 bg-white border border-gray-300 text-gray-700 font-bold text-xs rounded-lg hover:bg-gray-50"
+                        className="px-4 py-2 bg-white border border-gray-300 text-gray-700 font-bold text-xs rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
                     >
                         Auto-Match Exact Amounts
                     </button>
                     <button 
                         disabled={!selectedBankId || !selectedBookId}
                         onClick={handleMatchSelected}
-                        className={`px-4 py-2 font-bold text-xs rounded-lg transition-colors ${selectedBankId && selectedBookId ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                        className={`px-4 py-2 font-bold text-xs rounded-lg transition-colors ${selectedBankId && selectedBookId ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md' : 'bg-gray-100 text-gray-400 cursor-not-allowed'} dark:bg-gray-800`}
                     >
                         Match Selected ({selectedBankId && selectedBookId ? 'Ready' : 'Select one from each'})
                     </button>
@@ -132,8 +132,8 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
 
             <div className="flex-1 flex gap-4 min-h-0 overflow-hidden">
                 {/* Bank Column */}
-                <div className="w-1/2 flex flex-col bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div className="p-4 border-b border-gray-200 bg-blue-50 flex items-center justify-between">
+                <div className="w-1/2 flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                    <div className="p-4 border-b border-gray-200 bg-blue-50 flex items-center justify-between dark:border-gray-700">
                         <h3 className="font-bold text-blue-900">Bank Statement ({bankEntries.length})</h3>
                         <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-bold">{reconciledBankIds.size} Reconciled</span>
                     </div>
@@ -158,17 +158,17 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
                                     className={`p-3 border rounded-lg mb-3 shadow-sm transition-all cursor-pointer ${
                                         isMatched ? (discrepancies.length > 0 ? 'border-amber-400 bg-amber-50' : 'border-green-300 bg-green-50') : 
                                         isSelected ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200' : 'border-gray-200 bg-white hover:border-blue-300'
-                                    }`}
+                                    } dark:border-gray-700 dark:bg-gray-800`}
                                 >
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className="text-xs font-bold text-gray-500">{v.date?.value}</span>
+                                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400">{v.date?.value}</span>
                                         <span className={`text-sm font-black ${isDeposit ? 'text-green-600' : 'text-red-600'}`}>
                                             {isDeposit ? '+' : '-'}₹{amount.toLocaleString('en-IN')}
                                         </span>
                                     </div>
-                                    <div className="text-xs text-gray-800 mb-2">{v.narration?.value || v.partyName?.value}</div>
+                                    <div className="text-xs text-gray-800 mb-2 dark:text-gray-100">{v.narration?.value || v.partyName?.value}</div>
                                     
-                                    <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100">
+                                    <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100 dark:border-gray-800">
                                         {isMatched ? (
                                             <div className="text-xs font-bold flex flex-col gap-1 text-green-600">
                                                 <span className="flex items-center"><CheckCircleIcon className="w-4 h-4 mr-1" /> Reconciled</span>
@@ -212,9 +212,9 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
                 </div>
 
                 {/* Books Column */}
-                <div className="w-1/2 flex flex-col bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div className="p-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
-                        <h3 className="font-bold text-gray-800">Ledger Vouchers (Books) ({bookEntries.length})</h3>
+                <div className="w-1/2 flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                    <div className="p-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between dark:border-gray-700 dark:bg-gray-900">
+                        <h3 className="font-bold text-gray-800 dark:text-gray-100">Ledger Vouchers (Books) ({bookEntries.length})</h3>
                         <span className="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded font-bold">{reconciledBookIds.size} Reconciled</span>
                     </div>
                     <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">

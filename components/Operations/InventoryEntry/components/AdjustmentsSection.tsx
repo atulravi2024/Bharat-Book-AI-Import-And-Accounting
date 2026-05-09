@@ -19,7 +19,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
 }) => {
   return (
     <>
-      <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative mb-6 transition-all duration-300 z-[15] ${collapsedSections.taxableAdjustments ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'}`}>
+      <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative mb-6 transition-all duration-300 z-[15] ${collapsedSections.taxableAdjustments ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
         <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.taxableAdjustments ? '' : 'mb-6'}`} onClick={() => toggleSection('taxableAdjustments')}>
           <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Taxable Adjustment</h3>
           <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -37,7 +37,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                     type="number" 
                     step="0.01" 
                     placeholder="Discount %" 
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                     value={headerDetails.voucherDiscountPct || ''}
                     onChange={(e) => handleHeaderChange('voucherDiscountPct', e.target.value)}
                   />
@@ -49,7 +49,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                     type="number" 
                     step="0.01" 
                     placeholder="Amount" 
-                    className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                    className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                     value={headerDetails.voucherDiscountAmount || ''}
                     onChange={(e) => handleHeaderChange('voucherDiscountAmount', e.target.value)}
                   />
@@ -75,7 +75,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Pct %" 
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         value={headerDetails.taxableOtherAdjustmentPct || ''}
                         onChange={(e) => handleHeaderChange('taxableOtherAdjustmentPct', e.target.value)}
                       />
@@ -87,7 +87,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Amount" 
-                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         value={headerDetails.taxableOtherAdjustment || ''}
                         onChange={(e) => handleHeaderChange('taxableOtherAdjustment', e.target.value)}
                       />
@@ -99,7 +99,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
         )}
       </div>
 
-      <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative mb-6 transition-all duration-300 z-[14] ${collapsedSections.nonTaxableAdjustments ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'}`}>
+      <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative mb-6 transition-all duration-300 z-[14] ${collapsedSections.nonTaxableAdjustments ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
         <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.nonTaxableAdjustments ? '' : 'mb-6'}`} onClick={() => toggleSection('nonTaxableAdjustments')}>
           <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Non-Taxable Adjustment</h3>
           <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -117,7 +117,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                     type="number" 
                     step="0.01" 
                     placeholder="Discount %" 
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                     value={headerDetails.nonTaxableVoucherDiscountPct || ''}
                     onChange={(e) => handleHeaderChange('nonTaxableVoucherDiscountPct', e.target.value)}
                   />
@@ -129,7 +129,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                     type="number" 
                     step="0.01" 
                     placeholder="Amount" 
-                    className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                    className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                     value={headerDetails.nonTaxableVoucherDiscountAmount || ''}
                     onChange={(e) => handleHeaderChange('nonTaxableVoucherDiscountAmount', e.target.value)}
                   />
@@ -155,7 +155,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Pct %" 
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         value={headerDetails.nonTaxableOtherAdjustmentPct || ''}
                         onChange={(e) => handleHeaderChange('nonTaxableOtherAdjustmentPct', e.target.value)}
                       />
@@ -167,7 +167,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Amount" 
-                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         value={headerDetails.nonTaxableOtherAdjustment || ''}
                         onChange={(e) => handleHeaderChange('nonTaxableOtherAdjustment', e.target.value)}
                       />
@@ -179,7 +179,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
         )}
       </div>
 
-      <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative mb-6 transition-all duration-300 z-[13] ${collapsedSections.rounding ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'}`}>
+      <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative mb-6 transition-all duration-300 z-[13] ${collapsedSections.rounding ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
         <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.rounding ? '' : 'mb-6'}`} onClick={() => toggleSection('rounding')}>
           <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Rounding Off</h3>
           <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -193,7 +193,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
             <div className="flex-1">
               <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Rounding Type</label>
               <select 
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                 value={headerDetails.roundingType || 'auto'}
                 onChange={(e) => handleHeaderChange('roundingType', e.target.value)}
               >
@@ -212,7 +212,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                   type="number" 
                   step="0.01" 
                   placeholder="Amount" 
-                  className={`w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all ${headerDetails.roundingType !== 'manual' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all ${headerDetails.roundingType !== 'manual' ? 'opacity-50 cursor-not-allowed' : ''} dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700`}
                   value={headerDetails.roundingValue || ''}
                   onChange={(e) => handleHeaderChange('roundingValue', e.target.value)}
                   disabled={headerDetails.roundingType !== 'manual'}

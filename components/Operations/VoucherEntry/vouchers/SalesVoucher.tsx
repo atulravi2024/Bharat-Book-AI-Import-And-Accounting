@@ -1304,11 +1304,11 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
             </div>
         </div>
       )}
-      <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[50] ${collapsedSections.header ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'}`}>
+      <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[50] ${collapsedSections.header ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
         <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 rounded-l-[inherit]"></div>
         <div className={`flex items-center justify-between cursor-pointer ${collapsedSections.header ? '' : 'mb-5'}`} onClick={() => toggleSection('header')}>
            <div className="flex items-center space-x-3">
-             <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center">
+             <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
                <FileText size={16} className="mr-2 text-blue-500"/> Header <span className="hidden sm:inline">&nbsp;Details</span>
              </h3>
              <button 
@@ -1321,7 +1321,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
              </button>
            </div>
            <div className="flex items-center space-x-4">
-             <div className="flex items-center space-x-2 text-xs font-bold text-gray-400 bg-gray-50 px-3 py-1 rounded-full uppercase tracking-wider">
+             <div className="flex items-center space-x-2 text-xs font-bold text-gray-400 bg-gray-50 px-3 py-1 rounded-full uppercase tracking-wider dark:bg-gray-900">
                Status: <span className="text-amber-500 ml-1">Draft</span>
              </div>
              <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -1337,7 +1337,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
             </label>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <div className="relative flex-1">
-                <input type="date" value={headerDetails.voucherDate} onChange={(e) => handleHeaderChange('voucherDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+                <input type="date" value={headerDetails.voucherDate} onChange={(e) => handleHeaderChange('voucherDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
               <div className="sm:w-32 flex items-center justify-center px-4 py-3 bg-blue-50 border border-blue-100/50 rounded-xl text-sm font-black text-blue-700 shadow-sm shrink-0 whitespace-nowrap uppercase tracking-widest ring-1 ring-blue-200/50">
                   {(() => {
@@ -1349,18 +1349,18 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Voucher Number</label>
-            <input type="text" value={headerDetails.voucherNumber} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+            <input type="text" value={headerDetails.voucherNumber} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">REF / Invoice Number</label>
-            <input type="text" value={headerDetails.referenceNo} onChange={(e) => handleHeaderChange('referenceNo', e.target.value)} placeholder="Optional" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+            <input type="text" value={headerDetails.referenceNo} onChange={(e) => handleHeaderChange('referenceNo', e.target.value)} placeholder="Optional" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Creation Stamp (System)</label>
-            <input type="text" value={systemStamp} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none" />
+            <input type="text" value={systemStamp} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
           </div>
-          <div className="sm:col-span-2 lg:col-span-4 hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all">
-             <button onClick={() => fileInputRef.current?.click()} className="flex items-center px-4 py-2 border border-dashed border-gray-300 rounded-lg text-xs font-bold text-gray-500 hover:bg-white hover:text-blue-600 hover:border-blue-300 transition-all cursor-pointer shadow-sm">
+          <div className="sm:col-span-2 lg:col-span-4 hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all dark:hover:bg-gray-700">
+             <button onClick={() => fileInputRef.current?.click()} className="flex items-center px-4 py-2 border border-dashed border-gray-300 rounded-lg text-xs font-bold text-gray-500 hover:bg-white hover:text-blue-600 hover:border-blue-300 transition-all cursor-pointer shadow-sm dark:border-gray-600 dark:text-gray-400">
                <Paperclip size={14} className="mr-2" /> Attach Document
              </button>
              <div className="ml-4 flex items-center">
@@ -1380,10 +1380,10 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
         )}
       </div>
 
-      <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[40] ${collapsedSections.party ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'}`}>
+      <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[40] ${collapsedSections.party ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
          <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500 rounded-l-[inherit]"></div>
          <div className={`flex items-center justify-between cursor-pointer ${collapsedSections.party ? '' : 'mb-5'}`} onClick={() => toggleSection('party')}>
-           <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center">
+           <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
              <Users size={16} className="mr-2 text-emerald-500"/> Party <span className="hidden sm:inline">&nbsp;Details</span>
            </h3>
            <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -1397,7 +1397,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
             <select 
               value={headerDetails.entityCategory} 
               onChange={(e) => handleHeaderChange('entityCategory', e.target.value)} 
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
             >
               <option value="Customer">Customer</option>
               <option value="Vendor">Vendor</option>
@@ -1428,7 +1428,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
             <select 
               value={headerDetails.businessRole} 
               onChange={(e) => handleHeaderChange('businessRole', e.target.value)} 
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
             >
               {(headerDetails.entityCategory === 'Customer' || headerDetails.entityCategory === 'Both') && (
                 <>
@@ -1454,19 +1454,19 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">GST Number</label>
-            <input type="text" value={headerDetails.gstNumber} onChange={(e) => handleHeaderChange('gstNumber', e.target.value)} placeholder="22AAAAA0000A1Z5" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+            <input type="text" value={headerDetails.gstNumber} onChange={(e) => handleHeaderChange('gstNumber', e.target.value)} placeholder="22AAAAA0000A1Z5" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Aadhaar Card No.</label>
-            <input type="text" value={headerDetails.aadhaarNo} onChange={(e) => handleHeaderChange('aadhaarNo', e.target.value)} placeholder="12-digit number" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+            <input type="text" value={headerDetails.aadhaarNo} onChange={(e) => handleHeaderChange('aadhaarNo', e.target.value)} placeholder="12-digit number" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">PAN Card No.</label>
-            <input type="text" value={headerDetails.panNo} onChange={(e) => handleHeaderChange('panNo', e.target.value)} placeholder="ABCDE1234F" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+            <input type="text" value={headerDetails.panNo} onChange={(e) => handleHeaderChange('panNo', e.target.value)} placeholder="ABCDE1234F" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Party Type</label>
-            <select value={headerDetails.partyType} onChange={(e) => handleHeaderChange('partyType', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer">
+            <select value={headerDetails.partyType} onChange={(e) => handleHeaderChange('partyType', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700">
               <option value="Regular">Regular</option>
               <option value="Composition">Composition</option>
               <option value="Unregistered">Unregistered</option>
@@ -1480,7 +1480,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               value={headerDetails.placeOfSupply} 
               onChange={(e) => handleHeaderChange('placeOfSupply', e.target.value)} 
               placeholder="e.g. Maharashtra"
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" 
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" 
             />
           </div>
           <div>
@@ -1489,26 +1489,26 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               type="text" 
               value={headerDetails.supplyType} 
               readOnly 
-              className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-black text-gray-500 uppercase tracking-widest text-center cursor-not-allowed select-none"
+              className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-black text-gray-500 uppercase tracking-widest text-center cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
             />
           </div>
 
           <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-emerald-50/20 rounded-2xl border border-emerald-100/50 mt-2">
             <div>
               <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">PO Number</label>
-              <input type="text" value={headerDetails.poNumber} onChange={(e) => handleHeaderChange('poNumber', e.target.value)} placeholder="PO-001" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20" />
+              <input type="text" value={headerDetails.poNumber} onChange={(e) => handleHeaderChange('poNumber', e.target.value)} placeholder="PO-001" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
             </div>
             <div>
               <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">PO Date</label>
-              <input type="date" value={headerDetails.poDate} onChange={(e) => handleHeaderChange('poDate', e.target.value)} className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20" />
+              <input type="date" value={headerDetails.poDate} onChange={(e) => handleHeaderChange('poDate', e.target.value)} className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
             </div>
             <div>
               <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Credit Period (Days)</label>
-              <input type="number" value={headerDetails.creditPeriod} onChange={(e) => handleHeaderChange('creditPeriod', e.target.value)} placeholder="30" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20" />
+              <input type="number" value={headerDetails.creditPeriod} onChange={(e) => handleHeaderChange('creditPeriod', e.target.value)} placeholder="30" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
             </div>
             <div className="hidden sm:block">
               <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Price Level</label>
-              <select value={headerDetails.priceLevel} onChange={(e) => handleHeaderChange('priceLevel', e.target.value)} className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+              <select value={headerDetails.priceLevel} onChange={(e) => handleHeaderChange('priceLevel', e.target.value)} className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800">
                 <option value="Standard">Standard</option>
                 <option value="Wholesale">Wholesale</option>
                 <option value="Retail">Retail</option>
@@ -1520,10 +1520,10 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
         )}
       </div>
 
-      <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[35] ${collapsedSections.logistics ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'}`}>
+      <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[35] ${collapsedSections.logistics ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
          <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 rounded-l-[inherit]"></div>
          <div className={`flex items-center justify-between cursor-pointer ${collapsedSections.logistics ? '' : 'mb-5'}`} onClick={() => toggleSection('logistics')}>
-           <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center">
+           <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
              <MapPin size={16} className="mr-2 text-blue-600"/> Address & Logistics
            </h3>
            <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -1533,7 +1533,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
         {!collapsedSections.logistics && (
         <div className="space-y-8 animate-in fade-in slide-in-from-top-2 duration-300">
           {/* Billing Address */}
-          <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+          <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-4 flex items-center">
               <span className="bg-blue-600 w-2 h-2 rounded-full mr-2"></span> Billing Address
             </h4>
@@ -1549,34 +1549,34 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               </div>
               <div className="lg:col-span-2">
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Street Address</label>
-                <input type="text" value={headerDetails.billingAddress} onChange={(e) => handleHeaderChange('billingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+                <input type="text" value={headerDetails.billingAddress} onChange={(e) => handleHeaderChange('billingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State</label>
-                <input type="text" value={headerDetails.billingState} onChange={(e) => handleHeaderChange('billingState', e.target.value)} placeholder="e.g. Maharashtra" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+                <input type="text" value={headerDetails.billingState} onChange={(e) => handleHeaderChange('billingState', e.target.value)} placeholder="e.g. Maharashtra" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State Code / Pin Code</label>
                 <div className="flex space-x-2">
-                  <input type="text" value={headerDetails.billingStateCode} onChange={(e) => handleHeaderChange('billingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
-                  <input type="text" value={headerDetails.billingPinCode} onChange={(e) => handleHeaderChange('billingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+                  <input type="text" value={headerDetails.billingStateCode} onChange={(e) => handleHeaderChange('billingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.billingPinCode} onChange={(e) => handleHeaderChange('billingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Contact Person</label>
-                <input type="text" value={headerDetails.contactPerson} onChange={(e) => handleHeaderChange('contactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+                <input type="text" value={headerDetails.contactPerson} onChange={(e) => handleHeaderChange('contactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Mobile Number</label>
-                <input type="text" value={headerDetails.mobileNumber} onChange={(e) => handleHeaderChange('mobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+                <input type="text" value={headerDetails.mobileNumber} onChange={(e) => handleHeaderChange('mobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">WhatsApp Number</label>
-                <input type="text" value={headerDetails.whatsappNumber} onChange={(e) => handleHeaderChange('whatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+                <input type="text" value={headerDetails.whatsappNumber} onChange={(e) => handleHeaderChange('whatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Email ID</label>
-                <input type="email" value={headerDetails.emailId} onChange={(e) => handleHeaderChange('emailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" />
+                <input type="email" value={headerDetails.emailId} onChange={(e) => handleHeaderChange('emailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
             </div>
           </div>
@@ -1588,9 +1588,9 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                 type="checkbox" 
                 checked={headerDetails.isShippingSameAsBilling} 
                 onChange={(e) => handleHeaderChange('isShippingSameAsBilling', e.target.checked)}
-                className="w-5 h-5 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/20 transition-all cursor-pointer"
+                className="w-5 h-5 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/20 transition-all cursor-pointer dark:border-gray-600"
               />
-              <span className="text-xs font-black text-gray-700 uppercase tracking-widest">Shipping address is same as billing</span>
+              <span className="text-xs font-black text-gray-700 uppercase tracking-widest dark:text-gray-200">Shipping address is same as billing</span>
             </label>
           </div>
 
@@ -1602,10 +1602,10 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                   type="checkbox" 
                   checked={headerDetails.isEWayBillRequired} 
                   onChange={(e) => handleHeaderChange('isEWayBillRequired', e.target.checked)}
-                  className="w-6 h-6 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/20 transition-all cursor-pointer"
+                  className="w-6 h-6 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/20 transition-all cursor-pointer dark:border-gray-600"
                 />
                 <div className="flex flex-col">
-                  <span className="text-xs font-black text-gray-800 uppercase tracking-widest">Generate E-Way Bill</span>
+                  <span className="text-xs font-black text-gray-800 uppercase tracking-widest dark:text-gray-100">Generate E-Way Bill</span>
                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Required for interstate transport &gt; ₹50,000</span>
                 </div>
               </label>
@@ -1614,15 +1614,15 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 animate-in zoom-in-95 duration-300">
                   <div>
                     <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Vehicle No</label>
-                    <input type="text" value={headerDetails.vehicleNo} onChange={(e) => handleHeaderChange('vehicleNo', e.target.value)} placeholder="MH 12 AB 1234" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                    <input type="text" value={headerDetails.vehicleNo} onChange={(e) => handleHeaderChange('vehicleNo', e.target.value)} placeholder="MH 12 AB 1234" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Transporter</label>
-                    <input type="text" value={headerDetails.transporterName} onChange={(e) => handleHeaderChange('transporterName', e.target.value)} placeholder="Transporter Name" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                    <input type="text" value={headerDetails.transporterName} onChange={(e) => handleHeaderChange('transporterName', e.target.value)} placeholder="Transporter Name" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Distance (KM)</label>
-                    <input type="number" value={headerDetails.distance} onChange={(e) => handleHeaderChange('distance', e.target.value)} placeholder="Distance" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                    <input type="number" value={headerDetails.distance} onChange={(e) => handleHeaderChange('distance', e.target.value)} placeholder="Distance" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
                   </div>
                 </div>
               )}
@@ -1631,7 +1631,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
 
           {/* Shipping Address */}
           {!headerDetails.isShippingSameAsBilling && (
-            <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100 animate-in fade-in slide-in-from-top-4 duration-500 dark:border-gray-800">
               <h4 className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] mb-4 flex items-center">
                 <span className="bg-indigo-600 w-2 h-2 rounded-full mr-2"></span> Shipping Address
               </h4>
@@ -1647,38 +1647,38 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                 </div>
                 <div className="lg:col-span-2">
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Street Address</label>
-                  <input type="text" value={headerDetails.shippingAddress} onChange={(e) => handleHeaderChange('shippingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
+                  <input type="text" value={headerDetails.shippingAddress} onChange={(e) => handleHeaderChange('shippingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State</label>
-                  <input type="text" value={headerDetails.shippingState} onChange={(e) => handleHeaderChange('shippingState', e.target.value)} placeholder="e.g. Karnataka" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
+                  <input type="text" value={headerDetails.shippingState} onChange={(e) => handleHeaderChange('shippingState', e.target.value)} placeholder="e.g. Karnataka" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State Code / Pin Code</label>
                   <div className="flex space-x-2">
-                    <input type="text" value={headerDetails.shippingStateCode} onChange={(e) => handleHeaderChange('shippingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
-                    <input type="text" value={headerDetails.shippingPinCode} onChange={(e) => handleHeaderChange('shippingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
+                    <input type="text" value={headerDetails.shippingStateCode} onChange={(e) => handleHeaderChange('shippingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                    <input type="text" value={headerDetails.shippingPinCode} onChange={(e) => handleHeaderChange('shippingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Contact Info</label>
-                  <input type="text" value={headerDetails.shippingContact} onChange={(e) => handleHeaderChange('shippingContact', e.target.value)} placeholder="Phone or Email" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
+                  <input type="text" value={headerDetails.shippingContact} onChange={(e) => handleHeaderChange('shippingContact', e.target.value)} placeholder="Phone or Email" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Contact Person</label>
-                  <input type="text" value={headerDetails.shippingContactPerson} onChange={(e) => handleHeaderChange('shippingContactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
+                  <input type="text" value={headerDetails.shippingContactPerson} onChange={(e) => handleHeaderChange('shippingContactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Mobile Number</label>
-                  <input type="text" value={headerDetails.shippingMobileNumber} onChange={(e) => handleHeaderChange('shippingMobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
+                  <input type="text" value={headerDetails.shippingMobileNumber} onChange={(e) => handleHeaderChange('shippingMobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">WhatsApp Number</label>
-                  <input type="text" value={headerDetails.shippingWhatsappNumber} onChange={(e) => handleHeaderChange('shippingWhatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
+                  <input type="text" value={headerDetails.shippingWhatsappNumber} onChange={(e) => handleHeaderChange('shippingWhatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Email ID</label>
-                  <input type="email" value={headerDetails.shippingEmailId} onChange={(e) => handleHeaderChange('shippingEmailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
+                  <input type="email" value={headerDetails.shippingEmailId} onChange={(e) => handleHeaderChange('shippingEmailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
               </div>
             </div>
@@ -1687,14 +1687,14 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
         )}
       </div>
 
-      <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[30] ${collapsedSections.lineItems ? 'rounded-xl' : 'rounded-2xl'}`}>
+      <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[30] ${collapsedSections.lineItems ? 'rounded-xl' : 'rounded-2xl'} dark:bg-gray-800`}>
         <div className="absolute top-0 left-0 w-1 h-full bg-purple-500 rounded-l-[inherit]"></div>
-        <div className={`border-b border-gray-100 flex justify-between items-center bg-gray-50/50 cursor-pointer ${collapsedSections.lineItems ? 'px-4 py-3' : 'px-6 py-5'}`} onClick={() => toggleSection('lineItems')}>
-          <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center">
+        <div className={`border-b border-gray-100 flex justify-between items-center bg-gray-50/50 cursor-pointer ${collapsedSections.lineItems ? 'px-4 py-3' : 'px-6 py-5'} dark:border-gray-800`} onClick={() => toggleSection('lineItems')}>
+          <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
              <ClipboardList size={16} className="mr-2 text-purple-500"/> <span className="hidden sm:inline">Line&nbsp;</span>Items
            </h3>
            <div className="flex items-center space-x-2 md:space-x-3">
-             <button onClick={(e) => { e.stopPropagation(); setScanningRowIndex(-1); setShowScanner(true); }} className="flex items-center px-4 md:px-3 py-2 md:py-1.5 bg-white text-gray-600 border border-gray-200 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors" title="Scan">
+             <button onClick={(e) => { e.stopPropagation(); setScanningRowIndex(-1); setShowScanner(true); }} className="flex items-center px-4 md:px-3 py-2 md:py-1.5 bg-white text-gray-600 border border-gray-200 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700" title="Scan">
                <ScanBarcode size={16} /> 
              </button>
              <button onClick={(e) => {
@@ -1715,7 +1715,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
         {!collapsedSections.lineItems && (
         <div className="overflow-x-auto animate-in fade-in slide-in-from-top-2 duration-300">
           <table className="w-full text-sm text-left whitespace-nowrap">
-            <thead className="bg-gray-50/80 border-b border-gray-100 uppercase text-[10px] tracking-[0.2em] font-black text-gray-400">
+            <thead className="bg-gray-50/80 border-b border-gray-100 uppercase text-[10px] tracking-[0.2em] font-black text-gray-400 dark:bg-gray-800/80 dark:border-gray-700 dark:text-gray-300">
               <tr>
                 <th className="px-4 py-4 w-12 text-center">#</th>
                 <th className="px-4 py-4 min-w-[300px]">Item Description</th>
@@ -1746,7 +1746,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                           value={row.itemName || ''}
                           onChange={(value) => handleItemOrSkuChange(index, value, 'itemName')}
                           placeholder="Type to search item..."
-                          buttonClassName="w-full min-w-[300px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus-within:bg-white focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 transition-all"
+                          buttonClassName="w-full min-w-[300px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus-within:bg-white focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 transition-all dark:focus-within:bg-gray-700"
                         />
                       </div>
                     </div>
@@ -1758,14 +1758,14 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                       onChange={(value) => handleItemOrSkuChange(index, value, 'sku')}
                       placeholder="SKU..."
                       labelKey="sku"
-                      buttonClassName="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-gray-700"
+                      buttonClassName="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-gray-700 dark:focus:bg-gray-700 dark:text-gray-200"
                     />
                   </td>
                   <td className="px-4 py-2">
-                    <input type="text" placeholder="-" value={row.hsn || ''} onChange={(e) => { const r = [...rows]; r[index].hsn = e.target.value; setRows(r); }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px]" />
+                    <input type="text" placeholder="-" value={row.hsn || ''} onChange={(e) => { const r = [...rows]; r[index].hsn = e.target.value; setRows(r); }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px] dark:focus:bg-gray-700" />
                   </td>
                   <td className="px-4 py-2">
-                    <input type="number" placeholder="0" value={row.qty || ''} onChange={(e) => { const r = [...rows]; r[index].qty = e.target.value; setRows(r); }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px]" />
+                    <input type="number" placeholder="0" value={row.qty || ''} onChange={(e) => { const r = [...rows]; r[index].qty = e.target.value; setRows(r); }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px] dark:focus:bg-gray-700" />
                   </td>
                   <td className="px-4 py-2">
                     <input type="number" placeholder="0.00" step="0.01" value={row.rate || ''} onChange={(e) => { 
@@ -1774,7 +1774,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                       const rate = parseFloat(e.target.value) || 0;
                       r[index].rateWithTax = (rate * (1 + tax / 100)).toFixed(2);
                       setRows(r); 
-                    }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px]" />
+                    }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px] dark:focus:bg-gray-700" />
                   </td>
                   <td className="px-4 py-2">
                     <input type="number" placeholder="0.00" step="0.01" value={row.rateWithTax || ''} onChange={(e) => {
@@ -1784,7 +1784,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                       const divisor = 1 + tax / 100;
                       r[index].rate = divisor !== 0 ? (rwt / divisor).toFixed(2) : '0';
                       setRows(r);
-                    }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[90px]" />
+                    }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[90px] dark:focus:bg-gray-700" />
                   </td>
                   <td className="px-4 py-2">
                     <select value={row.tax || '18'} onChange={(e) => {
@@ -1793,7 +1793,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                       const rate = parseFloat(r[index].rate) || 0;
                       r[index].rateWithTax = (rate * (1 + tax / 100)).toFixed(2);
                       setRows(r); 
-                    }} className="w-full px-2 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none appearance-none cursor-pointer min-w-[60px]">
+                    }} className="w-full px-2 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none appearance-none cursor-pointer min-w-[60px] dark:focus:bg-gray-700">
                       <option value="0">0%</option>
                       <option value="5">5%</option>
                       <option value="12">12%</option>
@@ -1801,7 +1801,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                       <option value="28">28%</option>
                     </select>
                   </td>
-                  <td className="px-4 py-4 text-right font-bold text-gray-700 min-w-[100px]">
+                  <td className="px-4 py-4 text-right font-bold text-gray-700 min-w-[100px] dark:text-gray-200">
                     ₹{calculateRowNetAmount(row).toFixed(2)}
                   </td>
                   <td className="px-4 py-4 text-center">
@@ -1843,7 +1843,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 pb-[env(safe-area-inset-bottom)] md:sticky md:bottom-0 md:-mx-6 lg:-mx-8 md:-mb-6 lg:-mb-8 z-[60] md:z-50 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] p-2 md:p-1.5 flex justify-end md:justify-between items-center px-4 md:px-6 lg:px-8 mt-4 md:mt-4">
+      <div className="fixed bottom-0 left-0 right-0 pb-[env(safe-area-inset-bottom)] md:sticky md:bottom-0 md:-mx-6 lg:-mx-8 md:-mb-6 lg:-mb-8 z-[60] md:z-50 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] p-2 md:p-1.5 flex justify-end md:justify-between items-center px-4 md:px-6 lg:px-8 mt-4 md:mt-4 dark:bg-gray-800 dark:border-gray-700">
         <div className="hidden md:block text-[10px] font-black text-gray-400 uppercase tracking-widest">
            {activeTab.replace('_', ' ')}
         </div>
@@ -1851,7 +1851,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
            <button 
              onClick={() => setIsSection0Collapsed(!isSection0Collapsed)} 
              title="Toggle Navigation & Save"
-             className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0"
+             className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
            >
              {isSection0Collapsed ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
            </button>
@@ -1859,14 +1859,14 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
              <button 
                onClick={() => handleNavigate('first')} 
                title="First Record"
-               className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0"
+               className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
              >
                <ChevronsLeft size={18} />
              </button>
              <button 
                onClick={() => handleNavigate('up')} 
                title="Previous Record"
-               className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0"
+               className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
              >
                <ChevronLeft size={18} />
              </button>
@@ -1878,53 +1878,53 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
              <button 
                onClick={() => handleNavigate('down')} 
                title="Next Record"
-               className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0"
+               className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
              >
                <ChevronRight size={18} />
              </button>
              <button 
                onClick={() => handleNavigate('last')} 
                title="Last Record"
-               className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0"
+               className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
              >
                <ChevronsRight size={18} />
              </button>
            </div>
 
-           <div className="w-px bg-gray-200 my-1 mx-0.5 shrink-0"></div>
+           <div className="w-px bg-gray-200 my-1 mx-0.5 shrink-0 dark:bg-gray-700"></div>
 
            <button 
              onClick={() => setIsSection1Collapsed(!isSection1Collapsed)} 
              title="Toggle Tools"
-             className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0"
+             className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
            >
              {isSection1Collapsed ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
            </button>
            <div className={`${isSection1Collapsed ? 'hidden md:flex' : 'flex'} gap-1 animate-in slide-in-from-right-2 duration-300`}>
-             <button onClick={() => setShowHistory(true)} title="View History" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={() => setShowHistory(true)} title="View History" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <ClipboardList size={18} />
              </button>
-             <button onClick={(e) => { e.stopPropagation(); setScanningRowIndex(-1); setShowScanner(true); }} title="Scan Barcode" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={(e) => { e.stopPropagation(); setScanningRowIndex(-1); setShowScanner(true); }} title="Scan Barcode" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <ScanBarcode size={18} />
              </button>
-             <button onClick={() => fileInputRef.current?.click()} title="Attach Files" className="relative p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={() => fileInputRef.current?.click()} title="Attach Files" className="relative p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                {attachedFile && <span className="absolute -top-1 -right-1 flex h-3 w-3"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span></span>}
                <Paperclip size={18} />
              </button>
-             <button onClick={() => setShowCalculator(true)} title="Calculator" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={() => setShowCalculator(true)} title="Calculator" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Calculator size={18} />
              </button>
-             <button onClick={handleDuplicateEntry} title="Duplicate Entry" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handleDuplicateEntry} title="Duplicate Entry" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <PlusCircle size={18} />
              </button>
            </div>
            
-           <div className="w-px bg-gray-200 my-1 mx-0.5 shrink-0"></div>
+           <div className="w-px bg-gray-200 my-1 mx-0.5 shrink-0 dark:bg-gray-700"></div>
 
            <button 
              onClick={() => setIsSection2Collapsed(!isSection2Collapsed)} 
              title="Toggle Export Options"
-             className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0"
+             className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
            >
              {isSection2Collapsed ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
            </button>
@@ -1936,49 +1936,49 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
              >
                <Plus size={18} />
              </button>
-             <button onClick={handleSavePrint} title="Save & Print" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handleSavePrint} title="Save & Print" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Printer size={18} />
              </button>
-             <button onClick={handleSaveNew} title="Save & New" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handleSaveNew} title="Save & New" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <FilePlus size={18} />
              </button>
-             <button onClick={handleSaveDraft} title="Save as Draft" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handleSaveDraft} title="Save as Draft" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Bookmark size={18} />
              </button>
-             <button onClick={handlePreview} title="Print Preview" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handlePreview} title="Print Preview" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Eye size={18} />
              </button>
-             <button onClick={handleGeneratePDF} title="Generate PDF" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handleGeneratePDF} title="Generate PDF" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <FileText size={18} />
              </button>
-             <button onClick={handleGenerateImage} title="Generate Image" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handleGenerateImage} title="Generate Image" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Image size={18} />
              </button>
            </div>
            
-           <div className="w-px bg-gray-200 my-1 mx-0.5 shrink-0"></div>
+           <div className="w-px bg-gray-200 my-1 mx-0.5 shrink-0 dark:bg-gray-700"></div>
 
            <button 
              onClick={() => setIsSection3Collapsed(!isSection3Collapsed)} 
              title="Toggle Settings & Actions"
-             className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0"
+             className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
            >
              {isSection3Collapsed ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
            </button>
            <div className={`${isSection3Collapsed ? 'hidden md:flex' : 'flex'} gap-1 animate-in slide-in-from-right-2 duration-300`}>
-             <button onClick={handleClearEntryClick} title="Clear Entry" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handleClearEntryClick} title="Clear Entry" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200">
                <X size={18} />
              </button>
-             <button onClick={handleDeleteEntryClick} title="Delete Entry" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-red-50 hover:text-red-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handleDeleteEntryClick} title="Delete Entry" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-red-50 hover:text-red-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200">
                <Trash2 size={18} />
              </button>
-             <button onClick={() => setShowKeyboardShortcuts(true)} title="Keyboard Shortcuts" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={() => setShowKeyboardShortcuts(true)} title="Keyboard Shortcuts" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Keyboard size={18} />
              </button>
-             <button onClick={() => setShowHelp(true)} title="Help" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={() => setShowHelp(true)} title="Help" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <HelpCircle size={18} />
              </button>
-             <button onClick={() => onOpenPrintSettings && onOpenPrintSettings()} title="Print Settings" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={() => onOpenPrintSettings && onOpenPrintSettings()} title="Print Settings" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Settings2 size={18} />
              </button>
            </div>

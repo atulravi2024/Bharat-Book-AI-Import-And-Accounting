@@ -171,7 +171,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
 
     return (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 dark:bg-gray-800">
                 <div className="p-6 border-b flex justify-between items-center bg-indigo-600 text-white">
                     <div className="flex items-center">
                         <MapIcon className="mr-3 text-2xl" />
@@ -192,7 +192,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                             </div>
                             <div className="text-xs font-bold text-indigo-600">{String(currentVoucher.date?.value)}</div>
                         </div>
-                        <div className="text-sm font-bold text-gray-800 line-clamp-2 mb-2">{String(currentVoucher.narration?.value)}</div>
+                        <div className="text-sm font-bold text-gray-800 line-clamp-2 mb-2 dark:text-gray-100">{String(currentVoucher.narration?.value)}</div>
                         <div className="text-lg font-black text-indigo-700 font-mono">
                             ₹{Number(currentVoucher.amount?.value || currentVoucher.depositAmount?.value || currentVoucher.withdrawalAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </div>
@@ -206,7 +206,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                                     <button
                                         key={t}
                                         onClick={() => handleTypeChange(t)}
-                                        className={`px-3 py-1 text-[10px] uppercase font-bold rounded-full border transition-all ${selectionType === t ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-300'}`}
+                                        className={`px-3 py-1 text-[10px] uppercase font-bold rounded-full border transition-all ${selectionType === t ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-300'} dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600`}
                                     >
                                         {t}
                                     </button>
@@ -214,7 +214,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                             </div>
 
                             <div>
-                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{selectionType} Name</label>
+                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">{selectionType} Name</label>
                                 <input 
                                     className="w-full p-2 mt-1 border rounded-lg text-sm" 
                                     value={selectionType === 'ledger' ? targetLedger : targetParty}
@@ -223,7 +223,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                                 />
                                 <div className="flex gap-2 mt-1 flex-wrap">
                                     {activeSuggestions.map((s, idx) => (
-                                        <button key={`${s.id}-${idx}`} onClick={() => selectionType === 'ledger' ? setTargetLedger(s.name) : setTargetParty(s.name)} className="text-[9px] bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">{s.name}</button>
+                                        <button key={`${s.id}-${idx}`} onClick={() => selectionType === 'ledger' ? setTargetLedger(s.name) : setTargetParty(s.name)} className="text-[9px] bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded dark:bg-gray-800">{s.name}</button>
                                     ))}
                                 </div>
                             </div>
@@ -243,15 +243,15 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                         )}
                         
                         {vouchers.length > 1 && (
-                            <div className="flex items-center mt-3 pt-3 border-t border-gray-100">
+                            <div className="flex items-center mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
                                 <input 
                                     type="checkbox" 
                                     id="applyToAll" 
                                     checked={applyToAll} 
                                     onChange={(e) => setApplyToAll(e.target.checked)}
-                                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-2 h-4 w-4"
+                                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-2 h-4 w-4 dark:border-gray-600"
                                 />
-                                <label htmlFor="applyToAll" className="text-sm font-bold text-gray-700">Apply to all {vouchers.length} selected statements</label>
+                                <label htmlFor="applyToAll" className="text-sm font-bold text-gray-700 dark:text-gray-200">Apply to all {vouchers.length} selected statements</label>
                             </div>
                         )}
                     </div>
@@ -264,16 +264,16 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                     </div>
                 </div>
 
-                <div className="p-4 bg-gray-50 border-t flex space-x-3">
+                <div className="p-4 bg-gray-50 border-t flex space-x-3 dark:bg-gray-900">
                     <button 
                         onClick={onClose}
-                        className="py-3 px-4 bg-white border border-gray-300 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all shadow-sm"
+                        className="py-3 px-4 bg-white border border-gray-300 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
                     >
                         Discard
                     </button>
                     <div className="flex-1 flex justify-end space-x-2">
                         {!isFirst && (
-                            <button onClick={handlePrev} className="px-4 py-3 bg-white border border-indigo-200 text-indigo-600 rounded-xl text-sm font-bold hover:bg-indigo-50 transition-all">Previous</button>
+                            <button onClick={handlePrev} className="px-4 py-3 bg-white border border-indigo-200 text-indigo-600 rounded-xl text-sm font-bold hover:bg-indigo-50 transition-all dark:bg-gray-800">Previous</button>
                         )}
                         {!isLast ? (
                             <button 
@@ -299,13 +299,13 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
             {/* Mini Create Modal */}
             {showCreateModal && (
                 <div className="fixed inset-0 z-[210] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-                    <div className="bg-white rounded-xl shadow-xl w-full max-w-sm p-6 animate-in fade-in zoom-in-95">
-                        <h4 className="text-lg font-bold mb-1 text-gray-800">Create New {selectionType === 'ledger' ? 'Ledger' : 'Party'}</h4>
-                        <p className="text-xs text-gray-500 mb-4 tracking-tight">This will permanently add the master to your records.</p>
+                    <div className="bg-white rounded-xl shadow-xl w-full max-w-sm p-6 animate-in fade-in zoom-in-95 dark:bg-gray-800">
+                        <h4 className="text-lg font-bold mb-1 text-gray-800 dark:text-gray-100">Create New {selectionType === 'ledger' ? 'Ledger' : 'Party'}</h4>
+                        <p className="text-xs text-gray-500 mb-4 tracking-tight dark:text-gray-400">This will permanently add the master to your records.</p>
                         
-                        <label className="text-xs font-bold text-gray-500 uppercase">Master Name</label>
+                        <label className="text-xs font-bold text-gray-500 uppercase dark:text-gray-400">Master Name</label>
                         <input 
-                            className="w-full text-base font-bold text-indigo-700 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 mt-1 mb-4 focus:ring-2 focus:ring-indigo-500 outline-none"
+                            className="w-full text-base font-bold text-indigo-700 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 mt-1 mb-4 focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-gray-900 dark:border-gray-700"
                             value={newMasterName}
                             onChange={(e) => setNewMasterName(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && confirmCreateMaster()}
@@ -315,7 +315,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                         <div className="flex space-x-3 justify-end mt-2">
                             <button 
                                 onClick={() => setShowCreateModal(false)}
-                                className="px-4 py-2 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
+                                className="px-4 py-2 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-lg transition-all dark:text-gray-300 dark:hover:bg-gray-600"
                             >
                                 Cancel
                             </button>

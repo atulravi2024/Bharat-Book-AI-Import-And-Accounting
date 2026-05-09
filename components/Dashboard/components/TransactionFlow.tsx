@@ -11,11 +11,11 @@ export const TransactionFlow = () => {
     ];
 
     return (
-        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 mt-8 relative overflow-hidden">
+        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 mt-8 relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
             <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none">
                 <Repeat size={200} />
             </div>
-            <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-10 flex items-center">
+            <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-10 flex items-center dark:text-white">
                 <Activity size={18} className="mr-3 text-blue-600" /> Orchestration Lifecycle Flow
             </h3>
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 relative">
@@ -25,7 +25,7 @@ export const TransactionFlow = () => {
                             <div className={`w-16 h-16 ${step.bg} ${step.color} rounded-2xl flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
                                 <step.icon size={28} />
                             </div>
-                            <h4 className="text-xs font-black text-gray-900 uppercase tracking-wider">{step.label}</h4>
+                            <h4 className="text-xs font-black text-gray-900 uppercase tracking-wider dark:text-white">{step.label}</h4>
                             <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-tight">{step.sub}</p>
                         </div>
                         {i < steps.length - 1 && (

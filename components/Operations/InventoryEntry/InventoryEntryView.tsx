@@ -982,7 +982,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
       </div>
 
       <div className="sticky top-0 z-[40] md:static -mx-4 px-4 -mt-4 pt-4 bg-gray-100/95 backdrop-blur-md pb-4 mb-4 md:-mx-0 md:px-0 md:-mt-0 md:pt-0 md:bg-transparent md:pb-0 md:mb-8 overflow-x-auto no-scrollbar w-full">
-        <div className="bg-white p-2 rounded-2xl border border-gray-200 shadow-sm inline-flex min-w-max">
+        <div className="bg-white p-2 rounded-2xl border border-gray-200 shadow-sm inline-flex min-w-max dark:bg-gray-800 dark:border-gray-700">
           <nav className="flex space-x-1">
             {tabs.map((tab) => (
               <button
@@ -994,7 +994,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
                     ? 'bg-emerald-50 text-emerald-700 shadow-sm ring-1 ring-emerald-500/20' 
                     : 'bg-transparent text-gray-500 hover:text-gray-800 hover:bg-gray-50'
                   }
-                `}
+                 dark:text-gray-400 dark:hover:bg-gray-700`}
               >
                 <tab.icon size={14} className="mr-2" />
                 {tab.label}

@@ -15,7 +15,7 @@ export const RemarksSection: React.FC<RemarksSectionProps> = ({
   handleHeaderChange
 }) => {
   return (
-    <div className={`mt-6 bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[20] ${collapsedSections.remarks ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'}`}>
+    <div className={`mt-6 bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[20] ${collapsedSections.remarks ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
        <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.remarks ? '' : 'mb-3'}`} onClick={() => toggleSection('remarks')}>
          <label className="block text-xs font-black text-gray-400 uppercase tracking-widest cursor-pointer mb-0">Remarks / Reason</label>
          <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -28,7 +28,7 @@ export const RemarksSection: React.FC<RemarksSectionProps> = ({
              value={headerDetails.remarks} 
              onChange={(e) => handleHeaderChange('remarks', e.target.value)} 
              placeholder="Reason for stock taxable adjustment or movement..." 
-             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all min-h-[100px] resize-y"
+             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all min-h-[100px] resize-y dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
            />
          </div>
        )}

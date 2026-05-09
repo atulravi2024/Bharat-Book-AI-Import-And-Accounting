@@ -178,14 +178,14 @@ export const SampleSettings: React.FC<SampleSettingsProps> = ({ setView, setActi
     };
 
     return (
-        <div className="bg-white w-full">
+        <div className="bg-white w-full dark:bg-gray-800">
             <div className="flex items-center gap-3 p-6 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600">
+                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600 dark:bg-gray-900 dark:text-gray-300">
                     <Settings size={20} />
                 </div>
                 <div>
-                    <h2 className="text-xl font-bold text-gray-900">Master Configuration</h2>
-                    <p className="text-sm text-gray-500 font-medium">Manage your master record preferences.</p>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">Master Configuration</h2>
+                    <p className="text-sm text-gray-500 font-medium dark:text-gray-400">Manage your master record preferences.</p>
                 </div>
             </div>
             
@@ -196,17 +196,17 @@ export const SampleSettings: React.FC<SampleSettingsProps> = ({ setView, setActi
                     const allActive = hasSampleData && sampleItems.every(sub => activeSamples.includes(sub.id));
 
                     return (
-                        <div key={master.id} className={`overflow-hidden transition-all duration-300 border-b border-gray-100 ${expandedSection === master.id ? 'bg-white' : 'bg-white hover:bg-gray-50'}`}>
+                        <div key={master.id} className={`overflow-hidden transition-all duration-300 border-b border-gray-100 ${expandedSection === master.id ? 'bg-white' : 'bg-white hover:bg-gray-50'} dark:border-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700`}>
                             <button 
                                 onClick={() => toggleSection(master.id)}
                                 className="w-full flex items-center justify-between p-4 text-left transition-colors group"
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className={`p-2 rounded-lg ${expandedSection === master.id ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400 group-hover:text-blue-600'}`}>
+                                    <div className={`p-2 rounded-lg ${expandedSection === master.id ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400 group-hover:text-blue-600'} dark:bg-gray-800`}>
                                         <master.icon size={16} />
                                     </div>
                                     <div>
-                                        <span className="text-sm font-bold text-gray-900">{master.title}</span>
+                                        <span className="text-sm font-bold text-gray-900 dark:text-white">{master.title}</span>
                                         <p className="text-xs text-gray-400">{master.description}</p>
                                     </div>
                                 </div>
@@ -222,7 +222,7 @@ export const SampleSettings: React.FC<SampleSettingsProps> = ({ setView, setActi
                                             className={`w-10 h-5 rounded-full relative cursor-pointer transition-all shrink-0 ${allActive ? 'bg-blue-600' : 'bg-gray-300'}`}
                                             title={allActive ? "Disable all sample data" : "Enable all sample data"}
                                         >
-                                            <div className={`bg-white w-3 h-3 rounded-full absolute top-1 shadow-sm transition-all ${allActive ? 'right-1' : 'left-1'}`}></div>
+                                            <div className={`bg-white w-3 h-3 rounded-full absolute top-1 shadow-sm transition-all ${allActive ? 'right-1' : 'left-1'} dark:bg-gray-800`}></div>
                                         </div>
                                     )}
                                     <div className={`p-1 rounded-full transition-transform duration-300 ${expandedSection === master.id ? 'rotate-180 text-blue-600' : 'text-gray-400'}`}>
@@ -232,15 +232,15 @@ export const SampleSettings: React.FC<SampleSettingsProps> = ({ setView, setActi
                             </button>
                             
                             {expandedSection === master.id && (
-                                <div className="px-6 pb-4 bg-white animate-in fade-in slide-in-from-top-1 duration-300">
+                                <div className="px-6 pb-4 bg-white animate-in fade-in slide-in-from-top-1 duration-300 dark:bg-gray-800">
                                     {master.subItems.map((item) => (
                                         <div 
                                             key={item.id} 
-                                            className="py-3 px-4 flex items-center justify-between hover:bg-gray-50 rounded-lg group transition-colors cursor-pointer"
+                                            className="py-3 px-4 flex items-center justify-between hover:bg-gray-50 rounded-lg group transition-colors cursor-pointer dark:hover:bg-gray-700"
                                             onClick={() => handleRedirect(item, master.id)}
                                         >
                                             <div className="flex items-center space-x-3">
-                                                <span className="text-xs text-gray-700 font-medium">{item.label}</span>
+                                                <span className="text-xs text-gray-700 font-medium dark:text-gray-200">{item.label}</span>
                                                 <div 
                                                     className="opacity-0 group-hover:opacity-100 p-1 text-blue-600 hover:bg-blue-50 rounded transition-all"
                                                 >
@@ -253,9 +253,9 @@ export const SampleSettings: React.FC<SampleSettingsProps> = ({ setView, setActi
                                                         e.stopPropagation();
                                                         onToggleSample(item.id);
                                                     }}
-                                                    className={`w-10 h-5 rounded-full relative cursor-pointer transition-all shrink-0 ${activeSamples.includes(item.id) ? 'bg-blue-600' : 'bg-gray-200'}`}
+                                                    className={`w-10 h-5 rounded-full relative cursor-pointer transition-all shrink-0 ${activeSamples.includes(item.id) ? 'bg-blue-600' : 'bg-gray-200'} dark:bg-gray-700`}
                                                 >
-                                                    <div className={`bg-white w-3 h-3 rounded-full absolute top-1 shadow-sm transition-all ${activeSamples.includes(item.id) ? 'right-1' : 'left-1'}`}></div>
+                                                    <div className={`bg-white w-3 h-3 rounded-full absolute top-1 shadow-sm transition-all ${activeSamples.includes(item.id) ? 'right-1' : 'left-1'} dark:bg-gray-800`}></div>
                                                 </div>
                                             )}
                                         </div>

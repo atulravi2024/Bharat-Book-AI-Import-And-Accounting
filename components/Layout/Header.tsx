@@ -52,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
                 <input
                   id="search"
                   name="search"
-                  className="block w-full pl-14 pr-6 py-4 bg-premium-slate-50 dark:bg-gray-700 border-none transition-all rounded-3xl leading-5 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-800 focus:bg-white dark:bg-gray-600 sm:text-xs font-bold uppercase tracking-widest text-gray-700 dark:text-gray-200"
+                  className="block w-full pl-14 pr-6 py-4 bg-premium-slate-50 dark:bg-gray-700 border-none transition-all rounded-3xl leading-5 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-800 focus:bg-white dark:bg-gray-600 sm:text-xs font-bold uppercase tracking-widest text-gray-700 dark:text-gray-200 dark:focus:bg-gray-700"
                   placeholder="Global Command Search..."
                   type="search"
                 />
@@ -72,7 +72,7 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
               <span className="text-xl">{theme === 'light' ? '🌙' : '☀️'}</span>
             </button>
             <div className="h-8 w-px bg-premium-slate-100 dark:bg-gray-600 mx-2"></div>
-            <button className="flex items-center p-1 rounded-2xl text-gray-500 hover:bg-premium-slate-50 dark:hover:bg-gray-700 transition-all border border-transparent hover:border-premium-slate-100 dark:hover:border-gray-500">
+            <button className="flex items-center p-1 rounded-2xl text-gray-500 hover:bg-premium-slate-50 dark:hover:bg-gray-700 transition-all border border-transparent hover:border-premium-slate-100 dark:hover:border-gray-500 dark:text-gray-400">
                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50">
                   <AccountIcon />
                </div>

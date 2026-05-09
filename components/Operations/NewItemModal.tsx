@@ -25,51 +25,51 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
-        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/80">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 dark:bg-gray-800">
+        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/80 dark:border-gray-800">
           <div>
-            <h3 className="text-xl font-black text-gray-800 tracking-tight flex items-center">
+            <h3 className="text-xl font-black text-gray-800 tracking-tight flex items-center dark:text-gray-100">
               <Package className="mr-2 text-purple-600" size={20} />
               Create New Item Master
             </h3>
-            <p className="text-sm font-medium text-gray-500 mt-1">Add a new item to your inventory catalog.</p>
+            <p className="text-sm font-medium text-gray-500 mt-1 dark:text-gray-400">Add a new item to your inventory catalog.</p>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500/20">
             <X size={24} />
           </button>
         </div>
         
-        <div className="p-6 overflow-y-auto flex-1 h-full bg-white">
+        <div className="p-6 overflow-y-auto flex-1 h-full bg-white dark:bg-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="col-span-1 md:col-span-2">
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Item Name / Description <span className="text-red-500">*</span></label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Item Name / Description <span className="text-red-500">*</span></label>
               <input 
                 type="text" 
                 value={formData.name || ''} 
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                 placeholder="Enter item name"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">SKU / Code</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">SKU / Code</label>
               <input 
                 type="text" 
                 value={formData.sku || ''} 
                 onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                 placeholder="Product code"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">UOM (Unit of Measure)</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">UOM (Unit of Measure)</label>
               <select 
                 value={formData.uom || 'PCS'} 
                 onChange={(e) => setFormData({ ...formData, uom: e.target.value })}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
               >
                 <option value="PCS">Pieces (PCS)</option>
                 <option value="KG">Kilograms (KG)</option>
@@ -81,22 +81,22 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
             </div>
 
             <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">HSN / SAC Code</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">HSN / SAC Code</label>
               <input 
                 type="text" 
                 value={formData.hsnCode || ''} 
                 onChange={(e) => setFormData({ ...formData, hsnCode: e.target.value })}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                 placeholder="e.g. 1234"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Tax Rate (%)</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Tax Rate (%)</label>
               <select 
                 value={formData.taxRate || 0} 
                 onChange={(e) => setFormData({ ...formData, taxRate: Number(e.target.value) })}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
               >
                 <option value={0}>0%</option>
                 <option value={5}>5%</option>
@@ -107,55 +107,55 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
             </div>
 
             <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Purchase Rate (₹)</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Purchase Rate (₹)</label>
               <input 
                 type="number" 
                 value={formData.purchaseRate || ''} 
                 onChange={(e) => setFormData({ ...formData, purchaseRate: Number(e.target.value) })}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                 placeholder="0.00"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Sales Rate (₹)</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Sales Rate (₹)</label>
               <input 
                 type="number" 
                 value={formData.salesRate || ''} 
                 onChange={(e) => setFormData({ ...formData, salesRate: Number(e.target.value) })}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                 placeholder="0.00"
               />
             </div>
             
             <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Category</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Category</label>
               <input 
                 type="text" 
                 value={formData.category || ''} 
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                 placeholder="e.g. Electronics"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Minimum Stock</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Minimum Stock</label>
               <input 
                 type="number" 
                 value={formData.minStock || ''} 
                 onChange={(e) => setFormData({ ...formData, minStock: Number(e.target.value) })}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                 placeholder="0"
               />
             </div>
           </div>
         </div>
         
-        <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3 rounded-b-3xl">
+        <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3 rounded-b-3xl dark:border-gray-800">
           <button 
             onClick={onClose}
-            className="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 font-bold text-sm rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
+            className="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 font-bold text-sm rounded-xl hover:bg-gray-50 transition-colors shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
           >
             Cancel
           </button>

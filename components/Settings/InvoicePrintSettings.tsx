@@ -303,18 +303,18 @@ export const InvoicePrintSettings: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Configuration Section */}
             <div className="flex-1 space-y-6">
-                <div className="bg-white rounded-[2rem] py-4 border border-gray-100 shadow-sm overflow-hidden">
+                <div className="bg-white rounded-[2rem] py-4 border border-gray-100 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-800">
                     <div className="flex items-center gap-4 mb-8 px-8">
                         <div className="bg-blue-600 p-3 rounded-2xl text-white shadow-lg shadow-blue-500/20">
                             <Layout size={24} />
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight">Print Layout Configuration</h2>
-                            <p className="text-sm font-medium text-gray-500">Customize what appears on your generated invoices and vouchers</p>
+                            <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight dark:text-white">Print Layout Configuration</h2>
+                            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Customize what appears on your generated invoices and vouchers</p>
                         </div>
                     </div>
 
-                    <div className="flex flex-col border-t border-gray-100">
+                    <div className="flex flex-col border-t border-gray-100 dark:border-gray-800">
                         <CollapsibleSection 
                             title="Accounting & ERP Themes" 
                             isOpen={activeSection === 'design-accounting'} 
@@ -326,7 +326,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                         e.stopPropagation();
                                         resetSettingsForSection(['designLayout']);
                                     }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                 >
                                     <RotateCcw size={10} />
                                     Default
@@ -346,17 +346,17 @@ export const InvoicePrintSettings: React.FC = () => {
                                                         active 
                                                         ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-100' 
                                                         : 'bg-white border-gray-100 text-gray-500 hover:border-blue-200 hover:bg-blue-50/10'
-                                                    }`}
+                                                    } dark:bg-gray-800 dark:border-gray-800 dark:text-gray-400`}
                                                 >
-                                                    <div className={`p-1 rounded-lg transition-colors shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'}`}>
+                                                    <div className={`p-1 rounded-lg transition-colors shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'} dark:bg-gray-900`}>
                                                         {React.isValidElement(opt.icon) ? React.cloneElement(opt.icon as React.ReactElement, { size: 12 }) : opt.icon}
                                                     </div>
                                                     <div className="flex-grow text-left overflow-hidden">
-                                                        <span className={`block text-[8px] font-black uppercase tracking-tight whitespace-nowrap mb-[-2px] ${active ? 'text-white' : 'text-gray-900'}`}>{opt.label}</span>
+                                                        <span className={`block text-[8px] font-black uppercase tracking-tight whitespace-nowrap mb-[-2px] ${active ? 'text-white' : 'text-gray-900'} dark:text-white`}>{opt.label}</span>
                                                         <span className={`text-[6px] font-bold uppercase opacity-60 ${active ? 'text-blue-100' : 'text-gray-400'}`}>{opt.sub}</span>
                                                     </div>
-                                                    <div className={`w-5 h-2.5 rounded-full relative transition-colors shrink-0 ${active ? 'bg-white/30' : 'bg-gray-200'}`}>
-                                                        <div className={`absolute top-0.5 w-1.5 h-1.5 rounded-full bg-white transition-all shadow-sm ${active ? 'right-0.5' : 'left-0.5'}`} />
+                                                    <div className={`w-5 h-2.5 rounded-full relative transition-colors shrink-0 ${active ? 'bg-white/30' : 'bg-gray-200'} dark:bg-gray-700`}>
+                                                        <div className={`absolute top-0.5 w-1.5 h-1.5 rounded-full bg-white transition-all shadow-sm ${active ? 'right-0.5' : 'left-0.5'} dark:bg-gray-800`} />
                                                     </div>
                                                 </button>
                                             );
@@ -377,7 +377,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                         e.stopPropagation();
                                         resetSettingsForSection(['colorPalette']);
                                     }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                 >
                                     <RotateCcw size={10} />
                                     Default
@@ -397,17 +397,17 @@ export const InvoicePrintSettings: React.FC = () => {
                                                         active 
                                                         ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-100' 
                                                         : 'bg-white border-gray-100 text-gray-500 hover:border-blue-200 hover:bg-blue-50/10'
-                                                    }`}
+                                                    } dark:bg-gray-800 dark:border-gray-800 dark:text-gray-400`}
                                                 >
-                                                    <div className={`p-1 rounded-lg transition-colors shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'}`}>
+                                                    <div className={`p-1 rounded-lg transition-colors shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'} dark:bg-gray-900`}>
                                                         {React.isValidElement(opt.icon) ? React.cloneElement(opt.icon as React.ReactElement, { size: 12 }) : opt.icon}
                                                     </div>
                                                     <div className="flex-grow text-left overflow-hidden">
-                                                        <span className={`block text-[8px] font-black uppercase tracking-tight whitespace-nowrap mb-[-2px] ${active ? 'text-white' : 'text-gray-900'}`}>{opt.label}</span>
+                                                        <span className={`block text-[8px] font-black uppercase tracking-tight whitespace-nowrap mb-[-2px] ${active ? 'text-white' : 'text-gray-900'} dark:text-white`}>{opt.label}</span>
                                                         <span className={`text-[6px] font-bold uppercase opacity-60 ${active ? 'text-blue-100' : 'text-gray-400'}`}>{opt.sub}</span>
                                                     </div>
-                                                    <div className={`w-5 h-2.5 rounded-full relative transition-colors shrink-0 ${active ? 'bg-white/30' : 'bg-gray-200'}`}>
-                                                        <div className={`absolute top-0.5 w-1.5 h-1.5 rounded-full bg-white transition-all shadow-sm ${active ? 'right-0.5' : 'left-0.5'}`} />
+                                                    <div className={`w-5 h-2.5 rounded-full relative transition-colors shrink-0 ${active ? 'bg-white/30' : 'bg-gray-200'} dark:bg-gray-700`}>
+                                                        <div className={`absolute top-0.5 w-1.5 h-1.5 rounded-full bg-white transition-all shadow-sm ${active ? 'right-0.5' : 'left-0.5'} dark:bg-gray-800`} />
                                                     </div>
                                                 </button>
                                             );
@@ -428,7 +428,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                         e.stopPropagation();
                                         resetSettingsForSection(['compactMode', 'ultraCompactMode', 'ultraCleanMode', 'useGrayScale']);
                                     }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                 >
                                     <RotateCcw size={10} />
                                     Default
@@ -490,7 +490,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                             'textTransform'
                                         ]);
                                     }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                 >
                                     <RotateCcw size={10} />
                                     Default
@@ -507,7 +507,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                         <select
                                             value={settings.fontFamily}
                                             onChange={(e) => setSettings(prev => ({ ...prev, fontFamily: e.target.value }))}
-                                            className="w-full bg-white border border-gray-100 rounded-2xl pl-12 pr-4 py-4 text-xs font-black text-gray-900 uppercase tracking-widest focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-400 transition-all appearance-none cursor-pointer shadow-sm hover:border-blue-200"
+                                            className="w-full bg-white border border-gray-100 rounded-2xl pl-12 pr-4 py-4 text-xs font-black text-gray-900 uppercase tracking-widest focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-400 transition-all appearance-none cursor-pointer shadow-sm hover:border-blue-200 dark:bg-gray-800 dark:border-gray-800 dark:text-white"
                                             style={{ fontFamily: settings.fontFamily !== 'Default' ? settings.fontFamily : 'inherit' }}
                                         >
                                             {INVOICE_FONTS.map((font) => (
@@ -522,14 +522,14 @@ export const InvoicePrintSettings: React.FC = () => {
                                     </div>
                                     <div className="flex flex-wrap gap-2 pt-1 px-1">
                                         {['Sans', 'Serif', 'Mono', 'Display'].map(cat => (
-                                            <span key={cat} className="text-[8px] font-bold text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full uppercase tracking-tighter">
+                                            <span key={cat} className="text-[8px] font-bold text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full uppercase tracking-tighter dark:bg-gray-900">
                                                 {cat} Optimized
                                             </span>
                                         ))}
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2 border-t border-gray-100 mt-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2 border-t border-gray-100 mt-4 dark:border-gray-800">
                                     <div className="space-y-3 mt-4">
                                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Base Font size (px)</label>
                                         <div className="flex items-center gap-4">
@@ -540,9 +540,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                 step="0.5"
                                                 value={settings.baseFontSize}
                                                 onChange={(e) => setSettings(prev => ({ ...prev, baseFontSize: parseFloat(e.target.value) }))}
-                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer dark:bg-gray-800"
                                             />
-                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums bg-gray-50 px-2 py-1 rounded-md text-center">{settings.baseFontSize}</span>
+                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums bg-gray-50 px-2 py-1 rounded-md text-center dark:text-white dark:bg-gray-900">{settings.baseFontSize}</span>
                                         </div>
                                     </div>
                                     <div className="space-y-3 mt-4">
@@ -555,9 +555,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                 step="0.1"
                                                 value={settings.headingScale}
                                                 onChange={(e) => setSettings(prev => ({ ...prev, headingScale: parseFloat(e.target.value) }))}
-                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer dark:bg-gray-800"
                                             />
-                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums bg-gray-50 px-2 py-1 rounded-md text-center">{settings.headingScale}</span>
+                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums bg-gray-50 px-2 py-1 rounded-md text-center dark:text-white dark:bg-gray-900">{settings.headingScale}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -568,7 +568,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                         <select 
                                             value={settings.fontWeight}
                                             onChange={(e) => setSettings(prev => ({ ...prev, fontWeight: e.target.value }))}
-                                            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm"
+                                            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-900 dark:border-gray-800"
                                         >
                                             <option value="300">Light</option>
                                             <option value="400">Regular</option>
@@ -584,7 +584,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                         <select 
                                             value={settings.textTransform}
                                             onChange={(e) => setSettings(prev => ({ ...prev, textTransform: e.target.value }))}
-                                            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm"
+                                            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-900 dark:border-gray-800"
                                         >
                                             <option value="default">Default</option>
                                             <option value="uppercase">ALL CAPS</option>
@@ -615,7 +615,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                             'letterSpacing'
                                         ]);
                                     }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                 >
                                     <RotateCcw size={10} />
                                     Default
@@ -634,9 +634,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                 step="1"
                                                 value={settings.plainSpacing ?? 0}
                                                 onChange={(e) => setSettings(prev => ({ ...prev, plainSpacing: parseFloat(e.target.value) }))}
-                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer dark:bg-gray-800"
                                             />
-                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums">{settings.plainSpacing ?? 0}</span>
+                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums dark:text-white">{settings.plainSpacing ?? 0}</span>
                                         </div>
                                     </div>
 
@@ -650,9 +650,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                 step="0.05"
                                                 value={settings.lineHeight}
                                                 onChange={(e) => setSettings(prev => ({ ...prev, lineHeight: parseFloat(e.target.value) }))}
-                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer dark:bg-gray-800"
                                             />
-                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums">{settings.lineHeight}</span>
+                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums dark:text-white">{settings.lineHeight}</span>
                                         </div>
                                     </div>
 
@@ -666,9 +666,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                 step="0.5"
                                                 value={settings.wordSpacing ?? 0}
                                                 onChange={(e) => setSettings(prev => ({ ...prev, wordSpacing: parseFloat(e.target.value) }))}
-                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer dark:bg-gray-800"
                                             />
-                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums">{settings.wordSpacing ?? 0}</span>
+                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums dark:text-white">{settings.wordSpacing ?? 0}</span>
                                         </div>
                                     </div>
 
@@ -682,9 +682,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                 step="1"
                                                 value={settings.paragraphSpacing ?? 0}
                                                 onChange={(e) => setSettings(prev => ({ ...prev, paragraphSpacing: parseFloat(e.target.value) }))}
-                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer dark:bg-gray-800"
                                             />
-                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums">{settings.paragraphSpacing ?? 0}</span>
+                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums dark:text-white">{settings.paragraphSpacing ?? 0}</span>
                                         </div>
                                     </div>
 
@@ -698,9 +698,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                 step="1"
                                                 value={settings.headerSpacing ?? 0}
                                                 onChange={(e) => setSettings(prev => ({ ...prev, headerSpacing: parseFloat(e.target.value) }))}
-                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer dark:bg-gray-800"
                                             />
-                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums">{settings.headerSpacing ?? 0}</span>
+                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums dark:text-white">{settings.headerSpacing ?? 0}</span>
                                         </div>
                                     </div>
 
@@ -714,9 +714,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                 step="0.5"
                                                 value={settings.letterSpacing}
                                                 onChange={(e) => setSettings(prev => ({ ...prev, letterSpacing: parseFloat(e.target.value) }))}
-                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                                                className="flex-grow accent-blue-600 h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer dark:bg-gray-800"
                                             />
-                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums">{settings.letterSpacing}</span>
+                                            <span className="text-xs font-black text-gray-900 w-8 tabular-nums dark:text-white">{settings.letterSpacing}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -738,7 +738,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                             'narration', 'taxDetails', 'signatures', 'grandTotal'
                                         ]);
                                     }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                 >
                                     <RotateCcw size={10} />
                                     Default
@@ -763,16 +763,16 @@ export const InvoicePrintSettings: React.FC = () => {
                                 ].map((section) => {
                                     const style = (settings.sectionStyles as any)?.[section.key] || { color: '', weight: '', transform: 'default', family: 'Default', size: '' };
                                     return (
-                                        <div key={section.key} className="bg-gray-50 p-4 rounded-2xl border border-gray-100 space-y-4 hover:border-blue-200 transition-colors">
-                                            <div className="flex items-center justify-between pb-2 border-b border-gray-200">
-                                                <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest">{section.label}</h4>
+                                        <div key={section.key} className="bg-gray-50 p-4 rounded-2xl border border-gray-100 space-y-4 hover:border-blue-200 transition-colors dark:bg-gray-900 dark:border-gray-800">
+                                            <div className="flex items-center justify-between pb-2 border-b border-gray-200 dark:border-gray-700">
+                                                <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest dark:text-white">{section.label}</h4>
                                                 <div className="flex items-center gap-2">
                                                     <div
                                                         onClick={() => setSettings(prev => ({ 
                                                             ...prev, 
                                                             sectionStyles: { ...prev.sectionStyles, [section.key]: { color: '', weight: '', transform: 'default', family: 'Default', size: '', marginTop: '', marginBottom: '', verticalShift: 0, height: 0 } } 
                                                         }))}
-                                                        className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                                        className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                                     >
                                                         <RotateCcw size={10} />
                                                         Default
@@ -797,7 +797,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                                             ...prev, 
                                                             sectionStyles: { ...prev.sectionStyles, [section.key]: { ...style, family: e.target.value } } 
                                                         }))}
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700"
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
                                                     >
                                                         <option value="Default">Theme Default</option>
                                                         {INVOICE_FONTS.map(f => <option key={f.id} value={f.id}>{f.label}</option>)}
@@ -811,7 +811,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                                             ...prev, 
                                                             sectionStyles: { ...prev.sectionStyles, [section.key]: { ...style, weight: e.target.value } } 
                                                         }))}
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700"
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
                                                     >
                                                         <option value="">Default</option>
                                                         <option value="300">Light</option>
@@ -831,7 +831,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                                             ...prev, 
                                                             sectionStyles: { ...prev.sectionStyles, [section.key]: { ...style, transform: e.target.value } } 
                                                         }))}
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700"
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
                                                     >
                                                         <option value="default">Default</option>
                                                         <option value="uppercase">ALL CAPS</option>
@@ -848,7 +848,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                                             ...prev, 
                                                             sectionStyles: { ...prev.sectionStyles, [section.key]: { ...style, size: e.target.value } } 
                                                         }))}
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700"
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
                                                     >
                                                         <option value="">Default</option>
                                                         <option value="8">8 px</option>
@@ -878,7 +878,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                                             sectionStyles: { ...prev.sectionStyles, [section.key]: { ...style, marginTop: e.target.value } } 
                                                         }))}
                                                         placeholder="Default"
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700"
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
                                                     />
                                                 </div>
                                                 <div className="space-y-1">
@@ -891,7 +891,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                                             sectionStyles: { ...prev.sectionStyles, [section.key]: { ...style, marginBottom: e.target.value } } 
                                                         }))}
                                                         placeholder="Default"
-                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700"
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
                                                     />
                                                 </div>
                                                 <div className="space-y-1 col-span-1">
@@ -906,9 +906,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                             ...prev, 
                                                             sectionStyles: { ...prev.sectionStyles, [section.key]: { ...style, verticalShift: parseFloat(e.target.value) } } 
                                                         }))}
-                                                        className="w-full h-1 bg-gray-200 accent-blue-600 appearance-none rounded-lg cursor-pointer"
+                                                        className="w-full h-1 bg-gray-200 accent-blue-600 appearance-none rounded-lg cursor-pointer dark:bg-gray-700"
                                                     />
-                                                    <div className="text-right text-[8px] font-bold text-gray-500">{style.verticalShift ?? 0}mm</div>
+                                                    <div className="text-right text-[8px] font-bold text-gray-500 dark:text-gray-400">{style.verticalShift ?? 0}mm</div>
                                                 </div>
                                                 <div className="space-y-1 col-span-1">
                                                     <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Height Adjustment (mm)</label>
@@ -922,9 +922,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                                             ...prev, 
                                                             sectionStyles: { ...prev.sectionStyles, [section.key]: { ...style, height: parseFloat(e.target.value) } } 
                                                         }))}
-                                                        className="w-full h-1 bg-gray-200 accent-blue-600 appearance-none rounded-lg cursor-pointer"
+                                                        className="w-full h-1 bg-gray-200 accent-blue-600 appearance-none rounded-lg cursor-pointer dark:bg-gray-700"
                                                     />
-                                                    <div className="text-right text-[8px] font-bold text-gray-500">{style.height ?? 0}mm</div>
+                                                    <div className="text-right text-[8px] font-bold text-gray-500 dark:text-gray-400">{style.height ?? 0}mm</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -944,7 +944,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                         e.stopPropagation();
                                         resetSettingsForSection(['showLogo', 'showHeader', 'showBilling', 'showSignature', 'showCustomerSign', 'showFooterNotes']);
                                     }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                 >
                                     <RotateCcw size={10} />
                                     Default
@@ -1002,7 +1002,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                         e.stopPropagation();
                                         resetSettingsForSection(['showHSN', 'showQty', 'showRate', 'showMrp', 'showDiscountPercentage', 'showDiscountAmount', 'showHsnSummary', 'showTaxDetails', 'showAmountInWords', 'showNarration']);
                                     }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                 >
                                     <RotateCcw size={10} />
                                     Default
@@ -1084,7 +1084,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                         e.stopPropagation();
                                         resetSettingsForSection(['pageSize', 'pageOrientation', 'pageMargin', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight']);
                                     }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer"
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 cursor-pointer dark:bg-gray-800 dark:text-gray-300"
                                 >
                                     <RotateCcw size={10} />
                                     Default
@@ -1152,7 +1152,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                 <div className="pt-4 border-t border-gray-50">
                                     <div className="flex items-center gap-2 mb-4">
                                         <Maximize size={14} className="text-blue-600" />
-                                        <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest">Custom Margins (Inches)</h4>
+                                        <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest dark:text-white">Custom Margins (Inches)</h4>
                                     </div>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         <MarginInput 
@@ -1181,7 +1181,7 @@ export const InvoicePrintSettings: React.FC = () => {
                         </CollapsibleSection>
                     </div>
 
-                    <div className="mt-8 pt-6 border-t border-gray-100 space-y-4 px-8">
+                    <div className="mt-8 pt-6 border-t border-gray-100 space-y-4 px-8 dark:border-gray-800">
                         <div className={`transition-all duration-500 flex items-center justify-center gap-2 ${isSaved ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`}>
                             <CheckCircleIcon size={14} className="text-emerald-500" />
                             <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Settings Synchronized</span>
@@ -1190,7 +1190,7 @@ export const InvoicePrintSettings: React.FC = () => {
                         <div className="grid grid-cols-3 gap-4">
                              <button 
                                 onClick={() => window.print()}
-                                className="flex items-center justify-center gap-2 px-5 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-blue-100 hover:text-blue-600 hover:bg-blue-50/30 transition-all active:scale-95 shadow-sm"
+                                className="flex items-center justify-center gap-2 px-5 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-blue-100 hover:text-blue-600 hover:bg-blue-50/30 transition-all active:scale-95 shadow-sm dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700"
                              >
                                 <Printer size={16} /> TEST
                              </button>
@@ -1203,7 +1203,7 @@ export const InvoicePrintSettings: React.FC = () => {
                             </button>
                             <button 
                                 onClick={resetAllSettings}
-                                className="px-5 py-4 bg-gray-100 text-gray-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95 flex items-center justify-center gap-2"
+                                className="px-5 py-4 bg-gray-100 text-gray-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95 flex items-center justify-center gap-2 dark:bg-gray-800 dark:text-gray-300"
                             >
                                 <RotateCcw size={14} />
                                 DEFAULT
@@ -1227,7 +1227,7 @@ export const InvoicePrintSettings: React.FC = () => {
 
             {/* Live Preview Section */}
             <div className="w-full lg:w-[480px] xl:w-[600px] shrink-0 sticky top-8 flex flex-col gap-4">
-                <div className="bg-gray-200/50 rounded-[2.5rem] shadow-inner border border-gray-100 overflow-hidden h-[85vh] min-h-[600px] max-h-[1000px] flex flex-col items-center justify-center relative">
+                <div className="bg-gray-200/50 rounded-[2.5rem] shadow-inner border border-gray-100 overflow-hidden h-[85vh] min-h-[600px] max-h-[1000px] flex flex-col items-center justify-center relative dark:border-gray-800">
                     <div className="absolute top-6 left-10 text-[10px] font-black text-gray-400 uppercase tracking-widest opacity-60">
                         Live Engine Output
                     </div>
@@ -1235,7 +1235,7 @@ export const InvoicePrintSettings: React.FC = () => {
                     <div ref={previewContainerRef} className={`w-full h-full p-4 flex ${manualZoom === null ? 'items-center justify-center overflow-hidden' : 'items-start overflow-auto'} pointer-events-auto`}>
                         {manualZoom === null ? (
                             <div 
-                                className="origin-center pointer-events-none transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white"
+                                className="origin-center pointer-events-none transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white dark:bg-gray-800"
                                 style={{ transform: `scale(${previewScale})` }}
                             >
                                 <VoucherPreviewComponent 
@@ -1249,7 +1249,7 @@ export const InvoicePrintSettings: React.FC = () => {
                         ) : (
                             <div className="transition-all duration-300 relative flex-shrink-0" style={{ width: `${(settings.pageSize === 'A5' ? 559 : settings.pageSize === 'Letter' ? 816 : 794) * previewScale}px`, height: `${(settings.pageSize === 'A5' ? 794 : settings.pageSize === 'Letter' ? 1056 : 1123) * previewScale}px`, margin: '0 auto' }}>
                                 <div 
-                                    className="transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white absolute top-0 left-0 origin-top-left"
+                                    className="transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white absolute top-0 left-0 origin-top-left dark:bg-gray-800"
                                     style={{ transform: `scale(${previewScale})` }}
                                 >
                                     <VoucherPreviewComponent 
@@ -1265,10 +1265,10 @@ export const InvoicePrintSettings: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-full p-2 gap-2 mx-auto no-print">
+                <div className="flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-full p-2 gap-2 mx-auto no-print dark:bg-gray-800 dark:border-gray-700">
                     <button 
                         onClick={handleZoomOut}
-                        className="p-2.5 hover:bg-gray-100 rounded-full text-black transition-all active:scale-95"
+                        className="p-2.5 hover:bg-gray-100 rounded-full text-black transition-all active:scale-95 dark:hover:bg-gray-600"
                         title="Zoom Out"
                     >
                         <ZoomOut size={18} />
@@ -1278,15 +1278,15 @@ export const InvoicePrintSettings: React.FC = () => {
                     </div>
                     <button 
                         onClick={handleZoomIn}
-                        className="p-2.5 hover:bg-gray-100 rounded-full text-black transition-all active:scale-95"
+                        className="p-2.5 hover:bg-gray-100 rounded-full text-black transition-all active:scale-95 dark:hover:bg-gray-600"
                         title="Zoom In"
                     >
                         <ZoomIn size={18} />
                     </button>
-                    <div className="h-6 w-px bg-gray-200 mx-2" />
+                    <div className="h-6 w-px bg-gray-200 mx-2 dark:bg-gray-700" />
                     <button 
                         onClick={handleResetZoom}
-                        className={`p-2 rounded-full transition-all active:scale-95 flex items-center justify-center px-4 gap-2 ${manualZoom === null ? 'bg-gray-100 font-bold text-black' : 'text-black hover:bg-gray-100'}`}
+                        className={`p-2 rounded-full transition-all active:scale-95 flex items-center justify-center px-4 gap-2 ${manualZoom === null ? 'bg-gray-100 font-bold text-black' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
                         title="Fit to Screen"
                     >
                         <RotateCcw size={16} />
@@ -1294,7 +1294,7 @@ export const InvoicePrintSettings: React.FC = () => {
                     </button>
                     <button 
                         onClick={handleFullSize}
-                        className={`p-2 rounded-full transition-all active:scale-95 flex items-center justify-center px-4 gap-2 ${manualZoom === 1 ? 'bg-gray-100 font-bold text-black' : 'text-black hover:bg-gray-100'}`}
+                        className={`p-2 rounded-full transition-all active:scale-95 flex items-center justify-center px-4 gap-2 ${manualZoom === 1 ? 'bg-gray-100 font-bold text-black' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
                         title="Actual Size (100%)"
                     >
                         <Maximize size={16} />
@@ -1314,16 +1314,16 @@ const CollapsibleSection: React.FC<{
     onToggle: () => void;
     headerActions?: React.ReactNode;
 }> = ({ title, icon, children, isOpen, onToggle, headerActions }) => (
-    <div className={`border-b transition-all duration-300 ${isOpen ? 'bg-white' : 'hover:bg-gray-50/50'} border-gray-100`}>
+    <div className={`border-b transition-all duration-300 ${isOpen ? 'bg-white' : 'hover:bg-gray-50/50'} border-gray-100 dark:bg-gray-800 dark:border-gray-800`}>
         <button 
             onClick={onToggle}
             className="w-full flex items-center justify-between p-6 px-8 text-left focus:outline-none"
         >
             <div className="flex items-center gap-4">
-                <div className={`p-2 rounded-xl ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
+                <div className={`p-2 rounded-xl ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400'} dark:bg-gray-800`}>
                     {icon}
                 </div>
-                <h3 className="text-xs font-black text-gray-900 uppercase tracking-widest">{title}</h3>
+                <h3 className="text-xs font-black text-gray-900 uppercase tracking-widest dark:text-white">{title}</h3>
             </div>
             <div className="flex items-center gap-4">
                 {headerActions && <div onClick={(e) => e.stopPropagation()}>{headerActions}</div>}
@@ -1352,19 +1352,19 @@ const ToggleButton: React.FC<{
             active 
             ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-100' 
             : 'bg-white border-gray-100 text-gray-500 hover:border-blue-200 hover:bg-blue-50/10'
-        }`}
+        } dark:bg-gray-800 dark:border-gray-800 dark:text-gray-400`}
     >
-        <div className={`p-1.5 rounded-lg transition-colors ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'}`}>
+        <div className={`p-1.5 rounded-lg transition-colors ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'} dark:bg-gray-900`}>
             {React.isValidElement(icon) ? React.cloneElement(icon as React.ReactElement, { size: 14 }) : icon}
         </div>
         <div className="flex-grow text-left flex items-center gap-2 overflow-hidden">
-            <span className={`text-[9px] font-black uppercase tracking-widest whitespace-nowrap ${active ? 'text-white' : 'text-gray-900'}`}>{label}</span>
+            <span className={`text-[9px] font-black uppercase tracking-widest whitespace-nowrap ${active ? 'text-white' : 'text-gray-900'} dark:text-white`}>{label}</span>
             <span className={`text-[7px] font-black uppercase tracking-tight opacity-70 ${active ? 'text-blue-100' : 'text-gray-400'}`}>
                 {active ? 'Active' : 'Off'}
             </span>
         </div>
-        <div className={`w-8 h-4 rounded-full relative transition-colors shrink-0 ${active ? 'bg-white/30' : 'bg-gray-200'}`}>
-            <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all shadow-sm ${active ? 'right-0.5' : 'left-0.5'}`} />
+        <div className={`w-8 h-4 rounded-full relative transition-colors shrink-0 ${active ? 'bg-white/30' : 'bg-gray-200'} dark:bg-gray-700`}>
+            <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all shadow-sm ${active ? 'right-0.5' : 'left-0.5'} dark:bg-gray-800`} />
         </div>
     </button>
 );
@@ -1385,23 +1385,23 @@ const SegmentedControl: React.FC<{
                         active 
                         ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-100' 
                         : 'bg-white border-gray-100 text-gray-500 hover:border-blue-200 hover:bg-blue-50/10'
-                    }`}
+                    } dark:bg-gray-800 dark:border-gray-800 dark:text-gray-400`}
                 >
                     {opt.icon && (
-                        <div className={`p-1.5 rounded-lg transition-colors shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'}`}>
+                        <div className={`p-1.5 rounded-lg transition-colors shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'} dark:bg-gray-900`}>
                             {React.isValidElement(opt.icon) ? React.cloneElement(opt.icon as React.ReactElement, { size: 14 }) : opt.icon}
                         </div>
                     )}
                     <div className="flex-grow text-left flex items-baseline gap-1.5 overflow-hidden">
-                        <span className={`text-[9px] font-black uppercase tracking-widest whitespace-nowrap ${active ? 'text-white' : 'text-gray-900'}`}>{opt.label}</span>
+                        <span className={`text-[9px] font-black uppercase tracking-widest whitespace-nowrap ${active ? 'text-white' : 'text-gray-900'} dark:text-white`}>{opt.label}</span>
                         {opt.sub && (
                             <span className={`text-[7px] font-black uppercase tracking-tight opacity-70 whitespace-nowrap ${active ? 'text-blue-100' : 'text-gray-400'}`}>
                                 {opt.sub}
                             </span>
                         )}
                     </div>
-                    <div className={`w-8 h-4 rounded-full relative transition-colors shrink-0 ${active ? 'bg-white/30' : 'bg-gray-200'}`}>
-                        <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all shadow-sm ${active ? 'right-0.5' : 'left-0.5'}`} />
+                    <div className={`w-8 h-4 rounded-full relative transition-colors shrink-0 ${active ? 'bg-white/30' : 'bg-gray-200'} dark:bg-gray-700`}>
+                        <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all shadow-sm ${active ? 'right-0.5' : 'left-0.5'} dark:bg-gray-800`} />
                     </div>
                 </button>
             );
@@ -1426,7 +1426,7 @@ const MarginInput: React.FC<{ label: string, value: number, onChange: (val: numb
                         onChange(parseFloat(val) || 0);
                     }
                 }}
-                className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-xs font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200 transition-all"
+                className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-xs font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200 transition-all dark:bg-gray-800 dark:border-gray-800 dark:text-white"
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-gray-300 pointer-events-none group-focus-within:text-blue-400">IN</div>
         </div>
@@ -1840,7 +1840,7 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], totals: any,
                       {header.billingState} {header.billingPinCode}, India<br/>
                       {header.billingContact && <span className={primaryText}>Contact: {header.billingContact}</span>}
                     </div>
-                    {header.gstNumber && <div className={`mt-4 inline-block px-3 py-1 bg-gray-100 text-gray-800 border border-gray-300 font-black rounded-lg uppercase tracking-widest`} style={{ fontSize: `${baseSize * 0.7}px` }}>GSTIN: {header.gstNumber}</div>}
+                    {header.gstNumber && <div className={`mt-4 inline-block px-3 py-1 bg-gray-100 text-gray-800 border border-gray-300 font-black rounded-lg uppercase tracking-widest dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600`} style={{ fontSize: `${baseSize * 0.7}px` }}>GSTIN: {header.gstNumber}</div>}
                   </div>
                   <div className={tStyles.billingRightBox}>
                     <div className="space-y-8">
@@ -1922,7 +1922,7 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], totals: any,
                                         {config.showDiscountAmount && (
                                             <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.discountAmount ? parseFloat(row.discountAmount.toString()).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}</td>
                                         )}
-                                        <td className={`${config.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-bold text-gray-600 text-right tabular-nums`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.tax}%</td>
+                                        <td className={`${config.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-bold text-gray-600 text-right tabular-nums dark:text-gray-300`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.tax}%</td>
                                     </>
                                 ) : (
                                     <td className={`${config.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-black ${primaryText} text-right tracking-widest uppercase`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.crDr || 'Dr'}</td>

@@ -30,12 +30,12 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
           const groupInvoices = groupInvoicesUntyped as ParsedVoucher[];
           
           return (
-            <div key={groupType} className="bg-white border rounded-xl shadow-sm overflow-hidden mb-6 flex flex-col">
+            <div key={groupType} className="bg-white border rounded-xl shadow-sm overflow-hidden mb-6 flex flex-col dark:bg-gray-800">
               <div 
                   className="px-4 py-3 border-b flex justify-between items-center" 
                   style={{ backgroundColor: groupType.includes('B2B') ? '#eef2ff' : groupType.includes('B2C') ? '#fff7ed' : groupType.includes('Export') ? '#d1fae5' : groupType.includes('Exempt') ? '#f3f4f6' : '#f9fafb' }}
               >
-                <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wider">
+                <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wider dark:text-gray-100">
                   {groupType === 'B2B Credit Note' ? 'B2B Credit Notes' : 
                    groupType === 'B2B Debit Note' ? 'B2B Debit Notes' : 
                    `${groupType} Invoices`} Summary
@@ -45,18 +45,18 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
               <div className="hidden lg:block overflow-x-auto">
                 <table className="w-full text-sm text-left">
                   <thead>
-                    <tr className="bg-gray-50 border-b border-gray-200">
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">Type</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">Date/No.</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">Party/Particulars</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">Taxable Value</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">CGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">SGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">IGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">Total Tax</th>
+                    <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Type</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Date/No.</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Party/Particulars</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Taxable Value</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">CGST</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">SGST</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">IGST</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Total Tax</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                     {groupInvoices.map(v => {
                       const isCreditNote = v.type === VoucherType.CreditNote;
                       const sign = isCreditNote ? -1 : 1;
@@ -96,25 +96,25 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                               groupType === 'B2C Small' ? 'bg-yellow-100 text-yellow-700' :
                               groupType === 'Export' ? 'bg-emerald-100 text-emerald-700' :
                               groupType === 'Exempt' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
-                            }`}>
+                            } dark:bg-gray-800 dark:text-gray-200`}>
                               {groupType === 'B2B Credit Note' ? 'B2B CN' : 
                                groupType === 'B2B Debit Note' ? 'B2B DN' : groupType}
                             </span>
                           </td>
                           <td className="px-4 py-3">
-                            <div className="font-medium text-gray-900">{String(v.date?.value || '-')}</div>
-                            <div className="text-xs text-gray-500 font-mono mt-0.5">{String(v.invoiceNumber?.value || v.id.split('-')[0])}</div>
+                            <div className="font-medium text-gray-900 dark:text-white">{String(v.date?.value || '-')}</div>
+                            <div className="text-xs text-gray-500 font-mono mt-0.5 dark:text-gray-400">{String(v.invoiceNumber?.value || v.id.split('-')[0])}</div>
                           </td>
                           <td className="px-4 py-3">
-                            <div className="font-medium text-gray-900">{String(v.partyName?.value || '-')}</div>
-                            <div className="text-[11px] text-gray-500 max-w-xs truncate mt-0.5" title={String(v.narration?.value || '-')}>
+                            <div className="font-medium text-gray-900 dark:text-white">{String(v.partyName?.value || '-')}</div>
+                            <div className="text-[11px] text-gray-500 max-w-xs truncate mt-0.5 dark:text-gray-400" title={String(v.narration?.value || '-')}>
                               {String(v.narration?.value || '-')}
                             </div>
                           </td>
                           <td className="px-4 py-3 text-right font-mono text-sm">₹{taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600">₹{cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600">₹{sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600">₹{igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600 dark:text-gray-300">₹{cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600 dark:text-gray-300">₹{sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600 dark:text-gray-300">₹{igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                           <td className="px-4 py-3 text-right font-mono text-sm font-medium text-green-600">₹{tax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                         </tr>
                       );
@@ -122,7 +122,7 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                   </tbody>
                 </table>
               </div>
-              <div className="lg:hidden flex flex-col divide-y divide-gray-100">
+              <div className="lg:hidden flex flex-col divide-y divide-gray-100 dark:divide-gray-800">
                 {groupInvoices.map(v => {
                   const isCreditNote = v.type === VoucherType.CreditNote;
                   const sign = isCreditNote ? -1 : 1;
@@ -163,41 +163,41 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                             groupType === 'B2C Small' ? 'bg-yellow-100 text-yellow-700' :
                             groupType === 'Export' ? 'bg-emerald-100 text-emerald-700' :
                             groupType === 'Exempt' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
-                          }`}>
+                          } dark:bg-gray-800 dark:text-gray-200`}>
                             {groupType === 'B2B Credit Note' ? 'B2B CN' : 
                              groupType === 'B2B Debit Note' ? 'B2B DN' : groupType}
                           </span>
-                          <div className="font-bold text-gray-900">{String(v.partyName?.value || '-')}</div>
+                          <div className="font-bold text-gray-900 dark:text-white">{String(v.partyName?.value || '-')}</div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-gray-900 border px-2 py-1 rounded-md bg-gray-50">{String(v.invoiceNumber?.value || v.id.split('-')[0])}</div>
-                          <div className="text-xs text-gray-500 mt-1">{String(v.date?.value || '-')}</div>
+                          <div className="font-bold text-gray-900 border px-2 py-1 rounded-md bg-gray-50 dark:text-white dark:bg-gray-900">{String(v.invoiceNumber?.value || v.id.split('-')[0])}</div>
+                          <div className="text-xs text-gray-500 mt-1 dark:text-gray-400">{String(v.date?.value || '-')}</div>
                         </div>
                       </div>
                       
-                      <div className="bg-gray-50 p-3 rounded-lg grid grid-cols-1 gap-3 text-sm">
+                      <div className="bg-gray-50 p-3 rounded-lg grid grid-cols-1 gap-3 text-sm dark:bg-gray-900">
                         <div className="flex flex-col">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase">Taxable Value</span>
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">Taxable Value</span>
                           <span className="font-medium">₹{taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         </div>
                       </div>
 
-                      <div className="border border-gray-100 p-3 rounded-lg grid grid-cols-2 gap-3 text-sm">
+                      <div className="border border-gray-100 p-3 rounded-lg grid grid-cols-2 gap-3 text-sm dark:border-gray-800">
                         <div className="flex flex-col">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase">CGST</span>
-                          <span className="font-medium text-gray-700">₹{cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">CGST</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-200">₹{cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         </div>
                         <div className="flex flex-col text-right">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase">SGST</span>
-                          <span className="font-medium text-gray-700">₹{sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">SGST</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-200">₹{sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         </div>
-                        <div className="flex flex-col mt-2 pt-2 border-t border-gray-100">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase">IGST</span>
-                          <span className="font-medium text-gray-700">₹{igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <div className="flex flex-col mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">IGST</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-200">₹{igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         </div>
-                        <div className="flex flex-col text-right mt-2 pt-2 border-t border-gray-100">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase">Total Tax</span>
-                          <span className="font-bold text-gray-900">₹{tax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <div className="flex flex-col text-right mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">Total Tax</span>
+                          <span className="font-bold text-gray-900 dark:text-white">₹{tax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         </div>
                       </div>
                     </div>
@@ -209,7 +209,7 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
         })}
         
         {Object.keys(summary.groupedInvoices).length === 0 && (
-          <div className="bg-white border rounded-xl shadow-sm p-12 text-center text-gray-400">
+          <div className="bg-white border rounded-xl shadow-sm p-12 text-center text-gray-400 dark:bg-gray-800">
             No sales transactions recorded for this period.
           </div>
         )}
@@ -217,9 +217,9 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
         {Object.entries(summary.groupedHsnData).map(([groupType, groupHsnDataUntyped]) => {
           const groupHsnData = groupHsnDataUntyped as any[];
           return (
-            <div key={groupType} className="bg-white border rounded-xl shadow-sm overflow-hidden">
-              <div className="px-4 py-3 bg-gray-50 border-b flex justify-between items-center">
-                <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wider">
+            <div key={groupType} className="bg-white border rounded-xl shadow-sm overflow-hidden dark:bg-gray-800">
+              <div className="px-4 py-3 bg-gray-50 border-b flex justify-between items-center dark:bg-gray-900">
+                <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wider dark:text-gray-100">
                   HSN/SAC Summary for {
                     groupType === 'B2B Credit Note' ? 'B2B Credit Notes' : 
                     groupType === 'B2B Debit Note' ? 'B2B Debit Notes' : 
@@ -230,21 +230,21 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
               <div className="hidden lg:block overflow-x-auto">
                 <table className="w-full text-sm text-left">
                   <thead>
-                    <tr className="bg-gray-50 border-b">
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">HSN/SAC</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">Type</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">Description</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">Qty</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">UOM</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">Taxable Value</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">CGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">SGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">IGST</th>
+                    <tr className="bg-gray-50 border-b dark:bg-gray-900">
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">HSN/SAC</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Type</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Description</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Qty</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">UOM</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Taxable Value</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">CGST</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">SGST</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">IGST</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
                     {groupHsnData.map((hsn, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                      <tr key={idx} className="hover:bg-gray-50 transition-colors dark:hover:bg-gray-700">
                         <td className="px-4 py-3 font-mono font-medium text-blue-600">{hsn.hsn}</td>
                         <td className="px-4 py-3">
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
@@ -254,30 +254,30 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                             String(hsn.type || '').includes('B2C') ? 'bg-orange-100 text-orange-700' :
                             hsn.type === 'Export' ? 'bg-emerald-100 text-emerald-700' :
                             hsn.type === 'Exempt' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
-                          }`}>
+                          } dark:bg-gray-800 dark:text-gray-200`}>
                             {hsn.type === 'B2B Credit Note' ? 'B2B CN' : 
                              hsn.type === 'B2B Debit Note' ? 'B2B DN' : hsn.type}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-500 truncate max-w-[150px]" title={hsn.desc}>{hsn.desc || '-'}</td>
+                        <td className="px-4 py-3 text-gray-500 truncate max-w-[150px] dark:text-gray-400" title={hsn.desc}>{hsn.desc || '-'}</td>
                         <td className="px-4 py-3 text-right font-medium">{hsn.qty}</td>
-                        <td className="px-4 py-3 text-right text-gray-500">{hsn.uom}</td>
-                        <td className="px-4 py-3 text-right font-medium text-gray-600">₹{hsn.taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="px-4 py-3 text-right font-medium text-gray-600">₹{hsn.cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="px-4 py-3 text-right font-medium text-gray-600">₹{hsn.sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="px-4 py-3 text-right font-medium text-gray-600">₹{hsn.igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 text-right text-gray-500 dark:text-gray-400">{hsn.uom}</td>
+                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{hsn.taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{hsn.cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{hsn.sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{hsn.igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              <div className="lg:hidden flex flex-col divide-y divide-gray-100">
+              <div className="lg:hidden flex flex-col divide-y divide-gray-100 dark:divide-gray-800">
                 {groupHsnData.map((hsn, idx) => (
                   <div key={idx} className="p-4 flex flex-col space-y-3">
                     <div className="flex justify-between items-start">
                       <div className="flex flex-col">
                         <span className="font-mono font-bold text-blue-600">{hsn.hsn}</span>
-                        <span className="text-gray-800 text-sm mt-1">{hsn.desc || '-'}</span>
+                        <span className="text-gray-800 text-sm mt-1 dark:text-gray-100">{hsn.desc || '-'}</span>
                         <span className={`w-fit mt-2 px-2 py-0.5 rounded text-[10px] font-bold ${
                           hsn.type === 'B2B' ? 'bg-indigo-100 text-indigo-700' : 
                           hsn.type === 'B2B Credit Note' ? 'bg-red-100 text-red-700' :
@@ -285,7 +285,7 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                           String(hsn.type || '').includes('B2C') ? 'bg-orange-100 text-orange-700' :
                           hsn.type === 'Export' ? 'bg-emerald-100 text-emerald-700' :
                           hsn.type === 'Exempt' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
-                        }`}>
+                        } dark:bg-gray-800 dark:text-gray-200`}>
                           {hsn.type === 'B2B Credit Note' ? 'B2B CN' : 
                            hsn.type === 'B2B Debit Note' ? 'B2B DN' : hsn.type}
                         </span>
@@ -295,10 +295,10 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                       </div>
                     </div>
                     
-                    <div className="bg-gray-50 p-3 rounded-lg grid grid-cols-1 gap-3 text-xs">
+                    <div className="bg-gray-50 p-3 rounded-lg grid grid-cols-1 gap-3 text-xs dark:bg-gray-900">
                       <div className="flex flex-col">
-                        <span className="text-gray-500 font-bold uppercase">Taxable Value</span>
-                        <span className="font-medium text-gray-900">₹{hsn.taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <span className="text-gray-500 font-bold uppercase dark:text-gray-400">Taxable Value</span>
+                        <span className="font-medium text-gray-900 dark:text-white">₹{hsn.taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                       </div>
                     </div>
 
@@ -324,7 +324,7 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
         })}
         
         {Object.keys(summary.groupedHsnData).length === 0 && (
-          <div className="bg-white border rounded-xl shadow-sm p-12 text-center text-gray-400">
+          <div className="bg-white border rounded-xl shadow-sm p-12 text-center text-gray-400 dark:bg-gray-800">
             No HSN/SAC data available.
           </div>
         )}

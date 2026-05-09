@@ -244,15 +244,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouc
           </AnimatePresence>
 
           {/* Activity Section */}
-          <div className="bg-white rounded-[2.5rem] shadow-sm border border-premium-slate-100 p-8">
-            <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 flex items-center">
+          <div className="bg-white rounded-[2.5rem] shadow-sm border border-premium-slate-100 p-8 dark:bg-gray-800 dark:border-gray-700">
+            <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 flex items-center dark:text-white">
               <Clock size={16} className="mr-3 text-blue-600" /> {isDemo ? 'Demo Sequence Ledger' : 'Evolution Chronicle'}
             </h3>
             <div className="space-y-4">
               {vouchers.slice(-5).reverse().map((v, i) => (
-                <div key={v.id} onClick={() => onNavigateToView('vouchers')} className="flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 transition-all cursor-pointer group border border-transparent hover:border-gray-100">
+                <div key={v.id} onClick={() => onNavigateToView('vouchers')} className="flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 transition-all cursor-pointer group border border-transparent hover:border-gray-100 dark:hover:bg-gray-700">
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-xl bg-premium-slate-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
+                    <div className="w-10 h-10 rounded-xl bg-premium-slate-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform dark:bg-gray-800">
                       {v.type === VoucherType.Sales ? <TrendingUp size={18}/> : <FileText size={18}/>}
                     </div>
                     <div className="ml-4">
@@ -260,11 +260,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouc
                         <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{v.type}</p>
                         {isDemo && <span className="text-[7px] font-bold text-amber-500 bg-amber-50 px-1.5 rounded-full border border-amber-100 uppercase tracking-tighter">Demo</span>}
                       </div>
-                      <p className="text-xs font-bold text-gray-800">{String(v.partyName?.value || v.narration?.value || 'System Action')}</p>
+                      <p className="text-xs font-bold text-gray-800 dark:text-gray-100">{String(v.partyName?.value || v.narration?.value || 'System Action')}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-black text-gray-900">₹{Number(v.amount?.value || 0).toLocaleString()}</p>
+                    <p className="text-sm font-black text-gray-900 dark:text-white">₹{Number(v.amount?.value || 0).toLocaleString()}</p>
                     <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{String(v.date?.value)}</p>
                   </div>
                 </div>
@@ -279,7 +279,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouc
 };
 
 const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }: any) => (
-  <div className="bg-white p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-premium-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] group hover:shadow-2xl hover:shadow-blue-100/30 transition-all duration-500 relative overflow-hidden">
+  <div className="bg-white p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-premium-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] group hover:shadow-2xl hover:shadow-blue-100/30 transition-all duration-500 relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
     <div className={`absolute -top-4 -right-4 w-20 h-20 sm:w-24 sm:h-24 ${bg} rounded-full opacity-10 group-hover:scale-150 transition-transform duration-700`}></div>
     <div className="flex items-center justify-between mb-4 sm:mb-6 relative z-10">
       <div className={`w-12 h-12 sm:w-14 sm:h-14 ${bg} ${color} rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6 group-hover:scale-110`}>
@@ -294,8 +294,8 @@ const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }: any) =
     </div>
     <div className="relative z-10">
       <p className="text-[9px] sm:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 sm:mb-2">{label}</p>
-      <h3 className="text-2xl sm:text-3xl font-black text-gray-900 font-display tracking-tight leading-none truncate max-w-[200px] sm:max-w-none">{val}</h3>
-      <p className="text-[9px] sm:text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2 sm:mt-4 sm:opacity-60 group-hover:opacity-100 transition-opacity">
+      <h3 className="text-2xl sm:text-3xl font-black text-gray-900 font-display tracking-tight leading-none truncate max-w-[200px] sm:max-w-none dark:text-white">{val}</h3>
+      <p className="text-[9px] sm:text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2 sm:mt-4 sm:opacity-60 group-hover:opacity-100 transition-opacity dark:text-gray-400">
         {sub}
       </p>
     </div>
@@ -303,8 +303,8 @@ const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }: any) =
 );
 
 const MastersList = ({ title, data, icon: Icon, color, bg }: any) => (
-    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100">
-      <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-8 flex items-center">
+    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 dark:bg-gray-800 dark:border-gray-700">
+      <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-8 flex items-center dark:text-white">
         <Icon size={18} className={`mr-3 ${color}`} /> {title}
       </h3>
       <div className="space-y-6">
@@ -315,13 +315,13 @@ const MastersList = ({ title, data, icon: Icon, color, bg }: any) => (
                 {p.name.charAt(0)}
               </div>
               <div className="ml-4 flex flex-col">
-                  <span className="text-xs font-black text-gray-900 truncate max-w-[150px] uppercase tracking-wide leading-none mb-1">{p.name}</span>
+                  <span className="text-xs font-black text-gray-900 truncate max-w-[150px] uppercase tracking-wide leading-none mb-1 dark:text-white">{p.name}</span>
                   <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Active Partner</span>
               </div>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-[10px] font-black text-gray-900 mb-2 uppercase tracking-widest">{p.count} Vectors</span>
-              <div className="w-24 h-1.5 bg-gray-50 rounded-full overflow-hidden border border-premium-slate-50">
+              <span className="text-[10px] font-black text-gray-900 mb-2 uppercase tracking-widest dark:text-white">{p.count} Vectors</span>
+              <div className="w-24 h-1.5 bg-gray-50 rounded-full overflow-hidden border border-premium-slate-50 dark:bg-gray-900">
                 <div className={`h-full ${color.replace('text-', 'bg-')}`} style={{ width: `${(p.count / (data[0]?.count || 1)) * 100}%` }}></div>
               </div>
             </div>
@@ -335,16 +335,16 @@ const MastersList = ({ title, data, icon: Icon, color, bg }: any) => (
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-4 rounded-2xl shadow-2xl border border-premium-slate-100">
+      <div className="bg-white p-4 rounded-2xl shadow-2xl border border-premium-slate-100 dark:bg-gray-800 dark:border-gray-700">
         <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">{label}</p>
         <div className="space-y-2">
             {payload.map((entry: any, i: number) => (
                 <div key={i} className="flex items-center justify-between gap-4">
                     <div className="flex items-center">
                         <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: entry.color }}></div>
-                        <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wider">{entry.name}</span>
+                        <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wider dark:text-gray-300">{entry.name}</span>
                     </div>
-                    <span className="text-xs font-black text-gray-900 font-display">₹{Number(entry.value).toLocaleString('en-IN')}</span>
+                    <span className="text-xs font-black text-gray-900 font-display dark:text-white">₹{Number(entry.value).toLocaleString('en-IN')}</span>
                 </div>
             ))}
         </div>

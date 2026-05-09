@@ -254,13 +254,13 @@ export const AppNavigationSettings: React.FC = () => {
     return (
         <div className="flex flex-col gap-8 pb-20">
             {/* Minimal Modern Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-gray-100 mb-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-gray-100 mb-2 dark:border-gray-800">
                 <div className="flex items-center gap-4">
                     <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xl shadow-blue-100 shrink-0">
                         <SettingsIcon className="w-5 h-5" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-black text-gray-900 tracking-tight leading-tight">Navigation Architecture</h2>
+                        <h2 className="text-xl font-black text-gray-900 tracking-tight leading-tight dark:text-white">Navigation Architecture</h2>
                         <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1.5 flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                             App Entry & Routing Intelligence
@@ -268,10 +268,10 @@ export const AppNavigationSettings: React.FC = () => {
                     </div>
                 </div>
                 
-                <div className="flex items-center gap-2.5 p-1 bg-white border border-gray-100 rounded-[1.25rem] shadow-sm">
+                <div className="flex items-center gap-2.5 p-1 bg-white border border-gray-100 rounded-[1.25rem] shadow-sm dark:bg-gray-800 dark:border-gray-800">
                     <button 
                         onClick={handleReset}
-                        className="px-5 py-2.5 rounded-xl font-bold text-gray-400 hover:text-gray-900 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest"
+                        className="px-5 py-2.5 rounded-xl font-bold text-gray-400 hover:text-gray-900 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest dark:hover:bg-gray-700"
                     >
                         Reset Defaults
                     </button>
@@ -292,7 +292,7 @@ export const AppNavigationSettings: React.FC = () => {
             </div>
 
             {/* Section 1: Application Entry Defaults */}
-            <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm relative overflow-hidden group">
+            <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm relative overflow-hidden group dark:bg-gray-800 dark:border-gray-800">
                 <div className="absolute top-0 right-0 p-8 opacity-[0.03] grayscale pointer-events-none group-hover:scale-110 transition-transform duration-700">
                     <SettingsIcon className="w-48 h-48" />
                 </div>
@@ -302,7 +302,7 @@ export const AppNavigationSettings: React.FC = () => {
                         <SettingsIcon className="w-6 h-6" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Startup Priority</h3>
+                        <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight dark:text-white">Startup Priority</h3>
                         <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">Global Entry Point</p>
                     </div>
                 </div>
@@ -310,7 +310,7 @@ export const AppNavigationSettings: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
                     {/* Default Page Dropdown */}
                     <div className="flex flex-col gap-4">
-                        <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 flex items-center gap-2">
+                        <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 flex items-center gap-2 dark:text-gray-400">
                             <div className="w-1 h-3 bg-blue-600 rounded-full"></div>
                             Main Landing Category
                         </label>
@@ -322,7 +322,7 @@ export const AppNavigationSettings: React.FC = () => {
                                     setDefaultPage(val);
                                     if (subPages[val]) setDefaultSubPage(subPages[val][0].id);
                                 }}
-                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] px-8 py-5 text-lg font-black text-gray-900 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 focus:ring-8 focus:ring-blue-50 outline-none transition-all shadow-sm"
+                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] px-8 py-5 text-lg font-black text-gray-900 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 focus:ring-8 focus:ring-blue-50 outline-none transition-all shadow-sm dark:text-white dark:focus:bg-gray-700"
                             >
                                 {pages.map(p => (
                                     <option key={p.id} value={p.id} className="font-bold py-2">{p.label}</option>
@@ -334,14 +334,14 @@ export const AppNavigationSettings: React.FC = () => {
                         </div>
                         <div className="flex gap-2 px-2">
                             {pages.map(p => (
-                                <div key={p.id} className={`w-2 h-2 rounded-full transition-all duration-500 ${defaultPage === p.id ? 'bg-blue-600 w-6' : 'bg-gray-200'}`}></div>
+                                <div key={p.id} className={`w-2 h-2 rounded-full transition-all duration-500 ${defaultPage === p.id ? 'bg-blue-600 w-6' : 'bg-gray-200'} dark:bg-gray-700`}></div>
                             ))}
                         </div>
                     </div>
 
                     {/* Default Subpage Dropdown */}
                     <div className="flex flex-col gap-4">
-                        <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 flex items-center gap-2">
+                        <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 flex items-center gap-2 dark:text-gray-400">
                             <div className="w-1 h-3 bg-blue-400 rounded-full"></div>
                             Target Sub-Section
                         </label>
@@ -349,7 +349,7 @@ export const AppNavigationSettings: React.FC = () => {
                             <select
                                 value={defaultSubPage}
                                 onChange={(e) => setDefaultSubPage(e.target.value)}
-                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] px-8 py-5 text-lg font-black text-gray-900 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 focus:ring-8 focus:ring-blue-50 outline-none transition-all shadow-sm"
+                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] px-8 py-5 text-lg font-black text-gray-900 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 focus:ring-8 focus:ring-blue-50 outline-none transition-all shadow-sm dark:text-white dark:focus:bg-gray-700"
                             >
                                 {subPages[defaultPage]?.map(sp => (
                                     <option key={sp.id} value={sp.id} className="font-bold py-2">{sp.label}</option>
@@ -365,7 +365,7 @@ export const AppNavigationSettings: React.FC = () => {
             </div>
 
             {/* Section 2: Contextual View Routing */}
-            <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm relative overflow-hidden group">
+            <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm relative overflow-hidden group dark:bg-gray-800 dark:border-gray-800">
                 <div className="absolute top-0 left-0 p-8 opacity-[0.03] grayscale pointer-events-none group-hover:scale-110 transition-transform duration-700 -scale-x-100">
                     <AIToolsIcon className="w-48 h-48" />
                 </div>
@@ -375,24 +375,24 @@ export const AppNavigationSettings: React.FC = () => {
                         <AIToolsIcon className="w-6 h-6" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Sidebar Routing Intelligence</h3>
+                        <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight dark:text-white">Sidebar Routing Intelligence</h3>
                         <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">Automated Contextual Navigation</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
                     {pages.map((page) => (
-                        <div key={page.id} className="p-8 bg-white rounded-[2.5rem] border border-gray-100 hover:border-blue-200 transition-all group/card shadow-sm hover:shadow-xl hover:shadow-blue-50 relative overflow-hidden">
+                        <div key={page.id} className="p-8 bg-white rounded-[2.5rem] border border-gray-100 hover:border-blue-200 transition-all group/card shadow-sm hover:shadow-xl hover:shadow-blue-50 relative overflow-hidden dark:bg-gray-800 dark:border-gray-800">
                             <div className="absolute -right-4 -top-4 w-24 h-24 bg-blue-50/50 rounded-full blur-2xl opacity-0 group-hover/card:opacity-100 transition-opacity"></div>
                             
                             <div className="flex items-center justify-between mb-8 relative z-10">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-slate-50 flex items-center justify-center rounded-2xl border border-gray-100 group-hover/card:scale-110 transition-transform shadow-sm text-xl italic font-serif">
+                                    <div className="w-12 h-12 bg-slate-50 flex items-center justify-center rounded-2xl border border-gray-100 group-hover/card:scale-110 transition-transform shadow-sm text-xl italic font-serif dark:border-gray-800">
                                         {page.icon}
                                     </div>
                                     <div>
                                         <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-0.5">{page.id}</h3>
-                                        <h4 className="text-sm font-black text-gray-900 tracking-tight">{page.label}</h4>
+                                        <h4 className="text-sm font-black text-gray-900 tracking-tight dark:text-white">{page.label}</h4>
                                     </div>
                                 </div>
                                 <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
@@ -407,7 +407,7 @@ export const AppNavigationSettings: React.FC = () => {
                                     <select
                                         value={routingDefaults[page.id] || ''}
                                         onChange={(e) => updateRouting(page.id, e.target.value)}
-                                        className="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl px-5 py-4 text-xs font-black text-gray-800 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 outline-none transition-all"
+                                        className="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl px-5 py-4 text-xs font-black text-gray-800 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 outline-none transition-all dark:text-gray-100 dark:focus:bg-gray-700"
                                     >
                                         {subPages[page.id]?.map(sp => (
                                             <option key={sp.id} value={sp.id}>{sp.label}</option>

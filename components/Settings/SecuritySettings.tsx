@@ -4,8 +4,8 @@ import { SecurityIcon } from '../icons/IconComponents';
 
 export const SecuritySettings: React.FC = () => {
     return (
-        <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-premium-slate-100 relative">
-            <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-6 flex items-center">
+        <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-premium-slate-100 relative dark:bg-gray-800 dark:border-gray-700">
+            <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-6 flex items-center dark:text-white">
                 <SecurityIcon className="mr-3 text-blue-600" /> Security Settings
             </h3>
             <div className="space-y-6">
@@ -23,12 +23,12 @@ export const SecuritySettings: React.FC = () => {
                         <button className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold shadow-md hover:bg-indigo-700 transition-colors uppercase tracking-widest">Enable</button>
                     </div>
                 </div>
-                <div className="p-5 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                <div className="p-5 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between dark:bg-gray-900 dark:border-gray-800">
                     <div>
-                        <p className="font-bold text-gray-900 text-sm">Update Password</p>
-                        <p className="text-xs text-gray-500 font-medium mt-1">Manage your access credentials</p>
+                        <p className="font-bold text-gray-900 text-sm dark:text-white">Update Password</p>
+                        <p className="text-xs text-gray-500 font-medium mt-1 dark:text-gray-400">Manage your access credentials</p>
                     </div>
-                    <button className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl text-xs font-bold hover:bg-gray-100 transition-colors">Change Password</button>
+                    <button className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl text-xs font-bold hover:bg-gray-100 transition-colors dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">Change Password</button>
                 </div>
             </div>
         </div>

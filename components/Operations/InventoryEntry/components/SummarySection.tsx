@@ -27,7 +27,7 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
   rows
 }) => {
   return (
-    <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[10] ${collapsedSections.summary ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'}`}>
+    <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[10] ${collapsedSections.summary ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
       <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.summary ? '' : 'mb-6'}`} onClick={() => toggleSection('summary')}>
         <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Summary Log</h3>
         <button className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -98,7 +98,7 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
                   Object.keys(qtyByUnit).length > 0 ? (
                     <div className="flex flex-col gap-0.5">
                       {Object.entries(qtyByUnit).map(([unit, qty]) => (
-                        <span key={unit} className="text-gray-800 font-black text-sm leading-tight inline-flex items-center justify-center gap-1">
+                        <span key={unit} className="text-gray-800 font-black text-sm leading-tight inline-flex items-center justify-center gap-1 dark:text-gray-100">
                           {qty > 0 ? '+' : ''}{qty} <span className="text-[10px] text-gray-400 font-bold">{unit}</span>
                         </span>
                       ))}
@@ -150,7 +150,7 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
             </div>
 
             {activeTab !== 'physical_stock' && (
-              <div className="pt-6 border-t border-dashed border-gray-200">
+              <div className="pt-6 border-t border-dashed border-gray-200 dark:border-gray-700">
                 <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-2xl border border-blue-500 shadow-xl shadow-blue-500/20 text-white flex justify-between items-center group cursor-default transition-all duration-300 hover:shadow-blue-500/30 hover:-translate-y-0.5">
                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-500/20 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4"></div>

@@ -30,15 +30,15 @@ export const ItemTableSection: React.FC<ItemTableSectionProps> = ({
   setShowNewItemModal
 }) => {
   return (
-    <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[30] ${collapsedSections.lineItems ? 'rounded-xl' : 'rounded-2xl'}`}>
+    <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[30] ${collapsedSections.lineItems ? 'rounded-xl' : 'rounded-2xl'} dark:bg-gray-800`}>
 
       <div className="absolute top-0 left-0 w-1 h-full bg-purple-500 rounded-l-[inherit]"></div>
-      <div className={`border-b border-gray-100 flex justify-between items-center bg-gray-50/50 cursor-pointer ${collapsedSections.lineItems ? 'px-4 py-3' : 'px-6 py-5'}`} onClick={() => toggleSection('lineItems')}>
-        <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center">
+      <div className={`border-b border-gray-100 flex justify-between items-center bg-gray-50/50 cursor-pointer ${collapsedSections.lineItems ? 'px-4 py-3' : 'px-6 py-5'} dark:border-gray-800`} onClick={() => toggleSection('lineItems')}>
+        <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
            <ClipboardList size={16} className="mr-2 text-purple-500"/> <span className="hidden sm:inline">Item&nbsp;</span>Details
          </h3>
          <div className="flex gap-2 items-center">
-           <button onClick={(e) => { e.stopPropagation(); setScanningRowIndex(-1); setShowScanner(true); }} className="flex items-center px-3 md:px-3 py-2 md:py-1.5 bg-white text-gray-600 border border-gray-200 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors" title="Scan">
+           <button onClick={(e) => { e.stopPropagation(); setScanningRowIndex(-1); setShowScanner(true); }} className="flex items-center px-3 md:px-3 py-2 md:py-1.5 bg-white text-gray-600 border border-gray-200 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700" title="Scan">
              <ScanBarcode size={16} /> 
            </button>
            <button onClick={(e) => {
@@ -59,7 +59,7 @@ export const ItemTableSection: React.FC<ItemTableSectionProps> = ({
       {!collapsedSections.lineItems && (
       <div className="overflow-x-auto animate-in fade-in slide-in-from-top-2 duration-300">
         <table className="w-full text-sm text-left whitespace-nowrap">
-          <thead className="bg-gray-50/80 border-b border-gray-100 uppercase text-[10px] tracking-[0.2em] font-black text-gray-400">
+          <thead className="bg-gray-50/80 border-b border-gray-100 uppercase text-[10px] tracking-[0.2em] font-black text-gray-400 dark:border-gray-800">
             <tr>
               <th className="px-6 py-4 w-12 text-center">#</th>
               <th className="px-6 py-4 min-w-[300px]">Item Description</th>
@@ -96,7 +96,7 @@ export const ItemTableSection: React.FC<ItemTableSectionProps> = ({
                           value={row.itemName || ''}
                           onChange={(value) => handleItemOrSkuChange(index, value, 'itemName')}
                           placeholder="Select or type item..."
-                          buttonClassName="w-full min-w-[300px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus-within:bg-white focus-within:outline-none focus-within:ring-2 focus-within:ring-purple-500/20 focus-within:border-purple-500 transition-all text-left"
+                          buttonClassName="w-full min-w-[300px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus-within:bg-white focus-within:outline-none focus-within:ring-2 focus-within:ring-purple-500/20 focus-within:border-purple-500 transition-all text-left dark:focus-within:bg-gray-700"
                         />
                       </div>
                     </div>
@@ -108,30 +108,30 @@ export const ItemTableSection: React.FC<ItemTableSectionProps> = ({
                       onChange={(value) => handleItemOrSkuChange(index, value, 'sku')}
                       placeholder="SKU..."
                       labelKey="sku"
-                      buttonClassName="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-gray-700 text-left"
+                      buttonClassName="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-gray-700 text-left dark:focus:bg-gray-700 dark:text-gray-200"
                     />
                   </td>
                   <td className="px-6 py-3 hidden md:table-cell">
-                    <input type="text" placeholder="B-" value={row.batch || ''} onChange={(e) => { const r = [...rows]; r[index].batch = e.target.value; setRows(r); }} className="w-full min-w-[100px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all placeholder:font-normal placeholder:opacity-50 text-gray-500" />
+                    <input type="text" placeholder="B-" value={row.batch || ''} onChange={(e) => { const r = [...rows]; r[index].batch = e.target.value; setRows(r); }} className="w-full min-w-[100px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all placeholder:font-normal placeholder:opacity-50 text-gray-500 dark:focus:bg-gray-700 dark:text-gray-400" />
                   </td>
                   
                   {activeTab === 'physical_stock' ? (
                     <>
                       <td className="px-6 py-3">
-                        <input type="number" placeholder="0" className="w-full min-w-[80px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all opacity-70" readOnly />
+                        <input type="number" placeholder="0" className="w-full min-w-[80px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all opacity-70 dark:focus:bg-gray-700" readOnly />
                       </td>
                       <td className="px-6 py-3">
-                        <input type="number" placeholder="0" value={row.qty || ''} onChange={(e) => { const r = [...rows]; r[index].qty = e.target.value; setRows(r); }} className="w-full min-w-[80px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-bold text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all" />
+                        <input type="number" placeholder="0" value={row.qty || ''} onChange={(e) => { const r = [...rows]; r[index].qty = e.target.value; setRows(r); }} className="w-full min-w-[80px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-bold text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:focus:bg-gray-700" />
                       </td>
                     </>
                   ) : (
                     <td className="px-6 py-3">
-                      <input type="number" placeholder="0" value={row.qty || ''} onChange={(e) => { const r = [...rows]; r[index].qty = e.target.value; setRows(r); }} className="w-full min-w-[80px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-bold text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all" />
+                      <input type="number" placeholder="0" value={row.qty || ''} onChange={(e) => { const r = [...rows]; r[index].qty = e.target.value; setRows(r); }} className="w-full min-w-[80px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-bold text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:focus:bg-gray-700" />
                     </td>
                   )}
                   
                   <td className="px-6 py-3">
-                    <select value={row.unit || 'PCS'} onChange={(e) => { const r = [...rows]; r[index].unit = e.target.value; setRows(r); }} className="w-full min-w-[80px] px-2 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none appearance-none cursor-pointer">
+                    <select value={row.unit || 'PCS'} onChange={(e) => { const r = [...rows]; r[index].unit = e.target.value; setRows(r); }} className="w-full min-w-[80px] px-2 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none appearance-none cursor-pointer dark:focus:bg-gray-700">
                       <option>PCS</option>
                       <option>KG</option>
                       <option>BOX</option>
@@ -141,7 +141,7 @@ export const ItemTableSection: React.FC<ItemTableSectionProps> = ({
                   
                   {activeTab !== 'physical_stock' && (
                     <td className="px-6 py-3">
-                      <input type="number" placeholder="0.00" value={row.rate || ''} onChange={(e) => { const r = [...rows]; r[index].rate = e.target.value; setRows(r); }} className="w-full min-w-[100px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all placeholder:font-normal placeholder:opacity-50" />
+                      <input type="number" placeholder="0.00" value={row.rate || ''} onChange={(e) => { const r = [...rows]; r[index].rate = e.target.value; setRows(r); }} className="w-full min-w-[100px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all placeholder:font-normal placeholder:opacity-50 dark:focus:bg-gray-700" />
                     </td>
                   )}
 

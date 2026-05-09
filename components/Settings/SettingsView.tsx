@@ -373,84 +373,84 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ setView, setActiveMa
                         <button
                             id="settings-tab-vouchernumbering"
                             onClick={() => handleTabChange('vouchernumbering')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'vouchernumbering' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'vouchernumbering' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <SettingsIcon className="mr-3" /> Voucher Numbering
                         </button>
                         <button 
                             id="settings-tab-invoiceprint"
                             onClick={() => handleTabChange('invoiceprint')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'invoiceprint' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'invoiceprint' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <LayoutIcon className="mr-3" /> Invoice & Print
                         </button>
                         <button 
                             id="settings-tab-users"
                             onClick={() => handleTabChange('users')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'users' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'users' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <AccountIcon className="mr-3" /> Users
                         </button>
                         <button 
                             id="settings-tab-alerts"
                             onClick={() => handleTabChange('alerts')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'alerts' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'alerts' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <NotificationsIcon className="mr-3" /> Alerts
                         </button>
                         <button 
                             id="settings-tab-security"
                             onClick={() => handleTabChange('security')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'security' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'security' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <SecurityIcon className="mr-3" /> Security
                         </button>
                         <button 
                             id="settings-tab-privacy"
                             onClick={() => handleTabChange('privacy')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'privacy' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'privacy' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <InfoIcon className="mr-3" /> Privacy
                         </button>
                         <button 
                             id="settings-tab-imports"
                             onClick={() => handleTabChange('imports')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'imports' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'imports' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <SettingsIcon className="mr-3" /> Import Rules
                         </button>
                         <button 
                             id="settings-tab-mapping"
                             onClick={() => handleTabChange('mapping')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'mapping' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'mapping' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <SettingsIcon className="mr-3" /> Mapping
                         </button>
                         <button 
                             id="settings-tab-ai"
                             onClick={() => handleTabChange('ai')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'ai' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'ai' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <AIToolsIcon className="mr-3" /> AI Engines
                         </button>
                         <button 
                             id="settings-tab-sample"
                             onClick={() => handleTabChange('sample')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'sample' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'sample' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <SettingsIcon className="mr-3" /> Sample
                         </button>
                         <button 
                             id="settings-tab-admin"
                             onClick={() => handleTabChange('admin')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'admin' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'admin' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <AdminIcon className="mr-3" /> Admin
                         </button>
                         <button 
                             id="settings-tab-data"
                             onClick={() => handleTabChange('data')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'data' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'data' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
                         >
                             <CodeIcon className="mr-3" /> Data Explorer
                         </button>
@@ -590,7 +590,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ setView, setActiveMa
                     <div className="bg-blue-50/50 rounded-[2rem] p-8 border border-blue-100">
                         <h3 className="text-sm font-black text-blue-900 uppercase tracking-widest mb-2">Version Information</h3>
                         <p className="text-xs text-blue-700 font-medium italic opacity-75">Bharat Book AI - Professional Edition v2.4.0</p>
-                        <div className="mt-4 p-4 bg-white/50 rounded-xl text-[10px] font-bold text-blue-600 uppercase tracking-widest">
+                        <div className="mt-4 p-4 bg-white/50 rounded-xl text-[10px] font-bold text-blue-600 uppercase tracking-widest dark:bg-gray-800/50">
                             All systems operational
                         </div>
                     </div>

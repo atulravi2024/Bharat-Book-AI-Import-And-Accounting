@@ -510,13 +510,13 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
 
     return (
       <div className="fixed inset-0 z-[100] bg-gray-900/60 backdrop-blur-md flex items-center justify-center p-0 md:p-6 animate-in fade-in duration-300">
-        <div className="bg-white w-full max-w-[100vw] lg:max-w-7xl h-[100dvh] md:h-[95dvh] md:rounded-3xl shadow-2xl overflow-hidden flex border border-white/20 relative">
+        <div className="bg-white w-full max-w-[100vw] lg:max-w-7xl h-[100dvh] md:h-[95dvh] md:rounded-3xl shadow-2xl overflow-hidden flex border border-white/20 relative dark:bg-gray-800">
           
           {/* Settings Side Panel */}
-          <div className="hidden lg:flex w-72 flex-col border-r border-gray-200 bg-gray-50 overflow-y-auto no-print shrink-0">
-            <div className="p-4 border-b border-gray-200 bg-white sticky top-0 z-10 flex items-center gap-2">
-              <Settings size={18} className="text-gray-500" />
-              <h2 className="text-sm font-black uppercase tracking-wider text-gray-800">
+          <div className="hidden lg:flex w-72 flex-col border-r border-gray-200 bg-gray-50 overflow-y-auto no-print shrink-0 dark:border-gray-700 dark:bg-gray-900">
+            <div className="p-4 border-b border-gray-200 bg-white sticky top-0 z-10 flex items-center gap-2 dark:border-gray-700 dark:bg-gray-800">
+              <Settings size={18} className="text-gray-500 dark:text-gray-400" />
+              <h2 className="text-sm font-black uppercase tracking-wider text-gray-800 dark:text-gray-100">
                 Print Configuration
               </h2>
             </div>
@@ -530,9 +530,9 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
                                 <button
                                     key={setting.key}
                                     onClick={() => handleToggleSetting(setting.key as keyof typeof printConfig)}
-                                    className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 transition-colors group"
+                                    className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 transition-colors group dark:hover:bg-gray-600"
                                 >
-                                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{setting.label}</span>
+                                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-200">{setting.label}</span>
                                     {printConfig[setting.key as keyof typeof printConfig] ? (
                                         <ToggleRight size={20} className="text-blue-500 transition-transform active:scale-90" />
                                     ) : (
@@ -549,7 +549,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
           {/* Main Preview Panel */}
           <div className="flex-1 flex flex-col relative overflow-hidden">
         {/* Header Actions */}
-        <div className="p-3 md:p-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-gray-50/90 backdrop-blur-sm gap-3 sticky top-0 z-10 no-print">
+        <div className="p-3 md:p-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-gray-50/90 backdrop-blur-sm gap-3 sticky top-0 z-10 no-print dark:border-gray-800">
           <div className="flex items-center gap-3">
             <button 
               onClick={() => window.print()}
@@ -559,7 +559,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
               <Printer size={20} />
             </button>
             <div className="hidden sm:block">
-              <h3 className="text-sm md:text-lg font-black text-gray-900 uppercase tracking-tight leading-none">{type.replace('_', ' ')} Preview</h3>
+              <h3 className="text-sm md:text-lg font-black text-gray-900 uppercase tracking-tight leading-none dark:text-white">{type.replace('_', ' ')} Preview</h3>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1.5">{header.voucherNumber || header.entryNumber}</p>
             </div>
           </div>
@@ -577,14 +577,14 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
               {onDownloadImage && (
                 <button 
                   onClick={onDownloadImage}
-                  className="flex items-center gap-2 px-3 py-2 md:px-5 md:py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+                  className="flex items-center gap-2 px-3 py-2 md:px-5 md:py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm active:scale-95 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
                 >
                   <ImageIcon size={14} /> <span className="hidden sm:inline">Image</span>
                 </button>
               )}
               <button 
                 onClick={onClose}
-                className="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-500 border border-gray-200 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-100 transition-all active:scale-95 ml-1 md:ml-4"
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-gray-500 border border-gray-200 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-100 transition-all active:scale-95 ml-1 md:ml-4 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700"
               >
                 <X size={20} />
               </button>
@@ -607,7 +607,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
               }}
             >
               <div 
-                className="shadow-[0_30px_100px_rgba(0,0,0,0.15)] bg-white transition-transform duration-300 ease-out flex flex-col absolute top-0 left-0 origin-top-left"
+                className="shadow-[0_30px_100px_rgba(0,0,0,0.15)] bg-white transition-transform duration-300 ease-out flex flex-col absolute top-0 left-0 origin-top-left dark:bg-gray-800"
                 style={{ 
                   transform: `scale(${previewScale || 1})`,
                   width: PHYSICAL_WIDTH,
@@ -734,7 +734,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
                       {header.billingState} {header.billingPinCode}, India<br/>
                       {header.billingContact && <span className={primaryText}>Contact: {header.billingContact}</span>}
                     </div>
-                    {header.gstNumber && <div className={`mt-4 inline-block px-3 py-1 bg-gray-100 text-gray-800 border border-gray-300 font-black rounded-lg uppercase tracking-widest`} style={{ fontSize: `${baseSize * 0.7}px` }}>GSTIN: {header.gstNumber}</div>}
+                    {header.gstNumber && <div className={`mt-4 inline-block px-3 py-1 bg-gray-100 text-gray-800 border border-gray-300 font-black rounded-lg uppercase tracking-widest dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600`} style={{ fontSize: `${baseSize * 0.7}px` }}>GSTIN: {header.gstNumber}</div>}
                   </div>
                   <div className={tStyles.billingRightBox}>
                     <div className="space-y-8">
@@ -816,7 +816,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
                                         {printConfig.showDiscountAmount && (
                                             <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.discountAmount ? parseSafe(row.discountAmount).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}</td>
                                         )}
-                                        <td className={`${printConfig.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-bold text-gray-600 text-right tabular-nums align-top`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.tax}%</td>
+                                        <td className={`${printConfig.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-bold text-gray-600 text-right tabular-nums align-top dark:text-gray-300`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.tax}%</td>
                                     </>
                                 ) : (
                                     <td className={`${printConfig.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-black ${primaryText} text-right tracking-widest uppercase align-top`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.crDr || (type === 'payment' && index === 0 ? 'Cr' : type === 'payment' ? 'Dr' : type === 'receipt' && index === 0 ? 'Dr' : type === 'receipt' ? 'Cr' : type === 'journal' ? 'Dr' : 'Cr')}</td>
@@ -998,10 +998,10 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
         </div>
 
         {/* Bottom Zoom Controls Section */}
-        <div className="border-t border-gray-200 bg-white p-3 md:p-4 flex flex-shrink-0 justify-center items-center gap-2 z-20 no-print text-black">
+        <div className="border-t border-gray-200 bg-white p-3 md:p-4 flex flex-shrink-0 justify-center items-center gap-2 z-20 no-print text-black dark:border-gray-700 dark:bg-gray-800">
           <button 
             onClick={handleZoomOut}
-            className="p-2 hover:bg-gray-100 rounded-lg text-black transition-all active:scale-95"
+            className="p-2 hover:bg-gray-100 rounded-lg text-black transition-all active:scale-95 dark:hover:bg-gray-600"
             title="Zoom Out"
           >
             <ZoomOut size={20} />
@@ -1011,15 +1011,15 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
           </div>
           <button 
             onClick={handleZoomIn}
-            className="p-2 hover:bg-gray-100 rounded-lg text-black transition-all active:scale-95"
+            className="p-2 hover:bg-gray-100 rounded-lg text-black transition-all active:scale-95 dark:hover:bg-gray-600"
             title="Zoom In"
           >
             <ZoomIn size={20} />
           </button>
-          <div className="h-6 w-px bg-gray-200 mx-2 md:mx-4" />
+          <div className="h-6 w-px bg-gray-200 mx-2 md:mx-4 dark:bg-gray-700" />
           <button 
             onClick={handleResetZoom}
-            className={`p-2 rounded-lg transition-all active:scale-95 flex items-center gap-2 px-4 ${manualZoom === null ? 'text-black bg-gray-100 font-bold' : 'text-black hover:bg-gray-100'}`}
+            className={`p-2 rounded-lg transition-all active:scale-95 flex items-center gap-2 px-4 ${manualZoom === null ? 'text-black bg-gray-100 font-bold' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
             title="Fit to Screen"
           >
             <RotateCcw size={18} />
@@ -1027,7 +1027,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header, rows, to
           </button>
           <button 
             onClick={handleFullSize}
-            className={`p-2 rounded-lg transition-all active:scale-95 flex items-center gap-2 px-4 ${manualZoom === 1 ? 'text-black bg-gray-100 font-bold' : 'text-black hover:bg-gray-100'}`}
+            className={`p-2 rounded-lg transition-all active:scale-95 flex items-center gap-2 px-4 ${manualZoom === 1 ? 'text-black bg-gray-100 font-bold' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
             title="Actual Size (100%)"
           >
             <Maximize size={18} />

@@ -113,22 +113,22 @@ export const MainTab = ({ stats, isDemo }: any) => {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-xs font-black text-gray-900">{act.count} units</p>
+                                    <p className="text-xs font-black text-gray-900 dark:text-white">{act.count} units</p>
                                     <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{act.time}</p>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
-                <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 flex flex-col justify-center items-center text-center">
+                <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 flex flex-col justify-center items-center text-center dark:bg-gray-800 dark:border-gray-700">
                     <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mb-4">
                         <ShieldCheck size={40} />
                     </div>
-                    <h3 className="text-xl font-black text-gray-900 font-display">System Integrity</h3>
-                    <p className="text-sm text-gray-500 font-medium max-w-xs mt-2">All extraction engines are operating within nominal parameters. Real-time auditing is active.</p>
+                    <h3 className="text-xl font-black text-gray-900 font-display dark:text-white">System Integrity</h3>
+                    <p className="text-sm text-gray-500 font-medium max-w-xs mt-2 dark:text-gray-400">All extraction engines are operating within nominal parameters. Real-time auditing is active.</p>
                     <div className="mt-6 flex gap-4">
                         <div className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest">Healthy</div>
-                        <div className="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-[10px] font-black uppercase tracking-widest">v4.2.0-stable</div>
+                        <div className="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-[10px] font-black uppercase tracking-widest dark:bg-gray-800 dark:text-gray-300">v4.2.0-stable</div>
                     </div>
                 </div>
             </div>

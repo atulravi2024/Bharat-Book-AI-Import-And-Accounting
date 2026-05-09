@@ -84,10 +84,10 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, 
   return (
     <div className="max-w-[1600px] mx-auto h-full flex flex-col px-4 sm:px-8 pt-6 pb-0 space-y-6 text-center print:p-0 print:space-y-0">
       {/* Top Section: Header & Buttons (Hidden during print) */}
-      <div className="shrink-0 bg-white p-6 rounded-xl shadow-md flex flex-col justify-center items-center border border-gray-100 print:hidden">
+      <div className="shrink-0 bg-white p-6 rounded-xl shadow-md flex flex-col justify-center items-center border border-gray-100 print:hidden dark:bg-gray-800 dark:border-gray-800">
         <CheckCircleIcon className="text-5xl text-green-500 mb-4 shrink-0" />
-        <h2 className="text-2xl font-bold text-gray-800 mb-1">Success!</h2>
-        <p className="text-gray-600 text-sm mb-5">
+        <h2 className="text-2xl font-bold text-gray-800 mb-1 dark:text-gray-100">Success!</h2>
+        <p className="text-gray-600 text-sm mb-5 dark:text-gray-300">
           {voucherCount} {isBankImport ? 'bank transactions' : 'vouchers'} {voucherCount > 1 ? 'have' : 'has'} been successfully {isBankImport ? 'integrated' : 'posted'}.
         </p>
 
@@ -100,13 +100,13 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, 
           </button>
           <button 
             onClick={handleExportCSV}
-            className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-all shadow-sm"
+            className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-all shadow-sm dark:border-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
           >
             <DownloadIcon className="mr-2 text-lg text-green-500" /> CSV
           </button>
           <button 
             onClick={handleExportExcel}
-            className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-green-300 hover:text-green-600 transition-all shadow-sm"
+            className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-green-300 hover:text-green-600 transition-all shadow-sm dark:border-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
           >
             <DownloadIcon className="mr-2 text-lg text-blue-500" /> Excel
           </button>
@@ -118,7 +118,7 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, 
           </button>
           <button 
             onClick={onGoToVouchers}
-            className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-amber-300 hover:text-amber-600 transition-all shadow-sm"
+            className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-amber-300 hover:text-amber-600 transition-all shadow-sm dark:border-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
           >
             <VouchersIcon className="mr-2 text-lg text-amber-500" /> History
           </button>
@@ -138,33 +138,33 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, 
       </div>
 
       {/* Middle Section: Summary (Stretches to bottom using flex-1) */}
-      <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-left animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col min-h-0 border border-gray-100 print:p-0 print:shadow-none print:border-none print:static">
+      <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-left animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col min-h-0 border border-gray-100 print:p-0 print:shadow-none print:border-none print:static dark:bg-gray-800 dark:border-gray-800">
         <div className="flex items-baseline justify-between mb-4 shrink-0">
-          <h3 className="text-base font-bold text-gray-800 flex items-center justify-between print:mb-2 w-full">
+          <h3 className="text-base font-bold text-gray-800 flex items-center justify-between print:mb-2 w-full dark:text-gray-100">
             Import Summary
             <div className="flex items-center space-x-2">
-              <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded print:hidden">System Log ID: {Math.random().toString(36).substring(7).toUpperCase()}</span>
-              <span className="hidden print:block text-[10px] font-mono text-gray-500">Printed: {new Date().toLocaleString()}</span>
+              <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded print:hidden dark:bg-gray-900">System Log ID: {Math.random().toString(36).substring(7).toUpperCase()}</span>
+              <span className="hidden print:block text-[10px] font-mono text-gray-500 dark:text-gray-400">Printed: {new Date().toLocaleString()}</span>
             </div>
           </h3>
         </div>
-        <div className="flex-1 overflow-auto border border-gray-100 rounded-lg custom-scrollbar print:overflow-visible print:border-none print:h-auto">
+        <div className="flex-1 overflow-auto border border-gray-100 rounded-lg custom-scrollbar print:overflow-visible print:border-none print:h-auto dark:border-gray-800">
           <table className="w-full text-sm text-left print:text-[10pt]">
-            <thead className="sticky top-0 bg-white z-10 shadow-sm print:static print:shadow-none">
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">ID</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">Date</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">Party/Description</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right">Amount</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px]">Status</th>
+            <thead className="sticky top-0 bg-white z-10 shadow-sm print:static print:shadow-none dark:bg-gray-800">
+              <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">ID</th>
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Date</th>
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Party/Description</th>
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Amount</th>
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Status</th>
               </tr>
             </thead>
             <tbody>
               {vouchers.map(v => (
-                <tr key={v.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                <tr key={v.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors dark:border-gray-800 dark:hover:bg-gray-700">
                   <td className="px-4 py-3 font-mono text-xs">{v.id.split('-').slice(0, 2).join('-')}</td>
                   <td className="px-4 py-3 whitespace-nowrap">{v.date?.value || '-'}</td>
-                  <td className="px-4 py-3 font-medium text-gray-800">{String(v.partyName?.value || v.narration?.value || 'N/A')}</td>
+                  <td className="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{String(v.partyName?.value || v.narration?.value || 'N/A')}</td>
                   <td className="px-4 py-3 text-right font-bold text-blue-600">₹{Number(v?.amount?.value || v?.withdrawalAmount?.value || v?.depositAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                   <td className="px-4 py-3">
                     {v.origin === 'bank' ? (

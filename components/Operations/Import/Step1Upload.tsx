@@ -306,7 +306,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
     if (ext === 'pdf') return <PdfIcon className="text-red-500" />;
     if (['xlsx', 'xls', 'csv'].includes(ext || '')) return <ExcelIcon className="text-green-600" />;
     if (['jpg', 'jpeg', 'png', 'webp'].includes(ext || '')) return <ImageIcon className="text-blue-500" />;
-    return <FileIcon className="text-gray-500" />;
+    return <FileIcon className="text-gray-500 dark:text-gray-400" />;
   };
 
   const previewContent = useMemo(() => {
@@ -318,9 +318,9 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
     }
     // Simple preview for other file types
     return (
-        <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <p className="font-medium text-gray-700">{file.name}</p>
-            <p className="text-sm text-gray-500">{(file.size / 1024).toFixed(2)} KB</p>
+        <div className="text-center p-4 bg-gray-50 rounded-lg dark:bg-gray-900">
+            <p className="font-medium text-gray-700 dark:text-gray-200">{file.name}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{(file.size / 1024).toFixed(2)} KB</p>
         </div>
     );
   }, [file]);
@@ -376,10 +376,10 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
           <div className="flex items-center justify-between mb-10 shrink-0">
              <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tighter leading-none font-display">Data Entry Origin</h2>
+                <h2 className="text-3xl font-black text-gray-900 tracking-tighter leading-none font-display dark:text-white">Data Entry Origin</h2>
                 <div className="flex items-center mt-3 space-x-2">
                     <div className="flex -space-x-1">
-                        {[1,2,3].map(i => <div key={i} className={`w-2 h-2 rounded-full border border-white ${i === 1 ? 'bg-blue-400' : 'bg-gray-200'}`}></div>)}
+                        {[1,2,3].map(i => <div key={i} className={`w-2 h-2 rounded-full border border-white ${i === 1 ? 'bg-blue-400' : 'bg-gray-200'} dark:bg-gray-700`}></div>)}
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-[0.15em] text-blue-600/80 bg-blue-50/50 px-2 py-0.5 rounded-full border border-blue-100/50">Pipeline Alpha</span>
                     <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
@@ -390,8 +390,8 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
           
           <div className="mb-12">
             <div className="flex items-center justify-between mb-5 px-1">
-                <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40">System Classification</label>
-                <div className="h-px flex-1 bg-gray-100 mx-6"></div>
+                <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40 dark:text-white">System Classification</label>
+                <div className="h-px flex-1 bg-gray-100 mx-6 dark:bg-gray-800"></div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
               {[
@@ -437,7 +437,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                   <select 
                     value={selectedBank}
                     onChange={(e) => setSelectedBank(e.target.value)}
-                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-700"
                   >
                     <option value="">-- Choose Indian Major Bank --</option>
                     {bankMasters.map(bank => (
@@ -453,12 +453,12 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200 ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'}`}
+            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200 ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'} dark:border-gray-600 dark:bg-gray-800`}
           >
             <div className="flex flex-col items-center">
               <UploadFileIcon className="text-5xl text-gray-400 mb-4" />
-              <p className="mb-2 text-gray-600">Drag & drop files here</p>
-              <p className="text-sm text-gray-500 mb-4">PDF, Excel, JPG, PNG</p>
+              <p className="mb-2 text-gray-600 dark:text-gray-300">Drag & drop files here</p>
+              <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">PDF, Excel, JPG, PNG</p>
               <label htmlFor="file-upload" className="cursor-pointer bg-blue-100 text-blue-700 font-semibold px-4 py-2 rounded-lg hover:bg-blue-200 transition-colors">
                 Browse Files
               </label>
@@ -467,31 +467,31 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
           </div>
           
           {file && (
-            <div className="mt-8 p-6 bg-premium-slate-50 rounded-[2rem] border border-premium-slate-100 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="mt-8 p-6 bg-premium-slate-50 rounded-[2rem] border border-premium-slate-100 animate-in fade-in slide-in-from-top-4 duration-500 dark:bg-gray-800 dark:border-gray-700">
                 <div className="flex items-start">
-                    <div className="shrink-0 w-16 h-16 bg-white rounded-2xl border border-premium-slate-200 flex items-center justify-center shadow-sm">
+                    <div className="shrink-0 w-16 h-16 bg-white rounded-2xl border border-premium-slate-200 flex items-center justify-center shadow-sm dark:bg-gray-800 dark:border-gray-600">
                         {React.cloneElement(getFileIcon(file.name) as React.ReactElement, { className: 'text-3xl ' + (getFileIcon(file.name) as React.ReactElement).props.className })}
                     </div>
                     <div className="ml-5 flex-1 min-w-0">
                         <div className="flex items-center space-x-2">
-                            <h4 className="text-lg font-black text-gray-900 truncate tracking-tight">{file.name}</h4>
+                            <h4 className="text-lg font-black text-gray-900 truncate tracking-tight dark:text-white">{file.name}</h4>
                             <span className="shrink-0 px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-black uppercase rounded-md tracking-widest border border-blue-200">Live Asset</span>
                         </div>
                         <div className="flex items-center mt-2 space-x-4">
-                            <div className="flex items-center text-gray-500">
+                            <div className="flex items-center text-gray-500 dark:text-gray-400">
                                 <span className="text-[10px] uppercase font-bold tracking-widest mr-1.5 opacity-50">Type</span>
-                                <span className="text-xs font-bold text-gray-700">{file.name.split('.').pop()?.toUpperCase() || 'Unknown'}</span>
+                                <span className="text-xs font-bold text-gray-700 dark:text-gray-200">{file.name.split('.').pop()?.toUpperCase() || 'Unknown'}</span>
                             </div>
                             <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                            <div className="flex items-center text-gray-500">
+                            <div className="flex items-center text-gray-500 dark:text-gray-400">
                                 <span className="text-[10px] uppercase font-bold tracking-widest mr-1.5 opacity-50">Volume</span>
-                                <span className="text-xs font-bold text-gray-700">{(file.size / 1024).toFixed(2)} KB</span>
+                                <span className="text-xs font-bold text-gray-700 dark:text-gray-200">{(file.size / 1024).toFixed(2)} KB</span>
                             </div>
                         </div>
                     </div>
                     <button 
                         onClick={() => { setFile(null); setShowMapping(false); }}
-                        className="shrink-0 p-3 bg-white border border-premium-slate-200 text-gray-400 hover:text-red-500 hover:border-red-100 rounded-2xl transition-all shadow-sm"
+                        className="shrink-0 p-3 bg-white border border-premium-slate-200 text-gray-400 hover:text-red-500 hover:border-red-100 rounded-2xl transition-all shadow-sm dark:bg-gray-800 dark:border-gray-600"
                     >
                         <DeleteIcon />
                     </button>
@@ -502,7 +502,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
           {file && (
             <div className="mt-8 border-t pt-8">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-700">Source Options</h3>
+                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Source Options</h3>
                 {isStructuredFile && (
                   <button 
                     onClick={() => setShowMapping(!showMapping)}
@@ -515,17 +515,17 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
               </div>
               
               {showMapping && isStructuredFile ? (
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 pb-4 border-b border-gray-200 gap-4">
+                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 animate-in fade-in slide-in-from-top-2 duration-300 dark:bg-gray-900 dark:border-gray-700">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 pb-4 border-b border-gray-200 gap-4 dark:border-gray-700">
                     <div className="flex items-start">
                       <SettingsIcon className="text-blue-500 mr-2 mt-0.5 scale-90" />
                       <div>
-                        <h4 className="text-sm font-bold text-gray-800">Identify Header Row</h4>
-                        <p className="text-[10px] text-gray-500">Choose which row contains column names</p>
+                        <h4 className="text-sm font-bold text-gray-800 dark:text-gray-100">Identify Header Row</h4>
+                        <p className="text-[10px] text-gray-500 dark:text-gray-400">Choose which row contains column names</p>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-3 bg-white p-1 rounded-lg border border-gray-200">
-                      <span className="text-xs font-medium text-gray-500 ml-2">Row Index:</span>
+                    <div className="flex items-center space-x-3 bg-white p-1 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                      <span className="text-xs font-medium text-gray-500 ml-2 dark:text-gray-400">Row Index:</span>
                       <input 
                         type="number" 
                         min="0"
@@ -539,7 +539,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
                   <div className="flex items-start mb-4">
                     <InfoIcon className="text-blue-500 mr-2 mt-0.5" />
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-gray-600 dark:text-gray-300">
                       Map the columns from your Excel file to the corresponding fields in Bharat Book. 
                       Our AI will use these hints to improve parsing accuracy.
                     </p>
@@ -548,13 +548,13 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {Object.keys(mappings).map((targetField) => (
                       <div key={targetField}>
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 dark:text-gray-400">
                           {targetField.replace(/([A-Z])/g, ' $1')}
                         </label>
                         <select 
                           value={mappings[targetField]}
                           onChange={(e) => setMappings(prev => ({ ...prev, [targetField]: e.target.value }))}
-                          className="w-full text-sm p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 bg-white"
+                          className="w-full text-sm p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 bg-white dark:border-gray-600 dark:bg-gray-800"
                         >
                           <option value="">-- Auto-detect --</option>
                           {(fileHeaders.length > 0 ? fileHeaders : []).map(col => (
@@ -568,7 +568,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                   <div className="mt-6 flex justify-end">
                     <button 
                       onClick={clearMappings}
-                      className="text-xs font-semibold text-gray-500 hover:text-red-500 flex items-center transition-colors px-3 py-1.5 rounded-md hover:bg-red-50"
+                      className="text-xs font-semibold text-gray-500 hover:text-red-500 flex items-center transition-colors px-3 py-1.5 rounded-md hover:bg-red-50 dark:text-gray-400"
                     >
                       <UndoIcon className="mr-1.5 text-sm" />
                       Clear All Mappings
@@ -576,7 +576,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                   </div>
                 </div>
               ) : (
-                <div className="border p-4 rounded-lg bg-gray-50">
+                <div className="border p-4 rounded-lg bg-gray-50 dark:bg-gray-900">
                   {previewContent}
                 </div>
               )}
@@ -590,7 +590,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
               <InfoIcon className="mr-3 text-2xl" />
               <h3 className="text-lg font-bold">AI Suggestions</h3>
             </div>
-            <ul className="space-y-3 text-sm text-gray-600 list-disc list-inside">
+            <ul className="space-y-3 text-sm text-gray-600 list-disc list-inside dark:text-gray-300">
               <li>For best results, upload clear, high-resolution images or machine-readable PDFs.</li>
               <li>Ensure the voucher type matches the uploaded document.</li>
               <li>Our AI will attempt to automatically recognize all fields.</li>
@@ -656,7 +656,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                   <select 
                     value={parsingSettings.aiModel}
                     onChange={(e) => setParsingSettings(prev => ({ ...prev, aiModel: e.target.value as any }))}
-                    className="w-full text-sm font-bold p-3 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none shadow-sm"
+                    className="w-full text-sm font-bold p-3 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none shadow-sm dark:bg-gray-800"
                   >
                     <option value="Gemini 1.5 Flash">Gemini 1.5 Flash (Default - Balanced)</option>
                     <option value="Gemini 1.5 Pro">Gemini 1.5 Pro (Deep Reasoning & Multi-page)</option>
@@ -676,7 +676,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     onClick={() => setParsingSettings(prev => ({ ...prev, experimentalFeatures: !prev.experimentalFeatures }))}
                     className={`w-12 h-6 rounded-full transition-all relative shrink-0 ${parsingSettings.experimentalFeatures ? 'bg-blue-600 shadow-inner' : 'bg-gray-300'}`}
                   >
-                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${parsingSettings.experimentalFeatures ? 'left-7' : 'left-1'}`} />
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${parsingSettings.experimentalFeatures ? 'left-7' : 'left-1'} dark:bg-gray-800`} />
                   </button>
                 </div>
 
@@ -695,7 +695,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     value={parsingSettings.customInstructions}
                     onChange={(e) => setParsingSettings(prev => ({ ...prev, customInstructions: e.target.value }))}
                     placeholder="e.g. 'Always look for GSTIN in the footer', 'Ignore previous balance in total'..."
-                    className="w-full h-24 text-sm font-medium p-4 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none placeholder-blue-300 shadow-inner"
+                    className="w-full h-24 text-sm font-medium p-4 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none placeholder-blue-300 shadow-inner dark:bg-gray-800"
                   />
                   <p className="text-[10px] text-blue-600/70 mt-3 italic leading-relaxed">
                     <strong>Impact:</strong> These instructions are injected into the AI prompt. Use them to clarify ambiguous fields or handle specific accounting quirks of certain vendors.
@@ -717,7 +717,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     value={parsingSettings.customAiInstructions || ''}
                     onChange={(e) => setParsingSettings(prev => ({ ...prev, customAiInstructions: e.target.value }))}
                     placeholder="Input custom AI instructions for the parsing process..."
-                    className="w-full h-24 text-sm font-medium p-4 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none placeholder-blue-300 shadow-inner"
+                    className="w-full h-24 text-sm font-medium p-4 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none placeholder-blue-300 shadow-inner dark:bg-gray-800"
                   />
                 </div>
               </div>
@@ -728,7 +728,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
       
       <div className="mt-4 pt-3 border-t">
         <div className="flex justify-end space-x-4">
-          <button onClick={onCancel} className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+          <button onClick={onCancel} className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">
             <CancelIcon className="mr-2" />
             Cancel
           </button>

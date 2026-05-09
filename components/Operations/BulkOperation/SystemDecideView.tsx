@@ -61,8 +61,8 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
         <div className="p-8 max-w-6xl mx-auto">
             <header className="mb-10 flex justify-between items-end">
                 <div>
-                    <h1 className="text-3xl font-black text-gray-900 font-display">System Decide</h1>
-                    <p className="text-gray-500 mt-2 font-medium">Automatic intelligent price adjustment based on profit targets</p>
+                    <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">System Decide</h1>
+                    <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Automatic intelligent price adjustment based on profit targets</p>
                 </div>
                 <div className="flex bg-blue-50 p-1 rounded-2xl border border-blue-100">
                     <div className="px-4 py-2 text-center">
@@ -80,12 +80,12 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Control Panel */}
                 <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100">
+                    <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100 dark:bg-gray-800 dark:border-gray-800">
                         <div className="flex items-center space-x-3 mb-6">
                             <div className="w-10 h-10 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
                                 <SettingsIcon />
                             </div>
-                            <h2 className="text-sm font-black uppercase tracking-widest text-gray-700">Strategy Settings</h2>
+                            <h2 className="text-sm font-black uppercase tracking-widest text-gray-700 dark:text-gray-200">Strategy Settings</h2>
                         </div>
 
                         <div className="space-y-6">
@@ -97,7 +97,7 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
                                         min="2" 
                                         max="50" 
                                         step="2"
-                                        className="flex-1 accent-indigo-600 h-1.5 bg-gray-100 rounded-lg cursor-pointer" 
+                                        className="flex-1 accent-indigo-600 h-1.5 bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-800" 
                                         value={profitPercentage}
                                         onChange={(e) => setProfitPercentage(Number(e.target.value))}
                                     />
@@ -147,13 +147,13 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
                 {/* Results Area */}
                 <div className="lg:col-span-2">
                     {processedItems.length > 0 ? (
-                        <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col h-full overflow-hidden">
+                        <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col h-full overflow-hidden dark:bg-gray-800 dark:border-gray-800">
                             <div className="p-6 border-b border-gray-50 flex justify-between items-center">
                                 <div className="flex items-center space-x-3">
                                     <div className="w-10 h-10 bg-green-50 rounded-2xl flex items-center justify-center text-green-600">
                                         <InventoryIcon />
                                     </div>
-                                    <h2 className="text-sm font-black uppercase tracking-widest text-gray-700">Preview Changes</h2>
+                                    <h2 className="text-sm font-black uppercase tracking-widest text-gray-700 dark:text-gray-200">Preview Changes</h2>
                                 </div>
                                 <button 
                                     onClick={handleConfirm}
@@ -166,8 +166,8 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
 
                             <div className="flex-1 overflow-y-auto p-6 max-h-[500px] custom-scrollbar">
                                 <table className="w-full">
-                                    <thead className="sticky top-0 bg-white pb-4 block">
-                                        <tr className="flex text-left border-b border-gray-100 pb-2">
+                                    <thead className="sticky top-0 bg-white pb-4 block dark:bg-gray-800">
+                                        <tr className="flex text-left border-b border-gray-100 pb-2 dark:border-gray-800">
                                             <th className="flex-1 text-[10px] font-black text-gray-400 uppercase tracking-widest">Item Name</th>
                                             <th className="w-24 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Cost</th>
                                             <th className="w-24 text-center"></th>
@@ -182,10 +182,10 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
                                             return (
                                                 <tr key={item.id || idx} className={`flex items-center p-3 rounded-xl transition-colors ${isChanged ? 'bg-blue-50/30' : ''}`}>
                                                     <td className="flex-1">
-                                                        <div className="text-xs font-bold text-gray-900">{item.name}</div>
+                                                        <div className="text-xs font-bold text-gray-900 dark:text-white">{item.name}</div>
                                                         <div className="text-[10px] font-medium text-gray-400">{item.sku || 'No SKU'}</div>
                                                     </td>
-                                                    <td className="w-24 text-right text-xs font-bold text-gray-500">
+                                                    <td className="w-24 text-right text-xs font-bold text-gray-500 dark:text-gray-400">
                                                         ₹{item.purchaseRate?.toLocaleString()}
                                                     </td>
                                                     <td className="w-24 flex justify-center text-gray-300">
@@ -207,8 +207,8 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
                             </div>
                         </div>
                     ) : (
-                        <div className="bg-gray-50 rounded-[2.5rem] border border-dashed border-gray-200 flex flex-col items-center justify-center p-20 h-full text-center">
-                            <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center text-gray-200 shadow-sm mb-6">
+                        <div className="bg-gray-50 rounded-[2.5rem] border border-dashed border-gray-200 flex flex-col items-center justify-center p-20 h-full text-center dark:bg-gray-900 dark:border-gray-700">
+                            <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center text-gray-200 shadow-sm mb-6 dark:bg-gray-800">
                                 <AutoFixHighIcon className="text-4xl" />
                             </div>
                             <h3 className="text-base font-black text-gray-400 uppercase tracking-widest mb-2">Ready for Analysis</h3>
