@@ -339,23 +339,23 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
   return (
     <div className="h-full flex flex-col min-h-0">
-      <div className="md:hidden flex space-x-2 mb-4 bg-gray-100 p-1 rounded-xl shrink-0">
-        <button 
+      <div className="md:hidden flex space-x-2 mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0">
+        <button
           onClick={() => setActiveMobileTab('upload')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeMobileTab === 'upload' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500'}`}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeMobileTab === 'upload' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}
         >
           Upload & Map
         </button>
-        <button 
+        <button
           onClick={() => setActiveMobileTab('info')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeMobileTab === 'info' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500'}`}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeMobileTab === 'info' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}
         >
           Info & Settings
         </button>
       </div>
 
       <div className="flex-1 min-h-0 flex flex-col md:grid md:grid-cols-3 gap-4 sm:gap-6 overflow-hidden pb-4 md:pb-0">
-        <div className={`flex-1 md:col-span-2 bg-white px-5 sm:px-10 py-6 sm:py-9 rounded-3xl sm:rounded-[2.5rem] border border-premium-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] flex-col min-h-0 overflow-y-auto scrollbar-none relative group/main shrink-0 md:shrink ${activeMobileTab === 'upload' ? 'flex' : 'hidden md:flex'}`}>
+        <div className={`flex-1 md:col-span-2 bg-white dark:bg-gray-800 px-5 sm:px-10 py-6 sm:py-9 rounded-3xl sm:rounded-[2.5rem] border border-premium-slate-100 dark:border-gray-700 shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto scrollbar-none relative group/main shrink-0 md:shrink ${activeMobileTab === 'upload' ? 'flex' : 'hidden md:flex'}`}>
 
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
           

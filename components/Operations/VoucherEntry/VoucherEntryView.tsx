@@ -60,17 +60,17 @@ export const VoucherEntryView: React.FC<VoucherEntryViewProps> = (props) => {
 
   return (
     <div className="max-w-[1400px] mx-auto p-4 md:p-6 lg:p-8 animate-in fade-in duration-500 min-h-full">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-gray-200 pb-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-gray-200 dark:border-gray-700 pb-6">
         <div>
           <div className="flex items-center space-x-2 text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">
-            <span>Operations</span> <span className="text-gray-300">/</span> <span>Financial Entry</span>
+            <span>Operations</span> <span className="text-gray-300 dark:text-gray-600">/</span> <span>Financial Entry</span>
           </div>
-          <h1 className="text-3xl font-black text-gray-900 flex items-center tracking-tight">
+          <h1 className="text-3xl font-black text-gray-900 dark:text-white flex items-center tracking-tight">
             Transactions
           </h1>
-          <p className="text-gray-500 text-sm mt-2 font-medium">Record and manage financial vouchers manually</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-2 font-medium">Record and manage financial vouchers manually</p>
         </div>
-        <div className="flex gap-2 text-sm text-gray-500 font-medium">
+        <div className="flex gap-2 text-sm text-gray-500 dark:text-gray-400 font-medium">
            Workspace / Vouchers
         </div>
       </div>
