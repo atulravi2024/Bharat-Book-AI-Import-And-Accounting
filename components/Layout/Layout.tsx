@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import { ThemeProvider } from './ThemeContext';
 import { MainView } from '../../types';
 
 interface LayoutProps {
@@ -15,7 +16,8 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView,
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <ThemeProvider>
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
       {/* Mobile sidebar overlay */}
       <div 
         className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[80] md:hidden transition-opacity ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} 
@@ -36,12 +38,13 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView,
       />
       <div className="flex-1 flex flex-col w-full min-w-0 overflow-hidden">
         <Header pageTitle={pageTitle} onMenuClick={() => setIsSidebarOpen(true)} />
-        <main className="flex-1 min-h-0 bg-gray-100 overflow-hidden relative">
+        <main className="flex-1 min-h-0 bg-gray-100 dark:bg-gray-900 overflow-hidden relative">
           <div className="absolute inset-0 overflow-y-auto">
             {children}
           </div>
         </main>
       </div>
     </div>
+    </ThemeProvider>
   );
 };

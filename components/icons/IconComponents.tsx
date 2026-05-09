@@ -62,3 +62,5 @@ export const SaveIcon: React.FC<{ className?: string }> = ({ className }) => <Ic
 export const AddBoxIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="add_box" className={className} />;
 export const MoveToInboxIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="move_to_inbox" className={className} />;
 export const SwapHorizIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="swap_horiz" className={className} />;
+export const SunIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="light_mode" className={className} />;
+export const MoonIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="dark_mode" className={className} />;
