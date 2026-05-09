@@ -349,28 +349,28 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ setView, setActiveMa
     return (
         <div className="w-full px-2 sm:px-4 py-6 sm:py-8">
             <div className="mb-8">
-                <h1 className="text-3xl font-black text-gray-900 font-display tracking-tight leading-none mb-2">System Configuration</h1>
-                <p className="text-gray-500 font-medium font-sans">Manage your enterprise preferences and audit settings</p>
+                <h1 className="text-3xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none mb-2">System Configuration</h1>
+                <p className="text-gray-500 dark:text-gray-400 font-medium font-sans">Manage your enterprise preferences and audit settings</p>
             </div>
 
             <div className="flex flex-col space-y-6">
-                <div className="border-b border-gray-200 overflow-x-auto overflow-y-hidden custom-scrollbar pb-1 scrollbar-none">
+                <div className="border-b border-gray-200 dark:border-gray-700 overflow-x-auto overflow-y-hidden custom-scrollbar pb-1 scrollbar-none">
                     <div className="flex flex-row space-x-2 min-w-max px-1">
-                        <button 
+                        <button
                             id="settings-tab-general"
                             onClick={() => handleTabChange('general')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'general' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'general' ? 'bg-blue-600 text-white shadow-lg dark:shadow-blue-900/50 border border-transparent' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent'}`}
                         >
                             <SettingsIcon className="mr-3" /> General
                         </button>
-                        <button 
+                        <button
                             id="settings-tab-navigation"
                             onClick={() => handleTabChange('navigation')}
-                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'navigation' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}
+                            className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'navigation' ? 'bg-blue-600 text-white shadow-lg dark:shadow-blue-900/50 border border-transparent' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent'}`}
                         >
                             <SettingsIcon className="mr-3" /> App Defaults
                         </button>
-                        <button 
+                        <button
                             id="settings-tab-vouchernumbering"
                             onClick={() => handleTabChange('vouchernumbering')}
                             className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === 'vouchernumbering' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent'}`}

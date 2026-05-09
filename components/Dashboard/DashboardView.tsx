@@ -196,25 +196,25 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouc
   );
 
   return (
-    <div className="h-full flex flex-col bg-gray-50/50">
+    <div className="h-full flex flex-col bg-gray-50/50 dark:bg-gray-900/50">
       {/* Dynamic Header */}
-      <div className="bg-white border-b border-premium-slate-100 z-10 shrink-0">
+      <div className="bg-white dark:bg-gray-800 border-b border-premium-slate-100 dark:border-gray-700 z-10 shrink-0">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 lg:gap-6">
             <div>
               <div className="flex items-center gap-2 sm:gap-3">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 font-display tracking-tight leading-none">Voucher Intelligence Hub</h1>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none">Voucher Intelligence Hub</h1>
                 {isDemo && (
-                  <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-100 text-amber-700 text-[8px] sm:text-[9px] font-black uppercase tracking-widest rounded-full border border-amber-200">Demo Data</span>
+                  <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[8px] sm:text-[9px] font-black uppercase tracking-widest rounded-full border border-amber-200 dark:border-amber-700">Demo Data</span>
                 )}
               </div>
-              <p className="text-[9px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-2 sm:mt-3 flex items-center">
+              <p className="text-[9px] sm:text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-[0.2em] mt-2 sm:mt-3 flex items-center">
                 <Activity size={12} className="mr-2 text-blue-600" /> Granular voucher analytics & cashflow visualization
               </p>
             </div>
-            
+
             <div className="-mx-4 px-4 lg:mx-0 lg:px-0 mt-2 lg:mt-0">
-                <div className="flex bg-premium-slate-50 rounded-xl sm:rounded-2xl p-1 border border-premium-slate-100 overflow-x-auto scrollbar-none h-fit snap-x">
+                <div className="flex bg-premium-slate-50 dark:bg-gray-700 rounded-xl sm:rounded-2xl p-1 border border-premium-slate-100 dark:border-gray-600 overflow-x-auto scrollbar-none h-fit snap-x">
                   <div className="snap-start"><TabButton id="main" label="Overview" icon={Layers} /></div>
                   <div className="snap-start"><TabButton id="sales" label="Sales" icon={TrendingUp} /></div>
                   <div className="snap-start"><TabButton id="purchase" label="Purchase" icon={Package} /></div>

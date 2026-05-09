@@ -266,35 +266,35 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
         <div className="max-w-7xl mx-auto p-4 animate-in fade-in duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800 flex items-center">
+                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
                         <VouchersIcon className="mr-3 text-blue-600" />
                         Ledger Report {activeTab !== 'standard' && (
-                            <span className="ml-3 px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest rounded border border-blue-100">
+                            <span className="ml-3 px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest rounded border border-blue-100 dark:border-blue-800">
                                 {tabs.find(t => t.id === activeTab)?.label}
                             </span>
                         )}
                     </h1>
-                    <p className="text-gray-500 text-sm mt-1">
-                        {activeTab === 'day_book' 
-                            ? 'Comprehensive daily transaction timeline and audit log' 
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                        {activeTab === 'day_book'
+                            ? 'Comprehensive daily transaction timeline and audit log'
                             : `Reviewing ${tabs.find(t => t.id === activeTab)?.label || 'ledger'} entries and accounting records`
                         }
                     </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    <button 
+                    <button
                         onClick={() => onImportVoucher(VoucherType.Purchase)}
                         className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-all shadow-md active:scale-95"
                     >
                         <VouchersIcon className="mr-2" /> Import Transactions
                     </button>
-                    <button onClick={handleExportFilteredCSV} className="flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-50 transition-all">
-                        <DownloadIcon className="mr-2 text-gray-400" /> Export
+                    <button onClick={handleExportFilteredCSV} className="flex items-center px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-600 transition-all">
+                        <DownloadIcon className="mr-2 text-gray-400 dark:text-gray-500" /> Export
                     </button>
                 </div>
             </div>
 
-            <div className="mb-6 border-b border-gray-200 overflow-x-auto">
+            <div className="mb-6 border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
                 <nav className="-mb-px flex space-x-6 min-w-max" aria-label="Tabs">
                     {tabs.map(tab => (
                         <button
@@ -303,8 +303,8 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                             className={`
                                 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-xs transition-colors
                                 ${activeTab === tab.id
-                                    ? 'border-blue-500 text-blue-600' 
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600'
                                 }
                             `}
                         >

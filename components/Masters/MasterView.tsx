@@ -69,7 +69,7 @@ export const MasterView: React.FC<MasterViewProps> = (props) => {
   }, [props.initialSubTab]);
 
   return (
-    <div className="h-full flex flex-col bg-gray-50/50">
+    <div className="h-full flex flex-col bg-gray-50/50 dark:bg-gray-900/50">
       <div className="flex-1 overflow-y-auto">
         {activeSubTab === 'ledger' ? (
           <LedgerMasterView
