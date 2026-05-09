@@ -38,11 +38,11 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, active, isCollapsed, onC
     onClick={onClick}
     title={isCollapsed ? label : ''}
     className={`w-full flex items-center ${isCollapsed ? 'justify-center py-3' : 'p-2'} my-0.5 rounded-lg transition-all duration-300 relative group ${
-      active 
-        ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' 
-        : intent === 'primary' 
-            ? 'text-slate-700 hover:bg-slate-100 hover:text-blue-600' 
-            : 'text-slate-500 hover:bg-slate-50 hover:text-blue-600'
+      active
+        ? 'bg-blue-600 text-white shadow-lg shadow-blue-200 dark:shadow-blue-900/50'
+        : intent === 'primary'
+            ? 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400'
+            : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400'
     }`}
   >
     <div className={`transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-110'} shrink-0`}>
@@ -72,7 +72,7 @@ const NavGroup: React.FC<{
         <div className="mb-2">
             <button 
                 onClick={onToggle}
-                className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${isOpen ? 'bg-blue-50/50 text-blue-700' : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'}`}
+                className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${isOpen ? 'bg-blue-50/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-300'}`}
             >
                 {isOpen && (
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r-md" />
@@ -101,22 +101,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
   };
 
   return (
-    <aside className={`fixed top-0 left-0 h-full z-[90] bg-white shadow-[20px_0_40px_rgba(0,0,0,0.02)] border-r border-premium-slate-100 transition-all duration-300 md:duration-500 ease-in-out md:relative flex flex-col overflow-hidden max-md:w-64 ${
-      isSidebarOpen 
-        ? 'w-64 max-md:translate-x-0' 
+    <aside className={`fixed top-0 left-0 h-full z-[90] bg-white dark:bg-gray-800 shadow-[20px_0_40px_rgba(0,0,0,0.02)] dark:shadow-none border-r border-premium-slate-100 dark:border-gray-700 transition-all duration-300 md:duration-500 ease-in-out md:relative flex flex-col overflow-hidden max-md:w-64 ${
+      isSidebarOpen
+        ? 'w-64 max-md:translate-x-0'
         : 'w-20 max-md:-translate-x-full md:translate-x-0'
     }`}>
-        <div className="flex items-center p-6 border-b border-premium-slate-100 h-16 md:h-20 shrink-0">
-            <button 
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+        <div className="flex items-center p-6 border-b border-premium-slate-100 dark:border-gray-700 h-16 md:h-20 shrink-0">
+            <button
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className={`flex items-center justify-center w-full transition-all group ${!isSidebarOpen ? '' : 'space-x-3 justify-start'}`}
             >
-                <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-600 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 shrink-0 group-hover:scale-105 transition-transform">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-600 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 dark:shadow-blue-900/50 shrink-0 group-hover:scale-105 transition-transform">
                     <CheckCircleIcon className="text-white text-lg md:text-xl" />
                 </div>
                 {(isSidebarOpen || window.innerWidth < 768) && (
                     <div className="flex flex-col items-start transition-opacity duration-300 opacity-100">
-                        <span className="text-base md:text-lg font-black text-gray-900 leading-none font-display text-nowrap truncate w-full">Bharat Book</span>
+                        <span className="text-base md:text-lg font-black text-gray-900 dark:text-white leading-none font-display text-nowrap truncate w-full">Bharat Book</span>
                         <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 mt-1">Enterprise</span>
                     </div>
                 )}

@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Layout } from './components/Layout/Layout';
+import { ThemeProvider } from './components/Layout/ThemeContext';
 import { Step1Upload } from './components/Operations/Import/Step1Upload';
 import { Step2Correction } from './components/Operations/Import/Step2Correction';
 import { Step3Summary } from './components/Operations/Import/Step3Summary';
@@ -1171,13 +1172,15 @@ const App: React.FC = () => {
   };
 
   return (
-    <Layout 
-      pageTitle={view === 'import' ? "Import" : view.charAt(0).toUpperCase() + view.slice(1)}
-      activeView={view}
-      onViewChange={handleViewChange}
-    >
-      {renderContent()}
-    </Layout>
+    <ThemeProvider>
+      <Layout
+        pageTitle={view === 'import' ? "Import" : view.charAt(0).toUpperCase() + view.slice(1)}
+        activeView={view}
+        onViewChange={handleViewChange}
+      >
+        {renderContent()}
+      </Layout>
+    </ThemeProvider>
   );
 };
 
