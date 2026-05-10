@@ -29,6 +29,7 @@ export const UndoIcon: React.FC<{ className?: string }> = ({ className }) => <Ic
 export const ExpandMoreIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="expand_more" className={className} />;
 export const ExpandLessIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="expand_less" className={className} />;
 export const ChevronRightIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="chevron_right" className={className} />;
+export const ChevronDownIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="keyboard_arrow_down" className={className} />;
 export const AddIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="add" className={className} />;
 export const WarningIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="warning" className={className} />;
 export const ErrorIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="error" className={className} />;

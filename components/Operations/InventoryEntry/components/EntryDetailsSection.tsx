@@ -41,7 +41,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
             {[
               'Unique sequential Entry Number',
-              'Valid Warehouse/Location identification',
+              'Valid Location identification',
               'Batch/Lot Tracking details',
               'Accurate Stock Item units',
               'System-generated Date & Time Stamp',

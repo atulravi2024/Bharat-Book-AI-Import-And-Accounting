@@ -149,9 +149,9 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
     { id: 'physical_stock', label: 'Physical Stock', icon: Database },
     { id: 'consumption', label: 'Item Consumption', icon: Zap },
     { id: 'scrap', label: 'Item Scrap', icon: Trash2 },
-    { id: 'transfer', label: 'Inter-Warehouse', icon: Move },
-    { id: 'rejections_in', label: 'Rejections In', icon: Warehouse },
-    { id: 'rejections_out', label: 'Rejections Out', icon: Warehouse },
+    { id: 'transfer', label: 'Inter-Location', icon: Move },
+    { id: 'rejections_in', label: 'Rejections In', icon: MapPin },
+    { id: 'rejections_out', label: 'Rejections Out', icon: MapPin },
   ];
 
   const [headerDetails, setHeaderDetails] = useState<{ [key: string]: any }>({
@@ -438,7 +438,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
             {[
               'Unique sequential Entry Number',
-              'Valid Warehouse/Location identification',
+              'Valid Location identification',
               'Batch/Lot Tracking details',
               'Accurate Stock Item units',
               'System-generated Date & Time Stamp',
@@ -981,7 +981,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
         </div>
       </div>
 
-      <div className="sticky top-0 z-[40] md:static -mx-4 px-4 -mt-4 pt-4 bg-gray-100/95 backdrop-blur-md pb-4 mb-4 md:-mx-0 md:px-0 md:-mt-0 md:pt-0 md:bg-transparent md:pb-0 md:mb-8 overflow-x-auto no-scrollbar w-full">
+      <div className="sticky top-0 z-[40] md:static -mx-4 px-4 -mt-4 pt-4 bg-gray-100/95 backdrop-blur-md pb-4 mb-4 md:-mx-0 md:px-0 md:-mt-0 md:pt-0 md:bg-transparent md:pb-0 md:mb-8 overflow-x-auto custom-scrollbar w-full">
         <div className="bg-white p-2 rounded-2xl border border-gray-200 shadow-sm inline-flex min-w-max dark:bg-gray-800 dark:border-gray-700">
           <nav className="flex space-x-1">
             {tabs.map((tab) => (

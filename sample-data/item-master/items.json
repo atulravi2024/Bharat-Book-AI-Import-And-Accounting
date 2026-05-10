@@ -14,7 +14,9 @@
     "description": "High-end smartphone with advanced camera system",
     "assertionCategory": "ac1",
     "assertionCode": "ISO-9001",
-    "grade": "Grade A"
+    "grade": "Grade A",
+    "function": "Mobile Communication & Computing",
+    "feature": "120Hz AMOLED Display, 50MP Camera, 5G Connectivity"
   },
   { 
     "id": "item2", 
@@ -31,7 +33,9 @@
     "description": "Ergonomic mesh office chair with lumbar support",
     "assertionCategory": "ac1",
     "assertionCode": "ISO-9001",
-    "grade": "Grade B"
+    "grade": "Grade B",
+    "function": "Office Seating & Posture Support",
+    "feature": "Adjustable Lumbar Support, Breathable Mesh, 360 Wheel Swivel"
   },
   {
     "id": "item3",
@@ -48,6 +52,46 @@
     "description": "Business class laptop",
     "assertionCategory": "ac1",
     "assertionCode": "ISO-9001",
-    "grade": "Grade A"
+    "grade": "Grade A",
+    "function": "Business Computing & Processing",
+    "feature": "Intel Core i7, 16GB RAM, 512GB NVMe SSD, Enterprise Security"
+  },
+  {
+    "id": "item4",
+    "name": "Industrial Diesel Generator 500kVA",
+    "hsnCode": "8501",
+    "taxRate": 18,
+    "uom": "NOS",
+    "category": "Machinery",
+    "brand": "Cummins",
+    "purchaseRate": 1200000,
+    "salesRate": 1500000,
+    "sku": "GEN-CUM-500",
+    "minStock": 2,
+    "description": "Heavy-duty diesel generator for industrial backup power",
+    "assertionCategory": "ac2",
+    "assertionCode": "CE-CERT",
+    "grade": "Premium",
+    "function": "Primary and Backup Industrial Power Generation",
+    "feature": "Automatic Mains Failure (AMF) Panel, Low Noise Canopy, 500kVA Output"
+  },
+  {
+    "id": "item5",
+    "name": "Organic Cotton Printed T-Shirt",
+    "hsnCode": "6109",
+    "taxRate": 5,
+    "uom": "PCS",
+    "category": "Apparel",
+    "brand": "EcoWear",
+    "purchaseRate": 300,
+    "salesRate": 899,
+    "sku": "APP-TSH-001",
+    "minStock": 100,
+    "description": "Sustainable 100% organic cotton graphic t-shirt",
+    "assertionCategory": "ac3",
+    "assertionCode": "GOTS",
+    "grade": "Grade A",
+    "function": "Casual Wear & Fashion Clothing",
+    "feature": "100% Organic Cotton, Hypoallergenic, Custom DTG Print"
   }
 ]

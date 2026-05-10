@@ -70,7 +70,7 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
                     </div>
                     <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
                        <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-200">
-                         <b>Inter-Warehouse Transfer:</b> Moves inventory between bins or branches. Requires both Source and Destination identification. No financial loss/gain is recorded.
+                         <b>Inter-Location Transfer:</b> Moves inventory between bins or branches. Requires both Source and Destination identification. No financial loss/gain is recorded.
                        </p>
                     </div>
                   </div>

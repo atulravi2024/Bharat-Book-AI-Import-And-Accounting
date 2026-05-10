@@ -9,13 +9,13 @@ interface MasterViewProps {
   partyMasters: any[];
   ledgerMasters: any[];
   contactMasters: any[];
-  warehouseMasters: any[];
+  locationMasters: any[];
   costCenterMasters: any[];
   accountGroupMasters: any[];
   setPartyMasters: any;
   setLedgerMasters: any;
   setContactMasters: any;
-  setWarehouseMasters: any;
+  setLocationMasters: any;
   setCostCenterMasters: any;
   setAccountGroupMasters: any;
 
@@ -27,6 +27,7 @@ interface MasterViewProps {
   gradeMasters: any[];
   assertionCategoryMasters: any[];
   assertionCodeMasters: any[];
+  bomMasters?: any[];
   skuMasters: any[];
   priceListMasters: any[];
   weightMasters: any[];
@@ -44,6 +45,7 @@ interface MasterViewProps {
   setGradeMasters: any;
   setAssertionCategoryMasters: any;
   setAssertionCodeMasters: any;
+  setBomMasters?: any;
   setSkuMasters: any;
   setPriceListMasters: any;
   setWeightMasters: any;
@@ -77,13 +79,13 @@ export const MasterView: React.FC<MasterViewProps> = (props) => {
             partyMasters={props.partyMasters}
             ledgerMasters={props.ledgerMasters}
             contactMasters={props.contactMasters}
-            warehouseMasters={props.warehouseMasters}
+            locationMasters={props.locationMasters}
             costCenterMasters={props.costCenterMasters}
             accountGroupMasters={props.accountGroupMasters}
             setPartyMasters={props.setPartyMasters}
             setLedgerMasters={props.setLedgerMasters}
             setContactMasters={props.setContactMasters}
-            setWarehouseMasters={props.setWarehouseMasters}
+            setLocationMasters={props.setLocationMasters}
             setCostCenterMasters={props.setCostCenterMasters}
             setAccountGroupMasters={props.setAccountGroupMasters}
           />
@@ -98,6 +100,7 @@ export const MasterView: React.FC<MasterViewProps> = (props) => {
             gradeMasters={props.gradeMasters}
             assertionCategoryMasters={props.assertionCategoryMasters}
             assertionCodeMasters={props.assertionCodeMasters}
+            bomMasters={props.bomMasters || []}
             skuMasters={props.skuMasters}
             priceListMasters={props.priceListMasters}
             weightMasters={props.weightMasters}
@@ -106,7 +109,7 @@ export const MasterView: React.FC<MasterViewProps> = (props) => {
             sizeMasters={props.sizeMasters}
             variantMasters={props.variantMasters}
             dimensionMasters={props.dimensionMasters}
-            warehouseMasters={props.warehouseMasters}
+            warehouseMasters={props.locationMasters}
             stockGroupMasters={props.stockGroupMasters}
             setItemMasters={props.setItemMasters}
             setUomMasters={props.setUomMasters}
@@ -116,6 +119,7 @@ export const MasterView: React.FC<MasterViewProps> = (props) => {
             setGradeMasters={props.setGradeMasters}
             setAssertionCategoryMasters={props.setAssertionCategoryMasters}
             setAssertionCodeMasters={props.setAssertionCodeMasters}
+            setBomMasters={props.setBomMasters || (() => {})}
             setSkuMasters={props.setSkuMasters}
             setPriceListMasters={props.setPriceListMasters}
             setWeightMasters={props.setWeightMasters}
@@ -124,6 +128,7 @@ export const MasterView: React.FC<MasterViewProps> = (props) => {
             setSizeMasters={props.setSizeMasters}
             setVariantMasters={props.setVariantMasters}
             setDimensionMasters={props.setDimensionMasters}
+            setWarehouseMasters={props.setLocationMasters}
             setStockGroupMasters={props.setStockGroupMasters}
           />
         )}

@@ -17,7 +17,7 @@ import { InventoryEntryView } from './components/Operations/InventoryEntry/Inven
 import { SystemDecideView } from './components/Operations/BulkOperation/SystemDecideView';
 import { SettingsView } from './components/Settings/SettingsView';
 import { GSTReportView } from './components/Reports/GSTReport/GSTReportView';
-import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster } from './types';
+import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
 import { parseVoucherFile } from './services/aiService';
 import { InfoIcon, UndoIcon } from './components/icons/IconComponents';
 
@@ -34,10 +34,11 @@ const GRADE_MASTERS_KEY = 'bharat_book_grade_masters';
 const ASSERTION_CATEGORY_MASTERS_KEY = 'bharat_book_assertion_category_masters';
 const ASSERTION_CODE_MASTERS_KEY = 'bharat_book_assertion_code_masters';
 const CONTACT_MASTERS_KEY = 'bharat_book_contact_masters';
-const WAREHOUSE_MASTERS_KEY = 'bharat_book_warehouse_masters';
+const LOCATION_MASTERS_KEY = 'bharat_book_location_masters';
 const STOCK_GROUP_MASTERS_KEY = 'bharat_book_stock_group_masters';
 const COST_CENTER_MASTERS_KEY = 'bharat_book_cost_center_masters';
 const ACCOUNT_GROUP_MASTERS_KEY = 'bharat_book_account_group_masters';
+const BOM_MASTERS_KEY = 'bharat_book_bom_masters';
 
 // Safe JSON parse helper - returns default value on parse failure
 const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
@@ -255,7 +256,9 @@ const App: React.FC = () => {
     localStorage.setItem('bharat_book_dimension_masters', JSON.stringify(dimensionMasters));
   }, [dimensionMasters]);
 
-  const [warehouseMasters, setWarehouseMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(WAREHOUSE_MASTERS_KEY), []));
+  const [locationMasters, setLocationMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(LOCATION_MASTERS_KEY), []));
+
+  const [bomMasters, setBomMasters] = useState<BomMaster[]>(() => safeJsonParse(localStorage.getItem(BOM_MASTERS_KEY), []));
 
   const [stockGroupMasters, setStockGroupMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(STOCK_GROUP_MASTERS_KEY), []));
 
@@ -308,8 +311,12 @@ const App: React.FC = () => {
   }, [contactMasters]);
 
   useEffect(() => {
-    localStorage.setItem(WAREHOUSE_MASTERS_KEY, JSON.stringify(warehouseMasters));
-  }, [warehouseMasters]);
+    localStorage.setItem(LOCATION_MASTERS_KEY, JSON.stringify(locationMasters));
+  }, [locationMasters]);
+
+  useEffect(() => {
+    localStorage.setItem(BOM_MASTERS_KEY, JSON.stringify(bomMasters));
+  }, [bomMasters]);
 
   useEffect(() => {
     localStorage.setItem(STOCK_GROUP_MASTERS_KEY, JSON.stringify(stockGroupMasters));
@@ -668,7 +675,7 @@ const App: React.FC = () => {
     const sampleIds = [
       'uoms', 'gst', 'brands', 'categories', 'warehouses', 'skus', 'priceList', 'weights', 'volumes', 
       'colors', 'sizes', 'variants', 'dimensions', 'stockGroups', 'grades', 'assertionCategories', 
-      'assertionCodes', 'items', 'parties', 'vendors', 'accountGroups', 'ledgers', 'banks', 'costCenters', 
+      'assertionCodes', 'items', 'bom', 'bom_advanced', 'bom_pharma', 'parties', 'vendors', 'accountGroups', 'ledgers', 'banks', 'costCenters', 
       'contacts', 'vouchers', 'financial_vouchers', 'item_vouchers', 'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile',
       'sales_register', 'purchase_register', 'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
       'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation',
@@ -702,7 +709,7 @@ const App: React.FC = () => {
             case 'gst': setGstMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'brands': setBrandMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'categories': setCategoryMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
-            case 'warehouses': setWarehouseMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
+            case 'warehouses': setLocationMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'skus': setSkuMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'priceList': setPriceListMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'weights': setWeightMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
@@ -716,6 +723,9 @@ const App: React.FC = () => {
             case 'assertionCategories': setAssertionCategoryMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'assertionCodes': setAssertionCodeMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'items': setItemMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
+            case 'bom':
+            case 'bom_advanced':
+            case 'bom_pharma': setBomMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'parties':
             case 'vendors': setPartyMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'accountGroups': setAccountGroupMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
@@ -729,7 +739,7 @@ const App: React.FC = () => {
         const reportIds = ['vouchers', 'financial_vouchers', 'item_vouchers', 'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile', 'sales_register', 'purchase_register', 'day_book', 'journal_register', 'debit_note_register', 'credit_note_register', 'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation', 'balance_sheet', 'profit_loss', 'cash_flow', 'bank_flow', 'trial_balance', 'gstr1'];
         const entryIds = ['sales_entry', 'purchase_entry', 'payment_entry', 'receipt_entry', 'journal_entry', 'contra_entry', 'debit_note_entry', 'credit_note_entry', 'stock_journal_entry', 'physical_stock_entry', 'consumption_entry', 'scrap_entry', 'transfer_entry', 'rejections_in_entry', 'rejections_out_entry'];
         const folder = reportIds.includes(id) ? 'reports' : (entryIds.includes(id) ? 'entries' :
-                     (['items', 'weights', 'volumes', 'colors', 'sizes', 'variants', 'dimensions', 'skus', 'priceList', 'uoms', 'gst', 'brands', 'categories', 'warehouses', 'stockGroups', 'grades', 'assertionCategories', 'assertionCodes'].includes(id) 
+                     (['items', 'bom', 'bom_advanced', 'bom_pharma', 'weights', 'volumes', 'colors', 'sizes', 'variants', 'dimensions', 'skus', 'priceList', 'uoms', 'gst', 'brands', 'categories', 'warehouses', 'stockGroups', 'grades', 'assertionCategories', 'assertionCodes'].includes(id) 
                         ? 'item-master' 
                         : 'ledger-master'));
         const filename = (reportIds.includes(id) || entryIds.includes(id)) ? id : (id === 'gst' ? 'hsn' : id);
@@ -758,7 +768,7 @@ const App: React.FC = () => {
                 case 'gst': setGstMasters(merge); break;
                 case 'brands': setBrandMasters(merge); break;
                 case 'categories': setCategoryMasters(merge); break;
-                case 'warehouses': setWarehouseMasters(merge); break;
+                case 'warehouses': setLocationMasters(merge); break;
                 case 'skus': setSkuMasters(merge); break;
                 case 'priceList': setPriceListMasters(merge); break;
                 case 'weights': setWeightMasters(merge); break;
@@ -772,6 +782,9 @@ const App: React.FC = () => {
                 case 'assertionCategories': setAssertionCategoryMasters(merge); break;
                 case 'assertionCodes': setAssertionCodeMasters(merge); break;
                 case 'items': setItemMasters(merge); break;
+                case 'bom':
+                case 'bom_advanced':
+                case 'bom_pharma': setBomMasters(merge); break;
                 case 'parties':
                 case 'vendors': setPartyMasters(merge); break;
                 case 'accountGroups': setAccountGroupMasters(merge); break;
@@ -809,13 +822,13 @@ const App: React.FC = () => {
             partyMasters={partyMasters}
             ledgerMasters={ledgerMasters}
             contactMasters={contactMasters}
-            warehouseMasters={warehouseMasters}
+            locationMasters={locationMasters}
             costCenterMasters={costCenterMasters}
             accountGroupMasters={accountGroupMasters}
             setPartyMasters={handleSetPartyMasters}
             setLedgerMasters={handleSetLedgerMasters}
             setContactMasters={wrapStorage(CONTACT_MASTERS_KEY, setContactMasters)}
-            setWarehouseMasters={wrapStorage(WAREHOUSE_MASTERS_KEY, setWarehouseMasters)}
+            setLocationMasters={wrapStorage(LOCATION_MASTERS_KEY, setLocationMasters)}
             setCostCenterMasters={wrapStorage(COST_CENTER_MASTERS_KEY, setCostCenterMasters)}
             setAccountGroupMasters={wrapStorage(ACCOUNT_GROUP_MASTERS_KEY, setAccountGroupMasters)}
             
@@ -827,6 +840,7 @@ const App: React.FC = () => {
             gradeMasters={gradeMasters}
             assertionCategoryMasters={assertionCategoryMasters}
             assertionCodeMasters={assertionCodeMasters}
+            bomMasters={bomMasters}
             skuMasters={skuMasters}
             priceListMasters={priceListMasters}
             weightMasters={weightMasters}
@@ -844,6 +858,7 @@ const App: React.FC = () => {
             setGradeMasters={handleSetGradeMasters}
             setAssertionCategoryMasters={wrapStorage(ASSERTION_CATEGORY_MASTERS_KEY, setAssertionCategoryMasters)}
             setAssertionCodeMasters={wrapStorage(ASSERTION_CODE_MASTERS_KEY, setAssertionCodeMasters)}
+            setBomMasters={wrapStorage(BOM_MASTERS_KEY, setBomMasters)}
             setSkuMasters={wrapStorage('bharat_book_sku_masters', setSkuMasters)}
             setPriceListMasters={wrapStorage('bharat_book_price_list_masters', setPriceListMasters)}
             setWeightMasters={wrapStorage('bharat_book_weight_masters', setWeightMasters)}
@@ -997,7 +1012,7 @@ const App: React.FC = () => {
             <InventoryEntryView 
               defaultType={inventoryEntryActiveTab || 'stock_journal'}
               itemMasters={itemMasters}
-              warehouseMasters={warehouseMasters}
+              warehouseMasters={locationMasters}
               ledgerMasters={ledgerMasters}
               onUpdateItemMaster={(updatedItem) => {
                 setItemMasters(prev => prev.map(i => i.name === updatedItem.name ? { ...i, ...updatedItem } : i));

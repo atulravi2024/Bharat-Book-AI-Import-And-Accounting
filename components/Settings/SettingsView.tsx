@@ -354,7 +354,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ setView, setActiveMa
             </div>
 
             <div className="flex flex-col space-y-6">
-                <div className="border-b border-gray-200 dark:border-gray-700 overflow-x-auto overflow-y-hidden custom-scrollbar pb-1 scrollbar-none">
+                <div className="border-b border-gray-200 dark:border-gray-700 overflow-x-auto overflow-y-hidden custom-scrollbar pb-1 custom-scrollbar">
                     <div className="flex flex-row space-x-2 min-w-max px-1">
                         <button
                             id="settings-tab-general"

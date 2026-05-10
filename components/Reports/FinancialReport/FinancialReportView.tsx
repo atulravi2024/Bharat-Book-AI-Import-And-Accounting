@@ -325,7 +325,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
 
       {/* Report Tabs */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-800">
-        <div className="flex border-b overflow-x-auto whitespace-nowrap bg-gray-50/50 scrollbar-none">
+        <div className="flex border-b overflow-x-auto whitespace-nowrap bg-gray-50/50 custom-scrollbar">
           {[
             { id: 'pl', label: 'Profit & Loss', icon: <TrendingUpIcon /> },
             { id: 'bs', label: 'Balance Sheet', icon: <BarChart3 size={16} /> },

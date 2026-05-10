@@ -22,25 +22,38 @@
   .text-transform-capitalize, .text-transform-capitalize * { text-transform: capitalize !important; }
   .text-transform-none, .text-transform-none * { text-transform: none !important; }
 
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #e2e8f0 transparent;
+  }
+  .dark .custom-scrollbar {
+    scrollbar-color: #4b5563 transparent;
+  }
   .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 10px;
+    height: 10px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
+    background: #f1f5f9;
     border-radius: 10px;
   }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #cbd5e1;
+    border-radius: 10px;
+    border: 2px solid #f1f5f9;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-track {
+    background: #1f2937;
   }
   .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #4b5563; /* gray-600 */
+    background: #4b5563;
+    border: 2px solid #1f2937;
   }
   .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #6b7280; /* gray-500 */
+    background: #6b7280;
   }
 }
 

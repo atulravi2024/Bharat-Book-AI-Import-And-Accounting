@@ -71,7 +71,7 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
       {!collapsedSections.location && (
       <div className="animate-in fade-in slide-in-from-top-2 duration-300">
         <SearchableDropdown
-          label="Warehouse / Location"
+          label="Location"
           options={warehouseMasters}
           value={headerDetails.location}
           onChange={(value) => handleHeaderChange('location', value)}

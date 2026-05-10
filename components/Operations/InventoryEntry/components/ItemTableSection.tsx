@@ -147,10 +147,10 @@ export const ItemTableSection: React.FC<ItemTableSectionProps> = ({
 
                   <td className="px-6 py-4 text-center">
                     <div className="flex items-center justify-center gap-3">
-                      <button onClick={() => setEditingRowIndex(index)} className="text-purple-500 hover:text-purple-700 hover:bg-purple-50 p-1.5 rounded-lg transition-colors border border-purple-100" title="Edit">
+                      <button onClick={() => setEditingRowIndex(index)} className="flex items-center justify-center w-8 h-8 text-purple-500 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-all border border-purple-100" title="Edit">
                         <Edit2 size={16} />
                       </button>
-                      <button onClick={() => setRows(rows.filter(r => r.id !== row.id))} className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded-lg transition-colors border border-red-100" title="Delete">
+                      <button onClick={() => setRows(rows.filter(r => r.id !== row.id))} className="flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all border border-red-100" title="Delete">
                         <Trash2 size={16} />
                       </button>
                     </div>

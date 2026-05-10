@@ -187,7 +187,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
 
       {/* Sub-page Navigation Tabs */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-800">
-        <div className="flex border-b overflow-x-auto whitespace-nowrap bg-gray-50/50 scrollbar-none">
+        <div className="flex border-b overflow-x-auto whitespace-nowrap bg-gray-50/50 custom-scrollbar">
           {[
             { id: 'summary', label: 'Stock Summary', icon: List },
             { id: 'analysis', label: 'Rate Analysis', icon: TrendingUp },
@@ -198,7 +198,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
             { id: 'hsn', label: 'HSN/SAC Summary', icon: Tag },
             { id: 'tax', label: 'Tax Rate Wise', icon: Database },
             { id: 'brand', label: 'Brand Analysis', icon: ShieldCheck },
-            { id: 'location', label: 'Warehouse View', icon: MapPin },
+            { id: 'location', label: 'Location View', icon: MapPin },
             { id: 'unit', label: 'Unit Wise', icon: Box },
             { id: 'batch', label: 'Batch Wise', icon: Clock },
             { id: 'negative', label: 'Negative Stock', icon: AlertCircle },

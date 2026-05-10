@@ -214,7 +214,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouc
             </div>
 
             <div className="-mx-4 px-4 lg:mx-0 lg:px-0 mt-2 lg:mt-0">
-                <div className="flex bg-premium-slate-50 dark:bg-gray-700 rounded-xl sm:rounded-2xl p-1 border border-premium-slate-100 dark:border-gray-600 overflow-x-auto scrollbar-none h-fit snap-x">
+                <div className="flex bg-premium-slate-50 dark:bg-gray-700 rounded-xl sm:rounded-2xl p-1 border border-premium-slate-100 dark:border-gray-600 overflow-x-auto custom-scrollbar h-fit snap-x">
                   <div className="snap-start"><TabButton id="main" label="Overview" icon={Layers} /></div>
                   <div className="snap-start"><TabButton id="sales" label="Sales" icon={TrendingUp} /></div>
                   <div className="snap-start"><TabButton id="purchase" label="Purchase" icon={Package} /></div>

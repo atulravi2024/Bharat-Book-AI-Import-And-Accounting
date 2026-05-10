@@ -1387,7 +1387,7 @@ export const PaymentVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
                       <button onClick={() => setEditingRowIndex(index)} className="text-amber-500 hover:text-amber-700 hover:bg-amber-50 p-1.5 rounded-lg transition-colors border border-amber-100" title="Edit">
                         <Edit2 size={16} />
                       </button>
-                      <button onClick={() => setRows(rows.filter(r => r.id !== row.id))} className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded-lg transition-colors border border-red-100" title="Delete">
+                      <button onClick={() => setRows(rows.filter(r => r.id !== row.id))} className="flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all border border-red-100" title="Delete">
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -1425,7 +1425,7 @@ export const PaymentVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
         <div className="hidden md:block text-[10px] font-black text-gray-400 uppercase tracking-widest">
            {activeTab.replace('_', ' ')}
         </div>
-        <div className="flex gap-1 overflow-x-auto no-scrollbar py-0.5 items-center">
+        <div className="flex gap-1 overflow-x-auto custom-scrollbar py-0.5 items-center">
            <button 
              onClick={() => setIsSection0Collapsed(!isSection0Collapsed)} 
              title="Toggle Navigation & Save"

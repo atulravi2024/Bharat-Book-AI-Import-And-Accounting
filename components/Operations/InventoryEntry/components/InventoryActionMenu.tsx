@@ -56,7 +56,7 @@ export const InventoryActionMenu: React.FC<InventoryActionMenuProps> = ({
       <div className="hidden md:block text-[10px] font-black text-gray-400 uppercase tracking-widest">
          {activeTab.replace('_', ' ')}
       </div>
-      <div className="flex gap-1 overflow-x-auto no-scrollbar py-0.5 items-center">
+      <div className="flex gap-1 overflow-x-auto custom-scrollbar py-0.5 items-center">
          <button 
            onClick={() => setIsSection0Collapsed(!isSection0Collapsed)} 
            title="Toggle Navigation & Save"

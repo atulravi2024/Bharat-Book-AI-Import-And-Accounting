@@ -400,7 +400,7 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                 {activeTab === 'others_report' && 'Other GST Reports'}
                 {activeTab === 'generate_gst' && 'Generate GST Report'}
               </h2>
-              <div className="flex bg-gray-100 p-1 rounded-lg mt-3 w-full gap-1 overflow-x-auto scrollbar-none dark:bg-gray-800">
+              <div className="flex bg-gray-100 p-1 rounded-lg mt-3 w-full gap-1 overflow-x-auto custom-scrollbar dark:bg-gray-800">
                 <button 
                     id="gst-tab-generate_gst"
                     onClick={() => handleTabChange('generate_gst')}

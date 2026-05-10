@@ -355,7 +355,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
       </div>
 
       <div className="flex-1 min-h-0 flex flex-col md:grid md:grid-cols-3 gap-4 sm:gap-6 overflow-hidden pb-4 md:pb-0">
-        <div className={`flex-1 md:col-span-2 bg-white dark:bg-gray-800 px-5 sm:px-10 py-6 sm:py-9 rounded-3xl sm:rounded-[2.5rem] border border-premium-slate-100 dark:border-gray-700 shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto scrollbar-none relative group/main shrink-0 md:shrink ${activeMobileTab === 'upload' ? 'flex' : 'hidden md:flex'}`}>
+        <div className={`flex-1 md:col-span-2 bg-white dark:bg-gray-800 px-5 sm:px-10 py-6 sm:py-9 rounded-3xl sm:rounded-[2.5rem] border border-premium-slate-100 dark:border-gray-700 shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative group/main shrink-0 md:shrink ${activeMobileTab === 'upload' ? 'flex' : 'hidden md:flex'}`}>
 
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
           

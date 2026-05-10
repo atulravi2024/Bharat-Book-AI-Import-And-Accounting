@@ -1954,7 +1954,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
         </div>
 
         {tabVouchers.length > 0 && (
-            <div className="border-b border-gray-100 mb-4 overflow-x-auto scrollbar-none flex-shrink-0 bg-white p-1 rounded-lg dark:border-gray-800 dark:bg-gray-800">
+            <div className="border-b border-gray-100 mb-4 overflow-x-auto custom-scrollbar flex-shrink-0 bg-white p-1 rounded-lg dark:border-gray-800 dark:bg-gray-800">
                 <nav className="flex space-x-2" aria-label="Tabs">
                     {tabVouchers.map((voucher, index) => {
                         const hasError = Object.values(voucher || {}).some(field => typeof field === 'object' && field !== null && !Array.isArray(field) && (field as any).isMismatch) ||

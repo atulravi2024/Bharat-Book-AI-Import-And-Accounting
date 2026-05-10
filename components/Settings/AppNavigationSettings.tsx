@@ -97,7 +97,7 @@ export const AppNavigationSettings: React.FC = () => {
             { id: 'physical_stock', label: 'Physical Stock' },
             { id: 'consumption', label: 'Item Consumption' },
             { id: 'scrap', label: 'Item Scrap' },
-            { id: 'transfer', label: 'Inter-Warehouse' },
+            { id: 'transfer', label: 'Inter-Location' },
             { id: 'rejections_in', label: 'Rejections In' },
             { id: 'rejections_out', label: 'Rejections Out' }
         ],
@@ -117,7 +117,7 @@ export const AppNavigationSettings: React.FC = () => {
             { id: 'banks', label: 'Bank Masters' },
             { id: 'contacts', label: 'Contacts' },
             { id: 'accountGroups', label: 'Groups' },
-            { id: 'warehouses', label: 'Locations' },
+            { id: 'locations', label: 'Locations' },
             { id: 'costCenters', label: 'Cost Centers' }
         ],
         'item-master': [
@@ -181,7 +181,7 @@ export const AppNavigationSettings: React.FC = () => {
             { id: 'hsn', label: 'HSN/SAC Summary' },
             { id: 'tax', label: 'Tax Rate Wise' },
             { id: 'brand', label: 'Brand Analysis' },
-            { id: 'location', label: 'Warehouse View' },
+            { id: 'location', label: 'Location View' },
             { id: 'unit', label: 'Unit Wise' },
             { id: 'batch', label: 'Batch Wise' },
             { id: 'negative', label: 'Negative Stock' },

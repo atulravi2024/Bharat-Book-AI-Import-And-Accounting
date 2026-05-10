@@ -1,0 +1,169 @@
+const fs = require('fs');
+const path = require('path');
+
+const tabs = [
+  { id: 'parties', label: 'Customers', type: 'PartyMaster', prop: 'partyMasters', setter: 'setPartyMasters' },
+  { id: 'vendors', label: 'Vendors', type: 'PartyMaster', prop: 'partyMasters', setter: 'setPartyMasters' },
+  { id: 'ledgers', label: 'General Ledgers', type: 'LedgerMaster', prop: 'ledgerMasters', setter: 'setLedgerMasters' },
+  { id: 'banks', label: 'Bank Masters', type: 'LedgerMaster', prop: 'ledgerMasters', setter: 'setLedgerMasters' },
+  { id: 'contacts', label: 'Contacts', type: 'ContactMaster', prop: 'contactMasters', setter: 'setContactMasters' },
+  { id: 'accountGroups', label: 'Groups', type: 'AccountGroupMaster', prop: 'accountGroupMasters', setter: 'setAccountGroupMasters' },
+  { id: 'warehouses', label: 'Locations', type: 'WarehouseMaster', prop: 'warehouseMasters', setter: 'setWarehouseMasters' },
+  { id: 'costCenters', label: 'Cost Centers', type: 'CostCenterMaster', prop: 'costCenterMasters', setter: 'setCostCenterMasters' }
+];
+
+const outDir = path.join(__dirname, 'components/Masters/LedgerMaster/Tabs');
+if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+
+tabs.forEach(tab => {
+    const componentName = tab.label.replace(/\s+/g, '') + 'Tab';
+    const content = `import React, { useState, useMemo } from 'react';
+import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon } from '../../../../icons/IconComponents';
+
+interface ${componentName}Props {
+    data: any[];
+    onSave: (items: any[]) => void;
+}
+
+export const ${componentName}: React.FC<${componentName}Props> = ({ data, onSave }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [formData, setFormData] = useState<any>({});
+    const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; id: string; name: string } | null>(null);
+
+    const filteredData = useMemo(() => {
+        return (data || []).filter((m: any) => 
+            String(m.name || m.code || m.id || '').toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [data, searchTerm]);
+
+    const handleSave = () => {
+        if (!formData.name?.trim() && !formData.code?.trim()) return;
+        const newList = editingId 
+            ? data.map((m: any) => m.id === editingId ? { ...formData } : m)
+            : [...data, { ...formData, id: \`item-\${Date.now()}\` }];
+        onSave(newList);
+        setIsModalOpen(false);
+        setEditingId(null);
+        setFormData({});
+    };
+
+    const confirmDelete = () => {
+        if (!deleteConfirmation) return;
+        onSave(data.filter((m: any) => m.id !== deleteConfirmation.id));
+        setDeleteConfirmation(null);
+    };
+
+    return (
+        <div className="flex flex-col h-full animate-in fade-in duration-300">
+            <div className="p-4 bg-gray-50/30 border-b border-gray-100 flex justify-between items-center dark:bg-gray-800/30 dark:border-gray-800">
+                <div className="relative max-w-md w-full mr-4">
+                    <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input type="text" placeholder="Search ${tab.label}..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="mr-2" /> Add ${tab.label.slice(0, tab.label.endsWith('s') ? -1 : undefined)}
+                </button>
+            </div>
+
+            <div className="overflow-x-auto min-h-[300px]">
+                {filteredData.length > 0 ? (
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Name / Code</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Details / Description</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-gray-800">
+                            {filteredData.map((m: any) => (
+                                <tr key={m.id} className="hover:bg-blue-50/50 transition-colors group">
+                                    <td className="p-4">
+                                        <div className="flex items-center">
+                                            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold mr-3 text-xs shadow-sm ring-1 ring-blue-100">
+                                                {m.name?.[0]?.toUpperCase() || m.code?.[0]?.toUpperCase() || 'M'}
+                                            </div>
+                                            <div className="font-bold text-gray-900 text-sm font-sans dark:text-white">{m.name || m.code}</div>
+                                        </div>
+                                    </td>
+                                    <td className="p-4 text-xs text-gray-500 dark:text-gray-400">
+                                        {m.description || '-'}
+                                    </td>
+                                    <td className="p-4">
+                                        <div className="flex items-center justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all active:scale-95" title="Edit"><EditIcon className="w-4 h-4" /></button>
+                                            <button onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name||m.code})} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all active:scale-95" title="Delete"><DeleteIcon className="w-4 h-4" /></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                ) : (
+                    <div className="p-12 text-center flex flex-col justify-center items-center">
+                        <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 dark:bg-gray-900">
+                            <SearchIcon className="text-gray-300 text-3xl" />
+                        </div>
+                        <p className="text-gray-500 dark:text-gray-400">No data found matching your search</p>
+                    </div>
+                )}
+            </div>
+
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[1.25rem] w-full max-w-2xl shadow-2xl animate-in zoom-in-95 overflow-hidden flex flex-col max-h-[90vh] dark:bg-gray-800">
+                        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
+                            <h2 className="font-bold text-xl text-gray-900 flex items-center dark:text-white">
+                                {editingId ? 'Edit' : 'Add'} ${tab.label.slice(0, tab.label.endsWith('s') ? -1 : undefined)}
+                            </h2>
+                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full dark:hover:bg-gray-600">
+                                <CancelIcon className="w-5 h-5" />
+                            </button>
+                        </div>
+                        
+                        <div className="overflow-y-auto flex-1 p-6 space-y-4">
+                            <div className="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name / Code *</label>
+                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Enter name or code..." autoFocus />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Description / Notes</label>
+                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Add any extra details..." />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex space-x-3 p-6 border-t border-gray-100 bg-gray-50/50 dark:border-gray-800">
+                             <button onClick={() => setIsModalOpen(false)} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition">Cancel</button>
+                             <button onClick={handleSave} className="flex-1 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-md shadow-blue-200 transition">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {deleteConfirmation?.isOpen && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-sm text-center shadow-2xl animate-in zoom-in-95 dark:bg-gray-800">
+                        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
+                            <DeleteIcon className="text-3xl" />
+                        </div>
+                        <h2 className="font-bold text-xl mb-2 text-gray-900 dark:text-white">Delete ${tab.label.slice(0, tab.label.endsWith('s') ? -1 : undefined)}?</h2>
+                        <p className="text-gray-500 mb-6 text-sm dark:text-gray-400">Are you sure you want to delete "{deleteConfirmation.name}"?</p>
+                        <div className="flex space-x-3">
+                             <button onClick={() => setDeleteConfirmation(null)} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition">Cancel</button>
+                             <button onClick={confirmDelete} className="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-md shadow-red-200 transition">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+`;
+    fs.writeFileSync(path.join(outDir, componentName + '.tsx'), content);
+});
+
+console.log('done splitting ledger master');

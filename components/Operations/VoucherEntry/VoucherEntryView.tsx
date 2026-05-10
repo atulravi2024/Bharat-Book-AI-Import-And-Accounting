@@ -75,7 +75,7 @@ export const VoucherEntryView: React.FC<VoucherEntryViewProps> = (props) => {
         </div>
       </div>
 
-      <div className="sticky top-0 z-[40] md:static -mx-4 px-4 -mt-4 pt-4 bg-gray-100/95 backdrop-blur-md pb-4 mb-4 md:-mx-0 md:px-0 md:-mt-0 md:pt-0 md:bg-transparent md:pb-0 md:mb-8 overflow-x-auto no-scrollbar w-full">
+      <div className="sticky top-0 z-[40] md:static -mx-4 px-4 -mt-4 pt-4 bg-gray-100/95 backdrop-blur-md pb-4 mb-4 md:-mx-0 md:px-0 md:-mt-0 md:pt-0 md:bg-transparent md:pb-0 md:mb-8 overflow-x-auto custom-scrollbar w-full">
          <div className="bg-white p-2 rounded-2xl border border-gray-200 shadow-sm inline-flex min-w-max dark:bg-gray-800 dark:border-gray-700">
             <nav className="flex space-x-1">
                 {tabs.map((tab) => (
