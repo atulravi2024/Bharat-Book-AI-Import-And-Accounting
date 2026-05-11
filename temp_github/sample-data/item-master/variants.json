@@ -1,6 +1,0 @@
-[
-  {"id": "var1", "name": "Standard Edition", "code": "STD", "sampleSetId": "variants"},
-  {"id": "var2", "name": "Premium Edition", "code": "PREM", "sampleSetId": "variants"},
-  {"id": "var3", "name": "Limited Release", "code": "LIM", "sampleSetId": "variants"},
-  {"id": "var4", "name": "Collectors Edition", "code": "COLL", "sampleSetId": "variants"}
-]

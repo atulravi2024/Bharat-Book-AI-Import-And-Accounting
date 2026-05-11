@@ -1,5 +1,0 @@
-[
-  {"id": "wv1", "name": "1 Kg", "value": 1, "unit": "Kg", "sampleSetId": "itemAttributes"},
-  {"id": "wv2", "name": "500 ml", "value": 500, "unit": "ml", "sampleSetId": "itemAttributes"},
-  {"id": "wv3", "name": "250 g", "value": 250, "unit": "g", "sampleSetId": "itemAttributes"}
-]
