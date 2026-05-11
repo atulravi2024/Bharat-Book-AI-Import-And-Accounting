@@ -1,6 +1,0 @@
-[
-  {"id": "w1", "name": "1 Kg", "value": 1, "unit": "Kg", "sampleSetId": "weights"},
-  {"id": "w2", "name": "500 g", "value": 500, "unit": "g", "sampleSetId": "weights"},
-  {"id": "w3", "name": "250 g", "value": 250, "unit": "g", "sampleSetId": "weights"},
-  {"id": "w4", "name": "2 Kg", "value": 2, "unit": "Kg", "sampleSetId": "weights"}
-]

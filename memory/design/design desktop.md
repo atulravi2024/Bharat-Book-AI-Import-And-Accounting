@@ -88,7 +88,7 @@ Defined in `index.css` under global `@theme`:
 
 ### Main Views (Desktop Layouts)
 - **DashboardView**: Features high-level metrics cards, charts (using Recharts when applicable), and latest activity lists.
-- **SettingsView**: Tabs interface on the left, right pane with detailed form configuration sections (General, Import Rules, Mapping Laws, etc.). Uses desktop grids (`md:grid-cols-2`).
+- **SettingsView**: Tabs interface on the left, right pane with detailed form configuration sections (General, Import Rules, Mapping Laws, etc.). Uses desktop grids (`md:grid-cols-2`). The `FirmSettings` are uniquely designed with a multi-layered accordion pattern, which acts as an embedded navigation system handling 19 modular sub-components.
 - **ReportsView & BankView**: Extensive grid/data layouts allowing wide horizontal spaces for dense enterprise data.
 - **MastersManagement**: Sidebar layout for list and details pane side-by-side.
 

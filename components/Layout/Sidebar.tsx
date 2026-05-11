@@ -101,25 +101,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
   };
 
   return (
-    <aside className={`fixed top-0 left-0 h-full z-[90] bg-white dark:bg-gray-800 shadow-[20px_0_40px_rgba(0,0,0,0.02)] dark:shadow-none border-r border-premium-slate-100 dark:border-gray-700 transition-all duration-300 md:duration-500 ease-in-out md:relative flex flex-col overflow-hidden max-md:w-64 ${
+    <aside className={`fixed top-0 left-0 h-full z-[90] bg-white dark:bg-gray-800 shadow-[20px_0_40px_rgba(0,0,0,0.02)] dark:shadow-none border-r border-premium-slate-100 dark:border-gray-700 transition-all duration-300 md:duration-500 ease-in-out md:relative flex flex-col max-md:w-64 ${
       isSidebarOpen
         ? 'w-64 max-md:translate-x-0'
         : 'w-20 max-md:-translate-x-full md:translate-x-0'
     }`}>
-        <div className="flex items-center p-6 border-b border-premium-slate-100 dark:border-gray-700 h-16 md:h-20 shrink-0">
+        <div className={`flex items-center p-6 border-b border-premium-slate-100 dark:border-gray-700 h-16 md:h-20 shrink-0 ${!isSidebarOpen ? 'md:px-0 md:justify-center' : ''}`}>
             <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className={`flex items-center justify-center w-full transition-all group ${!isSidebarOpen ? '' : 'space-x-3 justify-start'}`}
+                className={`flex items-center justify-center w-full transition-all group ${!isSidebarOpen ? 'md:space-x-0' : 'space-x-3 justify-start'}`}
             >
                 <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-600 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 dark:shadow-blue-900/50 shrink-0 group-hover:scale-105 transition-transform">
                     <CheckCircleIcon className="text-white text-lg md:text-xl" />
                 </div>
-                {(isSidebarOpen || window.innerWidth < 768) && (
-                    <div className="flex flex-col items-start transition-opacity duration-300 opacity-100">
-                        <span className="text-base md:text-lg font-black text-gray-900 dark:text-white leading-none font-display text-nowrap truncate w-full">Bharat Book</span>
-                        <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 mt-1">Enterprise</span>
-                    </div>
-                )}
+                <div className={`flex flex-col items-start transition-opacity duration-300 overflow-hidden ${!isSidebarOpen ? 'w-0 opacity-0 md:hidden' : 'opacity-100 flex-1'}`}>
+                    <span className="text-base md:text-lg font-black text-gray-900 dark:text-white leading-none font-display text-nowrap truncate w-full">Bharat Book</span>
+                    <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 mt-1 text-nowrap">Enterprise</span>
+                </div>
             </button>
         </div>
         <nav className="flex-1 p-4 overflow-y-auto overflow-x-hidden custom-scrollbar">
@@ -127,7 +125,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 icon={<DashboardIcon className="text-xl" />} 
                 label="Dashboard" 
                 active={activeView === 'dashboard'} 
-                isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                isCollapsed={!isSidebarOpen} 
                 onClick={() => onViewChange('dashboard')}
             />
 
@@ -137,13 +135,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     icon={<AIToolsIcon className="text-base" />} 
                     isOpen={openGroup === 'ops'} 
                     onToggle={() => toggleGroup('ops')}
-                    isSidebarOpen={isSidebarOpen && window.innerWidth >= 768}
+                    isSidebarOpen={isSidebarOpen}
                 >
                     <NavItem 
                         icon={<AIToolsIcon className="text-xl" />} 
                         label="Import" 
                         active={activeView === 'import'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('import')}
                         intent="secondary"
                     />
@@ -151,7 +149,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                         icon={<AIToolsIcon className="text-xl" />} 
                         label="Bulk Operation" 
                         active={activeView === 'bulk-operation'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('bulk-operation')}
                         intent="secondary"
                     />
@@ -162,13 +160,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     icon={<AddBoxIcon className="text-base" />} 
                     isOpen={openGroup === 'entry'} 
                     onToggle={() => toggleGroup('entry')}
-                    isSidebarOpen={isSidebarOpen && window.innerWidth >= 768}
+                    isSidebarOpen={isSidebarOpen}
                 >
                     <NavItem 
                         icon={<AddBoxIcon className="text-xl" />} 
                         label="Transactions" 
                         active={activeView === 'voucher-entry'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('voucher-entry')}
                         intent="secondary"
                     />
@@ -176,7 +174,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                         icon={<SwapHorizIcon className="text-xl" />} 
                         label="Inventory Trans." 
                         active={activeView === 'inventory-entry'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('inventory-entry')}
                         intent="secondary"
                     />
@@ -187,13 +185,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     icon={<MastersIcon className="text-base" />} 
                     isOpen={openGroup === 'masters'} 
                     onToggle={() => toggleGroup('masters')}
-                    isSidebarOpen={isSidebarOpen && window.innerWidth >= 768}
+                    isSidebarOpen={isSidebarOpen}
                 >
                     <NavItem 
                         icon={<MastersIcon className="text-xl" />} 
                         label="Ledger Master" 
                         active={activeView === 'ledger-master'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('ledger-master')}
                         intent="secondary"
                     />
@@ -201,7 +199,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                         icon={<InventoryIcon className="text-xl" />} 
                         label="Item Master" 
                         active={activeView === 'item-master'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('item-master')}
                         intent="secondary"
                     />
@@ -212,13 +210,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     icon={<ReportsIcon className="text-base" />} 
                     isOpen={openGroup === 'reports'} 
                     onToggle={() => toggleGroup('reports')}
-                    isSidebarOpen={isSidebarOpen && window.innerWidth >= 768}
+                    isSidebarOpen={isSidebarOpen}
                 >
                     <NavItem 
                         icon={<BankIcon className="text-xl" />} 
                         label="Bank Vouchers" 
                         active={activeView === 'bank'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('bank')}
                         intent="secondary"
                     />
@@ -226,7 +224,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                         icon={<VouchersIcon className="text-xl" />} 
                         label="Ledger Report" 
                         active={activeView === 'vouchers'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('vouchers')}
                         intent="secondary"
                     />
@@ -234,7 +232,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                         icon={<TaxIcon className="text-xl" />} 
                         label="GST report" 
                         active={activeView === 'gst-report'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('gst-report')}
                         intent="secondary"
                     />
@@ -242,7 +240,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                         icon={<InventoryIcon className="text-xl" />} 
                         label="Item report" 
                         active={activeView === 'item-report'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('item-report')}
                         intent="secondary"
                     />
@@ -250,7 +248,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                         icon={<ReportsIcon className="text-xl" />} 
                         label="Financial Report" 
                         active={activeView === 'reports'} 
-                        isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                        isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('reports')}
                         intent="secondary"
                     />
@@ -262,7 +260,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 icon={<SettingsIcon className="text-xl" />} 
                 label="Settings" 
                 active={activeView === 'settings'} 
-                isCollapsed={!isSidebarOpen && window.innerWidth >= 768} 
+                isCollapsed={!isSidebarOpen} 
                 onClick={() => onViewChange('settings')}
             />
         </div>

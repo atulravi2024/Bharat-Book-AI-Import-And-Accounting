@@ -69,6 +69,10 @@ The mobile design retains the core essence of the desktop web app (technical, pr
 - **Step 3 & 4 (Summary & Success)**:
   - Simple, single-column summary cards. Success takes full screen.
 
+### Settings & Configuration Forms
+- **Responsive Accordions:** Settings sections (like the Firm Settings) are organized into vertically stacked collapsible accordions, perfectly suited for natural mobile scrolling without taking up horizontal real estate.
+- **Sticky Actions:** Heavy action buttons (Submit, Export Backup, Factory Reset) in deep configurations should stick to the bottom (`sticky bottom-0`) so users don't have to scroll infinitely to save changes.
+
 ## 5. Animation & Motion
 - Emphasize native-like transitions. Bottom sheets slide up (`slide-in-from-bottom`), sidebars slide left (`slide-in-from-left`).
 - Swipe gestures for lists (e.g., swipe to delete if implemented).
