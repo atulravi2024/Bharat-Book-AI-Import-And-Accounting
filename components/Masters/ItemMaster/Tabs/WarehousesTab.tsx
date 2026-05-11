@@ -105,7 +105,7 @@ export const WarehousesTab: React.FC<WarehousesTabProps> = ({ data, onSave }) =>
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:pl-20 lg:pl-64 transition-all duration-500">
                     <div className="bg-white rounded-[1.25rem] w-full max-w-2xl shadow-2xl animate-in zoom-in-95 overflow-hidden flex flex-col max-h-[90vh] dark:bg-gray-800">
                         <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
                             <h2 className="font-bold text-xl text-gray-900 flex items-center dark:text-white">

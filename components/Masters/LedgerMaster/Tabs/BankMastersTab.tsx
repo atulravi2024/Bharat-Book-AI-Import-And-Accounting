@@ -87,6 +87,9 @@ export const BankMastersTab: React.FC<BankMastersTabProps> = ({ data, onSave }) 
         <td className="p-4 text-sm text-gray-700 dark:text-gray-200">
             <div className="font-mono text-gray-800 tracking-wide dark:text-gray-100">{m.bankDetails?.accountNo || 'No account'}</div>
             {m.bankDetails?.ifsc && <div className="text-[11px] text-gray-500 uppercase font-mono mt-0.5 flex items-center dark:text-gray-400">IFSC: {m.bankDetails.ifsc}</div>}
+            {m.bankDetails?.swiftCode && <div className="text-[11px] text-gray-500 uppercase font-mono mt-0.5 flex items-center dark:text-gray-400">SWIFT: {m.bankDetails.swiftCode}</div>}
+            {m.bankDetails?.micrCode && <div className="text-[11px] text-gray-500 uppercase font-mono mt-0.5 flex items-center dark:text-gray-400">MICR: {m.bankDetails.micrCode}</div>}
+            {m.bankDetails?.upiId && <div className="text-[11px] text-gray-500 font-mono mt-0.5 flex items-center dark:text-gray-400">UPI: {m.bankDetails.upiId}</div>}
         </td>
         <td className="p-4 text-sm text-gray-700 dark:text-gray-200">
             <div className="font-mono font-medium text-gray-900 dark:text-white">₹{m.openingBalance?.toFixed(2) || '0.00'}</div>
@@ -170,11 +173,40 @@ export const BankMastersTab: React.FC<BankMastersTabProps> = ({ data, onSave }) 
         </div>
         <div>
             <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Account No</label>
-            <input type="text" value={formData.bankDetails?.accountNo || ''} onChange={e => setFormData({...formData, bankDetails: { ...formData.bankDetails, accountNo: e.target.value }})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700" placeholder="Account Number" />
+            <input type="text" value={formData.bankDetails?.accountNo || ''} onChange={e => setFormData({...formData, bankDetails: { ...formData.bankDetails, accountNo: e.target.value }})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Account Number" />
         </div>
         <div>
             <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">IFSC Code</label>
-            <input type="text" value={formData.bankDetails?.ifsc || ''} onChange={e => setFormData({...formData, bankDetails: { ...formData.bankDetails, ifsc: e.target.value }})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700" placeholder="IFSC Code" />
+            <input type="text" value={formData.bankDetails?.ifsc || ''} onChange={e => setFormData({...formData, bankDetails: { ...formData.bankDetails, ifsc: e.target.value }})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="IFSC Code" />
+        </div>
+        <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">SWIFT Code</label>
+            <input type="text" value={formData.bankDetails?.swiftCode || ''} onChange={e => setFormData({...formData, bankDetails: { ...formData.bankDetails, swiftCode: e.target.value }})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="SWIFT Code" />
+        </div>
+        <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">MICR Code</label>
+            <input type="text" value={formData.bankDetails?.micrCode || ''} onChange={e => setFormData({...formData, bankDetails: { ...formData.bankDetails, micrCode: e.target.value }})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="MICR Code" />
+        </div>
+        <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Account Type</label>
+            <select 
+                value={formData.bankDetails?.accountType || 'Savings'}
+                onChange={e => setFormData({ ...formData, bankDetails: { ...formData.bankDetails, accountType: e.target.value }})}
+                className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800"
+            >
+                <option value="Savings">Savings</option>
+                <option value="Current">Current</option>
+                <option value="Overdraft">Overdraft</option>
+                <option value="Cash Credit">Cash Credit</option>
+            </select>
+        </div>
+        <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Branch Name</label>
+            <input type="text" value={formData.bankDetails?.branchName || ''} onChange={e => setFormData({...formData, bankDetails: { ...formData.bankDetails, branchName: e.target.value }})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Branch Name" />
+        </div>
+        <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">UPI / VPA ID</label>
+            <input type="text" value={formData.bankDetails?.upiId || ''} onChange={e => setFormData({...formData, bankDetails: { ...formData.bankDetails, upiId: e.target.value }})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="company@bank" />
         </div>
     
                             </div>

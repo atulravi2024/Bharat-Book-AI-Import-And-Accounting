@@ -8,6 +8,10 @@
     "bankDetails": {
       "accountNo": "50200012345678",
       "ifsc": "HDFC0000123",
+      "swiftCode": "HDFCINTBB",
+      "micrCode": "400240002",
+      "accountType": "Current",
+      "upiId": "b1@hdfcbank",
       "bankName": "HDFC Bank",
       "branchName": "Fort Branch, Mumbai"
     }
@@ -21,6 +25,10 @@
     "bankDetails": {
       "accountNo": "33445566778",
       "ifsc": "SBIN0000456",
+      "swiftCode": "SBININBB456",
+      "micrCode": "110002005",
+      "accountType": "Savings",
+      "upiId": "b2@sbi",
       "bankName": "State Bank of India",
       "branchName": "Connaught Place, Delhi"
     }

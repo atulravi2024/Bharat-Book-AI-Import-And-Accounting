@@ -149,6 +149,10 @@ export interface LedgerMaster {
   bankDetails?: {
     accountNo?: string;
     ifsc?: string;
+    swiftCode?: string;
+    micrCode?: string;
+    accountType?: string;
+    upiId?: string;
     bankName?: string;
     branchName?: string;
   };

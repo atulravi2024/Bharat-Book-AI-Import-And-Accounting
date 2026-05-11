@@ -1038,6 +1038,7 @@ const App: React.FC = () => {
                 setReportBankActiveTab={setReportActiveTab}
                 defaultTab={settingsActiveTab}
                 onTabChange={setSettingsActiveTab}
+                ledgerMasters={ledgerMasters}
             />
         );
     }

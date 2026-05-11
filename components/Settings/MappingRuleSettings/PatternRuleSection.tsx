@@ -319,8 +319,21 @@ export const PatternRuleSection: React.FC<PatternRuleSectionProps> = ({
                             <div className="flex gap-2">
                                 <input type="file" accept=".csv" className="hidden" ref={fileInputRef} onChange={(e) => {
                                     if (e.target.files && e.target.files.length > 0) {
-                                        alert(`Simulated import of ${e.target.files[0].name} successful! 4 new aliases imported.`);
-                                        setAliases([...aliases, { from: 'GOOGLE CLOUD', to: 'Google India Pvt Ltd' }, { from: 'AWS EMEA', to: 'Amazon Web Services' }]);
+                                        const file = e.target.files[0];
+                                        const reader = new FileReader();
+                                        reader.onload = (event) => {
+                                          const text = event.target?.result as string;
+                                          const rows = text.split('\n').map(r => r.split(',').map(c => c.trim())).filter(r => r.length >= 2 && r[0] && r[1]);
+                                          
+                                          if (rows.length > 0) {
+                                            const newAliases = rows.map(r => ({ from: r[0], to: r[1] }));
+                                            setAliases(prev => [...prev, ...newAliases]);
+                                            alert(`Successfully imported ${newAliases.length} rules from ${file.name}.`);
+                                          } else {
+                                            alert(`No valid mapping rules found in ${file.name}. Expected format: 'from,to'`);
+                                          }
+                                        }
+                                        reader.readAsText(file);
                                         e.target.value = ''; // Reset
                                     }
                                 }} />
