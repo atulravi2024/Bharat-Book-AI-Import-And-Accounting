@@ -1,8 +1,0 @@
-{
-  "name": "Bharat Book AI Import And Accounting",
-  "description": "An AI-powered ERP companion for Bharat Book. Features include multi-step voucher import flow, ledger and item report analysis, bank statement reconciliation, and bulk price operations driven by semantic AI.",
-  "requestFramePermissions": [
-    "camera"
-  ],
-  "majorCapabilities": []
-}

@@ -1,7 +1,0 @@
-[
-  {"id": "sz1", "name": "Small", "code": "S", "sampleSetId": "itemAttributes"},
-  {"id": "sz2", "name": "Medium", "code": "M", "sampleSetId": "itemAttributes"},
-  {"id": "sz3", "name": "Large", "code": "L", "sampleSetId": "itemAttributes"},
-  {"id": "sz4", "name": "Extra Large", "code": "XL", "sampleSetId": "itemAttributes"},
-  {"id": "sz5", "name": "Double XL", "code": "XXL", "sampleSetId": "itemAttributes"}
-]

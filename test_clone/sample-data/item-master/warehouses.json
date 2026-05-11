@@ -1,5 +1,0 @@
-[
-  { "id": "wh1", "name": "Main Warehouse", "location": "Plot 12, MIDC Andheri East, Mumbai, MH", "capacity": 5000, "contactPerson": "Rajesh Kumar", "isActive": true },
-  { "id": "wh2", "name": "Delhi Depot", "location": "Sector 18, Gurugram, HR", "capacity": 2000, "contactPerson": "Amit Singh", "isActive": true },
-  { "id": "wh3", "name": "South Hub", "location": "Electronic City, Phase 1, Bengaluru, KA", "capacity": 3500, "contactPerson": "Laxmi Reddy", "isActive": true }
-]

@@ -1,9 +1,0 @@
-[
-  { "id": "uom1", "name": "Pieces", "symbol": "PCS" },
-  { "id": "uom2", "name": "Kilograms", "symbol": "KGS" },
-  { "id": "uom3", "name": "Box", "symbol": "BOX" },
-  { "id": "uom4", "name": "Numbers", "symbol": "NOS" },
-  { "id": "uom5", "name": "Meters", "symbol": "MTR" },
-  { "id": "uom6", "name": "Litre", "symbol": "LTR" },
-  { "id": "uom7", "name": "Set", "symbol": "SET" }
-]
