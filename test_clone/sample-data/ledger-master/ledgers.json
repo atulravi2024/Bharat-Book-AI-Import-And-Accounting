@@ -1,0 +1,7 @@
+[
+  { "id": "l1", "name": "Sales Account", "group": "Direct Income", "isInventoryAffected": true },
+  { "id": "l2", "name": "Purchase Account", "group": "Direct Expenses", "isInventoryAffected": true },
+  { "id": "l3", "name": "Cash In Hand", "group": "Cash-in-hand", "openingBalance": 10000, "balanceType": "Debit" },
+  { "id": "l4", "name": "Electricity Expenses", "group": "Indirect Expenses" },
+  { "id": "l5", "name": "Rent Paid", "group": "Indirect Expenses" }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "bom-solar-inv",
+    "name": "5kW Solar Inverter",
+    "itemId": "item1",
+    "quantityProduced": 1,
+    "isActive": true,
+    "description": "High-efficiency home solar inverter assembly",
+    "components": [
+      {
+        "itemId": "item1",
+        "quantity": 1,
+        "uom": "PCS",
+        "scrapPercentage": 0.5
+      }
+    ],
+    "routing": [
+      {
+        "step": 1,
+        "operation": "PCB Mounting",
+        "workCenter": "Precision Electronics",
+        "setupTime": 2,
+        "runTime": 1.5,
+        "laborCostPerHour": 1500,
+        "overheadCostPerHour": 800
+      },
+      {
+        "step": 2,
+        "operation": "Final Quality Check",
+        "workCenter": "QC Station 4",
+        "setupTime": 0,
+        "runTime": 0.5,
+        "laborCostPerHour": 2000,
+        "overheadCostPerHour": 1000
+      }
+    ]
+  },
+  {
+    "id": "bom-electric-motor",
+    "name": "Industrial Electric Motor (High Torque)",
+    "itemId": "item2",
+    "quantityProduced": 1,
+    "isActive": true,
+    "description": "Heavy-duty industrial motor for mining equipment",
+    "components": [
+      {
+        "itemId": "item2",
+        "quantity": 1,
+        "uom": "NOS",
+        "scrapPercentage": 1.5
+      }
+    ],
+    "routing": [
+      {
+        "step": 1,
+        "operation": "Stator Winding",
+        "workCenter": "Winding Shop 1",
+        "setupTime": 5,
+        "runTime": 8,
+        "laborCostPerHour": 1200,
+        "overheadCostPerHour": 2000
+      },
+      {
+        "step": 2,
+        "operation": "Magnetic Testing",
+        "workCenter": "Special Inspection",
+        "setupTime": 1,
+        "runTime": 2,
+        "laborCostPerHour": 2500,
+        "overheadCostPerHour": 1500
+      }
+    ]
+  }
+]

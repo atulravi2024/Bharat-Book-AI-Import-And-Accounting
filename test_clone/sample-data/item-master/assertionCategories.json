@@ -1,0 +1,5 @@
+[
+  { "id": "ac1", "name": "Quality Standards", "description": "Industry quality certifications and compliance standards" },
+  { "id": "ac2", "name": "Environmental Impact", "description": "Sustainability rankings and eco-friendly certifications" },
+  { "id": "ac3", "name": "Safety Compliance", "description": "Occupational health and safety standards" }
+]

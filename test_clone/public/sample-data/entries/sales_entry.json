@@ -1,0 +1,9 @@
+[
+  {
+    "id": "sample-sales-1",
+    "type": "sales",
+    "date": { "value": "2024-03-15" },
+    "voucherNo": { "value": "SALE/001" },
+    "amount": { "value": "15000" }
+  }
+]

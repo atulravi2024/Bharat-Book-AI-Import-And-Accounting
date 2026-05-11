@@ -1,0 +1,187 @@
+import React, { useState, useMemo } from 'react';
+import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon } from '../../../icons/IconComponents';
+
+interface VariantsTabProps {
+    data: any[];
+    onSave: (items: any[]) => void;
+    itemMasters?: any[];
+    colorMasters?: any[];
+    sizeMasters?: any[];
+}
+
+export const VariantsTab: React.FC<VariantsTabProps> = ({ data, onSave, itemMasters = [], colorMasters = [], sizeMasters = [] }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [formData, setFormData] = useState<any>({});
+    const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; id: string; name: string } | null>(null);
+
+    const filteredData = useMemo(() => {
+        return (data || []).filter((m: any) => 
+            String(m.name || m.code || m.id || '').toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [data, searchTerm]);
+
+    const handleSave = () => {
+        if (!formData.name?.trim() && !formData.code?.trim()) return;
+        const newList = editingId 
+            ? data.map((m: any) => m.id === editingId ? { ...formData } : m)
+            : [...data, { ...formData, id: `${Date.now()}` }];
+        onSave(newList);
+        setIsModalOpen(false);
+        setEditingId(null);
+        setFormData({});
+    };
+
+    const confirmDelete = () => {
+        if (!deleteConfirmation) return;
+        onSave(data.filter((m: any) => m.id !== deleteConfirmation.id));
+        setDeleteConfirmation(null);
+    };
+
+    return (
+        <div className="flex flex-col h-full animate-in fade-in duration-300">
+            <div className="p-4 bg-gray-50/30 border-b border-gray-100 flex justify-between items-center dark:bg-gray-800/30 dark:border-gray-800">
+                <div className="relative max-w-md w-full mr-4">
+                    <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input type="text" placeholder="Search Variants..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="mr-2" /> Add Variant
+                </button>
+            </div>
+
+            <div className="flex-1 overflow-auto custom-scrollbar min-h-0">
+                {filteredData.length > 0 ? (
+                    <table className="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Name</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Code</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">SKU</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Color</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Size</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Price Mod</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-gray-800">
+                            {filteredData.map((m: any) => (
+                                <tr key={m.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
+                                    <td className="p-4 whitespace-nowrap font-bold text-gray-900 text-sm font-sans dark:text-white">{m.name}</td>
+        <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200 font-mono">{m.code}</td>
+        <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200 font-mono">{m.skuCode}</td>
+        <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.colorId && <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 font-medium text-[10px] dark:bg-gray-800 dark:text-gray-300">{m.colorId}</span>}</td>
+        <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.sizeId && <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 font-medium text-[10px] dark:bg-gray-800 dark:text-gray-300">{m.sizeId}</span>}</td>
+        <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.priceModifier ? <span className="text-xs text-green-600 font-bold dark:text-green-400">{m.priceModifier > 0 ? '+' : ''}{m.priceModifier}</span> : null}</td>
+                                    <td className="p-4">
+                                        <div className="flex items-center justify-center space-x-2">
+                                            <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"><EditIcon className="w-4 h-4" /></button>
+                                            <button onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name||m.code})} className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title="Delete"><DeleteIcon className="w-4 h-4" /></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                ) : (
+                    <div className="p-12 text-center flex flex-col justify-center items-center">
+                        <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 dark:bg-gray-900">
+                            <SearchIcon className="text-gray-300 text-3xl" />
+                        </div>
+                        <p className="text-gray-500 dark:text-gray-400">No data found matching your search</p>
+                    </div>
+                )}
+            </div>
+
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[1.25rem] w-full max-w-2xl shadow-2xl animate-in zoom-in-95 overflow-hidden flex flex-col max-h-[90vh] dark:bg-gray-800">
+                        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
+                            <h2 className="font-bold text-xl text-gray-900 flex items-center dark:text-white">
+                                {editingId ? 'Edit' : 'Add'} Variant
+                            </h2>
+                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full dark:hover:bg-gray-600">
+                                <CancelIcon className="w-5 h-5" />
+                            </button>
+                        </div>
+                        
+                        <div className="overflow-y-auto flex-1 p-6 space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="col-span-1 md:col-span-2">
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name / Code *</label>
+                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Enter name or code..." autoFocus />
+                                </div>
+                                <div className="col-span-1 md:col-span-2">
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Description / Notes</label>
+                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Add any extra details..." />
+                                </div>
+                                <div className="col-span-1">
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Variant SKU Code</label>
+                                    <input type="text" value={formData.skuCode || ''} onChange={e => setFormData({...formData, skuCode: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="e.g. SHIRT-RED-L..." />
+                                </div>
+                                <div className="col-span-1">
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Base Item ID (Optional Reference)</label>
+                                    <select value={formData.baseItemId || ''} onChange={e => setFormData({...formData, baseItemId: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                        <option value="">Select Base Item...</option>
+                                        {itemMasters.map(i => (
+                                            <option key={i.id} value={i.id}>{i.name || i.code}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="col-span-1">
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Color Reference (Name/ID)</label>
+                                    <select value={formData.colorId || ''} onChange={e => setFormData({...formData, colorId: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                        <option value="">Select Color...</option>
+                                        {colorMasters.map(c => (
+                                            <option key={c.id} value={c.id}>{c.name || c.code}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="col-span-1">
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Size Reference (Name/ID)</label>
+                                    <select value={formData.sizeId || ''} onChange={e => setFormData({...formData, sizeId: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                        <option value="">Select Size...</option>
+                                        {sizeMasters.map(s => (
+                                            <option key={s.id} value={s.id}>{s.name || s.code}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="col-span-1 md:col-span-2 mt-2">
+                                    <label className="block text-xs font-bold text-green-600 uppercase mb-1 dark:text-green-500">Price Modifier (Difference from base price)</label>
+                                    <div className="flex items-center">
+                                        <span className="p-2 border border-gray-200 border-r-0 rounded-l-lg bg-gray-50 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 font-bold">₹</span>
+                                        <input type="number" value={formData.priceModifier || ''} onChange={e => setFormData({...formData, priceModifier: parseFloat(e.target.value)})} className="w-full p-2 border border-gray-200 rounded-r-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="0.00 (e.g. 50 for +50)" />
+                                    </div>
+                                    <p className="text-xs text-gray-400 mt-1">Specify amount to add or subtract (e.g. -10 or 50) from the base item's price.</p>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div className="flex space-x-3 p-6 border-t border-gray-100 bg-gray-50/50 dark:border-gray-800">
+                             <button onClick={() => setIsModalOpen(false)} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition">Cancel</button>
+                             <button onClick={handleSave} className="flex-1 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-md shadow-blue-200 transition">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {deleteConfirmation?.isOpen && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-sm text-center shadow-2xl animate-in zoom-in-95 dark:bg-gray-800">
+                        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
+                            <DeleteIcon className="text-3xl" />
+                        </div>
+                        <h2 className="font-bold text-xl mb-2 text-gray-900 dark:text-white">Delete Variant?</h2>
+                        <p className="text-gray-500 mb-6 text-sm dark:text-gray-400">Are you sure you want to delete "{deleteConfirmation.name}"?</p>
+                        <div className="flex space-x-3">
+                             <button onClick={() => setDeleteConfirmation(null)} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition">Cancel</button>
+                             <button onClick={confirmDelete} className="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-md shadow-red-200 transition">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};

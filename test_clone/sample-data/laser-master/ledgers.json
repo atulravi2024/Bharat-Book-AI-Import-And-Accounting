@@ -1,0 +1,44 @@
+[
+  { 
+    "id": "l1", 
+    "name": "Sales Account", 
+    "group": "Sales Accounts", 
+    "isInventoryAffected": true, 
+    "openingBalance": 0, 
+    "balanceType": "Credit",
+    "description": "Primary sales income account"
+  },
+  { 
+    "id": "l2", 
+    "name": "Purchase Account", 
+    "group": "Purchase Accounts", 
+    "isInventoryAffected": true, 
+    "openingBalance": 0, 
+    "balanceType": "Debit",
+    "description": "Primary product purchase account"
+  },
+  { 
+    "id": "l3", 
+    "name": "Cash In Hand", 
+    "group": "Cash-in-hand", 
+    "openingBalance": 10000, 
+    "balanceType": "Debit",
+    "description": "Physical cash in office safe"
+  },
+  { 
+    "id": "l4", 
+    "name": "Electricity Expenses", 
+    "group": "Indirect Expenses", 
+    "openingBalance": 0, 
+    "balanceType": "Debit",
+    "description": "Monthly utility bill payments"
+  },
+  { 
+    "id": "l5", 
+    "name": "Rent Paid", 
+    "group": "Indirect Expenses", 
+    "openingBalance": 0, 
+    "balanceType": "Debit",
+    "description": "Office space monthly rental"
+  }
+]

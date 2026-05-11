@@ -1,0 +1,24 @@
+{
+    "name": "Other GST Reports",
+    "description": "Additional GST Compliance Metrics",
+    "reports": [
+        {
+            "id": "itc_04",
+            "name": "ITC-04 Job Work",
+            "status": "Pending",
+            "due_date": "2024-10-25"
+        },
+        {
+            "id": "cmp_08",
+            "name": "CMP-08 Composition Scheme",
+            "status": "Filed",
+            "due_date": "2024-04-18"
+        },
+        {
+            "id": "gstr_7",
+            "name": "GSTR-7 TDS Return",
+            "status": "Not Applicable",
+            "due_date": ""
+        }
+    ]
+}

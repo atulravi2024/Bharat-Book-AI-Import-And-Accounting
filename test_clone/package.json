@@ -1,0 +1,37 @@
+{
+  "name": "bharat-book-ai-voucher-import",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^1.50.1",
+    "@google/generative-ai": "^0.24.1",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/express": "^5.0.6",
+    "express": "^5.2.1",
+    "html-to-image": "^1.11.13",
+    "html5-qrcode": "^2.3.8",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.8.0",
+    "motion": "^12.38.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "recharts": "^3.8.1",
+    "tailwindcss": "^4.2.2",
+    "tsx": "^4.21.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "ts-morph": "^28.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

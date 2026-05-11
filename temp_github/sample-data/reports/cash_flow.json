@@ -1,0 +1,15 @@
+[
+    {
+        "id": "cf-1",
+        "type": "Receipt",
+        "isSample": true,
+        "sampleSetId": "cash_flow",
+        "date": { "value": "2024-04-22" },
+        "partyName": { "value": "Customer Y" },
+        "amount": { "value": "8000" },
+        "ledger": { "value": "Sales A/c" },
+        "paymentMode": { "value": "CASH" },
+        "narration": { "value": "Cash Inflow" },
+        "items": []
+    }
+]

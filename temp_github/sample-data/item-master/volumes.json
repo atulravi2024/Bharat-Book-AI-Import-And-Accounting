@@ -1,0 +1,6 @@
+[
+  {"id": "v1", "name": "1 Litre", "value": 1000, "unit": "ml", "sampleSetId": "volumes"},
+  {"id": "v2", "name": "500 ml", "value": 500, "unit": "ml", "sampleSetId": "volumes"},
+  {"id": "v3", "name": "200 ml", "value": 200, "unit": "ml", "sampleSetId": "volumes"},
+  {"id": "v4", "name": "2 Litre", "value": 2000, "unit": "ml", "sampleSetId": "volumes"}
+]

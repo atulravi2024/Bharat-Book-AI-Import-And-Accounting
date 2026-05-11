@@ -1,0 +1,38 @@
+[
+  { 
+    "id": "v1", 
+    "name": "Global Traders Inc", 
+    "type": "Vendor", 
+    "gstin": "07AAACG9876C1Z3", 
+    "panNo": "AAACG9876C",
+    "contactPerson": "John Doe",
+    "phone": "011-23456789",
+    "email": "sales@globaltraders.com",
+    "address": "Plot No. 45, Okhla Industrial Area",
+    "city": "New Delhi", 
+    "state": "Delhi", 
+    "openingBalance": 45000, 
+    "creditDays": 15,
+    "bankName": "Axis Bank",
+    "bankAccountNo": "912010012345678",
+    "ifscCode": "UTIB0000123"
+  },
+  { 
+    "id": "v2", 
+    "name": "Bharat Electronics Ltd", 
+    "type": "Vendor", 
+    "gstin": "29AAACB1122D1Z4", 
+    "panNo": "AAACB1122D",
+    "contactPerson": "Anil Srivastava",
+    "phone": "080-22195262",
+    "email": "info@bel-india.in",
+    "address": "Outer Ring Road, Nagavara",
+    "city": "Bengaluru", 
+    "state": "Karnataka", 
+    "openingBalance": 0, 
+    "creditDays": 30,
+    "bankName": "State Bank of India",
+    "bankAccountNo": "33445566778",
+    "ifscCode": "SBIN0000456"
+  }
+]

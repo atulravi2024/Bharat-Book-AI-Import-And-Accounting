@@ -1,0 +1,7 @@
+[
+  {"id": "cl1", "name": "Matte Black", "hex": "#28282B", "sampleSetId": "itemAttributes"},
+  {"id": "cl2", "name": "Alpine White", "hex": "#F5F5F7", "sampleSetId": "itemAttributes"},
+  {"id": "cl3", "name": "Ocean Blue", "hex": "#0077BE", "sampleSetId": "itemAttributes"},
+  {"id": "cl4", "name": "Emerald Green", "hex": "#50C878", "sampleSetId": "itemAttributes"},
+  {"id": "cl5", "name": "Crimson Red", "hex": "#DC143C", "sampleSetId": "itemAttributes"}
+]

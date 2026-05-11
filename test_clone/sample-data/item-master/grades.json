@@ -1,0 +1,5 @@
+[
+  { "id": "gr1", "name": "Grade A", "description": "Premium Quality", "qualityScore": 10 },
+  { "id": "gr2", "name": "Grade B", "description": "Standard Quality", "qualityScore": 7 },
+  { "id": "gr3", "name": "Grade C", "description": "Budget Quality", "qualityScore": 4 }
+]

@@ -1,0 +1,38 @@
+[
+  { 
+    "id": "p1", 
+    "name": "Reliance Industries Ltd", 
+    "type": "Customer", 
+    "gstin": "27AAACR1234A1Z1", 
+    "panNo": "AAACR1234A",
+    "contactPerson": "Mukesh Ambani",
+    "phone": "022-22785000",
+    "email": "info@ril.com",
+    "address": "Maker Chambers IV, Nariman Point",
+    "city": "Mumbai", 
+    "state": "Maharashtra", 
+    "openingBalance": 150000, 
+    "creditDays": 30,
+    "bankName": "HDFC Bank",
+    "bankAccountNo": "50200012345678",
+    "ifscCode": "HDFC0000123"
+  },
+  { 
+    "id": "p2", 
+    "name": "Tata Consultancy Services", 
+    "type": "Customer", 
+    "gstin": "27AADCS5678B1Z2", 
+    "panNo": "AADCS5678B",
+    "contactPerson": "Rajesh Gopinathan",
+    "phone": "022-67789999",
+    "email": "contactus@tcs.com",
+    "address": "TCS House, Raveline Street, Fort",
+    "city": "Mumbai", 
+    "state": "Maharashtra", 
+    "openingBalance": 75000, 
+    "creditDays": 45,
+    "bankName": "ICICI Bank",
+    "bankAccountNo": "000101567890",
+    "ifscCode": "ICIC0000001"
+  }
+]

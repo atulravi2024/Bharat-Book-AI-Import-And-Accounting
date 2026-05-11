@@ -1,0 +1,12 @@
+[
+    {
+        "id": "im-1",
+        "type": "Sales",
+        "date": { "value": "2024-04-17" },
+        "partyName": { "value": "Retail Plus" },
+        "amount": { "value": "1500" },
+        "items": [
+            { "name": { "value": "Item Movement Example" }, "rate": { "value": "150" }, "quantity": { "value": "10" }, "total": { "value": "1500" } }
+        ]
+    }
+]

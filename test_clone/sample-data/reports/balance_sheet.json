@@ -1,0 +1,182 @@
+[
+    {
+        "id": "bs-1",
+        "type": "Journal",
+        "isSample": true,
+        "sampleSetId": "balance_sheet",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "5000000" },
+        "debitLedger": { "value": "HDFC Current A/c" },
+        "creditLedger": { "value": "Capital A/c" },
+        "partyName": { "value": "Capital A/c" },
+        "narration": { "value": "Owner's Equity / Initial Capital" },
+        "items": []
+    },
+    {
+        "id": "bs-2",
+        "type": "Journal",
+        "isSample": true,
+        "sampleSetId": "balance_sheet",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "3500000" },
+        "debitLedger": { "value": "Plant & Machinery A/c" },
+        "creditLedger": { "value": "SBI Term Loan A/c" },
+        "partyName": { "value": "SBI Term Loan A/c" },
+        "narration": { "value": "Secured Loan for Manufacturing Plant" },
+        "items": []
+    },
+    {
+        "id": "bs-3",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "1200000" },
+        "debitLedger": { "value": "Packaging Machinery A/c" },
+        "creditLedger": { "value": "HDFC Current A/c" },
+        "partyName": { "value": "Fixed Assets" },
+        "narration": { "value": "Purchase of Packaging Machines" },
+        "items": []
+    },
+    {
+        "id": "bs-4",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "800000" },
+        "debitLedger": { "value": "Computers & IT Equipments" },
+        "creditLedger": { "value": "Tech Solutions Ltd" },
+        "partyName": { "value": "Sundry Creditors (Tech Solutions)" },
+        "narration": { "value": "Servers and workstations for E-com team" },
+        "items": []
+    },
+    {
+        "id": "bs-5",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "150000" },
+        "debitLedger": { "value": "Factory Rent Deposit" },
+        "creditLedger": { "value": "HDFC Current A/c" },
+        "partyName": { "value": "Loans & Advances (Asset)" },
+        "narration": { "value": "Security deposit for manufacturing unit" },
+        "items": []
+    },
+    {
+        "id": "bs-6",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "1800000" },
+        "debitLedger": { "value": "Closing Stock - Raw Materials" },
+        "creditLedger": { "value": "Trading A/c" },
+        "partyName": { "value": "Current Assets" },
+        "narration": { "value": "Fabric, buttons, thread in stock" },
+        "items": []
+    },
+    {
+        "id": "bs-7",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "500000" },
+        "debitLedger": { "value": "Closing Stock - WIP" },
+        "creditLedger": { "value": "Trading A/c" },
+        "partyName": { "value": "Current Assets" },
+        "narration": { "value": "Work in progress at factory floor" },
+        "items": []
+    },
+    {
+        "id": "bs-8",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "4500000" },
+        "debitLedger": { "value": "Closing Stock - Finished Goods" },
+        "creditLedger": { "value": "Trading A/c" },
+        "partyName": { "value": "Current Assets" },
+        "narration": { "value": "Ready to dispatch E-commerce inventory" },
+        "items": []
+    },
+    {
+        "id": "bs-9",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "650000" },
+        "debitLedger": { "value": "Amazon India (Seller A/c)" },
+        "creditLedger": { "value": "Sales A/c" },
+        "partyName": { "value": "Sundry Debtors" },
+        "narration": { "value": "Outstanding payouts from Amazon" },
+        "items": []
+    },
+    {
+        "id": "bs-10",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "420000" },
+        "debitLedger": { "value": "Flipkart Internet Pvt Ltd" },
+        "creditLedger": { "value": "Sales A/c" },
+        "partyName": { "value": "Sundry Debtors" },
+        "narration": { "value": "Outstanding payouts from Flipkart" },
+        "items": []
+    },
+    {
+        "id": "bs-11",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "280000" },
+        "debitLedger": { "value": "Shopify Payments (Stripe)" },
+        "creditLedger": { "value": "Sales A/c" },
+        "partyName": { "value": "Sundry Debtors" },
+        "narration": { "value": "D2C website settlement pending" },
+        "items": []
+    },
+    {
+        "id": "bs-12",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "950000" },
+        "debitLedger": { "value": "Purchases A/c" },
+        "creditLedger": { "value": "Vardhman Textiles" },
+        "partyName": { "value": "Sundry Creditors" },
+        "narration": { "value": "Payable for raw material (Fabric)" },
+        "items": []
+    },
+    {
+        "id": "bs-13",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "350000" },
+        "debitLedger": { "value": "Freight & Forwarding A/c" },
+        "creditLedger": { "value": "Delhivery Pvt Ltd" },
+        "partyName": { "value": "Sundry Creditors" },
+        "narration": { "value": "Payable for E-commerce shipping logistics" },
+        "items": []
+    },
+    {
+        "id": "bs-14",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "180000" },
+        "debitLedger": { "value": "Profit & Loss A/c" },
+        "creditLedger": { "value": "GST Payable A/c" },
+        "partyName": { "value": "Duties & Taxes" },
+        "narration": { "value": "Net GST liability for the period" },
+        "items": []
+    },
+    {
+        "id": "bs-15",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "45000" },
+        "debitLedger": { "value": "Profit & Loss A/c" },
+        "creditLedger": { "value": "TDS Payable A/c" },
+        "partyName": { "value": "Duties & Taxes" },
+        "narration": { "value": "TDS deducted on contractor payments" },
+        "items": []
+    },
+    {
+        "id": "bs-16",
+        "type": "Journal",
+        "date": { "value": "2024-04-01" },
+        "amount": { "value": "25000" },
+        "debitLedger": { "value": "Cash-in-hand" },
+        "creditLedger": { "value": "HDFC Current A/c" },
+        "partyName": { "value": "Cash" },
+        "narration": { "value": "Petty cash for factory expenses" },
+        "items": []
+    }
+]

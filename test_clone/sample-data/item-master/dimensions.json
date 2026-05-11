@@ -1,0 +1,5 @@
+[
+  {"id": "dm1", "name": "Standard (10x10x10)", "l": 10, "w": 10, "h": 10, "unit": "cm", "sampleSetId": "itemAttributes"},
+  {"id": "dm2", "name": "Large (50x30x20)", "l": 50, "w": 30, "h": 20, "unit": "cm", "sampleSetId": "itemAttributes"},
+  {"id": "dm3", "name": "Slim (30x10x5)", "l": 30, "w": 10, "h": 5, "unit": "cm", "sampleSetId": "itemAttributes"}
+]

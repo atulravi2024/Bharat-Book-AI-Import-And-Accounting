@@ -1,0 +1,14 @@
+[
+    {
+        "id": "tb-1",
+        "type": "Journal",
+        "isSample": true,
+        "sampleSetId": "trial_balance",
+        "date": { "value": "2024-04-23" },
+        "amount": { "value": "100" },
+        "debitLedger": { "value": "Petty Cash" },
+        "creditLedger": { "value": "Main Cash" },
+        "narration": { "value": "Trial balance adjustment" },
+        "items": []
+    }
+]

@@ -1,0 +1,59 @@
+[
+  {
+    "id": "bom-pharma-batch",
+    "name": "Paracetamol 500mg Batch (100k Tablets)",
+    "itemId": "item-para-tablet",
+    "quantityProduced": 100000,
+    "isActive": true,
+    "description": "Standard production BOM for 500mg Paracetamol tablets - Batch size 100,000",
+    "components": [
+      {
+        "itemId": "api-paracetamol",
+        "quantity": 50,
+        "uom": "KG",
+        "scrapPercentage": 0.2
+      },
+      {
+        "itemId": "excipient-binder",
+        "quantity": 5,
+        "uom": "KG",
+        "scrapPercentage": 1
+      },
+      {
+        "itemId": "excipient-filler",
+        "quantity": 10,
+        "uom": "KG",
+        "scrapPercentage": 0.5
+      }
+    ],
+    "routing": [
+      {
+        "step": 1,
+        "operation": "Gramulation & Mixing",
+        "workCenter": "Granulator-01",
+        "setupTime": 2,
+        "runTime": 4,
+        "laborCostPerHour": 1500,
+        "overheadCostPerHour": 1000
+      },
+      {
+        "step": 2,
+        "operation": "Compression",
+        "workCenter": "Rotary Press-A",
+        "setupTime": 1.5,
+        "runTime": 6,
+        "laborCostPerHour": 1200,
+        "overheadCostPerHour": 1500
+      },
+      {
+        "step": 3,
+        "operation": "Coating",
+        "workCenter": "Coating Pan-02",
+        "setupTime": 1,
+        "runTime": 3,
+        "laborCostPerHour": 1200,
+        "overheadCostPerHour": 800
+      }
+    ]
+  }
+]

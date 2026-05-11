@@ -1,0 +1,13 @@
+[
+    {
+        "id": "db-1",
+        "type": "Payment",
+        "date": { "value": "2024-04-12" },
+        "partyName": { "value": "Reliance Energy" },
+        "amount": { "value": "2300" },
+        "ledger": { "value": "Electricity Expenses" },
+        "paymentMode": { "value": "NEFT" },
+        "narration": { "value": "Daybook Entry 1" },
+        "items": []
+    }
+]
