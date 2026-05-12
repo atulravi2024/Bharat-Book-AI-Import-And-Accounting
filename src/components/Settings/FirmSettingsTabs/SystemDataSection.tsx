@@ -105,15 +105,14 @@ export const SystemDataSection: React.FC<Props> = ({
                              >
                                Export 3D Backup
                              </button>
-                             <input
-                               type="file"
-                               accept=".json"
-                               ref={fileInputRef}
-                               onChange={handleRestoreBackup}
-                               className="hidden"
-                             />
                              <button
-                               onClick={() => fileInputRef.current?.click()}
+                               onClick={() => {
+                                 if (fileInputRef && fileInputRef.current) {
+                                   fileInputRef.current.click();
+                                 } else {
+                                   document.getElementById('globalHiddenFileInput')?.click();
+                                 }
+                               }}
                                className="px-6 py-3 bg-gray-50 text-gray-700 font-bold rounded-xl hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors"
                              >
                                Restore Backup

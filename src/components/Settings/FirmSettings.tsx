@@ -433,6 +433,130 @@ const initialFirmData = {
   softCloseDate: "",
 };
 
+const ALL_SEARCH_FIELDS = [
+  // Basic Details
+  { label: "Company Name", id: "basicCompany" },
+  { label: "Trade Name", id: "basicCompany" },
+  { label: "Business Slogan", id: "basicCompany" },
+  { label: "Date of Incorporation", id: "basicCompany" },
+  { label: "Employee Count", id: "basicCompany" },
+  { label: "Annual Turnover", id: "basicCompany" },
+
+  // Profile Details
+  { label: "Business Structure", id: "businessProfile" },
+  { label: "Primary Business Role", id: "businessProfile" },
+  { label: "Business Nature", id: "businessProfile" },
+  { label: "Industry Domain", id: "businessProfile" },
+  { label: "E-Commerce Operation", id: "businessProfile" },
+
+  // Contacts
+  { label: "Primary Contact Name", id: "primaryContacts" },
+  { label: "Contact Designation", id: "primaryContacts" },
+  { label: "Email Address", id: "primaryContacts" },
+  { label: "Phone Number", id: "primaryContacts" },
+  { label: "Support Email", id: "primaryContacts" },
+  { label: "Support Phone", id: "primaryContacts" },
+  { label: "WhatsApp", id: "primaryContacts" },
+
+  // Address
+  { label: "Complete Address", id: "addressDetails" },
+  { label: "State", id: "addressDetails" },
+  { label: "Country", id: "addressDetails" },
+  { label: "City", id: "addressDetails" },
+  { label: "District", id: "addressDetails" },
+  { label: "Pincode", id: "addressDetails" },
+  { label: "Jurisdiction City", id: "addressDetails" },
+
+  // Tax Registration
+  { label: "GSTIN", id: "statutoryTax" },
+  { label: "PAN", id: "statutoryTax" },
+  { label: "TAN", id: "statutoryTax" },
+
+  // Licenses
+  { label: "CIN", id: "businessLicenses" },
+  { label: "MSME Number", id: "businessLicenses" },
+  { label: "IEC Code", id: "businessLicenses" },
+  { label: "Trade License", id: "businessLicenses" },
+  { label: "FSSAI", id: "businessLicenses" },
+  { label: "Drug License", id: "businessLicenses" },
+
+  // HR Process
+  { label: "PF Registration Amount", id: "hrPayroll" },
+  { label: "ESIC", id: "hrPayroll" },
+  { label: "PT Number", id: "hrPayroll" },
+  { label: "LUT", id: "hrPayroll" },
+
+  // Financial General
+  { label: "Financial Year", id: "financial_general" },
+  { label: "Base Currency", id: "financial_general" },
+  { label: "Books Freezing Date", id: "financial_general" },
+  { label: "Accounting Method", id: "financial_general" },
+
+  // Financial Taxation
+  { label: "Default Tax Category", id: "financial_tax" },
+  { label: "Tax Filing", id: "financial_tax" },
+  { label: "TDS", id: "financial_tax" },
+
+  // Financial Formatting
+  { label: "Date Format", id: "financial_formatting" },
+  { label: "Currency Symbol", id: "financial_formatting" },
+  { label: "Decimal", id: "financial_formatting" },
+  { label: "Rounding", id: "financial_formatting" },
+
+  // Financial Advanced
+  { label: "Backdated", id: "financial_advanced" },
+  { label: "Soft Close Date", id: "financial_advanced" },
+
+  // Bank
+  { label: "Bank Name", id: "bank" },
+  { label: "Account Number", id: "bank" },
+  { label: "IFSC", id: "bank" },
+  { label: "SWIFT", id: "bank" },
+  { label: "MICR", id: "bank" },
+  { label: "Branch", id: "bank" },
+  { label: "UPI", id: "bank" },
+
+  // Social
+  { label: "Company Website", id: "social" },
+  { label: "LinkedIn", id: "social" },
+  { label: "Twitter", id: "social" },
+  { label: "Facebook", id: "social" },
+  { label: "Instagram", id: "social" },
+  { label: "YouTube", id: "social" },
+
+  // Operational
+  { label: "Timezone", id: "operational" },
+  { label: "Working Days", id: "operational" },
+  { label: "Working Hours", id: "operational" },
+  { label: "Holidays", id: "operational" },
+
+  // Billing
+  { label: "Invoice Prefix", id: "billing" },
+  { label: "Quotation Prefix", id: "billing" },
+  { label: "Payment Terms", id: "billing" },
+
+  // Inventory
+  { label: "Inventory Valuation Method", id: "inventoryLogistics" },
+  { label: "Enable Negative Stock", id: "inventoryLogistics" },
+  { label: "Shipping Partner", id: "inventoryLogistics" },
+  { label: "Delivery Time", id: "inventoryLogistics" },
+
+  // Branding
+  { label: "Logo", id: "branding" },
+  { label: "Theme Color", id: "branding" },
+  { label: "Signature", id: "branding" },
+  { label: "Stamp", id: "branding" },
+
+  // Legal
+  { label: "Notes", id: "legal Remarks" },
+
+  // System
+  { label: "Audit Log", id: "systemCompliance" },
+  { label: "Format Validation", id: "systemCompliance" },
+  { label: "Retention Period", id: "systemCompliance" },
+  { label: "Backup", id: "systemCompliance" },
+];
+
 export interface FirmSettingsProps {
   ledgerMasters?: LedgerMaster[];
 }
@@ -440,22 +564,141 @@ export interface FirmSettingsProps {
 export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<string | null>(
-    "basic",
+    null,
   );
-  const [firmData, setFirmData] = useState(initialFirmData);
+  const [firmData, setFirmData] = useState(() => {
+    const saved = localStorage.getItem("firmSettings_v1");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Error parsing saved firm settings:", e);
+      }
+    }
+    return initialFirmData;
+  });
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const searchDropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchDropdownRef.current && !searchDropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSearchSelect = (item: typeof ALL_SEARCH_FIELDS[0]) => {
+    // If it's already open, we don't need to wait for animation as much
+    const isAlreadyOpen = activeAccordion === item.id;
+    setActiveAccordion(item.id);
+    setSearchTerm("");
+    setShowDropdown(false);
+    
+    // Wait for the accordion to expand and content to render
+    const delay = isAlreadyOpen ? 100 : 500;
+    setTimeout(() => {
+        // Find all labels and look for the one that best matches the search label
+        const labels = Array.from(document.querySelectorAll('label'));
+        const targetLabel = labels.find(l => {
+            const text = l.textContent?.toLowerCase().trim() || "";
+            const searchLabel = item.label.toLowerCase().trim();
+            return text === searchLabel || text.includes(searchLabel) || searchLabel.includes(text);
+        });
+        
+        if (targetLabel) {
+            targetLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Look for the interactive element within the same container or nearby
+            const container = targetLabel.closest('.space-y-2') || targetLabel.parentElement;
+            const interactive = container?.querySelector('input, select, textarea, [role="combobox"], button:not([title])') as HTMLElement;
+            
+            if (interactive) {
+               // Special handling for SearchableDropdown or similar custom components
+               const focusTarget = interactive.getAttribute('role') === 'combobox' 
+                  ? interactive 
+                  : (interactive.tagName === 'INPUT' || interactive.tagName === 'SELECT' || interactive.tagName === 'TEXTAREA' ? interactive : null);
+
+               if (focusTarget) {
+                 focusTarget.focus();
+               }
+
+               // Highlight the entire container for better visibility
+               const highlightTarget = container as HTMLElement;
+               if (highlightTarget) {
+                 highlightTarget.classList.add('ring-4', 'ring-blue-500/40', 'bg-blue-50/50', 'rounded-xl', 'transition-all', 'duration-500', 'z-10', 'relative');
+                 setTimeout(() => {
+                   highlightTarget.classList.remove('ring-4', 'ring-blue-500/40', 'bg-blue-50/50');
+                 }, 3000);
+               }
+            }
+        }
+    }, delay); 
+  };
 
   const handleLoad = () => {
-    // Logic for loading (could be triggers file input or just a log for now if specific load source is not defined)
     if (fileInputRef.current) {
         fileInputRef.current.click();
+    } else {
+        const globalInput = document.getElementById('globalHiddenFileInput') as HTMLInputElement;
+        globalInput?.click();
     }
   };
 
   const handleClear = () => {
-    if (window.confirm("Are you sure you want to clear all fields? This will reset the form but not delete your saved settings until you click Save.")) {
-      setFirmData(initialFirmData);
+    // Explicit Yes/No style confirmation for the prompt
+    const message = "CONFIRM ACTION:\n\nThis will CLEAR ALL FILLED data in this form.\n\nAre you sure you want to proceed? \n\nClick 'OK' for YES, or 'Cancel' for NO.";
+    
+    if (window.confirm(message)) {
+      console.log("Action: User confirmed Clear All Fields");
+      
+      const clearedData = Object.keys(initialFirmData).reduce((acc: any, key) => {
+        const val = (initialFirmData as any)[key];
+        if (typeof val === "boolean") {
+          acc[key] = false;
+        } else if (typeof val === "number") {
+          acc[key] = 0;
+        } else {
+          acc[key] = "";
+        }
+        return acc;
+      }, {});
+      
+      // Update state
+      setFirmData(clearedData);
+      
+      // Persist to localStorage immediately
+      localStorage.setItem("firmSettings_v1", JSON.stringify(clearedData));
+      
+      // Expand first section and scroll to top for visual confirmation
+      setActiveAccordion("basicCompany");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      
+      alert("All fields have been cleared successfully.");
+    }
+  };
+
+  const handleResetToDefault = () => {
+    const message = "CONFIRM RESET:\n\nThis will restore ALL SETTINGS to their factory default values.\n\nAre you sure you want to proceed? \n\nClick 'OK' for YES, or 'Cancel' for NO.";
+    
+    if (window.confirm(message)) {
+      console.log("Action: User confirmed Reset to Defaults");
+      
+      // Update state to defaults
+      setFirmData({ ...initialFirmData });
+      
+      // Remove from localStorage to ensure clean state
+      localStorage.removeItem("firmSettings_v1");
+      
+      // Visual feedback
+      setActiveAccordion("basicCompany");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      
+      alert("Settings have been reset to factory defaults.");
     }
   };
 
@@ -518,11 +761,14 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
     if(fileInputRef.current) fileInputRef.current.value = "";
   };
 
+
   const handleFactoryReset = () => {
-    if (window.confirm("Are you sure you want to run the factory reset tooling? This action cannot be undone.")) {
-      setFirmData(initialFirmData);
+    if (window.confirm("Are you sure you want to run the factory reset? This will clear all settings and reset to defaults.")) {
+      setFirmData({ ...initialFirmData });
       localStorage.removeItem("firmSettings_v1");
-      alert("System Reset to factory defaults.");
+      // Expand first section for visual confirmation
+      setActiveAccordion("basicCompany");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -532,35 +778,41 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
 
   const SECTIONS = [
     { id: "basicCompany", label: "Basic Details", component: BasicSection },
-    { id: "profile", label: "Profile Details", component: ProfileSection },
-    { id: "contacts", label: "Contacts & Support", component: ContactsSection },
-    { id: "address", label: "Registered Address", component: AddressSection },
-    { id: "taxRegistration", label: "Tax Registrations", component: TaxRegistrationSection },
-    { id: "licenses", label: "Business Licenses", component: LicensesSection },
+    { id: "businessProfile", label: "Profile Details", component: ProfileSection },
+    { id: "primaryContacts", label: "Contacts & Support", component: ContactsSection },
+    { id: "addressDetails", label: "Registered Address", component: AddressSection },
+    { id: "statutoryTax", label: "Tax Registrations", component: TaxRegistrationSection },
+    { id: "businessLicenses", label: "Business Licenses", component: LicensesSection },
     { id: "hrPayroll", label: "HR & Payroll Setup", component: HrPayrollSection },
-    { id: "financialGeneral", label: "Financial General", component: FinancialGeneralSection },
-    { id: "financialTaxation", label: "Financial Taxation", component: FinancialTaxationSection },
-    { id: "financialFormatting", label: "Financial Formatting", component: FinancialFormattingSection },
-    { id: "financialAdvanced", label: "Financial Advanced", component: FinancialAdvancedSection },
-    { id: "bankDetails", label: "Bank Account Details", component: BankDetailsSection },
-    { id: "socialWeb", label: "Social & Web Assets", component: SocialWebSection },
+    { id: "financial_general", label: "Financial General", component: FinancialGeneralSection },
+    { id: "financial_tax", label: "Financial Taxation", component: FinancialTaxationSection },
+    { id: "financial_formatting", label: "Financial Formatting", component: FinancialFormattingSection },
+    { id: "financial_advanced", label: "Financial Advanced", component: FinancialAdvancedSection },
+    { id: "bank", label: "Bank Account Details", component: BankDetailsSection },
+    { id: "social", label: "Social & Web Assets", component: SocialWebSection },
     { id: "operational", label: "Operational Preferences", component: OperationalSection },
-    { id: "billingSales", label: "Billing & Sales Setup", component: BillingSalesSection },
+    { id: "billing", label: "Billing & Sales Setup", component: BillingSalesSection },
     { id: "inventoryLogistics", label: "Inventory & Logistics", component: InventoryLogisticsSection },
-    { id: "brandingAssets", label: "Branding Assets", component: BrandingAssetsSection },
-    { id: "legalRemarks", label: "Legal & Remarks", component: LegalRemarksSection },
-    { id: "systemData", label: "System & Backup", component: SystemDataSection },
+    { id: "branding", label: "Branding Assets", component: BrandingAssetsSection },
+    { id: "legal Remarks", label: "Legal & Remarks", component: LegalRemarksSection },
+    { id: "systemCompliance", label: "System & Backup", component: SystemDataSection },
   ];
 
-  const filteredSections = SECTIONS.filter(s => 
-    s.label.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredSections = SECTIONS;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
+      <input
+        type="file"
+        accept=".json"
+        ref={fileInputRef}
+        onChange={handleRestoreBackup}
+        className="hidden"
+        id="globalHiddenFileInput"
+      />
       {/* Header Row - Refactored for responsiveness and new controls */}
       <div className="flex flex-col md:flex-row items-center justify-between p-4 sm:p-6 lg:p-8 gap-4 border-b border-gray-50 dark:border-gray-700/50">
-        <div className="flex items-center w-full md:w-auto">
+        <div className="flex items-center w-full md:w-auto shrink-0">
           <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white flex items-center whitespace-nowrap">
             <AdminIcon className="mr-3 text-blue-600 w-6 h-6 sm:w-8 sm:h-8" /> 
             Firm Details
@@ -568,7 +820,7 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
         </div>
 
         {/* Search Bar - Flex-1 on md+ to take available space */}
-        <div className="relative w-full md:flex-1 md:max-w-md">
+        <div className="relative w-full md:flex-1 md:max-w-xl mx-0 md:mx-4" ref={searchDropdownRef}>
           <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
             <Search className="h-4 w-4 text-gray-400" />
           </div>
@@ -576,9 +828,36 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
             type="text"
             placeholder="Search settings..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setShowDropdown(true);
+            }}
+            onFocus={() => {
+              if (searchTerm.trim() !== '') setShowDropdown(true);
+            }}
             className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm font-medium transition-all"
           />
+          {showDropdown && searchTerm.trim() !== '' && (
+            <div className="absolute top-14 left-0 right-0 max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50">
+              {ALL_SEARCH_FIELDS.filter(field => 
+                 field.label.toLowerCase().includes(searchTerm.toLowerCase())
+              ).map((field, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSearchSelect(field)}
+                  className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition-colors"
+                >
+                  <span className="font-bold">{field.label}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 block">in {SECTIONS.find(s => s.id === field.id)?.label || 'Settings'}</span>
+                </button>
+              ))}
+              {ALL_SEARCH_FIELDS.filter(field => field.label.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (
+                <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center font-medium">
+                  No settings found matching "{searchTerm}"
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Action Buttons - Unified Styling & Responsive Labels */}
@@ -602,7 +881,7 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
           </button>
 
           <button
-            onClick={handleFactoryReset}
+            onClick={handleResetToDefault}
             title="Reset to Defaults"
             className="px-4 lg:px-6 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-lg active:scale-95 group"
           >
@@ -613,23 +892,13 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
           <button
             onClick={handleSave}
             title="Save Configuration"
-            className={`px-4 lg:px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-lg active:scale-95 ${
+            className={`p-3 lg:px-6 lg:py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-lg active:scale-95 ${
               isSaved 
                 ? "bg-green-500 text-white shadow-green-200 dark:shadow-none" 
                 : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200 dark:shadow-none"
             } `}
           >
-            {isSaved ? (
-              <>
-                <CheckCircleIcon className="w-5 h-5 lg:mr-2" /> 
-                <span className="hidden lg:inline">Saved!</span>
-              </>
-            ) : (
-              <>
-                <Save className="w-5 h-5 lg:mr-2" />
-                <span className="hidden lg:inline">Save</span>
-              </>
-            )}
+            {isSaved ? <CheckCircleIcon className="w-5 h-5" /> : <Save className="w-5 h-5" />}
           </button>
         </div>
       </div>
@@ -644,7 +913,7 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
             toggleAccordion={toggleAccordion} 
             bankOptions={bankOptions} 
             ledgerMasters={ledgerMasters}
-            {...(id === 'systemData' ? {
+            {...(id === 'systemCompliance' ? {
               handleExportBackup,
               handleRestoreBackup,
               handleFactoryReset,
@@ -652,12 +921,6 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
             } : {})}
           />
         ))}
-        {filteredSections.length === 0 && (
-          <div className="p-12 text-center">
-            <Search className="w-12 h-12 text-gray-200 mx-auto mb-4" />
-            <p className="text-gray-500 font-bold">No settings found matching "{searchTerm}"</p>
-          </div>
-        )}
       </div>
     </div>
   );
