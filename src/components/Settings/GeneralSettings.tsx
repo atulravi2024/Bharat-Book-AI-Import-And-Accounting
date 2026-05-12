@@ -90,7 +90,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                         onClick={handleSave}
                         className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-blue-100 hover:scale-105 active:scale-95 transition-all flex items-center"
                     >
-                        <CheckCircleIcon className="mr-3" /> Save Changes
+                        <CheckCircleIcon className="mr-3" /> Save
                     </button>
                 </div>
             </div>

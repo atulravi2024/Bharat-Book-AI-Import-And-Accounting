@@ -28,7 +28,7 @@ import {
   CheckCircleIcon,
   AdminIcon,
 } from "../icons/IconComponents";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Search, Download, RotateCcw, Save, FormInput, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BUSINESS_SUBDOMAINS: Record<string, { label: string; value: string }[]> =
@@ -439,11 +439,25 @@ export interface FirmSettingsProps {
 
 export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }) => {
   const [isSaved, setIsSaved] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [activeAccordion, setActiveAccordion] = useState<string | null>(
     "basic",
   );
   const [firmData, setFirmData] = useState(initialFirmData);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleLoad = () => {
+    // Logic for loading (could be triggers file input or just a log for now if specific load source is not defined)
+    if (fileInputRef.current) {
+        fileInputRef.current.click();
+    }
+  };
+
+  const handleClear = () => {
+    if (window.confirm("Are you sure you want to clear all fields? This will reset the form but not delete your saved settings until you click Save.")) {
+      setFirmData(initialFirmData);
+    }
+  };
 
   const bankOptions = React.useMemo(() => {
     const masterBanks = ledgerMasters
@@ -516,48 +530,134 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
     setActiveAccordion(activeAccordion === section ? null : section);
   };
 
+  const SECTIONS = [
+    { id: "basicCompany", label: "Basic Details", component: BasicSection },
+    { id: "profile", label: "Profile Details", component: ProfileSection },
+    { id: "contacts", label: "Contacts & Support", component: ContactsSection },
+    { id: "address", label: "Registered Address", component: AddressSection },
+    { id: "taxRegistration", label: "Tax Registrations", component: TaxRegistrationSection },
+    { id: "licenses", label: "Business Licenses", component: LicensesSection },
+    { id: "hrPayroll", label: "HR & Payroll Setup", component: HrPayrollSection },
+    { id: "financialGeneral", label: "Financial General", component: FinancialGeneralSection },
+    { id: "financialTaxation", label: "Financial Taxation", component: FinancialTaxationSection },
+    { id: "financialFormatting", label: "Financial Formatting", component: FinancialFormattingSection },
+    { id: "financialAdvanced", label: "Financial Advanced", component: FinancialAdvancedSection },
+    { id: "bankDetails", label: "Bank Account Details", component: BankDetailsSection },
+    { id: "socialWeb", label: "Social & Web Assets", component: SocialWebSection },
+    { id: "operational", label: "Operational Preferences", component: OperationalSection },
+    { id: "billingSales", label: "Billing & Sales Setup", component: BillingSalesSection },
+    { id: "inventoryLogistics", label: "Inventory & Logistics", component: InventoryLogisticsSection },
+    { id: "brandingAssets", label: "Branding Assets", component: BrandingAssetsSection },
+    { id: "legalRemarks", label: "Legal & Remarks", component: LegalRemarksSection },
+    { id: "systemData", label: "System & Backup", component: SystemDataSection },
+  ];
+
+  const filteredSections = SECTIONS.filter(s => 
+    s.label.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
-      <div className="flex items-center justify-between p-6 sm:p-8 mb-2">
-        <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white flex items-center">
-          <AdminIcon className="mr-3 text-blue-600" /> Firm Details
-        </h2>
-        <button
-          onClick={handleSave}
-          className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold text-sm transition-all flex items-center shadow-lg ${isSaved ? "bg-green-500 text-white shadow-green-200 dark:shadow-none" : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200 dark:shadow-none"} `}
-        >
-          {isSaved ? (
-            <>
-              <CheckCircleIcon className="mr-2" /> Saved!
-            </>
-          ) : (
-            "Save Configuration"
-          )}
-        </button>
+    <div className="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
+      {/* Header Row - Refactored for responsiveness and new controls */}
+      <div className="flex flex-col md:flex-row items-center justify-between p-4 sm:p-6 lg:p-8 gap-4 border-b border-gray-50 dark:border-gray-700/50">
+        <div className="flex items-center w-full md:w-auto">
+          <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white flex items-center whitespace-nowrap">
+            <AdminIcon className="mr-3 text-blue-600 w-6 h-6 sm:w-8 sm:h-8" /> 
+            Firm Details
+          </h2>
+        </div>
+
+        {/* Search Bar - Flex-1 on md+ to take available space */}
+        <div className="relative w-full md:flex-1 md:max-w-md">
+          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+            <Search className="h-4 w-4 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search settings..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm font-medium transition-all"
+          />
+        </div>
+
+        {/* Action Buttons - Unified Styling & Responsive Labels */}
+        <div className="flex items-center gap-2 w-full md:w-auto justify-center md:justify-end">
+          <button
+            onClick={handleLoad}
+            title="Load Local JSON"
+            className="px-4 lg:px-6 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-blue-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-lg active:scale-95 group"
+          >
+            <Download className="w-5 h-5 text-gray-500 group-hover:text-blue-500 transition-colors lg:mr-2" />
+            <span className="hidden lg:inline">Load</span>
+          </button>
+
+          <button
+            onClick={handleClear}
+            title="Clear All Fields"
+            className="px-4 lg:px-6 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-orange-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-lg active:scale-95 group"
+          >
+            <Trash2 className="w-5 h-5 text-gray-500 group-hover:text-orange-500 transition-colors lg:mr-2" />
+            <span className="hidden lg:inline">Clear</span>
+          </button>
+
+          <button
+            onClick={handleFactoryReset}
+            title="Reset to Defaults"
+            className="px-4 lg:px-6 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-lg active:scale-95 group"
+          >
+            <RotateCcw className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors lg:mr-2" />
+            <span className="hidden lg:inline">Reset</span>
+          </button>
+
+          <button
+            onClick={handleSave}
+            title="Save Configuration"
+            className={`px-4 lg:px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-lg active:scale-95 ${
+              isSaved 
+                ? "bg-green-500 text-white shadow-green-200 dark:shadow-none" 
+                : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200 dark:shadow-none"
+            } `}
+          >
+            {isSaved ? (
+              <>
+                <CheckCircleIcon className="w-5 h-5 lg:mr-2" /> 
+                <span className="hidden lg:inline">Saved!</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-5 h-5 lg:mr-2" />
+                <span className="hidden lg:inline">Save</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       <div className="space-y-0 text-left">
-
-                <BasicSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <ProfileSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <ContactsSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <AddressSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <TaxRegistrationSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <LicensesSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <HrPayrollSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <FinancialGeneralSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <FinancialTaxationSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <FinancialFormattingSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <FinancialAdvancedSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <BankDetailsSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <SocialWebSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <OperationalSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <BillingSalesSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <InventoryLogisticsSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <BrandingAssetsSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <LegalRemarksSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} />
-        <SystemDataSection firmData={firmData} setFirmData={setFirmData} activeAccordion={activeAccordion} toggleAccordion={toggleAccordion} bankOptions={bankOptions} ledgerMasters={ledgerMasters} handleExportBackup={handleExportBackup} handleRestoreBackup={handleRestoreBackup} handleFactoryReset={handleFactoryReset} fileInputRef={fileInputRef} />
-
+        {filteredSections.map(({ id, component: Component }) => (
+          <Component 
+            key={id}
+            firmData={firmData} 
+            setFirmData={setFirmData} 
+            activeAccordion={activeAccordion} 
+            toggleAccordion={toggleAccordion} 
+            bankOptions={bankOptions} 
+            ledgerMasters={ledgerMasters}
+            {...(id === 'systemData' ? {
+              handleExportBackup,
+              handleRestoreBackup,
+              handleFactoryReset,
+              fileInputRef
+            } : {})}
+          />
+        ))}
+        {filteredSections.length === 0 && (
+          <div className="p-12 text-center">
+            <Search className="w-12 h-12 text-gray-200 mx-auto mb-4" />
+            <p className="text-gray-500 font-bold">No settings found matching "{searchTerm}"</p>
+          </div>
+        )}
       </div>
     </div>
   );
