@@ -63,7 +63,8 @@ Bharat Book AI Import is a high-performance, AI-driven ERP companion designed to
   - Notably includes `/components/Settings/FirmSettingsTabs` which dynamically renders 19 configurable settings categories using our modular React accordion pattern.
 - `/lib`: Utility functions and shared constants
 - `/services`: Core business logic, matching engine, and AI integration
-- `/memory/design`: In-depth UI design specifications for Mobile and Desktop
+- `/public/memory/design`: In-depth UI design specifications for Mobile and Desktop
+- `/public/sample-data`: Static JSON data serving as the database backend
 - *(Note: Temporary build scripts and `.cjs` automation files were explicitly purged to maintain a lean, robust codebase.)*
 
 ---

@@ -1,6 +1,0 @@
-[
-  { "id": "as1", "code": "ISO-9001", "name": "ISO 9001:2015", "categoryId": "ac1", "description": "Quality management systems requirements" },
-  { "id": "as2", "code": "ISO-14001", "name": "ISO 14001:2015", "categoryId": "ac2", "description": "Environmental management systems requirements" },
-  { "id": "as3", "code": "CE-MARK", "name": "CE Marking", "categoryId": "ac1", "description": "European Union health, safety, and environmental protection standards" },
-  { "id": "as4", "code": "ROHS", "name": "RoHS Compliance", "categoryId": "ac2", "description": "Restriction of Hazardous Substances in electrical and electronic equipment" }
-]

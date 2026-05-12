@@ -176,7 +176,24 @@ const TransactionTypeSelect: React.FC<{
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showDropdown]);
 
-  const defaultOptions = ['Deposit', 'Withdrawal', 'Bank Charges', 'Interest Income', 'UPI', 'NEFT/RTGS', 'ATM Withdrawal', 'Dividend', 'Loan EMI', 'Credit Card Payment'];
+  const [metaOptions, setMetaOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchMeta = async () => {
+        try {
+            const resp = await fetch('/sample-data/masters/metadata.json');
+            if (resp.ok) {
+                const data = await resp.json();
+                if (data.importCorrectionOptions) setMetaOptions(data.importCorrectionOptions);
+            }
+        } catch (e) {
+            console.error("Failed to load metadata in Step2Correction TransactionTypeSelect", e);
+        }
+    };
+    fetchMeta();
+  }, []);
+
+  const defaultOptions = metaOptions.length > 0 ? metaOptions : ['Deposit', 'Withdrawal', 'Bank Charges', 'Interest Income', 'UPI', 'NEFT/RTGS', 'ATM Withdrawal', 'Dividend', 'Loan EMI', 'Credit Card Payment'];
 
   const suggestMappings = () => {
     const upperText = narration.toUpperCase();

@@ -1,67 +1,32 @@
 
-export const initialMappingRules = [
-    { kw: "RENT / OFFICE", led: "Rent Expense A/c" },
-    { kw: "SALARY / WAGES", led: "Salary Payable" },
-    { kw: "ZOMATO / SWIGGY", led: "Staff Welfare (Meals)" },
-    { kw: "UBER / OLA / TAXI", led: "Conveyance Expenses" },
-    { kw: "FUEL / PETROL / DIESEL", led: "Vehicle Fuel & Maint" },
-    { kw: "ELECTRICITY / MSEB", led: "Electricity Expenses" },
-    { kw: "WATER / TANKER", led: "Water Charges" },
-    { kw: "AIRTEL / JIO / VODA", led: "Telephone & Internet" },
-    { kw: "BROADBAND / ACT", led: "Telephone & Internet" },
-    { kw: "AMAZON / FLIPKART", led: "Office Misc Supplies" },
-    { kw: "STATIONERY / XEROX", led: "Printing & Stationery" },
-    { kw: "COURIER / SPEEDPOST", led: "Postage & Courier" },
-    { kw: "CLEANING / HOUSEKEEPING", led: "Maintenance Charges" },
-    { kw: "REPAIR / SERVICE", led: "Repairs & Maintenance" },
-    { kw: "AUDIT / CA / LEGAL", led: "Professional Fees" },
-    { kw: "INSURANCE / LIC", led: "Insurance Premium" },
-    { kw: "TDS / INCOME TAX", led: "Tax Paid" },
-    { kw: "GST / IGST / CGST", led: "GST Output/Input" },
-    { kw: "LOAN / EMI", led: "Loan Repayment" },
-    { kw: "INTEREST / INT", led: "Bank Interest Expense" },
-    { kw: "DIVIDEND", led: "Investment Income" },
-    { kw: "DONATION", led: "Charity & Donation" },
-    { kw: "TEA / COFFEE / SNACKS", led: "Staff Welfare" },
-    { kw: "GIFT / DIWALI", led: "Staff Welfare (Gifts)" },
-    { kw: "BONUS / INCENTIVE", led: "Salary & Wages" },
-    { kw: "MUNICIPAL / TAX", led: "Rates & Taxes" },
-    { kw: "PENALTY / FINE", led: "Penalty & Interest" },
-    { kw: "BANK CHG / SMS", led: "Bank Charges" },
-    { kw: "REFUND / REVERSAL", led: "Suspense Account" },
-    { kw: "CASH DEP / BY CASH", led: "Cash-in-Hand (Contra)" },
-    { kw: "CASH WDL / ATM", led: "Cash-in-Hand (Contra)" },
-    { kw: "CAR SERVICE / TYRE", led: "Vehicle Maintenance" },
-    { kw: "SOFTWARE / MSFT / AWS", led: "Software Subscription" },
-    { kw: "ADVERTISEMENT / FB", led: "Marketing & Ads" },
-    { kw: "STAFF WELFARE", led: "Staff Welfare" },
-    { kw: "STIPEND / INTERN", led: "Wages & Salaries" },
-    { kw: "FREIGHT / TRANSPORT", led: "Freight Outward" },
-    { kw: "LOADING / UNLOADING", led: "Handling Charges" },
-    { kw: "GARDENING", led: "Office Maintenance" },
-    { kw: "MEMBERSHIP / CLUB", led: "Subscription Fees" },
-    { kw: "HARDWARE / RAM / SSD", led: "Computer Repairs" },
-    { kw: "NEWSPAPER", led: "Office Expenses" },
-    { kw: "CHARITY", led: "Donation A/c" },
-    { kw: "MEDICAL / FIRST AID", led: "Staff Welfare" },
-    { kw: "ENTERTAINMENT", led: "Misc Expenses" },
-    { kw: "LOAN PROCESSING", led: "Bank Charges" },
-    { kw: "CREDIT CARD", led: "Credit Card Liability" },
-    { kw: "SWEEP IN / OUT", led: "Inter-bank Transfer" },
-    { kw: "MORTGAGE / HOME", led: "Loan A/c" },
-    { kw: "CONSULTANCY", led: "Professional Fees" }
-];
+export let initialMappingRules: any[] = [];
+
+// Helper to load default mapping rules
+export const loadDefaultMappingRules = async () => {
+    try {
+        const response = await fetch('/sample-data/ledger-master/default_mapping_rules.json');
+        if (response.ok) {
+            initialMappingRules = await response.json();
+            return initialMappingRules;
+        }
+    } catch (e) {
+        console.error("Failed to load default mapping rules", e);
+    }
+    return [];
+};
 
 export const runMappingSimulation = (input: string, options: any) => {
     const { 
-        mappingRules, aliases, bankChargesKeywords, cashFlowKeywords, selfTransferKeywords, toggles,
-        bankShortCodes, bankIgnoreWords, paymentModes, paymentChannels, ifscPrefixes,
+        mappingRules = [], aliases = [], bankChargesKeywords = '', cashFlowKeywords = '', selfTransferKeywords = '', toggles = {},
+        bankShortCodes = '', bankIgnoreWords = '', paymentModes = '', paymentChannels = '', ifscPrefixes = '',
         // Structural settings
         splitDelimiter = '/',
         partyNameLocation = 'Auto-Detect (AI Structural Parsing)',
         utrExtractorType = '12-16 Digit Alphanumeric Sequence',
         accountNumberDetection = 'Enabled (9+ Digits anywhere)',
-        ignoreExtractionKeywords = ''
+        ignoreExtractionKeywords = '',
+        // Reference data (passed from UI layer)
+        referenceBanks = ["HDFC", "ICICI", "SBI", "AXIS", "KOTAK", "YES BANK", "PUNJAB NAT", "IDFC", "INDUSIND"]
     } = options;
     
     // Parse noise lists from string to array (comma separated)

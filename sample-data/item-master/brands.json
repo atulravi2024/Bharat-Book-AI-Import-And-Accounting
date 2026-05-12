@@ -1,8 +1,0 @@
-[
-  { "id": "br1", "name": "Samsung", "origin": "South Korea", "tier": "Premium", "description": "Global leader in electronics and displays" },
-  { "id": "br2", "name": "Dell", "origin": "USA", "tier": "Premium", "description": "Reliable computing hardware manufacturer" },
-  { "id": "br3", "name": "Logitech", "origin": "Switzerland", "tier": "Premium", "description": "Precision computer peripherals" },
-  { "id": "br4", "name": "Local Brand A", "origin": "India", "tier": "Budget", "description": "Affordable local assembly" },
-  { "id": "br5", "name": "Milton", "origin": "India", "tier": "Economy", "description": "Household plastic and steel products" },
-  { "id": "br6", "name": "HP", "origin": "USA", "tier": "Premium", "description": "Hewlett-Packard computing and printing" }
-]

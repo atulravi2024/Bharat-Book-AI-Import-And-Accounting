@@ -1,9 +1,0 @@
-[
-  { "id": "ag1", "name": "Current Assets", "parentGroup": "Primary", "nature": "Assets" },
-  { "id": "ag2", "name": "Sundry Debtors", "parentGroup": "Current Assets", "nature": "Assets" },
-  { "id": "ag3", "name": "Bank Accounts", "parentGroup": "Current Assets", "nature": "Assets" },
-  { "id": "ag4", "name": "Current Liabilities", "parentGroup": "Primary", "nature": "Liabilities" },
-  { "id": "ag5", "name": "Sundry Creditors", "parentGroup": "Current Liabilities", "nature": "Liabilities" },
-  { "id": "ag6", "name": "Direct Income", "parentGroup": "Primary", "nature": "Income" },
-  { "id": "ag7", "name": "Direct Expenses", "parentGroup": "Primary", "nature": "Expenses" }
-]

@@ -20,6 +20,7 @@ import { GSTReportView } from './components/Reports/GSTReport/GSTReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
 import { parseVoucherFile } from './services/aiService';
 import { InfoIcon, UndoIcon } from './components/icons/IconComponents';
+import navMeta from '../public/sample-data/navigation_meta.json';
 
 const DRAFT_KEY = 'bharat_book_voucher_draft';
 const PARTY_MASTERS_KEY = 'bharat_book_party_masters';
@@ -676,17 +677,7 @@ const App: React.FC = () => {
   };
 
   const toggleSampleDataSet = async (id: string, forceState?: boolean) => {
-    const sampleIds = [
-      'uoms', 'gst', 'brands', 'categories', 'warehouses', 'skus', 'priceList', 'weights', 'volumes', 
-      'colors', 'sizes', 'variants', 'dimensions', 'stockGroups', 'grades', 'assertionCategories', 
-      'assertionCodes', 'items', 'bom', 'bom_advanced', 'bom_pharma', 'parties', 'vendors', 'accountGroups', 'ledgers', 'banks', 'costCenters', 
-      'contacts', 'vouchers', 'financial_vouchers', 'item_vouchers', 'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile',
-      'sales_register', 'purchase_register', 'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
-      'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation',
-      'balance_sheet', 'profit_loss', 'cash_flow', 'bank_flow', 'trial_balance', 'gstr1',
-      'sales_entry', 'purchase_entry', 'payment_entry', 'receipt_entry', 'journal_entry', 'contra_entry', 'debit_note_entry', 'credit_note_entry',
-      'stock_journal_entry', 'physical_stock_entry', 'consumption_entry', 'scrap_entry', 'transfer_entry', 'rejections_in_entry', 'rejections_out_entry'
-    ];
+    const sampleIds = navMeta?.sampleIds || [];
 
     if (!sampleIds.includes(id)) {
         console.warn(`No sample data loader for id: ${id}`);
@@ -740,13 +731,16 @@ const App: React.FC = () => {
             default: setAllVouchers(prev => prev.filter(m => m.sampleSetId !== id)); break;
         }
     } else {
-        const reportIds = ['vouchers', 'financial_vouchers', 'item_vouchers', 'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile', 'sales_register', 'purchase_register', 'day_book', 'journal_register', 'debit_note_register', 'credit_note_register', 'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation', 'balance_sheet', 'profit_loss', 'cash_flow', 'bank_flow', 'trial_balance', 'gstr1'];
-        const entryIds = ['sales_entry', 'purchase_entry', 'payment_entry', 'receipt_entry', 'journal_entry', 'contra_entry', 'debit_note_entry', 'credit_note_entry', 'stock_journal_entry', 'physical_stock_entry', 'consumption_entry', 'scrap_entry', 'transfer_entry', 'rejections_in_entry', 'rejections_out_entry'];
-        const folder = reportIds.includes(id) ? 'reports' : (entryIds.includes(id) ? 'entries' :
-                     (['items', 'bom', 'bom_advanced', 'bom_pharma', 'weights', 'volumes', 'colors', 'sizes', 'variants', 'dimensions', 'skus', 'priceList', 'uoms', 'gst', 'brands', 'categories', 'warehouses', 'stockGroups', 'grades', 'assertionCategories', 'assertionCodes'].includes(id) 
-                        ? 'item-master' 
-                        : 'ledger-master'));
-        const filename = (reportIds.includes(id) || entryIds.includes(id)) ? id : (id === 'gst' ? 'hsn' : id);
+        const reportIds = navMeta?.reportIds || [];
+        const entryIds = navMeta?.entryIds || [];
+        const itemMasterKeys = navMeta?.itemMasterKeys || [];
+
+        const isReport = reportIds.includes(id);
+        const isEntry = entryIds.includes(id);
+        const isItemMaster = itemMasterKeys.includes(id);
+
+        const folder = isReport ? 'reports' : (isEntry ? 'entries' : (isItemMaster ? 'item-master' : 'ledger-master'));
+        const filename = (isReport || isEntry) ? id : (id === 'gst' ? 'hsn' : id);
         
         try {
             const response = await fetch(`/sample-data/${folder}/${filename}.json`);
@@ -815,6 +809,21 @@ const App: React.FC = () => {
         console.error('Storage quota exceeded or error:', e);
      }
   };
+
+  useEffect(() => {
+    // Initial fetch of system reference data
+    const initSystemData = async () => {
+      try {
+        const { loadDefaultMappingRules } = await import('./services/mappingService');
+        const { loadMatchingRules } = await import('./services/matching/rules');
+        await loadDefaultMappingRules();
+        await loadMatchingRules();
+      } catch (e) {
+        console.error("Failed to initialize system data", e);
+      }
+    };
+    initSystemData();
+  }, []);
 
   const renderContent = () => {
     if (view === 'ledger-master' || view === 'item-master') {

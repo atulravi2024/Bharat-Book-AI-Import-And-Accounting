@@ -56,6 +56,24 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
   });
   const [fileHeaders, setFileHeaders] = useState<string[]>([]);
   const [mappings, setMappings] = useState<Record<string, string>>({});
+  const [synonymsData, setSynonymsData] = useState<Record<string, string[]>>({});
+  const [metaData, setMetaData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchMeta = async () => {
+        try {
+            const resp = await fetch('/sample-data/masters/metadata.json');
+            if (resp.ok) {
+                const data = await resp.json();
+                setMetaData(data);
+                if (data.keySynonyms) setSynonymsData(data.keySynonyms);
+            }
+        } catch (e) {
+            console.error("Failed to load metadata in Step1Upload", e);
+        }
+    };
+    fetchMeta();
+  }, []);
 
   // Dynamically configure mapping keys based on voucherType
   const mappingKeys = useMemo(() => {
@@ -124,7 +142,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
         return;
      }
 
-     const KEY_SYNONYMS: Record<string, string[]> = {
+     const KEY_SYNONYMS: Record<string, string[]> = synonymsData && Object.keys(synonymsData).length > 0 ? synonymsData : {
         invoiceNumber: ['invoice', 'voucher no', 'vch no', 'doc no', 'ref', 'bill no', 'inv no'],
         date: ['date', 'txn date', 'posting date', 'document date', 'value date'],
         amount: ['amount', 'total', 'gross', 'net', 'value', 'withdrawal', 'withdrawals', 'debit', 'dr', 'payment', 'payments', 'deposit', 'deposits', 'deposited', 'credit', 'cr', 'receipt', 'receipts'],
@@ -200,7 +218,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
         
         // Auto-detect header row if no specific row was requested
         if (requestedRowIndex === undefined) {
-           const commonHeaderKeywords = ['date', 'amount', 'narration', 'description', 'reference', 'withdrawal', 'deposit', 'balance', 'particulars', 'invoice', 'party'];
+           const commonHeaderKeywords = metaData?.commonHeaderKeywords || ['date', 'amount', 'narration', 'description', 'reference', 'withdrawal', 'deposit', 'balance', 'particulars', 'invoice', 'party'];
            let bestMatchScore = -1;
            let bestRowIndex = 0;
            
@@ -258,8 +276,8 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
         const lowerHeaders = fileHeaders.map(h => h.toLowerCase());
         const fileName = (file?.name || '').toLowerCase();
         
-        const bankKeywords = ['withdrawal', 'deposit', 'closing balance', 'value date', 'txn date', 'particulars'];
-        const matchesBankHeaders = bankKeywords.filter(k => lowerHeaders.some(h => h.includes(k))).length >= 3;
+        const bankKeywords = metaData?.bankKeywords || ['withdrawal', 'deposit', 'closing balance', 'value date', 'txn date', 'particulars'];
+        const matchesBankHeaders = bankKeywords.filter((k: string) => lowerHeaders.some(h => h.includes(k))).length >= 3;
         const matchesBankName = fileName.includes('bank') || fileName.includes('statement') || fileName.includes('txn') || fileName.includes('ledger');
         
         if ((matchesBankHeaders || (matchesBankName && fileHeaders.length > 0)) && voucherType !== VoucherType.BankStatement) {

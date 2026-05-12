@@ -262,36 +262,48 @@ export const InvoicePrintSettings: React.FC = () => {
         };
     }, [settings]);
 
-    // Dummy data for preview
-    const dummyHeader = {
-        voucherNumber: 'INV/2026/001',
-        entryNumber: 'INV/2026/001',
-        voucherDate: '2026-05-04',
-        partyName: 'Indraprastha Solutions Ltd',
-        billingPartyName: 'Indraprastha Solutions Ltd',
-        billingAddress: 'Tech Park, Block B, Sector 62',
-        billingState: 'Uttar Pradesh',
-        billingPinCode: '201309',
-        billingContact: '+91 9988776655',
-        gstNumber: '09AAACI1234F1Z5',
-        narration: 'Being goods sold on credit basis. Delivery against PO #9988.',
-        referenceNo: 'ORD-776',
-        poNumber: 'PO-8822'
-    };
+    const [dummyHeader, setDummyHeader] = useState<any>({
+        voucherNumber: '-',
+        entryNumber: '-',
+        voucherDate: '-',
+        partyName: '-',
+        billingPartyName: '-',
+        billingAddress: '-',
+        billingState: '-',
+        billingPinCode: '-',
+        billingContact: '-',
+        gstNumber: '-',
+        narration: '-',
+        referenceNo: '-',
+        poNumber: '-'
+    });
 
-    const dummyRows = [
-        { itemName: 'Financial Audit Report Pro', hsn: '9982', qty: 5, uom: 'PCS', mrp: 13000, discountPercent: 5, discountAmount: 3250, rate: 12000, tax: 18, amount: 60000 },
-        { itemName: 'Tax Consultancy Services', hsn: '9983', qty: 1, uom: 'HR', mrp: 5000, discountPercent: 0, discountAmount: 0, rate: 5000, tax: 18, amount: 5000 },
-    ];
-
-    const dummyTotals = {
-        taxableValue: 65000,
-        cgst: 5850,
-        sgst: 5850,
+    const [dummyRows, setDummyRows] = useState<any[]>([]);
+    const [dummyTotals, setDummyTotals] = useState<any>({
+        taxableValue: 0,
+        cgst: 0,
+        sgst: 0,
         igst: 0,
-        grandTotal: 76700,
-        finalValue: 76700
-    };
+        grandTotal: 0,
+        finalValue: 0
+    });
+
+    useEffect(() => {
+        const loadDummyData = async () => {
+            try {
+                const response = await fetch('/sample-data/reports/invoice_dummy_data.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    setDummyHeader(data.header);
+                    setDummyRows(data.rows);
+                    setDummyTotals(data.totals);
+                }
+            } catch (e) {
+                console.error("Failed to load dummy invoice data", e);
+            }
+        };
+        loadDummyData();
+    }, []);
 
     const [activeSection, setActiveSection] = useState<string | null>(null);
 

@@ -431,6 +431,33 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       } catch (e) {
         console.error("Failed to parse settings", e);
       }
+    } else {
+        // Load defaults from sample-data if NO local storage settings exist
+        const loadDefaultNoiseLists = async () => {
+            try {
+                const [bankRefResp, mappingResp] = await Promise.all([
+                    fetch('/sample-data/ledger-master/bank_reference.json'),
+                    fetch('/sample-data/ledger-master/default_mapping_rules.json')
+                ]);
+                
+                if (bankRefResp.ok) {
+                    const data = await bankRefResp.json();
+                    setBankShortCodes(data.bankShortCodes?.join(", ") || "");
+                    setBankIgnoreWords(data.bankIgnoreWords?.join(", ") || "");
+                    setPaymentModes(data.paymentModes?.join(", ") || "");
+                    setPaymentChannels(data.paymentChannels?.join(", ") || "");
+                    setIfscPrefixes(data.ifscPrefixes?.join(", ") || "");
+                }
+                
+                if (mappingResp.ok) {
+                    const rules = await mappingResp.json();
+                    setMappingRules(rules);
+                }
+            } catch (e) {
+                console.error("Failed to load default noise lists", e);
+            }
+        };
+        loadDefaultNoiseLists();
     }
   }, []);
 

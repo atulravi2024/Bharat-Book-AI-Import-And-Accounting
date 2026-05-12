@@ -8,47 +8,16 @@
  * 4. Clean noise from both front and back (e.g., "UBIAV" prefix or "HDFC" suffix).
  */
 
-const COMMON_INDIAN_FIRST_NAMES = [
-  'AMIT', 'RAJESH', 'SURESH', 'ANIL', 'VIJAY', 'SUNIL', 'ARUN', 'SANJAY', 'MANOJ', 'RAHUL',
-  'PRIYA', 'SUMIT', 'NEHA', 'RUDRA', 'KUMAR', 'SINGH', 'SHARMA', 'PATEL', 'GUPTA', 'VERMA',
-  'CHOUDHARY', 'YADAV', 'KHAN', 'ALI', 'MOHAMMED', 'FARID', 'HUMAKANT', 'RADHIKA', 'POOJA',
-  'DEEPAK', 'RAVI', 'KIRAN', 'SANDIP', 'PARAS', 'JAIN', 'MEHTA', 'SHAH', 'DAVE', 'MISHRA',
-  'SARAVANAN', 'KASHYAP', 'TIWARI', 'SINGHAL', 'AGRAWAL', 'BANSAL', 'CHAWLA', 'MALHOTRA',
-  'RAM', 'KRISHNA', 'OM', 'GANESH', 'SITA', 'GEETA', 'ANJALI', 'VIKRAM', 'ADITYA',
-  'REDDY', 'NAIR', 'IYER', 'KAUR', 'GILL', 'SIDHU', 'CHOPRA', 'KAPOOR', 'KHANNA', 'MEHRA',
-  'SETHI', 'MALIK', 'GOEL', 'MITTAL', 'SAXENA', 'PANDEY', 'SHUKLA', 'TRIPATHI', 'JOSHI',
-  'DESAI', 'KULKARNI', 'PATILE', 'BHAT', 'HEGDE', 'RAO', 'MENON', 'PILLAI', 'DAS', 'CHATTERJEE',
-  'BANERJEE', 'MUKHERJEE', 'BOSE', 'SEN', 'DUTTA', 'KUNDU', 'PAL', 'SARKAR', 'BISWAS'
-];
-
-const FIRM_SUFFIXES = [
-  'ENTERPRISES', 'TRADERS', 'SOLUTIONS', 'SERVICES', 'ENTERPRISE', 'AGENCIES', 'AGENCY',
-  'STORES', 'STORE', 'MART', 'EMPORIUM', 'INDUSTRIES', 'WORKS', 'PROPERTIES', 'VENTURES',
-  'PVT', 'LTD', 'LIMITED', 'LLP', 'CO', 'CORP', 'CORPORATION', 'GROUP', 'ASSOCIATES',
-  'SYSTEMS', 'LOGISTICS', 'MARKETING', 'PHARMA', 'FASHION', 'LIFESTYLE', 'STILL', 'CORNER',
-  'KISAN', 'KRISHI', 'AGRO', 'FARMS', 'FARM', 'FERTILIZERS', 'SEEDS', 'DAIRY', 'ORGANICS',
-  'CLOTHING', 'TEXTILES', 'ELECTRONICS', 'AUTOMOBILES', 'MOTORS', 'CONSTRUCTIONS', 'BUILDERS',
-  'DEVELOPERS', 'TECHNOLOGIES', 'INFRA', 'INFRASTRUCTURE', 'TRADING', 'MARKET', 'BAZAR',
-  'INC', 'ESTATE', 'HOLDINGS', 'INDIA'
-];
-
-import { BANK_SHORT_CODES, BANK_IGNORE_WORDS } from './matching/bankCodes';
-import { PAYMENT_MODES, PAYMENT_CHANNELS } from './matching/paymentModes';
-import { IFSC_PREFIXES } from './matching/ifscCodes';
-
-const BANK_NOISE = [
-  ...BANK_IGNORE_WORDS,
-  ...PAYMENT_MODES,
-  ...PAYMENT_CHANNELS,
-  ...IFSC_PREFIXES
-];
-
 interface ExtractionOptions {
   bankShortCodes?: string[];
   bankIgnoreWords?: string[];
   paymentModes?: string[];
   paymentChannels?: string[];
   ifscPrefixes?: string[];
+  commonIndianFirstNames?: string[];
+  firmSuffixes?: string[];
+  excludedWords?: string[];
+  noisePrefixes?: string[];
 }
 
 /**
@@ -58,17 +27,18 @@ interface ExtractionOptions {
 export const extractValidName = (narration: string, options: ExtractionOptions = {}): string | null => {
   if (!narration) return null;
 
-  const bShortCodes = options.bankShortCodes || BANK_SHORT_CODES;
-  const bIgnore = options.bankIgnoreWords || BANK_IGNORE_WORDS;
-  const pModes = options.paymentModes || PAYMENT_MODES;
-  const pChannels = options.paymentChannels || PAYMENT_CHANNELS;
-  const iPrefixes = options.ifscPrefixes || IFSC_PREFIXES;
-
+  const bShortCodes = options.bankShortCodes || [];
+  const bIgnore = options.bankIgnoreWords || [];
+  const pModes = options.paymentModes || [];
+  const pChannels = options.paymentChannels || [];
+  const iPrefixes = options.ifscPrefixes || [];
+  
   const bNoise = [
     ...bIgnore,
     ...pModes,
     ...pChannels,
-    ...iPrefixes
+    ...iPrefixes,
+    ...(options.noisePrefixes || [])
   ];
 
   // 1. Pre-cleaning: Remove anything that is NOT a letter or space
@@ -112,17 +82,18 @@ export const isValidIndianEntity = (name: string, options: ExtractionOptions = {
   if (!name) return false;
   const upper = name.toUpperCase();
   
-  const bShortCodes = options.bankShortCodes || BANK_SHORT_CODES;
-  const bIgnore = options.bankIgnoreWords || BANK_IGNORE_WORDS;
-  const pModes = options.paymentModes || PAYMENT_MODES;
-  const pChannels = options.paymentChannels || PAYMENT_CHANNELS;
-  const iPrefixes = options.ifscPrefixes || IFSC_PREFIXES;
+  const bShortCodes = options.bankShortCodes || [];
+  const bIgnore = options.bankIgnoreWords || [];
+  const pModes = options.paymentModes || [];
+  const pChannels = options.paymentChannels || [];
+  const iPrefixes = options.ifscPrefixes || [];
 
   const bNoise = [
     ...bIgnore,
     ...pModes,
     ...pChannels,
-    ...iPrefixes
+    ...iPrefixes,
+    ...(options.noisePrefixes || [])
   ];
 
   // Strict check: Should ONLY contain letters and spaces

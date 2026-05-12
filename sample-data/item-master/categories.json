@@ -1,7 +1,0 @@
-[
-  { "id": "cat1", "name": "Electronics", "description": "IT Hardware and consumer electronics products" },
-  { "id": "cat2", "name": "Furniture", "description": "Office and home furniture solutions" },
-  { "id": "cat3", "name": "Stationery", "description": "Office supplies, papers, and stationery items" },
-  { "id": "cat4", "name": "Raw Materials", "description": "Production raw materials and components" },
-  { "id": "cat5", "name": "Software", "description": "Digital licenses and platform subscriptions" }
-]

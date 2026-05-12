@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
     Plus, 
     Search, 
@@ -74,7 +74,22 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
         setDeleteConfirmation(null);
     };
 
-    const locationTypes = ['Distribution Center', 'Retail Outlet', 'Cold Storage', 'Virtual Location', 'Transit/Buffer', 'Raw Material Store'];
+    const [locationTypes, setLocationTypes] = useState<string[]>(['Distribution Center', 'Retail Outlet', 'Cold Storage', 'Virtual Location', 'Transit/Buffer', 'Raw Material Store']);
+
+    useEffect(() => {
+        const loadMeta = async () => {
+            try {
+                const response = await fetch('/sample-data/masters/metadata.json');
+                if (response.ok) {
+                    const meta = await response.json();
+                    if (meta.locationTypes) setLocationTypes(meta.locationTypes);
+                }
+            } catch (e) {
+                console.error("Failed to load master metadata", e);
+            }
+        };
+        loadMeta();
+    }, []);
 
     return (
         <div className="flex flex-col h-full animate-in fade-in duration-300">

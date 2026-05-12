@@ -50,8 +50,8 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
-  // Serve sample data
-  app.use("/sample-data", express.static(path.join(process.cwd(), "sample-data")));
+  // Serve sample data explicitly if needed (Vite handles this in dev via public, but just in case)
+  app.use("/sample-data", express.static(path.join(process.cwd(), "public/sample-data")));
 
   // API to get raw file content
   app.get("/api/raw-file", async (req, res) => {

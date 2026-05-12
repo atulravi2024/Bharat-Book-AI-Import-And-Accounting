@@ -27,44 +27,31 @@ interface DashboardViewProps {
 
 type DashboardTab = 'main' | 'sales' | 'purchase' | 'payment' | 'receipts' | 'journal' | 'contra' | 'bank';
 
-const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6B7280', '#14B8A6'];
-
 export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouchers, onNavigateToView, defaultTab, onTabChange }) => {
   const [activeTab, setActiveTab] = useState<DashboardTab>((defaultTab as DashboardTab) || 'main');
+  const [demoVouchers, setDemoVouchers] = useState<ParsedVoucher[]>([]);
+  const [colors, setColors] = useState<string[]>(['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6B7280', '#14B8A6']);
 
   React.useEffect(() => {
-    if (defaultTab && defaultTab !== activeTab) {
-      setActiveTab(defaultTab as DashboardTab);
-    }
-  }, [defaultTab, activeTab]);
-
-  React.useEffect(() => {
-    const scrollToTab = () => {
-      const el = document.getElementById(`dashboard-tab-${activeTab}`);
-      const container = el?.closest('.overflow-x-auto') as HTMLElement;
-      if (el && container) {
-        const cRect = container.getBoundingClientRect();
-        const eRect = el.getBoundingClientRect();
-        if (cRect.width === 0 || eRect.width === 0) return;
-        
-        const offset = (eRect.left + eRect.width / 2) - (cRect.left + cRect.width / 2);
-        
-        if (Math.abs(offset) > 2) {
-            container.scrollBy({ left: offset, behavior: 'smooth' });
+    const loadDemoData = async () => {
+        try {
+            const [demoResp, metaResp] = await Promise.all([
+                fetch('/sample-data/dashboard/demo_vouchers.json'),
+                fetch('/sample-data/masters/metadata.json')
+            ]);
+            if (demoResp.ok) {
+                setDemoVouchers(await demoResp.json());
+            }
+            if (metaResp.ok) {
+                const meta = await metaResp.json();
+                if (meta.dashboardColors) setColors(meta.dashboardColors);
+            }
+        } catch (e) {
+            console.error("Failed to load dashboard sample data", e);
         }
-      }
     };
-
-    scrollToTab();
-    const t1 = setTimeout(scrollToTab, 100);
-    const t2 = setTimeout(scrollToTab, 300);
-    const t3 = setTimeout(scrollToTab, 500);
-    return () => {
-        clearTimeout(t1);
-        clearTimeout(t2);
-        clearTimeout(t3);
-    };
-  }, [activeTab]);
+    loadDemoData();
+  }, []);
 
   const handleTabChange = (tab: DashboardTab) => {
     setActiveTab(tab);
@@ -74,15 +61,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouc
   const [showDemoToggle, setShowDemoToggle] = useState(false);
 
   const isDemo = realVouchers.length === 0;
-
-  const demoVouchers: ParsedVoucher[] = [
-    { id: 'demo-1', type: VoucherType.Sales, date: { value: '2025-04-20', confidence: Confidence.High }, amount: { value: 145000, confidence: Confidence.High }, partyName: { value: 'Demo Customer A Ltd', confidence: Confidence.High }, items: [] },
-    { id: 'demo-2', type: VoucherType.Purchase, date: { value: '2025-04-21', confidence: Confidence.High }, amount: { value: 82000, confidence: Confidence.High }, partyName: { value: 'Demo Global Vendor', confidence: Confidence.High }, items: [] },
-    { id: 'demo-3', type: VoucherType.Payment, date: { value: '2025-04-22', confidence: Confidence.High }, amount: { value: 25000, confidence: Confidence.High }, partyName: { value: 'Infrastructure Board', confidence: Confidence.High }, items: [] },
-    { id: 'demo-4', type: VoucherType.Receipt, date: { value: '2025-04-23', confidence: Confidence.High }, amount: { value: 95000, confidence: Confidence.High }, partyName: { value: 'Client Solutions Inc', confidence: Confidence.High }, items: [] },
-    { id: 'demo-5', type: VoucherType.BankStatement, date: { value: '2025-04-24', confidence: Confidence.High }, amount: { value: 50000, confidence: Confidence.High }, withdrawalAmount: { value: 50000, confidence: Confidence.High }, depositAmount: { value: 0, confidence: Confidence.High }, narration: { value: 'Office Rent Payout', confidence: Confidence.High }, items: [] },
-    { id: 'demo-6', type: VoucherType.BankStatement, date: { value: '2025-04-25', confidence: Confidence.High }, amount: { value: 125000, confidence: Confidence.High }, withdrawalAmount: { value: 0, confidence: Confidence.High }, depositAmount: { value: 125000, confidence: Confidence.High }, narration: { value: 'Export Services Settlement', confidence: Confidence.High }, items: [] },
-  ];
 
   const vouchers = isDemo ? demoVouchers : realVouchers;
 
@@ -233,14 +211,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouc
         <div className="max-w-[1600px] mx-auto space-y-6 sm:space-y-8 pb-12">
           
           <AnimatePresence mode="wait">
-            {activeTab === 'main' && <MainTab stats={stats} isDemo={isDemo} />}
-            {activeTab === 'sales' && <SalesTab stats={stats} isDemo={isDemo} />}
-            {activeTab === 'purchase' && <PurchaseTab stats={stats} isDemo={isDemo} />}
-            {activeTab === 'payment' && <PaymentTab stats={stats} isDemo={isDemo} />}
-            {activeTab === 'receipts' && <ReceiptsTab stats={stats} isDemo={isDemo} />}
-            {activeTab === 'bank' && <BankTab stats={stats} isDemo={isDemo} />}
-            {activeTab === 'journal' && <JournalTab stats={stats} isDemo={isDemo} />}
-            {activeTab === 'contra' && <ContraTab stats={stats} isDemo={isDemo} />}
+            {activeTab === 'main' && <MainTab stats={stats} isDemo={isDemo} colors={colors} />}
+            {activeTab === 'sales' && <SalesTab stats={stats} isDemo={isDemo} colors={colors} />}
+            {activeTab === 'purchase' && <PurchaseTab stats={stats} isDemo={isDemo} colors={colors} />}
+            {activeTab === 'payment' && <PaymentTab stats={stats} isDemo={isDemo} colors={colors} />}
+            {activeTab === 'receipts' && <ReceiptsTab stats={stats} isDemo={isDemo} colors={colors} />}
+            {activeTab === 'bank' && <BankTab stats={stats} isDemo={isDemo} colors={colors} />}
+            {activeTab === 'journal' && <JournalTab stats={stats} isDemo={isDemo} colors={colors} />}
+            {activeTab === 'contra' && <ContraTab stats={stats} isDemo={isDemo} colors={colors} />}
           </AnimatePresence>
 
           {/* Activity Section */}

@@ -87,8 +87,7 @@ export const DataExplorer: React.FC = () => {
             '/sample-data/ledger-master/costCenters.json',
             '/sample-data/ledger-master/contacts.json',
             '/sample-data/ledger-master/accountGroups.json',
-            '/sample-data/ledger-master/vendors.json',
-            '/sample-data/laser-master/ledgers.json'
+            '/sample-data/ledger-master/vendors.json'
         ],
         'Master Item': [
             '/sample-data/item-master/items.json',

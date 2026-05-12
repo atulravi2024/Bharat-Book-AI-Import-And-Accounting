@@ -132,8 +132,12 @@ export const findBestMasterMatch = (
 };
 
 export const extractMissingName = (narration: string): string | null => {
-    const extracted = extractValidName(narration);
-    if (extracted && isValidIndianEntity(extracted) && !isExcludedWordMatch(extracted)) {
+    const options = {
+        excludedWords: EXCLUDED_WORDS,
+        noisePrefixes: NOISE_PREFIXES
+    };
+    const extracted = extractValidName(narration, options);
+    if (extracted && isValidIndianEntity(extracted, options) && !isExcludedWordMatch(extracted)) {
         return extracted;
     }
     return null;
@@ -198,7 +202,11 @@ export const matchVoucherAsync = async (
 
     // 2. STEP 1: EXTRACTION
     // First try local extraction
-    let extractedName = extractValidName(narration);
+    const extractionOptions = {
+        excludedWords: EXCLUDED_WORDS,
+        noisePrefixes: NOISE_PREFIXES
+    };
+    let extractedName = extractValidName(narration, extractionOptions);
     
     // If local extraction fails or is weak, try AI extraction
     if (!extractedName || extractedName.length < 3) {
@@ -209,7 +217,7 @@ export const matchVoucherAsync = async (
     }
 
     // FINAL GUARD: Even if AI extracted it, check if it's a noise word/bank code
-    if (extractedName && !isValidIndianEntity(extractedName)) {
+    if (extractedName && !isValidIndianEntity(extractedName, extractionOptions)) {
         extractedName = null;
     }
 

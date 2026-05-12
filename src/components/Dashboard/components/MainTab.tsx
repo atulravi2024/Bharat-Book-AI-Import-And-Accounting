@@ -5,7 +5,8 @@ import { FileText, Zap, ShieldAlert, Users, ShieldCheck, Activity, TrendingUp, P
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, Legend, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
 import { TransactionFlow } from './TransactionFlow';
 
-export const MainTab = ({ stats, isDemo }: any) => {
+export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
+    const activeColors = colors || COLORS;
     return (
         <motion.div key="main" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -77,7 +78,7 @@ export const MainTab = ({ stats, isDemo }: any) => {
                         <ResponsiveContainer width="100%" height="100%">
                             <RechartsPieChart>
                                 <Pie data={stats.typeDistribution} innerRadius={60} outerRadius={90} dataKey="value" stroke="none">
-                                    {stats.typeDistribution.map((_: any, i: number) => <Cell key={i} fill={COLORS[i % COLORS.length]} cornerRadius={4} />)}
+                                    {stats.typeDistribution.map((_: any, i: number) => <Cell key={i} fill={activeColors[i % activeColors.length]} cornerRadius={4} />)}
                                 </Pie>
                                 <Tooltip />
                             </RechartsPieChart>
@@ -86,7 +87,7 @@ export const MainTab = ({ stats, isDemo }: any) => {
                     <div className="grid grid-cols-2 gap-2 mt-4">
                         {stats.typeDistribution.map((item: any, i: number) => (
                             <div key={i} className="flex items-center text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase">
-                                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: COLORS[i % COLORS.length] }}></div>
+                                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: activeColors[i % activeColors.length] }}></div>
                                 {item.name}
                             </div>
                         ))}
