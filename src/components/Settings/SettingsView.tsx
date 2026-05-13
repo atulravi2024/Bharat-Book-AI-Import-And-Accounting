@@ -66,12 +66,23 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onTabChange,
   ledgerMasters = [],
 }) => {
-  const [companyName, setCompanyName] = useState("Bharat Book Enterprise");
+  const [workspaceName, setWorkspaceName] = useState("Bharat Book Enterprise");
   const [displayId, setDisplayId] = useState("BBE-2026-IND");
   const [fiscalYear, setFiscalYear] = useState(
     "April to March (Indian Standard)",
   );
   const [appMode, setAppMode] = useState("demo");
+  const [language, setLanguage] = useState("en-IN");
+  const [dateFormat, setDateFormat] = useState("DD/MM/YYYY");
+  const [timezone, setTimezone] = useState("Asia/Kolkata");
+  const [theme, setTheme] = useState("system");
+  const [autoLock, setAutoLock] = useState("15");
+  const [density, setDensity] = useState("standard");
+  const [animations, setAnimations] = useState("enabled");
+  const [soundEffects, setSoundEffects] = useState("disabled");
+  const [keyboardShortcuts, setKeyboardShortcuts] = useState("enabled");
+  const [weekStartsOn, setWeekStartsOn] = useState("sunday");
+  const [paginationSize, setPaginationSize] = useState("50");
 
   // Noise Lists
   const [bankShortCodes, setBankShortCodes] = useState<string>(
@@ -368,15 +379,27 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     if (onTabChange) onTabChange(tab);
   };
 
-  useEffect(() => {
+  const loadFromLocalStorage = () => {
     const savedSettings = localStorage.getItem("bharat_book_app_settings");
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
-        if (parsed.companyName) setCompanyName(parsed.companyName);
+        if (parsed.workspaceName) setWorkspaceName(parsed.workspaceName);
+        else if (parsed.companyName) setWorkspaceName(parsed.companyName);
         if (parsed.displayId) setDisplayId(parsed.displayId);
         if (parsed.fiscalYear) setFiscalYear(parsed.fiscalYear);
         if (parsed.appMode) setAppMode(parsed.appMode);
+        if (parsed.language) setLanguage(parsed.language);
+        if (parsed.dateFormat) setDateFormat(parsed.dateFormat);
+        if (parsed.timezone) setTimezone(parsed.timezone);
+        if (parsed.theme) setTheme(parsed.theme);
+        if (parsed.autoLock) setAutoLock(parsed.autoLock);
+        if (parsed.density) setDensity(parsed.density);
+        if (parsed.animations) setAnimations(parsed.animations);
+        if (parsed.soundEffects) setSoundEffects(parsed.soundEffects);
+        if (parsed.keyboardShortcuts) setKeyboardShortcuts(parsed.keyboardShortcuts);
+        if (parsed.weekStartsOn) setWeekStartsOn(parsed.weekStartsOn);
+        if (parsed.paginationSize) setPaginationSize(parsed.paginationSize);
         if (parsed.bankMappings) setBankMappings(parsed.bankMappings);
 
         // Load Noise Lists
@@ -459,14 +482,122 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         };
         loadDefaultNoiseLists();
     }
+  };
+
+  useEffect(() => {
+    loadFromLocalStorage();
   }, []);
+
+  const handleLoad = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,.csv";
+    input.onchange = (e: any) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const content = event.target?.result as string;
+        try {
+          let parsed: any = {};
+          if (file.name.endsWith(".csv")) {
+            const lines = content.split("\n");
+            lines.forEach((line) => {
+              const [key, ...rest] = line.split(",");
+              if (key && rest.length > 0) {
+                let val = rest.join(",").trim();
+                // Strip quotes if any
+                if (val.startsWith('"') && val.endsWith('"')) {
+                    val = val.substring(1, val.length - 1);
+                }
+                parsed[key.trim()] = val;
+              }
+            });
+          } else {
+            parsed = JSON.parse(content);
+          }
+
+          if (parsed.workspaceName) setWorkspaceName(parsed.workspaceName);
+          else if (parsed.companyName) setWorkspaceName(parsed.companyName);
+          if (parsed.displayId) setDisplayId(parsed.displayId);
+          if (parsed.fiscalYear) setFiscalYear(parsed.fiscalYear);
+          if (parsed.appMode) setAppMode(parsed.appMode);
+          if (parsed.language) setLanguage(parsed.language);
+          if (parsed.dateFormat) setDateFormat(parsed.dateFormat);
+          if (parsed.timezone) setTimezone(parsed.timezone);
+          if (parsed.theme) setTheme(parsed.theme);
+          if (parsed.autoLock) setAutoLock(parsed.autoLock);
+          if (parsed.density) setDensity(parsed.density);
+          if (parsed.animations) setAnimations(parsed.animations);
+          if (parsed.soundEffects) setSoundEffects(parsed.soundEffects);
+          if (parsed.keyboardShortcuts) setKeyboardShortcuts(parsed.keyboardShortcuts);
+          if (parsed.weekStartsOn) setWeekStartsOn(parsed.weekStartsOn);
+          if (parsed.paginationSize) setPaginationSize(parsed.paginationSize);
+          
+        } catch (err) {
+          console.error("Failed to parse file", err);
+          alert("Failed to parse file");
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+
+  const handleReset = () => {
+    setWorkspaceName("Bharat Book Enterprise");
+    setDisplayId("BBE-2026-IND");
+    setFiscalYear("April to March (Indian Standard)");
+    setAppMode("demo");
+    setLanguage("en-IN");
+    setDateFormat("DD/MM/YYYY");
+    setTimezone("Asia/Kolkata");
+    setTheme("system");
+    setAutoLock("15");
+    setDensity("standard");
+    setAnimations("enabled");
+    setSoundEffects("disabled");
+    setKeyboardShortcuts("enabled");
+    setWeekStartsOn("sunday");
+    setPaginationSize("50");
+  };
+
+  const handleClear = () => {
+    setWorkspaceName("");
+    setDisplayId("");
+    setFiscalYear("");
+    setAppMode("");
+    setLanguage("");
+    setDateFormat("");
+    setTimezone("");
+    setTheme("");
+    setAutoLock("");
+    setDensity("");
+    setAnimations("");
+    setSoundEffects("");
+    setKeyboardShortcuts("");
+    setWeekStartsOn("");
+    setPaginationSize("");
+  };
 
   const handleSave = () => {
     const settings = {
-      companyName,
+      workspaceName,
       displayId,
       fiscalYear,
       appMode,
+      language,
+      dateFormat,
+      timezone,
+      theme,
+      autoLock,
+      density,
+      animations,
+      soundEffects,
+      keyboardShortcuts,
+      weekStartsOn,
+      paginationSize,
       bankMappings,
       bankShortCodes,
       bankIgnoreWords,
@@ -649,15 +780,38 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           {activeTab === "general" && (
             <GeneralSettings
-              companyName={companyName}
-              setCompanyName={setCompanyName}
+              workspaceName={workspaceName}
+              setWorkspaceName={setWorkspaceName}
+              theme={theme}
+              setTheme={setTheme}
+              language={language}
+              setLanguage={setLanguage}
+              dateFormat={dateFormat}
+              setDateFormat={setDateFormat}
+              timezone={timezone}
+              setTimezone={setTimezone}
+              autoLock={autoLock}
+              setAutoLock={setAutoLock}
+              density={density}
+              setDensity={setDensity}
+              animations={animations}
+              setAnimations={setAnimations}
+              soundEffects={soundEffects}
+              setSoundEffects={setSoundEffects}
+              keyboardShortcuts={keyboardShortcuts}
+              setKeyboardShortcuts={setKeyboardShortcuts}
+              weekStartsOn={weekStartsOn}
+              setWeekStartsOn={setWeekStartsOn}
+              paginationSize={paginationSize}
+              setPaginationSize={setPaginationSize}
               displayId={displayId}
               setDisplayId={setDisplayId}
-              fiscalYear={fiscalYear}
-              setFiscalYear={setFiscalYear}
               appMode={appMode}
               setAppMode={setAppMode}
               handleSave={handleSave}
+              handleLoad={handleLoad}
+              handleReset={handleReset}
+              handleClear={handleClear}
               isSaved={isSaved}
             />
           )}

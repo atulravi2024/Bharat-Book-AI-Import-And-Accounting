@@ -342,7 +342,7 @@ export const AppNavigationSettings: React.FC = () => {
                   setDefaultPage(val);
                   if (subPages[val]) setDefaultSubPage(subPages[val][0].id);
                 }}
-                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] px-8 py-5 text-lg font-black text-gray-900 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 focus:ring-8 focus:ring-blue-50 outline-none transition-all shadow-sm dark:text-white dark:focus:bg-gray-700"
+                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] px-8 py-5 text-lg font-black text-gray-900 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 focus:ring-8 focus:ring-blue-50 outline-none transition-all shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:bg-gray-700 dark:focus:border-blue-500 dark:focus:ring-blue-900/30"
               >
                 {pages.map((p) => (
                   <option key={p.id} value={p.id} className="font-bold py-2">
@@ -374,7 +374,7 @@ export const AppNavigationSettings: React.FC = () => {
               <select
                 value={defaultSubPage}
                 onChange={(e) => setDefaultSubPage(e.target.value)}
-                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] px-8 py-5 text-lg font-black text-gray-900 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 focus:ring-8 focus:ring-blue-50 outline-none transition-all shadow-sm dark:text-white dark:focus:bg-gray-700"
+                className="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] px-8 py-5 text-lg font-black text-gray-900 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 focus:ring-8 focus:ring-blue-50 outline-none transition-all shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:bg-gray-700 dark:focus:border-blue-500 dark:focus:ring-blue-900/30"
               >
                 {subPages[defaultPage]?.map((sp) => (
                   <option key={sp.id} value={sp.id} className="font-bold py-2">
@@ -451,7 +451,7 @@ export const AppNavigationSettings: React.FC = () => {
                   <select
                     value={routingDefaults[page.id] || ""}
                     onChange={(e) => updateRouting(page.id, e.target.value)}
-                    className="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl px-5 py-4 text-xs font-black text-gray-800 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 outline-none transition-all dark:text-gray-100 dark:focus:bg-gray-700"
+                    className="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl px-5 py-4 text-xs font-black text-gray-800 appearance-none cursor-pointer focus:bg-white focus:border-blue-400 outline-none transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:focus:bg-gray-700 dark:focus:border-blue-500"
                   >
                     {subPages[page.id]?.map((sp) => (
                       <option key={sp.id} value={sp.id}>

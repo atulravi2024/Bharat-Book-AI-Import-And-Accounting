@@ -20,7 +20,7 @@ import { GSTReportView } from './components/Reports/GSTReport/GSTReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
 import { parseVoucherFile } from './services/aiService';
 import { InfoIcon, UndoIcon } from './components/icons/IconComponents';
-import navMeta from '../public/sample-data/navigation_meta.json';
+import navMeta from './sample-data/navigation_meta.json';
 
 const DRAFT_KEY = 'bharat_book_voucher_draft';
 const PARTY_MASTERS_KEY = 'bharat_book_party_masters';

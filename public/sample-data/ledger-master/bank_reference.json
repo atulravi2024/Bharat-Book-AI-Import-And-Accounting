@@ -1,0 +1,6 @@
+{
+  "bankIgnoreWords": ["TRF", "REF", "VCH", "TXN", "CHQ", "BANK"],
+  "bankShortCodes": ["HDFC", "ICICI", "SBI", "AXIS", "KOTAK", "YES"],
+  "paymentModes": ["UPI", "IMPS", "NEFT", "RTGS", "ACH", "INB"],
+  "paymentChannels": ["MOBILE", "DESKTOP", "APP", "WEB"]
+}

@@ -26,6 +26,8 @@ export const EditIcon: React.FC<{ className?: string }> = ({ className }) => <Ic
 export const DownloadIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="download" className={className} />;
 export const PrintIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="print" className={className} />;
 export const UndoIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="undo" className={className} />;
+export const UploadIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="upload" className={className} />;
+export const ClearAllIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="clear_all" className={className} />;
 export const ExpandMoreIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="expand_more" className={className} />;
 export const ExpandLessIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="expand_less" className={className} />;
 export const ChevronRightIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="chevron_right" className={className} />;

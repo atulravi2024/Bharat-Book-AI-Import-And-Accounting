@@ -568,6 +568,22 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
   const [activeAccordion, setActiveAccordion] = useState<string | null>(
     null,
   );
+  const [confirmConfig, setConfirmConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    confirmText: string;
+    cancelText: string;
+    isDanger: boolean;
+    onConfirm: () => void;
+  } | null>(null);
+  
+  const [alertConfig, setAlertConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+  } | null>(null);
+
   const [firmData, setFirmData] = useState(() => {
     const saved = localStorage.getItem("firmSettings_v1");
     if (saved) {
@@ -650,56 +666,74 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
   };
 
   const handleClear = () => {
-    // Explicit Yes/No style confirmation for the prompt
-    const message = "CONFIRM ACTION:\n\nThis will CLEAR ALL FILLED data in this form.\n\nAre you sure you want to proceed? \n\nClick 'OK' for YES, or 'Cancel' for NO.";
-    
-    if (window.confirm(message)) {
-      console.log("Action: User confirmed Clear All Fields");
-      
-      const clearedData = Object.keys(initialFirmData).reduce((acc: any, key) => {
-        const val = (initialFirmData as any)[key];
-        if (typeof val === "boolean") {
-          acc[key] = false;
-        } else if (typeof val === "number") {
-          acc[key] = 0;
-        } else {
-          acc[key] = "";
-        }
-        return acc;
-      }, {});
-      
-      // Update state
-      setFirmData(clearedData);
-      
-      // Persist to localStorage immediately
-      localStorage.setItem("firmSettings_v1", JSON.stringify(clearedData));
-      
-      // Expand first section and scroll to top for visual confirmation
-      setActiveAccordion("basicCompany");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      
-      alert("All fields have been cleared successfully.");
-    }
+    setConfirmConfig({
+      isOpen: true,
+      title: "Clear All Fields",
+      message: "This will CLEAR ALL FILLED data in this form.\n\nAre you sure you want to proceed?",
+      confirmText: "Yes, Clear All",
+      cancelText: "No, Cancel",
+      isDanger: true,
+      onConfirm: () => {
+        console.log("Action: User confirmed Clear All Fields");
+        
+        const clearedData = Object.keys(initialFirmData).reduce((acc: any, key) => {
+          const val = (initialFirmData as any)[key];
+          if (typeof val === "boolean") {
+            acc[key] = false;
+          } else if (typeof val === "number") {
+            acc[key] = 0;
+          } else {
+            acc[key] = "";
+          }
+          return acc;
+        }, {});
+        
+        setFirmData(clearedData);
+        setActiveAccordion("basicCompany");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        
+        setAlertConfig({
+          isOpen: true,
+          title: "Success",
+          message: "All fields have been cleared successfully. (Click Save to apply)"
+        });
+      }
+    });
   };
 
   const handleResetToDefault = () => {
-    const message = "CONFIRM RESET:\n\nThis will restore ALL SETTINGS to their factory default values.\n\nAre you sure you want to proceed? \n\nClick 'OK' for YES, or 'Cancel' for NO.";
-    
-    if (window.confirm(message)) {
-      console.log("Action: User confirmed Reset to Defaults");
-      
-      // Update state to defaults
-      setFirmData({ ...initialFirmData });
-      
-      // Remove from localStorage to ensure clean state
-      localStorage.removeItem("firmSettings_v1");
-      
-      // Visual feedback
-      setActiveAccordion("basicCompany");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      
-      alert("Settings have been reset to factory defaults.");
-    }
+    setConfirmConfig({
+      isOpen: true,
+      title: "Reset to Saved Settings",
+      message: "This will discard any unsaved changes and restore the settings to their last saved values.\n\nAre you sure you want to proceed?",
+      confirmText: "Yes, Reset",
+      cancelText: "No, Cancel",
+      isDanger: false,
+      onConfirm: () => {
+        console.log("Action: User confirmed Reset to Saved");
+        
+        const saved = localStorage.getItem("firmSettings_v1");
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            setFirmData({ ...initialFirmData, ...parsed });
+          } catch (e) {
+            setFirmData({ ...initialFirmData });
+          }
+        } else {
+          setFirmData({ ...initialFirmData });
+        }
+        
+        setActiveAccordion("basicCompany");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        
+        setAlertConfig({
+          isOpen: true,
+          title: "Success",
+          message: "Settings have been restored to last saved values."
+        });
+      }
+    });
   };
 
   const bankOptions = React.useMemo(() => {
@@ -752,9 +786,17 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
       try {
         const parsed = JSON.parse(event.target?.result as string);
         setFirmData(prev => ({ ...prev, ...parsed }));
-        alert("Backup restored successfully. Please click Save Changes to persist.");
+        setAlertConfig({
+          isOpen: true,
+          title: "Backup Restored",
+          message: "Backup restored successfully. Please click Save Changes to persist."
+        });
       } catch (err) {
-        alert("Invalid backup file.");
+        setAlertConfig({
+          isOpen: true,
+          title: "Error",
+          message: "Invalid backup file."
+        });
       }
     };
     reader.readAsText(file);
@@ -763,13 +805,21 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
 
 
   const handleFactoryReset = () => {
-    if (window.confirm("Are you sure you want to run the factory reset? This will clear all settings and reset to defaults.")) {
-      setFirmData({ ...initialFirmData });
-      localStorage.removeItem("firmSettings_v1");
-      // Expand first section for visual confirmation
-      setActiveAccordion("basicCompany");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    setConfirmConfig({
+      isOpen: true,
+      title: "Factory Reset",
+      message: "Are you sure you want to run the factory reset? This will clear all settings and reset to defaults.",
+      confirmText: "Yes, Reset",
+      cancelText: "Cancel",
+      isDanger: true,
+      onConfirm: () => {
+        setFirmData({ ...initialFirmData });
+        localStorage.removeItem("firmSettings_v1");
+        // Expand first section for visual confirmation
+        setActiveAccordion("basicCompany");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
   };
 
   const toggleAccordion = (section: string) => {
@@ -922,6 +972,87 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
           />
         ))}
       </div>
+
+      {/* Confirmation Modal */}
+      <AnimatePresence>
+        {confirmConfig?.isOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setConfirmConfig(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 p-6"
+            >
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                {confirmConfig.title}
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 whitespace-pre-wrap">
+                {confirmConfig.message}
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setConfirmConfig(null)}
+                  className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl font-semibold text-sm transition-colors"
+                >
+                  {confirmConfig.cancelText}
+                </button>
+                <button
+                  onClick={() => {
+                    confirmConfig.onConfirm();
+                    setConfirmConfig(null);
+                  }}
+                  className={`px-4 py-2 text-white rounded-xl font-semibold text-sm transition-colors ${
+                    confirmConfig.isDanger ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
+                >
+                  {confirmConfig.confirmText}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Alert Modal */}
+      <AnimatePresence>
+        {alertConfig?.isOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setAlertConfig(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 p-6 text-center"
+            >
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                {alertConfig.title}
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                {alertConfig.message}
+              </p>
+              <button
+                onClick={() => setAlertConfig(null)}
+                className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-colors"
+              >
+                OK
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

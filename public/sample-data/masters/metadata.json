@@ -1,0 +1,26 @@
+{
+  "keySynonyms": {
+    "invoiceNumber": ["invoice", "voucher no", "vch no", "doc no", "ref", "bill no", "inv no"],
+    "date": ["date", "txn date", "posting date", "document date", "value date"],
+    "amount": ["amount", "total", "gross", "net", "value", "withdrawal", "withdrawals", "debit", "dr", "payment", "payments", "deposit", "deposits", "deposited", "credit", "cr", "receipt", "receipts"],
+    "ledger": ["ledger", "account", "type", "category", "head", "expense", "income"],
+    "itemName": ["item", "product", "description", "particulars", "goods", "material"],
+    "itemQuantity": ["qty", "quantity", "pieces", "nos", "count"],
+    "itemRate": ["rate", "price", "unit"],
+    "itemTaxRate": ["tax", "gst %", "igst", "cgst", "sgst", "vat"],
+    "itemTotalAmount": ["item total", "net amount", "total sum"],
+    "paymentMode": ["mode", "payment", "method", "type", "instrument"],
+    "referenceNo": ["ref", "cheque", "chq", "utr", "transaction id", "txn id", "instrument id", "inst id", "inst. id", "installment id"],
+    "bankDetails": ["bank", "account no", "ifsc", "branch"],
+    "narration": ["narration", "narrations", "remark", "remarks", "memo", "notes", "description", "descriptions"],
+    "debitLedger": ["debit", "dr", "to", "destination"],
+    "creditLedger": ["credit", "cr", "by", "source"],
+    "fromAccount": ["from", "source", "withdrawal", "payor"],
+    "toAccount": ["to", "destination", "deposit", "payee"],
+    "withdrawalAmount": ["withdrawal", "withdrawals", "debit", "dr", "payment", "payments"],
+    "depositAmount": ["deposit", "deposits", "deposited", "credit", "cr", "receipt", "receipts"],
+    "closingBalance": ["balance", "bal", "closing"]
+  },
+  "commonHeaderKeywords": ["date", "amount", "narration", "description", "reference", "withdrawal", "deposit", "balance", "particulars", "invoice", "party"],
+  "bankKeywords": ["withdrawal", "deposit", "closing balance", "value date", "txn date", "particulars"]
+}
