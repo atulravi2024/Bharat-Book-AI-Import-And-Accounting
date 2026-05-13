@@ -1,1 +1,67 @@
-[]
+[
+  {
+    "id": "ITEM-001",
+    "name": "Laptop Pro 15",
+    "code": "LP-15",
+    "itemType": "Inventory",
+    "hsnCode": "84713010",
+    "taxRate": 18,
+    "uom": "Nos",
+    "category": "Electronics",
+    "brand": "TechBrand",
+    "stockGroup": "Computers",
+    "price": 120000
+  },
+  {
+    "id": "ITEM-002",
+    "name": "Wireless Mouse",
+    "code": "WM-01",
+    "itemType": "Inventory",
+    "hsnCode": "84716060",
+    "taxRate": 18,
+    "uom": "Nos",
+    "category": "Accessories",
+    "brand": "TechBrand",
+    "stockGroup": "Peripherals",
+    "price": 1500
+  },
+  {
+    "id": "ITEM-003",
+    "name": "Mechanical Keyboard",
+    "code": "MK-01",
+    "itemType": "Inventory",
+    "hsnCode": "84716040",
+    "taxRate": 18,
+    "uom": "Nos",
+    "category": "Accessories",
+    "brand": "TechBrand",
+    "stockGroup": "Peripherals",
+    "price": 4500
+  },
+  {
+    "id": "ITEM-004",
+    "name": "Office Desk Set",
+    "code": "ODS-01",
+    "itemType": "Assembly",
+    "hsnCode": "94031010",
+    "taxRate": 18,
+    "uom": "Set",
+    "category": "Furniture",
+    "brand": "WoodKraft",
+    "stockGroup": "Office Furniture",
+    "price": 15000
+  },
+  {
+    "id": "ITEM-005",
+    "name": "IT Setup Service",
+    "code": "ITS-01",
+    "itemType": "Service",
+    "hsnCode": "998313",
+    "taxRate": 18,
+    "uom": "Hrs",
+    "category": "Services",
+    "brand": "TechBrand",
+    "stockGroup": "IT Services",
+    "price": 2000
+  }
+]

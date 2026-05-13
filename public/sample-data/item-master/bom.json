@@ -1,0 +1,20 @@
+[
+  {
+    "id": "BOM-001",
+    "name": "Office Desk Set Assembly",
+    "itemId": "ITEM-004",
+    "quantityProduced": 1,
+    "components": [
+      {
+        "itemId": "ITEM-002",
+        "quantity": 1,
+        "uom": "Nos"
+      },
+      {
+        "itemId": "ITEM-003",
+        "quantity": 1,
+        "uom": "Nos"
+      }
+    ]
+  }
+]

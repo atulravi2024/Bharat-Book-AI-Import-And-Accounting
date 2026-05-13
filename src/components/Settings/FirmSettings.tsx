@@ -28,7 +28,7 @@ import {
   CheckCircleIcon,
   AdminIcon,
 } from "../icons/IconComponents";
-import { ChevronDown, ChevronUp, Search, Download, RotateCcw, Save, FormInput, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Search, Download, RotateCcw, Save, FormInput, Trash2, Upload } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BUSINESS_SUBDOMAINS: Record<string, { label: string; value: string }[]> =
@@ -777,32 +777,93 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
     linkElement.click();
   };
 
-  const handleRestoreBackup = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCombinedImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     
     const reader = new FileReader();
     reader.onload = (event) => {
-      try {
-        const parsed = JSON.parse(event.target?.result as string);
-        setFirmData(prev => ({ ...prev, ...parsed }));
-        setAlertConfig({
-          isOpen: true,
-          title: "Backup Restored",
-          message: "Backup restored successfully. Please click Save Changes to persist."
-        });
-      } catch (err) {
-        setAlertConfig({
-          isOpen: true,
-          title: "Error",
-          message: "Invalid backup file."
-        });
+      const result = event.target?.result as string;
+      if (file.name.toLowerCase().endsWith('.csv')) {
+        try {
+          const lines = result.split('\n');
+          const newFirmData: any = {};
+          for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+            
+            // Simple CSV parser for 2 columns: Key, Value
+            const firstCommaIndex = line.indexOf(',');
+            if (firstCommaIndex > -1) {
+               let key = line.substring(0, firstCommaIndex);
+               let val = line.substring(firstCommaIndex + 1);
+               
+               if (key.startsWith('"') && key.endsWith('"')) {
+                   key = key.substring(1, key.length - 1);
+               }
+               if (val.startsWith('"') && val.endsWith('"')) {
+                   val = val.substring(1, val.length - 1);
+               }
+               key = key.replace(/""/g, '"');
+               val = val.replace(/""/g, '"');
+
+               if (initialFirmData.hasOwnProperty(key)) {
+                  newFirmData[key] = val === "true" ? true : val === "false" ? false : val;
+               }
+            }
+          }
+          setFirmData(prev => ({ ...prev, ...newFirmData }));
+          setAlertConfig({
+            isOpen: true,
+            title: "Backup Restored",
+            message: "CSV backup restored successfully. Please click Save to persist."
+          });
+        } catch (err) {
+          setAlertConfig({
+            isOpen: true,
+            title: "Error",
+            message: "Invalid CSV file."
+          });
+        }
+      } else {
+        try {
+          const parsed = JSON.parse(result);
+          setFirmData(prev => ({ ...prev, ...parsed }));
+          setAlertConfig({
+            isOpen: true,
+            title: "Backup Restored",
+            message: "JSON backup restored successfully. Please click Save Changes to persist."
+          });
+        } catch (err) {
+          setAlertConfig({
+            isOpen: true,
+            title: "Error",
+            message: "Invalid JSON backup file."
+          });
+        }
       }
     };
     reader.readAsText(file);
     if(fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const handleExportCSV = () => {
+    const keys = Object.keys(firmData) as (keyof typeof initialFirmData)[];
+    let csvContent = "Key,Value\n";
+    for (const key of keys) {
+      const value = firmData[key];
+      const escapedValue = String(value).replace(/"/g, '""');
+      csvContent += `"${key}","${escapedValue}"\n`;
+    }
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "firmSettings_backup.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleFactoryReset = () => {
     setConfirmConfig({
@@ -854,9 +915,9 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
     <div className="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
       <input
         type="file"
-        accept=".json"
+        accept=".json,.csv"
         ref={fileInputRef}
-        onChange={handleRestoreBackup}
+        onChange={handleCombinedImport}
         className="hidden"
         id="globalHiddenFileInput"
       />
@@ -911,44 +972,71 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
         </div>
 
         {/* Action Buttons - Unified Styling & Responsive Labels */}
-        <div className="flex items-center gap-2 w-full md:w-auto justify-center md:justify-end">
-          <button
-            onClick={handleLoad}
-            title="Load Local JSON"
-            className="px-4 lg:px-6 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-blue-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-lg active:scale-95 group"
-          >
-            <Download className="w-5 h-5 text-gray-500 group-hover:text-blue-500 transition-colors lg:mr-2" />
-            <span className="hidden lg:inline">Load</span>
-          </button>
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-center md:justify-end">
+          
+          <div className="flex items-center bg-gray-50 dark:bg-gray-900 p-1 rounded-xl border border-gray-200 dark:border-gray-700">
+             <button
+                onClick={() => fileInputRef.current?.click()}
+                title="Import (JSON/CSV)"
+                className="px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <Upload className="w-4 h-4" /> <span className="hidden sm:inline">Import</span>
+             </button>
+             <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+             <button
+                onClick={handleExportBackup}
+                title="Export JSON"
+                className="px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <Download className="w-4 h-4" /> <span className="hidden sm:inline">JSON</span>
+             </button>
+             <button
+                onClick={handleExportCSV}
+                title="Export CSV"
+                className="px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <Download className="w-4 h-4" /> <span className="hidden sm:inline">CSV</span>
+             </button>
+          </div>
 
           <button
             onClick={handleClear}
             title="Clear All Fields"
-            className="px-4 lg:px-6 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-orange-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-lg active:scale-95 group"
+            className="p-2 sm:px-4 sm:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-orange-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-sm active:scale-95 group"
           >
-            <Trash2 className="w-5 h-5 text-gray-500 group-hover:text-orange-500 transition-colors lg:mr-2" />
-            <span className="hidden lg:inline">Clear</span>
+            <Trash2 className="w-5 h-5 text-gray-500 group-hover:text-orange-500 transition-colors sm:mr-2" />
+            <span className="hidden sm:inline">Clear</span>
           </button>
 
           <button
             onClick={handleResetToDefault}
             title="Reset to Defaults"
-            className="px-4 lg:px-6 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-lg active:scale-95 group"
+            className="p-2 sm:px-4 sm:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-sm active:scale-95 group"
           >
-            <RotateCcw className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors lg:mr-2" />
-            <span className="hidden lg:inline">Reset</span>
+            <RotateCcw className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors sm:mr-2" />
+            <span className="hidden sm:inline">Reset</span>
           </button>
 
           <button
             onClick={handleSave}
             title="Save Configuration"
-            className={`p-3 lg:px-6 lg:py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-lg active:scale-95 ${
+            className={`p-2.5 sm:px-6 sm:py-2.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-md active:scale-95 ${
               isSaved 
-                ? "bg-green-500 text-white shadow-green-200 dark:shadow-none" 
+                ? "bg-emerald-500 text-white shadow-emerald-200 dark:shadow-none" 
                 : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200 dark:shadow-none"
             } `}
           >
-            {isSaved ? <CheckCircleIcon className="w-5 h-5" /> : <Save className="w-5 h-5" />}
+            {isSaved ? (
+              <>
+                <CheckCircleIcon className="w-5 h-5 sm:mr-2" />
+                <span className="hidden sm:inline">Saved!</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-5 h-5 sm:mr-2" />
+                <span className="hidden sm:inline">Save</span>
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -965,7 +1053,7 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
             ledgerMasters={ledgerMasters}
             {...(id === 'systemCompliance' ? {
               handleExportBackup,
-              handleRestoreBackup,
+              handleRestoreBackup: handleCombinedImport,
               handleFactoryReset,
               fileInputRef
             } : {})}

@@ -1,0 +1,17 @@
+{
+  "turnover_reconciliation": {
+    "turnover_as_per_audited_financial_statements": 10000000,
+    "unbilled_revenue_beginning": 500000,
+    "unbilled_revenue_end": 700000,
+    "unadjusted_advances_beginning": 100000,
+    "unadjusted_advances_end": 150000,
+    "turnover_declared_in_annual_return": 10050000,
+    "unreconciled_turnover": 0
+  },
+  "tax_reconciliation": {
+    "taxable_value": 8000000,
+    "tax_liability_as_per_gstr9": 1440000,
+    "tax_paid_through_cash_and_itc": 1440000,
+    "unreconciled_payment": 0
+  }
+}

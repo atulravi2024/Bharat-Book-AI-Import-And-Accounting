@@ -1,0 +1,19 @@
+{
+  "details_of_outward_supplies": {
+    "b2c": 1500000,
+    "b2b": 3500000,
+    "exports": 1000000,
+    "sez": 500000
+  },
+  "details_of_itc": {
+    "inputs": 200000,
+    "capital_goods": 500000,
+    "input_services": 150000
+  },
+  "tax_paid": {
+    "cgst": 450000,
+    "sgst": 450000,
+    "igst": 270000,
+    "cess": 0
+  }
+}

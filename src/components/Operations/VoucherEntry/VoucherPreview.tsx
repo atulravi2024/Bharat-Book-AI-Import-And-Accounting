@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import { VoucherType } from '../../../types';
 import { Printer, Download, Image as ImageIcon, X, ZoomIn, ZoomOut, Maximize, RotateCcw, FileText, GripVertical, ToggleLeft, ToggleRight, Settings, Layout, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { numberToWords } from '../../../lib/numberToWords';
@@ -208,10 +209,19 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
   const filteredRows = React.useMemo(() => rows.filter(r => (isInventory ? r.itemName : r.ledgerName)), [rows, isInventory]);
   const [currentPage, setCurrentPage] = useState(1);
   
+  const handlePrint = useReactToPrint({
+      contentRef: documentRef,
+      documentTitle: `Invoice_${header.invoiceNumber || 'Doc'}`.replace(/[^a-zA-Z0-9_\-]/g, '_'),
+      pageStyle: `@media print { @page { size: ${printConfig.pageSize || 'A4'} ${printConfig.pageOrientation?.toLowerCase() || 'portrait'}; margin: 0mm; } body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }`
+  });
+  
   const itemPages = React.useMemo(() => {
       const first = printConfig.itemsPerFirstPage || 12;
       const second = printConfig.itemsPerSecondPage || 15;
       const last = printConfig.itemsPerLastPage || 10;
+      
+      const hsnCount = (printConfig.showHsnSummary && filteredRows.length > 0) ? new Set(filteredRows.map(r => r.hsn)).size : 0;
+      const effectiveLast = Math.max(1, last - (printConfig.showHsnSummary ? Math.ceil(hsnCount * 0.5) : 0));
       
       const pages = [];
       let start = 0;
@@ -220,7 +230,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
       if (totalItems === 0) return [[]];
 
       let remaining = totalItems - start;
-      if (remaining <= last) {
+      if (remaining <= effectiveLast) {
           pages.push(filteredRows.slice(start, start + remaining));
           return pages;
       } else {
@@ -230,26 +240,27 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
       
       while (start < totalItems) {
           remaining = totalItems - start;
-          if (remaining <= last) {
+          if (remaining <= effectiveLast) {
                pages.push(filteredRows.slice(start, start + remaining));
                start += remaining;
                break;
           } else {
                const limit = second > 0 ? second : 15;
-               pages.push(filteredRows.slice(start, start + limit));
-               start += limit;
+               const toTake = Math.min(remaining, limit);
+               pages.push(filteredRows.slice(start, start + toTake));
+               start += toTake;
           }
       }
       
       if (pages.length > 0) {
           let lastPageItems = pages[pages.length - 1].length;
-          if (lastPageItems > last) {
+          if (lastPageItems > effectiveLast) {
               pages.push([]);
           }
       }
       
       return pages;
-  }, [filteredRows, (printConfig as any).itemsPerFirstPage, (printConfig as any).itemsPerSecondPage, (printConfig as any).itemsPerLastPage]);
+  }, [filteredRows, (printConfig as any).itemsPerFirstPage, (printConfig as any).itemsPerSecondPage, (printConfig as any).itemsPerLastPage, printConfig.showHsnSummary]);
 
   const totalPages = Math.max(1, itemPages.length);
   const paginatedRows = itemPages[currentPage - 1] || [];
@@ -310,11 +321,11 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
   useEffect(() => {
     if (autoPrint) {
       const timer = setTimeout(() => {
-        window.print();
+        if (handlePrint) handlePrint();
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [autoPrint]);
+  }, [autoPrint, handlePrint]);
 
   const handleZoomIn = () => setManualZoom(prev => Math.min((prev || autoScale) + 0.1, 2.5));
   const handleZoomOut = () => setManualZoom(prev => Math.max((prev || autoScale) - 0.1, 0.1));
@@ -607,7 +618,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
         <div className="p-3 md:p-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-gray-50/90 backdrop-blur-sm gap-3 sticky top-0 z-10 no-print dark:border-gray-800">
           <div className="flex items-center gap-3">
             <button 
-              onClick={() => window.print()}
+              onClick={() => { if(handlePrint) handlePrint(); }}
               className="bg-blue-600 p-2.5 rounded-xl text-white shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-95"
               title="Print Document"
             >
@@ -719,14 +730,15 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                   }
                 }
               `}</style>
-              <div id="voucher-to-print" ref={documentRef} className="w-full h-full">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => {
-                    const isLastPage = pageNum === totalPages;
-                    const pageRows = itemPages[pageNum - 1] || [];
-                    
-                    return (
-                        <div 
-                            key={pageNum}
+        <div id="voucher-to-print" ref={documentRef} className="w-full h-full">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => {
+                const isLastPage = pageNum === totalPages;
+                const pageRows = itemPages[pageNum - 1] || [];
+                const absoluteStartIndex = itemPages.slice(0, pageNum - 1).reduce((sum, page) => sum + page.length, 0);
+                
+                return (
+                    <div 
+                        key={pageNum}
                             className={`voucher-print-page bg-white flex-col min-h-full border border-gray-100 select-text transition-all duration-300 relative ${printConfig.useGrayScale ? 'grayscale contrast-125' : ''} ${isTechnical ? 'border-[3px] border-black' : ''} ${textTransform !== 'default' ? `text-transform-${textTransform}` : ''} ${pageNum === currentPage ? 'flex' : 'hidden print:flex'}`}
                             style={{ 
                                 boxSizing: 'border-box',
@@ -872,7 +884,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                     <tbody className={tStyles.tableBody}>
                         {pageRows.map((row, index) => (
                             <tr key={index} className={tStyles.tableRow}>
-                                <td className={tStyles.tableCellFirst} style={{ fontSize: `${baseSize * 0.9}px` }}>{String(index + 1).padStart(2, '0')}</td>
+                                <td className={tStyles.tableCellFirst} style={{ fontSize: `${baseSize * 0.9}px` }}>{String(absoluteStartIndex + index + 1).padStart(2, '0')}</td>
                                 <td className={tStyles.tableCellLeft}>
                                     <div {...getSectionStyle('lineItem', `font-black text-gray-900 uppercase tracking-tight ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * (printConfig.compactMode ? 1.0 : 1.33)}px` })}>{isInventory ? row.itemName : row.ledgerName}</div>
                                     {printConfig.showHSN && row.hsn && <div className={`${primaryText} font-black uppercase tracking-widest opacity-60`} style={{ fontSize: `${baseSize * 0.66}px`, marginTop: `${baseSize * 0.15}px` }}>HSN Code: {row.hsn}</div>}
@@ -1118,41 +1130,77 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
         </div>
 
         {/* Bottom Zoom Controls Section */}
-        <div className="border-t border-gray-200 bg-white p-3 md:p-4 flex flex-shrink-0 justify-center items-center gap-2 z-20 no-print text-black dark:border-gray-700 dark:bg-gray-800">
-          <button 
-            onClick={handleZoomOut}
-            className="p-2 hover:bg-gray-100 rounded-lg text-black transition-all active:scale-95 dark:hover:bg-gray-600"
-            title="Zoom Out"
-          >
-            <ZoomOut size={20} />
-          </button>
-          <div className="w-20 text-center text-sm font-black text-black tabular-nums">
-            {Math.round(previewScale * 100)}%
+        <div className="border-t border-gray-200 bg-white p-3 md:p-4 flex flex-col sm:flex-row flex-shrink-0 justify-center items-center gap-2 sm:gap-4 z-20 no-print text-black dark:border-gray-700 dark:bg-gray-800">
+          {totalPages > 1 && (
+              <div className="flex items-center justify-center bg-gray-50 border border-gray-200 shadow-sm rounded-lg p-1 gap-1 dark:bg-gray-700 dark:border-gray-600">
+                  <button
+                      onClick={() => setCurrentPage(1)}
+                      disabled={currentPage === 1}
+                      className="p-1.5 hover:bg-white rounded-md text-black disabled:opacity-50 transition-all active:scale-95 dark:text-gray-200 dark:hover:bg-gray-600"
+                      title="First Page"
+                  ><ChevronsLeft size={18} /></button>
+                  <button
+                      onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="p-1.5 hover:bg-white rounded-md text-black disabled:opacity-50 transition-all active:scale-95 dark:text-gray-200 dark:hover:bg-gray-600"
+                      title="Previous Page"
+                  ><ChevronLeft size={18} /></button>
+                  
+                  <div className="text-xs font-black px-2 tabular-nums min-w-[60px] text-center dark:text-gray-200">
+                      {currentPage} / {totalPages}
+                  </div>
+                  
+                  <button
+                      onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="p-1.5 hover:bg-white rounded-md text-black disabled:opacity-50 transition-all active:scale-95 dark:text-gray-200 dark:hover:bg-gray-600"
+                      title="Next Page"
+                  ><ChevronRight size={18} /></button>
+                  <button
+                      onClick={() => setCurrentPage(totalPages)}
+                      disabled={currentPage === totalPages}
+                      className="p-1.5 hover:bg-white rounded-md text-black disabled:opacity-50 transition-all active:scale-95 dark:text-gray-200 dark:hover:bg-gray-600"
+                      title="Last Page"
+                  ><ChevronsRight size={18} /></button>
+              </div>
+          )}
+          
+          <div className="flex items-center justify-center bg-gray-50 border border-gray-200 shadow-sm rounded-lg p-1 gap-1 dark:bg-gray-700 dark:border-gray-600">
+              <button 
+                onClick={handleZoomOut}
+                className="p-1.5 hover:bg-white rounded-md text-black transition-all active:scale-95 dark:text-gray-200 dark:hover:bg-gray-600"
+                title="Zoom Out"
+              >
+                <ZoomOut size={18} />
+              </button>
+              <div className="w-16 text-center text-sm font-black text-black tabular-nums dark:text-gray-200">
+                {Math.round(previewScale * 100)}%
+              </div>
+              <button 
+                onClick={handleZoomIn}
+                className="p-1.5 hover:bg-white rounded-md text-black transition-all active:scale-95 dark:text-gray-200 dark:hover:bg-gray-600"
+                title="Zoom In"
+              >
+                <ZoomIn size={18} />
+              </button>
+              <div className="h-6 w-px bg-gray-200 mx-1 md:mx-2 dark:bg-gray-600" />
+              <button 
+                onClick={handleResetZoom}
+                className={`p-1.5 rounded-md transition-all active:scale-95 flex items-center gap-2 px-3 ${manualZoom === null ? 'text-black bg-white shadow-sm font-bold dark:bg-gray-600' : 'text-black hover:bg-white dark:text-gray-200 dark:hover:bg-gray-600'} `}
+                title="Fit to Screen"
+              >
+                <RotateCcw size={16} />
+                <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">Fit</span>
+              </button>
+              <button 
+                onClick={handleFullSize}
+                className={`p-1.5 rounded-md transition-all active:scale-95 flex items-center gap-2 px-3 ${manualZoom === 1 ? 'text-black bg-white shadow-sm font-bold dark:bg-gray-600' : 'text-black hover:bg-white dark:text-gray-200 dark:hover:bg-gray-600'} `}
+                title="Actual Size (100%)"
+              >
+                <Maximize size={16} />
+                <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">100%</span>
+              </button>
           </div>
-          <button 
-            onClick={handleZoomIn}
-            className="p-2 hover:bg-gray-100 rounded-lg text-black transition-all active:scale-95 dark:hover:bg-gray-600"
-            title="Zoom In"
-          >
-            <ZoomIn size={20} />
-          </button>
-          <div className="h-6 w-px bg-gray-200 mx-2 md:mx-4 dark:bg-gray-700" />
-          <button 
-            onClick={handleResetZoom}
-            className={`p-2 rounded-lg transition-all active:scale-95 flex items-center gap-2 px-4 ${manualZoom === null ? 'text-black bg-gray-100 font-bold' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
-            title="Fit to Screen"
-          >
-            <RotateCcw size={18} />
-            <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">Fit</span>
-          </button>
-          <button 
-            onClick={handleFullSize}
-            className={`p-2 rounded-lg transition-all active:scale-95 flex items-center gap-2 px-4 ${manualZoom === 1 ? 'text-black bg-gray-100 font-bold' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
-            title="Actual Size (100%)"
-          >
-            <Maximize size={18} />
-            <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">100%</span>
-          </button>
         </div>
       </div>
     </div>

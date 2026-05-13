@@ -1,0 +1,28 @@
+[
+  {
+    "id": "WH-001",
+    "name": "Main Central Warehouse",
+    "type": "Main",
+    "location": "Mumbai",
+    "address": "123, Storage Street, Industrial Area",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "pincode": "400001",
+    "capacity": 10000,
+    "contactPerson": "John Doe",
+    "contactPhone": "9876543210"
+  },
+  {
+    "id": "WH-002",
+    "name": "Delhi Depot",
+    "type": "Distribution",
+    "location": "Delhi",
+    "address": "45, Distribution Road",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "pincode": "110001",
+    "capacity": 5000,
+    "contactPerson": "Jane Smith",
+    "contactPhone": "9876543211"
+  }
+]

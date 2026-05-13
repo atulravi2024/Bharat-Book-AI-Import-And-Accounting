@@ -52,6 +52,25 @@ const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
   }
 };
 
+function useStorageState<T>(key: string, defaultValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
+  const [state, setState] = useState<T>(() => safeJsonParse(localStorage.getItem(key), defaultValue));
+  const isFirstRender = React.useRef(true);
+  
+  useEffect(() => {
+      if (isFirstRender.current) {
+          isFirstRender.current = false;
+          return;
+      }
+      try {
+          localStorage.setItem(key, JSON.stringify(state));
+      } catch (e) {
+          console.error(`Storage error for ${key}:`, e);
+      }
+  }, [state, key]);
+  
+  return [state, setState];
+}
+
 const App: React.FC = () => {
   const [view, setView] = useState<MainView>(() => {
     const saved = localStorage.getItem('bharat_book_navigation_defaults');
@@ -98,13 +117,7 @@ const App: React.FC = () => {
   const [voucherEntryActiveTab, setVoucherEntryActiveTab] = useState<string | null>(() => getSubPageForView('voucher-entry'));
   const [inventoryEntryActiveTab, setInventoryEntryActiveTab] = useState<string | null>(() => getSubPageForView('inventory-entry'));
   const [settingsActiveTab, setSettingsActiveTab] = useState<string | null>(() => getSubPageForView('settings'));
-  const [activeSamples, setActiveSamples] = useState<string[]>(() => {
-    return safeJsonParse(localStorage.getItem('bharat_book_active_samples'), ['ledgers', 'items', 'parties']);
-  });
-  
-  useEffect(() => {
-    localStorage.setItem('bharat_book_active_samples', JSON.stringify(activeSamples));
-  }, [activeSamples]);
+  const [activeSamples, setActiveSamples] = useStorageState<string[]>('bharat_book_active_samples_v2', ['ledgers', 'items', 'bom', 'warehouses', 'parties']);
   
   useEffect(() => {
     if (view !== 'ledger-master' && view !== 'item-master' && view !== 'settings') {
@@ -115,36 +128,24 @@ const App: React.FC = () => {
   const [entryStep, setEntryStep] = useState<AppStep>('upload');
   const [vouchers, setVouchers] = useState<ParsedVoucher[]>([]);
   const [editingVoucher, setEditingVoucher] = useState<any | null>(null);
-  const [allVouchers, setAllVouchers] = useState<ParsedVoucher[]>(() => {
-    return safeJsonParse(localStorage.getItem(ALL_VOUCHERS_KEY), [] as ParsedVoucher[]);
-  });
+  const [allVouchers, setAllVouchers] = useStorageState<ParsedVoucher[]>(ALL_VOUCHERS_KEY, []);
   const [voucherType, setVoucherType] = useState<VoucherType>(VoucherType.Purchase);
   const [parsingSettings, setParsingSettings] = useState<ParsingSettings | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasDraft, setHasDraft] = useState(false);
   
-  const [partyMasters, setPartyMasters] = useState(() => safeJsonParse(localStorage.getItem(PARTY_MASTERS_KEY), []));
-
-  const [ledgerMasters, setLedgerMasters] = useState(() => safeJsonParse(localStorage.getItem(LEDGER_MASTERS_KEY), []));
-
-  const [itemMasters, setItemMasters] = useState(() => safeJsonParse(localStorage.getItem(ITEM_MASTERS_KEY), []));
-
-  const [uomMasters, setUomMasters] = useState(() => safeJsonParse(localStorage.getItem(UOM_MASTERS_KEY), []));
-
-  const [gstMasters, setGstMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(GST_MASTERS_KEY), []));
-
-  const [brandMasters, setBrandMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(BRAND_MASTERS_KEY), []));
-
-  const [categoryMasters, setCategoryMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(CATEGORY_MASTERS_KEY), []));
-
-  const [gradeMasters, setGradeMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(GRADE_MASTERS_KEY), []));
-
-  const [assertionCategoryMasters, setAssertionCategoryMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(ASSERTION_CATEGORY_MASTERS_KEY), []));
-
-  const [assertionCodeMasters, setAssertionCodeMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(ASSERTION_CODE_MASTERS_KEY), []));
-
-  const [contactMasters, setContactMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(CONTACT_MASTERS_KEY), []));
+  const [partyMasters, setPartyMasters] = useStorageState<any[]>(PARTY_MASTERS_KEY, []);
+  const [ledgerMasters, setLedgerMasters] = useStorageState<any[]>(LEDGER_MASTERS_KEY, []);
+  const [itemMasters, setItemMasters] = useStorageState<any[]>(ITEM_MASTERS_KEY, []);
+  const [uomMasters, setUomMasters] = useStorageState<any[]>(UOM_MASTERS_KEY, []);
+  const [gstMasters, setGstMasters] = useStorageState<any[]>(GST_MASTERS_KEY, []);
+  const [brandMasters, setBrandMasters] = useStorageState<any[]>(BRAND_MASTERS_KEY, []);
+  const [categoryMasters, setCategoryMasters] = useStorageState<any[]>(CATEGORY_MASTERS_KEY, []);
+  const [gradeMasters, setGradeMasters] = useStorageState<any[]>(GRADE_MASTERS_KEY, []);
+  const [assertionCategoryMasters, setAssertionCategoryMasters] = useStorageState<any[]>(ASSERTION_CATEGORY_MASTERS_KEY, []);
+  const [assertionCodeMasters, setAssertionCodeMasters] = useStorageState<any[]>(ASSERTION_CODE_MASTERS_KEY, []);
+  const [contactMasters, setContactMasters] = useStorageState<any[]>(CONTACT_MASTERS_KEY, []);
 
   // Ensure active samples are loaded on mount and cleanup legacy hard-coded data
   useEffect(() => {
@@ -202,142 +203,33 @@ const App: React.FC = () => {
     purgeLegacy();
 
     const reloadSamples = async () => {
-        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v6');
+        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v7');
         if (!hasLoaded) {
             for (const id of activeSamples) {
                 await toggleSampleDataSet(id, true);
             }
-            localStorage.setItem('bharat_book_samples_hydrated_v6', 'true');
+            localStorage.setItem('bharat_book_samples_hydrated_v7', 'true');
         }
     };
     reloadSamples();
   }, []);
 
-  const [skuMasters, setSkuMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_sku_masters'), []));
+  const [skuMasters, setSkuMasters] = useStorageState<any[]>('bharat_book_sku_masters', []);
+  const [priceListMasters, setPriceListMasters] = useStorageState<any[]>('bharat_book_price_list_masters', []);
+  const [weightMasters, setWeightMasters] = useStorageState<any[]>('bharat_book_weight_masters', []);
+  const [volumeMasters, setVolumeMasters] = useStorageState<any[]>('bharat_book_volume_masters', []);
+  const [colorMasters, setColorMasters] = useStorageState<ColorMaster[]>('bharat_book_color_masters', [] as ColorMaster[]);
+  const [sizeMasters, setSizeMasters] = useStorageState<SizeMaster[]>('bharat_book_size_masters', [] as SizeMaster[]);
+  const [variantMasters, setVariantMasters] = useStorageState<any[]>('bharat_book_variant_masters', []);
+  const [dimensionMasters, setDimensionMasters] = useStorageState<DimensionMaster[]>('bharat_book_dimension_masters', [] as DimensionMaster[]);
 
-  const [priceListMasters, setPriceListMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_price_list_masters'), []));
+  const [locationMasters, setLocationMasters] = useStorageState<any[]>(LOCATION_MASTERS_KEY, []);
+  const [bomMasters, setBomMasters] = useStorageState<BomMaster[]>(BOM_MASTERS_KEY, []);
+  const [stockGroupMasters, setStockGroupMasters] = useStorageState<any[]>(STOCK_GROUP_MASTERS_KEY, []);
+  const [costCenterMasters, setCostCenterMasters] = useStorageState<any[]>(COST_CENTER_MASTERS_KEY, []);
+  const [accountGroupMasters, setAccountGroupMasters] = useStorageState<any[]>(ACCOUNT_GROUP_MASTERS_KEY, []);
 
-  const [weightMasters, setWeightMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_weight_masters'), []));
 
-  const [volumeMasters, setVolumeMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_volume_masters'), []));
-
-  const [colorMasters, setColorMasters] = useState<ColorMaster[]>(() => safeJsonParse(localStorage.getItem('bharat_book_color_masters'), [] as ColorMaster[]));
-
-  const [sizeMasters, setSizeMasters] = useState<SizeMaster[]>(() => safeJsonParse(localStorage.getItem('bharat_book_size_masters'), [] as SizeMaster[]));
-
-  const [variantMasters, setVariantMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem('bharat_book_variant_masters'), []));
-
-  const [dimensionMasters, setDimensionMasters] = useState<DimensionMaster[]>(() => safeJsonParse(localStorage.getItem('bharat_book_dimension_masters'), [] as DimensionMaster[]));
-
-  useEffect(() => {
-    localStorage.setItem('bharat_book_sku_masters', JSON.stringify(skuMasters));
-  }, [skuMasters]);
-
-  useEffect(() => {
-    localStorage.setItem('bharat_book_price_list_masters', JSON.stringify(priceListMasters));
-  }, [priceListMasters]);
-
-  useEffect(() => {
-    localStorage.setItem('bharat_book_weight_masters', JSON.stringify(weightMasters));
-  }, [weightMasters]);
-
-  useEffect(() => {
-    localStorage.setItem('bharat_book_volume_masters', JSON.stringify(volumeMasters));
-  }, [volumeMasters]);
-
-  useEffect(() => {
-    localStorage.setItem('bharat_book_color_masters', JSON.stringify(colorMasters));
-  }, [colorMasters]);
-
-  useEffect(() => {
-    localStorage.setItem('bharat_book_size_masters', JSON.stringify(sizeMasters));
-  }, [sizeMasters]);
-
-  useEffect(() => {
-    localStorage.setItem('bharat_book_variant_masters', JSON.stringify(variantMasters));
-  }, [variantMasters]);
-
-  useEffect(() => {
-    localStorage.setItem('bharat_book_dimension_masters', JSON.stringify(dimensionMasters));
-  }, [dimensionMasters]);
-
-  const [locationMasters, setLocationMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(LOCATION_MASTERS_KEY), []));
-
-  const [bomMasters, setBomMasters] = useState<BomMaster[]>(() => safeJsonParse(localStorage.getItem(BOM_MASTERS_KEY), []));
-
-  const [stockGroupMasters, setStockGroupMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(STOCK_GROUP_MASTERS_KEY), []));
-
-  const [costCenterMasters, setCostCenterMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(COST_CENTER_MASTERS_KEY), []));
-
-  const [accountGroupMasters, setAccountGroupMasters] = useState<any[]>(() => safeJsonParse(localStorage.getItem(ACCOUNT_GROUP_MASTERS_KEY), []));
-
-  useEffect(() => {
-    localStorage.setItem(PARTY_MASTERS_KEY, JSON.stringify(partyMasters));
-  }, [partyMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(LEDGER_MASTERS_KEY, JSON.stringify(ledgerMasters));
-  }, [ledgerMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(ITEM_MASTERS_KEY, JSON.stringify(itemMasters));
-  }, [itemMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(UOM_MASTERS_KEY, JSON.stringify(uomMasters));
-  }, [uomMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(GST_MASTERS_KEY, JSON.stringify(gstMasters));
-  }, [gstMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(BRAND_MASTERS_KEY, JSON.stringify(brandMasters));
-  }, [brandMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(CATEGORY_MASTERS_KEY, JSON.stringify(categoryMasters));
-  }, [categoryMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(GRADE_MASTERS_KEY, JSON.stringify(gradeMasters));
-  }, [gradeMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(ASSERTION_CATEGORY_MASTERS_KEY, JSON.stringify(assertionCategoryMasters));
-  }, [assertionCategoryMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(ASSERTION_CODE_MASTERS_KEY, JSON.stringify(assertionCodeMasters));
-  }, [assertionCodeMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(CONTACT_MASTERS_KEY, JSON.stringify(contactMasters));
-  }, [contactMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(LOCATION_MASTERS_KEY, JSON.stringify(locationMasters));
-  }, [locationMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(BOM_MASTERS_KEY, JSON.stringify(bomMasters));
-  }, [bomMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(STOCK_GROUP_MASTERS_KEY, JSON.stringify(stockGroupMasters));
-  }, [stockGroupMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(COST_CENTER_MASTERS_KEY, JSON.stringify(costCenterMasters));
-  }, [costCenterMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(ACCOUNT_GROUP_MASTERS_KEY, JSON.stringify(accountGroupMasters));
-  }, [accountGroupMasters]);
-
-  useEffect(() => {
-    localStorage.setItem(ALL_VOUCHERS_KEY, JSON.stringify(allVouchers));
-  }, [allVouchers]);
 
   useEffect(() => {
     const savedDraft = localStorage.getItem(DRAFT_KEY);
@@ -718,9 +610,7 @@ const App: React.FC = () => {
             case 'assertionCategories': setAssertionCategoryMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'assertionCodes': setAssertionCodeMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'items': setItemMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
-            case 'bom':
-            case 'bom_advanced':
-            case 'bom_pharma': setBomMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
+            case 'bom': setBomMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'parties':
             case 'vendors': setPartyMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'accountGroups': setAccountGroupMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
@@ -739,12 +629,17 @@ const App: React.FC = () => {
         const isEntry = entryIds.includes(id);
         const isItemMaster = itemMasterKeys.includes(id);
 
-        const folder = isReport ? 'reports' : (isEntry ? 'entries' : (isItemMaster ? 'item-master' : 'ledger-master'));
+        const folder = isReport ? 'reports' : (isEntry ? 'dashboard' : (isItemMaster ? 'item-master' : 'ledger-master'));
         const filename = (isReport || isEntry) ? id : (id === 'gst' ? 'hsn' : id);
         
         try {
             const response = await fetch(`/sample-data/${folder}/${filename}.json`);
             if (!response.ok) throw new Error(`Failed to load ${id} sample data`);
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") === -1) {
+                 console.warn(`Sample data /sample-data/${folder}/${filename}.json is not JSON (possibly a 404 fallback). Ignoring.`);
+                 return;
+            }
             const data = await response.json();
             if (!Array.isArray(data)) return;
             
@@ -780,9 +675,7 @@ const App: React.FC = () => {
                 case 'assertionCategories': setAssertionCategoryMasters(merge); break;
                 case 'assertionCodes': setAssertionCodeMasters(merge); break;
                 case 'items': setItemMasters(merge); break;
-                case 'bom':
-                case 'bom_advanced':
-                case 'bom_pharma': setBomMasters(merge); break;
+                case 'bom': setBomMasters(merge); break;
                 case 'parties':
                 case 'vendors': setPartyMasters(merge); break;
                 case 'accountGroups': setAccountGroupMasters(merge); break;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SettingsIcon, CheckCircleIcon } from '../icons/IconComponents';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Save, Upload, Download, RotateCcw } from 'lucide-react';
 import { defaultVoucherSettings } from '../../services/voucherNumbering';
 
 export const VoucherNumberingSettings: React.FC = () => {
@@ -34,6 +34,37 @@ export const VoucherNumberingSettings: React.FC = () => {
         setIsSaved(true);
         setTimeout(() => setIsSaved(false), 2000);
         localStorage.setItem('bharat_book_voucher_numbering', JSON.stringify(settings));
+    };
+
+    const resetAllSettings = () => {
+        setSettings(defaultSettings);
+    };
+
+    const handleExport = () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(settings, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "bharat_book_voucher_settings.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    };
+
+    const handleImportSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const jsonObj = JSON.parse(e.target?.result as string);
+                setSettings({ ...defaultSettings, ...jsonObj });
+            } catch (error) {
+                console.error("Error parsing settings JSON", error);
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
     };
 
     const handleSettingChange = (type: string, field: string, value: any) => {
@@ -111,14 +142,6 @@ export const VoucherNumberingSettings: React.FC = () => {
                     </h2>
                     <p className="text-gray-500 text-sm mt-2 font-medium dark:text-gray-400">Configure automatic voucher numbering for different transaction types.</p>
                 </div>
-                <button 
-                    onClick={handleSave}
-                    className={`flex items-center px-6 py-2.5 rounded-xl font-bold transition-all shadow-md active:scale-95 ${
-                        isSaved ? 'bg-emerald-500 text-white shadow-emerald-200' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200'
-                    }`}
-                >
-                    {isSaved ? <><CheckCircleIcon className="mr-2" /> Saved!</> : 'Save Settings'}
-                </button>
             </div>
 
             <div className="space-y-8 px-0">
@@ -244,6 +267,51 @@ export const VoucherNumberingSettings: React.FC = () => {
                         </div>
                     </div>
                 ))}
+            </div>
+
+            <div className="p-6 mt-auto border-t border-gray-100 dark:border-gray-800 flex justify-end">
+                <div className="grid grid-cols-4 gap-2 md:gap-4 w-full md:w-auto">
+                    <label 
+                        className="flex items-center justify-center gap-2 px-2 md:px-5 py-3 md:py-2.5 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold transition-all active:scale-95 shadow-sm cursor-pointer hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700" 
+                        title="Import Settings"
+                    >
+                        <Upload size={18} className="w-5 h-5" /> <span className="hidden md:inline">Import</span>
+                        <input type="file" accept=".json" className="hidden" onChange={handleImportSettings} />
+                    </label>
+                    <button 
+                        onClick={handleExport}
+                        className="flex items-center justify-center gap-2 px-2 md:px-5 py-3 md:py-2.5 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold transition-all active:scale-95 shadow-sm hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700"
+                        title="Export Settings"
+                    >
+                        <Download size={18} className="w-5 h-5" /> <span className="hidden md:inline">Export</span>
+                    </button>
+                    <button 
+                        onClick={resetAllSettings}
+                        className="flex items-center justify-center gap-2 px-2 md:px-5 py-3 md:py-2.5 bg-gray-100 text-gray-600 border border-transparent rounded-xl font-bold transition-all active:scale-95 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                        title="Reset to Default"
+                    >
+                        <RotateCcw size={18} className="w-5 h-5" /> <span className="hidden md:inline">Default</span>
+                    </button>
+                    <button 
+                        onClick={handleSave}
+                        className={`flex items-center justify-center p-3 md:px-6 md:py-2.5 rounded-xl font-bold transition-all shadow-md active:scale-95 ${
+                            isSaved ? 'bg-emerald-500 text-white shadow-emerald-200' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200'
+                        }`}
+                        title="Save Settings"
+                    >
+                        {isSaved ? (
+                            <>
+                                <CheckCircleIcon className="w-5 h-5 md:mr-2" />
+                                <span className="hidden md:inline">Saved!</span>
+                            </>
+                        ) : (
+                            <>
+                                <Save className="w-5 h-5 md:mr-2" />
+                                <span className="hidden md:inline">Save</span>
+                            </>
+                        )}
+                    </button>
+                </div>
             </div>
         </div>
     );

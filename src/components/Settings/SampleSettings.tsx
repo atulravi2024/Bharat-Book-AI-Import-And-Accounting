@@ -42,8 +42,6 @@ export const SampleSettings: React.FC<SampleSettingsProps> = ({ setView, setActi
             subItems: [
                 { id: 'items', label: 'Items' },
                 { id: 'bom', label: 'Bill of Materials' },
-                { id: 'bom_advanced', label: 'Advanced Manufacturing (BOM)' },
-                { id: 'bom_pharma', label: 'Pharma Batch (BOM)' },
                 { id: 'stockGroups', label: 'Stock Groups' },
                 { id: 'uoms', label: 'UOM Master' },
                 { id: 'gst', label: 'HSN code' },

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import { numberToWords } from '../../lib/numberToWords';
 import { SettingsIcon, CheckCircleIcon } from '../icons/IconComponents';
-import { ToggleLeft, ToggleRight, Layout, Type, FileText, Image as ImageIcon, Signature, Hash, Calculator, Printer, Maximize, Focus, Palette, Columns, ZoomIn, ZoomOut, RotateCcw, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { ToggleLeft, ToggleRight, Layout, Type, FileText, Image as ImageIcon, Signature, Hash, Calculator, Printer, Maximize, Focus, Palette, Columns, ZoomIn, ZoomOut, RotateCcw, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Upload, Download } from 'lucide-react';
 import { VoucherPreview } from '../Operations/VoucherEntry/VoucherPreview';
 import { VISUAL_THEME_PALETTES } from './VisualDesignPaletteData';
 
@@ -103,6 +104,13 @@ export const InvoicePrintSettings: React.FC = () => {
     });
 
     const [isSaved, setIsSaved] = useState(false);
+
+    const printRef = useRef<HTMLDivElement>(null);
+    const handlePrintReact = useReactToPrint({
+        contentRef: printRef,
+        documentTitle: 'Invoice_Settings_Test',
+        pageStyle: `@media print { @page { size: ${settings.pageSize || 'A4'} ${settings.pageOrientation?.toLowerCase() || 'portrait'}; margin: 0mm; } body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }`
+    });
 
     const calculatePageStats = (pageType: 'First' | 'Middle' | 'Last') => {
         const s = settings as any;
@@ -451,6 +459,34 @@ export const InvoicePrintSettings: React.FC = () => {
         setTimeout(() => setIsSaved(false), 2000);
     };
 
+    const handleExport = () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(settings, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "bharat_book_print_settings.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    };
+
+    const handleImportSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const jsonObj = JSON.parse(e.target?.result as string);
+                setSettings(jsonObj);
+            } catch (error) {
+                console.error("Error parsing settings JSON", error);
+            }
+        };
+        reader.readAsText(file);
+        // Reset input so the same file could be selected again
+        event.target.value = '';
+    };
+
     const toggleSetting = (key: keyof typeof settings) => {
         setSettings(prev => ({ ...prev, [key]: !prev[key] }));
     };
@@ -600,6 +636,7 @@ export const InvoicePrintSettings: React.FC = () => {
 
     const totalPages = Math.max(1, itemPages.length);
     const paginatedRows = itemPages[currentPage - 1] || [];
+    const absoluteStartIndex = itemPages.slice(0, currentPage - 1).reduce((sum, page) => sum + page.length, 0);
 
     useEffect(() => {
         if (currentPage > totalPages) {
@@ -651,13 +688,16 @@ export const InvoicePrintSettings: React.FC = () => {
         ]
     };
 
+    const deferredSampleItemCount = React.useDeferredValue(sampleItemCount);
+    const deferredSampleHsnCount = React.useDeferredValue(sampleHsnCount);
+
     useEffect(() => {
         const catItems = CATEGORIES[sampleCategory] || CATEGORIES['electronics'];
         const newRows = [];
         let taxableValue = 0;
         let totalTaxAmount = 0;
 
-        for (let i = 0; i < sampleItemCount; i++) {
+        for (let i = 0; i < deferredSampleItemCount; i++) {
             const template = catItems[i % catItems.length];
             // Deterministic quantity based on index for stable previews
             const qty = (i % 5) + 1;
@@ -668,7 +708,7 @@ export const InvoicePrintSettings: React.FC = () => {
             totalTaxAmount += rowTax;
 
             // Generate HSN based on sampleHsnCount regardless of template to ensure exact unique count
-            const hsnIndex = i % Math.max(1, sampleHsnCount);
+            const hsnIndex = i % Math.max(1, deferredSampleHsnCount);
             const baseHsn = parseInt(CATEGORIES[sampleCategory]?.[0]?.hsn || '8500');
             const hsnVal = baseHsn + hsnIndex;
 
@@ -713,7 +753,7 @@ export const InvoicePrintSettings: React.FC = () => {
             referenceNo: prev.referenceNo === '-' ? 'REF-99201' : prev.referenceNo,
             poNumber: prev.poNumber === '-' ? 'PO-4421' : prev.poNumber,
         }));
-    }, [sampleItemCount, sampleCategory, sampleHsnCount, isInterstate]);
+    }, [deferredSampleItemCount, sampleCategory, deferredSampleHsnCount, isInterstate]);
 
     const [activeSection, setActiveSection] = useState<string | null>(null);
     const [plannerPageType, setPlannerPageType] = useState<'First' | 'Middle' | 'Last'>('First');
@@ -1916,26 +1956,41 @@ export const InvoicePrintSettings: React.FC = () => {
                             <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Settings Synchronized</span>
                         </div>
                         
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-5 gap-2 sm:gap-4">
                              <button 
-                                onClick={() => window.print()}
-                                className="flex items-center justify-center gap-2 px-5 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-blue-100 hover:text-blue-600 hover:bg-blue-50/30 transition-all active:scale-95 shadow-sm dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700"
+                                onClick={() => { if (handlePrintReact) handlePrintReact(); }}
+                                className="flex items-center justify-center gap-2 px-2 sm:px-5 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-blue-100 hover:text-blue-600 hover:bg-blue-50/30 transition-all active:scale-95 shadow-sm dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700"
+                                title="Test Print"
                              >
-                                <Printer size={16} /> TEST
+                                <Printer size={16} /> <span className="hidden sm:inline">TEST</span>
+                             </button>
+                             <label 
+                                className="flex items-center justify-center gap-2 px-2 sm:px-5 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-blue-100 hover:text-blue-600 hover:bg-blue-50/30 transition-all active:scale-95 shadow-sm cursor-pointer dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700" 
+                                title="Import Settings"
+                             >
+                                 <Upload size={16} /> <span className="hidden lg:inline">IMPORT</span>
+                                 <input type="file" accept=".json" className="hidden" onChange={handleImportSettings} />
+                             </label>
+                             <button 
+                                onClick={handleExport}
+                                className="flex items-center justify-center gap-2 px-2 sm:px-5 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-blue-100 hover:text-blue-600 hover:bg-blue-50/30 transition-all active:scale-95 shadow-sm dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700"
+                                title="Export Settings"
+                             >
+                                <Download size={16} /> <span className="hidden lg:inline">EXPORT</span>
                              </button>
                              <button 
                                 onClick={handleSave}
-                                className="px-5 py-4 bg-blue-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95 flex items-center justify-center gap-2"
+                                className="px-2 sm:px-5 py-4 bg-blue-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95 flex items-center justify-center gap-2"
+                                title="Save Settings"
                             >
-                                SAVE
-                                <Layout size={14} />
+                                <Layout size={14} /> <span className="hidden sm:inline">SAVE</span>
                             </button>
                             <button 
                                 onClick={resetAllSettings}
-                                className="px-5 py-4 bg-gray-100 text-gray-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95 flex items-center justify-center gap-2 dark:bg-gray-800 dark:text-gray-300"
+                                className="px-2 sm:px-5 py-4 bg-gray-100 text-gray-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95 flex items-center justify-center gap-2 dark:bg-gray-800 dark:text-gray-300"
+                                title="Default Settings"
                             >
-                                <RotateCcw size={14} />
-                                DEFAULT
+                                <RotateCcw size={14} /> <span className="hidden xl:inline">DEFAULT</span>
                             </button>
                         </div>
                     </div>
@@ -1967,6 +2022,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                 className="origin-center pointer-events-none transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white dark:bg-gray-800"
                                 style={{ transform: `scale(${previewScale})` }}
                             >
+                               <div ref={printRef} className="w-full h-full">
                                 <VoucherPreviewComponent 
                                     header={dummyHeader}
                                     rows={paginatedRows}
@@ -1977,7 +2033,9 @@ export const InvoicePrintSettings: React.FC = () => {
                                     isLastPage={currentPage === totalPages}
                                     pageNum={currentPage}
                                     totalPages={totalPages}
+                                    absoluteStartIndex={absoluteStartIndex}
                                 />
+                               </div>
                             </div>
                         ) : (
                             <div className="transition-all duration-300 relative flex-shrink-0" style={{ width: `${(settings.pageSize === 'A5' ? 559 : settings.pageSize === 'Letter' ? 816 : 794) * previewScale}px`, height: `${(settings.pageSize === 'A5' ? 794 : settings.pageSize === 'Letter' ? 1056 : 1123) * previewScale}px`, margin: '0 auto' }}>
@@ -1985,6 +2043,7 @@ export const InvoicePrintSettings: React.FC = () => {
                                     className="transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white absolute top-0 left-0 origin-top-left dark:bg-gray-800"
                                     style={{ transform: `scale(${previewScale})` }}
                                 >
+                                   <div ref={printRef} className="w-full h-full">
                                     <VoucherPreviewComponent 
                                         header={dummyHeader}
                                         rows={paginatedRows}
@@ -1995,80 +2054,84 @@ export const InvoicePrintSettings: React.FC = () => {
                                         isLastPage={currentPage === totalPages}
                                         pageNum={currentPage}
                                         totalPages={totalPages}
+                                        absoluteStartIndex={absoluteStartIndex}
                                     />
+                                   </div>
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
 
-                <div className="flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-full p-2 gap-2 mx-auto no-print dark:bg-gray-800 dark:border-gray-700">
-                    <button
-                        onClick={() => setCurrentPage(1)}
-                        disabled={currentPage === 1}
-                        className="p-2 hover:bg-gray-100 rounded-full text-black disabled:opacity-50 transition-all active:scale-95 dark:hover:bg-gray-600"
-                        title="First Page"
-                    ><ChevronsLeft size={18} /></button>
-                    <button
-                        onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
-                        disabled={currentPage === 1}
-                        className="p-2 hover:bg-gray-100 rounded-full text-black disabled:opacity-50 transition-all active:scale-95 dark:hover:bg-gray-600"
-                        title="Previous Page"
-                    ><ChevronLeft size={18} /></button>
-                    
-                    <div className="text-xs font-black px-2 tabular-nums">
-                        {currentPage} / {totalPages}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mx-auto no-print">
+                    <div className="flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-full p-2 gap-2 dark:bg-gray-800 dark:border-gray-700">
+                        <button
+                            onClick={() => setCurrentPage(1)}
+                            disabled={currentPage === 1}
+                            className="p-2 hover:bg-gray-100 rounded-full text-black disabled:opacity-50 transition-all active:scale-95 dark:hover:bg-gray-600"
+                            title="First Page"
+                        ><ChevronsLeft size={18} /></button>
+                        <button
+                            onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                            disabled={currentPage === 1}
+                            className="p-2 hover:bg-gray-100 rounded-full text-black disabled:opacity-50 transition-all active:scale-95 dark:hover:bg-gray-600"
+                            title="Previous Page"
+                        ><ChevronLeft size={18} /></button>
+                        
+                        <div className="text-xs font-black px-2 tabular-nums">
+                            {currentPage} / {totalPages}
+                        </div>
+                        
+                        <button
+                            onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+                            disabled={currentPage === totalPages}
+                            className="p-2 hover:bg-gray-100 rounded-full text-black disabled:opacity-50 transition-all active:scale-95 dark:hover:bg-gray-600"
+                            title="Next Page"
+                        ><ChevronRight size={18} /></button>
+                        <button
+                            onClick={() => setCurrentPage(totalPages)}
+                            disabled={currentPage === totalPages}
+                            className="p-2 hover:bg-gray-100 rounded-full text-black disabled:opacity-50 transition-all active:scale-95 dark:hover:bg-gray-600"
+                            title="Last Page"
+                        ><ChevronsRight size={18} /></button>
                     </div>
                     
-                    <button
-                        onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                        className="p-2 hover:bg-gray-100 rounded-full text-black disabled:opacity-50 transition-all active:scale-95 dark:hover:bg-gray-600"
-                        title="Next Page"
-                    ><ChevronRight size={18} /></button>
-                    <button
-                        onClick={() => setCurrentPage(totalPages)}
-                        disabled={currentPage === totalPages}
-                        className="p-2 hover:bg-gray-100 rounded-full text-black disabled:opacity-50 transition-all active:scale-95 dark:hover:bg-gray-600"
-                        title="Last Page"
-                    ><ChevronsRight size={18} /></button>
-                    
-                    <div className="h-6 w-px bg-gray-200 mx-2 dark:bg-gray-700" />
-                    
-                    <button 
-                        onClick={handleZoomOut}
-                        className="p-2.5 hover:bg-gray-100 rounded-full text-black transition-all active:scale-95 dark:hover:bg-gray-600"
-                        title="Zoom Out"
-                    >
-                        <ZoomOut size={18} />
-                    </button>
-                    <div className="w-16 text-center text-sm font-black text-black tabular-nums">
-                        {Math.round(previewScale * 100)}%
+                    <div className="flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-full p-2 gap-2 dark:bg-gray-800 dark:border-gray-700">
+                        <button 
+                            onClick={handleZoomOut}
+                            className="p-2.5 hover:bg-gray-100 rounded-full text-black transition-all active:scale-95 dark:hover:bg-gray-600"
+                            title="Zoom Out"
+                        >
+                            <ZoomOut size={18} />
+                        </button>
+                        <div className="w-16 text-center text-sm font-black text-black tabular-nums">
+                            {Math.round(previewScale * 100)}%
+                        </div>
+                        <button 
+                            onClick={handleZoomIn}
+                            className="p-2.5 hover:bg-gray-100 rounded-full text-black transition-all active:scale-95 dark:hover:bg-gray-600"
+                            title="Zoom In"
+                        >
+                            <ZoomIn size={18} />
+                        </button>
+                        <div className="h-6 w-px bg-gray-200 mx-2 dark:bg-gray-700" />
+                        <button 
+                            onClick={handleResetZoom}
+                            className={`p-2 rounded-full transition-all active:scale-95 flex items-center justify-center px-4 gap-2 ${manualZoom === null ? 'bg-gray-100 font-bold text-black' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
+                            title="Fit to Screen"
+                        >
+                            <RotateCcw size={16} />
+                            <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">Fit</span>
+                        </button>
+                        <button 
+                            onClick={handleFullSize}
+                            className={`p-2 rounded-full transition-all active:scale-95 flex items-center justify-center px-4 gap-2 ${manualZoom === 1 ? 'bg-gray-100 font-bold text-black' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
+                            title="Actual Size (100%)"
+                        >
+                            <Maximize size={16} />
+                            <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">100%</span>
+                        </button>
                     </div>
-                    <button 
-                        onClick={handleZoomIn}
-                        className="p-2.5 hover:bg-gray-100 rounded-full text-black transition-all active:scale-95 dark:hover:bg-gray-600"
-                        title="Zoom In"
-                    >
-                        <ZoomIn size={18} />
-                    </button>
-                    <div className="h-6 w-px bg-gray-200 mx-2 dark:bg-gray-700" />
-                    <button 
-                        onClick={handleResetZoom}
-                        className={`p-2 rounded-full transition-all active:scale-95 flex items-center justify-center px-4 gap-2 ${manualZoom === null ? 'bg-gray-100 font-bold text-black' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
-                        title="Fit to Screen"
-                    >
-                        <RotateCcw size={16} />
-                        <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">Fit</span>
-                    </button>
-                    <button 
-                        onClick={handleFullSize}
-                        className={`p-2 rounded-full transition-all active:scale-95 flex items-center justify-center px-4 gap-2 ${manualZoom === 1 ? 'bg-gray-100 font-bold text-black' : 'text-black hover:bg-gray-100'} dark:bg-gray-800 dark:hover:bg-gray-600`}
-                        title="Actual Size (100%)"
-                    >
-                        <Maximize size={16} />
-                        <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">100%</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -2204,7 +2267,7 @@ const MarginInput: React.FC<{ label: string, value: number, onChange: (val: numb
 
 // Internal simplified version of VoucherPreview for settings preview only
 // We don't want to use the full modal version here to avoid recursion/portal issues in a small frame
-const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: any[], totals: any, type: string, config: any, isLastPage?: boolean, pageNum?: number, totalPages?: number }> = ({ header = {} as any, rows = [], allRows = [], totals = {} as any, type = 'voucher', config, isLastPage = true, pageNum = 1, totalPages = 1 }) => {
+const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: any[], totals: any, type: string, config: any, isLastPage?: boolean, pageNum?: number, totalPages?: number, absoluteStartIndex?: number }> = ({ header = {} as any, rows = [], allRows = [], totals = {} as any, type = 'voucher', config, isLastPage = true, pageNum = 1, totalPages = 1, absoluteStartIndex = 0 }) => {
     const getSectionStyle = (key: string, baseClasses: string, styleOverrides?: React.CSSProperties) => {
         const style = (config.sectionStyles as any)?.[key];
         let classes = baseClasses;
@@ -2645,6 +2708,7 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
             )}
 
               {/* Table */}
+              {rows.length > 0 && (
               <div className={tStyles.tableWrap}>
                 <table className="w-full border-collapse">
                     <thead>
@@ -2679,7 +2743,7 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
                     <tbody className={tStyles.tableBody}>
                         {rows.filter(r => (true ? r.itemName : r.ledgerName)).map((row, index) => (
                             <tr key={index} className={tStyles.tableRow}>
-                                <td className={tStyles.tableCellFirst} style={{ fontSize: `${baseSize * 0.9}px` }}>{String(index + 1).padStart(2, '0')}</td>
+                                <td className={tStyles.tableCellFirst} style={{ fontSize: `${baseSize * 0.9}px` }}>{String(absoluteStartIndex + index + 1).padStart(2, '0')}</td>
                                 <td className={tStyles.tableCellLeft}>
                                     <div {...getSectionStyle('lineItem', `font-black text-gray-900 uppercase tracking-tight ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * (config.ultraCompactMode ? 0.8 : config.compactMode ? 1.0 : 1.33)}px` })}>{true ? row.itemName : row.ledgerName}</div>
                                     {config.showHSN && row.hsn && <div className={`${primaryText} font-black uppercase tracking-widest opacity-60`} style={{ fontSize: `${baseSize * 0.66}px`, marginTop: `${baseSize * 0.15}px` }}>HSN Code: {row.hsn}</div>}
@@ -2737,6 +2801,7 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
                     </tbody>
                 </table>
               </div>
+              )}
 
               {config.ultraCleanMode && <div className="flex-grow"></div>}
 

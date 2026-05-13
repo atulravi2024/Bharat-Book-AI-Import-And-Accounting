@@ -1,0 +1,28 @@
+{
+  "reports": [
+    {
+      "id": "GSTR-1",
+      "name": "Details of outward supplies of goods or services",
+      "due_date": "11th of next month",
+      "status": "Filed"
+    },
+    {
+      "id": "GSTR-3B",
+      "name": "Summary Return of Outward & Inward Supplies",
+      "due_date": "20th of next month",
+      "status": "Pending"
+    },
+    {
+      "id": "GSTR-9",
+      "name": "Annual Return for Normal Taxpayer",
+      "due_date": "31st December of next FY",
+      "status": "Pending"
+    },
+    {
+      "id": "CMP-08",
+      "name": "Statement for payment of tax for Composition Dealer",
+      "due_date": "18th of month succeeding quarter",
+      "status": "N/A"
+    }
+  ]
+}

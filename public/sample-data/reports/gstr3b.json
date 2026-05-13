@@ -1,0 +1,17 @@
+{
+  "outward_supplies": {
+    "taxable": 2500000,
+    "cgst": 225000,
+    "sgst": 225000,
+    "igst": 50000
+  },
+  "eligible_itc": {
+    "import_goods": 100000,
+    "import_services": 50000,
+    "inward_supplies": 300000
+  },
+  "payment_of_tax": {
+    "paid_through_itc": 400000,
+    "paid_in_cash": 100000
+  }
+}

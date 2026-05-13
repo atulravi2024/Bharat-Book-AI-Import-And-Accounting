@@ -146,7 +146,7 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
                 />;
             case 'bom':
                 return <BillOfMaterialsTab data={bomMasters} onSave={setBomMasters} itemMasters={itemMasters} />;
-            case 'warehouse':
+            case 'warehouses':
                 return <WarehousesTab data={warehouseMasters} onSave={setWarehouseMasters} />;
             case 'uoms':
                 return <UOMsTab data={uomMasters} onSave={setUomMasters} />;
@@ -187,7 +187,7 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
         switch (activeTab) {
             case 'items': exportData = itemMasters; filename = 'Items.json'; break;
             case 'bom': exportData = bomMasters; filename = 'BOMs.json'; break;
-            case 'warehouse': exportData = warehouseMasters; filename = 'Warehouses.json'; break;
+            case 'warehouses': exportData = warehouseMasters; filename = 'Warehouses.json'; break;
             case 'uoms': exportData = uomMasters; filename = 'UOMs.json'; break;
             case 'stockGroup': exportData = stockGroupMasters; filename = 'StockGroups.json'; break;
             case 'gst': exportData = gstMasters; filename = 'HSN_GST.json'; break;
@@ -230,7 +230,7 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
                         {[
                             { id: 'items', label: 'Items', icon: InventoryIcon },
                             { id: 'bom', label: 'Bill of Materials', icon: FilterListIcon },
-                            { id: 'warehouse', label: 'Warehouses', icon: CategoryIcon },
+                            { id: 'warehouses', label: 'Warehouses', icon: CategoryIcon },
                             { id: 'uoms', label: 'UOMs', icon: UomIcon },
                             { id: 'stockGroup', label: 'Stock Groups', icon: CategoryIcon },
                             { id: 'gst', label: 'HSN', icon: TaxIcon },
