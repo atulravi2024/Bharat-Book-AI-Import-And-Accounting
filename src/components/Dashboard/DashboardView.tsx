@@ -27,30 +27,23 @@ interface DashboardViewProps {
 
 type DashboardTab = 'main' | 'sales' | 'purchase' | 'payment' | 'receipts' | 'journal' | 'contra' | 'bank';
 
-export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouchers, onNavigateToView, defaultTab, onTabChange }) => {
+export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNavigateToView, defaultTab, onTabChange }) => {
   const [activeTab, setActiveTab] = useState<DashboardTab>((defaultTab as DashboardTab) || 'main');
-  const [demoVouchers, setDemoVouchers] = useState<ParsedVoucher[]>([]);
   const [colors, setColors] = useState<string[]>(['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6B7280', '#14B8A6']);
 
   React.useEffect(() => {
-    const loadDemoData = async () => {
+    const loadMeta = async () => {
         try {
-            const [demoResp, metaResp] = await Promise.all([
-                fetch('/sample-data/dashboard/demo_vouchers.json'),
-                fetch('/sample-data/masters/metadata.json')
-            ]);
-            if (demoResp.ok) {
-                setDemoVouchers(await demoResp.json());
-            }
+            const metaResp = await fetch('/sample-data/masters/metadata.json');
             if (metaResp.ok) {
                 const meta = await metaResp.json();
                 if (meta.dashboardColors) setColors(meta.dashboardColors);
             }
         } catch (e) {
-            console.error("Failed to load dashboard sample data", e);
+            console.error("Failed to load dashboard colors", e);
         }
     };
-    loadDemoData();
+    loadMeta();
   }, []);
 
   const handleTabChange = (tab: DashboardTab) => {
@@ -58,11 +51,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers: realVouc
     if (onTabChange) onTabChange(tab);
   };
 
-  const [showDemoToggle, setShowDemoToggle] = useState(false);
-
-  const isDemo = realVouchers.length === 0;
-
-  const vouchers = isDemo ? demoVouchers : realVouchers;
+  const isDemo = vouchers.some(v => v.sampleSetId === 'demo_vouchers' || v.isSample);
 
   const stats = useMemo(() => {
     // Volume calculations

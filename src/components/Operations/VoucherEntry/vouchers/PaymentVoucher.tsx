@@ -704,7 +704,7 @@ export const PaymentVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
       createdAt: initialVoucher?.createdAt || new Date().toISOString()
     };
     
-    const saved = safeJsonParse(localStorage.getItem('bharat_book_all_vouchers'), [] as any[]);
+    const saved = safeJsonParse(localStorage.getItem('bharat_book_all_vouchers_v2'), [] as any[]);
     const lookupId = currentRecordId || initialVoucher?.id;
     if (lookupId && saved.some((v: any) => v.id === lookupId)) {
         const idx = saved.findIndex((v: any) => v.id === lookupId);
@@ -712,7 +712,7 @@ export const PaymentVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
     } else {
         saved.push(entry);
     }
-    localStorage.setItem('bharat_book_all_vouchers', JSON.stringify(saved));
+    localStorage.setItem('bharat_book_all_vouchers_v2', JSON.stringify(saved));
     setCurrentRecordId(entry.id);
     
     if (onSaveEntry) {
@@ -966,7 +966,7 @@ export const PaymentVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
   };
 
   const handleNavigate = (direction: 'up' | 'down' | 'first' | 'last') => {
-    const allVouchersRaw = localStorage.getItem('bharat_book_all_vouchers');
+    const allVouchersRaw = localStorage.getItem('bharat_book_all_vouchers_v2');
     if (!allVouchersRaw) return;
     
     const allVouchers = JSON.parse(allVouchersRaw) as any[];
@@ -1171,11 +1171,11 @@ export const PaymentVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
   };
 
   const handleConfirmDelete = () => {
-    const savedStr = localStorage.getItem('bharat_book_all_vouchers');
+    const savedStr = localStorage.getItem('bharat_book_all_vouchers_v2');
     if (savedStr) {
       let saved: any[] = JSON.parse(savedStr);
       saved = saved.filter((v: any) => v.id !== currentRecordId);
-      localStorage.setItem('bharat_book_all_vouchers', JSON.stringify(saved));
+      localStorage.setItem('bharat_book_all_vouchers_v2', JSON.stringify(saved));
     }
     showNotify('Entry deleted!', 'error');
     handleNewEntry();
@@ -1292,7 +1292,7 @@ export const PaymentVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
               <span>Voucher Date</span>
             </label>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <input type="date" value={headerDetails.voucherDate} onChange={(e) => handleHeaderChange('voucherDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+              <input type="date" value={headerDetails.voucherDate || ''} onChange={(e) => handleHeaderChange('voucherDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               <div className="sm:w-32 flex items-center justify-center px-4 py-3 bg-amber-50 border border-amber-100/50 rounded-xl text-sm font-black text-amber-700 shadow-sm shrink-0 whitespace-nowrap uppercase tracking-wider">
                   {(() => {
                     const d = new Date(headerDetails.voucherDate);
@@ -1303,25 +1303,25 @@ export const PaymentVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Voucher Number</label>
-            <input type="text" value={headerDetails.voucherNumber} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+            <input type="text" value={headerDetails.voucherNumber || ''} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Creation Stamp (System)</label>
-            <input type="text" value={systemStamp} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
+            <input type="text" value={systemStamp || ''} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
           </div>
           {activeTab !== 'journal' && (
             <>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Account (Cash/Bank)</label>
-                <input list="ledger-list" value={headerDetails.cashBankAccount} onChange={(e) => handleHeaderChange('cashBankAccount', e.target.value)} placeholder="Search Cash/Bank Account..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+                <input list="ledger-list" value={headerDetails.cashBankAccount || ''} onChange={(e) => handleHeaderChange('cashBankAccount', e.target.value)} placeholder="Search Cash/Bank Account..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Instrument No.</label>
-                <input type="text" value={headerDetails.instrumentNo} onChange={(e) => handleHeaderChange('instrumentNo', e.target.value)} placeholder="Cheque/UTR/Ref No." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+                <input type="text" value={headerDetails.instrumentNo || ''} onChange={(e) => handleHeaderChange('instrumentNo', e.target.value)} placeholder="Cheque/UTR/Ref No." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Instrument Date</label>
-                <input type="date" value={headerDetails.instrumentDate} onChange={(e) => handleHeaderChange('instrumentDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+                <input type="date" value={headerDetails.instrumentDate || ''} onChange={(e) => handleHeaderChange('instrumentDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
             </>
           )}
@@ -1612,7 +1612,7 @@ export const PaymentVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
       <HistoryModal 
         isOpen={showHistory} 
         onClose={() => setShowHistory(false)} 
-        storageKey="bharat_book_all_vouchers" 
+        storageKey="bharat_book_all_vouchers_v2" 
         onSelectRecord={(record) => loadRecord(record)}
         title="Voucher History" 
       />

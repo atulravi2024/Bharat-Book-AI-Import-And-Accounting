@@ -31,7 +31,7 @@ export const AdminSettings: React.FC = () => {
         setStorageUsed(total > 1024 * 1024 ? `${mb} MB` : `${kb} KB`);
 
         try {
-            const v = JSON.parse(localStorage.getItem('bharat_book_all_vouchers') || '[]');
+            const v = JSON.parse(localStorage.getItem('bharat_book_all_vouchers_v2') || '[]');
             const p = JSON.parse(localStorage.getItem('bharat_book_party_masters') || '[]');
             const i = JSON.parse(localStorage.getItem('bharat_book_item_masters') || '[]');
             const l = JSON.parse(localStorage.getItem('bharat_book_ledger_masters') || '[]');

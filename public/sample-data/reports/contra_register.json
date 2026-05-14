@@ -1,19 +1,18 @@
 [
   {
-    "id": "bank_vouchers-sample-1",
-    "origin": "bank",
+    "id": "con_reg-0",
     "date": {
       "value": "2024-05-15"
     },
-    "type": "Bank Statement",
+    "type": "Contra",
     "partyName": {
       "value": "Sample Party"
     },
-    "withdrawalAmount": {
-      "value": 1500
+    "amount": {
+      "value": 10000
     },
     "narration": {
-      "value": "Generated for bank_vouchers"
+      "value": "Generated for day_book"
     },
     "auditLogs": [
       {
@@ -34,6 +33,15 @@
           "amount": "Updated amount"
         }
       }
-    ]
+    ],
+    "paymentMode": {
+      "value": "Cash"
+    },
+    "debitLedger": {
+      "value": "Bank A/c"
+    },
+    "creditLedger": {
+      "value": "Cash A/c"
+    }
   }
 ]

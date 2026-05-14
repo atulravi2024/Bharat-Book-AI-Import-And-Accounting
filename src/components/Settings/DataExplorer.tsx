@@ -73,7 +73,7 @@ export const DataExplorer: React.FC = () => {
             '/sample-data/reports/profit_loss.json',
             '/sample-data/reports/balance_sheet.json',
             '/sample-data/reports/trial_balance.json',
-            '/sample-data/reports/gstr1.json',
+            '/sample-data/reports/g1_data.json',
             '/sample-data/reports/stock_summary.json',
             '/sample-data/reports/item_vouchers.json',
             '/sample-data/reports/bank_flow.json',
@@ -81,7 +81,7 @@ export const DataExplorer: React.FC = () => {
             '/sample-data/reports/reconcile.json'
         ],
         'Master Ledger': [
-            '/sample-data/ledger-master/ledgers.json',
+            '/sample-data/ledger-master/ldg_masters.json',
             '/sample-data/ledger-master/parties.json',
             '/sample-data/ledger-master/banks.json',
             '/sample-data/ledger-master/costCenters.json',

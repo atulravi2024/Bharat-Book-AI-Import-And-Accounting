@@ -90,7 +90,7 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
           <div className="animate-in fade-in slide-in-from-top-2 duration-300 flex flex-col flex-grow">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
               
-              <MetricBox label="Total Items" value={totals.totalItems} />
+              <MetricBox label="Total Items" value={totals.totalItems || ''} />
               
               <MetricBox 
                 label="Total Net Qty" 

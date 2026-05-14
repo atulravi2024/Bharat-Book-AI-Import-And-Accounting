@@ -485,7 +485,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         <input 
                           type="number" 
                           step="0.01" 
-                          value={rows[editingRowIndex]?.preTaxRoundType === 'manual' ? (rows[editingRowIndex]?.preTaxRoundOff || '') : (rows[editingRowIndex] ? getRowPreTaxRoundOff(rows[editingRowIndex]).toFixed(2) : '')} 
+                          value={rows[editingRowIndex]?.preTaxRoundType === 'manual' ? (rows[editingRowIndex]?.preTaxRoundOff || '') : ((rows[editingRowIndex] && getRowPreTaxRoundOff(rows[editingRowIndex]) !== undefined) ? getRowPreTaxRoundOff(rows[editingRowIndex]).toFixed(2) : '')} 
                           onChange={(e) => {
                             const r = [...rows];
                             r[editingRowIndex].preTaxRoundType = 'manual';
@@ -573,7 +573,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         <input 
                           type="number" 
                           step="0.01" 
-                          value={rows[editingRowIndex]?.roundType === 'manual' ? (rows[editingRowIndex]?.roundOff || '') : (rows[editingRowIndex] ? getRowRoundOff(rows[editingRowIndex]).toFixed(2) : '')} 
+                          value={rows[editingRowIndex]?.roundType === 'manual' ? (rows[editingRowIndex]?.roundOff || '') : ((rows[editingRowIndex] && getRowRoundOff(rows[editingRowIndex]) !== undefined) ? getRowRoundOff(rows[editingRowIndex]).toFixed(2) : '')} 
                           onChange={(e) => {
                             const r = [...rows];
                             r[editingRowIndex].roundType = 'manual';

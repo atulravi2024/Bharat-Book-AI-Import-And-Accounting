@@ -34,7 +34,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
              </div>
              {!collapsedSections.narration && (
                <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                 <textarea value={headerDetails.narration} onChange={(e) => handleHeaderChange('narration', e.target.value)} placeholder="Enter narration or description of the transaction..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-h-[100px] resize-y dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"></textarea>
+                 <textarea value={headerDetails.narration || ''} onChange={(e) => handleHeaderChange('narration', e.target.value)} placeholder="Enter narration or description of the transaction..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-h-[100px] resize-y dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"></textarea>
                </div>
              )}
           </div>
@@ -85,7 +85,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                        <SearchableDropdown
                          label=""
                          options={ledgerMasters}
-                         value={headerDetails.taxableAdjustmentRemarks}
+                         value={headerDetails.taxableAdjustmentRemarks || ''}
                          onChange={(value) => handleHeaderChange('taxableAdjustmentRemarks', value)}
                          placeholder="Select Taxable Adjustment Ledger..."
                        />
@@ -166,7 +166,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                        <SearchableDropdown
                          label=""
                          options={ledgerMasters}
-                         value={headerDetails.nonTaxableAdjustmentRemarks}
+                         value={headerDetails.nonTaxableAdjustmentRemarks || ''}
                          onChange={(value) => handleHeaderChange('nonTaxableAdjustmentRemarks', value)}
                          placeholder="Select Non-Taxable Adjustment Ledger..."
                        />
@@ -321,7 +321,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
                     
                     {/* Items & Quantity */}
-                    <MetricBox label="Total Items" value={totalItems} />
+                    <MetricBox label="Total Items" value={totalItems || ''} />
                     
                     {isInventory && (
                       <MetricBox 

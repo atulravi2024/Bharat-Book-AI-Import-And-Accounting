@@ -194,6 +194,16 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
     const filteredVouchers = vouchers.filter(v => {
         if (!v || !derivesFromBank(v)) return false;
         
+        if (v.sampleSetId) {
+            if (activeTab === 'bank' && !['bank_vouchers', 'raw_bank'].includes(v.sampleSetId)) return false;
+            if (activeTab === 'classify' && v.sampleSetId !== 'to_classify') return false;
+            if (activeTab === 'auto-matched' && v.sampleSetId !== 'auto_match') return false;
+            if (activeTab === 'missing-masters' && v.sampleSetId !== 'missing_master') return false;
+            if (activeTab === 'unidentify' && v.sampleSetId !== 'unidentified') return false;
+            // reconcile is handled separately, but just in case:
+            if (activeTab === 'reconcile' && v.sampleSetId !== 'reconcile') return false;
+        }
+
         let matchesTab = false;
         if (activeTab === 'bank') matchesTab = isBankRaw(v);
         else if (activeTab === 'classify') matchesTab = isToClassify(v);
@@ -375,7 +385,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
             )}
             
             {activeTab === 'reconcile' && (
-                <ReconcileTab vouchers={vouchers} onMapVouchers={onMapVouchers} />
+                <ReconcileTab vouchers={vouchers.filter(v => !v.sampleSetId || v.sampleSetId === 'reconcile')} onMapVouchers={onMapVouchers} />
             )}
             
             <BankReportModals 

@@ -64,7 +64,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                    <SearchableDropdown
                      label=""
                      options={ledgerMasters}
-                     value={headerDetails.taxableAdjustmentRemarks}
+                     value={headerDetails.taxableAdjustmentRemarks || ''}
                      onChange={(value) => handleHeaderChange('taxableAdjustmentRemarks', value)}
                      placeholder="Select Taxable Adjustment Ledger..."
                    />
@@ -144,7 +144,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
                    <SearchableDropdown
                      label=""
                      options={ledgerMasters}
-                     value={headerDetails.nonTaxableAdjustmentRemarks}
+                     value={headerDetails.nonTaxableAdjustmentRemarks || ''}
                      onChange={(value) => handleHeaderChange('nonTaxableAdjustmentRemarks', value)}
                      placeholder="Select Non-Taxable Adjustment Ledger..."
                    />

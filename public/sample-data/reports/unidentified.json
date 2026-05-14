@@ -1,18 +1,16 @@
 [
   {
     "id": "unidentified-sample-1",
+    "origin": "bank",
     "date": {
       "value": "2024-05-15"
     },
-    "type": "Journal",
-    "partyName": {
-      "value": "Sample Party"
-    },
-    "amount": {
+    "type": "Bank Statement",
+    "depositAmount": {
       "value": 1500
     },
     "narration": {
-      "value": "Generated for unidentified"
+      "value": "NEFT-RETURN-UNKNOWN"
     }
   }
 ]

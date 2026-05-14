@@ -1,18 +1,32 @@
 [
   {
-    "id": "reconcile-sample-1",
+    "id": "reconcile-sample-bank-1",
+    "origin": "bank",
     "date": {
       "value": "2024-05-15"
     },
-    "type": "Journal",
+    "type": "Bank Statement",
+    "withdrawalAmount": {
+      "value": 2500
+    },
+    "narration": {
+      "value": "Bank Withdrawal for Reconcile"
+    }
+  },
+  {
+    "id": "reconcile-sample-book-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Payment",
     "partyName": {
       "value": "Sample Party"
     },
     "amount": {
-      "value": 1500
+      "value": 2500
     },
     "narration": {
-      "value": "Generated for reconcile"
+      "value": "Book Payment for Reconcile"
     }
   }
 ]

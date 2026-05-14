@@ -727,7 +727,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
       createdAt: initialVoucher?.createdAt || new Date().toISOString()
     };
     
-    const saved = safeJsonParse(localStorage.getItem('bharat_book_all_vouchers'), [] as any[]);
+    const saved = safeJsonParse(localStorage.getItem('bharat_book_all_vouchers_v2'), [] as any[]);
     const lookupId = currentRecordId || initialVoucher?.id;
     if (lookupId && saved.some((v: any) => v.id === lookupId)) {
         const idx = saved.findIndex((v: any) => v.id === lookupId);
@@ -735,7 +735,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
     } else {
         saved.push(entry);
     }
-    localStorage.setItem('bharat_book_all_vouchers', JSON.stringify(saved));
+    localStorage.setItem('bharat_book_all_vouchers_v2', JSON.stringify(saved));
     setCurrentRecordId(entry.id);
     
     if (onSaveEntry) {
@@ -989,7 +989,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
   };
 
   const handleNavigate = (direction: 'up' | 'down' | 'first' | 'last') => {
-    const allVouchersRaw = localStorage.getItem('bharat_book_all_vouchers');
+    const allVouchersRaw = localStorage.getItem('bharat_book_all_vouchers_v2');
     if (!allVouchersRaw) return;
     
     const allVouchers = JSON.parse(allVouchersRaw) as any[];
@@ -1194,11 +1194,11 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
   };
 
   const handleConfirmDelete = () => {
-    const savedStr = localStorage.getItem('bharat_book_all_vouchers');
+    const savedStr = localStorage.getItem('bharat_book_all_vouchers_v2');
     if (savedStr) {
       let saved: any[] = JSON.parse(savedStr);
       saved = saved.filter((v: any) => v.id !== currentRecordId);
-      localStorage.setItem('bharat_book_all_vouchers', JSON.stringify(saved));
+      localStorage.setItem('bharat_book_all_vouchers_v2', JSON.stringify(saved));
     }
     showNotify('Entry deleted!', 'error');
     handleNewEntry();
@@ -1332,7 +1332,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
             </label>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <div className="relative flex-1">
-                <input type="date" value={headerDetails.voucherDate} onChange={(e) => handleHeaderChange('voucherDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+                <input type="date" value={headerDetails.voucherDate || ''} onChange={(e) => handleHeaderChange('voucherDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
               <div className="sm:w-32 flex items-center justify-center px-4 py-3 bg-blue-50 border border-blue-100/50 rounded-xl text-sm font-black text-blue-700 shadow-sm shrink-0 whitespace-nowrap uppercase tracking-widest ring-1 ring-blue-200/50">
                   {(() => {
@@ -1344,15 +1344,15 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Voucher Number</label>
-            <input type="text" value={headerDetails.voucherNumber} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+            <input type="text" value={headerDetails.voucherNumber || ''} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">REF / Invoice Number</label>
-            <input type="text" value={headerDetails.referenceNo} onChange={(e) => handleHeaderChange('referenceNo', e.target.value)} placeholder="Optional" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+            <input type="text" value={headerDetails.referenceNo || ''} onChange={(e) => handleHeaderChange('referenceNo', e.target.value)} placeholder="Optional" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Creation Stamp (System)</label>
-            <input type="text" value={systemStamp} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
+            <input type="text" value={systemStamp || ''} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
           </div>
           <div className="sm:col-span-2 lg:col-span-4 hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all dark:hover:bg-gray-700">
              <button onClick={() => fileInputRef.current?.click()} className="flex items-center px-4 py-2 border border-dashed border-gray-300 rounded-lg text-xs font-bold text-gray-500 hover:bg-white hover:text-blue-600 hover:border-blue-300 transition-all cursor-pointer shadow-sm dark:border-gray-600 dark:text-gray-400">
@@ -1390,7 +1390,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Entity Category</label>
             <select 
-              value={headerDetails.entityCategory} 
+              value={headerDetails.entityCategory || ''} 
               onChange={(e) => handleHeaderChange('entityCategory', e.target.value)} 
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
             >
@@ -1413,7 +1413,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
                 if (cat === 'Hybrid' && p.type === 'Hybrid') return true;
                 return p.type === cat;
               })}
-              value={headerDetails.partyName}
+              value={headerDetails.partyName || ''}
               onChange={(value) => handleHeaderChange('partyName', value)}
               placeholder={`Search ${headerDetails.entityCategory}...`}
             />
@@ -1421,7 +1421,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Business Role</label>
             <select 
-              value={headerDetails.businessRole} 
+              value={headerDetails.businessRole || ''} 
               onChange={(e) => handleHeaderChange('businessRole', e.target.value)} 
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
             >
@@ -1449,19 +1449,19 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">GST Number</label>
-            <input type="text" value={headerDetails.gstNumber} onChange={(e) => handleHeaderChange('gstNumber', e.target.value)} placeholder="22AAAAA0000A1Z5" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+            <input type="text" value={headerDetails.gstNumber || ''} onChange={(e) => handleHeaderChange('gstNumber', e.target.value)} placeholder="22AAAAA0000A1Z5" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Aadhaar Card No.</label>
-            <input type="text" value={headerDetails.aadhaarNo} onChange={(e) => handleHeaderChange('aadhaarNo', e.target.value)} placeholder="12-digit number" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+            <input type="text" value={headerDetails.aadhaarNo || ''} onChange={(e) => handleHeaderChange('aadhaarNo', e.target.value)} placeholder="12-digit number" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">PAN Card No.</label>
-            <input type="text" value={headerDetails.panNo} onChange={(e) => handleHeaderChange('panNo', e.target.value)} placeholder="ABCDE1234F" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+            <input type="text" value={headerDetails.panNo || ''} onChange={(e) => handleHeaderChange('panNo', e.target.value)} placeholder="ABCDE1234F" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div>
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Party Type</label>
-            <select value={headerDetails.partyType} onChange={(e) => handleHeaderChange('partyType', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700">
+            <select value={headerDetails.partyType || ''} onChange={(e) => handleHeaderChange('partyType', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700">
               <option value="Regular">Regular</option>
               <option value="Composition">Composition</option>
               <option value="Unregistered">Unregistered</option>
@@ -1472,7 +1472,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Place of Supply</label>
             <input 
               type="text" 
-              value={headerDetails.placeOfSupply} 
+              value={headerDetails.placeOfSupply || ''} 
               onChange={(e) => handleHeaderChange('placeOfSupply', e.target.value)} 
               placeholder="e.g. Maharashtra"
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" 
@@ -1482,7 +1482,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Supply Classification (System)</label>
             <input 
               type="text" 
-              value={headerDetails.supplyType} 
+              value={headerDetails.supplyType || ''} 
               readOnly 
               className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-black text-gray-500 uppercase tracking-widest text-center cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
             />
@@ -1491,19 +1491,19 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
           <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-emerald-50/20 rounded-2xl border border-emerald-100/50 mt-2">
             <div>
               <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">PO Number</label>
-              <input type="text" value={headerDetails.poNumber} onChange={(e) => handleHeaderChange('poNumber', e.target.value)} placeholder="PO-001" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
+              <input type="text" value={headerDetails.poNumber || ''} onChange={(e) => handleHeaderChange('poNumber', e.target.value)} placeholder="PO-001" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
             </div>
             <div>
               <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">PO Date</label>
-              <input type="date" value={headerDetails.poDate} onChange={(e) => handleHeaderChange('poDate', e.target.value)} className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
+              <input type="date" value={headerDetails.poDate || ''} onChange={(e) => handleHeaderChange('poDate', e.target.value)} className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
             </div>
             <div>
               <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Credit Period (Days)</label>
-              <input type="number" value={headerDetails.creditPeriod} onChange={(e) => handleHeaderChange('creditPeriod', e.target.value)} placeholder="30" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
+              <input type="number" value={headerDetails.creditPeriod || ''} onChange={(e) => handleHeaderChange('creditPeriod', e.target.value)} placeholder="30" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
             </div>
             <div className="hidden sm:block">
               <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Price Level</label>
-              <select value={headerDetails.priceLevel} onChange={(e) => handleHeaderChange('priceLevel', e.target.value)} className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800">
+              <select value={headerDetails.priceLevel || ''} onChange={(e) => handleHeaderChange('priceLevel', e.target.value)} className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800">
                 <option value="Standard">Standard</option>
                 <option value="Wholesale">Wholesale</option>
                 <option value="Retail">Retail</option>
@@ -1537,41 +1537,41 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
                 <SearchableDropdown
                   label="Billing Party Name"
                   options={partyMasters}
-                  value={headerDetails.billingPartyName}
+                  value={headerDetails.billingPartyName || ''}
                   onChange={(value) => handleHeaderChange('billingPartyName', value)}
                   placeholder="Select Party..."
                 />
               </div>
               <div className="lg:col-span-2">
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Street Address</label>
-                <input type="text" value={headerDetails.billingAddress} onChange={(e) => handleHeaderChange('billingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                <input type="text" value={headerDetails.billingAddress || ''} onChange={(e) => handleHeaderChange('billingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State</label>
-                <input type="text" value={headerDetails.billingState} onChange={(e) => handleHeaderChange('billingState', e.target.value)} placeholder="e.g. Maharashtra" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                <input type="text" value={headerDetails.billingState || ''} onChange={(e) => handleHeaderChange('billingState', e.target.value)} placeholder="e.g. Maharashtra" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State Code / Pin Code</label>
                 <div className="flex space-x-2">
-                  <input type="text" value={headerDetails.billingStateCode} onChange={(e) => handleHeaderChange('billingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
-                  <input type="text" value={headerDetails.billingPinCode} onChange={(e) => handleHeaderChange('billingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.billingStateCode || ''} onChange={(e) => handleHeaderChange('billingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.billingPinCode || ''} onChange={(e) => handleHeaderChange('billingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Contact Person</label>
-                <input type="text" value={headerDetails.contactPerson} onChange={(e) => handleHeaderChange('contactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                <input type="text" value={headerDetails.contactPerson || ''} onChange={(e) => handleHeaderChange('contactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Mobile Number</label>
-                <input type="text" value={headerDetails.mobileNumber} onChange={(e) => handleHeaderChange('mobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                <input type="text" value={headerDetails.mobileNumber || ''} onChange={(e) => handleHeaderChange('mobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">WhatsApp Number</label>
-                <input type="text" value={headerDetails.whatsappNumber} onChange={(e) => handleHeaderChange('whatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                <input type="text" value={headerDetails.whatsappNumber || ''} onChange={(e) => handleHeaderChange('whatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
               <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Email ID</label>
-                <input type="email" value={headerDetails.emailId} onChange={(e) => handleHeaderChange('emailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                <input type="email" value={headerDetails.emailId || ''} onChange={(e) => handleHeaderChange('emailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
               </div>
             </div>
           </div>
@@ -1581,7 +1581,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
             <label className="flex items-center space-x-3 cursor-pointer">
               <input 
                 type="checkbox" 
-                checked={headerDetails.isShippingSameAsBilling} 
+                checked={headerDetails.isShippingSameAsBilling || false} 
                 onChange={(e) => handleHeaderChange('isShippingSameAsBilling', e.target.checked)}
                 className="w-5 h-5 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/20 transition-all cursor-pointer dark:border-gray-600"
               />
@@ -1595,7 +1595,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
               <label className="flex items-center space-x-3 cursor-pointer group">
                 <input 
                   type="checkbox" 
-                  checked={headerDetails.isEWayBillRequired} 
+                  checked={headerDetails.isEWayBillRequired || false} 
                   onChange={(e) => handleHeaderChange('isEWayBillRequired', e.target.checked)}
                   className="w-6 h-6 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/20 transition-all cursor-pointer dark:border-gray-600"
                 />
@@ -1609,15 +1609,15 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 animate-in zoom-in-95 duration-300">
                   <div>
                     <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Vehicle No</label>
-                    <input type="text" value={headerDetails.vehicleNo} onChange={(e) => handleHeaderChange('vehicleNo', e.target.value)} placeholder="MH 12 AB 1234" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
+                    <input type="text" value={headerDetails.vehicleNo || ''} onChange={(e) => handleHeaderChange('vehicleNo', e.target.value)} placeholder="MH 12 AB 1234" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Transporter</label>
-                    <input type="text" value={headerDetails.transporterName} onChange={(e) => handleHeaderChange('transporterName', e.target.value)} placeholder="Transporter Name" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
+                    <input type="text" value={headerDetails.transporterName || ''} onChange={(e) => handleHeaderChange('transporterName', e.target.value)} placeholder="Transporter Name" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Distance (KM)</label>
-                    <input type="number" value={headerDetails.distance} onChange={(e) => handleHeaderChange('distance', e.target.value)} placeholder="Distance" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
+                    <input type="number" value={headerDetails.distance || ''} onChange={(e) => handleHeaderChange('distance', e.target.value)} placeholder="Distance" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
                   </div>
                 </div>
               )}
@@ -1635,45 +1635,45 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
                   <SearchableDropdown
                     label="Shipping Party Name"
                     options={partyMasters}
-                    value={headerDetails.shippingPartyName}
+                    value={headerDetails.shippingPartyName || ''}
                     onChange={(value) => handleHeaderChange('shippingPartyName', value)}
                     placeholder="Select Party..."
                   />
                 </div>
                 <div className="lg:col-span-2">
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Street Address</label>
-                  <input type="text" value={headerDetails.shippingAddress} onChange={(e) => handleHeaderChange('shippingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.shippingAddress || ''} onChange={(e) => handleHeaderChange('shippingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State</label>
-                  <input type="text" value={headerDetails.shippingState} onChange={(e) => handleHeaderChange('shippingState', e.target.value)} placeholder="e.g. Karnataka" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.shippingState || ''} onChange={(e) => handleHeaderChange('shippingState', e.target.value)} placeholder="e.g. Karnataka" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State Code / Pin Code</label>
                   <div className="flex space-x-2">
-                    <input type="text" value={headerDetails.shippingStateCode} onChange={(e) => handleHeaderChange('shippingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
-                    <input type="text" value={headerDetails.shippingPinCode} onChange={(e) => handleHeaderChange('shippingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                    <input type="text" value={headerDetails.shippingStateCode || ''} onChange={(e) => handleHeaderChange('shippingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                    <input type="text" value={headerDetails.shippingPinCode || ''} onChange={(e) => handleHeaderChange('shippingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Contact Info</label>
-                  <input type="text" value={headerDetails.shippingContact} onChange={(e) => handleHeaderChange('shippingContact', e.target.value)} placeholder="Phone or Email" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.shippingContact || ''} onChange={(e) => handleHeaderChange('shippingContact', e.target.value)} placeholder="Phone or Email" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Contact Person</label>
-                  <input type="text" value={headerDetails.shippingContactPerson} onChange={(e) => handleHeaderChange('shippingContactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.shippingContactPerson || ''} onChange={(e) => handleHeaderChange('shippingContactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Mobile Number</label>
-                  <input type="text" value={headerDetails.shippingMobileNumber} onChange={(e) => handleHeaderChange('shippingMobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.shippingMobileNumber || ''} onChange={(e) => handleHeaderChange('shippingMobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">WhatsApp Number</label>
-                  <input type="text" value={headerDetails.shippingWhatsappNumber} onChange={(e) => handleHeaderChange('shippingWhatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.shippingWhatsappNumber || ''} onChange={(e) => handleHeaderChange('shippingWhatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Email ID</label>
-                  <input type="email" value={headerDetails.shippingEmailId} onChange={(e) => handleHeaderChange('shippingEmailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="email" value={headerDetails.shippingEmailId || ''} onChange={(e) => handleHeaderChange('shippingEmailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
               </div>
             </div>
@@ -2029,7 +2029,7 @@ export const PurchaseVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, 
       <HistoryModal 
         isOpen={showHistory} 
         onClose={() => setShowHistory(false)} 
-        storageKey="bharat_book_all_vouchers" 
+        storageKey="bharat_book_all_vouchers_v2" 
         onSelectRecord={(record) => loadRecord(record)}
         title="Voucher History" 
       />

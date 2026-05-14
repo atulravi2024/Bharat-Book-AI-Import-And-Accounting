@@ -1,14 +1,15 @@
 [
   {
     "id": "auto_match-sample-1",
+    "origin": "bank",
     "date": {
       "value": "2024-05-15"
     },
-    "type": "Journal",
+    "type": "Bank Statement",
     "partyName": {
       "value": "Sample Party"
     },
-    "amount": {
+    "withdrawalAmount": {
       "value": 1500
     },
     "narration": {

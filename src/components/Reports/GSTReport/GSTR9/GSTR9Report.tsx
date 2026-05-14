@@ -13,7 +13,7 @@ export const GSTR9Report: React.FC<GSTR9ReportProps> = ({ useSampleData, onToggl
     useEffect(() => {
         if (useSampleData) {
             setLoading(true);
-            fetch('/sample-data/reports/gstr9.json')
+            fetch('/sample-data/reports/g9_data.json')
                 .then(res => res.json())
                 .then(res => {
                     setData(res);

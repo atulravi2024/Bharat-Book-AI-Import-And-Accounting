@@ -80,6 +80,21 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
     if (onTabChange) onTabChange(tab);
   };
 
+  const filteredVouchers = useMemo(() => {
+    return vouchers.filter(v => {
+      if (v.isSample) {
+          const allowedSamples = ['item_vouchers', 'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation'];
+          if (!v.sampleSetId || !allowedSamples.includes(v.sampleSetId)) return false;
+          return true; // Always include its OWN sample data regardless of date filter
+      }
+      const date = String(v.date?.value || '');
+      if (!dateRange.from && !dateRange.to) return true;
+      if (dateRange.from && date < dateRange.from) return false;
+      if (dateRange.to && date > dateRange.to) return false;
+      return true;
+    });
+  }, [vouchers, dateRange]);
+
   const itemRateAnalysis = useMemo(() => {
     const stats: Record<string, {
       name: string;
@@ -91,16 +106,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
       totalSalesQty: number;
     }> = {};
 
-    const filtered = vouchers.filter(v => {
-      if (v.isSample) return true; // Always include sample data regardless of date filter
-      const date = String(v.date?.value || '');
-      if (!dateRange.from && !dateRange.to) return true;
-      if (dateRange.from && date < dateRange.from) return false;
-      if (dateRange.to && date > dateRange.to) return false;
-      return true;
-    });
-
-    const listToAnalyze = filtered.length > 0 ? filtered : vouchers;
+    const listToAnalyze = filteredVouchers.length > 0 ? filteredVouchers : vouchers;
     const sorted = [...listToAnalyze].sort((a, b) => String(a.date?.value || '').localeCompare(String(b.date?.value || '')));
 
     sorted.forEach(v => {
@@ -250,7 +256,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
               title={activeTab.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
               description={`Detailed inventory analysis and tracking for ${activeTab.replace('_', ' ')}.`}
               onExport={handleExport}
-              vouchers={vouchers}
+              vouchers={filteredVouchers}
               reportType={activeTab}
             />
           )}

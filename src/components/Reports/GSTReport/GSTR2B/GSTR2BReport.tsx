@@ -13,7 +13,7 @@ export const GSTR2BReport: React.FC<GSTR2BReportProps> = ({ useSampleData, onTog
     useEffect(() => {
         if (useSampleData) {
             setLoading(true);
-            fetch('/sample-data/reports/gstr2b.json')
+            fetch('/sample-data/reports/g2b_data.json')
                 .then(res => res.json())
                 .then(res => {
                     setData(res);

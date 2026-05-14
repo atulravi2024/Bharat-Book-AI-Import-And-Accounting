@@ -50,7 +50,9 @@ export const SummaryReport: React.FC<SummaryReportProps> = ({ data, onExport }) 
           </thead>
           <tbody>
             {data.map((item, idx) => {
-              const closing = item.totalQty - (item.outwardQty || 0);
+              const inwardQty = item.totalPurchaseQty || 0;
+              const outwardQty = item.totalSalesQty || 0;
+              const closing = inwardQty - outwardQty;
               const color = closing > 0 ? 'text-green-600' : closing < 0 ? 'text-red-600' : 'text-gray-400';
               return (
                 <tr key={idx} className="border-b hover:bg-gray-100/30 transition-colors">
@@ -58,11 +60,11 @@ export const SummaryReport: React.FC<SummaryReportProps> = ({ data, onExport }) 
                     <Package className="mr-2 text-gray-300" size={14} />
                     {item.name}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono">{item.totalQty.toLocaleString()}</td>
-                  <td className="px-4 py-3 text-right font-mono text-gray-500 dark:text-gray-400">{item.outwardQty || 0}</td>
+                  <td className="px-4 py-3 text-right font-mono">{inwardQty.toLocaleString()}</td>
+                  <td className="px-4 py-3 text-right font-mono text-gray-500 dark:text-gray-400">{outwardQty.toLocaleString()}</td>
                   <td className={`px-4 py-3 text-right font-bold font-mono ${color}`}>{closing.toLocaleString()}</td>
                   <td className="px-4 py-3 text-center text-xs text-gray-400 italic">PCS</td>
-                  <td className="px-4 py-3 text-right text-gray-600 font-medium dark:text-gray-300">₹{(closing * item.avgPurchaseRate).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</td>
+                  <td className="px-4 py-3 text-right text-gray-600 font-medium dark:text-gray-300">₹{(closing * (item.avgPurchaseRate || 0)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</td>
                 </tr>
               );
             })}

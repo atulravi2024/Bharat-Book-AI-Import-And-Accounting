@@ -37,7 +37,7 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
             <SearchableDropdown
               label="Source Location"
               options={warehouseMasters}
-              value={headerDetails.sourceLocation}
+              value={headerDetails.sourceLocation || ''}
               onChange={(value) => handleHeaderChange('sourceLocation', value)}
               placeholder="Search Origin..."
             />
@@ -46,7 +46,7 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
             <SearchableDropdown
               label="Destination Location"
               options={warehouseMasters}
-              value={headerDetails.destinationLocation}
+              value={headerDetails.destinationLocation || ''}
               onChange={(value) => handleHeaderChange('destinationLocation', value)}
               placeholder="Search Destination..."
             />
@@ -73,7 +73,7 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
         <SearchableDropdown
           label="Location"
           options={warehouseMasters}
-          value={headerDetails.location}
+          value={headerDetails.location || ''}
           onChange={(value) => handleHeaderChange('location', value)}
           placeholder="Search Location..."
         />

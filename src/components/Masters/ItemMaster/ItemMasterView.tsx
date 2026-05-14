@@ -158,21 +158,21 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
                 return <BrandsTab data={brandMasters} onSave={setBrandMasters} />;
             case 'categories':
                 return <CategoriesTab data={categoryMasters} onSave={setCategoryMasters} />;
-            case 'color':
+            case 'colors':
                 return <ColorsTab data={colorMasters} onSave={setColorMasters} />;
-            case 'size':
+            case 'sizes':
                 return <SizesTab data={sizeMasters} onSave={setSizeMasters} />;
-            case 'variant':
+            case 'variants':
                 return <VariantsTab data={variantMasters} onSave={setVariantMasters} itemMasters={itemMasters} colorMasters={colorMasters} sizeMasters={sizeMasters} />;
-            case 'dimension':
+            case 'dimensions':
                 return <DimensionsTab data={dimensionMasters} onSave={setDimensionMasters} />;
-            case 'sku':
+            case 'skus':
                 return <SKUsTab data={skuMasters} onSave={setSkuMasters} itemMasters={itemMasters} />;
             case 'priceList':
                 return <PriceListTab data={priceListMasters} onSave={setPriceListMasters} />;
-            case 'weight':
+            case 'weights':
                 return <WeightsTab data={weightMasters} onSave={setWeightMasters} />;
-            case 'volume':
+            case 'volumes':
                 return <VolumesTab data={volumeMasters} onSave={setVolumeMasters} />;
             case 'grades':
                 return <GradesTab data={gradeMasters} onSave={setGradeMasters} />;
@@ -193,14 +193,14 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
             case 'gst': exportData = gstMasters; filename = 'HSN_GST.json'; break;
             case 'brands': exportData = brandMasters; filename = 'Brands.json'; break;
             case 'categories': exportData = categoryMasters; filename = 'Categories.json'; break;
-            case 'color': exportData = colorMasters; filename = 'Colors.json'; break;
-            case 'size': exportData = sizeMasters; filename = 'Sizes.json'; break;
-            case 'variant': exportData = variantMasters; filename = 'Variants.json'; break;
-            case 'dimension': exportData = dimensionMasters; filename = 'Dimensions.json'; break;
-            case 'sku': exportData = skuMasters; filename = 'SKUs.json'; break;
+            case 'colors': exportData = colorMasters; filename = 'Colors.json'; break;
+            case 'sizes': exportData = sizeMasters; filename = 'Sizes.json'; break;
+            case 'variants': exportData = variantMasters; filename = 'Variants.json'; break;
+            case 'dimensions': exportData = dimensionMasters; filename = 'Dimensions.json'; break;
+            case 'skus': exportData = skuMasters; filename = 'SKUs.json'; break;
             case 'priceList': exportData = priceListMasters; filename = 'PriceLists.json'; break;
-            case 'weight': exportData = weightMasters; filename = 'Weights.json'; break;
-            case 'volume': exportData = volumeMasters; filename = 'Volumes.json'; break;
+            case 'weights': exportData = weightMasters; filename = 'Weights.json'; break;
+            case 'volumes': exportData = volumeMasters; filename = 'Volumes.json'; break;
             case 'grades': exportData = gradeMasters; filename = 'Grades.json'; break;
             default: break;
         }
@@ -236,14 +236,14 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
                             { id: 'gst', label: 'HSN', icon: TaxIcon },
                             { id: 'brands', label: 'Brands', icon: BrandIcon },
                             { id: 'categories', label: 'Categories', icon: CategoryIcon },
-                            { id: 'color', label: 'Colors', icon: CategoryIcon },
-                            { id: 'size', label: 'Sizes', icon: FilterListIcon },
-                            { id: 'variant', label: 'Variants', icon: FilterListIcon },
-                            { id: 'dimension', label: 'Dimensions', icon: FilterListIcon },
-                            { id: 'sku', label: 'SKUs', icon: FilterListIcon },
+                            { id: 'colors', label: 'Colors', icon: CategoryIcon },
+                            { id: 'sizes', label: 'Sizes', icon: FilterListIcon },
+                            { id: 'variants', label: 'Variants', icon: FilterListIcon },
+                            { id: 'dimensions', label: 'Dimensions', icon: FilterListIcon },
+                            { id: 'skus', label: 'SKUs', icon: FilterListIcon },
                             { id: 'priceList', label: 'Price List', icon: TrendingUpIcon },
-                            { id: 'weight', label: 'Weights', icon: FilterListIcon },
-                            { id: 'volume', label: 'Volumes', icon: FilterListIcon },
+                            { id: 'weights', label: 'Weights', icon: FilterListIcon },
+                            { id: 'volumes', label: 'Volumes', icon: FilterListIcon },
                             { id: 'grades', label: 'Grades', icon: FilterListIcon },
                         ].map(tab => (
                             <button key={tab.id} id={`item-master-tab-${tab.id}`} onClick={() => setActiveTab(tab.id)} className={`px-6 py-4 text-sm font-bold relative transition-all whitespace-nowrap flex items-center ${activeTab === tab.id ? 'text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-700' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>

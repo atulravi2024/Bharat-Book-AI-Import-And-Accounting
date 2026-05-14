@@ -25,7 +25,7 @@ export const RemarksSection: React.FC<RemarksSectionProps> = ({
        {!collapsedSections.remarks && (
          <div className="animate-in fade-in slide-in-from-top-2 duration-300">
            <textarea 
-             value={headerDetails.remarks} 
+             value={headerDetails.remarks || ''} 
              onChange={(e) => handleHeaderChange('remarks', e.target.value)} 
              placeholder="Reason for stock taxable adjustment or movement..." 
              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all min-h-[100px] resize-y dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"

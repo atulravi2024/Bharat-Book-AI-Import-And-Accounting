@@ -8,8 +8,8 @@ interface ReconcileTabProps {
 }
 
 export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouchers }) => {
-    const bankEntries = useMemo(() => vouchers.filter(v => v.origin === 'bank' || !!v.withdrawalAmount || !!v.depositAmount), [vouchers]);
-    const bookEntries = useMemo(() => vouchers.filter(v => v.origin !== 'bank' && !v.withdrawalAmount && !v.depositAmount), [vouchers]);
+    const bankEntries = useMemo(() => vouchers.filter(v => v.origin === 'bank' || v.type === 'Bank Statement' || !!v.withdrawalAmount || !!v.depositAmount), [vouchers]);
+    const bookEntries = useMemo(() => vouchers.filter(v => v.origin !== 'bank' && v.type !== 'Bank Statement' && v.type !== 'Debit Note' && v.type !== 'Credit Note' && !v.withdrawalAmount && !v.depositAmount), [vouchers]);
 
     const [reconciledPairs, setReconciledPairs] = useState<Record<string, string>>({}); // bankId -> bookId
     

@@ -1,18 +1,16 @@
 [
   {
     "id": "to_classify-sample-1",
+    "origin": "bank",
     "date": {
       "value": "2024-05-15"
     },
-    "type": "Journal",
-    "partyName": {
-      "value": "Sample Party"
-    },
-    "amount": {
+    "type": "Bank Statement",
+    "withdrawalAmount": {
       "value": 1500
     },
     "narration": {
-      "value": "Generated for to_classify"
+      "value": "UBER TRIP HELP.UBER.COM"
     }
   }
 ]

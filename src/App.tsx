@@ -27,7 +27,7 @@ const PARTY_MASTERS_KEY = 'bharat_book_party_masters';
 const LEDGER_MASTERS_KEY = 'bharat_book_ledger_masters';
 const ITEM_MASTERS_KEY = 'bharat_book_item_masters';
 const UOM_MASTERS_KEY = 'bharat_book_uom_masters';
-const ALL_VOUCHERS_KEY = 'bharat_book_all_vouchers';
+const ALL_VOUCHERS_KEY = 'bharat_book_all_vouchers_v2_v2';
 const GST_MASTERS_KEY = 'bharat_book_gst_masters';
 const BRAND_MASTERS_KEY = 'bharat_book_brand_masters';
 const CATEGORY_MASTERS_KEY = 'bharat_book_category_masters';
@@ -117,11 +117,12 @@ const App: React.FC = () => {
   const [voucherEntryActiveTab, setVoucherEntryActiveTab] = useState<string | null>(() => getSubPageForView('voucher-entry'));
   const [inventoryEntryActiveTab, setInventoryEntryActiveTab] = useState<string | null>(() => getSubPageForView('inventory-entry'));
   const [settingsActiveTab, setSettingsActiveTab] = useState<string | null>(() => getSubPageForView('settings'));
-  const [activeSamples, setActiveSamples] = useStorageState<string[]>('bharat_book_active_samples_v4', [
+  const [activeSamples, setActiveSamples] = useStorageState<string[]>('bharat_book_active_samples_v7', [
     'ledgers', 'items', 'bom', 'warehouses', 'parties', 
     'balance_sheet', 'profit_loss', 'cash_flow', 'bank_flow', 'trial_balance', 
     'sales_register', 'purchase_register', 'financial_vouchers', 'gstr1',
     'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
+    'payment_register', 'receipt_register', 'contra_register', 'audit_trail',
     'item_vouchers', 'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation',
     'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile'
   ]);
@@ -665,19 +666,39 @@ const App: React.FC = () => {
         const entryIds = navMeta?.entryIds || [];
         const itemMasterKeys = navMeta?.itemMasterKeys || [];
 
-        const isReport = reportIds.includes(id);
+        let isReport = reportIds.includes(id);
         const isEntry = entryIds.includes(id);
         const isItemMaster = itemMasterKeys.includes(id);
 
+        if (id.endsWith('_register') || (id.endsWith('_vouchers') && id !== 'demo_vouchers') || id === 'audit_trail' || id === 'day_book' || id === 'reconcile') {
+             isReport = true;
+        }
+
         const folder = isReport ? 'reports' : (isEntry ? 'dashboard' : (isItemMaster ? 'item-master' : 'ledger-master'));
-        const filename = (isReport || isEntry) ? id : (id === 'gst' ? 'hsn' : id);
+        let filename = (isReport || isEntry) ? id : (id === 'gst' ? 'hsn' : id);
+        
+        // Adblocker evasion or safe names
+        if (id === 'payment_register') filename = 'pay_reg_data';
+        if (id === 'receipt_register') filename = 'rec_reg_data';
+        if (id === 'contra_register') filename = 'con_reg_data';
+        if (id === 'debit_note_register') filename = 'dr_note_reg_data';
+        if (id === 'credit_note_register') filename = 'cr_note_reg_data';
+        if (id === 'debit_note_entry') filename = 'dr_note_entry_data';
+        if (id === 'credit_note_entry') filename = 'cr_note_entry_data';
+        if (id === 'gstr1') filename = 'g1_data';
+        if (id === 'gstr2b') filename = 'g2b_data';
+        if (id === 'gstr3b') filename = 'g3b_data';
+        if (id === 'gstr9') filename = 'g9_data';
+        if (id === 'gstr9c') filename = 'g9c_data';
+        if (id === 'ledgers') filename = 'ldg_masters';
         
         try {
-            const response = await fetch(`/sample-data/${folder}/${filename}.json`);
-            if (!response.ok) throw new Error(`Failed to load ${id} sample data`);
+            const url = `/sample-data/${folder}/${filename}.json`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Failed to load ${url} (Status: ${response.status})`);
             const contentType = response.headers.get("content-type");
             if (contentType && contentType.indexOf("application/json") === -1) {
-                 console.warn(`Sample data /sample-data/${folder}/${filename}.json is not JSON (possibly a 404 fallback). Ignoring.`);
+                 console.warn(`Sample data ${url} is not JSON (possibly a 404 fallback). Ignoring.`);
                  return;
             }
             const data = await response.json();
@@ -725,8 +746,8 @@ const App: React.FC = () => {
                 case 'contacts': setContactMasters(merge); break;
                 default: setAllVouchers(merge); break;
             }
-        } catch (e) {
-            console.error("Error loading sample data", e);
+        } catch (e: any) {
+            console.error(`Error loading sample data for '${id}' (url: /sample-data/${folder}/${filename}.json):`, e.message);
             // By skipping the filter here, the toggle remains visually ON even if there's no specific file.
         }
     }

@@ -98,10 +98,14 @@ export const SampleSettings: React.FC<SampleSettingsProps> = ({ setView, setActi
             description: 'Voucher and transaction analysis',
             subItems: [
                 { id: 'vouchers', label: 'Ledger Report', view: 'vouchers' as MainView },
-                { id: 'day_book', label: 'Day Book', view: 'vouchers' as MainView },
-                { id: 'journal_register', label: 'Journal Register', view: 'vouchers' as MainView },
-                { id: 'debit_note_register', label: 'Debit Note Register', view: 'vouchers' as MainView },
-                { id: 'credit_note_register', label: 'Credit Note Register', view: 'vouchers' as MainView }
+                { id: 'day_book', label: 'Day Book', view: 'vouchers' as MainView, tab: 'day_book' },
+                { id: 'journal_register', label: 'Journal Register', view: 'vouchers' as MainView, tab: 'journal' },
+                { id: 'payment_register', label: 'Payment Register', view: 'vouchers' as MainView, tab: 'payment' },
+                { id: 'receipt_register', label: 'Receipt Register', view: 'vouchers' as MainView, tab: 'receipt' },
+                { id: 'contra_register', label: 'Contra Register', view: 'vouchers' as MainView, tab: 'contra' },
+                { id: 'audit_trail', label: 'Audit Trail', view: 'vouchers' as MainView, tab: 'audit_trail' },
+                { id: 'debit_note_register', label: 'Debit Note Register', view: 'vouchers' as MainView, tab: 'debit_note' },
+                { id: 'credit_note_register', label: 'Credit Note Register', view: 'vouchers' as MainView, tab: 'credit_note' }
             ]
         },
         { 
@@ -123,6 +127,7 @@ export const SampleSettings: React.FC<SampleSettingsProps> = ({ setView, setActi
             icon: BookOpen, 
             description: 'Voucher entry and accounting',
             subItems: [
+                { id: 'demo_vouchers', label: 'Dashboard Overview', view: 'dashboard' as MainView, tab: 'main' },
                 { id: 'sales_entry', label: 'Sales Entry', view: 'voucher-entry' as MainView, tab: 'sales' },
                 { id: 'purchase_entry', label: 'Purchase Entry', view: 'voucher-entry' as MainView, tab: 'purchase' },
                 { id: 'payment_entry', label: 'Payment Entry', view: 'voucher-entry' as MainView, tab: 'payment' },

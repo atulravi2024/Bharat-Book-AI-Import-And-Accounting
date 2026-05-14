@@ -88,7 +88,29 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
     const vouchersToFilter = React.useMemo(() => {
         let list = vouchers.filter(v => {
             const isBankStatement = v.type === VoucherType.BankStatement;
-            return !isBankStatement;
+            if (isBankStatement) return false;
+            
+            if (v.sampleSetId) {
+                if (activeTab === 'purchase' && !['purchase_register', 'purchase_entry'].includes(v.sampleSetId)) return false;
+                if (activeTab === 'sales' && !['sales_register', 'sales_entry'].includes(v.sampleSetId)) return false;
+                if (activeTab === 'payment' && !['payment_register', 'payment_entry'].includes(v.sampleSetId)) return false;
+                if (activeTab === 'receipt' && !['receipt_register', 'receipt_entry'].includes(v.sampleSetId)) return false;
+                if (activeTab === 'journal' && !['journal_register', 'journal_entry', 'stock_journal_entry'].includes(v.sampleSetId)) return false;
+                if (activeTab === 'contra' && !['contra_register', 'contra_entry'].includes(v.sampleSetId)) return false;
+                if (activeTab === 'debit_note' && !['debit_note_register', 'debit_note_entry'].includes(v.sampleSetId)) return false;
+                if (activeTab === 'credit_note' && !['credit_note_register', 'credit_note_entry'].includes(v.sampleSetId)) return false;
+                if (activeTab === 'day_book' && v.sampleSetId !== 'day_book') return false;
+                if (activeTab === 'audit_trail' && v.sampleSetId !== 'audit_trail') return false;
+                
+                // Allow generic ones for 'standard' tab, plus let it see ALL vouchers. 
+                // Wait, if activeTab is standard, it should only show if that specific voucher sample toggle is ON.
+                // If it is ON, it is in 'vouchers'. So any v.sampleSetId is fine to show in 'standard' if it belongs to standard ledger!
+                // Actually, standard implies ALL vouchers. So if a sample is active, it's fine to show in standard, EXCEPT maybe specific ones?
+                // Let's just say standard shows EVERYTHING that is active.
+                // Except wait, before I had: if (activeTab === 'standard' && !['vouchers', 'financial_vouchers'].includes(v.sampleSetId)) return false;
+                if (activeTab === 'standard' && !['vouchers', 'financial_vouchers', 'sales_entry', 'purchase_entry', 'payment_entry', 'receipt_entry', 'journal_entry', 'contra_entry', 'debit_note_entry', 'credit_note_entry', 'sales_register', 'purchase_register', 'payment_register', 'receipt_register', 'journal_register', 'contra_register', 'debit_note_register', 'credit_note_register'].includes(v.sampleSetId)) return false;
+            }
+            return true;
         });
 
         if (activeTab === 'purchase') list = list.filter(v => v.type === VoucherType.Purchase);
@@ -341,7 +363,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                         />
                     </div>
                     <div className="flex items-center space-x-2">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Total: {filteredVouchers.length} {activeTab === 'standard' ? 'Entries' : 'Statements'}</span>
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Total: {filteredVouchers.length} Entries</span>
                     </div>
                 </div>
 
@@ -544,8 +566,8 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                 <tr>
                                     <td colSpan={6} className="px-6 py-20 text-center">
                                         <VouchersIcon className="text-6xl mx-auto text-gray-100 mb-4" />
-                                        <h3 className="text-lg font-bold text-gray-400">No {activeTab === 'standard' ? 'entries' : 'bank statements'} found</h3>
-                                        <p className="text-gray-400 text-sm max-w-xs mx-auto">Either you haven't imported any {activeTab === 'standard' ? 'data' : 'statements'} yet or your search filter returned no results.</p>
+                                        <h3 className="text-lg font-bold text-gray-400">No entries found</h3>
+                                        <p className="text-gray-400 text-sm max-w-xs mx-auto">Either you haven't imported any data yet or your search filter returned no results.</p>
                                     </td>
                                 </tr>
                             )}
