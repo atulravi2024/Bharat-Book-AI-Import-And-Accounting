@@ -67,7 +67,6 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
   };
   
   const [quickDateOption, setQuickDateOption] = useState<'currentMonth' | 'lastMonth' | 'currentYear' | 'lastYear' | null>('lastMonth');
-  const [useSampleData, setUseSampleData] = useState(false);
   const [selectedReportType, setSelectedReportType] = useState('GSTR-1');
   
   const calculateDates = (option: 'currentMonth' | 'lastMonth' | 'currentYear' | 'lastYear') => {
@@ -117,6 +116,8 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
 
   const filteredVouchers = useMemo(() => {
     return vouchers.filter(v => {
+      if (v.isSample) return true; // Always include sample data regardless of date filter
+      
       if (!dateRange.from && !dateRange.to) return true;
       
       const dateStr = String(v.date?.value || '').trim();
@@ -149,16 +150,11 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
   }, [vouchers, dateRange]);
 
   const gstr1Data = useMemo(() => {
-    const effectiveSamples = [...(activeSamples || [])];
-    if (useSampleData && !effectiveSamples.includes('gstr1')) {
-        effectiveSamples.push('gstr1');
-    }
-
     return filteredVouchers.filter(v => {
       if (!v.isSample) return (v.type === VoucherType.Sales || v.type === VoucherType.CreditNote || v.type === VoucherType.DebitNote);
-      return v.sampleSetId === 'gstr1' && effectiveSamples.includes('gstr1');
+      return v.sampleSetId === 'gstr1' && activeSamples?.includes('gstr1');
     });
-  }, [filteredVouchers, activeSamples, useSampleData]);
+  }, [filteredVouchers, activeSamples]);
 
   const gstr1Summary = useMemo(() => {
     let totalTaxable = 0;
@@ -495,11 +491,11 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
         {activeTab === 'summary' && <GSTRR1Summary summary={gstr1Summary} />}
         {activeTab === 'invoice_detail' && <InvoiceDetailReport vouchers={gstr1Data} />}
         {activeTab === 'hsn_detail' && <HSNDetailReport summary={gstr1Summary} />}
-        {activeTab === 'gstr2b_report' && <GSTR2BReport useSampleData={useSampleData} onToggleSampleData={setUseSampleData} />}
-        {activeTab === 'gstr3b_report' && <GSTR3BReport useSampleData={useSampleData} onToggleSampleData={setUseSampleData} />}
-        {activeTab === 'gstr9_report' && <GSTR9Report useSampleData={useSampleData} onToggleSampleData={setUseSampleData} />}
-        {activeTab === 'gstr9c_report' && <GSTR9CReport useSampleData={useSampleData} onToggleSampleData={setUseSampleData} />}
-        {activeTab === 'others_report' && <OtherGSTReports useSampleData={useSampleData} onToggleSampleData={setUseSampleData} />}
+        {activeTab === 'gstr2b_report' && <GSTR2BReport useSampleData={!!activeSamples?.includes('gstr2b')} onToggleSampleData={() => {}} />}
+        {activeTab === 'gstr3b_report' && <GSTR3BReport useSampleData={!!activeSamples?.includes('gstr3b')} onToggleSampleData={() => {}} />}
+        {activeTab === 'gstr9_report' && <GSTR9Report useSampleData={!!activeSamples?.includes('gstr9')} onToggleSampleData={() => {}} />}
+        {activeTab === 'gstr9c_report' && <GSTR9CReport useSampleData={!!activeSamples?.includes('gstr9c')} onToggleSampleData={() => {}} />}
+        {activeTab === 'others_report' && <OtherGSTReports useSampleData={!!activeSamples?.includes('others')} onToggleSampleData={() => {}} />}
         {activeTab === 'generate_gst' && (
           <div className="p-6 bg-gray-50 rounded-xl border border-dashed border-gray-300 dark:bg-gray-900 dark:border-gray-600">
             <div className="mb-4">
@@ -552,24 +548,6 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
               >
                   Export
               </button>
-              <label className="flex items-center justify-center space-x-1 cursor-pointer bg-white px-2 py-2 rounded-lg border shadow-sm truncate dark:bg-gray-800">
-                  <input 
-                      type="checkbox" 
-                      checked={useSampleData} 
-                      onChange={(e) => {
-                          const checked = e.target.checked;
-                          setUseSampleData(checked);
-                          if (checked) {
-                              setDateRange({ from: '2024-04-01', to: '2025-03-31' });
-                              setQuickDateOption(null);
-                          } else {
-                              setQuickDate('lastMonth');
-                          }
-                      }}
-                      className="rounded text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-xs font-bold text-gray-700 dark:text-gray-200">Samples</span>
-              </label>
             </div>
 
             <p className="text-sm text-gray-500 mt-4 dark:text-gray-400">Generate GST filing reports based on the selected period and company criteria.</p>

@@ -117,7 +117,14 @@ const App: React.FC = () => {
   const [voucherEntryActiveTab, setVoucherEntryActiveTab] = useState<string | null>(() => getSubPageForView('voucher-entry'));
   const [inventoryEntryActiveTab, setInventoryEntryActiveTab] = useState<string | null>(() => getSubPageForView('inventory-entry'));
   const [settingsActiveTab, setSettingsActiveTab] = useState<string | null>(() => getSubPageForView('settings'));
-  const [activeSamples, setActiveSamples] = useStorageState<string[]>('bharat_book_active_samples_v2', ['ledgers', 'items', 'bom', 'warehouses', 'parties']);
+  const [activeSamples, setActiveSamples] = useStorageState<string[]>('bharat_book_active_samples_v4', [
+    'ledgers', 'items', 'bom', 'warehouses', 'parties', 
+    'balance_sheet', 'profit_loss', 'cash_flow', 'bank_flow', 'trial_balance', 
+    'sales_register', 'purchase_register', 'financial_vouchers', 'gstr1',
+    'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
+    'item_vouchers', 'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation',
+    'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile'
+  ]);
   
   useEffect(() => {
     if (view !== 'ledger-master' && view !== 'item-master' && view !== 'settings') {
@@ -203,12 +210,12 @@ const App: React.FC = () => {
     purgeLegacy();
 
     const reloadSamples = async () => {
-        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v7');
+        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v8');
         if (!hasLoaded) {
             for (const id of activeSamples) {
                 await toggleSampleDataSet(id, true);
             }
-            localStorage.setItem('bharat_book_samples_hydrated_v7', 'true');
+            localStorage.setItem('bharat_book_samples_hydrated_v8', 'true');
         }
     };
     reloadSamples();
@@ -568,14 +575,47 @@ const App: React.FC = () => {
     setStep('upload');
   };
 
-  const toggleSampleDataSet = async (id: string, forceState?: boolean) => {
-    const sampleIds = navMeta?.sampleIds || [];
+  const wrapStorage = <T,>(key: string, setter: React.Dispatch<React.SetStateAction<T>>) => (data: T | ((prev: T) => T)) => {
+     setter(data);
+     try {
+        if (typeof data !== 'function') {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+     } catch(e) {
+        console.error('Storage quota exceeded or error:', e);
+     }
+  };
 
-    if (!sampleIds.includes(id)) {
-        console.warn(`No sample data loader for id: ${id}`);
-        return;
-    }
+  // Sync activeSamples to fetch them if missing
+  useEffect(() => {
+    let active = true;
+    const fetchMissingSamples = async () => {
+      // Small delay to let initial localStorage settle
+      await new Promise(r => setTimeout(r, 500));
+      if (!active) return;
 
+      for (const id of activeSamples) {
+        let hasData = false;
+        if (['parties', 'vendors'].includes(id)) hasData = partyMasters.some((m: any) => m.sampleSetId === id);
+        else if (['ledgers', 'banks'].includes(id)) hasData = ledgerMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'items') hasData = itemMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'uoms') hasData = uomMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'bom') hasData = bomMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'warehouses') hasData = locationMasters.some((m: any) => m.sampleSetId === id);
+        else hasData = allVouchers.some((v: any) => v.sampleSetId === id);
+
+        if (!hasData) {
+          try {
+            await toggleSampleDataSet(id, true);
+          } catch(e) {}
+        }
+      }
+    };
+    fetchMissingSamples();
+    return () => { active = false; };
+  }, [activeSamples, partyMasters, ledgerMasters, itemMasters, bomMasters, locationMasters, allVouchers.length]);
+
+  async function toggleSampleDataSet(id: string, forceState?: boolean) {
     const currentlyActive = activeSamples.includes(id);
     const shouldEnable = forceState !== undefined ? forceState : !currentlyActive;
 
@@ -687,20 +727,9 @@ const App: React.FC = () => {
             }
         } catch (e) {
             console.error("Error loading sample data", e);
-            setActiveSamples(prev => prev.filter(s => s !== id));
+            // By skipping the filter here, the toggle remains visually ON even if there's no specific file.
         }
     }
-  };
-
-  const wrapStorage = <T,>(key: string, setter: React.Dispatch<React.SetStateAction<T>>) => (data: T | ((prev: T) => T)) => {
-     setter(data);
-     try {
-        if (typeof data !== 'function') {
-            localStorage.setItem(key, JSON.stringify(data));
-        }
-     } catch(e) {
-        console.error('Storage quota exceeded or error:', e);
-     }
   };
 
   useEffect(() => {

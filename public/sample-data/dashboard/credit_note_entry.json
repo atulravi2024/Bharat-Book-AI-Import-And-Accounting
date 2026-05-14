@@ -1,0 +1,15 @@
+[
+  {
+    "id": "cn-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Credit Note",
+    "partyName": {
+      "value": "Client Party"
+    },
+    "amount": {
+      "value": 500
+    }
+  }
+]

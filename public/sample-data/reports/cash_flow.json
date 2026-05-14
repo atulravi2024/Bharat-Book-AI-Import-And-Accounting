@@ -1,0 +1,40 @@
+[
+  {
+    "id": "cf-1",
+    "date": {
+      "value": "2024-05-02"
+    },
+    "type": "Receipt",
+    "paymentMode": {
+      "value": "Cash"
+    },
+    "partyName": {
+      "value": "Customer A"
+    },
+    "amount": {
+      "value": 120000
+    },
+    "narration": {
+      "value": "Received from customer"
+    }
+  },
+  {
+    "id": "cf-2",
+    "date": {
+      "value": "2024-05-05"
+    },
+    "type": "Payment",
+    "paymentMode": {
+      "value": "Cash"
+    },
+    "partyName": {
+      "value": "Vendor B"
+    },
+    "amount": {
+      "value": 75000
+    },
+    "narration": {
+      "value": "Paid vendor for supplies"
+    }
+  }
+]

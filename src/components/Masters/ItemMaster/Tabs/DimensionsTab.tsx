@@ -43,9 +43,9 @@ export const DimensionsTab: React.FC<DimensionsTabProps> = ({ data, onSave }) =>
                     <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input type="text" placeholder="Search Dimensions..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
-                <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
-                    <AddIcon className="mr-2" /> Add Dimension
-                </button>
+                <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Add Dimension
+                </span></button>
             </div>
 
             <div className="flex-1 overflow-auto custom-scrollbar min-h-0">

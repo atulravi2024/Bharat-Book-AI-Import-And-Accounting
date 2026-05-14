@@ -1,0 +1,54 @@
+[
+  {
+    "id": "sr-1",
+    "date": {
+      "value": "2024-05-16"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Walkin Customer"
+    },
+    "amount": {
+      "value": 5900
+    },
+    "narration": {
+      "value": "Sales Invoice #102"
+    },
+    "auditLogs": [
+      {
+        "id": "al-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "System Auto",
+        "changes": {
+          "status": "Created"
+        }
+      },
+      {
+        "id": "al-2",
+        "action": "UPDATE",
+        "timestamp": "2024-05-11T12:30:00Z",
+        "user": "Admin User",
+        "changes": {
+          "amount": "Updated amount"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sr-2",
+    "date": {
+      "value": "2024-05-17"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Alpha Traders"
+    },
+    "amount": {
+      "value": 15000
+    },
+    "narration": {
+      "value": "Sales Invoice #103"
+    }
+  }
+]

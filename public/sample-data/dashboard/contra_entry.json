@@ -1,0 +1,18 @@
+[
+  {
+    "id": "con-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Contra",
+    "debitLedger": {
+      "value": "Cash A/c"
+    },
+    "creditLedger": {
+      "value": "Bank A/c"
+    },
+    "amount": {
+      "value": 1000
+    }
+  }
+]

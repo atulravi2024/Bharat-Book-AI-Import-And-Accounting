@@ -1,0 +1,16 @@
+[
+  {
+    "id": "brands-sample-1",
+    "name": "Sample Brands 1",
+    "code": "BRA-001",
+    "brand": "Brand X",
+    "category": "Category A",
+    "uom": "PCS",
+    "minStock": 10,
+    "maxStock": 100,
+    "reorderLevel": 20,
+    "salesRate": 1500,
+    "purchaseRate": 1200,
+    "mrp": 1999
+  }
+]

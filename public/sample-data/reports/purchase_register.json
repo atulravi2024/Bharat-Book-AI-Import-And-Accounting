@@ -1,0 +1,54 @@
+[
+  {
+    "id": "pr-1",
+    "date": {
+      "value": "2024-05-10"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Supplier A"
+    },
+    "amount": {
+      "value": 120000
+    },
+    "narration": {
+      "value": "Purchase Invoice #204"
+    },
+    "auditLogs": [
+      {
+        "id": "al-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "System Auto",
+        "changes": {
+          "status": "Created"
+        }
+      },
+      {
+        "id": "al-2",
+        "action": "UPDATE",
+        "timestamp": "2024-05-11T12:30:00Z",
+        "user": "Admin User",
+        "changes": {
+          "amount": "Updated amount"
+        }
+      }
+    ]
+  },
+  {
+    "id": "pr-2",
+    "date": {
+      "value": "2024-05-11"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Supplier B"
+    },
+    "amount": {
+      "value": 45000
+    },
+    "narration": {
+      "value": "Purchase Invoice #205"
+    }
+  }
+]

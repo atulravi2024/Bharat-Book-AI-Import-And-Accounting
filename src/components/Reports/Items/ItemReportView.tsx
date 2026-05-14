@@ -92,6 +92,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
     }> = {};
 
     const filtered = vouchers.filter(v => {
+      if (v.isSample) return true; // Always include sample data regardless of date filter
       const date = String(v.date?.value || '');
       if (!dateRange.from && !dateRange.to) return true;
       if (dateRange.from && date < dateRange.from) return false;

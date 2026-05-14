@@ -93,10 +93,10 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
             setFormData({ name: "" });
             setIsModalOpen(true);
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all"
+          className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all"
         >
-          <AddIcon className="mr-2" /> Add Item
-        </button>
+          <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Add Item
+        </span></button>
       </div>
 
       <div className="flex-1 overflow-auto custom-scrollbar min-h-0">

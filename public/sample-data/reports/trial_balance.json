@@ -1,0 +1,40 @@
+[
+  {
+    "id": "tb-1",
+    "date": {
+      "value": "2024-05-01"
+    },
+    "type": "Journal",
+    "debitLedger": {
+      "value": "Salary A/c"
+    },
+    "creditLedger": {
+      "value": "Bank A/c"
+    },
+    "amount": {
+      "value": 45000
+    },
+    "narration": {
+      "value": "Paid salaries"
+    }
+  },
+  {
+    "id": "tb-2",
+    "date": {
+      "value": "2024-05-10"
+    },
+    "type": "Journal",
+    "debitLedger": {
+      "value": "Bank A/c"
+    },
+    "creditLedger": {
+      "value": "Dividend Income A/c"
+    },
+    "amount": {
+      "value": 15000
+    },
+    "narration": {
+      "value": "Received dividend"
+    }
+  }
+]

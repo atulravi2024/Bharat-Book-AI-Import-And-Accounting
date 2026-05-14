@@ -1,0 +1,15 @@
+[
+  {
+    "id": "se-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Demo Party"
+    },
+    "amount": {
+      "value": 10000
+    }
+  }
+]

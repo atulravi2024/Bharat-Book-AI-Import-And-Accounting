@@ -1,0 +1,15 @@
+[
+  {
+    "id": "dn-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Debit Note",
+    "partyName": {
+      "value": "Vendor Party"
+    },
+    "amount": {
+      "value": 500
+    }
+  }
+]

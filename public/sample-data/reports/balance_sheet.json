@@ -1,0 +1,40 @@
+[
+  {
+    "id": "bs-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Journal",
+    "debitLedger": {
+      "value": "Furniture A/c"
+    },
+    "creditLedger": {
+      "value": "Capital A/c"
+    },
+    "amount": {
+      "value": 500000
+    },
+    "narration": {
+      "value": "Started business with furniture"
+    }
+  },
+  {
+    "id": "bs-2",
+    "date": {
+      "value": "2024-05-16"
+    },
+    "type": "Journal",
+    "debitLedger": {
+      "value": "Cash A/c"
+    },
+    "creditLedger": {
+      "value": "Bank Loan A/c"
+    },
+    "amount": {
+      "value": 200000
+    },
+    "narration": {
+      "value": "Took a bank loan"
+    }
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "unidentified-sample-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Sample Party"
+    },
+    "amount": {
+      "value": 1500
+    },
+    "narration": {
+      "value": "Generated for unidentified"
+    }
+  }
+]

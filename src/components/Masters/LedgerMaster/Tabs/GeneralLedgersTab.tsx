@@ -45,9 +45,9 @@ export const GeneralLedgersTab: React.FC<GeneralLedgersTabProps> = ({ data, onSa
                 </div>
                 <button onClick={() => { setEditingId(null); setFormData(
                     {name: ""}
-                ); setIsModalOpen(true); }} className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
-                    <AddIcon className="mr-2" /> Add General Ledger
-                </button>
+                ); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Add General Ledger
+                </span></button>
             </div>
 
             <div className="flex-1 overflow-auto custom-scrollbar min-h-0">

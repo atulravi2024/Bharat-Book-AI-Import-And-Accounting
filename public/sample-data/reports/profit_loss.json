@@ -1,0 +1,50 @@
+[
+  {
+    "id": "pl-1",
+    "date": {
+      "value": "2024-05-10"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "ABC Corp"
+    },
+    "amount": {
+      "value": 850000
+    },
+    "narration": {
+      "value": "Sales revenue"
+    }
+  },
+  {
+    "id": "pl-2",
+    "date": {
+      "value": "2024-05-12"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "XYZ Ltd"
+    },
+    "amount": {
+      "value": 400000
+    },
+    "narration": {
+      "value": "Inventory purchase"
+    }
+  },
+  {
+    "id": "pl-3",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Office Rent"
+    },
+    "amount": {
+      "value": 50000
+    },
+    "narration": {
+      "value": "Rent expense"
+    }
+  }
+]

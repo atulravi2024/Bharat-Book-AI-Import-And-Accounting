@@ -1,0 +1,15 @@
+[
+  {
+    "id": "rec-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Client Party"
+    },
+    "amount": {
+      "value": 15000
+    }
+  }
+]

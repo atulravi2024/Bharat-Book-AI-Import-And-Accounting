@@ -49,10 +49,36 @@
     "gstr9c",
     "gstr3b",
     "others",
-    "invoice_dummy_data"
+    "invoice_dummy_data",
+    "raw_bank",
+    "auto_match",
+    "missing_master",
+    "unidentified",
+    "to_classify",
+    "audit_trail",
+    "debit_note_register",
+    "credit_note_register",
+    "item_movement",
+    "low_stock",
+    "inventory_valuation"
   ],
   "entryIds": [
-    "demo_vouchers"
+    "demo_vouchers",
+    "sales_entry",
+    "purchase_entry",
+    "payment_entry",
+    "receipt_entry",
+    "journal_entry",
+    "contra_entry",
+    "debit_note_entry",
+    "credit_note_entry",
+    "stock_journal_entry",
+    "physical_stock_entry",
+    "consumption_entry",
+    "scrap_entry",
+    "transfer_entry",
+    "rejections_in_entry",
+    "rejections_out_entry"
   ],
   "itemMasterKeys": [
     "items",

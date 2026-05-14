@@ -1,0 +1,18 @@
+[
+  {
+    "id": "jou-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Journal",
+    "debitLedger": {
+      "value": "Bank A/c"
+    },
+    "creditLedger": {
+      "value": "Cash A/c"
+    },
+    "amount": {
+      "value": 2000
+    }
+  }
+]

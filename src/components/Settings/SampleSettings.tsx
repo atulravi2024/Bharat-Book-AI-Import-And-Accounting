@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Settings, ChevronDown, Package, BookOpen, Receipt, Users, ExternalLink, BarChart3, ShieldCheck } from 'lucide-react';
+import { Settings, ChevronDown, Package, BookOpen, Receipt, Users, ExternalLink, BarChart3, ShieldCheck, FileText } from 'lucide-react';
 import { MainView } from '../../types';
 
 interface SampleSettingsProps {
@@ -161,8 +161,21 @@ export const SampleSettings: React.FC<SampleSettingsProps> = ({ setView, setActi
                 { id: 'bank_flow', label: 'Bank Flow', view: 'reports' as MainView, tab: 'bank_flow' },
                 { id: 'trial_balance', label: 'Trial Balance', view: 'reports' as MainView, tab: 'trial_balance' },
                 { id: 'sales_register', label: 'Sales Register', view: 'reports' as MainView, tab: 'sales' },
-                { id: 'purchase_register', label: 'Purchase Register', view: 'reports' as MainView, tab: 'purchase' },
-                { id: 'gstr1', label: 'GSTR-1 Summary', view: 'reports' as MainView, tab: 'gstr1' }
+                { id: 'purchase_register', label: 'Purchase Register', view: 'reports' as MainView, tab: 'purchase' }
+            ]
+        },
+        { 
+            id: 'gst_report_section', 
+            title: 'GST Reports', 
+            icon: FileText, 
+            description: 'GSTR-1, GSTR-2B, GSTR-3B, GSTR-9, GSTR-9C',
+            subItems: [
+                { id: 'gstr1', label: 'GSTR-1 Summary', view: 'gst-report' as MainView, tab: 'filing' },
+                { id: 'gstr2b', label: 'GSTR-2B Recon', view: 'gst-report' as MainView, tab: 'gstr2b_report' },
+                { id: 'gstr3b', label: 'GSTR-3B Return', view: 'gst-report' as MainView, tab: 'gstr3b_report' },
+                { id: 'gstr9', label: 'GSTR-9 Annual', view: 'gst-report' as MainView, tab: 'gstr9_report' },
+                { id: 'gstr9c', label: 'GSTR-9C Audit', view: 'gst-report' as MainView, tab: 'gstr9c_report' },
+                { id: 'others', label: 'Other GST Reports', view: 'gst-report' as MainView, tab: 'others_report' }
             ]
         },
     ];

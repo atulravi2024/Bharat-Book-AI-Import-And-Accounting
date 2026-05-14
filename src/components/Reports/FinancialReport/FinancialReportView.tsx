@@ -104,6 +104,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
 
   const filteredVouchersTemp = useMemo(() => {
     return vouchers.filter(v => {
+      if (v.isSample) return true; // Always include sample data regardless of date filter
       const date = String(v.date?.value || '');
       if (dateRange.from && date < dateRange.from) return false;
       if (dateRange.to && date > dateRange.to) return false;

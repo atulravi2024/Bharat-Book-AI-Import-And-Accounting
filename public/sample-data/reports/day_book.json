@@ -1,0 +1,38 @@
+[
+  {
+    "id": "day_book-sample-1",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Sample Party"
+    },
+    "amount": {
+      "value": 1500
+    },
+    "narration": {
+      "value": "Generated for day_book"
+    },
+    "auditLogs": [
+      {
+        "id": "al-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "System Auto",
+        "changes": {
+          "status": "Created"
+        }
+      },
+      {
+        "id": "al-2",
+        "action": "UPDATE",
+        "timestamp": "2024-05-11T12:30:00Z",
+        "user": "Admin User",
+        "changes": {
+          "amount": "Updated amount"
+        }
+      }
+    ]
+  }
+]
