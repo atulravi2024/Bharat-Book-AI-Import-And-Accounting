@@ -655,11 +655,6 @@ export const InvoicePrintSettings: React.FC = () => {
     const handleFirstPage = () => setCurrentPage(1);
     const handleLastPage = () => setCurrentPage(totalPages);
 
-    const [sampleItemCount, setSampleItemCount] = useState<number>(50);
-    const [sampleHsnCount, setSampleHsnCount] = useState<number>(5);
-    const [isInterstate, setIsInterstate] = useState<boolean>(false);
-    const [sampleCategory, setSampleCategory] = useState<string>('electronics');
-
     const CATEGORIES: Record<string, {name: string, hsn: string, rate: number, tax: number}[]> = {
         'electronics': [
             {name: 'Premium Wireless Headphones', hsn: '8518', rate: 2499.00, tax: 18},
@@ -688,10 +683,11 @@ export const InvoicePrintSettings: React.FC = () => {
         ]
     };
 
-    const deferredSampleItemCount = React.useDeferredValue(sampleItemCount);
-    const deferredSampleHsnCount = React.useDeferredValue(sampleHsnCount);
-
     useEffect(() => {
+        const deferredSampleItemCount = 50;
+        const deferredSampleHsnCount = 5;
+        const isInterstate = false;
+        const sampleCategory: string = 'electronics';
         const catItems = CATEGORIES[sampleCategory] || CATEGORIES['electronics'];
         const newRows = [];
         let taxableValue = 0;
@@ -753,7 +749,7 @@ export const InvoicePrintSettings: React.FC = () => {
             referenceNo: prev.referenceNo === '-' ? 'REF-99201' : prev.referenceNo,
             poNumber: prev.poNumber === '-' ? 'PO-4421' : prev.poNumber,
         }));
-    }, [deferredSampleItemCount, sampleCategory, deferredSampleHsnCount, isInterstate]);
+    }, []);
 
     const [activeSection, setActiveSection] = useState<string | null>(null);
     const [plannerPageType, setPlannerPageType] = useState<'First' | 'Middle' | 'Last'>('First');
@@ -1834,120 +1830,7 @@ export const InvoicePrintSettings: React.FC = () => {
                             </div>
                         </CollapsibleSection>
 
-                        <CollapsibleSection 
-                            title="Sample Data Config" 
-                            isOpen={activeSection === 'sample_data'} 
-                            onToggle={() => toggleSection('sample_data')}
-                            icon={<FileText size={18} />}
-                            headerActions={
-                                <div className="bg-blue-100/50 text-blue-600 px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest dark:bg-blue-900/30 dark:text-blue-400">Preview Only</div>
-                            }
-                        >
-                            <div className="space-y-6">
-                                <p className="text-xs text-gray-500 italic mt-0 dark:text-gray-400">Configure the dummy state and contents shown in the preview window testing your document's layout responsiveness.</p>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Item Category</label>
-                                        <select 
-                                            value={sampleCategory}
-                                            onChange={(e) => setSampleCategory(e.target.value)}
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-gray-800 outline-none focus:border-blue-400 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
-                                        >
-                                            <option value="electronics">Electronics</option>
-                                            <option value="services">Services</option>
-                                            <option value="groceries">Groceries</option>
-                                            <option value="clothing">Clothing</option>
-                                        </select>
-                                    </div>
 
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1 flex justify-between">
-                                            <span>Quantity of Items</span>
-                                            <span className="text-blue-500 font-bold">{sampleItemCount} Items</span>
-                                        </label>
-                                        <input 
-                                            type="range" 
-                                            min="1" 
-                                            max="50" 
-                                            value={sampleItemCount}
-                                            onChange={(e) => setSampleItemCount(parseInt(e.target.value))}
-                                            className="w-full mt-2 accent-blue-500 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" 
-                                        />
-                                        <div className="flex justify-between text-[8px] font-bold text-gray-400 px-1 mt-1">
-                                            <span>Compact (1)</span>
-                                            <span>Multi-page (50)</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">GST Tax Setup</label>
-                                        <select 
-                                            value={isInterstate ? 'interstate' : 'intrastate'}
-                                            onChange={(e) => setIsInterstate(e.target.value === 'interstate')}
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-gray-800 outline-none focus:border-blue-400 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
-                                        >
-                                            <option value="intrastate">Intrastate (CGST/SGST)</option>
-                                            <option value="interstate">Interstate (IGST)</option>
-                                        </select>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1 flex justify-between">
-                                            <span>Unique HSN Codes</span>
-                                            <span className="text-blue-500 font-bold">{sampleHsnCount} Codes</span>
-                                        </label>
-                                        <input 
-                                            type="range" 
-                                            min="1" 
-                                            max="25" 
-                                            value={sampleHsnCount}
-                                            onChange={(e) => setSampleHsnCount(parseInt(e.target.value))}
-                                            className="w-full mt-2 accent-blue-500 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" 
-                                        />
-                                        <div className="flex justify-between text-[8px] font-bold text-gray-400 px-1 mt-1">
-                                            <span>Single HSN (1)</span>
-                                            <span>Multiple HSNs (25)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div className="space-y-4">
-                                    <h4 className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 pb-1 border-b border-gray-100 dark:border-gray-700">Primary Headers</h4>
-                                    
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest px-1">Party Name</label>
-                                            <input 
-                                                type="text" 
-                                                value={dummyHeader.partyName}
-                                                onChange={(e) => setDummyHeader(prev => ({...prev, partyName: e.target.value, billingPartyName: e.target.value}))}
-                                                className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 outline-none focus:border-blue-400 transition-colors shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest px-1">GSTIN Number</label>
-                                            <input 
-                                                type="text" 
-                                                value={dummyHeader.gstNumber}
-                                                onChange={(e) => setDummyHeader(prev => ({...prev, gstNumber: e.target.value}))}
-                                                className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-black text-gray-800 outline-none focus:border-blue-400 transition-colors shadow-sm uppercase dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
-                                            />
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="space-y-2 mt-4">
-                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest px-1">Remarks / Narration</label>
-                                        <textarea 
-                                            value={dummyHeader.narration}
-                                            onChange={(e) => setDummyHeader(prev => ({...prev, narration: e.target.value}))}
-                                            rows={2}
-                                            className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-800 outline-none focus:border-blue-400 transition-colors shadow-sm resize-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </CollapsibleSection>
                     </div>
 
                     <div className="mt-8 pt-6 border-t border-gray-100 space-y-4 px-8 dark:border-gray-800">

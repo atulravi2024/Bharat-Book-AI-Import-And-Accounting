@@ -23,7 +23,6 @@ import { PrivacySettings } from "./PrivacySettings";
 import { ImportSettings } from "./ImportSettings";
 import { MappingSettings } from "./MappingSettings";
 import { AISettings } from "./AISettings";
-import { SampleSettings } from "./SampleSettings";
 import { AdminSettings } from "./AdminSettings";
 import { DataExplorer } from "./DataExplorer";
 import { AppNavigationSettings } from "./AppNavigationSettings";
@@ -48,23 +47,21 @@ import { MainView, LedgerMaster } from "../../types";
 export interface SettingsViewProps {
   setView: (view: MainView) => void;
   setActiveMasterTab: (tab: string | null) => void;
-  activeSamples: string[];
-  onToggleSample: (id: string, forceState?: boolean) => void;
   setReportBankActiveTab?: (tab: string | null) => void;
   defaultTab?: string | null;
   onTabChange?: (tab: string | null) => void;
   ledgerMasters?: LedgerMaster[];
+  onAppModeChange?: (mode: string) => void;
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({
   setView,
   setActiveMasterTab,
-  activeSamples,
-  onToggleSample,
   setReportBankActiveTab,
   defaultTab,
   onTabChange,
   ledgerMasters = [],
+  onAppModeChange,
 }) => {
   const [workspaceName, setWorkspaceName] = useState("Bharat Book Enterprise");
   const [displayId, setDisplayId] = useState("BBE-2026-IND");
@@ -622,6 +619,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       accountNumberDetection,
     };
     localStorage.setItem("bharat_book_app_settings", JSON.stringify(settings));
+    if (onAppModeChange) {
+      onAppModeChange(appMode);
+    }
     setIsSaved(true);
     setTimeout(() => {
       setIsSaved(false);
@@ -735,13 +735,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <AIToolsIcon className="mr-3" /> AI Engines
             </button>
             <button
-              id="settings-tab-sample"
-              onClick={() => handleTabChange("sample")}
-              className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === "sample" ? "bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent" : "bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent"} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
-            >
-              <SettingsIcon className="mr-3" /> Sample
-            </button>
-            <button
               id="settings-tab-admin"
               onClick={() => handleTabChange("admin")}
               className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === "admin" ? "bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent" : "bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent"} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
@@ -765,16 +758,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               setAiSettings={setAiSettings}
               handleSave={handleSave}
               isSaved={isSaved}
-            />
-          )}
-
-          {activeTab === "sample" && (
-            <SampleSettings
-              setView={setView}
-              setActiveMasterTab={setActiveMasterTab}
-              activeSamples={activeSamples}
-              onToggleSample={onToggleSample}
-              setReportBankActiveTab={setReportBankActiveTab}
             />
           )}
 

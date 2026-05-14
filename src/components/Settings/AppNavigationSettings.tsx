@@ -228,7 +228,6 @@ export const AppNavigationSettings: React.FC = () => {
       { id: "imports", label: "Import Rules" },
       { id: "mapping", label: "Mapping" },
       { id: "ai", label: "AI Engines" },
-      { id: "sample", label: "Sample" },
       { id: "admin", label: "Admin" },
       { id: "data", label: "Data Explorer" },
     ],

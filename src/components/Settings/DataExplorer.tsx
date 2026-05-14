@@ -464,7 +464,6 @@ export const DataExplorer: React.FC = () => {
                                 <option value="masters">Masters</option>
                                 <option value="config">Config</option>
                                 <option value="audits">Audits</option>
-                                <option value="samples">Samples</option>
                                 <option value="database">Database</option>
                             </select>
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">

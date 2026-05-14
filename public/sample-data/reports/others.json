@@ -1,5 +1,4 @@
-{
-  "reports": [
+[
     {
       "id": "GSTR-1",
       "name": "Details of outward supplies of goods or services",
@@ -24,5 +23,4 @@
       "due_date": "18th of month succeeding quarter",
       "status": "N/A"
     }
-  ]
-}
+]

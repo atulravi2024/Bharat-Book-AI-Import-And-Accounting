@@ -603,6 +603,24 @@ const App: React.FC = () => {
         else if (id === 'uoms') hasData = uomMasters.some((m: any) => m.sampleSetId === id);
         else if (id === 'bom') hasData = bomMasters.some((m: any) => m.sampleSetId === id);
         else if (id === 'warehouses') hasData = locationMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'gst') hasData = gstMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'brands') hasData = brandMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'categories') hasData = categoryMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'skus') hasData = skuMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'priceList') hasData = priceListMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'weights') hasData = weightMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'volumes') hasData = volumeMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'colors') hasData = colorMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'sizes') hasData = sizeMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'variants') hasData = variantMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'dimensions') hasData = dimensionMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'stockGroups') hasData = stockGroupMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'grades') hasData = gradeMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'assertionCategories') hasData = assertionCategoryMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'assertionCodes') hasData = assertionCodeMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'accountGroups') hasData = accountGroupMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'costCenters') hasData = costCenterMasters.some((m: any) => m.sampleSetId === id);
+        else if (id === 'contacts') hasData = contactMasters.some((m: any) => m.sampleSetId === id);
         else hasData = allVouchers.some((v: any) => v.sampleSetId === id);
 
         if (!hasData) {
@@ -614,7 +632,7 @@ const App: React.FC = () => {
     };
     fetchMissingSamples();
     return () => { active = false; };
-  }, [activeSamples, partyMasters, ledgerMasters, itemMasters, bomMasters, locationMasters, allVouchers.length]);
+  }, [activeSamples]);
 
   async function toggleSampleDataSet(id: string, forceState?: boolean) {
     const currentlyActive = activeSamples.includes(id);
@@ -984,17 +1002,60 @@ const App: React.FC = () => {
         );
     }
 
+    const handleAppModeChange = (mode: string) => {
+        if (mode === 'working') {
+            setActiveSamples([]);
+            const clearSamples = (prev: any[]) => prev.filter(m => !m.sampleSetId && !m.isSample);
+            setUomMasters(clearSamples);
+            setGstMasters(clearSamples);
+            setBrandMasters(clearSamples);
+            setCategoryMasters(clearSamples);
+            setLocationMasters(clearSamples);
+            setSkuMasters(clearSamples);
+            setPriceListMasters(clearSamples);
+            setWeightMasters(clearSamples);
+            setVolumeMasters(clearSamples);
+            setColorMasters(clearSamples);
+            setSizeMasters(clearSamples);
+            setVariantMasters(clearSamples);
+            setDimensionMasters(clearSamples);
+            setStockGroupMasters(clearSamples);
+            setGradeMasters(clearSamples);
+            setAssertionCategoryMasters(clearSamples);
+            setAssertionCodeMasters(clearSamples);
+            setItemMasters(clearSamples);
+            setBomMasters(clearSamples);
+            setPartyMasters(clearSamples);
+            setAccountGroupMasters(clearSamples);
+            setLedgerMasters(clearSamples);
+            setCostCenterMasters(clearSamples);
+            setContactMasters(clearSamples);
+            setAllVouchers(clearSamples);
+            localStorage.removeItem('bharat_book_samples_hydrated_v8');
+        } else if (mode === 'demo') {
+            const defaultSamples = [
+                'ledgers', 'items', 'bom', 'warehouses', 'parties', 
+                'balance_sheet', 'profit_loss', 'cash_flow', 'bank_flow', 'trial_balance', 
+                'sales_register', 'purchase_register', 'financial_vouchers', 'gstr1',
+                'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
+                'payment_register', 'receipt_register', 'contra_register', 'audit_trail',
+                'item_vouchers', 'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation',
+                'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile'
+            ];
+            setActiveSamples(defaultSamples);
+        }
+    };
+
     if (view === 'settings') {
         return (
             <SettingsView 
                 setView={setView} 
                 setActiveMasterTab={setActiveMasterTab} 
-                activeSamples={activeSamples}
-                onToggleSample={toggleSampleDataSet}
                 setReportBankActiveTab={setReportActiveTab}
                 defaultTab={settingsActiveTab}
                 onTabChange={setSettingsActiveTab}
                 ledgerMasters={ledgerMasters}
+                onAppModeChange={handleAppModeChange}
             />
         );
     }
