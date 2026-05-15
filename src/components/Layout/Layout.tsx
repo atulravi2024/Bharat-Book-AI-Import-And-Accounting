@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-import { ThemeProvider } from './ThemeContext';
 import { MainView } from '../../types';
 
 interface LayoutProps {
@@ -16,7 +15,6 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView,
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <ThemeProvider>
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
       {/* Mobile sidebar overlay */}
       <div 
@@ -45,6 +43,5 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView,
         </main>
       </div>
     </div>
-    </ThemeProvider>
   );
 };

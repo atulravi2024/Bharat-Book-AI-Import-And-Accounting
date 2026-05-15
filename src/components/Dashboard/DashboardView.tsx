@@ -25,10 +25,15 @@ interface DashboardViewProps {
   onTabChange?: (tab: string | null) => void;
 }
 
-type DashboardTab = 'main' | 'sales' | 'purchase' | 'payment' | 'receipts' | 'journal' | 'contra' | 'bank';
+type DashboardTab = 'overview' | 'sales' | 'purchase' | 'payment' | 'receipts' | 'journal' | 'contra' | 'bank';
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNavigateToView, defaultTab, onTabChange }) => {
-  const [activeTab, setActiveTab] = useState<DashboardTab>((defaultTab as DashboardTab) || 'main');
+  const getInitialTab = (): DashboardTab => {
+    let tab = defaultTab as string;
+    if (tab === 'main') tab = 'overview';
+    return (tab as DashboardTab) || 'overview';
+  };
+  const [activeTab, setActiveTab] = useState<DashboardTab>(getInitialTab());
   const [colors, setColors] = useState<string[]>(['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6B7280', '#14B8A6']);
 
   React.useEffect(() => {
@@ -182,7 +187,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
 
             <div className="-mx-4 px-4 lg:mx-0 lg:px-0 mt-2 lg:mt-0">
                 <div className="flex bg-premium-slate-50 dark:bg-gray-700 rounded-xl sm:rounded-2xl p-1 border border-premium-slate-100 dark:border-gray-600 overflow-x-auto custom-scrollbar h-fit snap-x">
-                  <div className="snap-start"><TabButton id="main" label="Overview" icon={Layers} /></div>
+                  <div className="snap-start"><TabButton id="overview" label="Overview" icon={Layers} /></div>
                   <div className="snap-start"><TabButton id="sales" label="Sales" icon={TrendingUp} /></div>
                   <div className="snap-start"><TabButton id="purchase" label="Purchase" icon={Package} /></div>
                   <div className="snap-start"><TabButton id="payment" label="Payment" icon={CreditCard} /></div>
@@ -200,7 +205,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
         <div className="max-w-[1600px] mx-auto space-y-6 sm:space-y-8 pb-12">
           
           <AnimatePresence mode="wait">
-            {activeTab === 'main' && <MainTab stats={stats} isDemo={isDemo} colors={colors} />}
+            {activeTab === 'overview' && <MainTab stats={stats} isDemo={isDemo} colors={colors} />}
             {activeTab === 'sales' && <SalesTab stats={stats} isDemo={isDemo} colors={colors} />}
             {activeTab === 'purchase' && <PurchaseTab stats={stats} isDemo={isDemo} colors={colors} />}
             {activeTab === 'payment' && <PaymentTab stats={stats} isDemo={isDemo} colors={colors} />}
@@ -210,35 +215,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
             {activeTab === 'contra' && <ContraTab stats={stats} isDemo={isDemo} colors={colors} />}
           </AnimatePresence>
 
-          {/* Activity Section */}
-          <div className="bg-white rounded-[2.5rem] shadow-sm border border-premium-slate-100 p-8 dark:bg-gray-800 dark:border-gray-700">
-            <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 flex items-center dark:text-white">
-              <Clock size={16} className="mr-3 text-blue-600" /> {isDemo ? 'Demo Sequence Ledger' : 'Evolution Chronicle'}
-            </h3>
-            <div className="space-y-4">
-              {vouchers.slice(-5).reverse().map((v, i) => (
-                <div key={v.id} onClick={() => onNavigateToView('vouchers')} className="flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 transition-all cursor-pointer group border border-transparent hover:border-gray-100 dark:hover:bg-gray-700">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-xl bg-premium-slate-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform dark:bg-gray-800">
-                      {v.type === VoucherType.Sales ? <TrendingUp size={18}/> : <FileText size={18}/>}
-                    </div>
-                    <div className="ml-4">
-                      <div className="flex items-center gap-2">
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{v.type}</p>
-                        {isDemo && <span className="text-[7px] font-bold text-amber-500 bg-amber-50 px-1.5 rounded-full border border-amber-100 uppercase tracking-tighter">Demo</span>}
-                      </div>
-                      <p className="text-xs font-bold text-gray-800 dark:text-gray-100">{String(v.partyName?.value || v.narration?.value || 'System Action')}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-black text-gray-900 dark:text-white">₹{Number(v.amount?.value || 0).toLocaleString()}</p>
-                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{String(v.date?.value)}</p>
-                  </div>
-                </div>
-              ))}
-              {vouchers.length === 0 && <p className="text-center py-10 text-xs font-bold text-gray-400 uppercase tracking-widest">Chronicle currently empty</p>}
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

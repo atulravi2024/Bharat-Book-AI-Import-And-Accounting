@@ -13,7 +13,7 @@ export const AppNavigationSettings: React.FC = () => {
   const [routingDefaults, setRoutingDefaults] = useState<
     Record<string, string>
   >({
-    dashboard: "main",
+    dashboard: "overview",
     import: "upload",
     "bulk-operation": "decide",
     "ledger-master": "parties",
@@ -84,7 +84,7 @@ export const AppNavigationSettings: React.FC = () => {
 
   const subPages: Record<string, { id: string; label: string }[]> = {
     dashboard: [
-      { id: "main", label: "Overview" },
+      { id: "overview", label: "Overview" },
       { id: "sales", label: "Sales" },
       { id: "purchase", label: "Purchase" },
       { id: "payment", label: "Payment" },

@@ -19,7 +19,7 @@ export const BankTab = ({ stats, isDemo }: any) => {
                         {isDemo && <span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 border border-amber-600 animate-pulse">Demo Stream</span>}
                     </div>
                     <div className="flex-1">
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                             <AreaChart data={stats.trendData}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                                 <XAxis dataKey="date" fontSize={10} axisLine={false} tickLine={false} tickFormatter={(val) => val.split('-').slice(1).join('/')} />
@@ -38,7 +38,7 @@ export const BankTab = ({ stats, isDemo }: any) => {
                         {isDemo && <span className="px-2 py-1 bg-amber-100 text-amber-700 text-[8px] font-black uppercase tracking-widest rounded-lg border border-amber-200">Demo Ratio</span>}
                     </div>
                     <div className="flex-1 min-h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                             <RechartsPieChart>
                                 <Pie 
                                     data={[

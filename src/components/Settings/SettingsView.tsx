@@ -801,7 +801,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           {activeTab === "vouchernumbering" && <VoucherNumberingSettings />}
 
-          {activeTab === "invoiceprint" && <InvoicePrintSettings />}
+          {activeTab === "invoiceprint" && <InvoicePrintSettings appMode={appMode} />}
 
           {activeTab === "formdetails" && <FormDetailSettings />}
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useReactToPrint } from 'react-to-print';
 import { VoucherType } from '../../../types';
 import { Printer, Download, Image as ImageIcon, X, ZoomIn, ZoomOut, Maximize, RotateCcw, FileText, GripVertical, ToggleLeft, ToggleRight, Settings, Layout, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { numberToWords } from '../../../lib/numberToWords';
@@ -209,11 +208,10 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
   const filteredRows = React.useMemo(() => rows.filter(r => (isInventory ? r.itemName : r.ledgerName)), [rows, isInventory]);
   const [currentPage, setCurrentPage] = useState(1);
   
-  const handlePrint = useReactToPrint({
-      contentRef: documentRef,
-      documentTitle: `Invoice_${header.invoiceNumber || 'Doc'}`.replace(/[^a-zA-Z0-9_\-]/g, '_'),
-      pageStyle: `@media print { @page { size: ${printConfig.pageSize || 'A4'} ${printConfig.pageOrientation?.toLowerCase() || 'portrait'}; margin: 0mm; } body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }`
-  });
+  const handleManualPrint = () => {
+    console.log('Manual Print Triggered');
+    window.print();
+  };
   
   const itemPages = React.useMemo(() => {
       const first = printConfig.itemsPerFirstPage || 12;
@@ -299,6 +297,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
       }
     };
 
+    /*
     const resizeObserver = new ResizeObserver(() => {
       calculateScale();
     });
@@ -316,16 +315,21 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
     return () => {
       resizeObserver.disconnect();
     };
+    */
+    calculateScale();
+    window.addEventListener('resize', calculateScale);
+    return () => window.removeEventListener('resize', calculateScale);
+
   }, []);
 
   useEffect(() => {
     if (autoPrint) {
       const timer = setTimeout(() => {
-        if (handlePrint) handlePrint();
+        handleManualPrint();
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [autoPrint, handlePrint]);
+  }, [autoPrint]);
 
   const handleZoomIn = () => setManualZoom(prev => Math.min((prev || autoScale) + 0.1, 2.5));
   const handleZoomOut = () => setManualZoom(prev => Math.max((prev || autoScale) - 0.1, 0.1));
@@ -618,7 +622,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
         <div className="p-3 md:p-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-gray-50/90 backdrop-blur-sm gap-3 sticky top-0 z-10 no-print dark:border-gray-800">
           <div className="flex items-center gap-3">
             <button 
-              onClick={() => { if(handlePrint) handlePrint(); }}
+              onClick={handleManualPrint}
               className="bg-blue-600 p-2.5 rounded-xl text-white shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-95"
               title="Print Document"
             >

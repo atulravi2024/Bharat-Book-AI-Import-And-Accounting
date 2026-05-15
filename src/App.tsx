@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { Layout } from './components/Layout/Layout';
 import { ThemeProvider } from './components/Layout/ThemeContext';
 import { Step1Upload } from './components/Operations/Import/Step1Upload';
@@ -19,7 +19,7 @@ import { SettingsView } from './components/Settings/SettingsView';
 import { GSTReportView } from './components/Reports/GSTReport/GSTReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
 import { parseVoucherFile } from './services/aiService';
-import { InfoIcon, UndoIcon } from './components/icons/IconComponents';
+import { InfoIcon, UndoIcon, ErrorIcon } from './components/icons/IconComponents';
 import navMeta from './sample-data/navigation_meta.json';
 
 const DRAFT_KEY = 'bharat_book_voucher_draft';
@@ -71,7 +71,12 @@ function useStorageState<T>(key: string, defaultValue: T): [T, React.Dispatch<Re
   return [state, setState];
 }
 
+
 const App: React.FC = () => {
+  return <AppContent />;
+};
+
+const AppContent: React.FC = () => {
   const [view, setView] = useState<MainView>(() => {
     const saved = localStorage.getItem('bharat_book_navigation_defaults');
     if (saved) {
@@ -1177,6 +1182,11 @@ const App: React.FC = () => {
       setOriginView(view);
     }
     
+    // Default dashboard to overview
+    if (newView === 'dashboard') {
+      setDashboardActiveTab('overview');
+    }
+
     // Apply routing defaults if configured
     const savedNav = localStorage.getItem('bharat_book_navigation_defaults');
     if (savedNav) {

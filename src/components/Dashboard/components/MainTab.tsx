@@ -56,7 +56,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                         {isDemo && <span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg dark:shadow-amber-900/50 border border-amber-600 animate-pulse">Demo Plot</span>}
                     </div>
                     <div className="h-[400px]">
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                             <AreaChart data={stats.trendData}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                                 <XAxis dataKey="date" fontSize={10} axisLine={false} tickLine={false} />
@@ -75,7 +75,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                         {isDemo && <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[8px] font-black uppercase tracking-widest rounded-lg border border-amber-200 dark:border-amber-700">Demo Dist</span>}
                     </div>
                     <div className="h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                             <RechartsPieChart>
                                 <Pie data={stats.typeDistribution} innerRadius={60} outerRadius={90} dataKey="value" stroke="none">
                                     {stats.typeDistribution.map((_: any, i: number) => <Cell key={i} fill={activeColors[i % activeColors.length]} cornerRadius={4} />)}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useReactToPrint } from 'react-to-print';
 import { numberToWords } from '../../lib/numberToWords';
 import { SettingsIcon, CheckCircleIcon } from '../icons/IconComponents';
 import { ToggleLeft, ToggleRight, Layout, Type, FileText, Image as ImageIcon, Signature, Hash, Calculator, Printer, Maximize, Focus, Palette, Columns, ZoomIn, ZoomOut, RotateCcw, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Upload, Download } from 'lucide-react';
@@ -33,7 +32,7 @@ const INVOICE_FONTS = [
     { id: 'Source Sans Pro', label: 'Source Sans Pro', category: 'Professional Sans' },
 ];
 
-export const InvoicePrintSettings: React.FC = () => {
+export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode = 'working' }) => {
     const [settings, setSettings] = useState({
         itemsPerFirstPage: 12,
         itemsPerSecondPage: 15,
@@ -106,11 +105,6 @@ export const InvoicePrintSettings: React.FC = () => {
     const [isSaved, setIsSaved] = useState(false);
 
     const printRef = useRef<HTMLDivElement>(null);
-    const handlePrintReact = useReactToPrint({
-        contentRef: printRef,
-        documentTitle: 'Invoice_Settings_Test',
-        pageStyle: `@media print { @page { size: ${settings.pageSize || 'A4'} ${settings.pageOrientation?.toLowerCase() || 'portrait'}; margin: 0mm; } body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }`
-    });
 
     const calculatePageStats = (pageType: 'First' | 'Middle' | 'Last') => {
         const s = settings as any;
@@ -759,9 +753,9 @@ export const InvoicePrintSettings: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col lg:flex-row gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="flex flex-col lg:flex-row gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-0">
             {/* Configuration Section */}
-            <div className="flex-1 space-y-6">
+            <div className="flex-1 space-y-6 relative z-10">
                 <div className="bg-white rounded-[2rem] py-4 border border-gray-100 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-800">
                     <div className="flex items-center gap-4 mb-8 px-8">
                         <div className="bg-blue-600 p-3 rounded-2xl text-white shadow-lg shadow-blue-500/20">
@@ -1833,20 +1827,28 @@ export const InvoicePrintSettings: React.FC = () => {
 
                     </div>
 
-                    <div className="mt-8 pt-6 border-t border-gray-100 space-y-4 px-8 dark:border-gray-800">
+                    <div className="mt-8 pt-6 border-t border-gray-100 space-y-4 px-8 dark:border-gray-800 relative z-50">
                         <div className={`transition-all duration-500 flex items-center justify-center gap-2 ${isSaved ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`}>
                             <CheckCircleIcon size={14} className="text-emerald-500" />
                             <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Settings Synchronized</span>
                         </div>
                         
-                        <div className="grid grid-cols-5 gap-2 sm:gap-4">
-                             <button 
-                                onClick={() => { if (handlePrintReact) handlePrintReact(); }}
-                                className="flex items-center justify-center gap-2 px-2 sm:px-5 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-blue-100 hover:text-blue-600 hover:bg-blue-50/30 transition-all active:scale-95 shadow-sm dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700"
-                                title="Test Print"
-                             >
-                                <Printer size={16} /> <span className="hidden sm:inline">TEST</span>
-                             </button>
+                        <div className="grid grid-cols-5 gap-2 sm:gap-4 relative z-50">
+                                <button 
+                                    id="test-print-button"
+                                    style={{ pointerEvents: 'auto', zIndex: 100 }}
+                                    onClick={(e) => { 
+                                        e.preventDefault();
+                                        window.print();
+                                    }}
+                                    className={`flex items-center justify-center gap-2 px-2 sm:px-5 py-4 ${appMode === 'demo' ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-white text-gray-700 border-gray-200'} border rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-blue-100 hover:text-blue-600 hover:bg-blue-50/30 transition-all active:scale-95 shadow-sm dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 cursor-pointer group relative z-50`}
+                                    title={appMode === 'demo' ? "Demo Print (Watermarked)" : "Test Print"}
+                                >
+                                    <Printer size={16} className={appMode === 'demo' ? 'animate-pulse' : ''} /> 
+                                    <span className="hidden sm:inline">
+                                        {appMode === 'demo' ? 'DEMO PRINT' : 'TEST PRINT'}
+                                    </span>
+                                </button>
                              <label 
                                 className="flex items-center justify-center gap-2 px-2 sm:px-5 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-blue-100 hover:text-blue-600 hover:bg-blue-50/30 transition-all active:scale-95 shadow-sm cursor-pointer dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700" 
                                 title="Import Settings"
@@ -1900,33 +1902,19 @@ export const InvoicePrintSettings: React.FC = () => {
                     </div>
 
                     <div ref={previewContainerRef} className={`w-full h-full p-4 flex ${manualZoom === null ? 'items-center justify-center overflow-hidden' : 'items-start overflow-auto'} pointer-events-auto`}>
-                        {manualZoom === null ? (
-                            <div 
-                                className="origin-center pointer-events-none transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white dark:bg-gray-800"
-                                style={{ transform: `scale(${previewScale})` }}
-                            >
-                               <div ref={printRef} className="w-full h-full">
-                                <VoucherPreviewComponent 
-                                    header={dummyHeader}
-                                    rows={paginatedRows}
-                                    allRows={dummyRows}
-                                    totals={dummyTotals}
-                                    type="Sales_Invoice"
-                                    config={settings}
-                                    isLastPage={currentPage === totalPages}
-                                    pageNum={currentPage}
-                                    totalPages={totalPages}
-                                    absoluteStartIndex={absoluteStartIndex}
-                                />
-                               </div>
-                            </div>
-                        ) : (
-                            <div className="transition-all duration-300 relative flex-shrink-0" style={{ width: `${(settings.pageSize === 'A5' ? 559 : settings.pageSize === 'Letter' ? 816 : 794) * previewScale}px`, height: `${(settings.pageSize === 'A5' ? 794 : settings.pageSize === 'Letter' ? 1056 : 1123) * previewScale}px`, margin: '0 auto' }}>
+                        <div id="voucher-to-print" ref={printRef} className="relative">
+                            {appMode === 'demo' && (
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50 overflow-hidden">
+                                    <div className="text-[80px] sm:text-[120px] font-black text-gray-200/20 uppercase tracking-[0.2em] -rotate-45 select-none">
+                                        Demo Mode
+                                    </div>
+                                </div>
+                            )}
+                            {manualZoom === null ? (
                                 <div 
-                                    className="transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white absolute top-0 left-0 origin-top-left dark:bg-gray-800"
+                                    className="origin-center pointer-events-none transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white dark:bg-gray-800"
                                     style={{ transform: `scale(${previewScale})` }}
                                 >
-                                   <div ref={printRef} className="w-full h-full">
                                     <VoucherPreviewComponent 
                                         header={dummyHeader}
                                         rows={paginatedRows}
@@ -1939,10 +1927,29 @@ export const InvoicePrintSettings: React.FC = () => {
                                         totalPages={totalPages}
                                         absoluteStartIndex={absoluteStartIndex}
                                     />
-                                   </div>
                                 </div>
-                            </div>
-                        )}
+                            ) : (
+                                <div className="transition-all duration-300 relative flex-shrink-0" style={{ width: `${(settings.pageSize === 'A5' ? 559 : settings.pageSize === 'Letter' ? 816 : 794) * previewScale}px`, height: `${(settings.pageSize === 'A5' ? 794 : settings.pageSize === 'Letter' ? 1056 : 1123) * previewScale}px`, margin: '0 auto' }}>
+                                    <div 
+                                        className="transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white absolute top-0 left-0 origin-top-left dark:bg-gray-800"
+                                        style={{ transform: `scale(${previewScale})` }}
+                                    >
+                                        <VoucherPreviewComponent 
+                                            header={dummyHeader}
+                                            rows={paginatedRows}
+                                            allRows={dummyRows}
+                                            totals={dummyTotals}
+                                            type="Sales_Invoice"
+                                            config={settings}
+                                            isLastPage={currentPage === totalPages}
+                                            pageNum={currentPage}
+                                            totalPages={totalPages}
+                                            absoluteStartIndex={absoluteStartIndex}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 

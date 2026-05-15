@@ -922,122 +922,124 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
         id="globalHiddenFileInput"
       />
       {/* Header Row - Refactored for responsiveness and new controls */}
-      <div className="flex flex-col md:flex-row items-center justify-between p-4 sm:p-6 lg:p-8 gap-4 border-b border-gray-50 dark:border-gray-700/50">
-        <div className="flex items-center w-full md:w-auto shrink-0">
+      <div className="flex flex-col xl:flex-row items-center justify-between p-4 xl:p-6 gap-4 border-b border-gray-50 dark:border-gray-700/50">
+        <div className="flex items-center w-full xl:w-auto shrink-0 justify-between md:justify-start gap-4">
           <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white flex items-center whitespace-nowrap">
             <AdminIcon className="mr-3 text-blue-600 w-6 h-6 sm:w-8 sm:h-8" /> 
             Firm Details
           </h2>
         </div>
 
-        {/* Search Bar - Flex-1 on md+ to take available space */}
-        <div className="relative w-full md:flex-1 md:max-w-xl mx-0 md:mx-4" ref={searchDropdownRef}>
-          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search settings..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setShowDropdown(true);
-            }}
-            onFocus={() => {
-              if (searchTerm.trim() !== '') setShowDropdown(true);
-            }}
-            className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm font-medium transition-all"
-          />
-          {showDropdown && searchTerm.trim() !== '' && (
-            <div className="absolute top-14 left-0 right-0 max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50">
-              {ALL_SEARCH_FIELDS.filter(field => 
-                 field.label.toLowerCase().includes(searchTerm.toLowerCase())
-              ).map((field, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleSearchSelect(field)}
-                  className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition-colors"
-                >
-                  <span className="font-bold">{field.label}</span>
-                  <span className="text-xs text-gray-400 dark:text-gray-500 block">in {SECTIONS.find(s => s.id === field.id)?.label || 'Settings'}</span>
-                </button>
-              ))}
-              {ALL_SEARCH_FIELDS.filter(field => field.label.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (
-                <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center font-medium">
-                  No settings found matching "{searchTerm}"
+        <div className="flex flex-col md:flex-row items-center w-full gap-4">
+            {/* Search Bar - Flex-1 on md+ to take available space */}
+            <div className="relative w-full md:flex-1" ref={searchDropdownRef}>
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search settings..."
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setShowDropdown(true);
+                }}
+                onFocus={() => {
+                  if (searchTerm.trim() !== '') setShowDropdown(true);
+                }}
+                className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm font-medium transition-all"
+              />
+              {showDropdown && searchTerm.trim() !== '' && (
+                <div className="absolute top-14 left-0 right-0 max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50">
+                  {ALL_SEARCH_FIELDS.filter(field => 
+                     field.label.toLowerCase().includes(searchTerm.toLowerCase())
+                  ).map((field, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSearchSelect(field)}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition-colors"
+                    >
+                      <span className="font-bold">{field.label}</span>
+                      <span className="text-xs text-gray-400 dark:text-gray-500 block">in {SECTIONS.find(s => s.id === field.id)?.label || 'Settings'}</span>
+                    </button>
+                  ))}
+                  {ALL_SEARCH_FIELDS.filter(field => field.label.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (
+                    <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center font-medium">
+                      No settings found matching "{searchTerm}"
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          )}
-        </div>
 
-        {/* Action Buttons - Unified Styling & Responsive Labels */}
-        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-center md:justify-end">
-          
-          <div className="flex items-center bg-gray-50 dark:bg-gray-900 p-1 rounded-xl border border-gray-200 dark:border-gray-700">
-             <button
-                onClick={() => fileInputRef.current?.click()}
-                title="Import (JSON/CSV)"
-                className="px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            {/* Action Buttons - Unified Styling & Responsive Labels */}
+            <div className="flex flex-nowrap items-center gap-2 w-full md:w-auto shrink-0 justify-center">
+              
+              <div className="flex shrink-0 items-center bg-gray-50 dark:bg-gray-900 p-1 rounded-xl border border-gray-200 dark:border-gray-700">
+                 <button
+                    onClick={() => fileInputRef.current?.click()}
+                    title="Import (JSON/CSV)"
+                    className="px-3 py-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  >
+                    <Upload className="w-4 h-4" /> <span className="hidden xl:inline">Import</span>
+                 </button>
+                 <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                 <button
+                    onClick={handleExportBackup}
+                    title="Export JSON"
+                    className="px-3 py-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  >
+                    <Download className="w-4 h-4" /> <span className="hidden xl:inline">JSON</span>
+                 </button>
+                 <button
+                    onClick={handleExportCSV}
+                    title="Export CSV"
+                    className="px-3 py-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  >
+                    <Download className="w-4 h-4" /> <span className="hidden xl:inline">CSV</span>
+                 </button>
+              </div>
+
+              <button
+                onClick={handleClear}
+                title="Clear All Fields"
+                className="shrink-0 p-2 xl:px-4 xl:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-orange-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-sm active:scale-95 group"
               >
-                <Upload className="w-4 h-4" /> <span className="hidden sm:inline">Import</span>
-             </button>
-             <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
-             <button
-                onClick={handleExportBackup}
-                title="Export JSON"
-                className="px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                <Trash2 className="w-5 h-5 text-gray-500 group-hover:text-orange-500 transition-colors xl:mr-2" />
+                <span className="hidden xl:inline">Clear</span>
+              </button>
+
+              <button
+                onClick={handleResetToDefault}
+                title="Reset to Defaults"
+                className="shrink-0 p-2 xl:px-4 xl:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-sm active:scale-95 group"
               >
-                <Download className="w-4 h-4" /> <span className="hidden sm:inline">JSON</span>
-             </button>
-             <button
-                onClick={handleExportCSV}
-                title="Export CSV"
-                className="px-3 py-2 flex items-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                <RotateCcw className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors xl:mr-2" />
+                <span className="hidden xl:inline">Reset</span>
+              </button>
+
+              <button
+                onClick={handleSave}
+                title="Save Configuration"
+                className={`shrink-0 p-2.5 xl:px-6 xl:py-2.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-md active:scale-95 ${
+                  isSaved 
+                    ? "bg-emerald-500 text-white shadow-emerald-200 dark:shadow-none" 
+                    : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200 dark:shadow-none"
+                } `}
               >
-                <Download className="w-4 h-4" /> <span className="hidden sm:inline">CSV</span>
-             </button>
-          </div>
-
-          <button
-            onClick={handleClear}
-            title="Clear All Fields"
-            className="p-2 sm:px-4 sm:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-orange-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-sm active:scale-95 group"
-          >
-            <Trash2 className="w-5 h-5 text-gray-500 group-hover:text-orange-500 transition-colors sm:mr-2" />
-            <span className="hidden sm:inline">Clear</span>
-          </button>
-
-          <button
-            onClick={handleResetToDefault}
-            title="Reset to Defaults"
-            className="p-2 sm:px-4 sm:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center shadow-sm active:scale-95 group"
-          >
-            <RotateCcw className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors sm:mr-2" />
-            <span className="hidden sm:inline">Reset</span>
-          </button>
-
-          <button
-            onClick={handleSave}
-            title="Save Configuration"
-            className={`p-2.5 sm:px-6 sm:py-2.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-md active:scale-95 ${
-              isSaved 
-                ? "bg-emerald-500 text-white shadow-emerald-200 dark:shadow-none" 
-                : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200 dark:shadow-none"
-            } `}
-          >
-            {isSaved ? (
-              <>
-                <CheckCircleIcon className="w-5 h-5 sm:mr-2" />
-                <span className="hidden sm:inline">Saved!</span>
-              </>
-            ) : (
-              <>
-                <Save className="w-5 h-5 sm:mr-2" />
-                <span className="hidden sm:inline">Save</span>
-              </>
-            )}
-          </button>
+                {isSaved ? (
+                  <>
+                    <CheckCircleIcon className="w-5 h-5 xl:mr-2" />
+                    <span className="hidden xl:inline">Saved!</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-5 h-5 xl:mr-2" />
+                    <span className="hidden xl:inline">Save</span>
+                  </>
+                )}
+              </button>
+            </div>
         </div>
       </div>
 

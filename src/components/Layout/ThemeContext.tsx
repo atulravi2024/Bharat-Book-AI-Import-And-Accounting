@@ -12,10 +12,9 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 // Apply theme class to HTML element immediately on module load
 const getInitialTheme = (): Theme => {
   if (typeof window === 'undefined') return 'light';
-  const saved = localStorage.getItem('theme');
+  const saved = localStorage.getItem('theme') as Theme;
   if (saved === 'dark') {
     document.documentElement.classList.add('dark');
-    document.body.classList.add('dark');
     return 'dark';
   }
   return 'light';
