@@ -281,11 +281,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
 
   return (
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Financial Reports</h1>
-          <p className="text-gray-500 dark:text-gray-400">Analyze your business health with AI-generated insights</p>
-        </div>
+      <header className="flex flex-col md:flex-row md:items-center justify-end gap-4">
         <div className="flex items-center space-x-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700">
            <button
              onClick={() => setDateRangeMode(m => m === 'fy' ? 'custom' : 'fy')}

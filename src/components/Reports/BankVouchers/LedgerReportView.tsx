@@ -286,23 +286,11 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
 
     return (
         <div className="max-w-7xl mx-auto p-4 animate-in fade-in duration-500">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
-                        <VouchersIcon className="mr-3 text-blue-600" />
-                        Ledger Report {activeTab !== 'standard' && (
-                            <span className="ml-3 px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest rounded border border-blue-100 dark:border-blue-800">
-                                {tabs.find(t => t.id === activeTab)?.label}
-                            </span>
-                        )}
-                    </h1>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                        {activeTab === 'day_book'
-                            ? 'Comprehensive daily transaction timeline and audit log'
-                            : `Reviewing ${tabs.find(t => t.id === activeTab)?.label || 'ledger'} entries and accounting records`
-                        }
-                    </p>
-                </div>
+            <header className="mb-10">
+                <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Unified Ledger</h1>
+                <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Manage all your financial transactions, audit logs, and compliance registers.</p>
+            </header>
+            <div className="flex flex-col md:flex-row md:items-center justify-end mb-8 gap-4">
                 <div className="flex flex-wrap gap-3">
                     <button
                         onClick={() => onImportVoucher(VoucherType.Purchase)}

@@ -77,6 +77,18 @@ const App: React.FC = () => {
 };
 
 const AppContent: React.FC = () => {
+  const [workspaceName, setWorkspaceName] = useState("Bharat Book Enterprise");
+  
+  useEffect(() => {
+    const savedSettings = localStorage.getItem('bharat_book_app_settings');
+    if (savedSettings) {
+      try {
+        const parsed = JSON.parse(savedSettings);
+        if (parsed.workspaceName) setWorkspaceName(parsed.workspaceName);
+      } catch (e) {}
+    }
+  }, []);
+
   const [view, setView] = useState<MainView>(() => {
     const saved = localStorage.getItem('bharat_book_navigation_defaults');
     if (saved) {
@@ -1217,6 +1229,7 @@ const AppContent: React.FC = () => {
   return (
     <ThemeProvider>
       <Layout
+        workspaceName={workspaceName}
         pageTitle={view === 'import' ? "Import" : view.charAt(0).toUpperCase() + view.slice(1)}
         activeView={view}
         onViewChange={handleViewChange}

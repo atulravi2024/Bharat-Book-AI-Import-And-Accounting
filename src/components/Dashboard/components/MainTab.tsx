@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { KPIComponent, COLORS, CustomTooltip } from './DashboardShared';
+import { KPIComponent, COLORS, CustomTooltip, SafeResponsiveContainer } from './DashboardShared';
 import { FileText, Zap, ShieldAlert, Users, ShieldCheck, Activity, TrendingUp, Package, ArrowDownRight, CreditCard, Receipt, Repeat } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, Legend, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
 import { TransactionFlow } from './TransactionFlow';
@@ -53,36 +53,35 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                 <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700 relative overflow-hidden">
                     <div className="flex justify-between items-center mb-8 relative z-10">
                         <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">Performance Trajectory</h3>
-                        {isDemo && <span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg dark:shadow-amber-900/50 border border-amber-600 animate-pulse">Demo Plot</span>}
+                        {isDemo && <span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg dark:shadow-amber-900/50 border border-amber-600 animate-pulse">DEMO</span>}
                     </div>
                     <div className="h-[400px]">
-                        <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
-                            <AreaChart data={stats.trendData}>
+                        <SafeResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
+                            <AreaChart data={stats.trendData} margin={{ top: 0, right: 0, left: -40, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                <XAxis dataKey="date" fontSize={10} axisLine={false} tickLine={false} />
-                                <YAxis fontSize={10} axisLine={false} tickLine={false} />
+                                <XAxis dataKey="date" hide />
+                                <YAxis hide />
                                 <Tooltip content={<CustomTooltip />} />
-                                <Legend />
                                 <Area type="monotone" dataKey="sales" name="Sales" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.05} strokeWidth={3} />
                                 <Area type="monotone" dataKey="purchase" name="Purchase" stroke="#F59E0B" fill="#F59E0B" fillOpacity={0.05} strokeWidth={3} />
                             </AreaChart>
-                        </ResponsiveContainer>
+                        </SafeResponsiveContainer>
                     </div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700 relative overflow-hidden">
                     <div className="flex justify-between items-center mb-8 relative z-10">
                         <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">Distribution</h3>
-                        {isDemo && <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[8px] font-black uppercase tracking-widest rounded-lg border border-amber-200 dark:border-amber-700">Demo Dist</span>}
+                        {isDemo && <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[8px] font-black uppercase tracking-widest rounded-lg border border-amber-200 dark:border-amber-700">DEMO</span>}
                     </div>
                     <div className="h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
+                        <SafeResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                             <RechartsPieChart>
                                 <Pie data={stats.typeDistribution} innerRadius={60} outerRadius={90} dataKey="value" stroke="none">
                                     {stats.typeDistribution.map((_: any, i: number) => <Cell key={i} fill={activeColors[i % activeColors.length]} cornerRadius={4} />)}
                                 </Pie>
                                 <Tooltip />
                             </RechartsPieChart>
-                        </ResponsiveContainer>
+                        </SafeResponsiveContainer>
                     </div>
                     <div className="grid grid-cols-2 gap-2 mt-4">
                         {stats.typeDistribution.map((item: any, i: number) => (
@@ -99,7 +98,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">Operative Pulse</h3>
-                        {isDemo && <span className="text-[8px] font-black text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full border border-amber-100 dark:border-amber-700 uppercase tracking-tighter">Demo Active</span>}
+                        {isDemo && <span className="text-[8px] font-black text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full border border-amber-100 dark:border-amber-700 uppercase tracking-tighter">DEMO</span>}
                     </div>
                     <div className="space-y-4">
                         {stats.advanceMetrics.userActivity.map((act: any, i: number) => (

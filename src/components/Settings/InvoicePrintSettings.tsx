@@ -1906,7 +1906,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                             {appMode === 'demo' && (
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50 overflow-hidden">
                                     <div className="text-[80px] sm:text-[120px] font-black text-gray-200/20 uppercase tracking-[0.2em] -rotate-45 select-none">
-                                        Demo Mode
+                                        DEMO
                                     </div>
                                 </div>
                             )}

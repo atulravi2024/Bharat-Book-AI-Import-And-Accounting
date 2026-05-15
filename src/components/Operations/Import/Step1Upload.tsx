@@ -394,14 +394,15 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
           <div className="flex items-center justify-between mb-10 shrink-0">
              <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tighter leading-none font-display dark:text-white">Data Entry Origin</h2>
+                <header className="mb-0 text-left">
+                  <h1 className="text-3xl font-black text-gray-900 tracking-tighter leading-none font-display dark:text-white">Data Entry Origin</h1>
+                  <p className="text-gray-500 mt-3 font-medium dark:text-gray-400">Classify documents and ingest records through our intelligent automation pipeline.</p>
+                </header>
                 <div className="flex items-center mt-3 space-x-2">
                     <div className="flex -space-x-1">
                         {[1,2,3].map(i => <div key={i} className={`w-2 h-2 rounded-full border border-white ${i === 1 ? 'bg-blue-400' : 'bg-gray-200'} dark:bg-gray-700`}></div>)}
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-[0.15em] text-blue-600/80 bg-blue-50/50 px-2 py-0.5 rounded-full border border-blue-100/50">Pipeline Alpha</span>
-                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Classify document & ingest record</p>
                 </div>
              </div>
           </div>

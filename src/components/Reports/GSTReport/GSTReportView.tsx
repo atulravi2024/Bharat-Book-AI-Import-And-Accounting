@@ -342,11 +342,11 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
 
   return (
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">GST Reports</h1>
-          <p className="text-gray-500 dark:text-gray-400">View and analyze your Goods and Services Tax compliance</p>
-        </div>
+      <header className="mb-10">
+        <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Statutory GST Hub</h1>
+        <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Generate compliance-ready GSTR reports and monitor tax liabilities.</p>
+      </header>
+      <header className="flex flex-col md:flex-row md:items-center justify-end gap-4">
         <div className="flex bg-white dark:bg-gray-800 items-center p-1 md:p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-none w-fit">
            <div className="flex items-center px-2 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-md whitespace-nowrap">
                <Calendar size={14} className="mr-1.5 text-gray-400 hidden sm:block" />

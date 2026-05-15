@@ -108,7 +108,7 @@ export const BarcodeScannerModal: React.FC<BarcodeScannerModalProps> = ({ isOpen
             
             <div className="mt-8 flex flex-col items-center">
               <div className="w-full h-px bg-gray-100 mb-6 relative dark:bg-gray-800">
-                 <span className="absolute left-1/2 -translate-x-1/2 -top-2.5 bg-white px-4 text-xs font-black text-gray-400 uppercase tracking-widest dark:bg-gray-800">Manual Entry & Demo</span>
+                 <span className="absolute left-1/2 -translate-x-1/2 -top-2.5 bg-white px-4 text-xs font-black text-gray-400 uppercase tracking-widest dark:bg-gray-800">Manual Entry & DEMO</span>
               </div>
               
               <div className="w-full grid grid-cols-1 gap-4">
@@ -146,7 +146,7 @@ export const BarcodeScannerModal: React.FC<BarcodeScannerModalProps> = ({ isOpen
                   }}
                   className="w-full px-4 py-3 bg-purple-50 text-purple-700 font-bold text-sm rounded-xl hover:bg-purple-100 border border-purple-100 transition-all active:scale-95"
                  >
-                  Generate Random Demo Barcode
+                  Generate Random DEMO Barcode
                 </button>
               </div>
             </div>

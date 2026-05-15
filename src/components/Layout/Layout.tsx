@@ -5,13 +5,14 @@ import { Sidebar } from './Sidebar';
 import { MainView } from '../../types';
 
 interface LayoutProps {
+  workspaceName: string;
   pageTitle: string;
   children: React.ReactNode;
   activeView: MainView;
   onViewChange: (view: MainView) => void;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView, onViewChange }) => {
+export const Layout: React.FC<LayoutProps> = ({ workspaceName, pageTitle, children, activeView, onViewChange }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -35,7 +36,7 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView,
         }}
       />
       <div className="flex-1 flex flex-col w-full min-w-0 overflow-hidden">
-        <Header pageTitle={pageTitle} onMenuClick={() => setIsSidebarOpen(true)} />
+        <Header workspaceName={workspaceName} pageTitle={pageTitle} onMenuClick={() => setIsSidebarOpen(true)} />
         <main className="flex-1 min-h-0 bg-gray-100 dark:bg-gray-900 overflow-hidden relative">
           <div className="absolute inset-0 overflow-y-auto">
             {children}

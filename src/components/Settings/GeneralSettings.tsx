@@ -98,7 +98,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                         value={appMode}
                         onChange={(e) => setAppMode(e.target.value)}
                     >
-                        <option value="demo">Demo Mode (Pre-populated)</option>
+                        <option value="demo">DEMO (Pre-populated)</option>
                         <option value="working">Production / Live Mode (Clean)</option>
                     </select>
                     <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">Production syncs directly to standard ERP outputs. Demo is sandboxed.</p>

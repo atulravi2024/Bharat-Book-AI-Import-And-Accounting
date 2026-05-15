@@ -10,11 +10,12 @@ import {
 import { useTheme } from './ThemeContext';
 
 interface HeaderProps {
+  workspaceName: string;
   pageTitle: string;
   onMenuClick?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
+export const Header: React.FC<HeaderProps> = ({ workspaceName, pageTitle, onMenuClick }) => {
   const { theme, toggleTheme } = useTheme();
 
   const handleToggle = () => {
@@ -30,16 +31,24 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
             {onMenuClick && (
               <button 
                 onClick={onMenuClick}
-                className="md:hidden mr-3 p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-premium-slate-50 dark:hover:bg-gray-700 transition-all"
+                className="md:hidden mr-4 p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 hover:bg-premium-slate-100 dark:hover:bg-gray-700 transition-all border border-transparent hover:border-premium-slate-200 dark:hover:border-gray-600"
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="3" y1="12" x2="21" y2="12"></line>
                   <line x1="3" y1="6" x2="21" y2="6"></line>
                   <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
               </button>
             )}
-            <h1 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none truncate max-w-[150px] sm:max-w-xs">{pageTitle}</h1>
+            <div className="flex flex-col">
+              <div className="flex items-center mb-1.5 h-4">
+                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400 leading-none opacity-80 flex items-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2 animate-pulse" />
+                  {workspaceName}
+                </span>
+              </div>
+              <h1 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none truncate max-w-[200px] sm:max-w-xs capitalize">{pageTitle}</h1>
+            </div>
           </div>
           
           <div className="hidden lg:flex flex-1 justify-center px-10">

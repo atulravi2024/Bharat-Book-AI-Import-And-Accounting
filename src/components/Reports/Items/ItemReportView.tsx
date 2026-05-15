@@ -165,11 +165,11 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-x-hidden">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Item Reports</h1>
-          <p className="text-gray-500 font-medium uppercase text-[10px] tracking-wider mt-1 dark:text-gray-400">Inventory movement and rate analysis</p>
-        </div>
+      <header className="mb-10">
+        <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Inventory Analysis Hub</h1>
+        <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Comprehensive stock tracking, rate analysis, and inventory movement intelligence.</p>
+      </header>
+      <header className="flex flex-col md:flex-row md:items-center justify-end gap-4">
         <div className="flex items-center space-x-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100 dark:bg-gray-800 dark:border-gray-800">
            <div className="flex items-center px-3 border-r">
              <Calendar size={16} className="text-gray-400 mr-2" />

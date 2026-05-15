@@ -631,15 +631,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   return (
     <div className="w-full px-2 sm:px-4 py-6 sm:py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none mb-2">
-          System Configuration
-        </h1>
-        <p className="text-gray-500 dark:text-gray-400 font-medium font-sans">
-          Manage your enterprise preferences and audit settings
-        </p>
-      </div>
-
+      <header className="mb-10 px-2 text-left">
+        <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Control Center</h1>
+        <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Configure your professional workspace, AI preferences, and master data synchronization.</p>
+      </header>
       <div className="flex flex-col space-y-6">
         <div className="border-b border-gray-200 dark:border-gray-700 overflow-x-auto overflow-y-hidden custom-scrollbar pb-1 custom-scrollbar">
           <div className="flex flex-row space-x-2 min-w-max px-1">

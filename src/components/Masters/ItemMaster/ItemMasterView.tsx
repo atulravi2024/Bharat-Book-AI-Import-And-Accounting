@@ -223,8 +223,13 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-6">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col h-[calc(100vh-140px)]">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+            <header className="mb-8 text-left">
+                <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Inventory Master Directory</h1>
+                <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Deep-tier inventory management: manage items, SKU variants, warehouses, and taxation profiles.</p>
+            </header>
+
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col h-[calc(100vh-280px)]">
                 <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-x-auto custom-scrollbar items-center pr-4 flex-shrink-0 justify-between">
                     <div className="flex">
                         {[

@@ -274,14 +274,11 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
 
     return (
         <div className="h-full flex flex-col animate-in fade-in duration-500">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4 flex-shrink-0">
-                <div>
-                    <h1 className="text-xl font-bold text-gray-800 flex items-center dark:text-gray-100">
-                        <BankIcon className="mr-3 text-indigo-600" />
-                        Bank Report
-                    </h1>
-                    <p className="text-gray-500 text-xs mt-0.5 dark:text-gray-400">Manage bank statement reports, classification, and reconciliation</p>
-                </div>
+            <header className="mb-10 px-4 pt-4 text-left">
+                <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Bank Statement Analyzer</h1>
+                <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Advanced AI-powered reconciliation and structural analysis of bank transactions.</p>
+            </header>
+            <div className="flex flex-col md:flex-row md:items-center justify-end mb-4 gap-4 flex-shrink-0">
                 <div className="flex flex-wrap gap-3">
                     <button 
                         onClick={() => onImportVoucher(VoucherType.BankStatement)}

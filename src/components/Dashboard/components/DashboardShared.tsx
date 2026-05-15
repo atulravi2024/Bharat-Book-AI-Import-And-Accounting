@@ -1,7 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileText } from 'lucide-react';
+import { ResponsiveContainer } from 'recharts';
 
 export const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6B7280', '#14B8A6'];
+
+export const SafeResponsiveContainer = ({ children, minHeight = 200, minWidth = 100, ...props }: any) => {
+  const [size, setSize] = useState({ width: 0, height: 0 });
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const updateSize = (width: number, height: number) => {
+      // Floor the values to avoid sub-pixel measurement warnings in Recharts
+      const w = Math.max(1, Math.floor(width));
+      const h = Math.max(1, Math.floor(height));
+      
+      setSize({ width: w, height: h });
+    };
+
+    const firstRect = containerRef.current.getBoundingClientRect();
+    updateSize(firstRect.width, firstRect.height);
+
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const { width, height } = entry.contentRect;
+        updateSize(width, height);
+      }
+    });
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div 
+      ref={containerRef} 
+      className="w-full h-full relative"
+      style={{ 
+        minHeight,
+        minWidth
+      }}
+    >
+      {size.width > 0 && size.height > 0 ? (
+        <ResponsiveContainer 
+          {...props} 
+          width={size.width} 
+          height={size.height}
+          minWidth={size.width}
+          minHeight={size.height}
+          debounce={100}
+          aspect={undefined}
+        >
+          {children}
+        </ResponsiveContainer>
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-50/50 rounded-2xl animate-pulse dark:bg-gray-800/50">
+            {/* Placeholder during initial measurement */}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }: any) => (
   <div className="bg-white p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-premium-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] group hover:shadow-2xl hover:shadow-blue-100/30 transition-all duration-500 relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
@@ -12,8 +72,7 @@ export const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }:
       </div>
       {isDemo && (
         <div className="flex flex-col items-end">
-          <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 animate-pulse border border-amber-600">Demo Mode</span>
-          <span className="hidden sm:block text-[8px] font-bold text-amber-500 mt-1 uppercase tracking-tighter">Simulated Analytics</span>
+          <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 animate-pulse border border-amber-600">DEMO</span>
         </div>
       )}
     </div>

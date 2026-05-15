@@ -170,40 +170,26 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
   return (
     <div className="h-full flex flex-col bg-gray-50/50 dark:bg-gray-900/50">
       {/* Dynamic Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-premium-slate-100 dark:border-gray-700 z-10 shrink-0">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 lg:gap-6">
-            <div>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none">Voucher Intelligence Hub</h1>
-                {isDemo && (
-                  <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[8px] sm:text-[9px] font-black uppercase tracking-widest rounded-full border border-amber-200 dark:border-amber-700">Demo Data</span>
-                )}
-              </div>
-              <p className="text-[9px] sm:text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-[0.2em] mt-2 sm:mt-3 flex items-center">
-                <Activity size={12} className="mr-2 text-blue-600" /> Granular voucher analytics & cashflow visualization
-              </p>
-            </div>
-
-            <div className="-mx-4 px-4 lg:mx-0 lg:px-0 mt-2 lg:mt-0">
-                <div className="flex bg-premium-slate-50 dark:bg-gray-700 rounded-xl sm:rounded-2xl p-1 border border-premium-slate-100 dark:border-gray-600 overflow-x-auto custom-scrollbar h-fit snap-x">
-                  <div className="snap-start"><TabButton id="overview" label="Overview" icon={Layers} /></div>
-                  <div className="snap-start"><TabButton id="sales" label="Sales" icon={TrendingUp} /></div>
-                  <div className="snap-start"><TabButton id="purchase" label="Purchase" icon={Package} /></div>
-                  <div className="snap-start"><TabButton id="payment" label="Payment" icon={CreditCard} /></div>
-                  <div className="snap-start"><TabButton id="receipts" label="Receipt" icon={Receipt} /></div>
-                  <div className="snap-start"><TabButton id="bank" label="Bank Report" icon={ArrowDownRight} /></div>
-                  <div className="snap-start"><TabButton id="journal" label="Journal" icon={FileText} /></div>
-                  <div className="snap-start"><TabButton id="contra" label="Contra" icon={Repeat} /></div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8">
         <div className="max-w-[1600px] mx-auto space-y-6 sm:space-y-8 pb-12">
+          <header className="mb-10 text-left">
+            <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Professional Ledger Workspace</h1>
+            <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Intelligent financial insights, real-time transaction monitoring, and multi-entity consolidation.</p>
+          </header>
           
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+            <div className="flex bg-white dark:bg-gray-800 rounded-2xl p-1 shadow-sm border border-premium-slate-100 dark:border-gray-700 overflow-x-auto custom-scrollbar h-fit snap-x w-full sm:w-auto">
+              <div className="snap-start"><TabButton id="overview" label="Overview" icon={Layers} /></div>
+              <div className="snap-start"><TabButton id="sales" label="Sales" icon={TrendingUp} /></div>
+              <div className="snap-start"><TabButton id="purchase" label="Purchase" icon={Package} /></div>
+              <div className="snap-start"><TabButton id="payment" label="Payment" icon={CreditCard} /></div>
+              <div className="snap-start"><TabButton id="receipts" label="Receipt" icon={Receipt} /></div>
+              <div className="snap-start"><TabButton id="bank" label="Bank Report" icon={ArrowDownRight} /></div>
+              <div className="snap-start"><TabButton id="journal" label="Journal" icon={FileText} /></div>
+              <div className="snap-start"><TabButton id="contra" label="Contra" icon={Repeat} /></div>
+            </div>
+          </div>
+
           <AnimatePresence mode="wait">
             {activeTab === 'overview' && <MainTab stats={stats} isDemo={isDemo} colors={colors} />}
             {activeTab === 'sales' && <SalesTab stats={stats} isDemo={isDemo} colors={colors} />}
@@ -231,8 +217,7 @@ const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }: any) =
       </div>
       {isDemo && (
         <div className="flex flex-col items-end">
-          <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 animate-pulse border border-amber-600">Demo Mode</span>
-          <span className="hidden sm:block text-[8px] font-bold text-amber-500 mt-1 uppercase tracking-tighter">Simulated Analytics</span>
+          <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 animate-pulse border border-amber-600">DEMO</span>
         </div>
       )}
     </div>
