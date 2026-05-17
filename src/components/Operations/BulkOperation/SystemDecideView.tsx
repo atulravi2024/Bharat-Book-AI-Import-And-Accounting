@@ -12,6 +12,7 @@ import {
 import { motion } from 'motion/react';
 import { ItemMaster } from '../../../types';
 
+
 interface SystemDecideViewProps {
     itemMasters: ItemMaster[];
     setItemMasters: (items: ItemMaster[]) => void;
@@ -55,31 +56,11 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
             setShowSuccess(false);
             setProcessedItems([]);
         }, 3000);
-    };
-
-    return (
+    };  return (
         <div className="p-8 max-w-6xl mx-auto">
-            <header className="mb-10 flex justify-between items-end">
-                <div>
-                    <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">System Decide</h1>
-                    <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Automatic intelligent price adjustment based on profit targets</p>
-                </div>
-                <div className="flex bg-blue-50 p-1 rounded-2xl border border-blue-100">
-                    <div className="px-4 py-2 text-center">
-                        <span className="block text-[10px] font-bold text-blue-400 uppercase tracking-widest">Total Items</span>
-                        <span className="text-xl font-black text-blue-700">{stats.totalItems}</span>
-                    </div>
-                    <div className="w-px h-8 bg-blue-100 my-auto"></div>
-                    <div className="px-4 py-2 text-center">
-                        <span className="block text-[10px] font-bold text-blue-400 uppercase tracking-widest">Target Profit</span>
-                        <span className="text-xl font-black text-blue-700">{profitPercentage}%</span>
-                    </div>
-                </div>
-            </header>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="form-grid gap-8">
                 {/* Control Panel */}
-                <div className="lg:col-span-1 space-y-6">
+                <div className="form-field-wrapper lg:col-span-1 space-y-6">
                     <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100 dark:bg-gray-800 dark:border-gray-800">
                         <div className="flex items-center space-x-3 mb-6">
                             <div className="w-10 h-10 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
@@ -89,8 +70,8 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
                         </div>
 
                         <div className="space-y-6">
-                            <div>
-                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Target Profit Margin</label>
+                            <div className="form-field-wrapper">
+<label className="form-label mb-4">Target Profit Margin</label>
                                 <div className="flex items-center space-x-4">
                                     <input 
                                         type="range" 
@@ -145,7 +126,7 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
                 </div>
 
                 {/* Results Area */}
-                <div className="lg:col-span-2">
+                <div className="form-field-wrapper lg:col-span-2">
                     {processedItems.length > 0 ? (
                         <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col h-full overflow-hidden dark:bg-gray-800 dark:border-gray-800">
                             <div className="p-6 border-b border-gray-50 flex justify-between items-center">

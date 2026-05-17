@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
+import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon } from '../../../icons/IconComponents';
+
 
 interface PriceListTabProps {
     data: any[];
@@ -13,8 +15,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
     const [formData, setFormData] = useState<any>({});
     const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; id: string; name: string } | null>(null);
 
-    const filteredData = useMemo(() => {
-        return (data || []).filter((m: any) => 
+    const filteredData = useMemo(() => {  return (data || []).filter((m: any) => 
             String(m.name || m.code || m.id || '').toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [data, searchTerm]);
@@ -41,11 +42,14 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
             <div className="p-4 bg-gray-50/30 border-b border-gray-100 flex justify-between items-center dark:bg-gray-800/30 dark:border-gray-800">
                 <div className="relative max-w-md w-full mr-4">
                     <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="text" placeholder="Search Price List..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="text" placeholder="Search Price List..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="form-input pl-10 pr-4 text-sm" />
                 </div>
-                <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
-                    <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Add Price List
+                <div className="flex items-center">
+                    <ImportExportButtons data={data} onSave={onSave} entityName="PriceListTab" />
+                    <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">Add Price List
                 </span></button>
+                </div>
             </div>
 
             <div className="flex-1 overflow-auto custom-scrollbar min-h-0">
@@ -134,35 +138,35 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                         </div>
                         
                         <div className="overflow-y-auto flex-1 p-6 space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name / Code *</label>
-                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Enter Price List Name..." autoFocus />
+                            <div className="form-grid gap-4">
+                                <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                    <label className="form-label">Name / Code *</label>
+                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="form-input" placeholder="Enter Price List Name..." autoFocus />
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Type</label>
-                                    <select value={formData.type || 'Sales'} onChange={e => setFormData({...formData, type: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white">
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Type</label>
+                                    <select value={formData.type || 'Sales'} onChange={e => setFormData({...formData, type: e.target.value})} className="form-input">
                                         <option value="Sales">Sales (Selling Price)</option>
                                         <option value="Purchase">Purchase (Buying Price)</option>
                                     </select>
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Currency</label>
-                                    <input type="text" value={formData.currency || 'INR'} onChange={e => setFormData({...formData, currency: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="e.g. INR, USD..." />
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Currency</label>
+                                    <input type="text" value={formData.currency || 'INR'} onChange={e => setFormData({...formData, currency: e.target.value})} className="form-input" placeholder="e.g. INR, USD..." />
                                 </div>
                                 
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Description / Notes</label>
-                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Add any extra details..." />
+                                <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                    <label className="form-label">Description / Notes</label>
+                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="form-input" placeholder="Add any extra details..." />
                                 </div>
 
                                 {/* Applicability Section */}
-                                <div className="col-span-1 md:col-span-2 mt-4 mb-2">
+                                <div className="form-field-wrapper col-span-1 md:col-span-2 mt-4 mb-2">
                                     <h4 className="font-bold text-gray-700 dark:text-gray-300 border-b pb-2 dark:border-gray-700 text-sm">Applicability & Validity</h4>
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Industry / Domain Focus</label>
-                                    <select value={formData.industry || 'General'} onChange={e => setFormData({...formData, industry: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white">
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Industry / Domain Focus</label>
+                                    <select value={formData.industry || 'General'} onChange={e => setFormData({...formData, industry: e.target.value})} className="form-input">
                                         <option value="General">General Business / Standard</option>
                                         <option value="Healthcare">Healthcare (Doctors, Clinics, IPD/OPD)</option>
                                         <option value="Retail">Retail (Clothes, Bartan, Walk-ins)</option>
@@ -170,9 +174,9 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                                         <option value="Ecommerce">E-Commerce & Online Stores</option>
                                     </select>
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Customer/Supplier Group</label>
-                                    <input list="customerGroups" type="text" value={formData.applicableGroup || ''} onChange={e => setFormData({...formData, applicableGroup: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="e.g. Retail, B2B, OPD..." />
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Customer/Supplier Group</label>
+                                    <input list="customerGroups" type="text" value={formData.applicableGroup || ''} onChange={e => setFormData({...formData, applicableGroup: e.target.value})} className="form-input" placeholder="e.g. Retail, B2B, OPD..." />
                                     <datalist id="customerGroups">
                                         <option value="Retail Customers" />
                                         <option value="B2B / Wholesalers" />
@@ -185,17 +189,17 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                                         <option value="Corporate / Institutional" />
                                     </datalist>
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Valid From</label>
-                                    <input type="date" value={formData.validFrom || ''} onChange={e => setFormData({...formData, validFrom: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" />
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Valid From</label>
+                                    <input type="date" value={formData.validFrom || ''} onChange={e => setFormData({...formData, validFrom: e.target.value})} className="form-input" />
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Valid To</label>
-                                    <input type="date" value={formData.validTo || ''} onChange={e => setFormData({...formData, validTo: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" />
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Valid To</label>
+                                    <input type="date" value={formData.validTo || ''} onChange={e => setFormData({...formData, validTo: e.target.value})} className="form-input" />
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Status</label>
-                                    <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white">
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Status</label>
+                                    <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value})} className="form-input">
                                         <option value="Active">Active</option>
                                         <option value="Draft">Draft</option>
                                         <option value="Inactive">Inactive</option>
@@ -203,36 +207,37 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                                 </div>
 
                                 {/* Pricing Strategy Section */}
-                                <div className="col-span-1 md:col-span-2 mt-4 mb-2">
+                                <div className="form-field-wrapper col-span-1 md:col-span-2 mt-4 mb-2">
                                     <h4 className="font-bold text-gray-700 dark:text-gray-300 border-b pb-2 dark:border-gray-700 text-sm">Pricing Calculation Rules</h4>
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Base Price List</label>
-                                    <select value={formData.basePriceList || ''} onChange={e => setFormData({...formData, basePriceList: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white">
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Base Price List</label>
+                                    <select value={formData.basePriceList || ''} onChange={e => setFormData({...formData, basePriceList: e.target.value})} className="form-input">
                                         <option value="">None (Standalone)</option>
                                         {data?.map((pl: any) => pl.id !== formData.id && (
                                             <option key={pl.id} value={pl.id}>{pl.name || pl.code}</option>
                                         ))}
                                     </select>
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Adjustment Type</label>
-                                    <select value={formData.adjustmentType || 'None'} onChange={e => setFormData({...formData, adjustmentType: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" disabled={!formData.basePriceList}>
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Adjustment Type</label>
+                                    <select value={formData.adjustmentType || 'None'} onChange={e => setFormData({...formData, adjustmentType: e.target.value})} className="form-input" disabled={!formData.basePriceList}>
                                         <option value="None">No Adjustment</option>
                                         <option value="Percentage">Percentage (%)</option>
                                         <option value="Amount">Fixed Amount</option>
                                     </select>
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Adjustment Value (+/-)</label>
-                                    <input type="number" value={formData.adjustmentValue || ''} onChange={e => setFormData({...formData, adjustmentValue: parseFloat(e.target.value)})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="e.g. -10 for 10% discount" disabled={!formData.basePriceList || formData.adjustmentType === 'None'} />
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Adjustment Value (+/-)</label>
+                                    <input type="number" value={formData.adjustmentValue || ''} onChange={e => setFormData({...formData, adjustmentValue: parseFloat(e.target.value)})} className="form-input" placeholder="e.g. -10 for 10% discount" disabled={!formData.basePriceList || formData.adjustmentType === 'None'} />
                                 </div>
                                 
-                                <div className="col-span-1 flex flex-col justify-end pb-2">
-                                    <label className="flex items-center space-x-2 cursor-pointer p-2 bg-blue-50 rounded-lg border border-blue-100 dark:bg-blue-900/10 dark:border-blue-900/30">
-                                        <input type="checkbox" checked={formData.isDefault || false} onChange={e => setFormData({...formData, isDefault: e.target.checked})} className="rounded text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-transparent" />
-                                        <span className="text-sm font-bold text-blue-800 dark:text-blue-300">Set as Default Price List</span>
-                                    </label>
+                                <div className="form-field-wrapper col-span-1 flex flex-col justify-end pb-2">
+                                    <label className="form-label dark:text-gray-400">Default Price List</label>
+                                    <select value={formData.isDefault === true ? 'true' : 'false'} onChange={e => setFormData({...formData, isDefault: e.target.value === 'true'})} className="form-input">
+                                        <option value="true">Enable (Default)</option>
+                                        <option value="false">Disable / No</option>
+                                    </select>
                                 </div>
                                 
                             </div>

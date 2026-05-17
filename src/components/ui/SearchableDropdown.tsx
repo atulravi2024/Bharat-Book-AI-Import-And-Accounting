@@ -123,7 +123,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
-      {label && <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">{label}</label>}
+      {label && <label className="form-label">{label}</label>}
       <div className="relative flex items-center">
         <input
           type="text"

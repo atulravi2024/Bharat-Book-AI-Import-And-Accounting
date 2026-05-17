@@ -22,7 +22,7 @@ interface GSTRR1SummaryProps {
 export const GSTRR1Summary: React.FC<GSTRR1SummaryProps> = ({ summary }) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="grid grid-cols-1 gap-4">
+      <div className="form-grid gap-4">
         <h3 className="text-sm font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 px-1 dark:text-gray-400">Section Summaries</h3>
         {['B2B', 'B2C Small', 'B2C Large', 'Export', 'Credit Note', 'Debit Note', 'Exempt'].map((groupType) => {
           const groupInvoicesUntyped = summary.groupedInvoices[groupType];
@@ -83,7 +83,7 @@ export const GSTRR1Summary: React.FC<GSTRR1SummaryProps> = ({ summary }) => {
                 </span>
               </div>
       
-              <div className="p-5 grid grid-cols-2 md:grid-cols-5 gap-6">
+              <div className="form-grid p-5 gap-6">
                 <div className="flex flex-col">
                   <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter mb-1">Taxable Value</p>
                   <p className="text-base font-bold text-gray-900 font-mono dark:text-white">₹{gTaxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>

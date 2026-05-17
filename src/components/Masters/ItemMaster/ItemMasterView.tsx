@@ -7,8 +7,7 @@ import {
     TrendingUpIcon,
     TaxIcon,
     BrandIcon,
-    CategoryIcon,
-    DownloadIcon
+    CategoryIcon
 } from '../../icons/IconComponents';
 import { 
     ItemMaster, 
@@ -21,12 +20,15 @@ import {
 } from '../../../types';
 
 import { ItemsTab } from './Tabs/ItemsTab';
+import { BasicItemsTab } from './Tabs/BasicItemsTab';
 import { WarehousesTab } from './Tabs/WarehousesTab';
 import { UOMsTab } from './Tabs/UOMsTab';
 import { StockGroupsTab } from './Tabs/StockGroupsTab';
 import { HSNTab } from './Tabs/HSNTab';
 import { BrandsTab } from './Tabs/BrandsTab';
 import { CategoriesTab } from './Tabs/CategoriesTab';
+import { AssertionCategoriesTab } from './Tabs/AssertionCategoriesTab';
+import { AssertionCodesTab } from './Tabs/AssertionCodesTab';
 import { ColorsTab } from './Tabs/ColorsTab';
 import { SizesTab } from './Tabs/SizesTab';
 import { VariantsTab } from './Tabs/VariantsTab';
@@ -93,10 +95,19 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
         initialTab
     } = props;
 
-    const [activeTab, setActiveTab] = useState<string>(initialTab || 'items');
+    const validTabs = [
+        'items', 'basic_items', 'bom', 'warehouses', 'uoms', 'stockGroups', 
+        'gst', 'brands', 'categories', 'assertionCategories', 'assertionCodes', 
+        'colors', 'sizes', 'variants', 'dimensions', 'skus', 'priceList', 
+        'weights', 'volumes', 'grades'
+    ];
+
+    const [activeTab, setActiveTab] = useState<string>(
+        (initialTab && validTabs.includes(initialTab)) ? initialTab : 'items'
+    );
     
     useEffect(() => {
-        if (initialTab && initialTab !== activeTab) {
+        if (initialTab && validTabs.includes(initialTab) && initialTab !== activeTab) {
             setActiveTab(initialTab);
         }
     }, [initialTab]);
@@ -143,6 +154,14 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
                     assertionCategoryMasters={assertionCategoryMasters}
                     assertionCodeMasters={assertionCodeMasters}
                     gstMasters={gstMasters}
+                    weightMasters={weightMasters}
+                />;
+            case 'basic_items':
+                return <BasicItemsTab 
+                    data={itemMasters} 
+                    onSave={setItemMasters} 
+                    uomMasters={uomMasters} 
+                    categoryMasters={categoryMasters}
                 />;
             case 'bom':
                 return <BillOfMaterialsTab data={bomMasters} onSave={setBomMasters} itemMasters={itemMasters} />;
@@ -150,7 +169,7 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
                 return <WarehousesTab data={warehouseMasters} onSave={setWarehouseMasters} />;
             case 'uoms':
                 return <UOMsTab data={uomMasters} onSave={setUomMasters} />;
-            case 'stockGroup':
+            case 'stockGroups':
                 return <StockGroupsTab data={stockGroupMasters} onSave={setStockGroupMasters} />;
             case 'gst':
                 return <HSNTab data={gstMasters} onSave={setGstMasters} />;
@@ -158,6 +177,10 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
                 return <BrandsTab data={brandMasters} onSave={setBrandMasters} />;
             case 'categories':
                 return <CategoriesTab data={categoryMasters} onSave={setCategoryMasters} />;
+            case 'assertionCategories':
+                return <AssertionCategoriesTab data={assertionCategoryMasters} onSave={setAssertionCategoryMasters} />;
+            case 'assertionCodes':
+                return <AssertionCodesTab data={assertionCodeMasters} onSave={setAssertionCodeMasters} assertionCategoryMasters={assertionCategoryMasters} />;
             case 'colors':
                 return <ColorsTab data={colorMasters} onSave={setColorMasters} />;
             case 'sizes':
@@ -181,66 +204,23 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
         }
     };
 
-    const exportData = () => {
-        let exportData: any[] = [];
-        let filename = 'export.json';
-        switch (activeTab) {
-            case 'items': exportData = itemMasters; filename = 'Items.json'; break;
-            case 'bom': exportData = bomMasters; filename = 'BOMs.json'; break;
-            case 'warehouses': exportData = warehouseMasters; filename = 'Warehouses.json'; break;
-            case 'uoms': exportData = uomMasters; filename = 'UOMs.json'; break;
-            case 'stockGroup': exportData = stockGroupMasters; filename = 'StockGroups.json'; break;
-            case 'gst': exportData = gstMasters; filename = 'HSN_GST.json'; break;
-            case 'brands': exportData = brandMasters; filename = 'Brands.json'; break;
-            case 'categories': exportData = categoryMasters; filename = 'Categories.json'; break;
-            case 'colors': exportData = colorMasters; filename = 'Colors.json'; break;
-            case 'sizes': exportData = sizeMasters; filename = 'Sizes.json'; break;
-            case 'variants': exportData = variantMasters; filename = 'Variants.json'; break;
-            case 'dimensions': exportData = dimensionMasters; filename = 'Dimensions.json'; break;
-            case 'skus': exportData = skuMasters; filename = 'SKUs.json'; break;
-            case 'priceList': exportData = priceListMasters; filename = 'PriceLists.json'; break;
-            case 'weights': exportData = weightMasters; filename = 'Weights.json'; break;
-            case 'volumes': exportData = volumeMasters; filename = 'Volumes.json'; break;
-            case 'grades': exportData = gradeMasters; filename = 'Grades.json'; break;
-            default: break;
-        }
-
-        if(!exportData || exportData.length === 0) {
-            alert('No data available to export for this section.');
-            return;
-        }
-
-        const dataStr = JSON.stringify(exportData, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    };
-
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8">
-            <header className="mb-8 text-left">
-                <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Inventory Master Directory</h1>
-                <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Deep-tier inventory management: manage items, SKU variants, warehouses, and taxation profiles.</p>
-            </header>
-
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col h-[calc(100vh-280px)]">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col h-[calc(100vh-140px)]">
                 <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-x-auto custom-scrollbar items-center pr-4 flex-shrink-0 justify-between">
                     <div className="flex">
                         {[
-                            { id: 'items', label: 'Items', icon: InventoryIcon },
+                            { id: 'items', label: 'Item Hub', icon: InventoryIcon },
+                            { id: 'basic_items', label: 'Basic Item', icon: InventoryIcon },
                             { id: 'bom', label: 'Bill of Materials', icon: FilterListIcon },
                             { id: 'warehouses', label: 'Warehouses', icon: CategoryIcon },
                             { id: 'uoms', label: 'UOMs', icon: UomIcon },
-                            { id: 'stockGroup', label: 'Stock Groups', icon: CategoryIcon },
+                            { id: 'stockGroups', label: 'Stock Groups', icon: CategoryIcon },
                             { id: 'gst', label: 'HSN', icon: TaxIcon },
                             { id: 'brands', label: 'Brands', icon: BrandIcon },
                             { id: 'categories', label: 'Categories', icon: CategoryIcon },
+                            { id: 'assertionCategories', label: 'Assertion Categories', icon: CategoryIcon },
+                            { id: 'assertionCodes', label: 'Assertion Codes', icon: CategoryIcon },
                             { id: 'colors', label: 'Colors', icon: CategoryIcon },
                             { id: 'sizes', label: 'Sizes', icon: FilterListIcon },
                             { id: 'variants', label: 'Variants', icon: FilterListIcon },
@@ -258,10 +238,6 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
                             </button>
                         ))}
                     </div>
-                    <button onClick={exportData} title="Export Active Tab to JSON" className="ml-4 flex-shrink-0 bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-lg flex items-center text-xs font-bold hover:bg-gray-50 active:scale-95 transition-all outline-none focus:ring-2 focus:ring-blue-500 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 hover:dark:bg-gray-600">
-                        <DownloadIcon className="w-4 h-4 mr-2" />
-                        Download
-                    </button>
                 </div>
                 <div className="flex-1 overflow-hidden relative bg-white dark:bg-gray-800">
                     {renderTabContent()}

@@ -435,7 +435,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
         </div>
         <div>
           <h4 className="text-sm font-black text-emerald-900 uppercase tracking-wider mb-2">Inventory Bill Requirements</h4>
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
+          <ul className="form-grid gap-x-6 gap-y-2">
             {[
               'Unique sequential Entry Number',
               'Valid Location identification',
@@ -966,10 +966,6 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
 
   return (
     <div className="max-w-[1400px] mx-auto p-4 md:p-6 lg:p-8 animate-in fade-in duration-500 min-h-full">
-      <header className="mb-10">
-        <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Inventory Management</h1>
-        <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Track and manage stock journals, physical stock, and inter-location transfers.</p>
-      </header>
       <div className="sticky top-0 z-[40] md:static -mx-4 px-4 -mt-4 pt-4 bg-gray-100/95 backdrop-blur-md pb-4 mb-4 md:-mx-0 md:px-0 md:-mt-0 md:pt-0 md:bg-transparent md:pb-0 md:mb-8 overflow-x-auto custom-scrollbar w-full">
         <div className="bg-white p-2 rounded-2xl border border-gray-200 shadow-sm inline-flex min-w-max dark:bg-gray-800 dark:border-gray-700">
           <nav className="flex space-x-1">

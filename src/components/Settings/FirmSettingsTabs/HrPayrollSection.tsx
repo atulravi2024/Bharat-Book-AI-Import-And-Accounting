@@ -40,9 +40,9 @@ export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activ
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             EPF Number (Provident Fund)
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -67,7 +67,7 @@ export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activ
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             ESIC Number
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">

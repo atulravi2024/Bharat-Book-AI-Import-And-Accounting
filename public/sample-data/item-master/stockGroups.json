@@ -1,16 +1,62 @@
 [
   {
-    "id": "stockGroups-sample-1",
-    "name": "Sample StockGroups 1",
-    "code": "STO-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "SG-001",
+    "name": "Electronics",
+    "defaultTaxRate": 18,
+    "description": "Consumer electronic devices and gadgets"
+  },
+  {
+    "id": "SG-002",
+    "name": "Computers",
+    "defaultTaxRate": 18,
+    "description": "Laptops, desktops, and servers"
+  },
+  {
+    "id": "SG-003",
+    "name": "Photography",
+    "defaultTaxRate": 18,
+    "description": "Cameras, lenses, and tripods"
+  },
+  {
+    "id": "SG-004",
+    "name": "Accessories",
+    "defaultTaxRate": 18,
+    "description": "Cables, chargers, peripherals"
+  },
+  {
+    "id": "SG-005",
+    "name": "Components",
+    "defaultTaxRate": 18,
+    "description": "RAM, SSDs, motherboards"
+  },
+  {
+    "id": "SG-006",
+    "name": "Home Appliances",
+    "defaultTaxRate": 28,
+    "description": "Refrigerators, washing machines"
+  },
+  {
+    "id": "SG-007",
+    "name": "Gaming",
+    "defaultTaxRate": 18,
+    "description": "Consoles, controllers, gaming titles"
+  },
+  {
+    "id": "SG-008",
+    "name": "Networking",
+    "defaultTaxRate": 18,
+    "description": "Routers, switches, access points"
+  },
+  {
+    "id": "SG-009",
+    "name": "Wearables",
+    "defaultTaxRate": 18,
+    "description": "Smartwatches, fitness trackers"
+  },
+  {
+    "id": "SG-010",
+    "name": "Office Supplies",
+    "defaultTaxRate": 12,
+    "description": "Stationery, paper, pens"
   }
 ]

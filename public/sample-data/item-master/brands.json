@@ -1,16 +1,74 @@
 [
   {
-    "id": "brands-sample-1",
-    "name": "Sample Brands 1",
-    "code": "BRA-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "BRD-001",
+    "name": "Apple",
+    "manufacturer": "Apple Inc.",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-002",
+    "name": "Samsung",
+    "manufacturer": "Samsung Electronics",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-003",
+    "name": "Sony",
+    "manufacturer": "Sony Corporation",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-004",
+    "name": "LG",
+    "manufacturer": "LG Electronics",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-005",
+    "name": "Dell",
+    "manufacturer": "Dell Technologies",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-006",
+    "name": "Lenovo",
+    "manufacturer": "Lenovo Group",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-007",
+    "name": "Canon",
+    "manufacturer": "Canon Inc.",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-008",
+    "name": "Nikon",
+    "manufacturer": "Nikon Corporation",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-009",
+    "name": "Logitech",
+    "manufacturer": "Logitech International",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-010",
+    "name": "Keychron",
+    "manufacturer": "Keychron",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-011",
+    "name": "Bose",
+    "manufacturer": "Bose Corporation",
+    "status": "Active"
+  },
+  {
+    "id": "BRD-012",
+    "name": "ASUS",
+    "manufacturer": "ASUSTeK Computer Inc.",
+    "status": "Active"
   }
 ]

@@ -1,16 +1,52 @@
 [
   {
-    "id": "grades-sample-1",
-    "name": "Sample Grades 1",
-    "code": "GRA-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "GR-001",
+    "name": "Grade A - Brand New",
+    "qualityScore": 10
+  },
+  {
+    "id": "GR-002",
+    "name": "Grade A- - Open Box (Mint)",
+    "qualityScore": 9
+  },
+  {
+    "id": "GR-003",
+    "name": "Grade B+ - Refurbished (Excellent)",
+    "qualityScore": 8
+  },
+  {
+    "id": "GR-004",
+    "name": "Grade B - Refurbished (Good)",
+    "qualityScore": 7
+  },
+  {
+    "id": "GR-005",
+    "name": "Grade C - Refurbished (Fair)",
+    "qualityScore": 5
+  },
+  {
+    "id": "GR-006",
+    "name": "Scrap / Salvage Parts",
+    "qualityScore": 1
+  },
+  {
+    "id": "GR-007",
+    "name": "Premium Export Quality",
+    "qualityScore": 10
+  },
+  {
+    "id": "GR-008",
+    "name": "Standard Domestic Quality",
+    "qualityScore": 8
+  },
+  {
+    "id": "GR-009",
+    "name": "B-Grade (Cosmetic Blemishes)",
+    "qualityScore": 6
+  },
+  {
+    "id": "GR-010",
+    "name": "End of Life (Discontinued)",
+    "qualityScore": 4
   }
 ]

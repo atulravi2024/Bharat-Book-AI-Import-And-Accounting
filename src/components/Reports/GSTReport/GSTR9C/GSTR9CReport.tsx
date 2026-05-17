@@ -45,7 +45,7 @@ export const GSTR9CReport: React.FC<GSTR9CReportProps> = ({ useSampleData, onTog
                     <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
                 </div>
             ) : data ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="form-grid gap-6">
                     <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-800">
                         <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 dark:text-gray-100">Turnover Reconciliation</h3>
                         <div className="space-y-3">

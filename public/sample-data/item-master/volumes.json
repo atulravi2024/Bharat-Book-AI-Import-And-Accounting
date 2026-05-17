@@ -1,16 +1,62 @@
 [
   {
-    "id": "volumes-sample-1",
-    "name": "Sample Volumes 1",
-    "code": "VOL-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "VOL-001",
+    "name": "Small Phone Box (0.001 CBM)",
+    "value": 0.001,
+    "unit": "CBM"
+  },
+  {
+    "id": "VOL-002",
+    "name": "Laptop Box (0.005 CBM)",
+    "value": 0.005,
+    "unit": "CBM"
+  },
+  {
+    "id": "VOL-003",
+    "name": "55\" TV Box (0.17 CBM)",
+    "value": 0.17,
+    "unit": "CBM"
+  },
+  {
+    "id": "VOL-004",
+    "name": "65\" TV Box (0.28 CBM)",
+    "value": 0.28,
+    "unit": "CBM"
+  },
+  {
+    "id": "VOL-005",
+    "name": "Headphone Box (0.003 CBM)",
+    "value": 0.003,
+    "unit": "CBM"
+  },
+  {
+    "id": "VOL-006",
+    "name": "Mouse Box (0.0007 CBM)",
+    "value": 0.0007,
+    "unit": "CBM"
+  },
+  {
+    "id": "VOL-007",
+    "name": "Keyboard Box (0.002 CBM)",
+    "value": 0.002,
+    "unit": "CBM"
+  },
+  {
+    "id": "VOL-008",
+    "name": "1 Liter",
+    "value": 1,
+    "unit": "L"
+  },
+  {
+    "id": "VOL-009",
+    "name": "5 Liters",
+    "value": 5,
+    "unit": "L"
+  },
+  {
+    "id": "VOL-010",
+    "name": "20 Liters",
+    "value": 20,
+    "unit": "L"
   }
 ]

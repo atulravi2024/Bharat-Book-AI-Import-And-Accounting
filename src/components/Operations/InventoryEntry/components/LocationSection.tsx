@@ -32,7 +32,7 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
            </button>
         </div>
         {!collapsedSections.location && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="form-grid gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
           <div>
             <SearchableDropdown
               label="Source Location"

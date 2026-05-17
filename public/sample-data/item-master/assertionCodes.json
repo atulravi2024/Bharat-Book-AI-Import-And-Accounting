@@ -1,16 +1,62 @@
 [
   {
-    "id": "assertionCodes-sample-1",
-    "name": "Sample AssertionCodes 1",
-    "code": "ASS-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "ACD-001",
+    "code": "COMP-CE",
+    "description": "CE Certified Output",
+    "categoryId": "AC-001"
+  },
+  {
+    "id": "ACD-002",
+    "code": "COMP-FCC",
+    "description": "FCC Compliance Verified",
+    "categoryId": "AC-001"
+  },
+  {
+    "id": "ACD-003",
+    "code": "QC-PASS",
+    "description": "General QC Check Passed",
+    "categoryId": "AC-002"
+  },
+  {
+    "id": "ACD-004",
+    "code": "ENV-ROHS",
+    "description": "RoHS Compliant Material",
+    "categoryId": "AC-003"
+  },
+  {
+    "id": "ACD-005",
+    "code": "SAF-UL",
+    "description": "UL Listed Safety",
+    "categoryId": "AC-004"
+  },
+  {
+    "id": "ACD-006",
+    "code": "PERF-A",
+    "description": "Class A Performance Level",
+    "categoryId": "AC-005"
+  },
+  {
+    "id": "ACD-007",
+    "code": "DUR-MIL",
+    "description": "MIL-STD-810G Drop Test Passed",
+    "categoryId": "AC-006"
+  },
+  {
+    "id": "ACD-008",
+    "code": "PKG-IST",
+    "description": "ISTA Packaging Standard",
+    "categoryId": "AC-007"
+  },
+  {
+    "id": "ACD-009",
+    "code": "SW-V1",
+    "description": "Firmware 1.0 Installed",
+    "categoryId": "AC-008"
+  },
+  {
+    "id": "ACD-010",
+    "code": "BAT-100",
+    "description": "100% Battery Capacity Tested",
+    "categoryId": "AC-009"
   }
 ]

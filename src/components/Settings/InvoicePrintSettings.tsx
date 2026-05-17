@@ -788,7 +788,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                         >
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pr-1">
+                                    <div className="form-grid gap-2 pr-1">
                                         {VISUAL_THEME_PALETTES.filter(t => ['Modern', 'Tally', 'Vyapar', 'Busy', 'Academic', 'Classic', 'Technical', 'Bold'].includes(t.id)).map((opt) => {
                                             const active = settings.designLayout === opt.id;
                                             return (
@@ -839,7 +839,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                         >
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pr-1">
+                                    <div className="form-grid gap-2 pr-1">
                                         {VISUAL_THEME_PALETTES.filter(t => ['Eco', 'Royal', 'Sunset', 'Ocean', 'Midnight', 'Slate', 'Crimson', 'Forest', 'Minimal', 'Professional', 'Retail'].includes(t.id)).map((opt) => {
                                             const active = settings.colorPalette === opt.id;
                                             return (
@@ -888,7 +888,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                 </div>
                             }
                         >
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="form-grid gap-4">
                                 <ToggleButton 
                                     icon={<Maximize size={20} />}
                                     label="Compact Layout"
@@ -952,7 +952,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                         >
                             <div className="space-y-8">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Primary Font Family</label>
+                                    <label className="form-label px-1">Primary Font Family</label>
                                     <div className="relative group">
                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-600 pointer-events-none group-focus-within:scale-110 transition-transform">
                                             <Type size={18} />
@@ -960,7 +960,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                         <select
                                             value={settings.fontFamily}
                                             onChange={(e) => setSettings(prev => ({ ...prev, fontFamily: e.target.value }))}
-                                            className="w-full bg-white border border-gray-100 rounded-2xl pl-12 pr-4 py-4 text-xs font-black text-gray-900 uppercase tracking-widest focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-400 transition-all appearance-none cursor-pointer shadow-sm hover:border-blue-200 dark:bg-gray-800 dark:border-gray-800 dark:text-white"
+                                            className="form-input rounded-2xl pl-12 pr-4 py-4 text-xs font-black uppercase tracking-widest focus:ring-4 focus:ring-blue-500/10 focus:border-blue-400 appearance-none cursor-pointer shadow-sm hover:border-blue-200"
                                             style={{ fontFamily: settings.fontFamily !== 'Default' ? settings.fontFamily : 'inherit' }}
                                         >
                                             {INVOICE_FONTS.map((font) => (
@@ -982,9 +982,9 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2 border-t border-gray-100 mt-4 dark:border-gray-800">
+                                <div className="form-grid gap-6 pt-2 border-t border-gray-100 mt-4 dark:border-gray-800">
                                     <div className="space-y-3 mt-4">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Base Font size (px)</label>
+                                        <label className="form-label px-1">Base Font size (px)</label>
                                         <div className="flex items-center gap-4">
                                             <input 
                                                 type="range" 
@@ -999,7 +999,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                         </div>
                                     </div>
                                     <div className="space-y-3 mt-4">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Heading Scale</label>
+                                        <label className="form-label px-1">Heading Scale</label>
                                         <div className="flex items-center gap-4">
                                             <input 
                                                 type="range" 
@@ -1015,13 +1015,13 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4 pt-2">
+                                <div className="form-grid gap-4 pt-2">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Font Weight</label>
+                                        <label className="form-label px-1">Font Weight</label>
                                         <select 
                                             value={settings.fontWeight}
                                             onChange={(e) => setSettings(prev => ({ ...prev, fontWeight: e.target.value }))}
-                                            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-900 dark:border-gray-800"
+                                            className="form-input text-[10px] font-black uppercase tracking-widest shadow-sm"
                                         >
                                             <option value="300">Light</option>
                                             <option value="400">Regular</option>
@@ -1033,11 +1033,11 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                         </select>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Text Transform</label>
+                                        <label className="form-label px-1">Text Transform</label>
                                         <select 
                                             value={settings.textTransform}
                                             onChange={(e) => setSettings(prev => ({ ...prev, textTransform: e.target.value }))}
-                                            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-900 dark:border-gray-800"
+                                            className="form-input text-[10px] font-black uppercase tracking-widest shadow-sm"
                                         >
                                             <option value="default">Default</option>
                                             <option value="uppercase">ALL CAPS</option>
@@ -1076,9 +1076,9 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                             }
                         >
                             <div className="space-y-6">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                                <div className="form-grid gap-6 pt-2">
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Plain Spacing</label>
+                                        <label className="form-label px-1">Plain Spacing</label>
                                         <div className="flex items-center gap-4">
                                             <input 
                                                 type="range" 
@@ -1094,7 +1094,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                     </div>
 
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Line Spacing</label>
+                                        <label className="form-label px-1">Line Spacing</label>
                                         <div className="flex items-center gap-4">
                                             <input 
                                                 type="range" 
@@ -1110,7 +1110,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                     </div>
 
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Text Spacing (px)</label>
+                                        <label className="form-label px-1">Text Spacing (px)</label>
                                         <div className="flex items-center gap-4">
                                             <input 
                                                 type="range" 
@@ -1126,7 +1126,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                     </div>
 
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Paragraph Spacing (px)</label>
+                                        <label className="form-label px-1">Paragraph Spacing (px)</label>
                                         <div className="flex items-center gap-4">
                                             <input 
                                                 type="range" 
@@ -1142,7 +1142,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                     </div>
 
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Header Spacing (px)</label>
+                                        <label className="form-label px-1">Header Spacing (px)</label>
                                         <div className="flex items-center gap-4">
                                             <input 
                                                 type="range" 
@@ -1158,7 +1158,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                     </div>
 
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Character Spacing (px)</label>
+                                        <label className="form-label px-1">Character Spacing (px)</label>
                                         <div className="flex items-center gap-4">
                                             <input 
                                                 type="range" 
@@ -1241,7 +1241,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-2 gap-3">
+                                            <div className="form-grid gap-3">
                                                 <div className="space-y-1">
                                                     <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Font Family</label>
                                                     <select 
@@ -1347,7 +1347,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                                         className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
                                                     />
                                                 </div>
-                                                <div className="space-y-1 col-span-1">
+                                                <div className="form-field-wrapper space-y-1 col-span-1">
                                                     <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Vertical Shift (mm)</label>
                                                     <input 
                                                         type="range"
@@ -1363,7 +1363,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                                     />
                                                     <div className="text-right text-[8px] font-bold text-gray-500 dark:text-gray-400">{style.verticalShift ?? 0}mm</div>
                                                 </div>
-                                                <div className="space-y-1 col-span-1">
+                                                <div className="form-field-wrapper space-y-1 col-span-1">
                                                     <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Height Adjustment (mm)</label>
                                                     <input 
                                                         type="range"
@@ -1404,7 +1404,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                 </div>
                             }
                         >
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                            <div className="form-grid gap-3">
                                 <ToggleButton 
                                     icon={<ImageIcon size={18} />}
                                     label="Logo"
@@ -1462,7 +1462,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                 </div>
                             }
                         >
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                            <div className="form-grid gap-3">
                                 <ToggleButton 
                                     icon={<Hash size={18} />}
                                     label="HSN Codes"
@@ -1546,7 +1546,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                         >
                             <div className="space-y-6">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Paper Standard</label>
+                                    <label className="form-label px-1">Paper Standard</label>
                                     <SegmentedControl 
                                         options={[
                                             { id: 'A4', label: 'A4', sub: 'Standard' },
@@ -1560,7 +1560,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                 </div>
 
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Page Orientation</label>
+                                    <label className="form-label px-1">Page Orientation</label>
                                     <SegmentedControl 
                                         options={[
                                             { id: 'Portrait', label: 'Portrait', sub: 'Vertical' },
@@ -1572,7 +1572,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                 </div>
 
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Margin Profile</label>
+                                    <label className="form-label px-1">Margin Profile</label>
                                     <SegmentedControl 
                                         options={[
                                             { id: 'Zero', label: 'Zero', sub: '0"' },
@@ -1607,7 +1607,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                         <Maximize size={14} className="text-blue-600" />
                                         <h4 className="text-[10px] font-black text-gray-900 uppercase tracking-widest dark:text-white">Custom Margins (Inches)</h4>
                                     </div>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div className="form-grid gap-4">
                                         <MarginInput 
                                             label="Top" 
                                             value={settings.marginTop} 
@@ -1652,13 +1652,13 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                             }
                         >
                             <div className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="form-grid gap-4">
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">First Page Items</label>
+                                        <label className="form-label px-1">First Page Items</label>
                                         <select 
                                             value={settings.itemsPerFirstPage || 12}
                                             onChange={(e) => setSettings(prev => ({ ...prev, itemsPerFirstPage: parseInt(e.target.value) }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             {Array.from({length: 50}, (_, i) => i + 1).map(num => (
                                                 <option key={num} value={num}>{num} items</option>
@@ -1666,11 +1666,11 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                         </select>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Middle Pages Items</label>
+                                        <label className="form-label px-1">Middle Pages Items</label>
                                         <select 
                                             value={settings.itemsPerSecondPage || 15}
                                             onChange={(e) => setSettings(prev => ({ ...prev, itemsPerSecondPage: parseInt(e.target.value) }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             {Array.from({length: 50}, (_, i) => i + 1).map(num => (
                                                 <option key={num} value={num}>{num} items</option>
@@ -1678,11 +1678,11 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                         </select>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Last Page Items</label>
+                                        <label className="form-label px-1">Last Page Items</label>
                                         <select 
                                             value={settings.itemsPerLastPage || 10}
                                             onChange={(e) => setSettings(prev => ({ ...prev, itemsPerLastPage: parseInt(e.target.value) }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             {Array.from({length: 50}, (_, i) => i + 1).map(num => (
                                                 <option key={num} value={num}>{num} items</option>
@@ -1702,11 +1702,11 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                         >
                             <div className="space-y-4">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Select Page to Analyze</label>
+                                    <label className="form-label px-1">Select Page to Analyze</label>
                                     <select 
                                         value={plannerPageType}
                                         onChange={(e) => setPlannerPageType(e.target.value as any)}
-                                        className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                        className="form-input text-xs font-bold shadow-sm"
                                     >
                                         <option value="First">First Page items setting</option>
                                         <option value="Middle">Middle Page items setting</option>
@@ -1736,13 +1736,13 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                             }
                         >
                             <div className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div className="form-grid gap-4">
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Header Section Display</label>
+                                        <label className="form-label px-1">Header Section Display</label>
                                         <select 
                                             value={settings.headerDisplay || 'First Page Only'}
                                             onChange={(e) => setSettings(prev => ({ ...prev, headerDisplay: e.target.value }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             <option value="All Pages">All Pages</option>
                                             <option value="First Page Only">First Page Only</option>
@@ -1750,22 +1750,22 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                         </select>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Page Subtotals</label>
+                                        <label className="form-label px-1">Page Subtotals</label>
                                         <select 
                                             value={settings.pageSubtotalDisplay || 'All Pages'}
                                             onChange={(e) => setSettings(prev => ({ ...prev, pageSubtotalDisplay: e.target.value }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             <option value="All Pages">All Pages</option>
                                             <option value="Last Page Only">Last Page Only</option>
                                         </select>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Select User</label>
+                                        <label className="form-label px-1">Select User</label>
                                         <select 
                                             value={settings.selectedUser || 'Admin'}
                                             onChange={(e) => setSettings(prev => ({ ...prev, selectedUser: e.target.value }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             <option value="Admin">Admin</option>
                                             <option value="Manager">Manager</option>
@@ -1774,33 +1774,33 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                         </select>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Show Page Number</label>
+                                        <label className="form-label px-1">Show Page Number</label>
                                         <select 
                                             value={settings.showPageNumber || 'Yes'}
                                             onChange={(e) => setSettings(prev => ({ ...prev, showPageNumber: e.target.value }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             <option value="Yes">Yes</option>
                                             <option value="No">No</option>
                                         </select>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Page Number Location</label>
+                                        <label className="form-label px-1">Page Number Location</label>
                                         <select 
                                             value={settings.pageNumberLocation || 'Bottom'}
                                             onChange={(e) => setSettings(prev => ({ ...prev, pageNumberLocation: e.target.value }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             <option value="Top">Top</option>
                                             <option value="Bottom">Bottom</option>
                                         </select>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Page Number Alignment</label>
+                                        <label className="form-label px-1">Page Number Alignment</label>
                                         <select 
                                             value={settings.pageNumberAlignment || 'Right'}
                                             onChange={(e) => setSettings(prev => ({ ...prev, pageNumberAlignment: e.target.value }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             <option value="Left">Left</option>
                                             <option value="Center">Center</option>
@@ -1808,11 +1808,11 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                         </select>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Page Number Format</label>
+                                        <label className="form-label px-1">Page Number Format</label>
                                         <select 
                                             value={settings.pageNumberFormat || 'Page 1 of 3'}
                                             onChange={(e) => setSettings(prev => ({ ...prev, pageNumberFormat: e.target.value }))}
-                                            className="w-full bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                            className="form-input text-xs font-bold shadow-sm"
                                         >
                                             <option value="1">1</option>
                                             <option value="Page 1">Page 1</option>
@@ -1833,7 +1833,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                             <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Settings Synchronized</span>
                         </div>
                         
-                        <div className="grid grid-cols-5 gap-2 sm:gap-4 relative z-50">
+                        <div className="form-grid gap-2 sm:gap-4 relative z-50">
                                 <button 
                                     id="test-print-button"
                                     style={{ pointerEvents: 'auto', zIndex: 100 }}
@@ -2096,7 +2096,7 @@ const SegmentedControl: React.FC<{
     value: string;
     onChange: (val: string) => void;
 }> = ({ options, value, onChange }) => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+    <div className="form-grid gap-2">
         {options.map((opt) => {
             const active = value === opt.id;
             return (
@@ -2148,7 +2148,7 @@ const MarginInput: React.FC<{ label: string, value: number, onChange: (val: numb
                         onChange(parseFloat(val) || 0);
                     }
                 }}
-                className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-xs font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200 transition-all dark:bg-gray-800 dark:border-gray-800 dark:text-white"
+                className="form-input text-xs font-bold focus:border-blue-200"
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-gray-300 pointer-events-none group-focus-within:text-blue-400">IN</div>
         </div>

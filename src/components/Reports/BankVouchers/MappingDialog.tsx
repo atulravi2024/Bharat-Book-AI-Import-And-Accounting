@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { ParsedVoucher, VoucherType, PartyMaster, LedgerMaster, Confidence } from '../../../types';
+
 import { 
     CancelIcon, 
     CheckCircleIcon, 
@@ -53,10 +54,10 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
             const aiParty = currentVoucher.partyName?.value;
             const aiLedger = currentVoucher.ledger?.value;
             
-            const matchedParty = partyMasters.find(p => desc.includes(p.name.toLowerCase()));
+            const matchedParty = partyMasters.find(p => desc.includes(String(p.name || '').toLowerCase()));
             setTargetParty(String(aiParty || matchedParty?.name || ''));
             
-            const matchedLedger = ledgerMasters.find(l => desc.includes(l.name.toLowerCase()));
+            const matchedLedger = ledgerMasters.find(l => desc.includes(String(l.name || '').toLowerCase()));
             setTargetLedger(String(aiLedger || matchedLedger?.name || ''));
         }
         setSearchTerm('');
@@ -84,13 +85,13 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
         if (query) {
             // Priority 1: Match the current query entered in the search box
             return masters
-                .filter(m => m.name.toLowerCase().includes(query))
+                .filter(m => String(m.name || '').toLowerCase().includes(query))
                 .slice(0, 5); // Show more suggestions if they are typing
         }
 
         // Priority 2: Fallback to auto-detection from narration if query is empty
         return masters
-            .filter(m => m.name.toLowerCase().includes(desc) || desc.includes(m.name.toLowerCase()))
+            .filter(m => String(m.name || '').toLowerCase().includes(desc) || desc.includes(String(m.name || '').toLowerCase()))
             .slice(0, 3);
     }, [selectionType, partyMasters, ledgerMasters, currentVoucher, targetParty, targetLedger]);
 
@@ -167,9 +168,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
         
         onMap(Object.keys(finalMappings), finalMappings);
         onClose();
-    };
-
-    return (
+    };  return (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 dark:bg-gray-800">
                 <div className="p-6 border-b flex justify-between items-center bg-indigo-600 text-white">
@@ -213,8 +212,8 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                                 ))}
                             </div>
 
-                            <div>
-                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">{selectionType} Name</label>
+                            <div className="form-field-wrapper">
+<label className="form-label">{selectionType} Name</label>
                                 <input 
                                     className="w-full p-2 mt-1 border rounded-lg text-sm" 
                                     value={selectionType === 'ledger' ? targetLedger : targetParty}
@@ -229,8 +228,8 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                             </div>
                         </div>
 
-                        {((selectionType !== 'ledger' && targetParty && !partyMasters.some(p => p.name.toLowerCase() === targetParty.toLowerCase())) || 
-                          (selectionType === 'ledger' && targetLedger && !ledgerMasters.some(l => l.name.toLowerCase() === targetLedger.toLowerCase()))) && (
+                        {((selectionType !== 'ledger' && targetParty && !partyMasters.some(p => String(p.name || '').toLowerCase() === targetParty.toLowerCase())) || 
+                          (selectionType === 'ledger' && targetLedger && !ledgerMasters.some(l => String(l.name || '').toLowerCase() === targetLedger.toLowerCase()))) && (
                             <div className="flex items-center space-x-2 mt-2">
                                <div className="text-[10px] text-amber-600 font-bold">{selectionType} not in masters.</div>
                                <button 
@@ -303,7 +302,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                         <h4 className="text-lg font-bold mb-1 text-gray-800 dark:text-gray-100">Create New {selectionType === 'ledger' ? 'Ledger' : 'Party'}</h4>
                         <p className="text-xs text-gray-500 mb-4 tracking-tight dark:text-gray-400">This will permanently add the master to your records.</p>
                         
-                        <label className="text-xs font-bold text-gray-500 uppercase dark:text-gray-400">Master Name</label>
+                        <label className="form-label dark:text-gray-400">Master Name</label>
                         <input 
                             className="w-full text-base font-bold text-indigo-700 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 mt-1 mb-4 focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-gray-900 dark:border-gray-700"
                             value={newMasterName}

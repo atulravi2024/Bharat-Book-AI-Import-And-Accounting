@@ -68,7 +68,7 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
             </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-4 sm:mt-0">
+        <div className="form-grid gap-4 sm:gap-6 mt-4 sm:mt-0">
           <div className="bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
             <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">Voucher Details</h3>
             <div className="space-y-3">
@@ -88,7 +88,7 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
             </div>
           </div>
           {(voucherType === VoucherType.Purchase || voucherType === VoucherType.Sales) && (
-            <div className="md:col-span-2 bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
+            <div className="form-field-wrapper md:col-span-2 bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
               <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">Tax Summary</h3>
               <div className="space-y-3">
                 <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Total GST</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.gst.toFixed(2)}</span></div>
@@ -105,7 +105,7 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
               type="checkbox"
               checked={isConfirmed}
               onChange={(e) => setIsConfirmed(e.target.checked)}
-              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:border-gray-600"
+              className="form-input h-4 w-4 text-blue-600 border-gray-300 rounded dark:border-gray-600"
             />
             <span className="ml-3 text-gray-700 dark:text-gray-200">I confirm the accuracy of these entries.</span>
           </label>

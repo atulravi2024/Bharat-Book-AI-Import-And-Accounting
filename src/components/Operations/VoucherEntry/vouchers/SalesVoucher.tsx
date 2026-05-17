@@ -19,6 +19,7 @@ import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { Notification, NotificationType } from '../../../ui/Notification';
 
+
 // Safe JSON parse helper
 const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
   if (!jsonString) return defaultValue;
@@ -1169,8 +1170,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);  return () => window.removeEventListener('keydown', handleKeyDown);
   });
 
   const handleDuplicateEntry = () => {
@@ -1330,14 +1330,14 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
            </div>
         </div>
         {!collapsedSections.header && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 flex justify-between items-center">
+        <div className="form-grid gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="form-field-wrapper">
+<label className="form-label flex justify-between items-center">
               <span>Voucher Date & Weekday</span>
             </label>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <div className="relative flex-1">
-                <input type="date" value={headerDetails.voucherDate || ''} onChange={(e) => handleHeaderChange('voucherDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+                <input type="date" value={headerDetails.voucherDate || ''} onChange={(e) => handleHeaderChange('voucherDate', e.target.value)} className="form-input text-sm font-medium dark:focus:bg-gray-700" />
               </div>
               <div className="sm:w-32 flex items-center justify-center px-4 py-3 bg-blue-50 border border-blue-100/50 rounded-xl text-sm font-black text-blue-700 shadow-sm shrink-0 whitespace-nowrap uppercase tracking-widest ring-1 ring-blue-200/50">
                   {(() => {
@@ -1347,19 +1347,19 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               </div>
             </div>
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Voucher Number</label>
-            <input type="text" value={headerDetails.voucherNumber || ''} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+          <div className="form-field-wrapper">
+<label className="form-label">Voucher Number</label>
+            <input type="text" value={headerDetails.voucherNumber || ''} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="form-input text-sm font-medium dark:focus:bg-gray-700" />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">REF / Invoice Number</label>
-            <input type="text" value={headerDetails.referenceNo || ''} onChange={(e) => handleHeaderChange('referenceNo', e.target.value)} placeholder="Optional" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+          <div className="form-field-wrapper">
+<label className="form-label">REF / Invoice Number</label>
+            <input type="text" value={headerDetails.referenceNo || ''} onChange={(e) => handleHeaderChange('referenceNo', e.target.value)} placeholder="Optional" className="form-input text-sm font-medium dark:focus:bg-gray-700" />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Creation Stamp (System)</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Creation Stamp (System)</label>
             <input type="text" value={systemStamp || ''} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
           </div>
-          <div className="sm:col-span-2 lg:col-span-4 hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all dark:hover:bg-gray-700">
+          <div className="form-field-wrapper sm:col-span-2 lg:col-span-4 hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all dark:hover:bg-gray-700">
              <button onClick={() => fileInputRef.current?.click()} className="flex items-center px-4 py-2 border border-dashed border-gray-300 rounded-lg text-xs font-bold text-gray-500 hover:bg-white hover:text-blue-600 hover:border-blue-300 transition-all cursor-pointer shadow-sm dark:border-gray-600 dark:text-gray-400">
                <Paperclip size={14} className="mr-2" /> Attach Document
              </button>
@@ -1391,9 +1391,9 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
            </button>
         </div>
         {!collapsedSections.party && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Entity Category</label>
+        <div className="form-grid gap-x-6 gap-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="form-field-wrapper">
+<label className="form-label">Entity Category</label>
             <select 
               value={headerDetails.entityCategory || ''} 
               onChange={(e) => handleHeaderChange('entityCategory', e.target.value)} 
@@ -1423,8 +1423,8 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               placeholder={`Search ${headerDetails.entityCategory}...`}
             />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Business Role</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Business Role</label>
             <select 
               value={headerDetails.businessRole || ''} 
               onChange={(e) => handleHeaderChange('businessRole', e.target.value)} 
@@ -1452,20 +1452,20 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               )}
             </select>
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">GST Number</label>
+          <div className="form-field-wrapper">
+<label className="form-label">GST Number</label>
             <input type="text" value={headerDetails.gstNumber || ''} onChange={(e) => handleHeaderChange('gstNumber', e.target.value)} placeholder="22AAAAA0000A1Z5" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Aadhaar Card No.</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Aadhaar Card No.</label>
             <input type="text" value={headerDetails.aadhaarNo || ''} onChange={(e) => handleHeaderChange('aadhaarNo', e.target.value)} placeholder="12-digit number" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">PAN Card No.</label>
+          <div className="form-field-wrapper">
+<label className="form-label">PAN Card No.</label>
             <input type="text" value={headerDetails.panNo || ''} onChange={(e) => handleHeaderChange('panNo', e.target.value)} placeholder="ABCDE1234F" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Party Type</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Party Type</label>
             <select value={headerDetails.partyType || ''} onChange={(e) => handleHeaderChange('partyType', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700">
               <option value="Regular">Regular</option>
               <option value="Composition">Composition</option>
@@ -1473,8 +1473,8 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               <option value="Consumer">Consumer</option>
             </select>
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Place of Supply</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Place of Supply</label>
             <input 
               type="text" 
               value={headerDetails.placeOfSupply || ''} 
@@ -1483,8 +1483,8 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" 
             />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Supply Classification (System)</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Supply Classification (System)</label>
             <input 
               type="text" 
               value={headerDetails.supplyType || ''} 
@@ -1493,17 +1493,17 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
             />
           </div>
 
-          <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-emerald-50/20 rounded-2xl border border-emerald-100/50 mt-2">
-            <div>
-              <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">PO Number</label>
+          <div className="form-field-wrapper form-grid md:col-span-3 gap-4 p-4 bg-emerald-50/20 rounded-2xl border border-emerald-100/50 mt-2">
+            <div className="form-field-wrapper">
+<label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">PO Number</label>
               <input type="text" value={headerDetails.poNumber || ''} onChange={(e) => handleHeaderChange('poNumber', e.target.value)} placeholder="PO-001" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
             </div>
-            <div>
-              <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">PO Date</label>
+            <div className="form-field-wrapper">
+<label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">PO Date</label>
               <input type="date" value={headerDetails.poDate || ''} onChange={(e) => handleHeaderChange('poDate', e.target.value)} className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
             </div>
-            <div>
-              <label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Credit Period (Days)</label>
+            <div className="form-field-wrapper">
+<label className="block text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Credit Period (Days)</label>
               <input type="number" value={headerDetails.creditPeriod || ''} onChange={(e) => handleHeaderChange('creditPeriod', e.target.value)} placeholder="30" className="w-full px-3 py-2 bg-white border border-emerald-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-gray-800" />
             </div>
             <div className="hidden sm:block">
@@ -1537,8 +1537,8 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-4 flex items-center">
               <span className="bg-blue-600 w-2 h-2 rounded-full mr-2"></span> Billing Address
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-1">
+            <div className="form-grid gap-6">
+              <div className="form-field-wrapper lg:col-span-1">
                 <SearchableDropdown
                   label="Billing Party Name"
                   options={partyMasters}
@@ -1547,36 +1547,36 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                   placeholder="Select Party..."
                 />
               </div>
-              <div className="lg:col-span-2">
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Street Address</label>
-                <input type="text" value={headerDetails.billingAddress || ''} onChange={(e) => handleHeaderChange('billingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+              <div className="form-field-wrapper lg:col-span-2">
+                <label className="form-label">Street Address</label>
+                <input type="text" value={headerDetails.billingAddress || ''} onChange={(e) => handleHeaderChange('billingAddress', e.target.value)} placeholder="Full address" className="form-input text-sm font-medium" />
               </div>
-              <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State</label>
-                <input type="text" value={headerDetails.billingState || ''} onChange={(e) => handleHeaderChange('billingState', e.target.value)} placeholder="e.g. Maharashtra" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+              <div className="form-field-wrapper">
+<label className="form-label">State</label>
+                <input type="text" value={headerDetails.billingState || ''} onChange={(e) => handleHeaderChange('billingState', e.target.value)} placeholder="e.g. Maharashtra" className="form-input text-sm font-medium" />
               </div>
-              <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State Code / Pin Code</label>
+              <div className="form-field-wrapper">
+<label className="form-label">State Code / Pin Code</label>
                 <div className="flex space-x-2">
-                  <input type="text" value={headerDetails.billingStateCode || ''} onChange={(e) => handleHeaderChange('billingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
-                  <input type="text" value={headerDetails.billingPinCode || ''} onChange={(e) => handleHeaderChange('billingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="text" value={headerDetails.billingStateCode || ''} onChange={(e) => handleHeaderChange('billingStateCode', e.target.value)} placeholder="Code" className="form-input w-20 text-sm font-medium" />
+                  <input type="text" value={headerDetails.billingPinCode || ''} onChange={(e) => handleHeaderChange('billingPinCode', e.target.value)} placeholder="Pin" className="form-input flex-1 text-sm font-medium" />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Contact Person</label>
-                <input type="text" value={headerDetails.contactPerson || ''} onChange={(e) => handleHeaderChange('contactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+              <div className="form-field-wrapper">
+<label className="form-label">Contact Person</label>
+                <input type="text" value={headerDetails.contactPerson || ''} onChange={(e) => handleHeaderChange('contactPerson', e.target.value)} placeholder="Name" className="form-input text-sm font-medium" />
               </div>
-              <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Mobile Number</label>
-                <input type="text" value={headerDetails.mobileNumber || ''} onChange={(e) => handleHeaderChange('mobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+              <div className="form-field-wrapper">
+<label className="form-label">Mobile Number</label>
+                <input type="text" value={headerDetails.mobileNumber || ''} onChange={(e) => handleHeaderChange('mobileNumber', e.target.value)} placeholder="10-digit number" className="form-input text-sm font-medium" />
               </div>
-              <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">WhatsApp Number</label>
-                <input type="text" value={headerDetails.whatsappNumber || ''} onChange={(e) => handleHeaderChange('whatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+              <div className="form-field-wrapper">
+<label className="form-label">WhatsApp Number</label>
+                <input type="text" value={headerDetails.whatsappNumber || ''} onChange={(e) => handleHeaderChange('whatsappNumber', e.target.value)} placeholder="WhatsApp number" className="form-input text-sm font-medium" />
               </div>
-              <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Email ID</label>
-                <input type="email" value={headerDetails.emailId || ''} onChange={(e) => handleHeaderChange('emailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
+              <div className="form-field-wrapper">
+<label className="form-label">Email ID</label>
+                <input type="email" value={headerDetails.emailId || ''} onChange={(e) => handleHeaderChange('emailId', e.target.value)} placeholder="email@example.com" className="form-input text-sm font-medium" />
               </div>
             </div>
           </div>
@@ -1588,7 +1588,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                 type="checkbox" 
                 checked={headerDetails.isShippingSameAsBilling || false} 
                 onChange={(e) => handleHeaderChange('isShippingSameAsBilling', e.target.checked)}
-                className="w-5 h-5 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/20 transition-all cursor-pointer dark:border-gray-600"
+                className="form-input w-5 h-5 border-2 border-gray-300 text-blue-600 cursor-pointer dark:border-gray-600"
               />
               <span className="text-xs font-black text-gray-700 uppercase tracking-widest dark:text-gray-200">Shipping address is same as billing</span>
             </label>
@@ -1602,7 +1602,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                   type="checkbox" 
                   checked={headerDetails.isEWayBillRequired || false} 
                   onChange={(e) => handleHeaderChange('isEWayBillRequired', e.target.checked)}
-                  className="w-6 h-6 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/20 transition-all cursor-pointer dark:border-gray-600"
+                  className="form-input w-6 h-6 border-2 border-gray-300 text-blue-600 cursor-pointer dark:border-gray-600"
                 />
                 <div className="flex flex-col">
                   <span className="text-xs font-black text-gray-800 uppercase tracking-widest dark:text-gray-100">Generate E-Way Bill</span>
@@ -1611,18 +1611,18 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               </label>
 
               {headerDetails.isEWayBillRequired && (
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 animate-in zoom-in-95 duration-300">
-                  <div>
-                    <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Vehicle No</label>
-                    <input type="text" value={headerDetails.vehicleNo || ''} onChange={(e) => handleHeaderChange('vehicleNo', e.target.value)} placeholder="MH 12 AB 1234" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
+                <div className="form-grid flex-1 gap-4 animate-in zoom-in-95 duration-300">
+                  <div className="form-field-wrapper">
+<label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Vehicle No</label>
+                    <input type="text" value={headerDetails.vehicleNo || ''} onChange={(e) => handleHeaderChange('vehicleNo', e.target.value)} placeholder="MH 12 AB 1234" className="form-input border-blue-100 text-sm font-bold" />
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Transporter</label>
-                    <input type="text" value={headerDetails.transporterName || ''} onChange={(e) => handleHeaderChange('transporterName', e.target.value)} placeholder="Transporter Name" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
+                  <div className="form-field-wrapper">
+<label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Transporter</label>
+                    <input type="text" value={headerDetails.transporterName || ''} onChange={(e) => handleHeaderChange('transporterName', e.target.value)} placeholder="Transporter Name" className="form-input border-blue-100 text-sm font-bold" />
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Distance (KM)</label>
-                    <input type="number" value={headerDetails.distance || ''} onChange={(e) => handleHeaderChange('distance', e.target.value)} placeholder="Distance" className="w-full px-4 py-2 bg-white border border-blue-100 rounded-lg text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800" />
+                  <div className="form-field-wrapper">
+<label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Distance (KM)</label>
+                    <input type="number" value={headerDetails.distance || ''} onChange={(e) => handleHeaderChange('distance', e.target.value)} placeholder="Distance" className="form-input border-blue-100 text-sm font-bold" />
                   </div>
                 </div>
               )}
@@ -1635,8 +1635,8 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
               <h4 className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] mb-4 flex items-center">
                 <span className="bg-indigo-600 w-2 h-2 rounded-full mr-2"></span> Shipping Address
               </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-1">
+              <div className="form-grid gap-6">
+                <div className="form-field-wrapper lg:col-span-1">
                   <SearchableDropdown
                     label="Shipping Party Name"
                     options={partyMasters}
@@ -1645,39 +1645,39 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                     placeholder="Select Party..."
                   />
                 </div>
-                <div className="lg:col-span-2">
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Street Address</label>
+                <div className="form-field-wrapper lg:col-span-2">
+                  <label className="form-label">Street Address</label>
                   <input type="text" value={headerDetails.shippingAddress || ''} onChange={(e) => handleHeaderChange('shippingAddress', e.target.value)} placeholder="Full address" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State</label>
+                <div className="form-field-wrapper">
+<label className="form-label">State</label>
                   <input type="text" value={headerDetails.shippingState || ''} onChange={(e) => handleHeaderChange('shippingState', e.target.value)} placeholder="e.g. Karnataka" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">State Code / Pin Code</label>
+                <div className="form-field-wrapper">
+<label className="form-label">State Code / Pin Code</label>
                   <div className="flex space-x-2">
                     <input type="text" value={headerDetails.shippingStateCode || ''} onChange={(e) => handleHeaderChange('shippingStateCode', e.target.value)} placeholder="Code" className="w-20 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                     <input type="text" value={headerDetails.shippingPinCode || ''} onChange={(e) => handleHeaderChange('shippingPinCode', e.target.value)} placeholder="Pin" className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                   </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Contact Info</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Contact Info</label>
                   <input type="text" value={headerDetails.shippingContact || ''} onChange={(e) => handleHeaderChange('shippingContact', e.target.value)} placeholder="Phone or Email" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Contact Person</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Contact Person</label>
                   <input type="text" value={headerDetails.shippingContactPerson || ''} onChange={(e) => handleHeaderChange('shippingContactPerson', e.target.value)} placeholder="Name" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Mobile Number</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Mobile Number</label>
                   <input type="text" value={headerDetails.shippingMobileNumber || ''} onChange={(e) => handleHeaderChange('shippingMobileNumber', e.target.value)} placeholder="10-digit number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">WhatsApp Number</label>
+                <div className="form-field-wrapper">
+<label className="form-label">WhatsApp Number</label>
                   <input type="text" value={headerDetails.shippingWhatsappNumber || ''} onChange={(e) => handleHeaderChange('shippingWhatsappNumber', e.target.value)} placeholder="WhatsApp number" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Email ID</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Email ID</label>
                   <input type="email" value={headerDetails.shippingEmailId || ''} onChange={(e) => handleHeaderChange('shippingEmailId', e.target.value)} placeholder="email@example.com" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-800 dark:border-gray-700" />
                 </div>
               </div>
@@ -1762,10 +1762,10 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                     />
                   </td>
                   <td className="px-4 py-2">
-                    <input type="text" placeholder="-" value={row.hsn || ''} onChange={(e) => { const r = [...rows]; r[index].hsn = e.target.value; setRows(r); }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px] dark:focus:bg-gray-700" />
+                    <input type="text" placeholder="-" value={row.hsn || ''} onChange={(e) => { const r = [...rows]; r[index].hsn = e.target.value; setRows(r); }} className="form-input bg-transparent border-transparent group-hover:border-gray-200 text-sm font-medium min-w-[80px] dark:focus:bg-gray-700" />
                   </td>
                   <td className="px-4 py-2">
-                    <input type="number" placeholder="0" value={row.qty || ''} onChange={(e) => { const r = [...rows]; r[index].qty = e.target.value; setRows(r); }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px] dark:focus:bg-gray-700" />
+                    <input type="number" placeholder="0" value={row.qty || ''} onChange={(e) => { const r = [...rows]; r[index].qty = e.target.value; setRows(r); }} className="form-input bg-transparent border-transparent group-hover:border-gray-200 text-sm font-medium text-right min-w-[80px] dark:focus:bg-gray-700" />
                   </td>
                   <td className="px-4 py-2">
                     <input type="number" placeholder="0.00" step="0.01" value={row.rate || ''} onChange={(e) => { 
@@ -1774,7 +1774,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                       const rate = parseFloat(e.target.value) || 0;
                       r[index].rateWithTax = (rate * (1 + tax / 100)).toFixed(2);
                       setRows(r); 
-                    }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[80px] dark:focus:bg-gray-700" />
+                    }} className="form-input bg-transparent border-transparent group-hover:border-gray-200 text-sm font-medium text-right min-w-[80px] dark:focus:bg-gray-700" />
                   </td>
                   <td className="px-4 py-2">
                     <input type="number" placeholder="0.00" step="0.01" value={row.rateWithTax || ''} onChange={(e) => {
@@ -1784,7 +1784,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                       const divisor = 1 + tax / 100;
                       r[index].rate = divisor !== 0 ? (rwt / divisor).toFixed(2) : '0';
                       setRows(r);
-                    }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-[90px] dark:focus:bg-gray-700" />
+                    }} className="form-input bg-transparent border-transparent group-hover:border-gray-200 text-sm font-medium text-right min-w-[90px] dark:focus:bg-gray-700" />
                   </td>
                   <td className="px-4 py-2">
                     <select value={row.tax || '18'} onChange={(e) => {
@@ -1793,7 +1793,7 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
                       const rate = parseFloat(r[index].rate) || 0;
                       r[index].rateWithTax = (rate * (1 + tax / 100)).toFixed(2);
                       setRows(r); 
-                    }} className="w-full px-2 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none appearance-none cursor-pointer min-w-[60px] dark:focus:bg-gray-700">
+                    }} className="form-input px-2 bg-transparent border-transparent group-hover:border-gray-200 text-sm font-medium text-center appearance-none cursor-pointer min-w-[60px] dark:focus:bg-gray-700">
                       <option value="0">0%</option>
                       <option value="5">5%</option>
                       <option value="12">12%</option>

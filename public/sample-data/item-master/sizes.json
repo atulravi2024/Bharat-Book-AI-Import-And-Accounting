@@ -1,16 +1,80 @@
 [
   {
-    "id": "sizes-sample-1",
-    "name": "Sample Sizes 1",
-    "code": "SIZ-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "SZ-001",
+    "name": "13-inch",
+    "code": "13IN",
+    "sizeSystem": "Display Size"
+  },
+  {
+    "id": "SZ-002",
+    "name": "15-inch",
+    "code": "15IN",
+    "sizeSystem": "Display Size"
+  },
+  {
+    "id": "SZ-003",
+    "name": "16-inch",
+    "code": "16IN",
+    "sizeSystem": "Display Size"
+  },
+  {
+    "id": "SZ-004",
+    "name": "55-inch",
+    "code": "55IN",
+    "sizeSystem": "TV Size"
+  },
+  {
+    "id": "SZ-005",
+    "name": "65-inch",
+    "code": "65IN",
+    "sizeSystem": "TV Size"
+  },
+  {
+    "id": "SZ-006",
+    "name": "75-inch",
+    "code": "75IN",
+    "sizeSystem": "TV Size"
+  },
+  {
+    "id": "SZ-007",
+    "name": "40mm",
+    "code": "40MM",
+    "sizeSystem": "Watch Case"
+  },
+  {
+    "id": "SZ-008",
+    "name": "44mm",
+    "code": "44MM",
+    "sizeSystem": "Watch Case"
+  },
+  {
+    "id": "SZ-009",
+    "name": "41mm",
+    "code": "41MM",
+    "sizeSystem": "Watch Case"
+  },
+  {
+    "id": "SZ-010",
+    "name": "45mm",
+    "code": "45MM",
+    "sizeSystem": "Watch Case"
+  },
+  {
+    "id": "SZ-011",
+    "name": "Small",
+    "code": "SM",
+    "sizeSystem": "Apparel"
+  },
+  {
+    "id": "SZ-012",
+    "name": "Medium",
+    "code": "MD",
+    "sizeSystem": "Apparel"
+  },
+  {
+    "id": "SZ-013",
+    "name": "Large",
+    "code": "LG",
+    "sizeSystem": "Apparel"
   }
 ]

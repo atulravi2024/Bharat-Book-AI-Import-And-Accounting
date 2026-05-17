@@ -19,6 +19,7 @@ import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { Notification, NotificationType } from '../../../ui/Notification';
 
+
 // Safe JSON parse helper
 const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
   if (!jsonString) return defaultValue;
@@ -1141,8 +1142,7 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);  return () => window.removeEventListener('keydown', handleKeyDown);
   });
 
   const handleDuplicateEntry = () => {
@@ -1286,9 +1286,9 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
            </button>
         </div>
         {!collapsedSections.header && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 flex justify-between items-center">
+        <div className="form-grid gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="form-field-wrapper">
+<label className="form-label flex justify-between items-center">
               <span>Voucher Date</span>
             </label>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
@@ -1301,26 +1301,26 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
               </div>
             </div>
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Voucher Number</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Voucher Number</label>
             <input type="text" value={headerDetails.voucherNumber || ''} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Creation Stamp (System)</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Creation Stamp (System)</label>
             <input type="text" value={systemStamp || ''} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
           </div>
           {activeTab !== 'journal' && (
             <>
-              <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Account (Cash/Bank)</label>
+              <div className="form-field-wrapper">
+<label className="form-label">Account (Cash/Bank)</label>
                 <input list="ledger-list" value={headerDetails.cashBankAccount || ''} onChange={(e) => handleHeaderChange('cashBankAccount', e.target.value)} placeholder="Search Cash/Bank Account..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
-              <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Instrument No.</label>
+              <div className="form-field-wrapper">
+<label className="form-label">Instrument No.</label>
                 <input type="text" value={headerDetails.instrumentNo || ''} onChange={(e) => handleHeaderChange('instrumentNo', e.target.value)} placeholder="Cheque/UTR/Ref No." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
-              <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Instrument Date</label>
+              <div className="form-field-wrapper">
+<label className="form-label">Instrument Date</label>
                 <input type="date" value={headerDetails.instrumentDate || ''} onChange={(e) => handleHeaderChange('instrumentDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
             </>

@@ -1,16 +1,79 @@
 [
   {
-    "id": "hsn-sample-1",
-    "name": "Sample Hsn 1",
-    "code": "HSN-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "HSN-001",
+    "code": "85171300",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Smartphones for cellular networks"
+  },
+  {
+    "id": "HSN-002",
+    "code": "85287211",
+    "rate": 28,
+    "type": "Goods",
+    "description": "Television receivers, color"
+  },
+  {
+    "id": "HSN-003",
+    "code": "84713010",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Personal computers (laptops, notebooks)"
+  },
+  {
+    "id": "HSN-004",
+    "code": "85258020",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Digital cameras and video camera recorders"
+  },
+  {
+    "id": "HSN-005",
+    "code": "85183000",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Headphones and earphones"
+  },
+  {
+    "id": "HSN-006",
+    "code": "84716060",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Mouse and pointing devices"
+  },
+  {
+    "id": "HSN-007",
+    "code": "84716040",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Keyboards"
+  },
+  {
+    "id": "HSN-008",
+    "code": "85235100",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Solid-state non-volatile storage devices"
+  },
+  {
+    "id": "HSN-009",
+    "code": "85444299",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Other electric conductors, for a voltage <= 1000V"
+  },
+  {
+    "id": "HSN-010",
+    "code": "85044030",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Battery chargers"
+  },
+  {
+    "id": "HSN-011",
+    "code": "91021200",
+    "rate": 18,
+    "type": "Goods",
+    "description": "Wrist-watches, electrically operated (Smartwatches)"
   }
 ]

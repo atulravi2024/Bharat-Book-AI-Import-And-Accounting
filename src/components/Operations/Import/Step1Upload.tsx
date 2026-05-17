@@ -2,6 +2,7 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import { VoucherType, ParsingSettings } from '../../../types';
+
 import { 
     UploadFileIcon, 
     InfoIcon, 
@@ -321,7 +322,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
   const getFileIcon = (fileName: string) => {
     const ext = fileName.toLowerCase().split('.').pop();
-    if (ext === 'pdf') return <PdfIcon className="text-red-500" />;
+    if (ext === 'pdf')  return <PdfIcon className="text-red-500" />;
     if (['xlsx', 'xls', 'csv'].includes(ext || '')) return <ExcelIcon className="text-green-600" />;
     if (['jpg', 'jpeg', 'png', 'webp'].includes(ext || '')) return <ImageIcon className="text-blue-500" />;
     return <FileIcon className="text-gray-500 dark:text-gray-400" />;
@@ -372,7 +373,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
         </button>
       </div>
 
-      <div className="flex-1 min-h-0 flex flex-col md:grid md:grid-cols-3 gap-4 sm:gap-6 overflow-hidden pb-4 md:pb-0">
+      <div className="form-grid flex-1 min-h-0 flex flex-col md:grid gap-4 sm:gap-6 overflow-hidden pb-4 md:pb-0">
         <div className={`flex-1 md:col-span-2 bg-white dark:bg-gray-800 px-5 sm:px-10 py-6 sm:py-9 rounded-3xl sm:rounded-[2.5rem] border border-premium-slate-100 dark:border-gray-700 shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative group/main shrink-0 md:shrink ${activeMobileTab === 'upload' ? 'flex' : 'hidden md:flex'}`}>
 
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
@@ -394,15 +395,14 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
           <div className="flex items-center justify-between mb-10 shrink-0">
              <div>
-                <header className="mb-0 text-left">
-                  <h1 className="text-3xl font-black text-gray-900 tracking-tighter leading-none font-display dark:text-white">Data Entry Origin</h1>
-                  <p className="text-gray-500 mt-3 font-medium dark:text-gray-400">Classify documents and ingest records through our intelligent automation pipeline.</p>
-                </header>
+                <h2 className="text-3xl font-black text-gray-900 tracking-tighter leading-none font-display dark:text-white">Data Entry Origin</h2>
                 <div className="flex items-center mt-3 space-x-2">
                     <div className="flex -space-x-1">
                         {[1,2,3].map(i => <div key={i} className={`w-2 h-2 rounded-full border border-white ${i === 1 ? 'bg-blue-400' : 'bg-gray-200'} dark:bg-gray-700`}></div>)}
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-[0.15em] text-blue-600/80 bg-blue-50/50 px-2 py-0.5 rounded-full border border-blue-100/50">Pipeline Alpha</span>
+                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Classify document & ingest record</p>
                 </div>
              </div>
           </div>
@@ -412,7 +412,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                 <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40 dark:text-white">System Classification</label>
                 <div className="h-px flex-1 bg-gray-100 mx-6 dark:bg-gray-800"></div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+            <div className="form-grid gap-4">
               {[
                 { type: VoucherType.Purchase, icon: InventoryIcon, color: 'text-emerald-600 bg-emerald-50/50 border-emerald-100', accent: 'bg-emerald-600' },
                 { type: VoucherType.Sales, icon: TaxIcon, color: 'text-blue-600 bg-blue-50/50 border-blue-100', accent: 'bg-blue-600' },
@@ -420,7 +420,6 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                 { type: VoucherType.Receipt, icon: VouchersIcon, color: 'text-amber-600 bg-amber-50/50 border-amber-100', accent: 'bg-amber-600' },
                 { type: VoucherType.Journal, icon: CategoryIcon, color: 'text-slate-600 bg-slate-50/50 border-slate-100', accent: 'bg-slate-600' },
                 { type: VoucherType.Contra, icon: UndoIcon, color: 'text-rose-600 bg-rose-50/50 border-rose-100', accent: 'bg-rose-600' },
-                { type: VoucherType.BankStatement, icon: BankIcon, color: 'text-indigo-600 bg-indigo-50/50 border-indigo-100', accent: 'bg-indigo-600' },
               ].map((item) => (
                 <button
                   key={item.type}
@@ -451,8 +450,8 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Select Bank Source (Mandatory)</label>
+                <div className="form-field-wrapper">
+<label className="form-label px-1">Select Bank Source (Mandatory)</label>
                   <select 
                     value={selectedBank}
                     onChange={(e) => setSelectedBank(e.target.value)}
@@ -564,16 +563,16 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     </p>
                   </div>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="form-grid gap-4">
                     {Object.keys(mappings).map((targetField) => (
                       <div key={targetField}>
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 dark:text-gray-400">
+                        <label className="form-label tracking-wider dark:text-gray-400">
                           {targetField.replace(/([A-Z])/g, ' $1')}
                         </label>
                         <select 
                           value={mappings[targetField]}
                           onChange={(e) => setMappings(prev => ({ ...prev, [targetField]: e.target.value }))}
-                          className="w-full text-sm p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 bg-white dark:border-gray-600 dark:bg-gray-800"
+                          className="form-input text-sm border-gray-300 rounded focus:ring-1 dark:border-gray-600"
                         >
                           <option value="">-- Auto-detect --</option>
                           {(fileHeaders.length > 0 ? fileHeaders : []).map(col => (
@@ -675,7 +674,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                   <select 
                     value={parsingSettings.aiModel}
                     onChange={(e) => setParsingSettings(prev => ({ ...prev, aiModel: e.target.value as any }))}
-                    className="w-full text-sm font-bold p-3 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none shadow-sm dark:bg-gray-800"
+                    className="form-input text-sm font-bold border-blue-200 shadow-sm"
                   >
                     <option value="Gemini 1.5 Flash">Gemini 1.5 Flash (Default - Balanced)</option>
                     <option value="Gemini 1.5 Pro">Gemini 1.5 Pro (Deep Reasoning & Multi-page)</option>
@@ -714,7 +713,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     value={parsingSettings.customInstructions}
                     onChange={(e) => setParsingSettings(prev => ({ ...prev, customInstructions: e.target.value }))}
                     placeholder="e.g. 'Always look for GSTIN in the footer', 'Ignore previous balance in total'..."
-                    className="w-full h-24 text-sm font-medium p-4 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none placeholder-blue-300 shadow-inner dark:bg-gray-800"
+                    className="form-input h-24 text-sm font-medium p-4 border-blue-200 resize-none placeholder-blue-300 shadow-inner"
                   />
                   <p className="text-[10px] text-blue-600/70 mt-3 italic leading-relaxed">
                     <strong>Impact:</strong> These instructions are injected into the AI prompt. Use them to clarify ambiguous fields or handle specific accounting quirks of certain vendors.
@@ -736,7 +735,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     value={parsingSettings.customAiInstructions || ''}
                     onChange={(e) => setParsingSettings(prev => ({ ...prev, customAiInstructions: e.target.value }))}
                     placeholder="Input custom AI instructions for the parsing process..."
-                    className="w-full h-24 text-sm font-medium p-4 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none placeholder-blue-300 shadow-inner dark:bg-gray-800"
+                    className="form-input h-24 text-sm font-medium p-4 border-blue-200 resize-none placeholder-blue-300 shadow-inner"
                   />
                 </div>
               </div>

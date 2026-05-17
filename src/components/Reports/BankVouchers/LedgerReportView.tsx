@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
+import { Printer } from 'lucide-react';
 import { ParsedVoucher, VoucherType, AuditLog, PartyMaster, LedgerMaster, Confidence } from '../../../types';
 import { 
     VouchersIcon, 
@@ -23,6 +24,8 @@ import {
     PieChartIcon,
 } from '../../icons/IconComponents';
 
+import { ImportExportButtons } from '../../shared/ImportExportButtons';
+
 interface LedgerReportViewProps {
   vouchers: ParsedVoucher[];
   partyMasters: PartyMaster[];
@@ -37,6 +40,7 @@ interface LedgerReportViewProps {
   onNavigateToMasters: () => void;
   defaultTab?: string | null;
   onTabChange?: (tab: string | null) => void;
+  setVouchers?: (data: any[]) => void;
 }
 
 export const LedgerReportView: React.FC<LedgerReportViewProps> = ({ 
@@ -52,7 +56,8 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
     onImportVoucher,
     onNavigateToMasters,
     defaultTab,
-    onTabChange
+    onTabChange,
+    setVouchers
 }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState<string>((defaultTab as string) || 'standard');
@@ -244,11 +249,11 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
             discrepancies.push(`Critical low confidence score detected in core financial attributes.`);
         }
 
-        if (partyName && !partyMasters.find(m => m.name.toLowerCase() === partyName.toLowerCase())) {
+        if (partyName && !partyMasters.find(m => String(m.name || '').toLowerCase() === partyName.toLowerCase())) {
             discrepancies.push(`Undeclared Entity: "${partyName}" does not exist in any mapped master registers.`);
         }
 
-        if (ledgerName && !ledgerMasters.find(m => m.name.toLowerCase() === ledgerName.toLowerCase())) {
+        if (ledgerName && !ledgerMasters.find(m => String(m.name || '').toLowerCase() === ledgerName.toLowerCase())) {
             discrepancies.push(`Orphaned Ledger: Account code "${ledgerName}" is missing from the global chart of accounts.`);
         }
 
@@ -284,27 +289,15 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
         { id: 'audit_trail', label: 'Audit Trail' }
     ];
 
-    return (
-        <div className="max-w-7xl mx-auto p-4 animate-in fade-in duration-500">
-            <header className="mb-10">
-                <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Unified Ledger</h1>
-                <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Manage all your financial transactions, audit logs, and compliance registers.</p>
-            </header>
-            <div className="flex flex-col md:flex-row md:items-center justify-end mb-8 gap-4">
-                <div className="flex flex-wrap gap-3">
-                    <button
-                        onClick={() => onImportVoucher(VoucherType.Purchase)}
-                        className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-all shadow-md active:scale-95"
-                    >
-                        <VouchersIcon className="mr-2" /> Import Transactions
-                    </button>
-                    <button onClick={handleExportFilteredCSV} className="flex items-center px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-600 transition-all">
-                        <DownloadIcon className="mr-2 text-gray-400 dark:text-gray-500" /> Export
-                    </button>
-                </div>
-            </div>
+    const completeSave = (data: any[]) => {
+        if (!setVouchers) return;
+        const bankVouchers = vouchers.filter(v => v.type === VoucherType.BankStatement || v.origin === 'bank');
+        setVouchers([...bankVouchers, ...data]);
+    };
 
-            <div className="mb-6 border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
+    return (
+        <div className="max-w-7xl mx-auto p-4 animate-in fade-in duration-500 print-area">
+            <div className="mb-6 border-b border-gray-200 dark:border-gray-700 overflow-x-auto no-print">
                 <nav className="-mb-px flex space-x-6 min-w-max" aria-label="Tabs">
                     {tabs.map(tab => (
                         <button
@@ -326,7 +319,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative dark:bg-gray-800 dark:border-gray-700">
                 {selectedIds.length > 0 && (
-                    <div className="absolute top-0 inset-x-0 bg-blue-600 text-white p-3 z-30 flex items-center justify-between animate-in slide-in-from-top duration-300">
+                    <div className="absolute top-0 inset-x-0 bg-blue-600 text-white p-3 z-30 flex items-center justify-between animate-in slide-in-from-top duration-300 no-print">
                         <div className="flex items-center text-sm font-bold">
                             <span className="bg-blue-800 px-2 py-1 rounded mr-3">{selectedIds.length}</span>
                         </div>
@@ -339,16 +332,23 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                         </div>
                     </div>
                 )}
-                <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4 dark:border-gray-800">
-                    <div className="relative flex-1 max-w-md">
-                        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                        <input 
-                            type="text"
-                            placeholder="Search by Party or Import ID..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all text-sm dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                        />
+                <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4 dark:border-gray-800 no-print">
+                    <div className="flex flex-1 items-center gap-4">
+                        <div className="relative max-w-md w-full">
+                            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <input 
+                                type="text"
+                                placeholder="Search by Party or Import ID..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="form-input pl-10 pr-4 text-sm dark:focus:bg-gray-700"
+                            />
+                        </div>
+                        <ImportExportButtons data={filteredVouchers} onSave={completeSave} entityName="Vouchers" />
+                        <button onClick={(e) => { e.currentTarget.blur(); setTimeout(() => window.print(), 100); }} className="bg-white text-gray-700 border border-gray-200 px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-sm whitespace-nowrap hover:bg-gray-50 active:scale-95 transition-all dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 hover:dark:bg-gray-700">
+                            <Printer className="text-[18px] leading-none lg:mr-2" />
+                            <span className="hidden lg:inline-block">Print</span>
+                        </button>
                     </div>
                     <div className="flex items-center space-x-2">
                         <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Total: {filteredVouchers.length} Entries</span>
@@ -362,7 +362,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                 <th className="px-6 py-4 text-left">
                                     <input 
                                         type="checkbox" 
-                                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4 dark:border-gray-600"
+                                        className="form-input rounded border-gray-300 text-blue-600 h-4 w-4 dark:border-gray-600"
                                         checked={selectedIds.length === filteredVouchers.length && filteredVouchers.length > 0}
                                         onChange={toggleSelectAll}
                                     />
@@ -388,7 +388,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                 <div className="flex items-center space-x-3">
                                                     <input 
                                                         type="checkbox" 
-                                                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4 dark:border-gray-600"
+                                                        className="form-input rounded border-gray-300 text-blue-600 h-4 w-4 dark:border-gray-600"
                                                         checked={selectedIds.includes(voucher.id)}
                                                         onChange={() => toggleSelect(voucher.id)}
                                                     />
@@ -429,7 +429,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                         {String(voucher.partyName?.value || voucher.narration?.value || voucher.fromAccount?.value || 'N/A')}
                                                         <ConfidenceIndicator confidence={voucher.partyName?.confidence || voucher.fromAccount?.confidence} />
                                                     </div>
-                                                    {voucher.partyName && !partyMasters.find(m => m.name.toLowerCase() === String(voucher.partyName?.value).toLowerCase()) && (
+                                                    {voucher.partyName && !partyMasters.find(m => String(m.name || '').toLowerCase() === String(voucher.partyName?.value).toLowerCase()) && (
                                                         <button onClick={onNavigateToMasters} className="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded flex items-center hover:bg-amber-100 transition-colors" title="Party not linked to a master record">
                                                             <WarningIcon className="text-[10px] mr-1" /> Unlinked
                                                         </button>
@@ -440,7 +440,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                         {String(voucher.ledger?.value || voucher.debitLedger?.value || voucher.toAccount?.value || '-')}
                                                         <ConfidenceIndicator confidence={voucher.ledger?.confidence || voucher.debitLedger?.confidence || voucher.toAccount?.confidence} />
                                                     </div>
-                                                    {voucher.ledger && !ledgerMasters.find(m => m.name.toLowerCase() === String(voucher.ledger?.value).toLowerCase()) && (
+                                                    {voucher.ledger && !ledgerMasters.find(m => String(m.name || '').toLowerCase() === String(voucher.ledger?.value).toLowerCase()) && (
                                                         <button onClick={onNavigateToMasters} className="text-[9px] font-bold text-amber-600 hover:text-amber-800 transition-colors" title="Ledger not linked to a master record. Click to manage.">
                                                             (Create in Masters)
                                                         </button>
@@ -516,7 +516,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                                     {getAiInsights(voucher).summary}
                                                                 </p>
                                                             </div>
-                                                            <div className="grid grid-cols-3 gap-3">
+                                                            <div className="form-grid gap-3">
                                                                 {Object.entries(getAiInsights(voucher).keyExtraction || {}).map(([k, val]) => (
                                                                     <div key={k} className="bg-white p-2 rounded-lg border border-blue-50 dark:bg-gray-800">
                                                                         <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">{k}</p>

@@ -33,7 +33,7 @@ export const VoucherKeyboardShortcutsModal: React.FC<VoucherKeyboardShortcutsMod
             </button>
             {showHelpGeneral && (
               <div className="p-3 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                <div className="grid grid-cols-2 gap-2 text-gray-600 dark:text-gray-300">
+                <div className="form-grid gap-2 text-gray-600 dark:text-gray-300">
                   <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Next Field</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Tab</kbd></div>
                   <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Previous Field</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Shift+Tab</kbd></div>
                   <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Select / Submit</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Enter</kbd></div>
@@ -55,7 +55,7 @@ export const VoucherKeyboardShortcutsModal: React.FC<VoucherKeyboardShortcutsMod
             </button>
             {showHelpDocShortcuts && (
               <div className="p-3 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                <div className="grid grid-cols-2 gap-2 text-gray-600 dark:text-gray-300">
+                <div className="form-grid gap-2 text-gray-600 dark:text-gray-300">
                   <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Save Entry</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Ctrl+S</kbd></div>
                   <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Save & New</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Ctrl+Shift+S</kbd></div>
                   <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>New Entry</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Ctrl+N</kbd></div>
@@ -78,7 +78,7 @@ export const VoucherKeyboardShortcutsModal: React.FC<VoucherKeyboardShortcutsMod
             </button>
             {showHelpToolShortcuts && (
               <div className="p-3 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                <div className="grid grid-cols-2 gap-2 text-gray-600 dark:text-gray-300">
+                <div className="form-grid gap-2 text-gray-600 dark:text-gray-300">
                   <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Calculator</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Alt+C</kbd></div>
                   <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Scan Barcode</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Alt+S</kbd></div>
                   <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Attach Files</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Alt+A</kbd></div>
@@ -98,7 +98,7 @@ export const VoucherKeyboardShortcutsModal: React.FC<VoucherKeyboardShortcutsMod
               {showSectionShortcuts ? <ChevronUp size={16} className="text-gray-500 dark:text-gray-400"/> : <ChevronDown size={16} className="text-gray-500 dark:text-gray-400"/>}
             </button>
             {showSectionShortcuts && (
-              <div className="p-3 bg-white grid grid-cols-1 md:grid-cols-2 gap-2 text-gray-600 border-t border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700">
+              <div className="form-grid p-3 bg-white gap-2 text-gray-600 border-t border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700">
                 <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Toggle Bottom Nav & Save</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Alt+0</kbd></div>
                 <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Toggle Bottom Tools</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Alt+1</kbd></div>
                 <div className="flex justify-between border-b border-gray-100 pb-1 dark:border-gray-800"><span>Toggle Bottom Export</span> <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono dark:bg-gray-800">Alt+2</kbd></div>

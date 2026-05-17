@@ -1,5 +1,6 @@
 import React from 'react';
 import { ParsedVoucher, VoucherType, Confidence } from '../../../types';
+
 import { 
     MoreHorizIcon, 
     EditIcon, 
@@ -27,7 +28,7 @@ interface BankStatementTableProps {
 
 const ConfidenceIndicator = ({ confidence }: { confidence?: Confidence }) => {
     if (!confidence) return null;
-    if (confidence === Confidence.High) return <div title="High Confidence" className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block ml-1 opacity-80" />;
+    if (confidence === Confidence.High)  return <div title="High Confidence" className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block ml-1 opacity-80" />;
     if (confidence === Confidence.Medium) return <div title="Medium Confidence" className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block ml-1 opacity-80" />;
     if (confidence === Confidence.Low) return <div title="Low Confidence" className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block ml-1 opacity-80" />;
     return null;
@@ -199,14 +200,14 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                                 {expandedId === v.id && (
                                     <tr className="bg-indigo-50/10 border-b border-indigo-100">
                                         <td colSpan={9} className="px-8 py-6">
-                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                            <div className="form-grid gap-6">
                                                 <div className="space-y-4">
-                                                    <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Narration</label>
+                                                    <div className="form-field-wrapper">
+<label className="form-label">Narration</label>
                                                         <p className="text-sm text-gray-800 bg-white p-3 rounded-lg border border-gray-200 dark:text-gray-100 dark:bg-gray-800 dark:border-gray-700">{v.narration?.value || 'N/A'}</p>
                                                     </div>
-                                                    <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">AI Discrepancies</label>
+                                                    <div className="form-field-wrapper">
+<label className="form-label">AI Discrepancies</label>
                                                         {v.aiSummary?.discrepancies && v.aiSummary.discrepancies.length > 0 ? (
                                                             <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 space-y-2">
                                                                 {v.aiSummary.discrepancies.map((d, i) => (
@@ -225,26 +226,26 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                                                     </div>
                                                 </div>
                                                 <div className="space-y-4">
-                                                    <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Transaction Type</label>
+                                                    <div className="form-field-wrapper">
+<label className="form-label">Transaction Type</label>
                                                         <p className="text-sm font-bold text-gray-800 dark:text-gray-100">{v.type}</p>
                                                     </div>
-                                                    <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Extracted Party</label>
+                                                    <div className="form-field-wrapper">
+<label className="form-label">Extracted Party</label>
                                                         <p className="text-sm font-bold text-indigo-700">{v.partyName?.value || 'Unidentified'}</p>
                                                     </div>
-                                                    <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Extracted Ledger</label>
+                                                    <div className="form-field-wrapper">
+<label className="form-label">Extracted Ledger</label>
                                                         <p className="text-sm font-bold text-indigo-700">{v.ledger?.value || 'Unidentified'}</p>
                                                     </div>
                                                 </div>
                                                 <div className="space-y-4">
-                                                    <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">REF / Invoice Number</label>
+                                                    <div className="form-field-wrapper">
+<label className="form-label">REF / Invoice Number</label>
                                                         <p className="text-sm font-mono text-gray-700 bg-gray-100 p-2 rounded inline-block dark:text-gray-200 dark:bg-gray-800">{v.referenceNo?.value || 'N/A'}</p>
                                                     </div>
-                                                    <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Client-Side Validation</label>
+                                                    <div className="form-field-wrapper">
+<label className="form-label">Client-Side Validation</label>
                                                         <div className="space-y-2">
                                                             <div className={`flex text-xs items-center ${String(v.date?.value).match(/^\d{4}-\d{2}-\d{2}$/)? 'text-green-600' : 'text-red-500 font-bold'}`}>
                                                                 {String(v.date?.value).match(/^\d{4}-\d{2}-\d{2}$/) ? <CheckCircleIcon className="w-3" /> : <WarningIcon className="w-3" />}

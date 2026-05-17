@@ -47,7 +47,7 @@ export const SystemDataSection: React.FC<Props> = ({
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         
                         {/* Action Logic Audit */}
                         <div className="space-y-2 flex items-center pt-8">
@@ -61,7 +61,7 @@ export const SystemDataSection: React.FC<Props> = ({
                                 enableAuditLog: e.target.checked,
                               })
                             }
-                            className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                            className="form-input w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label
                             htmlFor="enableAuditLog"
@@ -83,7 +83,7 @@ export const SystemDataSection: React.FC<Props> = ({
                                 enforceFormatValidation: e.target.checked,
                               })
                             }
-                            className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                            className="form-input w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label
                             htmlFor="enforceFormatValidation"
@@ -94,7 +94,7 @@ export const SystemDataSection: React.FC<Props> = ({
                         </div>
       
                         {/* 3D Backup Reset Tooling */}
-                        <div className="space-y-2 md:col-span-2 pt-4 border-t border-gray-100 dark:border-gray-700 border-dashed">
+                        <div className="form-field-wrapper space-y-2 md:col-span-2 pt-4 border-t border-gray-100 dark:border-gray-700 border-dashed">
                            <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">
                              3D Backup / Reset Tooling
                            </h4>
@@ -127,7 +127,7 @@ export const SystemDataSection: React.FC<Props> = ({
                         </div>
       
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Data Retention Period
                           </label>
                           <select
@@ -158,7 +158,7 @@ export const SystemDataSection: React.FC<Props> = ({
                                 autoBackup: e.target.checked,
                               })
                             }
-                            className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                            className="form-input w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label
                             htmlFor="autoBackup"
@@ -170,7 +170,7 @@ export const SystemDataSection: React.FC<Props> = ({
       
                         {firmData.autoBackup && (
                           <div className="space-y-2">
-                            <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                            <label className="form-label">
                               Auto Backup Frequency
                             </label>
                             <select

@@ -45,7 +45,7 @@ export const GSTR3BReport: React.FC<GSTR3BReportProps> = ({ useSampleData, onTog
                     <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
                 </div>
             ) : data ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="form-grid gap-6">
                     <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-800">
                         <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 dark:text-gray-100">Outward Supplies</h3>
                         <div className="space-y-3">
@@ -86,9 +86,9 @@ export const GSTR3BReport: React.FC<GSTR3BReportProps> = ({ useSampleData, onTog
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm md:col-span-2 dark:bg-gray-800 dark:border-gray-800">
+                    <div className="form-field-wrapper bg-white p-6 rounded-xl border border-gray-100 shadow-sm md:col-span-2 dark:bg-gray-800 dark:border-gray-800">
                         <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 dark:text-gray-100">Payment of Tax</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="form-grid gap-4">
                             <div className="bg-emerald-50 p-4 rounded-lg flex justify-between items-center border border-emerald-100">
                                 <span className="text-sm font-bold text-emerald-800">Paid through ITC</span>
                                 <span className="text-lg font-black text-emerald-600">₹{data.payment_of_tax?.paid_through_itc?.toLocaleString('en-IN')}</span>

@@ -3,6 +3,7 @@ import { SettingsIcon, CheckCircleIcon } from '../icons/IconComponents';
 import { ChevronDown, ChevronUp, Save, Upload, Download, RotateCcw } from 'lucide-react';
 import { defaultVoucherSettings } from '../../services/voucherNumbering';
 
+
 export const VoucherNumberingSettings: React.FC = () => {
     const defaultSettings = defaultVoucherSettings;
 
@@ -131,9 +132,7 @@ export const VoucherNumberingSettings: React.FC = () => {
                 { id: 'rejections_out', label: 'Rejections Out' },
             ]
         }
-    ];
-
-    return (
+    ];  return (
         <div className="bg-white rounded-3xl pb-6 shadow-xl shadow-gray-200/40 border border-gray-100 flex flex-col h-full overflow-hidden dark:bg-gray-800 dark:border-gray-800">
             <div className="flex justify-between items-start mb-8 p-6 md:p-8 pb-0">
                 <div>
@@ -168,10 +167,10 @@ export const VoucherNumberingSettings: React.FC = () => {
                                             </div>
                                             <div className="flex items-center">
                                                 <label className="flex items-center space-x-2 cursor-pointer z-10" onClick={(e) => e.stopPropagation()}>
-                                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider mr-2 dark:text-gray-400">Auto Generate</span>
+                                                    <span className="form-label tracking-wider mr-2 dark:text-gray-400">Auto Generate</span>
                                                     <input 
                                                         type="checkbox" 
-                                                        className="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
+                                                        className="form-input form-checkbox h-5 w-5 text-blue-600 rounded"
                                                         checked={currentSettings.autoGenerate}
                                                         onChange={(e) => handleSettingChange(type.id, 'autoGenerate', e.target.checked)}
                                                     />
@@ -184,56 +183,56 @@ export const VoucherNumberingSettings: React.FC = () => {
                                                 <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
                                                     {currentSettings.autoGenerate ? (
                                                         <>
-                                                            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                                                                <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Prefix</label>
+                                                            <div className="form-grid gap-4">
+                                                                <div className="form-field-wrapper">
+<label className="form-label">Prefix</label>
                                                                     <input 
                                                                         type="text" 
                                                                         value={currentSettings.prefix || ''}
                                                                         onChange={(e) => handleSettingChange(type.id, 'prefix', e.target.value)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
+                                                                        className="form-input text-sm font-semibold"
                                                                         placeholder="e.g. SAL/"
                                                                     />
                                                                 </div>
-                                                                <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Starting No.</label>
+                                                                <div className="form-field-wrapper">
+<label className="form-label">Starting No.</label>
                                                                     <input 
                                                                         type="number" 
                                                                         value={currentSettings.startAt || 1}
                                                                         onChange={(e) => handleSettingChange(type.id, 'startAt', parseInt(e.target.value) || 1)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
+                                                                        className="form-input text-sm font-semibold"
                                                                         placeholder="1"
                                                                         min="1"
                                                                     />
                                                                 </div>
-                                                                <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Zero Padding</label>
+                                                                <div className="form-field-wrapper">
+<label className="form-label">Zero Padding</label>
                                                                     <input 
                                                                         type="number" 
                                                                         value={currentSettings.padding !== undefined ? currentSettings.padding : 3}
                                                                         onChange={(e) => handleSettingChange(type.id, 'padding', parseInt(e.target.value) || 0)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
+                                                                        className="form-input text-sm font-semibold"
                                                                         placeholder="3"
                                                                         min="0"
                                                                         max="10"
                                                                     />
                                                                 </div>
-                                                                <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Suffix</label>
+                                                                <div className="form-field-wrapper">
+<label className="form-label">Suffix</label>
                                                                     <input 
                                                                         type="text" 
                                                                         value={currentSettings.suffix || ''}
                                                                         onChange={(e) => handleSettingChange(type.id, 'suffix', e.target.value)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
+                                                                        className="form-input text-sm font-semibold"
                                                                         placeholder="e.g. /23-24"
                                                                     />
                                                                 </div>
-                                                                <div>
-                                                                    <label className="block text-xs font-bold text-gray-500 mb-1 dark:text-gray-400">Restart</label>
+                                                                <div className="form-field-wrapper">
+<label className="form-label">Restart</label>
                                                                     <select 
                                                                         value={currentSettings.resetPattern || 'yearly'}
                                                                         onChange={(e) => handleSettingChange(type.id, 'resetPattern', e.target.value)}
-                                                                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-gray-800 dark:border-gray-700"
+                                                                        className="form-input text-sm font-semibold"
                                                                     >
                                                                         {resetPatterns.map(pattern => (
                                                                             <option key={pattern.id} value={pattern.id}>{pattern.label}</option>
@@ -270,7 +269,7 @@ export const VoucherNumberingSettings: React.FC = () => {
             </div>
 
             <div className="p-6 mt-auto border-t border-gray-100 dark:border-gray-800 flex justify-end">
-                <div className="grid grid-cols-4 gap-2 md:gap-4 w-full md:w-auto">
+                <div className="form-grid gap-2 md:gap-4 w-full md:w-auto">
                     <label 
                         className="flex items-center justify-center gap-2 px-2 md:px-5 py-3 md:py-2.5 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold transition-all active:scale-95 shadow-sm cursor-pointer hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700" 
                         title="Import Settings"

@@ -40,9 +40,9 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
-                        <div className="space-y-2 md:col-span-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+                        <div className="form-field-wrapper space-y-2 md:col-span-2">
+                          <label className="form-label">
                             Registered Address
                           </label>
                           <textarea
@@ -56,7 +56,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             State / Province
                           </label>
                           <select
@@ -82,7 +82,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             District
                           </label>
                           {STATE_DATA[firmData.state]?.districts.length > 0 ? (
@@ -110,7 +110,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           )}
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             City
                           </label>
                           <input
@@ -124,7 +124,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             State / UT Code (e.g., 27 for MH)
                           </label>
                           <input
@@ -138,7 +138,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Pincode / ZIP Code
                           </label>
                           <input
@@ -152,7 +152,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Country
                           </label>
                           <input

@@ -22,7 +22,7 @@ interface GSTR1ReportProps {
 export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
   return (
     <div className="space-y-6 animate-in zoom-in-95 duration-300">
-      <div className="grid grid-cols-1 gap-6">
+      <div className="form-grid gap-6">
         {['B2B', 'B2B Credit Note', 'B2B Debit Note', 'B2C Small', 'B2C Large', 'Export', 'Exempt'].map((groupType) => {
           const groupInvoicesUntyped = summary.groupedInvoices[groupType];
           if (!groupInvoicesUntyped || groupInvoicesUntyped.length === 0) return null;
@@ -175,14 +175,14 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                         </div>
                       </div>
                       
-                      <div className="bg-gray-50 p-3 rounded-lg grid grid-cols-1 gap-3 text-sm dark:bg-gray-900">
+                      <div className="form-grid bg-gray-50 p-3 rounded-lg gap-3 text-sm dark:bg-gray-900">
                         <div className="flex flex-col">
                           <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">Taxable Value</span>
                           <span className="font-medium">₹{taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         </div>
                       </div>
 
-                      <div className="border border-gray-100 p-3 rounded-lg grid grid-cols-2 gap-3 text-sm dark:border-gray-800">
+                      <div className="form-grid border border-gray-100 p-3 rounded-lg gap-3 text-sm dark:border-gray-800">
                         <div className="flex flex-col">
                           <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">CGST</span>
                           <span className="font-medium text-gray-700 dark:text-gray-200">₹{cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
@@ -295,14 +295,14 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                       </div>
                     </div>
                     
-                    <div className="bg-gray-50 p-3 rounded-lg grid grid-cols-1 gap-3 text-xs dark:bg-gray-900">
+                    <div className="form-grid bg-gray-50 p-3 rounded-lg gap-3 text-xs dark:bg-gray-900">
                       <div className="flex flex-col">
                         <span className="text-gray-500 font-bold uppercase dark:text-gray-400">Taxable Value</span>
                         <span className="font-medium text-gray-900 dark:text-white">₹{hsn.taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 px-1">
+                    <div className="form-grid gap-2 px-1">
                       <div className="flex flex-col">
                         <span className="text-[9px] text-gray-400 font-bold uppercase">CGST</span>
                         <span className="text-[10px] font-medium">₹{hsn.cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>

@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
+import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon } from '../../../icons/IconComponents';
+
 
 interface BrandsTabProps {
     data: any[];
@@ -13,8 +15,7 @@ export const BrandsTab: React.FC<BrandsTabProps> = ({ data, onSave }) => {
     const [formData, setFormData] = useState<any>({});
     const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; id: string; name: string } | null>(null);
 
-    const filteredData = useMemo(() => {
-        return (data || []).filter((m: any) => 
+    const filteredData = useMemo(() => {  return (data || []).filter((m: any) => 
             String(m.name || m.code || m.id || '').toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [data, searchTerm]);
@@ -41,11 +42,14 @@ export const BrandsTab: React.FC<BrandsTabProps> = ({ data, onSave }) => {
             <div className="p-4 bg-gray-50/30 border-b border-gray-100 flex justify-between items-center dark:bg-gray-800/30 dark:border-gray-800">
                 <div className="relative max-w-md w-full mr-4">
                     <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="text" placeholder="Search Brands..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="text" placeholder="Search Brands..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="form-input pl-10 pr-4 text-sm" />
                 </div>
-                <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
-                    <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Add Brand
+                <div className="flex items-center">
+                    <ImportExportButtons data={data} onSave={onSave} entityName="BrandsTab" />
+                    <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">Add Brand
                 </span></button>
+                </div>
             </div>
 
             <div className="flex-1 overflow-auto custom-scrollbar min-h-0">
@@ -55,6 +59,7 @@ export const BrandsTab: React.FC<BrandsTabProps> = ({ data, onSave }) => {
                             <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Name / Code</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Brand Info</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Status</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -82,6 +87,13 @@ export const BrandsTab: React.FC<BrandsTabProps> = ({ data, onSave }) => {
             {m.website && <div className="text-[10px] mt-0.5 text-blue-500"><a href={m.website} target="_blank" rel="noreferrer" className="hover:underline">{m.website}</a></div>}
         </td>
     
+                                    <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+            {m.status === 'Active' || !m.status ? (
+                <span className="px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-bold text-[10px] uppercase">Active</span>
+            ) : (
+                <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-bold text-[10px] uppercase">Inactive</span>
+            )}
+        </td>
                                     <td className="p-4">
                                         <div className="flex items-center justify-center space-x-2">
                                             <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"><EditIcon className="w-4 h-4" /></button>
@@ -115,24 +127,31 @@ export const BrandsTab: React.FC<BrandsTabProps> = ({ data, onSave }) => {
                         </div>
                         
                         <div className="overflow-y-auto flex-1 p-6 space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name / Code *</label>
-                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Enter name or code..." autoFocus />
-                                </div>
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Description / Notes</label>
-                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Add any extra details..." />
+                            <div className="form-grid gap-4">
+                                <div className="form-field-wrapper col-span-1">
+<label className="form-label">Code *</label>
+<input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input bg-transparent font-mono" placeholder="Enter code..." autoFocus />
+</div>
+<div className="form-field-wrapper col-span-1">
+<label className="form-label">Name *</label>
+<input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input" placeholder="Enter name..." />
+</div>
+                                <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                    <label className="form-label">Description / Notes</label>
+                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="form-input" placeholder="Add any extra details..." />
                                 </div>
                                 
-        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Origin / Country</label><input type="text" value={formData.origin || ''} onChange={e => setFormData({...formData, origin: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="Origin..." /></div>
-        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Manufacturer</label><input type="text" value={formData.manufacturer || ''} onChange={e => setFormData({...formData, manufacturer: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="Manufacturer..." /></div>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Origin / Country</label><input type="text" value={formData.origin || ''} onChange={e => setFormData({...formData, origin: e.target.value})} className="form-input bg-transparent" placeholder="Origin..." /></div>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Manufacturer</label><input type="text" value={formData.manufacturer || ''} onChange={e => setFormData({...formData, manufacturer: e.target.value})} className="form-input bg-transparent" placeholder="Manufacturer..." /></div>
         
-        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Website</label><input type="url" value={formData.website || ''} onChange={e => setFormData({...formData, website: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="Website URL..." /></div>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Website</label><input type="url" value={formData.website || ''} onChange={e => setFormData({...formData, website: e.target.value})} className="form-input bg-transparent" placeholder="Website URL..." /></div>
         
-        <div>
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Tier / Positioning</label>
-            <select value={formData.tier || ''} onChange={e => setFormData({...formData, tier: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Tier / Positioning</label>
+            <select value={formData.tier || ''} onChange={e => setFormData({...formData, tier: e.target.value})} className="form-input bg-white dark:bg-gray-800">
                 <option value="">Select Tier...</option>
                 <option value="Premium">Premium / Luxury</option>
                 <option value="Economy">Economy / Standard</option>
@@ -140,9 +159,9 @@ export const BrandsTab: React.FC<BrandsTabProps> = ({ data, onSave }) => {
             </select>
         </div>
 
-        <div className="col-span-1 md:col-span-2">
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Brand Logo URL</label>
-            <input type="text" value={formData.logoUrl || ''} onChange={e => setFormData({...formData, logoUrl: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="https://..." />
+        <div className="form-field-wrapper col-span-1 md:col-span-2">
+            <label className="form-label dark:text-gray-400">Brand Logo URL</label>
+            <input type="text" value={formData.logoUrl || ''} onChange={e => setFormData({...formData, logoUrl: e.target.value})} className="form-input bg-transparent" placeholder="https://..." />
             {formData.logoUrl && (
                 <div className="mt-2 p-2 bg-gray-50 border border-gray-200 rounded-lg inline-block dark:bg-gray-900 border-gray-700">
                     <img src={formData.logoUrl} alt="Logo Preview" className="h-10 object-contain" onError={(e) => (e.currentTarget.style.display = 'none')} />
@@ -150,9 +169,9 @@ export const BrandsTab: React.FC<BrandsTabProps> = ({ data, onSave }) => {
             )}
         </div>
         
-        <div>
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Status</label>
-            <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Status</label>
+            <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value})} className="form-input bg-white dark:bg-gray-800">
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
             </select>

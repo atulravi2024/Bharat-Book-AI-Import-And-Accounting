@@ -131,20 +131,23 @@ export const AppNavigationSettings: React.FC = () => {
     ],
     "item-master": [
       { id: "items", label: "Items" },
-      { id: "warehouse", label: "Warehouses" },
+      { id: "bom", label: "Bill of Materials" },
+      { id: "warehouses", label: "Warehouses" },
       { id: "uoms", label: "UOMs" },
-      { id: "stockGroup", label: "Stock Groups" },
+      { id: "stockGroups", label: "Stock Groups" },
       { id: "gst", label: "HSN" },
       { id: "brands", label: "Brands" },
       { id: "categories", label: "Categories" },
-      { id: "color", label: "Colors" },
-      { id: "size", label: "Sizes" },
-      { id: "variant", label: "Variants" },
-      { id: "dimension", label: "Dimensions" },
-      { id: "sku", label: "SKUs" },
+      { id: "assertionCategories", label: "Assertion Categories" },
+      { id: "assertionCodes", label: "Assertion Codes" },
+      { id: "colors", label: "Colors" },
+      { id: "sizes", label: "Sizes" },
+      { id: "variants", label: "Variants" },
+      { id: "dimensions", label: "Dimensions" },
+      { id: "skus", label: "SKUs" },
       { id: "priceList", label: "Price List" },
-      { id: "weight", label: "Weights" },
-      { id: "volume", label: "Volumes" },
+      { id: "weights", label: "Weights" },
+      { id: "volumes", label: "Volumes" },
       { id: "grades", label: "Grades" },
     ],
     bank: [
@@ -326,7 +329,7 @@ export const AppNavigationSettings: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+        <div className="form-grid gap-12 relative z-10">
           {/* Default Page Dropdown */}
           <div className="flex flex-col gap-4">
             <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 flex items-center gap-2 dark:text-gray-400">
@@ -416,7 +419,7 @@ export const AppNavigationSettings: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+        <div className="form-grid gap-6 relative z-10">
           {pages.map((page) => (
             <div
               key={page.id}

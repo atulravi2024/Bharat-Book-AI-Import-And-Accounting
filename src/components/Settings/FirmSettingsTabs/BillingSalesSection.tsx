@@ -40,9 +40,9 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Invoice Prefix
                           </label>
                           <input
@@ -59,7 +59,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Quotation Prefix
                           </label>
                           <input
@@ -76,7 +76,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Default Payment Terms
                           </label>
                           <select
@@ -98,7 +98,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Late Payment Penalty Rate
                           </label>
                           <input
@@ -114,7 +114,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
-                        <div className="space-y-2 md:col-span-2 flex items-center">
+                        <div className="form-field-wrapper space-y-2 md:col-span-2 flex items-center">
                           <input
                             type="checkbox"
                             id="taxInclusivePricing"
@@ -125,7 +125,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                                 taxInclusivePricing: e.target.checked,
                               })
                             }
-                            className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                            className="form-input w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label
                             htmlFor="taxInclusivePricing"
@@ -134,8 +134,8 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             Prices are Tax Inclusive by default
                           </label>
                         </div>
-                        <div className="space-y-2 md:col-span-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                        <div className="form-field-wrapper space-y-2 md:col-span-2">
+                          <label className="form-label">
                             Default Terms and Conditions
                           </label>
                           <textarea

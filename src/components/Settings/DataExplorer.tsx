@@ -86,7 +86,7 @@ export const DataExplorer: React.FC = () => {
             '/sample-data/ledger-master/banks.json',
             '/sample-data/ledger-master/costCenters.json',
             '/sample-data/ledger-master/contacts.json',
-            '/sample-data/ledger-master/accountGroups.json',
+            '/sample-data/ledger-master/acc_groups.json',
             '/sample-data/ledger-master/vendors.json'
         ],
         'Master Item': [
@@ -438,7 +438,7 @@ export const DataExplorer: React.FC = () => {
                             placeholder="Search database..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder:text-gray-400 font-medium dark:bg-gray-900 dark:border-gray-700"
+                            className="form-input rounded-2xl px-5 text-sm placeholder:text-gray-400 font-medium"
                         />
                     </div>
 
@@ -452,7 +452,7 @@ export const DataExplorer: React.FC = () => {
                             <select
                                 value={filterType}
                                 onChange={(e) => setFilterType(e.target.value as any)}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-[11px] font-black text-gray-600 appearance-none cursor-pointer focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase tracking-wider pr-8 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                className="form-input rounded-2xl text-[11px] font-black text-gray-600 appearance-none cursor-pointer uppercase tracking-wider pr-8 dark:text-gray-300"
                             >
                                 <option value="all">All Items</option>
                                 <option value="file">Server Files</option>
@@ -478,7 +478,7 @@ export const DataExplorer: React.FC = () => {
                             <select
                                 value={fileTypeFilter}
                                 onChange={(e) => setFileTypeFilter(e.target.value)}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-[11px] font-black text-gray-600 appearance-none cursor-pointer focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase tracking-wider pr-8 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                className="form-input rounded-2xl text-[11px] font-black text-gray-600 appearance-none cursor-pointer uppercase tracking-wider pr-8 dark:text-gray-300"
                             >
                                 <option value="All">All Types</option>
                                 <option value="JSON">JSON</option>

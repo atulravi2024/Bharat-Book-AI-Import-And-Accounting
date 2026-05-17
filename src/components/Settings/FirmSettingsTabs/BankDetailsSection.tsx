@@ -40,9 +40,9 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2 relative">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Bank Name
                           </label>
                           <SearchableDropdown
@@ -71,7 +71,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Account Number
                           </label>
                           <input
@@ -88,7 +88,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             IFSC Code
                           </label>
                           <input
@@ -102,7 +102,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             SWIFT Code
                           </label>
                           <input
@@ -116,7 +116,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             MICR Code
                           </label>
                           <input
@@ -130,7 +130,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Account Type
                           </label>
                           <select
@@ -147,7 +147,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Branch Name
                           </label>
                           <input
@@ -161,7 +161,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             UPI / VPA ID
                           </label>
                           <input

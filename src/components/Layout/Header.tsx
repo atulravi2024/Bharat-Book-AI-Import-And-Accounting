@@ -10,12 +10,11 @@ import {
 import { useTheme } from './ThemeContext';
 
 interface HeaderProps {
-  workspaceName: string;
   pageTitle: string;
   onMenuClick?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ workspaceName, pageTitle, onMenuClick }) => {
+export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
   const { theme, toggleTheme } = useTheme();
 
   const handleToggle = () => {
@@ -40,15 +39,7 @@ export const Header: React.FC<HeaderProps> = ({ workspaceName, pageTitle, onMenu
                 </svg>
               </button>
             )}
-            <div className="flex flex-col">
-              <div className="flex items-center mb-1.5 h-4">
-                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400 leading-none opacity-80 flex items-center">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2 animate-pulse" />
-                  {workspaceName}
-                </span>
-              </div>
-              <h1 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none truncate max-w-[200px] sm:max-w-xs capitalize">{pageTitle}</h1>
-            </div>
+            <h1 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none truncate max-w-[150px] sm:max-w-xs capitalize">{pageTitle}</h1>
           </div>
           
           <div className="hidden lg:flex flex-1 justify-center px-10">

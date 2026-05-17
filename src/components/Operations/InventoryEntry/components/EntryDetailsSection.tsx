@@ -1,6 +1,7 @@
 import React from 'react';
 import { Settings2, X, Info, Paperclip, Trash2, ChevronUp, HelpCircle } from 'lucide-react';
 
+
 interface EntryDetailsSectionProps {
   headerDetails: any;
   handleHeaderChange: (field: string, value: any) => void;
@@ -38,7 +39,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
         </div>
         <div>
           <h4 className="text-sm font-black text-emerald-900 uppercase tracking-wider mb-2">Inventory Bill Requirements</h4>
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
+          <ul className="form-grid gap-x-6 gap-y-2">
             {[
               'Unique sequential Entry Number',
               'Valid Location identification',
@@ -65,9 +66,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
         </button>
       </div>
     </div>
-  );
-
-  return (
+  );  return (
     <>
       {showRequirements && <WebBillRequirements />}
       {formError && (
@@ -112,9 +111,9 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
            </div>
         </div>
         {!collapsedSections.header && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 flex justify-between items-center">
+        <div className="form-grid gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="form-field-wrapper">
+<label className="form-label flex justify-between items-center">
               <span>Entry Date & Weekday</span>
             </label>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
@@ -129,19 +128,19 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
               </div>
             </div>
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Entry Number</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Entry Number</label>
             <input type="text" value={headerDetails.entryNumber || ''} onChange={(e) => handleHeaderChange('entryNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">REF / Invoice Number</label>
+          <div className="form-field-wrapper">
+<label className="form-label">REF / Invoice Number</label>
             <input type="text" value={headerDetails.referenceNo || ''} onChange={(e) => handleHeaderChange('referenceNo', e.target.value)} placeholder="Optional reference..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
-          <div>
-            <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Creation Stamp (System)</label>
+          <div className="form-field-wrapper">
+<label className="form-label">Creation Stamp (System)</label>
             <input type="text" value={systemStamp || ''} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
           </div>
-          <div className="sm:col-span-2 lg:col-span-4 hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all dark:hover:bg-gray-700">
+          <div className="form-field-wrapper sm:col-span-2 lg:col-span-4 hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all dark:hover:bg-gray-700">
             <label htmlFor="inventory-file-upload" className="flex items-center px-4 py-2 border border-dashed border-gray-300 rounded-lg text-xs font-bold text-gray-500 hover:bg-white hover:text-emerald-600 hover:border-emerald-300 transition-all cursor-pointer shadow-sm dark:border-gray-600 dark:text-gray-400">
               <Paperclip size={14} className="mr-2" /> Attach Document
             </label>

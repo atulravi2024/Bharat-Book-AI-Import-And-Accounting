@@ -16,7 +16,7 @@ interface ProfitAndLossProps {
 export const ProfitAndLoss: React.FC<ProfitAndLossProps> = ({ summary }) => {
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-in slide-in-from-bottom-2 duration-300">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-b pb-8">
+      <div className="form-grid gap-8 border-b pb-8">
         <div className="space-y-4">
           <h4 className="text-xs font-bold text-blue-600 uppercase tracking-widest">Revenue</h4>
           <div className="flex justify-between items-center py-2">
@@ -47,7 +47,7 @@ export const ProfitAndLoss: React.FC<ProfitAndLossProps> = ({ summary }) => {
       </div>
 
       <div className="space-y-4">
-        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest dark:text-gray-400">Operating Expenses</h4>
+        <h4 className="form-label tracking-widest dark:text-gray-400">Operating Expenses</h4>
         <div className="flex justify-between items-center py-2">
           <span className="text-sm text-gray-600 dark:text-gray-300">Administrative Expenses (Payments)</span>
           <span className="text-sm font-bold text-gray-900 dark:text-white">₹{summary.operatingExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>

@@ -155,7 +155,7 @@ export const MappingListSection: React.FC<MappingListSectionProps> = ({
                                             />
                                         </div>
                                         <div className="flex flex-col gap-1 w-full sm:w-[15%] items-end sm:items-center">
-                                            <label className="flex items-center text-[10px] font-bold text-gray-500 cursor-pointer dark:text-gray-400">
+                                            <label className="form-label flex items-center cursor-pointer">
                                                 <input 
                                                     type="checkbox" 
                                                     className="mr-1 accent-indigo-600" 

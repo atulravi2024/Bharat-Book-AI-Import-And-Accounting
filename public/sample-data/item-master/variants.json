@@ -1,16 +1,68 @@
 [
   {
-    "id": "variants-sample-1",
-    "name": "Sample Variants 1",
-    "code": "VAR-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "VAR-001",
+    "name": "Base Model (8GB/256GB)",
+    "code": "V-BASE",
+    "priceModifier": 0
+  },
+  {
+    "id": "VAR-002",
+    "name": "Upgraded RAM (16GB/256GB)",
+    "code": "V-RAM+",
+    "priceModifier": 20000
+  },
+  {
+    "id": "VAR-003",
+    "name": "Upgraded Storage (8GB/512GB)",
+    "code": "V-STO+",
+    "priceModifier": 20000
+  },
+  {
+    "id": "VAR-004",
+    "name": "Max Model (16GB/1TB)",
+    "code": "V-MAX",
+    "priceModifier": 60000
+  },
+  {
+    "id": "VAR-005",
+    "name": "Wi-Fi Only",
+    "code": "V-WIFI",
+    "priceModifier": 0
+  },
+  {
+    "id": "VAR-006",
+    "name": "Wi-Fi + Cellular (5G)",
+    "code": "V-CELL",
+    "priceModifier": 15000
+  },
+  {
+    "id": "VAR-007",
+    "name": "Standard Edition",
+    "code": "V-STD",
+    "priceModifier": 0
+  },
+  {
+    "id": "VAR-008",
+    "name": "Pro Edition",
+    "code": "V-PRO",
+    "priceModifier": 10000
+  },
+  {
+    "id": "VAR-009",
+    "name": "128GB Storage",
+    "code": "V-128",
+    "priceModifier": 0
+  },
+  {
+    "id": "VAR-010",
+    "name": "256GB Storage",
+    "code": "V-256",
+    "priceModifier": 10000
+  },
+  {
+    "id": "VAR-011",
+    "name": "512GB Storage",
+    "code": "V-512",
+    "priceModifier": 30000
   }
 ]

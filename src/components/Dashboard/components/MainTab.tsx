@@ -83,7 +83,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                             </RechartsPieChart>
                         </SafeResponsiveContainer>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 mt-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
                         {stats.typeDistribution.map((item: any, i: number) => (
                             <div key={i} className="flex items-center text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase">
                                 <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: activeColors[i % activeColors.length] }}></div>
@@ -94,7 +94,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">Operative Pulse</h3>

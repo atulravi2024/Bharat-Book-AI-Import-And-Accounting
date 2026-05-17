@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, Component } from 'react';
+import { RefreshCw } from 'lucide-react';
 import { Layout } from './components/Layout/Layout';
 import { ThemeProvider } from './components/Layout/ThemeContext';
 import { Step1Upload } from './components/Operations/Import/Step1Upload';
@@ -20,7 +21,6 @@ import { GSTReportView } from './components/Reports/GSTReport/GSTReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
 import { parseVoucherFile } from './services/aiService';
 import { InfoIcon, UndoIcon, ErrorIcon } from './components/icons/IconComponents';
-import navMeta from './sample-data/navigation_meta.json';
 
 const DRAFT_KEY = 'bharat_book_voucher_draft';
 const PARTY_MASTERS_KEY = 'bharat_book_party_masters';
@@ -77,18 +77,6 @@ const App: React.FC = () => {
 };
 
 const AppContent: React.FC = () => {
-  const [workspaceName, setWorkspaceName] = useState("Bharat Book Enterprise");
-  
-  useEffect(() => {
-    const savedSettings = localStorage.getItem('bharat_book_app_settings');
-    if (savedSettings) {
-      try {
-        const parsed = JSON.parse(savedSettings);
-        if (parsed.workspaceName) setWorkspaceName(parsed.workspaceName);
-      } catch (e) {}
-    }
-  }, []);
-
   const [view, setView] = useState<MainView>(() => {
     const saved = localStorage.getItem('bharat_book_navigation_defaults');
     if (saved) {
@@ -134,8 +122,11 @@ const AppContent: React.FC = () => {
   const [voucherEntryActiveTab, setVoucherEntryActiveTab] = useState<string | null>(() => getSubPageForView('voucher-entry'));
   const [inventoryEntryActiveTab, setInventoryEntryActiveTab] = useState<string | null>(() => getSubPageForView('inventory-entry'));
   const [settingsActiveTab, setSettingsActiveTab] = useState<string | null>(() => getSubPageForView('settings'));
-  const [activeSamples, setActiveSamples] = useStorageState<string[]>('bharat_book_active_samples_v7', [
-    'ledgers', 'items', 'bom', 'warehouses', 'parties', 
+  const [activeSamples, setActiveSamples] = useStorageState<string[]>('bharat_book_active_samples_v12', [
+    'uoms', 'gst', 'brands', 'categories', 'warehouses', 'skus', 'priceList', 
+    'weights', 'volumes', 'colors', 'sizes', 'variants', 'dimensions', 'stockGroups', 
+    'grades', 'assertionCategories', 'assertionCodes', 
+    'ledgers', 'items', 'bom', 'parties', 'vendors', 'accountGroups', 'banks', 'costCenters', 'contacts',
     'balance_sheet', 'profit_loss', 'cash_flow', 'bank_flow', 'trial_balance', 
     'sales_register', 'purchase_register', 'financial_vouchers', 'gstr1',
     'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
@@ -159,6 +150,7 @@ const AppContent: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasDraft, setHasDraft] = useState(false);
+  const [syncProgress, setSyncProgress] = useState<{current: number, total: number, label: string} | null>(null);
   
   const [partyMasters, setPartyMasters] = useStorageState<any[]>(PARTY_MASTERS_KEY, []);
   const [ledgerMasters, setLedgerMasters] = useStorageState<any[]>(LEDGER_MASTERS_KEY, []);
@@ -228,12 +220,12 @@ const AppContent: React.FC = () => {
     purgeLegacy();
 
     const reloadSamples = async () => {
-        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v8');
+        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v13');
         if (!hasLoaded) {
             for (const id of activeSamples) {
                 await toggleSampleDataSet(id, true);
             }
-            localStorage.setItem('bharat_book_samples_hydrated_v8', 'true');
+            localStorage.setItem('bharat_book_samples_hydrated_v13', 'true');
         }
     };
     reloadSamples();
@@ -533,7 +525,7 @@ const AppContent: React.FC = () => {
   };
 
   const handleAddPartyMaster = (name: string) => {
-    if (!partyMasters.some((m: any) => m.name.toLowerCase() === name.toLowerCase())) {
+    if (!partyMasters.some((m: any) => String(m.name || '').toLowerCase() === name.toLowerCase())) {
         const newParty: any = {
             id: `p-${Date.now()}`,
             name,
@@ -544,7 +536,7 @@ const AppContent: React.FC = () => {
   };
 
   const handleAddLedgerMaster = (name: string) => {
-    if (!ledgerMasters.some((m: any) => m.name.toLowerCase() === name.toLowerCase())) {
+    if (!ledgerMasters.some((m: any) => String(m.name || '').toLowerCase() === name.toLowerCase())) {
         const newLedger: any = {
             id: `l-${Date.now()}`,
             name,
@@ -555,7 +547,7 @@ const AppContent: React.FC = () => {
   };
 
   const handleAddUomMaster = (name: string) => {
-    if (!uomMasters.some((m: any) => m.name.toLowerCase() === name.toLowerCase() || m.symbol.toLowerCase() === name.toLowerCase())) {
+    if (!uomMasters.some((m: any) => String(m.name || '').toLowerCase() === name.toLowerCase() || String(m.symbol || '').toLowerCase() === name.toLowerCase())) {
         const newUom: any = {
             id: `u-${Date.now()}`,
             name,
@@ -566,7 +558,7 @@ const AppContent: React.FC = () => {
   };
 
   const handleAddItemMaster = (name: string) => {
-    if (!itemMasters.some((m: any) => m.name.toLowerCase() === name.toLowerCase())) {
+    if (!itemMasters.some((m: any) => String(m.name || '').toLowerCase() === name.toLowerCase())) {
         const newItem: any = {
             id: `i-${Date.now()}`,
             name,
@@ -611,40 +603,60 @@ const AppContent: React.FC = () => {
       // Small delay to let initial localStorage settle
       await new Promise(r => setTimeout(r, 500));
       if (!active) return;
-
-      for (const id of activeSamples) {
+      
+      const missingSamples = activeSamples.filter(id => {
         let hasData = false;
-        if (['parties', 'vendors'].includes(id)) hasData = partyMasters.some((m: any) => m.sampleSetId === id);
-        else if (['ledgers', 'banks'].includes(id)) hasData = ledgerMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'items') hasData = itemMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'uoms') hasData = uomMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'bom') hasData = bomMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'warehouses') hasData = locationMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'gst') hasData = gstMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'brands') hasData = brandMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'categories') hasData = categoryMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'skus') hasData = skuMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'priceList') hasData = priceListMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'weights') hasData = weightMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'volumes') hasData = volumeMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'colors') hasData = colorMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'sizes') hasData = sizeMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'variants') hasData = variantMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'dimensions') hasData = dimensionMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'stockGroups') hasData = stockGroupMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'grades') hasData = gradeMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'assertionCategories') hasData = assertionCategoryMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'assertionCodes') hasData = assertionCodeMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'accountGroups') hasData = accountGroupMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'costCenters') hasData = costCenterMasters.some((m: any) => m.sampleSetId === id);
-        else if (id === 'contacts') hasData = contactMasters.some((m: any) => m.sampleSetId === id);
-        else hasData = allVouchers.some((v: any) => v.sampleSetId === id);
+        if (['parties', 'vendors'].includes(id)) hasData = (Array.isArray(partyMasters) ? partyMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (['ledgers', 'banks'].includes(id)) hasData = (Array.isArray(ledgerMasters) ? ledgerMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'items') hasData = (Array.isArray(itemMasters) ? itemMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'uoms') hasData = (Array.isArray(uomMasters) ? uomMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'bom') hasData = (Array.isArray(bomMasters) ? bomMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (['warehouses', 'locations'].includes(id)) hasData = (Array.isArray(locationMasters) ? locationMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'gst') hasData = (Array.isArray(gstMasters) ? gstMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'brands') hasData = (Array.isArray(brandMasters) ? brandMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'categories') hasData = (Array.isArray(categoryMasters) ? categoryMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'skus') hasData = (Array.isArray(skuMasters) ? skuMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'priceList') hasData = (Array.isArray(priceListMasters) ? priceListMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'weights') hasData = (Array.isArray(weightMasters) ? weightMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'volumes') hasData = (Array.isArray(volumeMasters) ? volumeMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'colors') hasData = (Array.isArray(colorMasters) ? colorMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'sizes') hasData = (Array.isArray(sizeMasters) ? sizeMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'variants') hasData = (Array.isArray(variantMasters) ? variantMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'dimensions') hasData = (Array.isArray(dimensionMasters) ? dimensionMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'stockGroups') hasData = (Array.isArray(stockGroupMasters) ? stockGroupMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'grades') hasData = (Array.isArray(gradeMasters) ? gradeMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'assertionCategories') hasData = (Array.isArray(assertionCategoryMasters) ? assertionCategoryMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'assertionCodes') hasData = (Array.isArray(assertionCodeMasters) ? assertionCodeMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'accountGroups') hasData = (Array.isArray(accountGroupMasters) ? accountGroupMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'costCenters') hasData = (Array.isArray(costCenterMasters) ? costCenterMasters : []).some((m: any) => m.sampleSetId === id);
+        else if (id === 'contacts') hasData = (Array.isArray(contactMasters) ? contactMasters : []).some((m: any) => m.sampleSetId === id);
+        else hasData = (Array.isArray(allVouchers) ? allVouchers : []).some((v: any) => v.sampleSetId === id);
+        return !hasData;
+      });
 
-        if (!hasData) {
+      if (missingSamples.length > 0) {
+        setSyncProgress({ current: 0, total: missingSamples.length, label: 'Loading Demo Mode Data...' });
+        let current = 0;
+        for (const id of missingSamples) {
           try {
-            await toggleSampleDataSet(id, true);
-          } catch(e) {}
+            // Apply a 5 second timeout to prevent indefinite hanging in case of network issues
+            const fetchPromise = toggleSampleDataSet(id, true);
+            const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000));
+            await Promise.race([fetchPromise, timeoutPromise]);
+          } catch(e) {
+             console.error('Failed to load missing sample (timeout or error):', id);
+          }
+          if (!active) {
+            // Still clear UI if component unmounted or effect reran during await
+            setSyncProgress(null);
+            break;
+          }
+          current++;
+          setSyncProgress({ current, total: missingSamples.length, label: 'Loading Demo Mode Data...' });
         }
+        setTimeout(() => {
+          if (active) setSyncProgress(null);
+        }, 1200);
       }
     };
     fetchMissingSamples();
@@ -672,7 +684,8 @@ const AppContent: React.FC = () => {
             case 'gst': setGstMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'brands': setBrandMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'categories': setCategoryMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
-            case 'warehouses': setLocationMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
+            case 'warehouses':
+            case 'locations': setLocationMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'skus': setSkuMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'priceList': setPriceListMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'weights': setWeightMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
@@ -697,13 +710,23 @@ const AppContent: React.FC = () => {
             default: setAllVouchers(prev => prev.filter(m => m.sampleSetId !== id)); break;
         }
     } else {
+        let navMeta: any = { reportIds: [], entryIds: [], itemMasterKeys: [] };
+        try {
+            const navMetaResponse = await fetch('/sample-data/navigation_meta.json');
+            if (navMetaResponse.ok) {
+                navMeta = await navMetaResponse.json();
+            }
+        } catch (e) {
+            console.warn("Failed to load navigation_meta.json", e);
+        }
+
         const reportIds = navMeta?.reportIds || [];
         const entryIds = navMeta?.entryIds || [];
         const itemMasterKeys = navMeta?.itemMasterKeys || [];
 
         let isReport = reportIds.includes(id);
         const isEntry = entryIds.includes(id);
-        const isItemMaster = itemMasterKeys.includes(id);
+        const isItemMaster = itemMasterKeys.includes(id) || id === 'gst';
 
         if (id.endsWith('_register') || (id.endsWith('_vouchers') && id !== 'demo_vouchers') || id === 'audit_trail' || id === 'day_book' || id === 'reconcile') {
              isReport = true;
@@ -725,6 +748,7 @@ const AppContent: React.FC = () => {
         if (id === 'gstr3b') filename = 'g3b_data';
         if (id === 'gstr9') filename = 'g9_data';
         if (id === 'gstr9c') filename = 'g9c_data';
+        if (id === 'accountGroups') filename = 'acc_groups';
         if (id === 'ledgers') filename = 'ldg_masters';
         
         try {
@@ -742,8 +766,9 @@ const AppContent: React.FC = () => {
             const sampleData = data.map((m: any) => ({ ...m, isSample: true, sampleSetId: id }));
             
             const merge = (prev: any[]) => {
+                const safePrev = Array.isArray(prev) ? prev : [];
                 const map = new Map();
-                prev.filter((m: any) => m.sampleSetId !== id).forEach(m => {
+                safePrev.filter((m: any) => m.sampleSetId !== id).forEach(m => {
                     if (m && m.id) map.set(m.id, m);
                 });
                 sampleData.forEach((m: any) => {
@@ -757,7 +782,8 @@ const AppContent: React.FC = () => {
                 case 'gst': setGstMasters(merge); break;
                 case 'brands': setBrandMasters(merge); break;
                 case 'categories': setCategoryMasters(merge); break;
-                case 'warehouses': setLocationMasters(merge); break;
+                case 'warehouses':
+                case 'locations': setLocationMasters(merge); break;
                 case 'skus': setSkuMasters(merge); break;
                 case 'priceList': setPriceListMasters(merge); break;
                 case 'weights': setWeightMasters(merge); break;
@@ -879,6 +905,7 @@ const AppContent: React.FC = () => {
                 onView={handleViewVoucher}
                 onImportVoucher={handleImportVoucher}
                 onNavigateToMasters={() => setView('ledger-master')}
+                setVouchers={wrapStorage(ALL_VOUCHERS_KEY, setAllVouchers)}
             />
         );
     }
@@ -901,6 +928,7 @@ const AppContent: React.FC = () => {
                 onCreateLedgerMaster={handleAddLedgerMaster}
                 defaultTab={bankActiveTab}
                 onTabChange={setBankActiveTab}
+                setVouchers={wrapStorage(ALL_VOUCHERS_KEY, setAllVouchers)}
             />
         );
     }
@@ -1021,6 +1049,17 @@ const AppContent: React.FC = () => {
 
     const handleAppModeChange = (mode: string) => {
         if (mode === 'working') {
+            setSyncProgress({ current: 0, total: 24, label: 'Switching to Live Mode... Cleaning up demo data' });
+            let c = 0;
+            const interval = setInterval(() => {
+                c += 4;
+                setSyncProgress({ current: Math.min(c, 24), total: 24, label: 'Switching to Live Mode... Cleaning up demo data' });
+                if (c >= 24) {
+                    clearInterval(interval);
+                    setTimeout(() => setSyncProgress(null), 800);
+                }
+            }, 100);
+
             setActiveSamples([]);
             const clearSamples = (prev: any[]) => prev.filter(m => !m.sampleSetId && !m.isSample);
             setUomMasters(clearSamples);
@@ -1048,10 +1087,13 @@ const AppContent: React.FC = () => {
             setCostCenterMasters(clearSamples);
             setContactMasters(clearSamples);
             setAllVouchers(clearSamples);
-            localStorage.removeItem('bharat_book_samples_hydrated_v8');
+            localStorage.removeItem('bharat_book_samples_hydrated_v13');
         } else if (mode === 'demo') {
             const defaultSamples = [
-                'ledgers', 'items', 'bom', 'warehouses', 'parties', 
+                'uoms', 'gst', 'brands', 'categories', 'warehouses', 'skus', 'priceList', 
+                'weights', 'volumes', 'colors', 'sizes', 'variants', 'dimensions', 'stockGroups', 
+                'grades', 'assertionCategories', 'assertionCodes', 
+                'ledgers', 'items', 'bom', 'parties', 'vendors', 'accountGroups', 'banks', 'costCenters', 'contacts',
                 'balance_sheet', 'profit_loss', 'cash_flow', 'bank_flow', 'trial_balance', 
                 'sales_register', 'purchase_register', 'financial_vouchers', 'gstr1',
                 'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
@@ -1228,8 +1270,31 @@ const AppContent: React.FC = () => {
 
   return (
     <ThemeProvider>
+      {syncProgress && (
+        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 w-full max-w-sm shadow-2xl border border-gray-100 dark:border-gray-700 flex flex-col items-center text-center">
+            <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 dark:border-blue-800">
+              <RefreshCw className="w-8 h-8 text-blue-600 dark:text-blue-400 animate-spin" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{syncProgress.label}</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-8">Please wait while the system synchronizes data.</p>
+            
+            <div className="w-full relative">
+              <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3 mb-2 overflow-hidden shadow-inner flex">
+                <div 
+                  className="bg-blue-500 h-3 rounded-full transition-all duration-300 ease-out flex-shrink-0" 
+                  style={{ width: `${Math.min(100, Math.max(0, (syncProgress.current / syncProgress.total) * 100))}%` }}
+                ></div>
+              </div>
+              <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-gray-400 px-1">
+                <span>{Math.round((syncProgress.current / syncProgress.total) * 100)}%</span>
+                <span>{syncProgress.current} / {syncProgress.total}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <Layout
-        workspaceName={workspaceName}
         pageTitle={view === 'import' ? "Import" : view.charAt(0).toUpperCase() + view.slice(1)}
         activeView={view}
         onViewChange={handleViewChange}

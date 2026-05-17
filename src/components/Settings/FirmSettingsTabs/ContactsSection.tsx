@@ -40,9 +40,9 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Primary Contact Name
                           </label>
                           <input
@@ -59,7 +59,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Contact Designation
                           </label>
                           <input
@@ -76,7 +76,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Primary Email
                           </label>
                           <input
@@ -90,7 +90,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Phone Number
                           </label>
                           <input
@@ -104,7 +104,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             WhatsApp Business Number
                           </label>
                           <input
@@ -118,7 +118,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Support Email
                           </label>
                           <input
@@ -135,7 +135,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Support Phone Number
                           </label>
                           <input
@@ -152,7 +152,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Website
                           </label>
                           <input

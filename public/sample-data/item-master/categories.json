@@ -1,16 +1,62 @@
 [
   {
-    "id": "categories-sample-1",
-    "name": "Sample Categories 1",
-    "code": "CAT-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "CAT-001",
+    "name": "Smartphones",
+    "description": "Mobile phones with advanced computing capabilities",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-002",
+    "name": "Televisions",
+    "description": "LCD, LED, OLED, and QLED displays",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-003",
+    "name": "Laptops",
+    "description": "Portable personal computers",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-004",
+    "name": "Cameras",
+    "description": "Mirrorless, DSLR, and action cameras",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-005",
+    "name": "Audio",
+    "description": "Headphones, earbuds, and speakers",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-006",
+    "name": "Peripherals",
+    "description": "Mice, keyboards, webcams",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-007",
+    "name": "Storage",
+    "description": "Internal and external drives, memory cards",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-008",
+    "name": "Smartwatches",
+    "description": "Wearable computing devices",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-009",
+    "name": "Monitors",
+    "description": "Computer display screens",
+    "status": "Active"
+  },
+  {
+    "id": "CAT-010",
+    "name": "Networking",
+    "description": "Wi-Fi routers, mesh systems, switches",
+    "status": "Active"
   }
 ]

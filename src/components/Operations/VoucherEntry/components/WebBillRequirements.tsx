@@ -13,7 +13,7 @@ export const WebBillRequirements: React.FC<WebBillRequirementsProps> = ({ onClos
       </div>
       <div>
         <h4 className="text-sm font-black text-blue-900 uppercase tracking-wider mb-2">Essential Web Bill Requirements</h4>
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
+        <ul className="form-grid gap-x-6 gap-y-2">
           {[
             'Unique sequential Invoice Number',
             'Valid GSTIN/Tax Identification',

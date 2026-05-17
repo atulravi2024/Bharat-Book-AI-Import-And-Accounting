@@ -7,7 +7,7 @@ import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, L
 export const PaymentTab = ({ stats, isDemo }: any) => {
     return (
         <motion.div key="payment" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <KPIComponent label="Total Payments" val={`₹${stats.vol.payment.toLocaleString()}`} sub={`${stats.counts.payment} Payouts`} icon={CreditCard} color="text-rose-600" bg="bg-rose-50" isDemo={isDemo} />
                 <KPIComponent label="Liabilities Met" val="94%" sub="Completion rate" icon={Target} color="text-emerald-600" bg="bg-emerald-50" isDemo={isDemo} />
                 <KPIComponent label="Frequency" val="Regular" sub="Weekly settlement" icon={Activity} color="text-blue-600" bg="bg-blue-50" isDemo={isDemo} />

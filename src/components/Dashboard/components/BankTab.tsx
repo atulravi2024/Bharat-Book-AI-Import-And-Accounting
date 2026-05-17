@@ -7,12 +7,12 @@ import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tool
 export const BankTab = ({ stats, isDemo }: any) => {
     return (
         <motion.div key="bank" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <KPIComponent label="Total Deposits" val={`₹${stats.vol.deposits.toLocaleString()}`} sub="Direct inflows" icon={TrendingUp} color="text-emerald-600" bg="bg-emerald-50" isDemo={isDemo} />
                 <KPIComponent label="Total Withdrawals" val={`₹${stats.vol.withdrawals.toLocaleString()}`} sub="Operational outflows" icon={TrendingDown} color="text-rose-600" bg="bg-rose-50" isDemo={isDemo} />
                 <KPIComponent label="Bank Activity" val={stats.counts.bank} sub="Statement entries" icon={Activity} color="text-blue-600" bg="bg-blue-50" isDemo={isDemo} />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="md:col-span-2 bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 flex flex-col h-[450px] relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                     <div className="flex justify-between items-center mb-8 relative z-10">
                         <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest dark:text-white">Cash Position Delta</h3>

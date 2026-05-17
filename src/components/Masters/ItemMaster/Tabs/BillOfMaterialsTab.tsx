@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon, InfoIcon } from '../../../icons/IconComponents';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -19,7 +20,7 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
     const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
 
     const filteredData = (data || []).filter(m => 
-        m.name.toLowerCase().includes(searchTerm.toLowerCase())
+        String(m.name || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const resetForm = () => {
@@ -44,12 +45,13 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
         const newBom: BomMaster = {
             id: editingId || `bom-${Date.now()}`,
             name: formData.name,
+            code: formData.code,
             itemId: formData.itemId,
             quantityProduced: formData.quantityProduced || 1,
             components: formData.components || [],
             routing: formData.routing || [],
             description: formData.description || '',
-            isActive: formData.isActive ?? true,
+            status: formData.status || 'Active',
             revision: formData.revision || '1.0',
             type: formData.type || 'Manufacturing',
             validFrom: formData.validFrom,
@@ -191,11 +193,14 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
             <div className="p-4 bg-gray-50/30 border-b border-gray-100 flex justify-between items-center dark:bg-gray-800/30 dark:border-gray-800">
                 <div className="relative max-w-md w-full mr-4">
                     <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="text" placeholder="Search BOMs..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" />
+                    <input type="text" placeholder="Search BOMs..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="form-input pl-10 pr-4 text-sm" />
                 </div>
-                <button onClick={() => { setEditingId(null); setFormData({name: '', isActive: true, components: []}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
-                    <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Create BOM
+                <div className="flex items-center">
+                    <ImportExportButtons data={data} onSave={onSave} entityName="BillOfMaterialsTab" />
+                    <button onClick={() => { setEditingId(null); setFormData({name: '', isActive: true, components: []}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">Create BOM
                 </span></button>
+                </div>
             </div>
 
             <div className="flex-1 overflow-auto custom-scrollbar min-h-0">
@@ -222,8 +227,8 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                                     <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.quantityProduced} units</td>
                                     <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200"><span className="bg-gray-100 inline-block px-2 py-1 rounded font-mono text-[10px] font-bold dark:bg-gray-900">{m.components?.length || 0}</span></td>
                                     <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.routing && m.routing.length > 0 ? <span className="bg-purple-50 text-purple-700 inline-block px-2 py-1 rounded font-mono text-[10px] font-bold dark:bg-purple-900/30 dark:text-purple-400">{m.routing.length}</span> : null}</td>
-                                    <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
-                                        {m.isActive ? 
+                                                                <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+                                        {m.status === 'Active' ? 
                                             <span className="px-2 py-1 bg-green-50 text-green-700 rounded text-[10px] font-bold ring-1 ring-green-100 uppercase">Active</span> :
                                             <span className="px-2 py-1 bg-gray-50 text-gray-500 rounded text-[10px] font-bold ring-1 ring-gray-200 uppercase">Inactive</span>
                                         }
@@ -296,61 +301,63 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                                             transition={{ duration: 0.3, ease: 'easeInOut' }}
                                         >
                                             <div className="p-4 sm:p-6 pt-0 space-y-6 border-t border-gray-100 dark:border-gray-800">
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-4">
-                                                    <div className="space-y-1.5 md:col-span-2">
-                                                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">BOM Name *</label>
-                                                        <input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-2.5 sm:p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:text-white transition-all font-medium text-sm" placeholder="e.g. Standard PC Build" />
+                                                <div className="form-grid gap-4 sm:gap-6 pt-4">
+                                                    <div className="space-y-1.5">
+                                                        <label className="form-label ml-1">BOM Code</label>
+                                                        <input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input p-2.5 sm:p-3 font-mono text-sm" placeholder="e.g. BOM-001" />
+                                                    </div>
+                                                    <div className="form-field-wrapper space-y-1.5 md:col-span-2">
+                                                        <label className="form-label ml-1">BOM Name *</label>
+                                                        <input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input p-2.5 sm:p-3 font-medium text-sm" placeholder="e.g. Standard PC Build" />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Revision / Version</label>
-                                                        <input type="text" value={formData.revision || ''} onChange={e => setFormData({...formData, revision: e.target.value})} className="w-full p-2.5 sm:p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:text-white transition-all font-mono text-sm" placeholder="e.g. v1.2" />
+                                                        <label className="form-label ml-1">Revision / Version</label>
+                                                        <input type="text" value={formData.revision || ''} onChange={e => setFormData({...formData, revision: e.target.value})} className="form-input p-2.5 sm:p-3 font-mono text-sm" placeholder="e.g. v1.2" />
                                                     </div>
 
                                                     <div className="space-y-1.5">
                                                         <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">BOM Type</label>
-                                                        <select value={formData.type || 'Manufacturing'} onChange={e => setFormData({...formData, type: e.target.value as any})} className="w-full p-2.5 sm:p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:text-white transition-all font-medium text-sm">
+                                                        <select value={formData.type || 'Manufacturing'} onChange={e => setFormData({...formData, type: e.target.value as any})} className="form-input p-2.5 sm:p-3 font-medium text-sm">
                                                             <option value="Manufacturing">Manufacturing</option>
                                                             <option value="Engineering">Engineering</option>
                                                         </select>
                                                     </div>
                                                     <div className="space-y-1.5">
                                                         <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Finished Good *</label>
-                                                        <select value={formData.itemId || ''} onChange={e => setFormData({...formData, itemId: e.target.value})} className="w-full p-2.5 sm:p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:text-white transition-all font-medium text-sm">
+                                                        <select value={formData.itemId || ''} onChange={e => setFormData({...formData, itemId: e.target.value})} className="form-input p-2.5 sm:p-3 font-medium text-sm">
                                                             <option value="">Select Item...</option>
                                                             {itemMasters.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
                                                         </select>
                                                     </div>
                                                     <div className="space-y-1.5">
                                                         <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Batch Qty</label>
-                                                        <input type="number" value={formData.quantityProduced || 1} onChange={e => setFormData({...formData, quantityProduced: parseFloat(e.target.value) || 1})} className="w-full p-2.5 sm:p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:text-white transition-all font-mono text-sm" min={1} />
+                                                        <input type="number" value={formData.quantityProduced || 1} onChange={e => setFormData({...formData, quantityProduced: parseFloat(e.target.value) || 1})} className="form-input p-2.5 sm:p-3 font-mono text-sm" min={1} />
                                                     </div>
 
                                                     <div className="space-y-1.5">
                                                         <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Valid From</label>
-                                                        <input type="date" value={formData.validFrom || ''} onChange={e => setFormData({...formData, validFrom: e.target.value})} className="w-full p-2.5 sm:p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:text-white transition-all font-medium text-sm" />
+                                                        <input type="date" value={formData.validFrom || ''} onChange={e => setFormData({...formData, validFrom: e.target.value})} className="form-input p-2.5 sm:p-3 font-medium text-sm" />
                                                     </div>
                                                     <div className="space-y-1.5">
                                                         <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Valid Until</label>
-                                                        <input type="date" value={formData.validTo || ''} onChange={e => setFormData({...formData, validTo: e.target.value})} className="w-full p-2.5 sm:p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:text-white transition-all font-medium text-sm" />
+                                                        <input type="date" value={formData.validTo || ''} onChange={e => setFormData({...formData, validTo: e.target.value})} className="form-input p-2.5 sm:p-3 font-medium text-sm" />
                                                     </div>
                                                     
                                                     <div className="flex flex-col space-y-3 justify-center">
-                                                        <label className="flex items-center space-x-3 cursor-pointer group">
-                                                            <div className="relative">
-                                                                <input type="checkbox" checked={formData.isActive ?? true} onChange={e => setFormData({...formData, isActive: e.target.checked})} className="sr-only" />
-                                                                <div className={`w-10 h-5 sm:w-12 sm:h-6 rounded-full transition-colors ${formData.isActive ?? true ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'}`}></div>
-                                                                <div className={`absolute top-0.5 sm:top-1 left-0.5 sm:left-1 w-4 h-4 rounded-full bg-white transition-transform ${formData.isActive ?? true ? 'translate-x-5 sm:translate-x-6' : 'translate-x-0'}`}></div>
-                                                            </div>
-                                                            <span className="text-xs font-bold text-gray-600 dark:text-gray-400">Active BOM</span>
-                                                        </label>
-                                                        <label className="flex items-center space-x-3 cursor-pointer group">
-                                                            <div className="relative">
-                                                                <input type="checkbox" checked={formData.isDefault || false} onChange={e => setFormData({...formData, isDefault: e.target.checked})} className="sr-only" />
-                                                                <div className={`w-10 h-5 sm:w-12 sm:h-6 rounded-full transition-colors ${formData.isDefault ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'}`}></div>
-                                                                <div className={`absolute top-0.5 sm:top-1 left-0.5 sm:left-1 w-4 h-4 rounded-full bg-white transition-transform ${formData.isDefault ? 'translate-x-5 sm:translate-x-6' : 'translate-x-0'}`}></div>
-                                                            </div>
-                                                            <span className="text-xs font-bold text-gray-600 dark:text-gray-400">Default for Product</span>
-                                                        </label>
+                                                        <div className="space-y-1.5">
+                                                            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Status</label>
+                                                            <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value as any})} className="form-input p-2.5 sm:p-3 font-medium text-sm">
+                                                                <option value="Active">Active</option>
+                                                                <option value="Inactive">Inactive</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider ml-1">Default for Product</label>
+                                                            <select value={formData.isDefault === true ? 'true' : 'false'} onChange={e => setFormData({...formData, isDefault: e.target.value === 'true'})} className="form-input p-2.5 sm:p-3 font-medium text-sm">
+                                                                <option value="true">Enable / Yes</option>
+                                                                <option value="false">Disable / No</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -412,14 +419,14 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                                                         {formData.components?.map((comp, idx) => (
                                                             <div key={idx} className="group hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors grid grid-cols-[2fr_1fr_80px_80px_1fr_50px] items-center">
                                                                 <div className="px-3 py-2">
-                                                                    <select value={comp.itemId} onChange={e => updateComponent(idx, 'itemId', e.target.value)} className="w-full p-2 text-xs border border-transparent hover:border-gray-200 dark:hover:border-gray-700 bg-transparent rounded-lg outline-none focus:ring-1 focus:ring-blue-500 dark:text-white transition-all font-medium">
+                                                                    <select value={comp.itemId} onChange={e => updateComponent(idx, 'itemId', e.target.value)} className="form-input text-xs border-transparent hover:border-gray-200 dark:hover:border-gray-700 bg-transparent focus:ring-1 font-medium">
                                                                         <option value="">Item...</option>
                                                                         {itemMasters.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
                                                                     </select>
                                                                 </div>
                                                                 
                                                                 <div className="px-2 py-2">
-                                                                    <input type="number" value={comp.quantity} onChange={e => updateComponent(idx, 'quantity', parseFloat(e.target.value))} className="w-full p-2 text-xs border border-transparent hover:border-gray-200 dark:hover:border-gray-700 bg-transparent rounded-lg text-center font-mono dark:text-white outline-none focus:ring-1 focus:ring-blue-500" />
+                                                                    <input type="number" value={comp.quantity} onChange={e => updateComponent(idx, 'quantity', parseFloat(e.target.value))} className="form-input text-xs border-transparent hover:border-gray-200 dark:hover:border-gray-700 bg-transparent text-center font-mono focus:ring-1" />
                                                                 </div>
 
                                                                 <div className="px-2 py-2 text-center text-[10px] font-bold text-gray-500 dark:text-gray-400">
@@ -427,7 +434,7 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                                                                 </div>
 
                                                                 <div className="px-2 py-2">
-                                                                    <input type="number" value={comp.scrapPercentage || 0} onChange={e => updateComponent(idx, 'scrapPercentage', parseFloat(e.target.value))} className="w-full p-2 text-xs border border-transparent hover:border-gray-200 dark:hover:border-gray-700 bg-transparent rounded-lg text-center font-mono dark:text-white outline-none focus:ring-1 focus:ring-blue-500" />
+                                                                    <input type="number" value={comp.scrapPercentage || 0} onChange={e => updateComponent(idx, 'scrapPercentage', parseFloat(e.target.value))} className="form-input text-xs border-transparent hover:border-gray-200 dark:hover:border-gray-700 bg-transparent text-center font-mono focus:ring-1" />
                                                                 </div>
 
                                                                 <div className="px-2 py-2">
@@ -492,7 +499,7 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                                                     {formData.routing?.map((op, idx) => (
                                                         <div key={idx} className="bg-white dark:bg-gray-800/80 p-4 rounded-2xl border border-gray-100 dark:border-gray-700/50 relative shadow-sm">
                                                             <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px] font-black shadow-lg">{op.step}</div>
-                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                            <div className="form-grid gap-4">
                                                                 <div className="space-y-1">
                                                                     <label className="block text-[9px] font-bold text-gray-400 uppercase ml-1">Operation Name</label>
                                                                     <input type="text" value={op.operation} onChange={e => updateRoutingStep(idx, 'operation', e.target.value)} placeholder="e.g. Injection Molding" className="w-full p-2 bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-purple-500 outline-none transition-all dark:text-white font-bold text-sm" />
@@ -501,7 +508,7 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                                                                     <label className="block text-[9px] font-bold text-gray-400 uppercase ml-1">Work Center / Machine</label>
                                                                     <input type="text" value={op.workCenter || ''} onChange={e => updateRoutingStep(idx, 'workCenter', e.target.value)} placeholder="e.g. Press #4" className="w-full p-2 bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-purple-500 outline-none transition-all dark:text-white font-bold text-sm" />
                                                                 </div>
-                                                                <div className="grid grid-cols-4 gap-3 md:col-span-2">
+                                                                <div className="form-field-wrapper form-grid gap-3 md:col-span-2">
                                                                     <div className="space-y-1">
                                                                         <label className="block text-[8px] font-bold text-gray-400 uppercase text-center">Setup (H)</label>
                                                                         <input type="number" value={op.setupTime || ''} onChange={e => updateRoutingStep(idx, 'setupTime', parseFloat(e.target.value))} className="w-full p-1.5 bg-gray-50 dark:bg-gray-900 rounded-lg text-center font-mono text-xs dark:text-white" placeholder="0" />
@@ -632,7 +639,7 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                                             transition={{ duration: 0.3, ease: 'easeInOut' }}
                                         >
                                             <div className="p-4 sm:p-6 pt-0 space-y-6 border-t border-gray-100 dark:border-gray-800">
-                                                <div className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="form-grid pt-4 gap-6">
                                                     {/* Cost Summary */}
                                                     <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm text-gray-900 dark:text-white">
                                                         <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Estimated Cost (Per Batch)</h4>
@@ -662,8 +669,8 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
 
                                                     <div className="space-y-4">
                                                         <div className="space-y-2">
-                                                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Manufacturing Instructions</label>
-                                                            <textarea value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-3 sm:p-4 bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all h-32 resize-none font-medium text-xs shadow-inner" placeholder="Add critical assembly sequences, QA steps, or material handling notes..."></textarea>
+                                                            <label className="form-label ml-1">Manufacturing Instructions</label>
+                                                            <textarea value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="form-input sm:p-4 dark:bg-gray-900/50 rounded-2xl focus:ring-blue-500/10 h-32 resize-none font-medium text-xs shadow-inner" placeholder="Add critical assembly sequences, QA steps, or material handling notes..."></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -675,7 +682,7 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                         </div>
 
                         {/* Footer */}
-                        <div className="grid grid-cols-3 gap-2 px-4 sm:px-8 py-4 sm:py-6 border-t border-gray-100 bg-gray-50/80 dark:bg-gray-800/80 dark:border-gray-800 shrink-0">
+                        <div className="form-grid gap-2 px-4 sm:px-8 py-4 sm:py-6 border-t border-gray-100 bg-gray-50/80 dark:bg-gray-800/80 dark:border-gray-800 shrink-0">
                              <button onClick={resetForm} className="py-3 sm:py-3.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-bold rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-all text-[10px] sm:text-sm">Reset</button>
                              <button onClick={handleSave} className="py-3 sm:py-3.5 bg-blue-600 text-white font-black rounded-2xl hover:bg-blue-700 shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-all active:scale-[0.98] text-[10px] sm:text-sm">Save</button>
                              <button onClick={() => setIsModalOpen(false)} className="py-3 sm:py-3.5 bg-white border border-gray-200 text-gray-700 font-bold rounded-2xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition-all text-[10px] sm:text-sm">Cancel</button>

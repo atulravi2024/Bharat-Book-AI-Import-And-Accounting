@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from "react";
+import { useFormSettings } from '../../../../context/FormSettingsContext';
+import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import {
   AddIcon,
   EditIcon,
@@ -20,6 +22,7 @@ interface ItemsTabProps {
   assertionCategoryMasters?: any[];
   assertionCodeMasters?: any[];
   gstMasters?: any[];
+  weightMasters?: any[];
 }
 
 export const ItemsTab: React.FC<ItemsTabProps> = ({
@@ -33,7 +36,9 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
   assertionCategoryMasters = [],
   assertionCodeMasters = [],
   gstMasters = [],
+  weightMasters = [],
 }) => {
+  const { layoutType } = useFormSettings();
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -44,7 +49,6 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
     id: string;
     name: string;
   } | null>(null);
-
   const toggleSection = (section: string) => {
     setActiveSection((prev) => (prev === section ? "" : section));
   };
@@ -84,19 +88,22 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
             placeholder="Search Items..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-input pl-10 pr-4 text-sm"
           />
         </div>
-        <button
+        <div className="flex items-center">
+                    <ImportExportButtons data={data} onSave={onSave} entityName="ItemsTab" />
+                    <button
           onClick={() => {
             setEditingId(null);
             setFormData({ name: "" });
             setIsModalOpen(true);
           }}
-          className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all"
+          className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all"
         >
-          <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Add Item
+          <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">Add Item
         </span></button>
+                </div>
       </div>
 
       <div className="flex-1 overflow-auto custom-scrollbar min-h-0">
@@ -356,8 +363,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                   )}
                 </button>
                 {activeSection === "basic" && (
-                  <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-gray-200 dark:border-gray-700">
-                    <div className="col-span-1 md:col-span-2 flex items-start gap-4">
+                  <div className="form-grid">
+                    <div className={`col-span-1 md:col-span-2 flex items-start gap-4 ${layoutType === 'stacked' ? 'flex-col sm:flex-row' : ''}`}>
                       <div className="w-16 h-16 bg-gray-100 rounded-lg border border-dashed border-gray-300 flex items-center justify-center text-gray-400 dark:bg-gray-800 dark:border-gray-600 flex-shrink-0 relative overflow-hidden">
                         {formData.imageUrl ? (
                           <img
@@ -370,45 +377,80 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                           </span>
                         )}
                       </div>
-                      <div className="flex-1">
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
-                          Name / Code *
+                      <div className={`flex-1 ${layoutType === 'compact' ? 'space-y-2' : 'space-y-4'} w-full`}>
+                        <div className="form-field-wrapper">
+                            <label className="form-label">
+                            Item Code *
+                            </label>
+                            <input
+                            type="text"
+                            value={formData.code || ""}
+                            onChange={(e) =>
+                                setFormData({
+                                ...formData,
+                                code: e.target.value,
+                                })
+                            }
+                            className="form-input font-mono"
+                            placeholder="e.g. ITM-001"
+                            autoFocus
+                            />
+                        </div>
+                        <div className="form-field-wrapper">
+                            <label className="form-label">
+                            Item Name *
+                            </label>
+                            <input
+                            type="text"
+                            value={formData.name || ""}
+                            onChange={(e) =>
+                                setFormData({
+                                ...formData,
+                                name: e.target.value,
+                                })
+                            }
+                            className="form-input"
+                            placeholder="e.g. Widget A"
+                            />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="form-field-wrapper form-grid col-span-1 md:col-span-2 gap-4">
+                      <div className={`col-span-1 md:col-span-2 $"form-field-wrapper"`}>
+                        <label className="form-label">
+                          Description / Notes
                         </label>
                         <input
                           type="text"
-                          value={formData.name || formData.code || ""}
+                          value={formData.description || ""}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              name: e.target.value,
-                              code: e.target.value,
+                              description: e.target.value,
                             })
                           }
-                          className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
-                          placeholder="Enter name or code..."
-                          autoFocus
+                          className="form-input"
+                          placeholder="Add any extra details..."
                         />
                       </div>
+                      <div className={`col-span-1 $"form-field-wrapper"`}>
+                        <label className="form-label">
+                          Status
+                        </label>
+                        <select
+                          value={formData.status || "Active"}
+                          onChange={(e) =>
+                            setFormData({ ...formData, status: e.target.value })
+                          }
+                          className="form-input dark:bg-gray-800"
+                        >
+                          <option value="Active">Active / Enable</option>
+                          <option value="Inactive">Inactive / Disable</option>
+                        </select>
+                      </div>
                     </div>
-                    <div className="col-span-1 md:col-span-2">
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
-                        Description / Notes
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.description || ""}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            description: e.target.value,
-                          })
-                        }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
-                        placeholder="Add any extra details..."
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Item Type
                       </label>
                       <select
@@ -416,7 +458,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         onChange={(e) =>
                           setFormData({ ...formData, itemType: e.target.value })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="Inventory">
                           Inventory (Stock tracking)
@@ -432,8 +474,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         </option>
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Unit of Measure (UOM)
                       </label>
                       <select
@@ -441,7 +483,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         onChange={(e) =>
                           setFormData({ ...formData, uom: e.target.value })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="">Select UOM...</option>
                         {uomMasters?.map((u: any) => (
@@ -472,9 +514,9 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                   )}
                 </button>
                 {activeSection === "classification" && (
-                  <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-gray-200 dark:border-gray-700">
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                  <div className="form-grid">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Category
                       </label>
                       <select
@@ -482,7 +524,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         onChange={(e) =>
                           setFormData({ ...formData, category: e.target.value })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="">Select Category...</option>
                         {categoryMasters?.map((c: any) => (
@@ -492,8 +534,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Stock Group
                       </label>
                       <select
@@ -504,7 +546,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             stockGroup: e.target.value,
                           })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="">Select Stock Group...</option>
                         {stockGroupMasters?.map((sg: any) => (
@@ -514,8 +556,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Brand
                       </label>
                       <select
@@ -523,7 +565,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         onChange={(e) =>
                           setFormData({ ...formData, brand: e.target.value })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="">Select Brand...</option>
                         {brandMasters?.map((b: any) => (
@@ -533,8 +575,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Grade / Quality
                       </label>
                       <select
@@ -542,7 +584,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         onChange={(e) =>
                           setFormData({ ...formData, grade: e.target.value })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="">Select Grade...</option>
                         {gradeMasters?.map((g: any) => (
@@ -552,8 +594,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         SKU
                       </label>
                       <input
@@ -562,12 +604,12 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         onChange={(e) =>
                           setFormData({ ...formData, sku: e.target.value })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                        className="form-input"
                         placeholder="Enter SKU..."
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Part Number / MPN
                       </label>
                       <input
@@ -579,12 +621,12 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             partNumber: e.target.value,
                           })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                        className="form-input"
                         placeholder="Part No."
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Barcode / UPC / EAN
                       </label>
                       <input
@@ -593,12 +635,12 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         onChange={(e) =>
                           setFormData({ ...formData, barcode: e.target.value })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                        className="form-input"
                         placeholder="Barcode"
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Assertion Code
                       </label>
                       <select
@@ -609,7 +651,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             assertionCode: e.target.value,
                           })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="">Select Assertion Code...</option>
                         {assertionCodeMasters?.map((a: any) => (
@@ -619,8 +661,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Assertion Category
                       </label>
                       <select
@@ -631,7 +673,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             assertionCategory: e.target.value,
                           })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="">Select Assertion Category...</option>
                         {assertionCategoryMasters?.map((a: any) => (
@@ -641,8 +683,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Costing Method
                       </label>
                       <select
@@ -653,7 +695,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             costingMethod: e.target.value,
                           })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="FIFO">FIFO</option>
                         <option value="LIFO">LIFO</option>
@@ -661,8 +703,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         <option value="Standard">Standard</option>
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         Substitute Item
                       </label>
                       <select
@@ -673,7 +715,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             substituteItemId: e.target.value,
                           })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="">No Substitute...</option>
                         {data
@@ -706,9 +748,9 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                   )}
                 </button>
                 {activeSection === "pricing" && (
-                  <div className="p-6 grid grid-cols-1 md:grid-cols-4 gap-6 border-t border-gray-200 dark:border-gray-700">
-                    <div className="col-span-1 md:col-span-2">
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                  <div className="form-grid p-6 gap-6 border-t border-gray-200 dark:border-gray-700">
+                    <div className="form-field-wrapper col-span-1 md:col-span-2">
+                      <label className="form-label">
                         Tax Rate / GST (%)
                       </label>
                       <input
@@ -720,11 +762,11 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             taxRate: parseFloat(e.target.value) || 0,
                           })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                        className="form-input"
                       />
                     </div>
-                    <div className="col-span-1 md:col-span-2">
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper col-span-1 md:col-span-2">
+                      <label className="form-label">
                         HSN/SAC Code
                       </label>
                       <select
@@ -742,7 +784,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                               : formData.taxRate,
                           });
                         }}
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                        className="form-input bg-white dark:bg-gray-800"
                       >
                         <option value="">Select HSN...</option>
                         {gstMasters?.map((g: any) => (
@@ -752,8 +794,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="block text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-1">
                         Purchase Rate
                       </label>
                       <input
@@ -769,8 +811,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         placeholder="0.00"
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase mb-1">
                         Sales Rate (Standard)
                       </label>
                       <input
@@ -782,12 +824,12 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             salesRate: parseFloat(e.target.value),
                           })
                         }
-                        className="w-full p-2 border border-blue-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-blue-800/50 bg-blue-50/30 dark:bg-blue-900/10 dark:text-white"
+                        className="form-input border-blue-200 dark:border-blue-800/50 bg-blue-50/30 dark:bg-blue-900/10"
                         placeholder="0.00"
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-purple-600 dark:text-purple-400 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="block text-xs font-bold text-purple-600 dark:text-purple-400 uppercase mb-1">
                         Wholesale Rate
                       </label>
                       <input
@@ -803,8 +845,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                         placeholder="0.00"
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="form-label">
                         MRP
                       </label>
                       <input
@@ -816,12 +858,12 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             mrp: parseFloat(e.target.value),
                           })
                         }
-                        className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                        className="form-input"
                         placeholder="0.00"
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-teal-600 dark:text-teal-400 uppercase mb-1">
+                    <div className="form-field-wrapper">
+<label className="block text-xs font-bold text-teal-600 dark:text-teal-400 uppercase mb-1">
                         Dealer Rate
                       </label>
                       <input
@@ -859,9 +901,9 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                     )}
                   </button>
                   {activeSection === "inventory" && (
-                    <div className="p-6 grid grid-cols-1 md:grid-cols-4 gap-6 border-t border-gray-200 dark:border-gray-700">
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-grid p-6 gap-6 border-t border-gray-200 dark:border-gray-700">
+                      <div className="form-field-wrapper">
+<label className="form-label">
                           Min Stock
                         </label>
                         <input
@@ -877,8 +919,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                           placeholder="0.00"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <div className="form-field-wrapper">
+<label className="form-label">
                           Max Stock
                         </label>
                         <input
@@ -890,12 +932,12 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                               maxStock: parseFloat(e.target.value),
                             })
                           }
-                          className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                          className="form-input"
                           placeholder="0.00"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <div className="form-field-wrapper">
+<label className="form-label">
                           Reorder Lvl
                         </label>
                         <input
@@ -911,8 +953,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                           placeholder="0.00"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <div className="form-field-wrapper">
+<label className="form-label">
                           Lead Time (Days)
                         </label>
                         <input
@@ -924,62 +966,48 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                               leadTime: parseInt(e.target.value, 10),
                             })
                           }
-                          className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                          className="form-input"
                           placeholder="Days"
                         />
                       </div>
-                      <div className="col-span-1 md:col-span-4 flex flex-wrap gap-4 mt-1 p-3 bg-gray-50 rounded-lg border border-gray-100 dark:bg-gray-800/50 dark:border-gray-700">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={formData.batchTracking || false}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                batchTracking: e.target.checked,
-                              })
-                            }
-                            className="rounded text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-transparent border-gray-300 dark:border-gray-600"
-                          />
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Maintain in Batches
-                          </span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={formData.expiryTracking || false}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                expiryTracking: e.target.checked,
-                                batchTracking: e.target.checked
-                                  ? true
-                                  : formData.batchTracking,
-                              })
-                            }
-                            className="rounded text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-transparent border-gray-300 dark:border-gray-600"
-                          />
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Maintain Expiry Dates
-                          </span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={formData.serialTracking || false}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                serialTracking: e.target.checked,
-                              })
-                            }
-                            className="rounded text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-transparent border-gray-300 dark:border-gray-600"
-                          />
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Track Serial Numbers
-                          </span>
-                        </label>
+                      <div className="form-field-wrapper form-grid col-span-1 md:col-span-4 gap-4 mt-1 p-3 bg-gray-50 rounded-lg border border-gray-100 dark:bg-gray-800/50 dark:border-gray-700">
+                        <div className="form-field-wrapper">
+<label className="form-label">Maintain in Batches</label>
+                          <select
+                            value={formData.batchTracking === true ? 'true' : 'false'}
+                            onChange={e => setFormData({...formData, batchTracking: e.target.value === 'true'})}
+                            className="form-input text-sm"
+                          >
+                            <option value="true">Enable (Yes)</option>
+                            <option value="false">Disable (No)</option>
+                          </select>
+                        </div>
+                        <div className="form-field-wrapper">
+<label className="form-label">Maintain Expiry Dates</label>
+                          <select
+                            value={formData.expiryTracking === true ? 'true' : 'false'}
+                            onChange={e => setFormData({
+                                ...formData, 
+                                expiryTracking: e.target.value === 'true',
+                                batchTracking: e.target.value === 'true' ? true : formData.batchTracking
+                            })}
+                            className="form-input text-sm"
+                          >
+                            <option value="true">Enable (Yes)</option>
+                            <option value="false">Disable (No)</option>
+                          </select>
+                        </div>
+                        <div className="form-field-wrapper">
+<label className="form-label">Track Serial Numbers</label>
+                          <select
+                            value={formData.serialTracking === true ? 'true' : 'false'}
+                            onChange={e => setFormData({...formData, serialTracking: e.target.value === 'true'})}
+                            className="form-input text-sm"
+                          >
+                            <option value="true">Enable (Yes)</option>
+                            <option value="false">Disable (No)</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -1003,24 +1031,19 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                   )}
                 </button>
                 {activeSection === "ecommerce" && (
-                  <div className="p-6 grid grid-cols-1 md:grid-cols-4 gap-6 border-t border-gray-200 dark:border-gray-700">
-                    <div className="col-span-1 md:col-span-4 flex flex-wrap gap-4 p-3 bg-blue-50 border border-blue-100 rounded-lg dark:bg-blue-900/10 dark:border-blue-900/30">
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.isECommerceItem || false}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              isECommerceItem: e.target.checked,
-                            })
-                          }
-                          className="rounded text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-transparent border-blue-300 dark:border-blue-600"
-                        />
-                        <span className="text-sm font-bold text-blue-800 dark:text-blue-300">
-                          Sell Online / E-commerce Sync
-                        </span>
-                      </label>
+                  <div className="form-grid p-6 gap-6 border-t border-gray-200 dark:border-gray-700">
+                    <div className="form-field-wrapper col-span-1 md:col-span-4 flex flex-col gap-4 p-4 bg-blue-50 border border-blue-100 rounded-lg dark:bg-blue-900/10 dark:border-blue-900/30">
+                      <div className="form-field-wrapper">
+<label className="block text-[10px] font-bold text-blue-800 dark:text-blue-300 uppercase tracking-widest mb-1">Sell Online / E-commerce Sync</label>
+                          <select
+                            value={formData.isECommerceItem === true ? 'true' : 'false'}
+                            onChange={e => setFormData({...formData, isECommerceItem: e.target.value === 'true'})}
+                            className="form-input md:w-1/3 border-blue-200 dark:border-blue-800 text-sm"
+                          >
+                            <option value="true">Enable / Synced</option>
+                            <option value="false">Disable / Not Synced</option>
+                          </select>
+                      </div>
                       {formData.isECommerceItem && (
                         <>
                           <div className="flex bg-white px-2 py-1 rounded border border-blue-200 dark:bg-gray-800 dark:border-gray-700">
@@ -1054,16 +1077,16 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                                   productUrl: e.target.value,
                                 })
                               }
-                              className="w-full px-3 py-1.5 text-sm border border-blue-200 rounded outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                              className="form-input py-1.5 text-sm border-blue-200 rounded"
                               placeholder="https://store.example.com/item"
                             />
                           </div>
                         </>
                       )}
                     </div>
-                    <div className="col-span-1 md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="col-span-2 md:col-span-2">
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                    <div className="form-field-wrapper form-grid col-span-1 md:col-span-4 gap-4">
+                      <div className="form-field-wrapper col-span-2 md:col-span-2">
+                        <label className="form-label">
                           Dimensions (LxWxH)
                         </label>
                         <div className="flex gap-1">
@@ -1080,7 +1103,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                                 },
                               })
                             }
-                            className="w-full min-w-0 p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white text-center"
+                            className="form-input min-w-0 bg-transparent text-center"
                           />
                           <span className="text-gray-400 self-center">×</span>
                           <input
@@ -1096,7 +1119,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                                 },
                               })
                             }
-                            className="w-full min-w-0 p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white text-center"
+                            className="form-input min-w-0 bg-transparent text-center"
                           />
                           <span className="text-gray-400 self-center">×</span>
                           <input
@@ -1112,12 +1135,12 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                                 },
                               })
                             }
-                            className="w-full min-w-0 p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white text-center"
+                            className="form-input min-w-0 bg-transparent text-center"
                           />
                         </div>
                       </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <div className="form-field-wrapper">
+<label className="form-label">
                           Weight
                         </label>
                         <div className="flex">
@@ -1134,10 +1157,10 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                                 },
                               })
                             }
-                            className="w-full p-2 border border-gray-200 rounded-l-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white border-r-0"
+                            className="form-input rounded-l-lg bg-transparent border-r-0"
                           />
                           <select
-                            value={formData.weight?.unit || "kg"}
+                            value={formData.weight?.unit || ""}
                             onChange={(e) =>
                               setFormData({
                                 ...formData,
@@ -1147,16 +1170,19 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                                 },
                               })
                             }
-                            className="w-16 p-2 border border-gray-200 rounded-r-lg bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white text-xs"
+                            className="form-input w-16 rounded-r-lg text-xs"
                           >
-                            <option value="kg">kg</option>
-                            <option value="g">g</option>
-                            <option value="lb">lb</option>
+                            <option value="">Unit</option>
+                            {weightMasters?.map((w: any) => (
+                              <option key={w.id} value={w.name}>
+                                {w.name}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <div className="form-field-wrapper">
+<label className="form-label">
                           Pack Size (Retail)
                         </label>
                         <input
@@ -1168,12 +1194,12 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                               packSize: parseInt(e.target.value),
                             })
                           }
-                          className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                          className="form-input"
                           placeholder="Pieces per pack"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <div className="form-field-wrapper">
+<label className="form-label">
                           Master Carton Qty
                         </label>
                         <input
@@ -1185,12 +1211,12 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                               outerCartonQuantity: parseInt(e.target.value),
                             })
                           }
-                          className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                          className="form-input"
                           placeholder="Qty for wholesale"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <div className="form-field-wrapper">
+<label className="form-label">
                           Warranty Details
                         </label>
                         <input
@@ -1202,67 +1228,52 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                               warrantyPeriod: e.target.value,
                             })
                           }
-                          className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white"
+                          className="form-input"
                           placeholder="e.g. 1 Year"
                         />
                       </div>
                     </div>
-                    <div className="col-span-1 md:col-span-4 flex flex-wrap gap-4 mt-2 p-3 bg-red-50 border border-red-100 rounded-lg dark:bg-red-900/10 dark:border-red-900/30">
-                      <div className="flex w-full items-center mb-1">
+                    <div className="form-field-wrapper form-grid col-span-1 md:col-span-4 gap-4 mt-2 p-3 bg-red-50 border border-red-100 rounded-lg dark:bg-red-900/10 dark:border-red-900/30">
+                      <div className="form-field-wrapper col-span-1 md:col-span-3 flex w-full items-center mb-1 border-b border-red-200/50 pb-2">
                         <span className="text-xs font-bold text-red-800 uppercase tracking-wider dark:text-red-400">
                           Industry Constraints / Medical / Food
                         </span>
                       </div>
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.drugLicenseRequired || false}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              drugLicenseRequired: e.target.checked,
-                            })
-                          }
-                          className="rounded text-red-600 focus:ring-red-500 focus:ring-offset-0 bg-transparent border-red-300 dark:border-red-800"
-                        />
-                        <span className="text-sm font-medium text-red-900 dark:text-red-300">
-                          Requires Drug License (Pharma)
-                        </span>
-                      </label>
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.prescriptionRequired || false}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              prescriptionRequired: e.target.checked,
-                            })
-                          }
-                          className="rounded text-red-600 focus:ring-red-500 focus:ring-offset-0 bg-transparent border-red-300 dark:border-red-800"
-                        />
-                        <span className="text-sm font-medium text-red-900 dark:text-red-300">
-                          Needs Prescription (Rx)
-                        </span>
-                      </label>
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.fssaiRequired || false}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              fssaiRequired: e.target.checked,
-                            })
-                          }
-                          className="rounded text-orange-500 focus:ring-orange-500 focus:ring-offset-0 bg-transparent border-orange-300 dark:border-orange-800"
-                        />
-                        <span className="text-sm font-medium text-orange-900 dark:text-orange-300">
-                          FSSAI Relevant (Food/Grocery)
-                        </span>
-                      </label>
+                      <div className="form-field-wrapper">
+<label className="block text-[10px] font-bold text-red-900 dark:text-red-300 uppercase tracking-widest mb-1">Requires Drug License (Pharma)</label>
+                        <select
+                          value={formData.drugLicenseRequired === true ? 'true' : 'false'}
+                          onChange={e => setFormData({...formData, drugLicenseRequired: e.target.value === 'true'})}
+                          className="w-full p-2 bg-white dark:bg-gray-900 border border-red-200 dark:border-red-800 rounded-lg outline-none focus:ring-2 focus:ring-red-500 dark:text-white text-sm"
+                        >
+                          <option value="true">Enable (Yes)</option>
+                          <option value="false">Disable (No)</option>
+                        </select>
+                      </div>
+                      <div className="form-field-wrapper">
+<label className="block text-[10px] font-bold text-red-900 dark:text-red-300 uppercase tracking-widest mb-1">Needs Prescription (Rx)</label>
+                        <select
+                          value={formData.prescriptionRequired === true ? 'true' : 'false'}
+                          onChange={e => setFormData({...formData, prescriptionRequired: e.target.value === 'true'})}
+                          className="w-full p-2 bg-white dark:bg-gray-900 border border-red-200 dark:border-red-800 rounded-lg outline-none focus:ring-2 focus:ring-red-500 dark:text-white text-sm"
+                        >
+                          <option value="true">Enable (Yes)</option>
+                          <option value="false">Disable (No)</option>
+                        </select>
+                      </div>
+                      <div className="form-field-wrapper">
+<label className="block text-[10px] font-bold text-orange-900 dark:text-orange-300 uppercase tracking-widest mb-1">FSSAI Relevant (Food/Grocery)</label>
+                        <select
+                          value={formData.fssaiRequired === true ? 'true' : 'false'}
+                          onChange={e => setFormData({...formData, fssaiRequired: e.target.value === 'true'})}
+                          className="w-full p-2 bg-white dark:bg-gray-900 border border-orange-200 dark:border-orange-800 rounded-lg outline-none focus:ring-2 focus:ring-orange-500 dark:text-white text-sm"
+                        >
+                          <option value="true">Enable (Yes)</option>
+                          <option value="false">Disable (No)</option>
+                        </select>
+                      </div>
                     </div>
-                    <div className="col-span-1 md:col-span-4 flex flex-wrap gap-4 mt-2 p-3 bg-teal-50 border border-teal-100 rounded-lg dark:bg-teal-900/10 dark:border-teal-900/30">
+                    <div className="form-field-wrapper col-span-1 md:col-span-4 flex flex-wrap gap-4 mt-2 p-3 bg-teal-50 border border-teal-100 rounded-lg dark:bg-teal-900/10 dark:border-teal-900/30">
                       <div className="flex w-full items-center mb-1">
                         <span className="text-xs font-bold text-teal-800 uppercase tracking-wider dark:text-teal-400">
                           Kitchenware & Utensils Attributes
@@ -1285,71 +1296,51 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                           placeholder="Stainless Steel, Glass, Ceramic..."
                         />
                       </div>
-                      <div className="flex w-full flex-wrap gap-4">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={formData.isFoodGrade || false}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                isFoodGrade: e.target.checked,
-                              })
-                            }
-                            className="rounded text-teal-600 focus:ring-teal-500 focus:ring-offset-0 bg-transparent border-teal-300 dark:border-teal-800"
-                          />
-                          <span className="text-sm font-medium text-teal-900 dark:text-teal-300">
-                            Food Grade Safe
-                          </span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={formData.isDishwasherSafe || false}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                isDishwasherSafe: e.target.checked,
-                              })
-                            }
-                            className="rounded text-teal-600 focus:ring-teal-500 focus:ring-offset-0 bg-transparent border-teal-300 dark:border-teal-800"
-                          />
-                          <span className="text-sm font-medium text-teal-900 dark:text-teal-300">
-                            Dishwasher Safe
-                          </span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={formData.isMicrowaveSafe || false}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                isMicrowaveSafe: e.target.checked,
-                              })
-                            }
-                            className="rounded text-teal-600 focus:ring-teal-500 focus:ring-offset-0 bg-transparent border-teal-300 dark:border-teal-800"
-                          />
-                          <span className="text-sm font-medium text-teal-900 dark:text-teal-300">
-                            Microwave Safe
-                          </span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={formData.isOvenSafe || false}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                isOvenSafe: e.target.checked,
-                              })
-                            }
-                            className="rounded text-teal-600 focus:ring-teal-500 focus:ring-offset-0 bg-transparent border-teal-300 dark:border-teal-800"
-                          />
-                          <span className="text-sm font-medium text-teal-900 dark:text-teal-300">
-                            Oven Safe
-                          </span>
-                        </label>
+                      <div className="form-grid flex w-full flex-wrap gap-4">
+                        <div className="form-field-wrapper">
+<label className="block text-[10px] font-bold text-teal-900 dark:text-teal-300 uppercase tracking-widest mb-1">Food Grade Safe</label>
+                          <select
+                            value={formData.isFoodGrade === true ? 'true' : 'false'}
+                            onChange={e => setFormData({...formData, isFoodGrade: e.target.value === 'true'})}
+                            className="w-full p-2 bg-white dark:bg-gray-900 border border-teal-200 dark:border-teal-800 rounded-lg outline-none focus:ring-2 focus:ring-teal-500 dark:text-white text-sm"
+                          >
+                            <option value="true">Enable (Yes)</option>
+                            <option value="false">Disable (No)</option>
+                          </select>
+                        </div>
+                        <div className="form-field-wrapper">
+<label className="block text-[10px] font-bold text-teal-900 dark:text-teal-300 uppercase tracking-widest mb-1">Dishwasher Safe</label>
+                          <select
+                            value={formData.isDishwasherSafe === true ? 'true' : 'false'}
+                            onChange={e => setFormData({...formData, isDishwasherSafe: e.target.value === 'true'})}
+                            className="w-full p-2 bg-white dark:bg-gray-900 border border-teal-200 dark:border-teal-800 rounded-lg outline-none focus:ring-2 focus:ring-teal-500 dark:text-white text-sm"
+                          >
+                            <option value="true">Enable (Yes)</option>
+                            <option value="false">Disable (No)</option>
+                          </select>
+                        </div>
+                        <div className="form-field-wrapper">
+<label className="block text-[10px] font-bold text-teal-900 dark:text-teal-300 uppercase tracking-widest mb-1">Microwave Safe</label>
+                          <select
+                            value={formData.isMicrowaveSafe === true ? 'true' : 'false'}
+                            onChange={e => setFormData({...formData, isMicrowaveSafe: e.target.value === 'true'})}
+                            className="w-full p-2 bg-white dark:bg-gray-900 border border-teal-200 dark:border-teal-800 rounded-lg outline-none focus:ring-2 focus:ring-teal-500 dark:text-white text-sm"
+                          >
+                            <option value="true">Enable (Yes)</option>
+                            <option value="false">Disable (No)</option>
+                          </select>
+                        </div>
+                        <div className="form-field-wrapper">
+<label className="block text-[10px] font-bold text-teal-900 dark:text-teal-300 uppercase tracking-widest mb-1">Oven Safe</label>
+                          <select
+                            value={formData.isOvenSafe === true ? 'true' : 'false'}
+                            onChange={e => setFormData({...formData, isOvenSafe: e.target.value === 'true'})}
+                            className="w-full p-2 bg-white dark:bg-gray-900 border border-teal-200 dark:border-teal-800 rounded-lg outline-none focus:ring-2 focus:ring-teal-500 dark:text-white text-sm"
+                          >
+                            <option value="true">Enable (Yes)</option>
+                            <option value="false">Disable (No)</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>

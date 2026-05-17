@@ -13,7 +13,7 @@ interface BalanceSheetProps {
 
 export const BalanceSheet: React.FC<BalanceSheetProps> = ({ summary }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden animate-in fade-in duration-300 border rounded-xl shadow-sm bg-white dark:bg-gray-800">
+    <div className="form-grid gap-0 overflow-hidden animate-in fade-in duration-300 border rounded-xl shadow-sm bg-white dark:bg-gray-800">
       <div className="flex flex-col border-r">
         <div className="px-4 py-3 bg-gray-50 border-b font-bold text-gray-700 uppercase tracking-wider text-xs dark:bg-gray-900 dark:text-gray-200">
           Liabilities

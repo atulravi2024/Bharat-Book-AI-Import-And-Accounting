@@ -74,7 +74,143 @@ body {
   }
 }
 
+@layer components {
+  /* GLOBAL FORM CSS BASED ON SETTINGS DATA ATTRIBUTES */
+
+  /* Default Forms */
+  .form-input {
+    @apply w-full outline-none focus:ring-2 focus:ring-blue-500 dark:text-white transition-all bg-white dark:bg-gray-800;
+  }
+  .form-label {
+    @apply block text-xs font-bold text-gray-500 uppercase mb-1 transition-all;
+  }
+  .form-grid {
+    @apply p-6 grid gap-6 border-t border-gray-200 dark:border-gray-700 transition-all;
+  }
+  .form-field-wrapper {
+    @apply relative w-full transition-all;
+  }
+
+  /* Desktop Settings (min-width 1024px) */
+  @media (min-width: 1024px) {
+    /* Input Size */
+    :root[data-fs-desktopinputsize="small"] .form-input { @apply p-1.5 text-xs; }
+    :root[data-fs-desktopinputsize="medium"] .form-input { @apply p-2 text-sm; }
+    :root[data-fs-desktopinputsize="large"] .form-input { @apply p-3 text-base; }
+    
+    /* Input Borders */
+    :root[data-fs-desktopshowborders="true"] .form-input { @apply border border-gray-200 rounded-lg dark:border-gray-700; }
+    :root[data-fs-desktopshowborders="false"] .form-input { @apply border-b border-gray-200 dark:border-gray-700 pt-2 pb-1 px-1 rounded-none; }
+
+    /* Label Options */
+    :root[data-fs-desktoplabelposition="floating"] .form-label,
+    :root[data-fs-floatinglabels="true"] .form-label {
+      @apply absolute -top-2 left-2 bg-white dark:bg-gray-800 px-1 text-[10px] font-bold text-blue-500 uppercase z-10;
+    }
+    :root[data-fs-desktoplabelposition="floating"] .form-field-wrapper,
+    :root[data-fs-floatinglabels="true"] .form-field-wrapper {
+      @apply pt-2;
+    }
+    :root[data-fs-desktoplabelposition="compact"] .form-field-wrapper {
+      @apply flex items-center gap-4;
+    }
+    :root[data-fs-desktoplabelposition="compact"] .form-label {
+      @apply mb-0 min-w-[120px] w-1/3;
+    }
+
+    /* Grid Columns */
+    :root[data-fs-desktopcolumns="1"] .form-grid { @apply grid-cols-1; }
+    :root[data-fs-desktopcolumns="2"] .form-grid { @apply grid-cols-2; }
+    :root[data-fs-desktopcolumns="3"] .form-grid { @apply grid-cols-3; }
+    :root[data-fs-desktopcolumns="4"] .form-grid { @apply grid-cols-4; }
+    :root[data-fs-desktopcolumns="6"] .form-grid { @apply grid-cols-6; }
+  }
+
+  /* Tablet Settings (between 768px and 1023px) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    /* Input Size */
+    :root[data-fs-tabletinputsize="small"] .form-input { @apply p-1.5 text-xs; }
+    :root[data-fs-tabletinputsize="medium"] .form-input { @apply p-2 text-sm; }
+    :root[data-fs-tabletinputsize="large"] .form-input { @apply p-3 text-base; }
+    
+    /* Input Borders */
+    :root[data-fs-tabletshowborders="true"] .form-input { @apply border border-gray-200 rounded-lg dark:border-gray-700; }
+    :root[data-fs-tabletshowborders="false"] .form-input { @apply border-b border-gray-200 dark:border-gray-700 pt-2 pb-1 px-1 rounded-none; }
+
+    /* Label Options */
+    :root[data-fs-tabletlabelposition="floating"] .form-label,
+    :root[data-fs-floatinglabels="true"] .form-label {
+      @apply absolute -top-2 left-2 bg-white dark:bg-gray-800 px-1 text-[10px] font-bold text-blue-500 uppercase z-10;
+    }
+    :root[data-fs-tabletlabelposition="floating"] .form-field-wrapper,
+    :root[data-fs-floatinglabels="true"] .form-field-wrapper {
+      @apply pt-2;
+    }
+    :root[data-fs-tabletlabelposition="compact"] .form-field-wrapper {
+      @apply flex items-center gap-4;
+    }
+    :root[data-fs-tabletlabelposition="compact"] .form-label {
+      @apply mb-0 min-w-[120px] w-1/3;
+    }
+
+    /* Grid Columns */
+    :root[data-fs-tabletcolumns="1"] .form-grid { @apply grid-cols-1; }
+    :root[data-fs-tabletcolumns="2"] .form-grid { @apply grid-cols-2; }
+    :root[data-fs-tabletcolumns="3"] .form-grid { @apply grid-cols-3; }
+    :root[data-fs-tabletcolumns="4"] .form-grid { @apply grid-cols-4; }
+    :root[data-fs-tabletcolumns="6"] .form-grid { @apply grid-cols-6; }
+  }
+
+  /* Mobile Settings (max-width 767px) */
+  @media (max-width: 767px) {
+    /* Input Size */
+    :root[data-fs-mobileinputsize="small"] .form-input { @apply p-1.5 text-xs; }
+    :root[data-fs-mobileinputsize="medium"] .form-input { @apply p-2 text-sm; }
+    :root[data-fs-mobileinputsize="large"] .form-input { @apply p-3 text-base; }
+    
+    /* Input Borders */
+    :root[data-fs-mobileshowborders="true"] .form-input { @apply border border-gray-200 rounded-lg dark:border-gray-700; }
+    :root[data-fs-mobileshowborders="false"] .form-input { @apply border-b border-gray-200 dark:border-gray-700 pt-2 pb-1 px-1 rounded-none; }
+
+    /* Label Options */
+    :root[data-fs-mobilelabelposition="floating"] .form-label,
+    :root[data-fs-floatinglabels="true"] .form-label {
+      @apply absolute -top-2 left-2 bg-white dark:bg-gray-800 px-1 text-[10px] font-bold text-blue-500 uppercase z-10;
+    }
+    :root[data-fs-mobilelabelposition="floating"] .form-field-wrapper,
+    :root[data-fs-floatinglabels="true"] .form-field-wrapper {
+      @apply pt-2;
+    }
+    :root[data-fs-mobilelabelposition="compact"] .form-field-wrapper {
+      @apply flex items-center gap-2;
+    }
+    :root[data-fs-mobilelabelposition="compact"] .form-label {
+      @apply mb-0 min-w-[100px] w-1/3;
+    }
+
+    /* Grid Columns */
+    :root[data-fs-mobilecolumns="1"] .form-grid { @apply grid-cols-1; }
+    :root[data-fs-mobilecolumns="2"] .form-grid { @apply grid-cols-2; }
+    :root[data-fs-mobilecolumns="3"] .form-grid { @apply grid-cols-3; }
+    :root[data-fs-mobilecolumns="4"] .form-grid { @apply grid-cols-4; }
+    :root[data-fs-mobilecolumns="6"] .form-grid { @apply grid-cols-6; }
+  }
+}
+
 @media print {
+  html, body, #root, .print-area,
+  .print-reset-layout,
+  .print-reset-container,
+  .print-reset-main,
+  .print-reset-content {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+  }
+
   body {
     visibility: hidden !important;
     -webkit-print-color-adjust: exact;
@@ -82,17 +218,49 @@ body {
   }
   
   #voucher-to-print,
-  #voucher-to-print * {
+  #voucher-to-print *,
+  .print-area,
+  .print-area * {
     visibility: visible !important;
   }
   
-  #voucher-to-print {
+  #voucher-to-print,
+  #voucher-to-print *,
+  .print-area,
+  .print-area * {
+    visibility: visible !important;
+  }
+
+  #voucher-to-print,
+  .print-area,
+  .print-area div,
+  .print-area table,
+  .print-area tbody,
+  .print-area tr,
+  .print-area td,
+  .print-area th {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  .print-area {
     position: absolute !important;
     left: 0 !important;
     top: 0 !important;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+  }
+
+  .print-area .flex-col, 
+  .print-area .flex-1,
+  .print-area .h-full,
+  .print-area .max-h-full {
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
   }
 
   /* Hide common UI elements just in case */

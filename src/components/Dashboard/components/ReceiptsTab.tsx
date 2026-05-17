@@ -7,7 +7,7 @@ import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, A
 export const ReceiptsTab = ({ stats, isDemo }: any) => {
     return (
         <motion.div key="receipts" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <KPIComponent label="Total Receipts" val={`₹${stats.vol.receipt.toLocaleString()}`} sub={`${stats.counts.receipt} Inflows`} icon={Receipt} color="text-emerald-600" bg="bg-emerald-50" isDemo={isDemo} />
                 <KPIComponent label="Collection Speed" val="Fast" sub="Instant settle" icon={TrendingUp} color="text-blue-600" bg="bg-blue-50" isDemo={isDemo} />
                 <KPIComponent label="Verified" val="All" sub="100% Accuracy" icon={ShieldCheck} color="text-indigo-600" bg="bg-indigo-50" isDemo={isDemo} />

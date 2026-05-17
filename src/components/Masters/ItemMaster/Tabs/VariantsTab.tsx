@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
+import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon } from '../../../icons/IconComponents';
+
 
 interface VariantsTabProps {
     data: any[];
@@ -16,8 +18,7 @@ export const VariantsTab: React.FC<VariantsTabProps> = ({ data, onSave, itemMast
     const [formData, setFormData] = useState<any>({});
     const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; id: string; name: string } | null>(null);
 
-    const filteredData = useMemo(() => {
-        return (data || []).filter((m: any) => 
+    const filteredData = useMemo(() => {  return (data || []).filter((m: any) => 
             String(m.name || m.code || m.id || '').toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [data, searchTerm]);
@@ -44,11 +45,14 @@ export const VariantsTab: React.FC<VariantsTabProps> = ({ data, onSave, itemMast
             <div className="p-4 bg-gray-50/30 border-b border-gray-100 flex justify-between items-center dark:bg-gray-800/30 dark:border-gray-800">
                 <div className="relative max-w-md w-full mr-4">
                     <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="text" placeholder="Search Variants..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="text" placeholder="Search Variants..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="form-input pl-10 pr-4 text-sm" />
                 </div>
-                <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
-                    <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Add Variant
+                <div className="flex items-center">
+                    <ImportExportButtons data={data} onSave={onSave} entityName="VariantsTab" />
+                    <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">Add Variant
                 </span></button>
+                </div>
             </div>
 
             <div className="flex-1 overflow-auto custom-scrollbar min-h-0">
@@ -62,6 +66,7 @@ export const VariantsTab: React.FC<VariantsTabProps> = ({ data, onSave, itemMast
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Color</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Size</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Price Mod</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Status</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -74,6 +79,13 @@ export const VariantsTab: React.FC<VariantsTabProps> = ({ data, onSave, itemMast
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.colorId && <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 font-medium text-[10px] dark:bg-gray-800 dark:text-gray-300">{m.colorId}</span>}</td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.sizeId && <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 font-medium text-[10px] dark:bg-gray-800 dark:text-gray-300">{m.sizeId}</span>}</td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.priceModifier ? <span className="text-xs text-green-600 font-bold dark:text-green-400">{m.priceModifier > 0 ? '+' : ''}{m.priceModifier}</span> : null}</td>
+                                    <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+            {m.status === 'Active' || !m.status ? (
+                <span className="px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-bold text-[10px] uppercase">Active</span>
+            ) : (
+                <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-bold text-[10px] uppercase">Inactive</span>
+            )}
+        </td>
                                     <td className="p-4">
                                         <div className="flex items-center justify-center space-x-2">
                                             <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"><EditIcon className="w-4 h-4" /></button>
@@ -107,56 +119,69 @@ export const VariantsTab: React.FC<VariantsTabProps> = ({ data, onSave, itemMast
                         </div>
                         
                         <div className="overflow-y-auto flex-1 p-6 space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name / Code *</label>
-                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Enter name or code..." autoFocus />
+                            <div className="form-grid gap-4">
+                                <div className="form-field-wrapper col-span-1">
+<label className="form-label">Code *</label>
+<input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input bg-transparent font-mono" placeholder="Enter code..." autoFocus />
+</div>
+<div className="form-field-wrapper col-span-1">
+<label className="form-label">Name *</label>
+<input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input" placeholder="Enter name..." />
+</div>
+                                <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                    <label className="form-label">Description / Notes</label>
+                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="form-input" placeholder="Add any extra details..." />
                                 </div>
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Description / Notes</label>
-                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Add any extra details..." />
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Variant SKU Code</label>
+                                    <input type="text" value={formData.skuCode || ''} onChange={e => setFormData({...formData, skuCode: e.target.value})} className="form-input bg-transparent" placeholder="e.g. SHIRT-RED-L..." />
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Variant SKU Code</label>
-                                    <input type="text" value={formData.skuCode || ''} onChange={e => setFormData({...formData, skuCode: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="e.g. SHIRT-RED-L..." />
-                                </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Base Item ID (Optional Reference)</label>
-                                    <select value={formData.baseItemId || ''} onChange={e => setFormData({...formData, baseItemId: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Base Item ID (Optional Reference)</label>
+                                    <select value={formData.baseItemId || ''} onChange={e => setFormData({...formData, baseItemId: e.target.value})} className="form-input bg-white dark:bg-gray-800">
                                         <option value="">Select Base Item...</option>
                                         {itemMasters.map(i => (
                                             <option key={i.id} value={i.id}>{i.name || i.code}</option>
                                         ))}
                                     </select>
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Color Reference (Name/ID)</label>
-                                    <select value={formData.colorId || ''} onChange={e => setFormData({...formData, colorId: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Color Reference (Name/ID)</label>
+                                    <select value={formData.colorId || ''} onChange={e => setFormData({...formData, colorId: e.target.value})} className="form-input bg-white dark:bg-gray-800">
                                         <option value="">Select Color...</option>
                                         {colorMasters.map(c => (
                                             <option key={c.id} value={c.id}>{c.name || c.code}</option>
                                         ))}
                                     </select>
                                 </div>
-                                <div className="col-span-1">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Size Reference (Name/ID)</label>
-                                    <select value={formData.sizeId || ''} onChange={e => setFormData({...formData, sizeId: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label dark:text-gray-400">Size Reference (Name/ID)</label>
+                                    <select value={formData.sizeId || ''} onChange={e => setFormData({...formData, sizeId: e.target.value})} className="form-input bg-white dark:bg-gray-800">
                                         <option value="">Select Size...</option>
                                         {sizeMasters.map(s => (
                                             <option key={s.id} value={s.id}>{s.name || s.code}</option>
                                         ))}
                                     </select>
                                 </div>
-                                <div className="col-span-1 md:col-span-2 mt-2">
+                                <div className="form-field-wrapper col-span-1 md:col-span-2 mt-2">
                                     <label className="block text-xs font-bold text-green-600 uppercase mb-1 dark:text-green-500">Price Modifier (Difference from base price)</label>
                                     <div className="flex items-center">
                                         <span className="p-2 border border-gray-200 border-r-0 rounded-l-lg bg-gray-50 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 font-bold">₹</span>
-                                        <input type="number" value={formData.priceModifier || ''} onChange={e => setFormData({...formData, priceModifier: parseFloat(e.target.value)})} className="w-full p-2 border border-gray-200 rounded-r-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="0.00 (e.g. 50 for +50)" />
+                                        <input type="number" value={formData.priceModifier || ''} onChange={e => setFormData({...formData, priceModifier: parseFloat(e.target.value)})} className="form-input rounded-r-lg bg-transparent" placeholder="0.00 (e.g. 50 for +50)" />
                                     </div>
                                     <p className="text-xs text-gray-400 mt-1">Specify amount to add or subtract (e.g. -10 or 50) from the base item's price.</p>
                                 </div>
                                 
-                            </div>
+                            
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Status</label>
+            <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value})} className="form-input bg-white dark:bg-gray-800">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+        </div>
+
+</div>
                         </div>
 
                         <div className="flex space-x-3 p-6 border-t border-gray-100 bg-gray-50/50 dark:border-gray-800">

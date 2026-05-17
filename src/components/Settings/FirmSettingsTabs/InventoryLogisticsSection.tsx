@@ -40,9 +40,9 @@ export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmDa
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Inventory Valuation Method
                           </label>
                           <select
@@ -71,7 +71,7 @@ export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmDa
                                 enableNegativeStock: e.target.checked,
                               })
                             }
-                            className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                            className="form-input w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
                           />
                           <label
                             htmlFor="enableNegativeStock"
@@ -81,7 +81,7 @@ export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmDa
                           </label>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Preferred Shipping Partner
                           </label>
                           <input
@@ -98,7 +98,7 @@ export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmDa
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Standard Delivery Time
                           </label>
                           <input

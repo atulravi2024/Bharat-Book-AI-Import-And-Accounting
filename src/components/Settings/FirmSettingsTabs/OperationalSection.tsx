@@ -40,9 +40,9 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Timezone
                           </label>
                           <select
@@ -60,7 +60,7 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Working Days
                           </label>
                           <select
@@ -82,8 +82,8 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                         </div>
       
                         {firmData.workingDays === "Custom" && (
-                          <div className="space-y-2 md:col-span-2">
-                            <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <div className="form-field-wrapper space-y-2 md:col-span-2">
+                            <label className="form-label">
                               Custom Working Days
                             </label>
                             <input
@@ -101,11 +101,11 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                           </div>
                         )}
       
-                        <div className="space-y-2 md:col-span-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                        <div className="form-field-wrapper space-y-2 md:col-span-2">
+                          <label className="form-label">
                             Working Hours
                           </label>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="form-grid gap-4">
                             <div className="relative">
                               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 uppercase">From</span>
                               <input
@@ -140,8 +140,8 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                             </div>
                           </div>
                         </div>
-                        <div className="space-y-2 md:col-span-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                        <div className="form-field-wrapper space-y-2 md:col-span-2">
+                          <label className="form-label">
                             Holidays
                           </label>
                           <textarea

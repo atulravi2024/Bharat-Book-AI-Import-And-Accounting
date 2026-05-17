@@ -1,16 +1,74 @@
 [
   {
-    "id": "skus-sample-1",
-    "name": "Sample Skus 1",
-    "code": "SKU-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "SKU-001",
+    "name": "IP15P-256-BLK",
+    "code": "IP15P-256-BLK",
+    "description": "iPhone 15 Pro 256GB Midnight Black"
+  },
+  {
+    "id": "SKU-002",
+    "name": "IP15P-256-WHT",
+    "code": "IP15P-256-WHT",
+    "description": "iPhone 15 Pro 256GB Starlight White"
+  },
+  {
+    "id": "SKU-003",
+    "name": "S23U-512-GRN",
+    "code": "S23U-512-GRN",
+    "description": "Galaxy S23 Ultra 512GB Alpine Green"
+  },
+  {
+    "id": "SKU-004",
+    "name": "SNY-65X90L-V1",
+    "code": "SNY-65X90L-V1",
+    "description": "Sony 65\" TV 2023 Model"
+  },
+  {
+    "id": "SKU-005",
+    "name": "MBA-M2-8-256-SG",
+    "code": "MBA-M2-8-256-SG",
+    "description": "MacBook Air M2 8GB 256GB Space Gray"
+  },
+  {
+    "id": "SKU-006",
+    "name": "MBA-M2-16-512-SLV",
+    "code": "MBA-M2-16-512-SLV",
+    "description": "MacBook Air M2 16GB 512GB Silver"
+  },
+  {
+    "id": "SKU-007",
+    "name": "CAN-R5-BDY",
+    "code": "CAN-R5-BDY",
+    "description": "Canon R5 Mirrorless Body"
+  },
+  {
+    "id": "SKU-008",
+    "name": "SNY-WH5-BLK",
+    "code": "SNY-WH5-BLK",
+    "description": "Sony WH-1000XM5 Black"
+  },
+  {
+    "id": "SKU-009",
+    "name": "APP2-WHT",
+    "code": "APP2-WHT",
+    "description": "AirPods Pro 2 White"
+  },
+  {
+    "id": "SKU-010",
+    "name": "LOG-MX3S-GRY",
+    "code": "LOG-MX3S-GRY",
+    "description": "MX Master 3S Graphite"
+  },
+  {
+    "id": "SKU-011",
+    "name": "KEY-K2-RGB-BRN",
+    "code": "KEY-K2-RGB-BRN",
+    "description": "Keychron K2 RGB Brown Switch"
+  },
+  {
+    "id": "SKU-012",
+    "name": "SAM-980P-1TB",
+    "code": "SAM-980P-1TB",
+    "description": "Samsung 980 Pro 1TB M.2"
   }
 ]

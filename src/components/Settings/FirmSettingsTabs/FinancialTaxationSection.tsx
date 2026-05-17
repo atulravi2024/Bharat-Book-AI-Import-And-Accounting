@@ -40,9 +40,9 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Tax Filing Frequency
                           </label>
                           <select
@@ -58,7 +58,7 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Default Tax System
                           </label>
                           <select

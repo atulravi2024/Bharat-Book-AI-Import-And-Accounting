@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
+import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon } from '../../../icons/IconComponents';
+
 
 interface WarehousesTabProps {
     data: any[];
@@ -13,8 +15,7 @@ export const WarehousesTab: React.FC<WarehousesTabProps> = ({ data, onSave }) =>
     const [formData, setFormData] = useState<any>({});
     const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; id: string; name: string } | null>(null);
 
-    const filteredData = useMemo(() => {
-        return (data || []).filter((m: any) => 
+    const filteredData = useMemo(() => {  return (data || []).filter((m: any) => 
             String(m.name || m.code || m.id || '').toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [data, searchTerm]);
@@ -41,11 +42,14 @@ export const WarehousesTab: React.FC<WarehousesTabProps> = ({ data, onSave }) =>
             <div className="p-4 bg-gray-50/30 border-b border-gray-100 flex justify-between items-center dark:bg-gray-800/30 dark:border-gray-800">
                 <div className="relative max-w-md w-full mr-4">
                     <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="text" placeholder="Search Warehouses..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="text" placeholder="Search Warehouses..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="form-input pl-10 pr-4 text-sm" />
                 </div>
-                <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
-                    <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Add Warehouse
+                <div className="flex items-center">
+                    <ImportExportButtons data={data} onSave={onSave} entityName="WarehousesTab" />
+                    <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">Add Warehouse
                 </span></button>
+                </div>
             </div>
 
             <div className="flex-1 overflow-auto custom-scrollbar min-h-0">
@@ -77,7 +81,7 @@ export const WarehousesTab: React.FC<WarehousesTabProps> = ({ data, onSave }) =>
                                         </div>
                                     </td>
                                     <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200 font-mono">{m.code}</td>
-                                    <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{!m.isActive ? <div className="text-[10px] text-red-500 font-bold mt-1">INACTIVE</div> : <div className="text-[10px] text-green-500 font-bold mt-1 uppercase">ACTIVE</div>}</td>
+                                    <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{formData.status === 'Inactive' || m.status === 'Inactive' ? <div className="text-[10px] text-red-500 font-bold mt-1 uppercase">DISABLED</div> : <div className="text-[10px] text-green-500 font-bold mt-1 uppercase">ACTIVE</div>}</td>
                                     <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.type && <span className="bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded font-bold dark:bg-purple-900/30 dark:text-purple-300">{m.type}</span>}</td>
                                     <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.location || '-'}</td>
                                     <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.address}{m.city ? `, ${m.city}` : ''}</td>
@@ -117,45 +121,55 @@ export const WarehousesTab: React.FC<WarehousesTabProps> = ({ data, onSave }) =>
                         </div>
                         
                         <div className="overflow-y-auto flex-1 p-6 space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name / Code *</label>
-                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Enter name or code..." autoFocus />
+                            <div className="form-grid gap-4">
+                                <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                    <label className="form-label">Name / Code *</label>
+                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="form-input" placeholder="Enter name or code..." autoFocus />
                                 </div>
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Description / Notes</label>
-                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Add any extra details..." />
+                                <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                    <label className="form-label">Description / Notes</label>
+                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="form-input" placeholder="Add any extra details..." />
                                 </div>
                                 
-        <div>
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Warehouse Type</label>
-            <select value={formData.type || 'Main'} onChange={e => setFormData({...formData, type: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Warehouse Type</label>
+            <select value={formData.type || 'Main'} onChange={e => setFormData({...formData, type: e.target.value})} className="form-input">
                 <option value="Main">Main Warehouse</option>
                 <option value="Store">Retail Store</option>
                 <option value="Distribution">Distribution Center</option>
                 <option value="Transit">In-Transit / Virtual</option>
             </select>
         </div>
-        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Location Name</label><input type="text" value={formData.location || ''} onChange={e => setFormData({...formData, location: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="e.g. North Wing" /></div>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Location Name</label><input type="text" value={formData.location || ''} onChange={e => setFormData({...formData, location: e.target.value})} className="form-input bg-transparent" placeholder="e.g. North Wing" /></div>
         
-        <div className="col-span-1 md:col-span-2">
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Address Line</label>
-            <input type="text" value={formData.address || ''} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="Street Address..." />
+        <div className="form-field-wrapper col-span-1 md:col-span-2">
+            <label className="form-label dark:text-gray-400">Address Line</label>
+            <input type="text" value={formData.address || ''} onChange={e => setFormData({...formData, address: e.target.value})} className="form-input bg-transparent" placeholder="Street Address..." />
         </div>
         
-        <div className="grid grid-cols-3 gap-4 col-span-1 md:col-span-2">
-            <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">City</label><input type="text" value={formData.city || ''} onChange={e => setFormData({...formData, city: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="City" /></div>
-            <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">State</label><input type="text" value={formData.state || ''} onChange={e => setFormData({...formData, state: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="State" /></div>
-            <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Pincode</label><input type="text" value={formData.pincode || ''} onChange={e => setFormData({...formData, pincode: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="Pincode" /></div>
+        <div className="form-field-wrapper form-grid gap-4 col-span-1 md:col-span-2">
+            <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">City</label><input type="text" value={formData.city || ''} onChange={e => setFormData({...formData, city: e.target.value})} className="form-input bg-transparent" placeholder="City" /></div>
+            <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">State</label><input type="text" value={formData.state || ''} onChange={e => setFormData({...formData, state: e.target.value})} className="form-input bg-transparent" placeholder="State" /></div>
+            <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Pincode</label><input type="text" value={formData.pincode || ''} onChange={e => setFormData({...formData, pincode: e.target.value})} className="form-input bg-transparent" placeholder="Pincode" /></div>
         </div>
 
-        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Capacity</label><input type="number" value={formData.capacity || ''} onChange={e => setFormData({...formData, capacity: parseFloat(e.target.value)})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="e.g. 5000" /></div>
-        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Contact Person</label><input type="text" value={formData.contactPerson || ''} onChange={e => setFormData({...formData, contactPerson: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="Name..." /></div>
-        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Phone</label><input type="text" value={formData.phone || ''} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="Phone..." /></div>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Capacity</label><input type="number" value={formData.capacity || ''} onChange={e => setFormData({...formData, capacity: parseFloat(e.target.value)})} className="form-input bg-transparent" placeholder="e.g. 5000" /></div>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Contact Person</label><input type="text" value={formData.contactPerson || ''} onChange={e => setFormData({...formData, contactPerson: e.target.value})} className="form-input bg-transparent" placeholder="Name..." /></div>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Phone</label><input type="text" value={formData.phone || ''} onChange={e => setFormData({...formData, phone: e.target.value})} className="form-input bg-transparent" placeholder="Phone..." /></div>
         
-        <div className="flex items-center mt-6 col-span-1 md:col-span-2">
-            <input type="checkbox" checked={formData.isActive !== false} onChange={e => setFormData({...formData, isActive: e.target.checked})} className="mr-2" />
-            <label className="text-sm text-gray-700 dark:text-gray-300">Is Active Warehouse</label>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Status</label>
+            <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value})} className="form-input">
+                <option value="Active">Enable (Active)</option>
+                <option value="Inactive">Disable (Inactive)</option>
+            </select>
         </div>
     
                             </div>

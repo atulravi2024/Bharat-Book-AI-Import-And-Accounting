@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { 
     Plus, 
     Search, 
@@ -102,10 +103,12 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                         placeholder="Search Locations..." 
                         value={searchTerm} 
                         onChange={e => setSearchTerm(e.target.value)} 
-                        className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium" 
+                        className="form-input pl-10 pr-4 text-sm font-medium" 
                     />
                 </div>
-                <button 
+                <div className="flex items-center">
+                    <ImportExportButtons data={data} onSave={onSave} entityName="LocationsTab" />
+                    <button 
                     onClick={() => { 
                         setEditingId(null); 
                         setFormData({ 
@@ -124,10 +127,11 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                         setIsModalOpen(true); 
                         setActiveAccordion(null);
                     }} 
-                    className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center text-xs shadow-lg shadow-blue-200 dark:shadow-none whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all"
+                    className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center justify-center text-xs shadow-lg shadow-blue-200 dark:shadow-none whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all"
                 >
                     <Plus className="mr-2 w-4 h-4" /> Add Location
                 </button>
+                </div>
             </div>
 
             {/* List Table */}
@@ -139,7 +143,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">Location Details</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">Type & Status</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">Contact Person</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800 text-right">Actions</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -174,16 +178,16 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                         </div>
                                     </td>
                                     <td className="p-4">
-                                        <div className="flex items-center justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="flex items-center justify-center space-x-2">
                                             <button 
                                                 onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} 
-                                                className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all"
+                                                className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"
                                             >
                                                 <Edit2 className="w-4 h-4" />
                                             </button>
                                             <button 
                                                 onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name})} 
-                                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all"
+                                                className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title="Delete"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
@@ -253,38 +257,36 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <AnimatePresence>
                                         {activeAccordion === 'identity' && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
-                                                <div className="p-6 pt-2 grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-gray-100 dark:border-gray-800">
+                                                <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Location Name *</label>
-                                                        <input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" placeholder="e.g. Master Distribution Center" />
+                                                        <label className="form-label ml-1">Location Name *</label>
+                                                        <input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder="e.g. Master Distribution Center" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Location Code</label>
-                                                        <input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-mono font-bold shadow-sm" placeholder="e.g. LOC-001" />
+                                                        <label className="form-label ml-1">Location Code</label>
+                                                        <input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-mono font-bold shadow-sm" placeholder="e.g. LOC-001" />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Location Type</label>
-                                                        <select value={formData.type || ''} onChange={e => setFormData({...formData, type: e.target.value})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm">
+                                                        <label className="form-label ml-1">Location Type</label>
+                                                        <select value={formData.type || ''} onChange={e => setFormData({...formData, type: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
                                                             {locationTypes.map(t => <option key={t} value={t}>{t}</option>)}
                                                         </select>
                                                     </div>
-                                                    <div className="flex items-center space-x-6 h-full pt-4">
-                                                        <label className="flex items-center space-x-3 cursor-pointer group">
-                                                            <div className="relative">
-                                                                <input type="checkbox" checked={formData.isActive ?? true} onChange={e => setFormData({...formData, isActive: e.target.checked})} className="sr-only" />
-                                                                <div className={`w-11 h-6 rounded-full transition-colors ${formData.isActive ?? true ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-700'}`}></div>
-                                                                <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${formData.isActive ?? true ? 'translate-x-5' : 'translate-x-0'}`}></div>
-                                                            </div>
-                                                            <span className="text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">Active</span>
-                                                        </label>
-                                                        <label className="flex items-center space-x-3 cursor-pointer group">
-                                                            <div className="relative">
-                                                                <input type="checkbox" checked={formData.isDefault || false} onChange={e => setFormData({...formData, isDefault: e.target.checked})} className="sr-only" />
-                                                                <div className={`w-11 h-6 rounded-full transition-colors ${formData.isDefault ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-700'}`}></div>
-                                                                <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${formData.isDefault ? 'translate-x-5' : 'translate-x-0'}`}></div>
-                                                            </div>
-                                                            <span className="text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">Default</span>
-                                                        </label>
+                                                    <div className="flex flex-col space-y-4 pt-4">
+                                                        <div className="space-y-1.5">
+                                                            <label className="form-label ml-1">Status</label>
+                                                            <select value={formData.isActive === false ? 'false' : 'true'} onChange={e => setFormData({...formData, isActive: e.target.value === 'true'})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
+                                                                <option value="true">Active</option>
+                                                                <option value="false">Inactive</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="form-label ml-1">Default</label>
+                                                            <select value={formData.isDefault === true ? 'true' : 'false'} onChange={e => setFormData({...formData, isDefault: e.target.value === 'true'})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
+                                                                <option value="true">Yes (Default)</option>
+                                                                <option value="false">No / Disabled</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -312,18 +314,18 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <AnimatePresence>
                                         {activeAccordion === 'contact' && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
-                                                <div className="p-6 pt-2 grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-gray-100 dark:border-gray-800">
+                                                <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Manager Name</label>
-                                                        <input type="text" value={formData.manager || ''} onChange={e => setFormData({...formData, manager: e.target.value})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" placeholder="Primary Supervisor" />
+                                                        <label className="form-label ml-1">Manager Name</label>
+                                                        <input type="text" value={formData.manager || ''} onChange={e => setFormData({...formData, manager: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder="Primary Supervisor" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Contact Number</label>
-                                                        <input type="text" value={formData.contactNumber || ''} onChange={e => setFormData({...formData, contactNumber: e.target.value})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" placeholder="+1 (555) 000-0000" />
+                                                        <label className="form-label ml-1">Contact Number</label>
+                                                        <input type="text" value={formData.contactNumber || ''} onChange={e => setFormData({...formData, contactNumber: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder="+1 (555) 000-0000" />
                                                     </div>
-                                                    <div className="space-y-1.5 md:col-span-2">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Full Address</label>
-                                                        <textarea rows={2} value={formData.address || ''} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-medium shadow-sm resize-none" placeholder="Street, City, State, ZIP, Country" />
+                                                    <div className="form-field-wrapper space-y-1.5 md:col-span-2">
+                                                        <label className="form-label ml-1">Full Address</label>
+                                                        <textarea rows={2} value={formData.address || ''} onChange={e => setFormData({...formData, address: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-medium shadow-sm resize-none" placeholder="Street, City, State, ZIP, Country" />
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -351,18 +353,18 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <AnimatePresence>
                                         {activeAccordion === 'capacity' && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
-                                                <div className="p-6 pt-2 grid grid-cols-2 md:grid-cols-3 gap-5 border-t border-gray-100 dark:border-gray-800">
+                                                <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Total Area (sq ft)</label>
-                                                        <input type="number" value={formData.capacity?.totalArea || 0} onChange={e => setFormData({...formData, capacity: {...formData.capacity, totalArea: Number(e.target.value)}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">Total Area (sq ft)</label>
+                                                        <input type="number" value={formData.capacity?.totalArea || 0} onChange={e => setFormData({...formData, capacity: {...formData.capacity, totalArea: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Max Weight (kg)</label>
-                                                        <input type="number" value={formData.capacity?.maxWeight || 0} onChange={e => setFormData({...formData, capacity: {...formData.capacity, maxWeight: Number(e.target.value)}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">Max Weight (kg)</label>
+                                                        <input type="number" value={formData.capacity?.maxWeight || 0} onChange={e => setFormData({...formData, capacity: {...formData.capacity, maxWeight: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Total Volume (cu ft)</label>
-                                                        <input type="number" value={formData.capacity?.totalVolume || 0} onChange={e => setFormData({...formData, capacity: {...formData.capacity, totalVolume: Number(e.target.value)}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">Total Volume (cu ft)</label>
+                                                        <input type="number" value={formData.capacity?.totalVolume || 0} onChange={e => setFormData({...formData, capacity: {...formData.capacity, totalVolume: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -390,18 +392,18 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <AnimatePresence>
                                         {activeAccordion === 'ops' && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
-                                                <div className="p-6 pt-2 grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-gray-100 dark:border-gray-800">
+                                                <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Working Hours</label>
-                                                        <input type="text" value={formData.ops?.workingHours || ''} onChange={e => setFormData({...formData, ops: {...formData.ops, workingHours: e.target.value}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" placeholder="e.g. 08:00 - 20:00" />
+                                                        <label className="form-label ml-1">Working Hours</label>
+                                                        <input type="text" value={formData.ops?.workingHours || ''} onChange={e => setFormData({...formData, ops: {...formData.ops, workingHours: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder="e.g. 08:00 - 20:00" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Picking Lead Time (min)</label>
-                                                        <input type="number" value={formData.ops?.pickingLeadTime || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, pickingLeadTime: Number(e.target.value)}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">Picking Lead Time (min)</label>
+                                                        <input type="number" value={formData.ops?.pickingLeadTime || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, pickingLeadTime: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Packing Lead Time (min)</label>
-                                                        <input type="number" value={formData.ops?.packingLeadTime || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, packingLeadTime: Number(e.target.value)}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">Packing Lead Time (min)</label>
+                                                        <input type="number" value={formData.ops?.packingLeadTime || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, packingLeadTime: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -429,14 +431,14 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <AnimatePresence>
                                         {activeAccordion === 'zoning' && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
-                                                <div className="p-6 pt-2 grid grid-cols-2 gap-5 border-t border-gray-100 dark:border-gray-800">
+                                                <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Total Zones</label>
-                                                        <input type="number" value={formData.ops?.zones || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, zones: Number(e.target.value)}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">Total Zones</label>
+                                                        <input type="number" value={formData.ops?.zones || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, zones: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Loading Docks</label>
-                                                        <input type="number" value={formData.ops?.docks || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, docks: Number(e.target.value)}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">Loading Docks</label>
+                                                        <input type="number" value={formData.ops?.docks || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, docks: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -464,20 +466,26 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <AnimatePresence>
                                         {activeAccordion === 'security' && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
-                                                <div className="p-6 pt-2 grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-gray-100 dark:border-gray-800">
-                                                    <div className="flex items-center space-x-6 h-full pt-4">
-                                                        <label className="flex items-center space-x-3 cursor-pointer">
-                                                            <input type="checkbox" checked={formData.security?.hasCctv} onChange={e => setFormData({...formData, security: {...formData.security, hasCctv: e.target.checked}})} className="rounded p-2 text-blue-600 border-gray-300" />
-                                                            <span className="text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">CCTV</span>
-                                                        </label>
-                                                        <label className="flex items-center space-x-3 cursor-pointer">
-                                                            <input type="checkbox" checked={formData.security?.hasGuard} onChange={e => setFormData({...formData, security: {...formData.security, hasGuard: e.target.checked}})} className="rounded p-2 text-blue-600 border-gray-300" />
-                                                            <span className="text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">Guards</span>
-                                                        </label>
+                                                <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
+                                                    <div className="flex flex-col space-y-4 pt-4">
+                                                        <div className="space-y-1.5">
+                                                            <label className="form-label ml-1">CCTV</label>
+                                                            <select value={formData.security?.hasCctv === true ? 'true' : 'false'} onChange={e => setFormData({...formData, security: {...formData.security, hasCctv: e.target.value === 'true'}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
+                                                                <option value="true">Enable / Installed</option>
+                                                                <option value="false">Disable / None</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="form-label ml-1">Guards</label>
+                                                            <select value={formData.security?.hasGuard === true ? 'true' : 'false'} onChange={e => setFormData({...formData, security: {...formData.security, hasGuard: e.target.value === 'true'}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
+                                                                <option value="true">Enable / Assigned</option>
+                                                                <option value="false">Disable / None</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Fire Rating</label>
-                                                        <select value={formData.security?.fireRating || 'A'} onChange={e => setFormData({...formData, security: {...formData.security, fireRating: e.target.value}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm">
+                                                        <label className="form-label ml-1">Fire Rating</label>
+                                                        <select value={formData.security?.fireRating || 'A'} onChange={e => setFormData({...formData, security: {...formData.security, fireRating: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
                                                             <option value="A">A (Superior)</option>
                                                             <option value="B">B (Standard)</option>
                                                             <option value="C">C (Basic)</option>
@@ -509,18 +517,21 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <AnimatePresence>
                                         {activeAccordion === 'tech' && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
-                                                <div className="p-6 pt-2 grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-gray-100 dark:border-gray-800">
+                                                <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Scanning System</label>
-                                                        <select value={formData.tech?.scanSystem || 'BARCODE'} onChange={e => setFormData({...formData, tech: {...formData.tech, scanSystem: e.target.value}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm">
+                                                        <label className="form-label ml-1">Scanning System</label>
+                                                        <select value={formData.tech?.scanSystem || 'BARCODE'} onChange={e => setFormData({...formData, tech: {...formData.tech, scanSystem: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
                                                             <option value="BARCODE">Barcode</option>
                                                             <option value="RFID">RFID</option>
                                                             <option value="QR">QR Code</option>
                                                         </select>
                                                     </div>
-                                                    <div className="flex items-center space-x-3 pt-4">
-                                                        <input type="checkbox" checked={formData.tech?.ecomIntegrated} onChange={e => setFormData({...formData, tech: {...formData.tech, ecomIntegrated: e.target.checked}})} className="rounded text-blue-600 border-gray-300" />
-                                                        <span className="text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">E-commerce Integrated</span>
+                                                    <div className="space-y-1.5 mt-4">
+                                                        <label className="form-label ml-1">E-commerce Integrated</label>
+                                                        <select value={formData.tech?.ecomIntegrated === true ? 'true' : 'false'} onChange={e => setFormData({...formData, tech: {...formData.tech, ecomIntegrated: e.target.value === 'true'}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
+                                                            <option value="true">Integrated (Yes)</option>
+                                                            <option value="false">Not Integrated (No)</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -548,18 +559,18 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <AnimatePresence>
                                         {activeAccordion === 'inventory' && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
-                                                <div className="p-6 pt-2 grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-gray-100 dark:border-gray-800">
+                                                <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Cycle Count Frequency</label>
-                                                        <select value={formData.inventory?.cycleCountFreq || 'Monthly'} onChange={e => setFormData({...formData, inventory: {...formData.inventory, cycleCountFreq: e.target.value}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm">
+                                                        <label className="form-label ml-1">Cycle Count Frequency</label>
+                                                        <select value={formData.inventory?.cycleCountFreq || 'Monthly'} onChange={e => setFormData({...formData, inventory: {...formData.inventory, cycleCountFreq: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
                                                             <option value="Daily">Daily</option>
                                                             <option value="Weekly">Weekly</option>
                                                             <option value="Monthly">Monthly</option>
                                                         </select>
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">QA Sample Size (%)</label>
-                                                        <input type="number" value={formData.inventory?.qaSampleSize || 10} onChange={e => setFormData({...formData, inventory: {...formData.inventory, qaSampleSize: Number(e.target.value)}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">QA Sample Size (%)</label>
+                                                        <input type="number" value={formData.inventory?.qaSampleSize || 10} onChange={e => setFormData({...formData, inventory: {...formData.inventory, qaSampleSize: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -587,14 +598,14 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <AnimatePresence>
                                         {activeAccordion === 'compliance' && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
-                                                <div className="p-6 pt-2 grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-gray-100 dark:border-gray-800">
+                                                <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Tax ID</label>
-                                                        <input type="text" value={formData.compliance?.taxId || ''} onChange={e => setFormData({...formData, compliance: {...formData.compliance, taxId: e.target.value}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">Tax ID</label>
+                                                        <input type="text" value={formData.compliance?.taxId || ''} onChange={e => setFormData({...formData, compliance: {...formData.compliance, taxId: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Headcount</label>
-                                                        <input type="number" value={formData.compliance?.headcount || 0} onChange={e => setFormData({...formData, compliance: {...formData.compliance, headcount: Number(e.target.value)}})} className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:text-white transition-all text-sm font-bold shadow-sm" />
+                                                        <label className="form-label ml-1">Headcount</label>
+                                                        <input type="number" value={formData.compliance?.headcount || 0} onChange={e => setFormData({...formData, compliance: {...formData.compliance, headcount: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -605,7 +616,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
 
                              {/* Modal Footer */}
                             <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
-                                <div className="grid grid-cols-3 gap-3 w-full">
+                                <div className="form-grid gap-3 w-full">
                                     <button 
                                         onClick={resetForm} 
                                         className="py-2.5 md:py-3 text-[10px] md:text-sm font-bold text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-900 rounded-2xl flex items-center justify-center"

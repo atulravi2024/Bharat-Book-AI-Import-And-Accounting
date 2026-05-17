@@ -40,9 +40,9 @@ export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, 
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Company Logo URL
                           </label>
                           <input
@@ -56,7 +56,7 @@ export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, 
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Theme Color
                           </label>
                           <div className="flex space-x-4 items-center">
@@ -85,7 +85,7 @@ export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, 
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Authorized Signature URL
                           </label>
                           <input
@@ -102,7 +102,7 @@ export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, 
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Company Stamp URL
                           </label>
                           <input

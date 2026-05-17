@@ -16,6 +16,7 @@ import { GSTR3BReport } from './GSTR3B/GSTR3BReport';
 import { GSTR9Report } from './GSTR9/GSTR9Report';
 import { GSTR9CReport } from './GSTR9C/GSTR9CReport';
 import { OtherGSTReports } from './Others/OtherGSTReports';
+import { DateRangeSelector, calculateDateRange, DateRangeOption } from '../../shared/DateRangeSelector';
 
 interface GSTReportViewProps {
   vouchers: ParsedVoucher[];
@@ -66,52 +67,14 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
     if (onTabChange) onTabChange(tab);
   };
   
-  const [quickDateOption, setQuickDateOption] = useState<'currentMonth' | 'lastMonth' | 'currentYear' | 'lastYear' | null>('lastMonth');
+  const [quickDateOption, setQuickDateOption] = useState<DateRangeOption>('lastMonth');
   const [selectedReportType, setSelectedReportType] = useState('GSTR-1');
   
-  const calculateDates = (option: 'currentMonth' | 'lastMonth' | 'currentYear' | 'lastYear') => {
-      const now = new Date();
-      let from, to;
-      
-      const formatDate = (date: Date) => {
-          const year = date.getFullYear();
-          const month = String(date.getMonth() + 1).padStart(2, '0');
-          const day = String(date.getDate()).padStart(2, '0');
-          return `${year}-${month}-${day}`;
-      };
-      
-      switch(option) {
-          case 'currentMonth':
-              from = formatDate(new Date(now.getFullYear(), now.getMonth(), 1));
-              to = formatDate(new Date(now.getFullYear(), now.getMonth() + 1, 0));
-              break;
-          case 'lastMonth':
-              from = formatDate(new Date(now.getFullYear(), now.getMonth() - 1, 1));
-              to = formatDate(new Date(now.getFullYear(), now.getMonth(), 0));
-              break;
-          case 'currentYear':
-              from = `${now.getFullYear()}-04-01`;
-              to = `${now.getFullYear() + 1}-03-31`;
-              break;
-          case 'lastYear':
-              from = `${now.getFullYear() - 1}-04-01`;
-              to = `${now.getFullYear()}-03-31`;
-              break;
-      }
-      return { from: from!, to: to! };
-  };
-
-  const setQuickDate = (option: 'currentMonth' | 'lastMonth' | 'currentYear' | 'lastYear') => {
-      setQuickDateOption(option);
-      setDateRange(calculateDates(option));
-  };
-  
-  const [dateRange, setDateRange] = useState(() => {
-    return calculateDates('lastMonth');
-  });
+  const [dateRange, setDateRange] = useState(() => calculateDateRange('lastMonth'));
 
   useEffect(() => {
-      setQuickDate('lastMonth');
+      setDateRange(calculateDateRange('lastMonth'));
+      setQuickDateOption('lastMonth');
   }, []);
 
   const filteredVouchers = useMemo(() => {
@@ -342,148 +305,116 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
 
   return (
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-      <header className="mb-10">
-        <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Statutory GST Hub</h1>
-        <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Generate compliance-ready GSTR reports and monitor tax liabilities.</p>
-      </header>
       <header className="flex flex-col md:flex-row md:items-center justify-end gap-4">
-        <div className="flex bg-white dark:bg-gray-800 items-center p-1 md:p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-none w-fit">
-           <div className="flex items-center px-2 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-md whitespace-nowrap">
-               <Calendar size={14} className="mr-1.5 text-gray-400 hidden sm:block" />
-               {quickDateOption === 'currentMonth' ? 'Current Month' :
-                quickDateOption === 'lastMonth' ? 'Last Month' :
-                quickDateOption === 'currentYear' ? 'Current Year' :
-                quickDateOption === 'lastYear' ? 'Last Year' :
-                'Custom Period'}
-           </div>
-           <div className="flex items-center px-2">
-             <input
-              type="date"
-              className="text-[10px] sm:text-xs font-medium outline-none text-gray-700 dark:text-gray-300 bg-transparent cursor-pointer"
-              value={dateRange.from}
-              onChange={e => {
-                  setQuickDateOption(null);
-                  setDateRange(prev => ({ ...prev, from: e.target.value }));
-              }}
-             />
-             <span className="mx-1 sm:mx-2 text-gray-300">-</span>
-             <input 
-              type="date" 
-              className="text-[10px] sm:text-xs font-medium outline-none text-gray-700 bg-transparent cursor-pointer dark:text-gray-200" 
-              value={dateRange.to}
-              onChange={e => {
-                  setQuickDateOption(null);
-                  setDateRange(prev => ({ ...prev, to: e.target.value }));
-              }}
-             />
-           </div>
-        </div>
+        <DateRangeSelector dateRange={dateRange} onChange={setDateRange} defaultOption="lastMonth" />
       </header>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6 dark:bg-gray-800 dark:border-gray-800">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-            <div className="flex flex-col">
-              <h2 className="text-lg font-bold text-gray-800 flex items-center dark:text-gray-100">
-                <FileText className="mr-2 text-blue-600" size={20} />
-                {activeTab === 'summary' && 'GSTR1 Summary'}
-                {activeTab === 'filing' && 'GSTR-1 Filing'}
-                {activeTab === 'invoice_detail' && 'GSTR1 Invoices'}
-                {activeTab === 'hsn_detail' && 'GSTR1 HSN'}
-                {activeTab === 'gstr2b_report' && 'GSTR-2B Report'}
-                {activeTab === 'gstr3b_report' && 'GSTR-3B Report'}
-                {activeTab === 'gstr9_report' && 'GSTR-9 Report'}
-                {activeTab === 'gstr9c_report' && 'GSTR-9C Report'}
-                {activeTab === 'others_report' && 'Other GST Reports'}
-                {activeTab === 'generate_gst' && 'Generate GST Report'}
-              </h2>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 dark:bg-gray-800 dark:border-gray-800 print-area">
+        <div className="mb-6 w-full min-w-0 no-print">
+            <div className="flex flex-col min-w-0 flex-1">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <h2 className="text-lg font-bold text-gray-800 flex items-center dark:text-gray-100">
+                    <FileText className="mr-2 text-blue-600" size={20} />
+                    {activeTab === 'summary' && 'GSTR1 Summary'}
+                    {activeTab === 'filing' && 'GSTR-1 Filing'}
+                    {activeTab === 'invoice_detail' && 'GSTR1 Invoices'}
+                    {activeTab === 'hsn_detail' && 'GSTR1 HSN'}
+                    {activeTab === 'gstr2b_report' && 'GSTR-2B Report'}
+                    {activeTab === 'gstr3b_report' && 'GSTR-3B Report'}
+                    {activeTab === 'gstr9_report' && 'GSTR-9 Report'}
+                    {activeTab === 'gstr9c_report' && 'GSTR-9C Report'}
+                    {activeTab === 'others_report' && 'Other GST Reports'}
+                    {activeTab === 'generate_gst' && 'Generate GST Report'}
+                  </h2>
+                  <div className="flex space-x-2 self-start md:self-center">
+                    <button 
+                      onClick={handleExport}
+                      className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800"
+                      title="Download Report"
+                    >
+                      <Download size={18} />
+                    </button>
+                    <button 
+                      onClick={(e) => { e.currentTarget.blur(); setTimeout(() => window.print(), 100); }}
+                      className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800"
+                      title="Print Report"
+                    >
+                      <Printer size={18} />
+                    </button>
+                  </div>
+              </div>
               <div className="flex bg-gray-100 p-1 rounded-lg mt-3 w-full gap-1 overflow-x-auto custom-scrollbar dark:bg-gray-800">
                 <button 
                     id="gst-tab-generate_gst"
                     onClick={() => handleTabChange('generate_gst')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'generate_gst' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'generate_gst' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     Generate GST
                 </button>
                 <button 
                     id="gst-tab-summary"
                     onClick={() => handleTabChange('summary')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'summary' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'summary' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR1 Summary
                 </button>
                 <button 
                     id="gst-tab-filing"
                     onClick={() => handleTabChange('filing')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'filing' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'filing' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR1 Filing
                 </button>
                 <button 
                     id="gst-tab-invoice_detail"
                     onClick={() => handleTabChange('invoice_detail')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'invoice_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'invoice_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR1 Invoice
                 </button>
                 <button 
                     id="gst-tab-hsn_detail"
                     onClick={() => handleTabChange('hsn_detail')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'hsn_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'hsn_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR1 HSN
                 </button>
                 <button 
                     id="gst-tab-gstr2b_report"
                     onClick={() => handleTabChange('gstr2b_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr2b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr2b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR-2B
                 </button>
                 <button 
                     id="gst-tab-gstr3b_report"
                     onClick={() => handleTabChange('gstr3b_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr3b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr3b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR-3B
                 </button>
                 <button 
                     id="gst-tab-gstr9_report"
                     onClick={() => handleTabChange('gstr9_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR-9
                 </button>
                 <button 
                     id="gst-tab-gstr9c_report"
                     onClick={() => handleTabChange('gstr9c_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9c_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9c_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     GSTR-9C
                 </button>
                 <button 
                     id="gst-tab-others_report"
                     onClick={() => handleTabChange('others_report')}
-                    className={`px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'others_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'others_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     Others
                 </button>
               </div>
-            </div>
-            <div className="flex space-x-2 self-start md:self-center">
-              <button 
-                onClick={handleExport}
-                className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300"
-                title="Download Report"
-              >
-                <Download size={18} />
-              </button>
-              <button 
-                onClick={() => window.print()}
-                className="p-2 border rounded-lg hover:bg-gray-50 text-gray-600 transition-colors dark:hover:bg-gray-700 dark:text-gray-300"
-                title="Print Report"
-              >
-                <Printer size={18} />
-              </button>
             </div>
         </div>
 
@@ -505,10 +436,12 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                 value={quickDateOption || ''}
                 onChange={(e) => {
                     if (e.target.value) {
-                         setQuickDate(e.target.value as any);
+                         const option = e.target.value as DateRangeOption;
+                         setDateRange(calculateDateRange(option));
+                         setQuickDateOption(option);
                     }
                 }}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 block dark:border-gray-700 dark:bg-gray-800"
+                className="form-input text-xs font-bold mb-4 block"
             >
                 <option value="">Select Period</option>
                 <option value="currentMonth">Current Month</option>
@@ -519,7 +452,7 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
             <select
                 value={selectedReportType}
                 onChange={(e) => setSelectedReportType(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6 block dark:border-gray-700 dark:bg-gray-800"
+                className="form-input text-xs font-bold mb-6 block"
             >
                 <option value="GSTR-1">GSTR-1</option>
                 <option value="GSTR-2B">GSTR-2B</option>
@@ -528,7 +461,7 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                 <option value="GSTR-9C">GSTR-9C</option>
                 <option value="others">Others</option>
             </select>
-            <div className="grid grid-cols-3 gap-2 mb-6">
+            <div className="form-grid gap-2 mb-6">
               <button 
                   onClick={() => {
                       if (selectedReportType === 'GSTR-1') setActiveTab('summary');

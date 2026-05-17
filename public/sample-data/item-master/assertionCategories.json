@@ -1,16 +1,52 @@
 [
   {
-    "id": "assertionCategories-sample-1",
-    "name": "Sample AssertionCategories 1",
-    "code": "ASS-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "AC-001",
+    "name": "Compliance",
+    "description": "Regulatory Compliance Assertions"
+  },
+  {
+    "id": "AC-002",
+    "name": "Quality Control",
+    "description": "Product Quality Tests"
+  },
+  {
+    "id": "AC-003",
+    "name": "Environmental",
+    "description": "Eco and Sustainability"
+  },
+  {
+    "id": "AC-004",
+    "name": "Safety",
+    "description": "Health and Safety checks"
+  },
+  {
+    "id": "AC-005",
+    "name": "Performance",
+    "description": "Performance benchmark passed"
+  },
+  {
+    "id": "AC-006",
+    "name": "Durability",
+    "description": "Drop and stress tests"
+  },
+  {
+    "id": "AC-007",
+    "name": "Packaging",
+    "description": "Packaging integrity"
+  },
+  {
+    "id": "AC-008",
+    "name": "Software",
+    "description": "Firmware validation"
+  },
+  {
+    "id": "AC-009",
+    "name": "Battery",
+    "description": "Battery lifecycle testing"
+  },
+  {
+    "id": "AC-010",
+    "name": "Thermal",
+    "description": "Heat dissipation tests"
   }
 ]

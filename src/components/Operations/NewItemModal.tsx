@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Package, Save } from 'lucide-react';
 import { ItemMaster } from '../../types';
 
+
 interface NewItemModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -21,9 +22,7 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
     sku: '',
   });
 
-  if (!isOpen) return null;
-
-  return (
+  if (!isOpen) return null;  return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 dark:bg-gray-800">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/80 dark:border-gray-800">
@@ -40,9 +39,9 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
         </div>
         
         <div className="p-6 overflow-y-auto flex-1 h-full bg-white dark:bg-gray-800">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="col-span-1 md:col-span-2">
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Item Name / Description <span className="text-red-500">*</span></label>
+          <div className="form-grid gap-6">
+            <div className="form-field-wrapper col-span-1 md:col-span-2">
+              <label className="form-label">Item Name / Description <span className="text-red-500">*</span></label>
               <input 
                 type="text" 
                 value={formData.name || ''} 
@@ -53,8 +52,8 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">SKU / Code</label>
+            <div className="form-field-wrapper">
+<label className="form-label">SKU / Code</label>
               <input 
                 type="text" 
                 value={formData.sku || ''} 
@@ -64,8 +63,8 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">UOM (Unit of Measure)</label>
+            <div className="form-field-wrapper">
+<label className="form-label">UOM (Unit of Measure)</label>
               <select 
                 value={formData.uom || 'PCS'} 
                 onChange={(e) => setFormData({ ...formData, uom: e.target.value })}
@@ -80,8 +79,8 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
               </select>
             </div>
 
-            <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">HSN / SAC Code</label>
+            <div className="form-field-wrapper">
+<label className="form-label">HSN / SAC Code</label>
               <input 
                 type="text" 
                 value={formData.hsnCode || ''} 
@@ -91,8 +90,8 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Tax Rate (%)</label>
+            <div className="form-field-wrapper">
+<label className="form-label">Tax Rate (%)</label>
               <select 
                 value={formData.taxRate || 0} 
                 onChange={(e) => setFormData({ ...formData, taxRate: Number(e.target.value) })}
@@ -106,8 +105,8 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
               </select>
             </div>
 
-            <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Purchase Rate (₹)</label>
+            <div className="form-field-wrapper">
+<label className="form-label">Purchase Rate (₹)</label>
               <input 
                 type="number" 
                 value={formData.purchaseRate || ''} 
@@ -117,8 +116,8 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Sales Rate (₹)</label>
+            <div className="form-field-wrapper">
+<label className="form-label">Sales Rate (₹)</label>
               <input 
                 type="number" 
                 value={formData.salesRate || ''} 
@@ -128,8 +127,8 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
               />
             </div>
             
-            <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Category</label>
+            <div className="form-field-wrapper">
+<label className="form-label">Category</label>
               <input 
                 type="text" 
                 value={formData.category || ''} 
@@ -139,8 +138,8 @@ export const NewItemModal: React.FC<NewItemModalProps> = ({ isOpen, onClose, onS
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 dark:text-gray-400">Minimum Stock</label>
+            <div className="form-field-wrapper">
+<label className="form-label">Minimum Stock</label>
               <input 
                 type="number" 
                 value={formData.minStock || ''} 

@@ -18,7 +18,7 @@ export const SummaryReport: React.FC<SummaryReportProps> = ({ data, onExport }) 
             <input 
               type="text" 
               placeholder="Filter items..." 
-              className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full dark:border-gray-700"
+              className="form-input pl-9 pr-4 text-sm"
             />
           </div>
           <button 

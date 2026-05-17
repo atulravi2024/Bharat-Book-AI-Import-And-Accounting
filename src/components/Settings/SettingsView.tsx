@@ -63,7 +63,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   ledgerMasters = [],
   onAppModeChange,
 }) => {
-  const [workspaceName, setWorkspaceName] = useState("Bharat Book Enterprise");
   const [displayId, setDisplayId] = useState("BBE-2026-IND");
   const [fiscalYear, setFiscalYear] = useState(
     "April to March (Indian Standard)",
@@ -381,8 +380,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
-        if (parsed.workspaceName) setWorkspaceName(parsed.workspaceName);
-        else if (parsed.companyName) setWorkspaceName(parsed.companyName);
         if (parsed.displayId) setDisplayId(parsed.displayId);
         if (parsed.fiscalYear) setFiscalYear(parsed.fiscalYear);
         if (parsed.appMode) setAppMode(parsed.appMode);
@@ -515,8 +512,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             parsed = JSON.parse(content);
           }
 
-          if (parsed.workspaceName) setWorkspaceName(parsed.workspaceName);
-          else if (parsed.companyName) setWorkspaceName(parsed.companyName);
           if (parsed.displayId) setDisplayId(parsed.displayId);
           if (parsed.fiscalYear) setFiscalYear(parsed.fiscalYear);
           if (parsed.appMode) setAppMode(parsed.appMode);
@@ -543,7 +538,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   const handleReset = () => {
-    setWorkspaceName("Bharat Book Enterprise");
     setDisplayId("BBE-2026-IND");
     setFiscalYear("April to March (Indian Standard)");
     setAppMode("demo");
@@ -561,7 +555,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   const handleClear = () => {
-    setWorkspaceName("");
     setDisplayId("");
     setFiscalYear("");
     setAppMode("");
@@ -580,7 +573,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   const handleSave = () => {
     const settings = {
-      workspaceName,
       displayId,
       fiscalYear,
       appMode,
@@ -618,23 +610,22 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       utrExtractorType,
       accountNumberDetection,
     };
+    const previousSettingsStr = localStorage.getItem("bharat_book_app_settings");
+    const previousSettings = previousSettingsStr ? JSON.parse(previousSettingsStr) : {};
+    const previousAppMode = previousSettings.appMode || "demo";
+
     localStorage.setItem("bharat_book_app_settings", JSON.stringify(settings));
-    if (onAppModeChange) {
+    if (onAppModeChange && appMode !== previousAppMode) {
       onAppModeChange(appMode);
     }
     setIsSaved(true);
     setTimeout(() => {
       setIsSaved(false);
-      window.location.reload();
-    }, 1000);
+    }, 1500);
   };
 
   return (
     <div className="w-full px-2 sm:px-4 py-6 sm:py-8">
-      <header className="mb-10 px-2 text-left">
-        <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Control Center</h1>
-        <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Configure your professional workspace, AI preferences, and master data synchronization.</p>
-      </header>
       <div className="flex flex-col space-y-6">
         <div className="border-b border-gray-200 dark:border-gray-700 overflow-x-auto overflow-y-hidden custom-scrollbar pb-1 custom-scrollbar">
           <div className="flex flex-row space-x-2 min-w-max px-1">
@@ -758,8 +749,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           {activeTab === "general" && (
             <GeneralSettings
-              workspaceName={workspaceName}
-              setWorkspaceName={setWorkspaceName}
               theme={theme}
               setTheme={setTheme}
               language={language}

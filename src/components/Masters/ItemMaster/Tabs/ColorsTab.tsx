@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
+import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon } from '../../../icons/IconComponents';
+
 
 interface ColorsTabProps {
     data: any[];
@@ -13,8 +15,7 @@ export const ColorsTab: React.FC<ColorsTabProps> = ({ data, onSave }) => {
     const [formData, setFormData] = useState<any>({});
     const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; id: string; name: string } | null>(null);
 
-    const filteredData = useMemo(() => {
-        return (data || []).filter((m: any) => 
+    const filteredData = useMemo(() => {  return (data || []).filter((m: any) => 
             String(m.name || m.code || m.id || '').toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [data, searchTerm]);
@@ -41,11 +42,14 @@ export const ColorsTab: React.FC<ColorsTabProps> = ({ data, onSave }) => {
             <div className="p-4 bg-gray-50/30 border-b border-gray-100 flex justify-between items-center dark:bg-gray-800/30 dark:border-gray-800">
                 <div className="relative max-w-md w-full mr-4">
                     <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="text" placeholder="Search Colors..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="text" placeholder="Search Colors..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="form-input pl-10 pr-4 text-sm" />
                 </div>
-                <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-bold flex items-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
-                    <AddIcon className="sm:mr-2" /> <span className="hidden sm:inline-block">Add Color
+                <div className="flex items-center">
+                    <ImportExportButtons data={data} onSave={onSave} entityName="ColorsTab" />
+                    <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">Add Color
                 </span></button>
+                </div>
             </div>
 
             <div className="flex-1 overflow-auto custom-scrollbar min-h-0">
@@ -58,6 +62,7 @@ export const ColorsTab: React.FC<ColorsTabProps> = ({ data, onSave }) => {
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Color</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Hex</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Family</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Status</th>
                                 <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -75,6 +80,13 @@ export const ColorsTab: React.FC<ColorsTabProps> = ({ data, onSave }) => {
         </td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200 font-mono text-xs">{m.hex}</td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.colorFamily && <span className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-[10px] dark:bg-gray-700 dark:text-gray-300">{m.colorFamily}</span>}</td>
+        <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+            {m.status === 'Active' || !m.status ? (
+                <span className="px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-bold text-[10px] uppercase">Active</span>
+            ) : (
+                <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-bold text-[10px] uppercase">Inactive</span>
+            )}
+        </td>
     
                                     <td className="p-4">
                                         <div className="flex items-center justify-center space-x-2">
@@ -109,19 +121,33 @@ export const ColorsTab: React.FC<ColorsTabProps> = ({ data, onSave }) => {
                         </div>
                         
                         <div className="overflow-y-auto flex-1 p-6 space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Name / Code *</label>
-                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Enter name or code..." autoFocus />
+                            <div className="form-grid gap-4">
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label">Color Code *</label>
+                                    <input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input bg-transparent font-mono" placeholder="e.g. COL-001" autoFocus />
                                 </div>
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Description / Notes</label>
-                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent dark:text-white" placeholder="Add any extra details..." />
+                                <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label">Color Name *</label>
+                                    <input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input" placeholder="e.g. Red" />
+                                </div>
+                                <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                    <label className="form-label">Description / Notes</label>
+                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="form-input" placeholder="Add any extra details..." />
                                 </div>
                                 
-        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Hex Code</label><div className="flex items-center space-x-2"><input type="color" value={formData.hex || '#000000'} onChange={e => setFormData({...formData, hex: e.target.value})} className="w-10 h-10 border-0 rounded cursor-pointer" /><input type="text" value={formData.hex || ''} onChange={e => setFormData({...formData, hex: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="#000000" /></div></div>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Hex Code</label><div className="flex items-center space-x-2"><input type="color" value={formData.hex || '#000000'} onChange={e => setFormData({...formData, hex: e.target.value})} className="w-10 h-10 border-0 rounded cursor-pointer" /><input type="text" value={formData.hex || ''} onChange={e => setFormData({...formData, hex: e.target.value})} className="form-input bg-transparent" placeholder="#000000" /></div></div>
         
-        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1 dark:text-gray-400">Color Family</label><input type="text" value={formData.colorFamily || ''} onChange={e => setFormData({...formData, colorFamily: e.target.value})} className="w-full p-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 bg-transparent" placeholder="e.g. Red, Earth Tones" /></div>
+        <div className="form-field-wrapper">
+<label className="form-label dark:text-gray-400">Color Family</label><input type="text" value={formData.colorFamily || ''} onChange={e => setFormData({...formData, colorFamily: e.target.value})} className="form-input bg-transparent" placeholder="e.g. Red, Earth Tones" /></div>
+        
+        <div className="form-field-wrapper col-span-1 md:col-span-2 mt-2">
+            <label className="form-label dark:text-gray-400">Status</label>
+            <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value})} className="form-input bg-white dark:bg-gray-800">
+                <option value="Active">Active / Enable</option>
+                <option value="Inactive">Inactive / Disable</option>
+            </select>
+        </div>
     
                             </div>
                         </div>

@@ -50,10 +50,19 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
   setAccountGroupMasters,
   initialTab
 }) => {
-    const [activeTab, setActiveTab] = useState<MasterTab>(initialTab || 'parties');
+    const validTabs: MasterTab[] = [
+        'parties', 'vendors', 'banks', 'ledgers', 'contacts', 
+        'locations', 'costCenters', 'accountGroups'
+    ];
+
+    const [activeTab, setActiveTab] = useState<MasterTab>(
+        (initialTab && validTabs.includes(initialTab as MasterTab)) ? initialTab : 'parties'
+    );
 
     useEffect(() => {
-        if (initialTab && initialTab !== activeTab) setActiveTab(initialTab);
+        if (initialTab && validTabs.includes(initialTab as MasterTab) && initialTab !== activeTab) {
+            setActiveTab(initialTab as MasterTab);
+        }
     }, [initialTab]);
 
     useEffect(() => {
@@ -96,9 +105,9 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
             case 'vendors':
                 return <VendorsTab data={vendors} onSave={(newV) => setPartyMasters([...newV, ...customers])} />;
             case 'ledgers':
-                return <GeneralLedgersTab data={ledgers} onSave={(newL) => setLedgerMasters([...newL, ...banks])} />;
+                return <GeneralLedgersTab data={ledgers} onSave={(newL) => setLedgerMasters([...newL, ...banks])} accountGroupMasters={accountGroupMasters} />;
             case 'banks':
-                return <BankMastersTab data={banks} onSave={(newB) => setLedgerMasters([...newB, ...ledgers])} />;
+                return <BankMastersTab data={banks} onSave={(newB) => setLedgerMasters([...newB, ...ledgers])} accountGroupMasters={accountGroupMasters} />;
             case 'contacts':
                 return <ContactsTab data={contactMasters} onSave={setContactMasters} />;
             case 'accountGroups':
@@ -113,12 +122,7 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 animate-in fade-in duration-500">
-            <header className="mb-8 text-left">
-                <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Relational Master Directory</h1>
-                <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Configure and manage your financial ecosystem: parties, ledgers, and organizational units.</p>
-            </header>
-
+        <div className="max-w-7xl mx-auto px-4 py-6 animate-in fade-in duration-500">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-x-auto custom-scrollbar justify-between items-center pr-4">
                     <div className="flex">

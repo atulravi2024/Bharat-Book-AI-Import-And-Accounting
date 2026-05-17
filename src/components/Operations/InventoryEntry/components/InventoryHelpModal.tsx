@@ -26,7 +26,7 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
                <HelpCircle size={24} className="text-emerald-500" /> 
                Help & User Guide
              </h3>
-             <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mt-1 dark:text-gray-400">Mastering Inventory Operations</p>
+             <p className="form-label tracking-widest mt-1 dark:text-gray-400">Mastering Inventory Operations</p>
           </div>
           <button onClick={onClose} className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors border border-transparent hover:border-red-100 group">
             <X size={24} className="group-active:scale-95 transition-transform" />
@@ -52,7 +52,7 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
                   <h4 className="font-black text-emerald-800 text-xs mb-3 pb-2 border-b-2 border-emerald-50 uppercase tracking-[0.2em] flex items-center">
                     <Bookmark size={14} className="mr-2" /> Workflow Types (Tabs)
                   </h4>
-                  <div className="grid grid-cols-1 gap-4">
+                  <div className="form-grid gap-4">
                     <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
                        <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-200">
                          <b>Stock Journal:</b> The "Swiss Army Knife" of inventory. Use for generic taxable adjustments, converting raw materials into finished goods (Manufacturing), or correcting bin errors.
@@ -93,7 +93,7 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
                 <div>
                   <h4 className="font-black text-emerald-800 text-xs mb-3 pb-2 border-b-2 border-emerald-50 uppercase tracking-[0.2em]">2. Intelligent Item Selection</h4>
                   <p className="text-xs text-gray-500 mb-3 italic dark:text-gray-400">Use one of three entry methods:</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="form-grid gap-3">
                     <div className="p-3 border border-gray-100 rounded-xl bg-gray-50 text-center dark:border-gray-800 dark:bg-gray-900">
                       <Zap size={16} className="mx-auto mb-2 text-yellow-500" />
                       <span className="text-[10px] uppercase font-bold text-gray-600 dark:text-gray-300">Smart Search</span>
@@ -125,7 +125,7 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
             </button>
             {expandedSections.keyboard && (
               <div className="p-5 bg-white dark:bg-gray-800">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="form-grid gap-4">
                   <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-gray-700">
                     <span className="text-xs font-bold text-gray-500 dark:text-gray-400">Save Current Entry</span>
                     <kbd className="px-2 py-1 bg-gray-100 border border-gray-200 rounded text-[10px] font-black text-gray-600 min-w-[50px] text-center shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">CTRL + S</kbd>

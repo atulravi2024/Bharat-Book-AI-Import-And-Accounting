@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import * as XLSX from 'xlsx';
+import { Printer } from 'lucide-react';
 import { ParsedVoucher, VoucherType, PartyMaster, LedgerMaster, AuditLog, Confidence } from '../../../types';
 import { 
     BankIcon,
@@ -24,6 +25,8 @@ import { BankStatementTable } from './BankStatementTable';
 import { BankReportModals } from './BankReportModals';
 import { matchVoucher, matchVoucherAsync } from '../../../services/matching';
 
+import { ImportExportButtons } from '../../shared/ImportExportButtons';
+
 interface BankReportViewProps {
   vouchers: ParsedVoucher[];
   partyMasters: PartyMaster[];
@@ -40,6 +43,7 @@ interface BankReportViewProps {
   onCreateLedgerMaster?: (name: string) => void;
   defaultTab?: string | null;
   onTabChange?: (tab: string | null) => void;
+  setVouchers?: (data: any[]) => void;
 }
 
 export const BankReportView: React.FC<BankReportViewProps> = ({ 
@@ -57,7 +61,8 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
     onCreatePartyMaster,
     onCreateLedgerMaster,
     defaultTab,
-    onTabChange
+    onTabChange,
+    setVouchers
 }) => {
     vouchers = vouchers || [];
     partyMasters = partyMasters || [];
@@ -272,30 +277,17 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
         setDeleteConfirmation(null);
     };
 
-    return (
-        <div className="h-full flex flex-col animate-in fade-in duration-500">
-            <header className="mb-10 px-4 pt-4 text-left">
-                <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Bank Statement Analyzer</h1>
-                <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Advanced AI-powered reconciliation and structural analysis of bank transactions.</p>
-            </header>
-            <div className="flex flex-col md:flex-row md:items-center justify-end mb-4 gap-4 flex-shrink-0">
-                <div className="flex flex-wrap gap-3">
-                    <button 
-                        onClick={() => onImportVoucher(VoucherType.BankStatement)}
-                        className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700 transition-all shadow-md active:scale-95"
-                    >
-                        <BankIcon className="mr-2" /> Import Raw Bank
-                    </button>
-                    <button 
-                        onClick={handleBulkExport}
-                        className="flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-50 transition-all dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
-                    >
-                        <DownloadIcon className="mr-2 text-gray-400" /> Export
-                    </button>
-                </div>
-            </div>
+    const completeSave = (data: any[]) => {
+        if (!setVouchers) return;
+        const nonBank = vouchers.filter(v => v.type !== VoucherType.BankStatement && v.origin !== 'bank');
+        setVouchers([...nonBank, ...data]);
+    };
 
-            <div className="mb-2 border-b border-gray-200 flex-shrink-0 overflow-x-auto overflow-y-hidden custom-scrollbar dark:border-gray-700">
+    const bankVouchers = vouchers.filter(v => derivesFromBank(v));
+
+    return (
+        <div className="h-full flex flex-col animate-in fade-in duration-500 print-area">
+            <div className="mb-2 border-b border-gray-200 flex-shrink-0 overflow-x-auto overflow-y-hidden custom-scrollbar dark:border-gray-700 no-print">
                 <nav className="-mb-px flex space-x-8 min-w-max px-2" aria-label="Tabs">
                     {['bank', 'auto-matched', 'missing-masters', 'unidentify', 'classify', 'reconcile'].map((tab) => (
                         <button
@@ -322,7 +314,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
             {activeTab !== 'reconcile' && (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 relative flex-1 flex flex-col min-h-0 dark:bg-gray-800 dark:border-gray-700">
                     {selectedIds.length > 0 && (
-                        <div className="absolute top-0 inset-x-0 bg-indigo-600 text-white p-3 z-30 flex items-center justify-between animate-in slide-in-from-top duration-300">
+                        <div className="absolute top-0 inset-x-0 bg-indigo-600 text-white p-3 z-30 flex items-center justify-between animate-in slide-in-from-top duration-300 no-print">
                             <div className="flex items-center text-sm font-bold">
                                 <span className="bg-indigo-800 px-2 py-1 rounded mr-3">{selectedIds.length}</span>
                             </div>
@@ -335,16 +327,23 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
                             </div>
                         </div>
                     )}
-                    <div className="p-4 border-b border-gray-100 flex-shrink-0 flex items-center justify-between dark:border-gray-800">
-                        <div className="relative max-w-md w-full">
-                            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input 
-                                type="text"
-                                placeholder="Search statements..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all text-sm dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                            />
+                    <div className="p-4 border-b border-gray-100 flex-shrink-0 flex items-center justify-between dark:border-gray-800 no-print">
+                        <div className="flex flex-1 items-center gap-4">
+                            <div className="relative max-w-md w-full">
+                                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                                <input 
+                                    type="text"
+                                    placeholder="Search statements..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all text-sm dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                                />
+                            </div>
+                            <ImportExportButtons data={bankVouchers} onSave={completeSave} entityName="BankStatements" />
+                            <button onClick={(e) => { e.currentTarget.blur(); setTimeout(() => window.print(), 100); }} className="bg-white text-gray-700 border border-gray-200 px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-sm whitespace-nowrap hover:bg-gray-50 active:scale-95 transition-all dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 hover:dark:bg-gray-700">
+                                <Printer className="text-[18px] leading-none lg:mr-2" />
+                                <span className="hidden lg:inline-block">Print</span>
+                            </button>
                         </div>
                         <button 
                             disabled={isRunningAI || vouchers.length === 0}

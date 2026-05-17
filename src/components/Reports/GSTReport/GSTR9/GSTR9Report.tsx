@@ -45,7 +45,7 @@ export const GSTR9Report: React.FC<GSTR9ReportProps> = ({ useSampleData, onToggl
                     <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
                 </div>
             ) : data ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="form-grid gap-6">
                     <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-800">
                         <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 dark:text-gray-100">Outward Supplies</h3>
                         <div className="space-y-3">
@@ -86,9 +86,9 @@ export const GSTR9Report: React.FC<GSTR9ReportProps> = ({ useSampleData, onToggl
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm md:col-span-2 dark:bg-gray-800 dark:border-gray-800">
+                    <div className="form-field-wrapper bg-white p-6 rounded-xl border border-gray-100 shadow-sm md:col-span-2 dark:bg-gray-800 dark:border-gray-800">
                         <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 dark:text-gray-100">Tax Paid Details</h3>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div className="form-grid gap-4">
                             <div className="bg-blue-50 p-4 rounded-lg text-center border border-blue-100">
                                 <span className="text-xs font-bold text-blue-400 block mb-1 uppercase tracking-widest">CGST</span>
                                 <span className="text-sm font-black text-blue-700">₹{data.tax_paid?.cgst?.toLocaleString('en-IN')}</span>

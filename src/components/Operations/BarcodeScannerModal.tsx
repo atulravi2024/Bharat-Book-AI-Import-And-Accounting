@@ -111,7 +111,7 @@ export const BarcodeScannerModal: React.FC<BarcodeScannerModalProps> = ({ isOpen
                  <span className="absolute left-1/2 -translate-x-1/2 -top-2.5 bg-white px-4 text-xs font-black text-gray-400 uppercase tracking-widest dark:bg-gray-800">Manual Entry & DEMO</span>
               </div>
               
-              <div className="w-full grid grid-cols-1 gap-4">
+              <div className="form-grid w-full gap-4">
                 <div className="flex gap-2">
                   <div className="relative flex-1">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

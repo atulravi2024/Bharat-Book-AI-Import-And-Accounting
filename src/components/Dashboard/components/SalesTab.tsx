@@ -7,7 +7,7 @@ import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Ba
 export const SalesTab = ({ stats, isDemo }: any) => {
     return (
         <motion.div key="sales" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <KPIComponent label="Sales Revenue" val={`₹${stats.vol.sales.toLocaleString()}`} sub={`${stats.counts.sales} Vouchers`} icon={TrendingUp} color="text-blue-600" bg="bg-blue-50" isDemo={isDemo} />
                 <KPIComponent label="Averaging" val={`₹${(stats.vol.sales / (stats.counts.sales || 1)).toFixed(0)}`} sub="Per Invoice" icon={Activity} color="text-indigo-600" bg="bg-indigo-50" isDemo={isDemo} />
                 <KPIComponent label="Growth" val="+12.5%" sub="MoM Deviation" icon={Target} color="text-emerald-600" bg="bg-emerald-50" isDemo={isDemo} />

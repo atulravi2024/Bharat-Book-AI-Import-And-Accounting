@@ -40,9 +40,9 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                        <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                        <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
       
-                        <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                        <div className="form-field-wrapper form-grid md:col-span-2 gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
                           <label className="flex items-center space-x-3 cursor-pointer group">
                             <div className="relative">
                               <input
@@ -170,11 +170,11 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                           </label>
                         </div>
       
-                        <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-gray-100 dark:border-gray-800">
+                        <div className="form-field-wrapper form-grid md:col-span-2 gap-6 pt-6 border-t border-gray-100 dark:border-gray-800">
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Currency & Exchange</h4>
                             <div className="space-y-2">
-                              <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                              <label className="form-label">
                                 Exchange Rate Update
                               </label>
                               <select
@@ -192,9 +192,9 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
       
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">TDS / TCS Compliance</h4>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="form-grid gap-4">
                               <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                                <label className="form-label">
                                   Default TDS Rate (%)
                                 </label>
                                 <input
@@ -206,7 +206,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                 />
                               </div>
                               <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                                <label className="form-label">
                                   Threshold Limit
                                 </label>
                                 <input
@@ -223,7 +223,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Approval Control</h4>
                             <div className="space-y-2">
-                              <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                              <label className="form-label">
                                 Approval Threshold (₹)
                               </label>
                               <input
@@ -239,9 +239,9 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
       
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Interest Calculation</h4>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="form-grid gap-4">
                               <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                                <label className="form-label">
                                   Late Interest (%)
                                 </label>
                                 <input
@@ -253,7 +253,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                 />
                               </div>
                               <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                                <label className="form-label">
                                   Method
                                 </label>
                                 <select
@@ -271,9 +271,9 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
       
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Compliance & Closing</h4>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="form-grid gap-4">
                               <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                                <label className="form-label">
                                   Soft Close Date
                                 </label>
                                 <input
@@ -284,7 +284,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                 />
                               </div>
                               <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                                <label className="form-label">
                                   Hard Freeze Date
                                 </label>
                                 <input
@@ -298,10 +298,10 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                           </div>
                         </div>
       
-                        <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 pt-6 border-t border-gray-100 dark:border-gray-800">
+                        <div className="form-field-wrapper form-grid md:col-span-2 gap-4 pt-6 border-t border-gray-100 dark:border-gray-800">
                           {firmData.enableBackdatedGracePeriod && (
                             <div className="space-y-2">
-                              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                              <label className="form-label">
                                 Grace Period (Days)
                               </label>
                               <input

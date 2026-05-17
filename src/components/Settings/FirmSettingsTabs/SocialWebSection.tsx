@@ -40,9 +40,9 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             LinkedIn Page
                           </label>
                           <input
@@ -56,7 +56,7 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Twitter / X Handle
                           </label>
                           <input
@@ -70,7 +70,7 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Facebook Page
                           </label>
                           <input
@@ -84,7 +84,7 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Instagram Handle
                           </label>
                           <input
@@ -98,7 +98,7 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             YouTube Channel
                           </label>
                           <input
@@ -112,7 +112,7 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             WhatsApp Number
                           </label>
                           <input

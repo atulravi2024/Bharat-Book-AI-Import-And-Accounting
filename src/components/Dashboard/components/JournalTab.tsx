@@ -7,7 +7,7 @@ import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Ba
 export const JournalTab = ({ stats, isDemo }: any) => {
     return (
         <motion.div key="journal" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <KPIComponent label="Journal Value" val={`₹${stats.vol.journal.toLocaleString()}`} sub={`${stats.counts.journal} Entries`} icon={FileText} color="text-slate-600" bg="bg-slate-50" isDemo={isDemo} />
                 <KPIComponent label="Taxable Adjustments" val="Manual" sub="Override triggered" icon={Activity} color="text-blue-600" bg="bg-blue-50" isDemo={isDemo} />
                 <KPIComponent label="Compliance" val="Standard" sub="IA-v1 protocols" icon={ShieldCheck} color="text-indigo-600" bg="bg-indigo-50" isDemo={isDemo} />

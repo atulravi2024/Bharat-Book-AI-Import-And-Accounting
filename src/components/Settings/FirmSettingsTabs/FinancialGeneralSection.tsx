@@ -40,9 +40,9 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Financial Year
                           </label>
                           <select
@@ -62,7 +62,7 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Base Currency
                           </label>
                           <select
@@ -82,7 +82,7 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Date Format
                           </label>
                           <select
@@ -98,7 +98,7 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Accounting Method
                           </label>
                           <select

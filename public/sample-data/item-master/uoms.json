@@ -1,16 +1,74 @@
 [
   {
-    "id": "uoms-sample-1",
-    "name": "Sample Uoms 1",
-    "code": "UOM-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "UOM-001",
+    "name": "Numbers",
+    "symbol": "Nos",
+    "conversionFactor": 1
+  },
+  {
+    "id": "UOM-002",
+    "name": "Kilograms",
+    "symbol": "Kgs",
+    "conversionFactor": 1
+  },
+  {
+    "id": "UOM-003",
+    "name": "Grams",
+    "symbol": "Gms",
+    "conversionFactor": 1000
+  },
+  {
+    "id": "UOM-004",
+    "name": "Pieces",
+    "symbol": "Pcs",
+    "conversionFactor": 1
+  },
+  {
+    "id": "UOM-005",
+    "name": "Boxes",
+    "symbol": "Bx",
+    "conversionFactor": 1
+  },
+  {
+    "id": "UOM-006",
+    "name": "Liters",
+    "symbol": "Ltr",
+    "conversionFactor": 1
+  },
+  {
+    "id": "UOM-007",
+    "name": "Milliliters",
+    "symbol": "ml",
+    "conversionFactor": 1000
+  },
+  {
+    "id": "UOM-008",
+    "name": "Meters",
+    "symbol": "Mtr",
+    "conversionFactor": 1
+  },
+  {
+    "id": "UOM-009",
+    "name": "Centimeters",
+    "symbol": "cm",
+    "conversionFactor": 100
+  },
+  {
+    "id": "UOM-010",
+    "name": "Dozen",
+    "symbol": "Dzn",
+    "conversionFactor": 12
+  },
+  {
+    "id": "UOM-011",
+    "name": "Sets",
+    "symbol": "Set",
+    "conversionFactor": 1
+  },
+  {
+    "id": "UOM-012",
+    "name": "Packs",
+    "symbol": "Pck",
+    "conversionFactor": 1
   }
 ]

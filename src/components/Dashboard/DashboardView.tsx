@@ -172,10 +172,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
       {/* Dynamic Header */}
       <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8">
         <div className="max-w-[1600px] mx-auto space-y-6 sm:space-y-8 pb-12">
-          <header className="mb-10 text-left">
-            <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Professional Ledger Workspace</h1>
-            <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Intelligent financial insights, real-time transaction monitoring, and multi-entity consolidation.</p>
-          </header>
           
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
             <div className="flex bg-white dark:bg-gray-800 rounded-2xl p-1 shadow-sm border border-premium-slate-100 dark:border-gray-700 overflow-x-auto custom-scrollbar h-fit snap-x w-full sm:w-auto">

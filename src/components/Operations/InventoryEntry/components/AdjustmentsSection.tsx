@@ -2,6 +2,7 @@ import React from 'react';
 import { ChevronUp } from 'lucide-react';
 import { SearchableDropdown } from '../../../ui/SearchableDropdown';
 
+
 interface AdjustmentsSectionProps {
   collapsedSections: any;
   toggleSection: (section: string) => void;
@@ -16,8 +17,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
   headerDetails,
   handleHeaderChange,
   ledgerMasters
-}) => {
-  return (
+}) => {  return (
     <>
       <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative mb-6 transition-all duration-300 z-[15] ${collapsedSections.taxableAdjustments ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
         <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.taxableAdjustments ? '' : 'mb-6'}`} onClick={() => toggleSection('taxableAdjustments')}>
@@ -29,8 +29,8 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
         
         {!collapsedSections.taxableAdjustments && (
         <div className="animate-in fade-in slide-in-from-top-2 duration-300 flex flex-col gap-6">
-           <div>
-              <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Voucher Level Discount</label>
+           <div className="form-field-wrapper">
+<label className="form-label">Voucher Level Discount</label>
               <div className="flex items-center gap-4">
                 <div className="flex-1">
                   <input 
@@ -57,8 +57,8 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
               </div>
            </div>
            
-           <div>
-              <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Other Taxable Adjustment / Charges</label>
+           <div className="form-field-wrapper">
+<label className="form-label">Other Taxable Adjustment / Charges</label>
               <div className="flex flex-col gap-4">
                 <div className="w-full">
                    <SearchableDropdown
@@ -109,8 +109,8 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
         
         {!collapsedSections.nonTaxableAdjustments && (
         <div className="animate-in fade-in slide-in-from-top-2 duration-300 flex flex-col gap-6">
-           <div>
-              <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Voucher Level Discount (Non-Taxable)</label>
+           <div className="form-field-wrapper">
+<label className="form-label">Voucher Level Discount (Non-Taxable)</label>
               <div className="flex items-center gap-4">
                 <div className="flex-1">
                   <input 
@@ -137,8 +137,8 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
               </div>
            </div>
            
-           <div>
-              <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Other Non-Taxable Adjustment / Charges</label>
+           <div className="form-field-wrapper">
+<label className="form-label">Other Non-Taxable Adjustment / Charges</label>
               <div className="flex flex-col gap-4">
                 <div className="w-full">
                    <SearchableDropdown
@@ -191,7 +191,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
         <div className="animate-in fade-in slide-in-from-top-2 duration-300 flex flex-col gap-6">
           <div className="flex items-center gap-4">
             <div className="flex-1">
-              <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Rounding Type</label>
+              <label className="form-label">Rounding Type</label>
               <select 
                 className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                 value={headerDetails.roundingType || 'auto'}
@@ -205,7 +205,7 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
               </select>
             </div>
             <div className="flex-1">
-              <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Round Off Amount</label>
+              <label className="form-label">Round Off Amount</label>
               <div className="relative">
                 <span className="absolute left-4 top-[22px] -translate-y-1/2 text-gray-400 font-black z-10">₹</span>
                 <input 

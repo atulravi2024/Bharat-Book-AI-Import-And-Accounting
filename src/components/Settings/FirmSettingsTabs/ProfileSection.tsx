@@ -40,9 +40,9 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Business Constitution
                           </label>
                           <select
@@ -64,7 +64,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Nature of Business
                           </label>
                           <select
@@ -91,7 +91,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Sales Channel / E-Commerce
                           </label>
                           <select
@@ -110,7 +110,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Select the Business Type
                           </label>
                           <select
@@ -131,7 +131,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             What business is involved?
                           </label>
                           <select
@@ -156,7 +156,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                         </div>
                         {BUSINESS_SUBDOMAINS[firmData.businessDomain] && (
                           <div className="space-y-2">
-                            <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                            <label className="form-label">
                               Specific Business Type
                             </label>
                             <select

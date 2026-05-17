@@ -40,9 +40,9 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             GSTIN / Tax ID
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -67,7 +67,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             PAN Number
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -92,7 +92,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             TAN Number
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -117,7 +117,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             LUT Number (For Exports)
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -142,7 +142,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Professional Tax (PT) Reg No.
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">

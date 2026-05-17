@@ -46,11 +46,11 @@ export const GSTR2BReport: React.FC<GSTR2BReportProps> = ({ useSampleData, onTog
                 </div>
             ) : data ? (
                 <div className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="form-grid gap-6">
                         {data.sections.map((sec: any, i: number) => (
                             <div key={i} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-800">
                                 <h3 className="font-bold text-gray-800 mb-4 dark:text-gray-100">{sec.title}</h3>
-                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                <div className="form-grid gap-4 mb-4">
                                     <div className="bg-gray-50 p-3 rounded-lg dark:bg-gray-900">
                                         <p className="text-xs text-gray-500 font-medium dark:text-gray-400">Total Taxable</p>
                                         <p className="font-bold text-gray-800 dark:text-gray-100">₹{sec.total_taxable?.toLocaleString('en-IN')}</p>
@@ -60,7 +60,7 @@ export const GSTR2BReport: React.FC<GSTR2BReportProps> = ({ useSampleData, onTog
                                         <p className="font-bold text-blue-700">₹{sec.total_itc?.toLocaleString('en-IN')}</p>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-3 gap-2">
+                                <div className="form-grid gap-2">
                                     <div className="text-center p-2 rounded bg-gray-50 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
                                         <p className="text-[10px] uppercase font-bold text-gray-400">CGST</p>
                                         <p className="text-xs font-bold text-gray-700 dark:text-gray-200">₹{sec.cgst?.toLocaleString('en-IN')}</p>

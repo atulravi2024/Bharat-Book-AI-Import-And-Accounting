@@ -40,9 +40,9 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             CIN (Corporate Identity Number)
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -67,7 +67,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             MSME / Udyam Number
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -92,7 +92,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             IEC (Import Export Code)
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -117,7 +117,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Trade License Number
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -145,7 +145,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             FSSAI License Number (If Applicable)
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -173,7 +173,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Drug License No. (If applicable)
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">

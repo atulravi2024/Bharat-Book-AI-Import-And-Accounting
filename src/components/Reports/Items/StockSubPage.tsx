@@ -81,7 +81,7 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
     }
 
     if (searchTerm) {
-      list = list.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      list = list.filter(item => String(item.name || '').toLowerCase().includes(searchTerm.toLowerCase()));
     }
 
     return list;
@@ -102,7 +102,7 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
               placeholder="Search items..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[200px] dark:border-gray-700"
+              className="form-input pl-9 pr-4 text-sm focus:border-transparent min-w-[200px]"
             />
           </div>
           <button 

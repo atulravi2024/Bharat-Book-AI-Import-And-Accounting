@@ -15,6 +15,7 @@ import { TrialBalance } from './TrialBalance';
 import { SalesRegister } from './SalesRegister';
 import { PurchaseRegister } from './PurchaseRegister';
 import { GSTR1Report } from './GSTR1Report';
+import { DateRangeSelector } from '../../shared/DateRangeSelector';
 
 const TrendingUpIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -34,7 +35,6 @@ type ReportType = 'pl' | 'bs' | 'cash_flow' | 'bank_flow' | 'trial_balance' | 's
 
 export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, onTabChange, activeSamples }) => {
   const [activeTab, setActiveTab] = useState<ReportType>((defaultTab as ReportType) || 'pl');
-  const [dateRangeMode, setDateRangeMode] = useState<'fy' | 'custom'>('fy');
   
   useEffect(() => {
     if (defaultTab && defaultTab !== activeTab) {
@@ -282,42 +282,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
   return (
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-end gap-4">
-        <div className="flex items-center space-x-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700">
-           <button
-             onClick={() => setDateRangeMode(m => m === 'fy' ? 'custom' : 'fy')}
-             className="flex items-center space-x-2 text-xs font-bold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-3 py-1.5 rounded-lg mr-2"
-           >
-             <Calendar size={14} />
-             <span>{dateRangeMode === 'fy' ? 'FY Period' : 'Custom Period'}</span>
-           </button>
-
-           {dateRangeMode === 'custom' && (
-             <>
-               <div className="flex items-center px-3 border-r border-gray-200 dark:border-gray-600">
-                 <input
-                  type="date"
-                  className="text-xs font-medium outline-none text-gray-600 dark:text-gray-300 bg-transparent" 
-                  value={dateRange.from}
-                  onChange={e => setDateRange(prev => ({ ...prev, from: e.target.value }))}
-                 />
-               </div>
-               <div className="flex items-center px-3">
-                 <ArrowRight size={14} className="text-gray-300 mr-3" />
-                 <input 
-                  type="date" 
-                  className="text-xs font-medium outline-none text-gray-600 dark:text-gray-300" 
-                  value={dateRange.to}
-                  onChange={e => setDateRange(prev => ({ ...prev, to: e.target.value }))}
-                 />
-               </div>
-             </>
-           )}
-           {dateRangeMode === 'fy' && (
-             <div className="flex items-center px-3 text-xs font-bold text-gray-700 dark:text-gray-200">
-                {dateRange.from} <ArrowRight size={14} className="mx-2 text-gray-300" /> {dateRange.to}
-             </div>
-           )}
-        </div>
+        <DateRangeSelector dateRange={dateRange} onChange={setDateRange} defaultOption="currentFY" />
       </header>
 
       {/* Report Tabs */}

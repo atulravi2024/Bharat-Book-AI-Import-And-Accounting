@@ -120,6 +120,8 @@ export type MainView = 'dashboard' | 'ledger-master' | 'item-master' | 'vouchers
 export interface PartyMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   type: 'Customer' | 'Vendor' | 'Both';
   gstin?: string;
   panNo?: string;
@@ -140,6 +142,8 @@ export interface PartyMaster {
 export interface LedgerMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   group: string;
   description?: string;
   taxRate?: number;
@@ -162,6 +166,7 @@ export interface ItemMaster {
   id: string;
   name: string;
   code?: string;
+  status?: 'Active' | 'Inactive';
   itemType?: 'Inventory' | 'Service' | 'Non-Inventory' | 'Assembly';
   hsnCode?: string;
   taxRate: number; // Percentage
@@ -234,6 +239,8 @@ export interface ItemMaster {
 export interface BomMaster {
   id: string;
   name: string;
+  code?: string;
+  description?: string;
   itemId: string; // The parent item it produces
   quantityProduced: number;
   components: {
@@ -252,9 +259,8 @@ export interface BomMaster {
     laborCostPerHour?: number;
     overheadCostPerHour?: number;
   }[];
-  description?: string;
-  isActive: boolean;
   revision?: string;
+  status?: 'Active' | 'Inactive';
   type?: 'Engineering' | 'Manufacturing';
   validFrom?: string;
   validTo?: string;
@@ -269,6 +275,8 @@ export interface BomMaster {
 export interface GradeMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   description?: string;
   qualityScore?: number; // 1-10
 }
@@ -276,12 +284,15 @@ export interface GradeMaster {
 export interface AssertionCategoryMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   description?: string;
 }
 
 export interface AssertionCodeMaster {
   id: string;
   code: string;
+  status?: 'Active' | 'Inactive';
   name: string;
   categoryId: string; // Linked Assertion Category
   description?: string;
@@ -290,6 +301,8 @@ export interface AssertionCodeMaster {
 export interface UomMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   symbol: string;
   baseUom?: string; // Links to another UOM
   conversionFactor?: number; // e.g. 1 Box = 10 Pcs (Conversion factor 10)
@@ -298,6 +311,7 @@ export interface UomMaster {
 export interface GstMaster {
   id: string;
   code: string; // GSTN / HSN Code
+  status?: 'Active' | 'Inactive';
   rate: number;
   type: 'Goods' | 'Services';
   effectiveFrom?: string;
@@ -309,6 +323,7 @@ export interface GstMaster {
 export interface BrandMaster {
   id: string;
   name: string;
+  code?: string;
   origin?: string;
   manufacturer?: string;
   website?: string;
@@ -320,6 +335,7 @@ export interface BrandMaster {
 export interface CategoryMaster {
   id: string;
   name: string;
+  code?: string;
   description?: string;
   parentCategory?: string;
   hsnCode?: string; // Default HSN for category
@@ -331,6 +347,8 @@ export interface CategoryMaster {
 export interface ContactMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   contactType?: 'Internal' | 'External' | 'Contract';
   role?: string;
   email?: string;
@@ -344,6 +362,8 @@ export interface ContactMaster {
 export interface LocationMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   type?: 'Main' | 'Store' | 'Distribution' | 'Transit';
   location?: string;
   address?: string;
@@ -353,7 +373,6 @@ export interface LocationMaster {
   capacity?: number;
   contactPerson?: string;
   phone?: string;
-  isActive: boolean;
 }
 
 export interface WarehouseMaster extends LocationMaster {}
@@ -361,6 +380,8 @@ export interface WarehouseMaster extends LocationMaster {}
 export interface StockGroupMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   parentGroup?: string;
   defaultCostingMethod?: 'FIFO' | 'LIFO' | 'Average' | 'Standard';
   defaultTaxRate?: number;
@@ -370,6 +391,8 @@ export interface StockGroupMaster {
 export interface CostCenterMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   category?: string;
   description?: string;
 }
@@ -377,6 +400,8 @@ export interface CostCenterMaster {
 export interface AccountGroupMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   parentGroup?: string;
   nature: 'Assets' | 'Liabilities' | 'Expenses' | 'Income';
 }
@@ -384,6 +409,8 @@ export interface AccountGroupMaster {
 export interface ColorMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   hex: string;
   colorFamily?: string; // e.g., 'Red', 'Blue', 'Earth Tones'
 }
@@ -392,6 +419,7 @@ export interface SizeMaster {
   id: string;
   name: string;
   code: string;
+  status?: 'Active' | 'Inactive';
   sizeSystem?: string; // e.g., 'US', 'UK', 'EU', 'Universal'
   category?: string; // e.g., 'Apparel', 'Footwear'
 }
@@ -399,6 +427,8 @@ export interface SizeMaster {
 export interface WeightMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   value: number;
   unit: string;
 }
@@ -406,6 +436,8 @@ export interface WeightMaster {
 export interface VolumeMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   value: number;
   unit: string;
 }
@@ -413,6 +445,7 @@ export interface VolumeMaster {
 export interface SkuMaster {
   id: string;
   name: string;
+  status?: 'Active' | 'Inactive';
   code?: string;
   skuCode?: string;
   itemCode?: string;
@@ -424,6 +457,7 @@ export interface SkuMaster {
 export interface PriceListMaster {
   id: string;
   name: string;
+  status?: 'Active' | 'Inactive';
   code?: string;
   currency?: string;
   isDefault?: boolean;
@@ -435,6 +469,7 @@ export interface PriceListMaster {
 export interface VariantMaster {
   id: string;
   name: string;
+  status?: 'Active' | 'Inactive';
   code?: string;
   baseItemId?: string;
   colorId?: string;
@@ -447,6 +482,8 @@ export interface VariantMaster {
 export interface DimensionMaster {
   id: string;
   name: string;
+  code?: string;
+  status?: 'Active' | 'Inactive';
   l: number;
   w: number;
   h: number;

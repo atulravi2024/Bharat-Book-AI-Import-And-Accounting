@@ -1,19 +1,98 @@
 [
   {
     "id": "BOM-001",
-    "name": "Office Desk Set Assembly",
-    "itemId": "ITEM-004",
+    "name": "Standard Laptop Assembly",
+    "description": "Standard Bill of Materials for assembling a basic 15-inch laptop.",
+    "itemId": "ITM-005",
     "quantityProduced": 1,
     "components": [
       {
-        "itemId": "ITEM-002",
+        "itemId": "ITM-014",
         "quantity": 1,
-        "uom": "Nos"
+        "uom": "NOS",
+        "scrapPercentage": 0,
+        "instructions": "Install the NVMe drive carefully into the mainboard slot."
       },
       {
-        "itemId": "ITEM-003",
+        "itemId": "ITM-020",
         "quantity": 1,
-        "uom": "Nos"
+        "uom": "NOS",
+        "scrapPercentage": 0,
+        "instructions": "Attach the screen assembly."
+      }
+    ],
+    "routing": [
+      {
+        "step": 1,
+        "operation": "Motherboard Prep",
+        "workCenter": "Station 1",
+        "timeInMinutes": 15
+      },
+      {
+        "step": 2,
+        "operation": "Storage Installation",
+        "workCenter": "Station 2",
+        "timeInMinutes": 5
+      }
+    ]
+  },
+  {
+    "id": "BOM-002",
+    "name": "Advanced Camera Kit",
+    "description": "BOM for the Canon EOS R5 Bundle with extra accessories.",
+    "itemId": "ITM-008",
+    "quantityProduced": 1,
+    "components": [
+      {
+        "itemId": "ITM-021",
+        "quantity": 1,
+        "uom": "NOS",
+        "scrapPercentage": 0,
+        "instructions": "Include standard battery pack."
+      },
+      {
+        "itemId": "ITM-022",
+        "quantity": 1,
+        "uom": "NOS",
+        "scrapPercentage": 0,
+        "instructions": "Include memory card."
+      }
+    ]
+  },
+  {
+    "id": "BOM-003",
+    "name": "Gaming Desktop Build",
+    "description": "Custom configuration for a high-end gaming desktop.",
+    "itemId": "ITM-015",
+    "quantityProduced": 1,
+    "components": [
+      {
+        "itemId": "ITM-014",
+        "quantity": 2,
+        "uom": "NOS",
+        "scrapPercentage": 0,
+        "instructions": "Install both NVMe drives."
+      },
+      {
+        "itemId": "ITM-018",
+        "quantity": 1,
+        "uom": "NOS",
+        "scrapPercentage": 2,
+        "instructions": "Apply thermal paste."
+      }
+    ],
+    "routing": [
+      {
+        "step": 1,
+        "operation": "CPU & Cooler Assembly",
+        "workCenter": "Station A",
+        "timeInMinutes": 10
+      },
+      {
+        "step": 2,
+        "operation": "Storage & RAM Assembly",
+        "workCenter": "Station B",
+        "timeInMinutes": 15
       }
     ]
   }

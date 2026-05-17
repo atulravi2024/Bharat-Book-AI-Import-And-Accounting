@@ -119,7 +119,7 @@ export const AdminSettings: React.FC = () => {
                 <p className="text-gray-500 dark:text-gray-400">Advanced tools for managing your application environment, data backups, and factory resets.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div className="form-grid gap-8 mb-10">
                 <div className="bg-blue-50/50 rounded-3xl p-8 border border-blue-100/50">
                     <div className="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-6 text-blue-600 dark:bg-gray-800">
                         <SecurityIcon />
@@ -159,7 +159,7 @@ export const AdminSettings: React.FC = () => {
                     <h4 className="text-lg font-bold text-gray-900 mb-2 dark:text-white">System Diagnostics</h4>
                     <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">Review your local storage utilization. Exceeding browser limits (usually 5MB) may cause data loss.</p>
                     
-                    <div className="grid grid-cols-2 gap-2 mb-6">
+                    <div className="form-grid gap-2 mb-6">
                         <div className="bg-white p-3 rounded-xl border border-gray-100 flex flex-col dark:bg-gray-800 dark:border-gray-800">
                             <span className="text-xs text-gray-500 font-medium dark:text-gray-400">Vouchers</span>
                             <span className="text-lg font-bold text-gray-900 dark:text-white">{stats.vouchers}</span>
@@ -191,7 +191,7 @@ export const AdminSettings: React.FC = () => {
                 <h4 className="text-lg font-bold text-red-900 mb-2">Danger Zone</h4>
                 <p className="text-sm text-red-700/80 mb-6">These operations are irreversible. Please ensure you have taken a backup before proceeding with any data purge operation.</p>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="form-grid gap-4">
                     <div className="bg-white rounded-2xl p-5 border border-red-100 dark:bg-gray-800">
                         <h5 className="font-bold text-gray-900 mb-1 dark:text-white">Clear Cache</h5>
                         <p className="text-xs text-gray-500 mb-4 dark:text-gray-400">Removes drafts, settings, and cached states without deleting your data.</p>

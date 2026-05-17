@@ -17,7 +17,7 @@ export const RemarksSection: React.FC<RemarksSectionProps> = ({
   return (
     <div className={`mt-6 bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[20] ${collapsedSections.remarks ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
        <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.remarks ? '' : 'mb-3'}`} onClick={() => toggleSection('remarks')}>
-         <label className="block text-xs font-black text-gray-400 uppercase tracking-widest cursor-pointer mb-0">Remarks / Reason</label>
+         <label className="form-label cursor-pointer mb-0">Remarks / Reason</label>
          <button className="text-gray-400 hover:text-gray-600 transition-colors">
            <ChevronUp size={20} className={`transform transition-transform duration-300 ${collapsedSections.remarks ? 'rotate-180' : ''}`} />
          </button>

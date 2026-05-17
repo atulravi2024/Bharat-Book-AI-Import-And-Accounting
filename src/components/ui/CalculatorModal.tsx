@@ -226,7 +226,7 @@ export const CalculatorModal: React.FC<CalculatorModalProps> = ({ isOpen, onClos
         </div>
 
         {/* Keypad */}
-        <div className="flex-1 grid grid-cols-4 gap-1 p-1 bg-[#f3f3f3] mx-1 mb-1 pb-2">
+        <div className="form-grid flex-1 gap-1 p-1 bg-[#f3f3f3] mx-1 mb-1 pb-2">
           {/* Row 1 */}
           <button className={opClass} onClick={calculatePercentage}>%</button>
           <button className={opClass} onClick={clearEntry}>CE</button>

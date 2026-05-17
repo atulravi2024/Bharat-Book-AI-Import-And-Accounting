@@ -1,16 +1,62 @@
 [
   {
-    "id": "priceList-sample-1",
-    "name": "Sample PriceList 1",
-    "code": "PRI-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "PL-001",
+    "name": "Retail MSRP",
+    "code": "RTL",
+    "currency": "INR"
+  },
+  {
+    "id": "PL-002",
+    "name": "Wholesale Tier 1 (10-50 units)",
+    "code": "WS-T1",
+    "currency": "INR"
+  },
+  {
+    "id": "PL-003",
+    "name": "Wholesale Tier 2 (50+ units)",
+    "code": "WS-T2",
+    "currency": "INR"
+  },
+  {
+    "id": "PL-004",
+    "name": "Corporate Discount (B2B)",
+    "code": "CORP-B2B",
+    "currency": "INR"
+  },
+  {
+    "id": "PL-005",
+    "name": "Employee Purchase Program",
+    "code": "EPP",
+    "currency": "INR"
+  },
+  {
+    "id": "PL-006",
+    "name": "Diwali Festive Sale",
+    "code": "FST-DWL",
+    "currency": "INR"
+  },
+  {
+    "id": "PL-007",
+    "name": "Student Education Pricing",
+    "code": "EDU",
+    "currency": "INR"
+  },
+  {
+    "id": "PL-008",
+    "name": "Clearance / End of Life",
+    "code": "CLR",
+    "currency": "INR"
+  },
+  {
+    "id": "PL-009",
+    "name": "Export USD Pricing",
+    "code": "EXP-USD",
+    "currency": "USD"
+  },
+  {
+    "id": "PL-010",
+    "name": "VIP Customer Premium",
+    "code": "VIP",
+    "currency": "INR"
   }
 ]

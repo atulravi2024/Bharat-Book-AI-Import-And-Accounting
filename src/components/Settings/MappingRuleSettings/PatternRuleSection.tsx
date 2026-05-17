@@ -2,6 +2,7 @@
 import React from 'react';
 import { AddIcon, DeleteIcon } from '../../icons/IconComponents';
 
+
 interface PatternRuleSectionProps {
     isOpen: boolean;
     toggleSection: () => void;
@@ -52,8 +53,7 @@ export const PatternRuleSection: React.FC<PatternRuleSectionProps> = ({
     setAliases,
     setShowAliasModal,
     showAliasModal
-}) => {
-    return (
+}) => {  return (
         <div className="border-t border-gray-100 overflow-hidden dark:border-gray-800">
             <div className="flex items-center px-8 py-5 transition-colors hover:bg-gray-50 group dark:hover:bg-gray-700">
                 <div 
@@ -232,8 +232,8 @@ export const PatternRuleSection: React.FC<PatternRuleSectionProps> = ({
                             </div>
                             <p className="text-xs text-gray-500 mb-6 dark:text-gray-400">Use custom Regular Expressions to enforce strict extraction rules based on bank formats.</p>
                             <div className={`${!advancedParsingEnabled && 'opacity-60 pointer-events-none'} space-y-4 transition-all`}>
-                                <div>
-                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Regex Pattern</label>
+                                <div className="form-field-wrapper">
+<label className="form-label">Regex Pattern</label>
                                     <input 
                                         type="text" 
                                         className="w-full bg-white border border-gray-200 rounded-lg text-xs font-mono p-3 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:border-gray-700" 
@@ -402,7 +402,7 @@ export const PatternRuleSection: React.FC<PatternRuleSectionProps> = ({
                             <div className="mt-6">
                                 <button 
                                     onClick={() => setAliases([...aliases, { from: '', to: '' }])}
-                                    className="w-full py-3 border-2 border-dashed border-gray-200 text-gray-500 hover:border-blue-300 hover:text-blue-600 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 dark:border-gray-700 dark:text-gray-400"
+                                    className="form-label w-full py-3 border-2 border-dashed border-gray-200 hover:border-blue-300 hover:text-blue-600 rounded-xl tracking-widest transition-colors flex items-center justify-center gap-2 dark:border-gray-700 dark:text-gray-400"
                                 >
                                     <AddIcon className="w-4 h-4" /> Add New Alias Row
                                 </button>

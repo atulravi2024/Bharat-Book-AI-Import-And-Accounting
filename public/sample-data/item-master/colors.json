@@ -1,16 +1,74 @@
 [
   {
-    "id": "colors-sample-1",
-    "name": "Sample Colors 1",
-    "code": "COL-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "COL-001",
+    "name": "Space Gray",
+    "hex": "#53565B",
+    "colorFamily": "Gray"
+  },
+  {
+    "id": "COL-002",
+    "name": "Midnight",
+    "hex": "#1C2936",
+    "colorFamily": "Black"
+  },
+  {
+    "id": "COL-003",
+    "name": "Starlight",
+    "hex": "#F8F5F2",
+    "colorFamily": "White"
+  },
+  {
+    "id": "COL-004",
+    "name": "Phantom Black",
+    "hex": "#111111",
+    "colorFamily": "Black"
+  },
+  {
+    "id": "COL-005",
+    "name": "Cream",
+    "hex": "#F0E7DD",
+    "colorFamily": "White"
+  },
+  {
+    "id": "COL-006",
+    "name": "Silver",
+    "hex": "#C0C0C0",
+    "colorFamily": "Silver"
+  },
+  {
+    "id": "COL-007",
+    "name": "Platinum",
+    "hex": "#E5E4E2",
+    "colorFamily": "Silver"
+  },
+  {
+    "id": "COL-008",
+    "name": "Graphite",
+    "hex": "#41424C",
+    "colorFamily": "Gray"
+  },
+  {
+    "id": "COL-009",
+    "name": "Alpine Green",
+    "hex": "#4B5245",
+    "colorFamily": "Green"
+  },
+  {
+    "id": "COL-010",
+    "name": "Burgundy",
+    "hex": "#800020",
+    "colorFamily": "Red"
+  },
+  {
+    "id": "COL-011",
+    "name": "Navy Blue",
+    "hex": "#000080",
+    "colorFamily": "Blue"
+  },
+  {
+    "id": "COL-012",
+    "name": "Rose Gold",
+    "hex": "#B76E79",
+    "colorFamily": "Gold"
   }
 ]

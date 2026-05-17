@@ -5,21 +5,20 @@ import { Sidebar } from './Sidebar';
 import { MainView } from '../../types';
 
 interface LayoutProps {
-  workspaceName: string;
   pageTitle: string;
   children: React.ReactNode;
   activeView: MainView;
   onViewChange: (view: MainView) => void;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ workspaceName, pageTitle, children, activeView, onViewChange }) => {
+export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView, onViewChange }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden print-reset-layout">
       {/* Mobile sidebar overlay */}
       <div 
-        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[80] md:hidden transition-opacity ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} 
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[80] md:hidden transition-opacity ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} no-print`} 
         onClick={() => setIsSidebarOpen(false)} 
       />
       
@@ -35,10 +34,10 @@ export const Layout: React.FC<LayoutProps> = ({ workspaceName, pageTitle, childr
           }
         }}
       />
-      <div className="flex-1 flex flex-col w-full min-w-0 overflow-hidden">
-        <Header workspaceName={workspaceName} pageTitle={pageTitle} onMenuClick={() => setIsSidebarOpen(true)} />
-        <main className="flex-1 min-h-0 bg-gray-100 dark:bg-gray-900 overflow-hidden relative">
-          <div className="absolute inset-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col w-full min-w-0 overflow-hidden print-reset-container">
+        <Header pageTitle={pageTitle} onMenuClick={() => setIsSidebarOpen(true)} />
+        <main className="flex-1 min-h-0 bg-gray-100 dark:bg-gray-900 overflow-hidden relative print-reset-main">
+          <div className="absolute inset-0 overflow-y-auto print-reset-content">
             {children}
           </div>
         </main>

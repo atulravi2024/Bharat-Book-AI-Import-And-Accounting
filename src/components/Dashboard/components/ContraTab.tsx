@@ -7,7 +7,7 @@ import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, A
 export const ContraTab = ({ stats, isDemo }: any) => {
     return (
         <motion.div key="contra" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <KPIComponent label="Contra Ops" val={`₹${stats.vol.contra.toLocaleString()}`} sub={`${stats.counts.contra} Transfers`} icon={Repeat} color="text-purple-600" bg="bg-purple-50" isDemo={isDemo} />
                 <KPIComponent label="Bank Liquidity" val="Optimal" sub="Balanced accounts" icon={ShieldCheck} color="text-blue-600" bg="bg-blue-50" isDemo={isDemo} />
                 <KPIComponent label="Internal Flow" val="Active" sub="High frequency" icon={Activity} color="text-emerald-600" bg="bg-emerald-50" isDemo={isDemo} />

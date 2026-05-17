@@ -2,9 +2,8 @@
 import React from 'react';
 import { InfoIcon, CheckCircleIcon, UploadIcon, UndoIcon, ClearAllIcon } from '../icons/IconComponents';
 
+
 interface GeneralSettingsProps {
-    workspaceName: string;
-    setWorkspaceName: (val: string) => void;
     theme: string;
     setTheme: (val: string) => void;
     language: string;
@@ -40,7 +39,6 @@ interface GeneralSettingsProps {
 }
 
 export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
-    workspaceName, setWorkspaceName,
     theme, setTheme,
     language, setLanguage,
     dateFormat, setDateFormat,
@@ -55,8 +53,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
     displayId, setDisplayId,
     appMode, setAppMode,
     handleSave, handleLoad, handleDeleteAll, handleReset, handleClear, isSaved
-}) => {
-    return (
+}) => {  return (
         <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-premium-slate-100 relative dark:bg-gray-800 dark:border-gray-700">
             {isSaved && (
                 <div className="absolute top-4 right-4 bg-green-100 text-green-700 px-4 py-2 rounded-lg text-xs font-bold flex items-center animate-in fade-in slide-in-from-top-2 z-10">
@@ -67,21 +64,9 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                 <InfoIcon className="mr-3 text-blue-600" /> General Application Preferences
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Workspace / Software Name</label>
-                    <input 
-                        type="text" 
-                        className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200" 
-                        value={workspaceName}
-                        onChange={(e) => setWorkspaceName(e.target.value)}
-                        placeholder="e.g. Bharat Book App"
-                    />
-                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">The name of this software instance. This is strictly for the application workspace, distinct from your legal Firm Name.</p>
-                </div>
-
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Display ID (Workspace Prefix)</label>
+            <div className="form-grid gap-6 mb-6">
+                <div className="form-field-wrapper">
+<label className="form-label">Display ID (Workspace Prefix)</label>
                     <input 
                         type="text" 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200" 
@@ -91,8 +76,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">A unique prefix assigned to generated vouchers (e.g., BBE-JV-001).</p>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Application Mode</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Application Mode</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={appMode}
@@ -104,8 +89,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">Production syncs directly to standard ERP outputs. Demo is sandboxed.</p>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Theme Mode</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Theme Mode</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={theme}
@@ -117,8 +102,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Display Language</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Display Language</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={language}
@@ -131,8 +116,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Date Format</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Date Format</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={dateFormat}
@@ -144,8 +129,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Default Timezone</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Default Timezone</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={timezone}
@@ -158,8 +143,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Auto-Lock Timeout</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Auto-Lock Timeout</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={autoLock}
@@ -174,8 +159,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">Lock the application after inactivity.</p>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Display Density</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Display Density</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={density}
@@ -188,8 +173,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">Controls spacing across tables and lists.</p>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">UI Animations</label>
+                <div className="form-field-wrapper">
+<label className="form-label">UI Animations</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={animations}
@@ -200,8 +185,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Sound Effects</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Sound Effects</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={soundEffects}
@@ -212,8 +197,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Keyboard Shortcuts</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Keyboard Shortcuts</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={keyboardShortcuts}
@@ -224,8 +209,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Start Week On</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Start Week On</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={weekStartsOn}
@@ -236,8 +221,8 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Default Pagination Size</label>
+                <div className="form-field-wrapper">
+<label className="form-label">Default Pagination Size</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={paginationSize}

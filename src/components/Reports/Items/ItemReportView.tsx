@@ -11,6 +11,7 @@ import { getFiscalYearDates } from '../../../services/aiService';
 import { RateAnalysis } from './RateAnalysis';
 import { SummaryReport } from './SummaryReport';
 import { StockSubPage } from './StockSubPage';
+import { DateRangeSelector } from '../../shared/DateRangeSelector';
 
 interface ItemReportViewProps {
   vouchers: ParsedVoucher[];
@@ -165,31 +166,8 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-x-hidden">
-      <header className="mb-10">
-        <h1 className="text-3xl font-black text-gray-900 font-display dark:text-white">Inventory Analysis Hub</h1>
-        <p className="text-gray-500 mt-2 font-medium dark:text-gray-400">Comprehensive stock tracking, rate analysis, and inventory movement intelligence.</p>
-      </header>
       <header className="flex flex-col md:flex-row md:items-center justify-end gap-4">
-        <div className="flex items-center space-x-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100 dark:bg-gray-800 dark:border-gray-800">
-           <div className="flex items-center px-3 border-r">
-             <Calendar size={16} className="text-gray-400 mr-2" />
-             <input 
-              type="date" 
-              className="text-xs font-medium outline-none" 
-              value={dateRange.from}
-              onChange={e => setDateRange(prev => ({ ...prev, from: e.target.value }))}
-             />
-           </div>
-           <div className="flex items-center px-3">
-             <ArrowRight size={14} className="text-gray-300 mr-3" />
-             <input 
-              type="date" 
-              className="text-xs font-medium outline-none" 
-              value={dateRange.to}
-              onChange={e => setDateRange(prev => ({ ...prev, to: e.target.value }))}
-             />
-           </div>
-        </div>
+        <DateRangeSelector dateRange={dateRange} onChange={setDateRange} defaultOption="currentFY" />
       </header>
 
       {/* Sub-page Navigation Tabs */}

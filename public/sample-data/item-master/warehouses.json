@@ -1,28 +1,82 @@
 [
   {
     "id": "WH-001",
-    "name": "Main Central Warehouse",
-    "type": "Main",
-    "location": "Mumbai",
-    "address": "123, Storage Street, Industrial Area",
-    "city": "Mumbai",
-    "state": "Maharashtra",
-    "pincode": "400001",
-    "capacity": 10000,
-    "contactPerson": "John Doe",
-    "contactPhone": "9876543210"
+    "name": "Central Hub - Mumbai",
+    "location": "Mumbai, Maharashtra",
+    "capacity": "50,000 sq ft",
+    "manager": "Anand Desai",
+    "type": "Primary Distribution Center"
   },
   {
     "id": "WH-002",
-    "name": "Delhi Depot",
-    "type": "Distribution",
-    "location": "Delhi",
-    "address": "45, Distribution Road",
-    "city": "New Delhi",
-    "state": "Delhi",
-    "pincode": "110001",
-    "capacity": 5000,
-    "contactPerson": "Jane Smith",
-    "contactPhone": "9876543211"
+    "name": "North Node - Delhi",
+    "location": "New Delhi, NCR",
+    "capacity": "35,000 sq ft",
+    "manager": "Rohan Sharma",
+    "type": "Regional Hub"
+  },
+  {
+    "id": "WH-003",
+    "name": "South Node - Bangalore",
+    "location": "Bangalore, Karnataka",
+    "capacity": "40,000 sq ft",
+    "manager": "Kavitha N",
+    "type": "Regional Hub"
+  },
+  {
+    "id": "WH-004",
+    "name": "East Node - Kolkata",
+    "location": "Kolkata, West Bengal",
+    "capacity": "25,000 sq ft",
+    "manager": "Amit Das",
+    "type": "Regional Hub"
+  },
+  {
+    "id": "WH-005",
+    "name": "West Fulfillment Center - Pune",
+    "location": "Pune, Maharashtra",
+    "capacity": "15,000 sq ft",
+    "manager": "Sneha Patil",
+    "type": "Fulfillment Center"
+  },
+  {
+    "id": "WH-006",
+    "name": "Electronic City Outlet Store",
+    "location": "Bangalore, Karnataka",
+    "capacity": "5,000 sq ft",
+    "manager": "Vikram Singh",
+    "type": "Retail Storage"
+  },
+  {
+    "id": "WH-007",
+    "name": "Gurgaon Tech Park Warehouse",
+    "location": "Gurgaon, Haryana",
+    "capacity": "18,000 sq ft",
+    "manager": "Neha Gupta",
+    "type": "B2B Distribution"
+  },
+  {
+    "id": "WH-008",
+    "name": "Chennai Port Storage",
+    "location": "Chennai, Tamil Nadu",
+    "capacity": "60,000 sq ft",
+    "manager": "Suresh Kumar",
+    "type": "Transit / Import Hub"
+  },
+  {
+    "id": "WH-009",
+    "name": "Ahmedabad Industrial Depot",
+    "location": "Ahmedabad, Gujarat",
+    "capacity": "30,000 sq ft",
+    "manager": "Rahul Mehta",
+    "type": "Distribution Center"
+  },
+  {
+    "id": "WH-010",
+    "name": "Hyderabad Cyber City Warehouse",
+    "location": "Hyderabad, Telangana",
+    "capacity": "22,000 sq ft",
+    "manager": "Priya Reddy",
+    "type": "Electronics Speciality"
   }
 ]

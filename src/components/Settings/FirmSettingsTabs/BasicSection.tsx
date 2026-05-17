@@ -40,9 +40,9 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white dark:bg-gray-800">
+                      <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Company Name
                           </label>
                           <input
@@ -59,7 +59,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Trade Name / Brand Name
                           </label>
                           <input
@@ -76,7 +76,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Business Slogan / Tagline
                           </label>
                           <input
@@ -93,7 +93,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Date of Incorporation
                           </label>
                           <input
@@ -109,7 +109,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Employee Count
                           </label>
                           <select
@@ -131,7 +131,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-xs font-black text-gray-500 uppercase tracking-widest">
+                          <label className="form-label">
                             Annual Turnover
                           </label>
                           <select

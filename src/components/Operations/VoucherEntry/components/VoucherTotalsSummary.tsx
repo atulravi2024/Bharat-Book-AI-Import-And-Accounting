@@ -2,6 +2,7 @@ import React from 'react';
 import { ChevronUp } from 'lucide-react';
 import { SearchableDropdown } from '../../../ui/SearchableDropdown';
 
+
 interface VoucherTotalsSummaryProps {
   collapsedSections: any;
   toggleSection: (section: string) => void;
@@ -22,19 +23,18 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
   totals,
   activeTab,
   rows
-}) => {
-  return (
+}) => {  return (
     <div className="flex flex-col gap-6 mt-6">
           <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[20] ${collapsedSections.narration ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
              <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.narration ? '' : 'mb-3'}`} onClick={() => toggleSection('narration')}>
-               <label className="text-xs font-black text-gray-400 uppercase tracking-widest cursor-pointer">Narration (Optional)</label>
+               <label className="form-label cursor-pointer">Narration (Optional)</label>
                <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
                  <ChevronUp size={20} className={`transform transition-transform duration-300 ${collapsedSections.narration ? 'rotate-180' : ''}`} />
                </button>
              </div>
              {!collapsedSections.narration && (
                <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                 <textarea value={headerDetails.narration || ''} onChange={(e) => handleHeaderChange('narration', e.target.value)} placeholder="Enter narration or description of the transaction..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-h-[100px] resize-y dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"></textarea>
+                 <textarea value={headerDetails.narration || ''} onChange={(e) => handleHeaderChange('narration', e.target.value)} placeholder="Enter narration or description of the transaction..." className="form-input text-sm min-h-[100px] resize-y dark:focus:bg-gray-700"></textarea>
                </div>
              )}
           </div>
@@ -50,15 +50,15 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
             
             {!collapsedSections.taxableAdjustments && (
             <div className="animate-in fade-in slide-in-from-top-2 duration-300 flex flex-col gap-6">
-               <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Voucher Level Discount</label>
+               <div className="form-field-wrapper">
+<label className="form-label">Voucher Level Discount</label>
                   <div className="flex items-center gap-4">
                     <div className="flex-1">
                       <input 
                         type="number" 
                         step="0.01" 
                         placeholder="Discount %" 
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                        className="form-input text-sm font-medium dark:focus:bg-gray-700"
                         value={headerDetails.voucherDiscountPct || ''}
                         onChange={(e) => handleHeaderChange('voucherDiscountPct', e.target.value)}
                       />
@@ -70,7 +70,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Amount" 
-                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                        className="form-input pl-8 pr-4 text-sm font-medium dark:focus:bg-gray-700"
                         value={headerDetails.voucherDiscountAmount || ''}
                         onChange={(e) => handleHeaderChange('voucherDiscountAmount', e.target.value)}
                       />
@@ -78,8 +78,8 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                   </div>
                </div>
                
-               <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Other Taxable Adjustment / Charges</label>
+               <div className="form-field-wrapper">
+<label className="form-label">Other Taxable Adjustment / Charges</label>
                   <div className="flex flex-col gap-4">
                     <div className="w-full">
                        <SearchableDropdown
@@ -96,7 +96,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                             type="number" 
                             step="0.01" 
                             placeholder="Pct %" 
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                            className="form-input text-sm font-medium dark:focus:bg-gray-700"
                             value={headerDetails.taxableOtherAdjustmentPct || ''}
                             onChange={(e) => handleHeaderChange('taxableOtherAdjustmentPct', e.target.value)}
                           />
@@ -108,7 +108,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                             type="number" 
                             step="0.01" 
                             placeholder="Amount" 
-                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                            className="form-input pl-8 pr-4 text-sm font-medium dark:focus:bg-gray-700"
                             value={headerDetails.taxableOtherAdjustment || ''}
                             onChange={(e) => handleHeaderChange('taxableOtherAdjustment', e.target.value)}
                           />
@@ -132,15 +132,15 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
             
             {!collapsedSections.nonTaxableAdjustments && (
             <div className="animate-in fade-in slide-in-from-top-2 duration-300 flex flex-col gap-6">
-               <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Voucher Level Discount (Non-Taxable)</label>
+               <div className="form-field-wrapper">
+<label className="form-label">Voucher Level Discount (Non-Taxable)</label>
                   <div className="flex items-center gap-4">
                     <div className="flex-1">
                       <input 
                         type="number" 
                         step="0.01" 
                         placeholder="Discount %" 
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                        className="form-input text-sm font-medium dark:focus:bg-gray-700"
                         value={headerDetails.nonTaxableVoucherDiscountPct || ''}
                         onChange={(e) => handleHeaderChange('nonTaxableVoucherDiscountPct', e.target.value)}
                       />
@@ -152,15 +152,15 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                         type="number" 
                         step="0.01" 
                         placeholder="Amount" 
-                        className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                        className="form-input pl-8 pr-4 text-sm font-medium dark:focus:bg-gray-700"
                         value={headerDetails.nonTaxableVoucherDiscountAmount || ''}
                         onChange={(e) => handleHeaderChange('nonTaxableVoucherDiscountAmount', e.target.value)}
                       />
                     </div>
                   </div>
                </div>
-               <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Other Non-Taxable Adjustment / Charges</label>
+               <div className="form-field-wrapper">
+<label className="form-label">Other Non-Taxable Adjustment / Charges</label>
                   <div className="flex flex-col gap-4">
                     <div className="w-full">
                        <SearchableDropdown
@@ -177,7 +177,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                             type="number" 
                             step="0.01" 
                             placeholder="Pct %" 
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                            className="form-input text-sm font-medium dark:focus:bg-gray-700"
                             value={headerDetails.nonTaxableOtherAdjustmentPct || ''}
                             onChange={(e) => handleHeaderChange('nonTaxableOtherAdjustmentPct', e.target.value)}
                           />
@@ -189,7 +189,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                             type="number" 
                             step="0.01" 
                             placeholder="Amount" 
-                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                            className="form-input pl-8 pr-4 text-sm font-medium dark:focus:bg-gray-700"
                             value={headerDetails.nonTaxableOtherAdjustment || ''}
                             onChange={(e) => handleHeaderChange('nonTaxableOtherAdjustment', e.target.value)}
                           />
@@ -215,9 +215,9 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
             <div className="animate-in fade-in slide-in-from-top-2 duration-300 flex flex-col gap-6">
               <div className="flex items-center gap-4">
                 <div className="flex-1">
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Rounding Type</label>
+                  <label className="form-label">Rounding Type</label>
                   <select 
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                    className="form-input text-sm font-medium appearance-none cursor-pointer dark:focus:bg-gray-700"
                     value={headerDetails.roundingType || 'auto'}
                     onChange={(e) => handleHeaderChange('roundingType', e.target.value)}
                   >
@@ -229,7 +229,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
                   </select>
                 </div>
                 <div className="flex-1">
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Round Off Amount</label>
+                  <label className="form-label">Round Off Amount</label>
                   <div className="relative">
                     <span className="absolute left-4 top-[22px] -translate-y-1/2 text-gray-400 font-black z-10">₹</span>
                     <input 
@@ -318,7 +318,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
 
               return (
                 <div className="animate-in fade-in slide-in-from-top-2 duration-300 flex flex-col flex-grow">
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                  <div className="form-grid gap-3 mb-6">
                     
                     {/* Items & Quantity */}
                     <MetricBox label="Total Items" value={totalItems || ''} />

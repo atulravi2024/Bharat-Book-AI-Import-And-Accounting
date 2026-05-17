@@ -1,16 +1,82 @@
 [
   {
-    "id": "dimensions-sample-1",
-    "name": "Sample Dimensions 1",
-    "code": "DIM-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "DIM-001",
+    "name": "Smartphone Standard",
+    "l": 14.6,
+    "w": 7.15,
+    "h": 0.78,
+    "unit": "cm"
+  },
+  {
+    "id": "DIM-002",
+    "name": "Smartphone Max",
+    "l": 16.08,
+    "w": 7.81,
+    "h": 0.78,
+    "unit": "cm"
+  },
+  {
+    "id": "DIM-003",
+    "name": "Laptop 13-inch",
+    "l": 30.41,
+    "w": 21.24,
+    "h": 1.56,
+    "unit": "cm"
+  },
+  {
+    "id": "DIM-004",
+    "name": "Laptop 16-inch",
+    "l": 35.57,
+    "w": 24.81,
+    "h": 1.68,
+    "unit": "cm"
+  },
+  {
+    "id": "DIM-005",
+    "name": "TV 55-inch Box",
+    "l": 136,
+    "w": 81,
+    "h": 16,
+    "unit": "cm"
+  },
+  {
+    "id": "DIM-006",
+    "name": "TV 65-inch Box",
+    "l": 160,
+    "w": 96,
+    "h": 18,
+    "unit": "cm"
+  },
+  {
+    "id": "DIM-007",
+    "name": "Camera Body Box",
+    "l": 20,
+    "w": 15,
+    "h": 10,
+    "unit": "cm"
+  },
+  {
+    "id": "DIM-008",
+    "name": "Headphone Box",
+    "l": 22,
+    "w": 20,
+    "h": 7,
+    "unit": "cm"
+  },
+  {
+    "id": "DIM-009",
+    "name": "Mouse Box",
+    "l": 15,
+    "w": 10,
+    "h": 5,
+    "unit": "cm"
+  },
+  {
+    "id": "DIM-010",
+    "name": "Keyboard Box",
+    "l": 45,
+    "w": 15,
+    "h": 4,
+    "unit": "cm"
   }
 ]

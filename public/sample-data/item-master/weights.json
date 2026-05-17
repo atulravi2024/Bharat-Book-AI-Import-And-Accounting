@@ -1,16 +1,62 @@
 [
   {
-    "id": "weights-sample-1",
-    "name": "Sample Weights 1",
-    "code": "WEI-001",
-    "brand": "Brand X",
-    "category": "Category A",
-    "uom": "PCS",
-    "minStock": 10,
-    "maxStock": 100,
-    "reorderLevel": 20,
-    "salesRate": 1500,
-    "purchaseRate": 1200,
-    "mrp": 1999
+    "id": "WT-001",
+    "name": "150g (Smartphone approx)",
+    "value": 150,
+    "unit": "g"
+  },
+  {
+    "id": "WT-002",
+    "name": "200g (Large Smartphone approx)",
+    "value": 200,
+    "unit": "g"
+  },
+  {
+    "id": "WT-003",
+    "name": "1.2kg (Light Laptop)",
+    "value": 1.2,
+    "unit": "kg"
+  },
+  {
+    "id": "WT-004",
+    "name": "2.0kg (Performance Laptop)",
+    "value": 2,
+    "unit": "kg"
+  },
+  {
+    "id": "WT-005",
+    "name": "25kg (55-inch TV Boxed)",
+    "value": 25,
+    "unit": "kg"
+  },
+  {
+    "id": "WT-006",
+    "name": "35kg (65-inch TV Boxed)",
+    "value": 35,
+    "unit": "kg"
+  },
+  {
+    "id": "WT-007",
+    "name": "750g (Camera Body)",
+    "value": 750,
+    "unit": "g"
+  },
+  {
+    "id": "WT-008",
+    "name": "250g (Headphones)",
+    "value": 250,
+    "unit": "g"
+  },
+  {
+    "id": "WT-009",
+    "name": "141g (Mouse)",
+    "value": 141,
+    "unit": "g"
+  },
+  {
+    "id": "WT-010",
+    "name": "1.5kg (Mechanical Keyboard)",
+    "value": 1.5,
+    "unit": "kg"
   }
 ]
