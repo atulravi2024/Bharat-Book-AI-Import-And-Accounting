@@ -1585,6 +1585,8 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
         calculateRowAmount={calculateRowAmount}
         getRowRoundOff={getRowRoundOff}
         calculateRowNetAmount={calculateRowNetAmount}
+        activeTab={activeTab}
+        ledgerMasters={ledgerMasters}
       />
       
       <NewItemModal

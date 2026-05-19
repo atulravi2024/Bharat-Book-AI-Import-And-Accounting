@@ -224,14 +224,6 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
     instrumentNo: '',
     instrumentDate: '',
     narration: '',
-    taxableOtherAdjustment: '',
-    taxableOtherAdjustmentPct: '',
-    taxableAdjustmentRemarks: '',
-    nonTaxableOtherAdjustment: '',
-    nonTaxableOtherAdjustmentPct: '',
-    nonTaxableAdjustmentRemarks: '',
-    nonTaxableVoucherDiscountPct: '',
-    nonTaxableVoucherDiscountAmount: '',
     roundingType: 'auto',
     roundingValue: '',
     isEWayBillRequired: false,
@@ -763,14 +755,6 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
       instrumentNo: '',
       instrumentDate: '',
       narration: '',
-      taxableOtherAdjustment: '',
-      taxableOtherAdjustmentPct: '',
-      taxableAdjustmentRemarks: '',
-      nonTaxableOtherAdjustment: '',
-      nonTaxableOtherAdjustmentPct: '',
-      nonTaxableAdjustmentRemarks: '',
-      nonTaxableVoucherDiscountPct: '',
-      nonTaxableVoucherDiscountAmount: '',
       roundingType: 'auto',
       roundingValue: '',
       isEWayBillRequired: false,
@@ -1326,7 +1310,6 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
                     const r = [...rows];
                     if (r.length > 0) {
                       r[0].ledgerName = value;
-                      r[0].crDr = activeTab === 'payment' ? 'Cr' : (activeTab === 'receipt' ? 'Dr' : 'Cr');
                       setRows(r);
                     }
                   }}
@@ -1391,7 +1374,7 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
                   </td>
                   <td className="px-6 py-3">
                     <SearchableDropdown
-                      options={(activeTab === 'payment' || activeTab === 'receipt') && index === 0 ? ledgerMasters.filter(l => l.group?.toLowerCase().includes('cash') || l.group?.toLowerCase().includes('bank') || l.name?.toLowerCase().includes('cash') || l.name?.toLowerCase().includes('bank')) : ledgerMasters}
+                      options={ledgerMasters.filter(l => l.group?.toLowerCase().includes('cash') || l.group?.toLowerCase().includes('bank') || l.name?.toLowerCase().includes('cash') || l.name?.toLowerCase().includes('bank'))}
                       value={row.ledgerName || ''}
                       onChange={(value) => { 
                         const r = [...rows]; 
@@ -1604,6 +1587,8 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
         calculateRowAmount={calculateRowAmount}
         getRowRoundOff={getRowRoundOff}
         calculateRowNetAmount={calculateRowNetAmount}
+        activeTab={activeTab}
+        ledgerMasters={ledgerMasters}
       />
       
       <NewItemModal

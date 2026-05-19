@@ -19,14 +19,22 @@ interface VoucherItemEditModalProps {
   calculateRowAmount: (row: any) => number;
   getRowRoundOff: (row: any) => number;
   calculateRowNetAmount: (row: any) => number;
+  activeTab?: string;
+  ledgerMasters?: any[];
 }
 
 export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
   isOpen, editingRowIndex, setEditingRowIndex, expandedRowSection, setExpandedRowSection,
   rows, setRows, itemMasters, handleItemOrSkuChange, setScanningRowIndex, setShowScanner,
-  getRowPreTaxRoundOff, calculateRowAmount, getRowRoundOff, calculateRowNetAmount
+  getRowPreTaxRoundOff, calculateRowAmount, getRowRoundOff, calculateRowNetAmount,
+  activeTab = 'sales',
+  ledgerMasters = []
 }) => {
-  if (!isOpen || editingRowIndex === null) return null;  return (
+  if (!isOpen || editingRowIndex === null) return null;
+
+  const isInventory = ['sales', 'purchase', 'debit_note', 'credit_note', 'journal'].includes(activeTab);
+
+  return (
 
         <div className="fixed inset-0 z-[100] bg-gray-50 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300 dark:bg-gray-900">
           <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm z-10 relative dark:border-gray-700 dark:bg-gray-800">
@@ -48,44 +56,64 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     onClick={() => setExpandedRowSection(expandedRowSection === 'item_selection' ? null : 'item_selection')}
                   >
                     <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                      <Package size={16} className="mr-2 text-blue-500"/> Item Selection
+                      {isInventory ? (
+                        <>
+                          <Package size={16} className="mr-2 text-blue-500"/> Item Selection
+                        </>
+                      ) : (
+                        <>
+                          <ClipboardList size={16} className="mr-2 text-blue-500"/> Account Selection
+                        </>
+                      )}
                     </h4>
                     <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'item_selection' ? 'rotate-180' : ''}`} />
                   </header>
                   {expandedRowSection === 'item_selection' && (
                   <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                     <div className="form-field-wrapper col-span-1 md:col-span-1">
-                      <label className="form-label">Item Name</label>
+                      <label className="form-label">{isInventory ? 'Item Name' : 'Ledger Name'}</label>
                       <div className="flex items-center gap-2">
-                        <button className="form-input text-gray-400 hover:text-blue-500 transition-colors shrink-0" title="Scan Barcode" onClick={(e) => { e.stopPropagation(); setScanningRowIndex(editingRowIndex); setShowScanner(true); }}>
-                          <ScanBarcode size={20} />
-                        </button>
+                        {isInventory && (
+                          <button className="form-input text-gray-400 hover:text-blue-500 transition-colors shrink-0" title="Scan Barcode" onClick={(e) => { e.stopPropagation(); setScanningRowIndex(editingRowIndex); setShowScanner(true); }}>
+                            <ScanBarcode size={20} />
+                          </button>
+                        )}
                         <div className="flex-1">
                           <SearchableDropdown
-                            options={itemMasters}
-                            value={rows[editingRowIndex]?.itemName || ''}
-                            onChange={(val) => handleItemOrSkuChange(editingRowIndex, val, 'itemName')}
-                            placeholder="Search for an item..."
+                            options={isInventory ? itemMasters : ledgerMasters}
+                            value={isInventory ? (rows[editingRowIndex]?.itemName || '') : (rows[editingRowIndex]?.ledgerName || '')}
+                            onChange={(val) => {
+                              if (isInventory) {
+                                handleItemOrSkuChange(editingRowIndex, val, 'itemName');
+                              } else {
+                                const r = [...rows];
+                                r[editingRowIndex].ledgerName = val;
+                                setRows(r);
+                              }
+                            }}
+                            placeholder={isInventory ? "Search for an item..." : "Search for a ledger..."}
                             buttonClassName="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-left dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                           />
                         </div>
                       </div>
                     </div>
 
-                    <div className="form-field-wrapper col-span-1 md:col-span-1">
-                      <label className="form-label">Godown / Location</label>
-                      <input 
-                        type="text" 
-                        value={rows[editingRowIndex]?.godown || ''} 
-                        onChange={(e) => {
-                          const r = [...rows];
-                          r[editingRowIndex].godown = e.target.value;
-                          setRows(r);
-                        }}
-                        className="form-input text-sm font-semibold dark:focus:bg-gray-700"
-                        placeholder="Main Location"
-                      />
-                    </div>
+                    {isInventory && (
+                      <div className="form-field-wrapper col-span-1 md:col-span-1">
+                        <label className="form-label">Godown / Location</label>
+                        <input 
+                          type="text" 
+                          value={rows[editingRowIndex]?.godown || ''} 
+                          onChange={(e) => {
+                            const r = [...rows];
+                            r[editingRowIndex].godown = e.target.value;
+                            setRows(r);
+                          }}
+                          className="form-input text-sm font-semibold dark:focus:bg-gray-700"
+                          placeholder="Main Location"
+                        />
+                      </div>
+                    )}
 
                     <div className="form-field-wrapper col-span-1 md:col-span-2">
                        <label className="form-label">Remarks / Narration</label>
@@ -105,7 +133,8 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                 </section>
 
                 {/* Advanced Item Attributes */}
-                <section className="bg-white border-y border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                {isInventory && (
+                  <section className="bg-white border-y border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                   <header 
                     className="p-4 cursor-pointer flex justify-between items-center bg-gray-50/50 hover:bg-gray-100/50 transition-colors"
                     onClick={() => setExpandedRowSection(expandedRowSection === 'attributes' ? null : 'attributes')}
@@ -260,6 +289,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                   </div>
                   )}
                 </section>
+                )}
 
                 {/* Quantity and Price */}
                 <section className="bg-white border-y border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
@@ -268,165 +298,206 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     onClick={() => setExpandedRowSection(expandedRowSection === 'quantities' ? null : 'quantities')}
                   >
                     <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                      <Calculator size={16} className="mr-2 text-rose-500"/> Quantity and Price
+                      <Calculator size={16} className="mr-2 text-rose-500"/> {isInventory ? 'Quantity and Price' : 'Transaction Amount'}
                     </h4>
                     <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'quantities' ? 'rotate-180' : ''}`} />
                   </header>
                   {expandedRowSection === 'quantities' && (
                   <div className="p-6 space-y-6 border-t border-gray-100 dark:border-gray-800">
                     <div className="form-grid gap-6">
+                      {!isInventory && (
+                        <div className="form-field-wrapper col-span-1 md:col-span-2">
+                          <label className="form-label">Cr / Dr</label>
+                          <select 
+                            value={rows[editingRowIndex]?.crDr || 'Dr'} 
+                            onChange={(e) => {
+                              const r = [...rows];
+                              r[editingRowIndex].crDr = e.target.value;
+                              setRows(r);
+                            }}
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-lg font-black text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:focus:bg-gray-700"
+                          >
+                            <option value="Dr">Debit (Dr)</option>
+                            <option value="Cr">Credit (Cr)</option>
+                          </select>
+                        </div>
+                      )}
+
                       <div className="form-field-wrapper">
-<label className="form-label">Quantity</label>
+                        <label className="form-label">Amount (₹)</label>
                         <input 
                           type="number" 
-                          value={rows[editingRowIndex]?.qty || ''} 
+                          step="0.01"
+                          value={rows[editingRowIndex]?.amount || ''} 
                           onChange={(e) => {
                             const r = [...rows];
-                            r[editingRowIndex].qty = e.target.value;
+                            r[editingRowIndex].amount = e.target.value;
                             setRows(r);
                           }}
-                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-lg font-black text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:focus:bg-gray-700"
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xl font-black text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:focus:bg-gray-700"
                         />
                       </div>
                       
-                      <div className="form-field-wrapper">
-<label className="form-label">Unit</label>
-                        <select 
-                          value={rows[editingRowIndex]?.unit || 'PCS'} 
-                          onChange={(e) => {
-                            const r = [...rows];
-                            r[editingRowIndex].unit = e.target.value;
-                            setRows(r);
-                          }}
-                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-lg font-black text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:focus:bg-gray-700"
-                        >
-                          <option>PCS</option>
-                          <option>NOS</option>
-                          <option>KG</option>
-                          <option>BOX</option>
-                          <option>LTR</option>
-                          <option>MTR</option>
-                          <option>PKT</option>
-                          <option>DOZ</option>
-                          <option>ROLL</option>
-                          <option>SET</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="form-grid gap-6 p-4 bg-gray-50/50 rounded-xl border border-gray-100 dark:border-gray-800">
-                      <div className="form-field-wrapper">
-<label className="form-label">MRP (₹)</label>
-                        <input 
-                          type="number" 
-                          step="0.01"
-                          value={rows[editingRowIndex]?.mrp || ''} 
-                          onChange={(e) => {
-                            const r = [...rows];
-                            r[editingRowIndex].mrp = e.target.value;
-                            setRows(r);
-                          }}
-                          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                        />
-                      </div>
-
-                      <div className="form-field-wrapper">
-<label className="form-label">Rate (₹) [Excl. Tax]</label>
-                        <input 
-                          type="number" 
-                          step="0.01"
-                          value={rows[editingRowIndex]?.rate || ''} 
-                          onChange={(e) => {
-                            const r = [...rows];
-                            r[editingRowIndex].rate = e.target.value;
-                            const tax = parseFloat(r[editingRowIndex].tax || '18');
-                            const rate = parseFloat(e.target.value) || 0;
-                            r[editingRowIndex].rateWithTax = (rate * (1 + tax / 100)).toFixed(2);
-                            setRows(r);
-                          }}
-                          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                        />
-                      </div>
+                      {isInventory && (
+                        <div className="form-field-wrapper">
+                          <label className="form-label">Quantity</label>
+                          <input 
+                            type="number" 
+                            value={rows[editingRowIndex]?.qty || ''} 
+                            onChange={(e) => {
+                              const r = [...rows];
+                              r[editingRowIndex].qty = e.target.value;
+                              setRows(r);
+                            }}
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-lg font-black text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:focus:bg-gray-700"
+                          />
+                        </div>
+                      )}
                       
-                      <div className="form-field-wrapper">
-<label className="form-label">Tax %</label>
-                        <select 
-                          value={rows[editingRowIndex]?.tax || '18'} 
-                          onChange={(e) => {
-                            const r = [...rows];
-                            r[editingRowIndex].tax = e.target.value;
-                            const tax = parseFloat(e.target.value) || 0;
-                            const rate = parseFloat(r[editingRowIndex].rate) || 0;
-                            r[editingRowIndex].rateWithTax = (rate * (1 + tax / 100)).toFixed(2);
-                            setRows(r);
-                          }}
-                          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                        >
-                          <option value="0">0%</option>
-                          <option value="5">5%</option>
-                          <option value="12">12%</option>
-                          <option value="18">18%</option>
-                          <option value="28">28%</option>
-                        </select>
-                      </div>
-
-                      <div className="form-field-wrapper">
-<label className="form-label">HSN / SAC</label>
-                        <input 
-                          type="text" 
-                          value={rows[editingRowIndex]?.hsn || ''} 
-                          onChange={(e) => {
-                            const r = [...rows];
-                            r[editingRowIndex].hsn = e.target.value;
-                            setRows(r);
-                          }}
-                          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                          placeholder="HSN Code"
-                        />
-                      </div>
-
-                      <div className="form-field-wrapper">
-<label className="form-label">Rate w/ Tax (₹)</label>
-                        <input 
-                          type="number" 
-                          step="0.01"
-                          value={rows[editingRowIndex]?.rateWithTax || ''} 
-                          onChange={(e) => {
-                            const r = [...rows];
-                            r[editingRowIndex].rateWithTax = e.target.value;
-                            const tax = parseFloat(r[editingRowIndex].tax || '18');
-                            const rwt = parseFloat(e.target.value) || 0;
-                            r[editingRowIndex].rate = (rwt / (1 + tax / 100)).toFixed(2);
-                            setRows(r);
-                          }}
-                          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                        />
-                      </div>
-
-                      <div className="form-field-wrapper">
-<label className="form-label">Tax Amount (₹)</label>
-                        <input 
-                          type="number" 
-                          step="0.01"
-                          readOnly
-                          value={((parseFloat(rows[editingRowIndex]?.rate || '0') * (parseFloat(rows[editingRowIndex]?.tax || '18') / 100))).toFixed(2)} 
-                          className="w-full px-4 py-3 bg-gray-100 border border-transparent rounded-xl text-sm font-black text-gray-500 outline-none dark:bg-gray-800 dark:text-gray-400"
-                        />
-                      </div>
+                      {isInventory && (
+                        <div className="form-field-wrapper">
+                          <label className="form-label">Unit</label>
+                          <select 
+                            value={rows[editingRowIndex]?.unit || 'PCS'} 
+                            onChange={(e) => {
+                              const r = [...rows];
+                              r[editingRowIndex].unit = e.target.value;
+                              setRows(r);
+                            }}
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-lg font-black text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:focus:bg-gray-700"
+                          >
+                            <option>PCS</option>
+                            <option>NOS</option>
+                            <option>KG</option>
+                            <option>BOX</option>
+                            <option>LTR</option>
+                            <option>MTR</option>
+                            <option>PKT</option>
+                            <option>DOZ</option>
+                            <option>ROLL</option>
+                            <option>SET</option>
+                          </select>
+                        </div>
+                      )}
                     </div>
+
+                    {isInventory && (
+                      <div className="form-grid gap-6 p-4 bg-gray-50/50 rounded-xl border border-gray-100 dark:border-gray-800">
+                        <div className="form-field-wrapper">
+  <label className="form-label">MRP (₹)</label>
+                          <input 
+                            type="number" 
+                            step="0.01"
+                            value={rows[editingRowIndex]?.mrp || ''} 
+                            onChange={(e) => {
+                              const r = [...rows];
+                              r[editingRowIndex].mrp = e.target.value;
+                              setRows(r);
+                            }}
+                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                          />
+                        </div>
+
+                        <div className="form-field-wrapper">
+  <label className="form-label">Rate (₹) [Excl. Tax]</label>
+                          <input 
+                            type="number" 
+                            step="0.01"
+                            value={rows[editingRowIndex]?.rate || ''} 
+                            onChange={(e) => {
+                              const r = [...rows];
+                              r[editingRowIndex].rate = e.target.value;
+                              const tax = parseFloat(r[editingRowIndex].tax || '18');
+                              const rate = parseFloat(e.target.value) || 0;
+                              r[editingRowIndex].rateWithTax = (rate * (1 + tax / 100)).toFixed(2);
+                              setRows(r);
+                            }}
+                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                          />
+                        </div>
+                        
+                        <div className="form-field-wrapper">
+  <label className="form-label">Tax %</label>
+                          <select 
+                            value={rows[editingRowIndex]?.tax || '18'} 
+                            onChange={(e) => {
+                              const r = [...rows];
+                              r[editingRowIndex].tax = e.target.value;
+                              const tax = parseFloat(e.target.value) || 0;
+                              const rate = parseFloat(r[editingRowIndex].rate) || 0;
+                              r[editingRowIndex].rateWithTax = (rate * (1 + tax / 100)).toFixed(2);
+                              setRows(r);
+                            }}
+                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                          >
+                            <option value="0">0%</option>
+                            <option value="5">5%</option>
+                            <option value="12">12%</option>
+                            <option value="18">18%</option>
+                            <option value="28">28%</option>
+                          </select>
+                        </div>
+
+                        <div className="form-field-wrapper">
+  <label className="form-label">HSN / SAC</label>
+                          <input 
+                            type="text" 
+                            value={rows[editingRowIndex]?.hsn || ''} 
+                            onChange={(e) => {
+                              const r = [...rows];
+                              r[editingRowIndex].hsn = e.target.value;
+                              setRows(r);
+                            }}
+                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                            placeholder="HSN Code"
+                          />
+                        </div>
+
+                        <div className="form-field-wrapper">
+  <label className="form-label">Rate w/ Tax (₹)</label>
+                          <input 
+                            type="number" 
+                            step="0.01"
+                            value={rows[editingRowIndex]?.rateWithTax || ''} 
+                            onChange={(e) => {
+                              const r = [...rows];
+                              r[editingRowIndex].rateWithTax = e.target.value;
+                              const tax = parseFloat(r[editingRowIndex].tax || '18');
+                              const rwt = parseFloat(e.target.value) || 0;
+                              r[editingRowIndex].rate = (rwt / (1 + tax / 100)).toFixed(2);
+                              setRows(r);
+                            }}
+                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                          />
+                        </div>
+
+                        <div className="form-field-wrapper">
+  <label className="form-label">Tax Amount (₹)</label>
+                          <input 
+                            type="number" 
+                            step="0.01"
+                            readOnly
+                            value={((parseFloat(rows[editingRowIndex]?.rate || '0') * (parseFloat(rows[editingRowIndex]?.tax || '18') / 100))).toFixed(2)} 
+                            className="w-full px-4 py-3 bg-gray-100 border border-transparent rounded-xl text-sm font-black text-gray-500 outline-none dark:bg-gray-800 dark:text-gray-400"
+                          />
+                        </div>
+                      </div>
+                    )}
 
                     <div className="form-field-wrapper bg-rose-50/50 rounded-xl p-4 border border-rose-100 flex items-center justify-between mt-4 md:col-span-2">
-                       <span className="text-sm font-bold text-rose-800 uppercase tracking-widest">Net Row Amount</span>
+                       <span className="text-sm font-bold text-rose-800 uppercase tracking-widest">{isInventory ? 'Net Row Amount' : 'Entry Amount'}</span>
                        <span className="text-xl font-black text-gray-900 dark:text-white">
-                         ₹ {calculateRowNetAmount(rows[editingRowIndex]).toFixed(2)}
+                         ₹ {isInventory ? calculateRowNetAmount(rows[editingRowIndex]).toFixed(2) : (parseFloat(rows[editingRowIndex]?.amount || '0').toFixed(2))}
                        </span>
                     </div>
                   </div>
                   )}
                 </section>
 
-                {/* Non-Tax Related */}
-                <section className="bg-white border-y border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                {/* Pricing & Adjustments */}
+                {isInventory && (
+                  <>
+                    <section className="bg-white border-y border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                   <header 
                     className="p-4 cursor-pointer flex justify-between items-center bg-gray-50/50 hover:bg-gray-100/50 transition-colors"
                     onClick={() => setExpandedRowSection(expandedRowSection === 'pricing_nontax' ? null : 'pricing_nontax')}
@@ -660,14 +731,16 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           r[editingRowIndex].expiryDate = e.target.value;
                           setRows(r);
                         }}
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus-within:bg-white focus-within:outline-none focus-within:ring-2 focus-within:ring-purple-500/20 focus-within:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus-within:bg-gray-700"
                       />
                     </div>
                   </div>
                   )}
                 </section>
-              </div>
-            </div>
+              </>
+            )}
+          </div>
+        </div>
             
             <div className="p-6 border-t border-gray-100 bg-white flex justify-end gap-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-10 relative dark:border-gray-800 dark:bg-gray-800">
               <button 
