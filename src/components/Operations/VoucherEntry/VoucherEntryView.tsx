@@ -32,7 +32,7 @@ export const VoucherEntryView: React.FC<VoucherEntryViewProps> = (props) => {
     { id: 'purchase', label: 'Purchase' },
     { id: 'payment', label: 'Payment' },
     { id: 'receipt', label: 'Receipt' },
-    { id: 'journal', label: 'General / Journal' },
+    { id: 'journal', label: 'Journal' },
     { id: 'contra', label: 'Contra' },
     { id: 'debit_note', label: 'Debit Note' },
     { id: 'credit_note', label: 'Credit Note' },

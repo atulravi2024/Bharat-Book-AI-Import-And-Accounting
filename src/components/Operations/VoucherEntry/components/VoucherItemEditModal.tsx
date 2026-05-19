@@ -32,7 +32,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
 }) => {
   if (!isOpen || editingRowIndex === null) return null;
 
-  const isInventory = ['sales', 'purchase', 'debit_note', 'credit_note', 'journal'].includes(activeTab);
+  const isInventory = ['sales', 'purchase', 'debit_note', 'credit_note'].includes(activeTab);
 
   return (
 

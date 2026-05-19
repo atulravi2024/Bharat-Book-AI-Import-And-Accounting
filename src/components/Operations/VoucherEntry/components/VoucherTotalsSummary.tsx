@@ -24,7 +24,7 @@ export const VoucherTotalsSummary: React.FC<VoucherTotalsSummaryProps> = ({
   activeTab,
   rows
 }) => {
-  const isInventory = ['sales', 'purchase', 'debit_note', 'credit_note', 'journal'].includes(activeTab);
+  const isInventory = ['sales', 'purchase', 'debit_note', 'credit_note'].includes(activeTab);
 
   return (
     <div className="flex flex-col gap-6 mt-6">
