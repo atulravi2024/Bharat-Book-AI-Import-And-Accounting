@@ -1,1 +1,114 @@
-[]
+[
+  {
+    "id": "ldg-1",
+    "name": "Cash A/c",
+    "group": "Cash-in-hand",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-2",
+    "name": "Bank A/c",
+    "group": "Bank Accounts",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-3",
+    "name": "Sales A/c",
+    "group": "Sales Accounts",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-4",
+    "name": "Purchase A/c",
+    "group": "Purchase Accounts",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-5",
+    "name": "Vendor Party",
+    "group": "Sundry Creditors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-6",
+    "name": "Client Party",
+    "group": "Sundry Debtors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-7",
+    "name": "Sample Party",
+    "group": "Sundry Debtors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-8",
+    "name": "Demo Party",
+    "group": "Sundry Debtors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-9",
+    "name": "Tech Solutions",
+    "group": "Sundry Debtors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-10",
+    "name": "Global Dist",
+    "group": "Sundry Debtors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-11",
+    "name": "Prime Systems",
+    "group": "Sundry Debtors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-12",
+    "name": "Apex Corp",
+    "group": "Sundry Debtors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-13",
+    "name": "Nexus Ltd",
+    "group": "Sundry Debtors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  },
+  {
+    "id": "ldg-14",
+    "name": "Zenith Inc",
+    "group": "Sundry Debtors",
+    "openingBalance": 0,
+    "type": "Ledger",
+    "status": "Active"
+  }
+]

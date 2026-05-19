@@ -140,7 +140,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
 <label className="form-label">Creation Stamp (System)</label>
             <input type="text" value={systemStamp || ''} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
           </div>
-          <div className="form-field-wrapper sm:col-span-2 lg:col-span-4 hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all dark:hover:bg-gray-700">
+          <div className="form-field-wrapper col-span-full hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all dark:hover:bg-gray-700">
             <label htmlFor="inventory-file-upload" className="flex items-center px-4 py-2 border border-dashed border-gray-300 rounded-lg text-xs font-bold text-gray-500 hover:bg-white hover:text-emerald-600 hover:border-emerald-300 transition-all cursor-pointer shadow-sm dark:border-gray-600 dark:text-gray-400">
               <Paperclip size={14} className="mr-2" /> Attach Document
             </label>

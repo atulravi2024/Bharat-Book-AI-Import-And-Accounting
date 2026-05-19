@@ -33,6 +33,22 @@
           "amount": "Updated amount"
         }
       }
+    ],
+    "items": [
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 25000
+        },
+        "amount": {
+          "value": 50000
+        }
+      }
     ]
   },
   {

@@ -58,10 +58,10 @@ export const AISettings: React.FC<AISettingsProps> = ({
                     <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2 dark:text-white">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Active Engine
                     </h4>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <button 
                             onClick={() => setAiSettings({...aiSettings, provider: 'internal'})}
-                            className={`relative p-5 sm:p-6 rounded-xl border-2 transition-all flex flex-col text-left group overflow-hidden ${
+                            className={`relative h-full p-5 sm:p-6 rounded-xl border-2 transition-all flex flex-col text-left group overflow-hidden ${
                                 aiSettings.provider === 'internal' 
                                 ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-900/20 shadow-sm' 
                                 : 'border-gray-200 bg-white hover:border-blue-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500'
@@ -78,7 +78,7 @@ export const AISettings: React.FC<AISettingsProps> = ({
                         
                         <button 
                             onClick={() => setAiSettings({...aiSettings, provider: 'external'})}
-                            className={`relative p-5 sm:p-6 rounded-xl border-2 transition-all flex flex-col text-left group overflow-hidden ${
+                            className={`relative h-full p-5 sm:p-6 rounded-xl border-2 transition-all flex flex-col text-left group overflow-hidden ${
                                 aiSettings.provider === 'external' 
                                 ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-900/20 shadow-sm' 
                                 : 'border-gray-200 bg-white hover:border-blue-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500'
@@ -97,9 +97,9 @@ export const AISettings: React.FC<AISettingsProps> = ({
 
                 {/* Engine Configuration */}
                 {aiSettings.provider === 'internal' ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in slide-in-from-bottom-4 fade-in duration-300">
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Select Model</label>
+                    <div className="form-grid !p-0 !border-0 animate-in slide-in-from-bottom-4 fade-in duration-300">
+                        <div className="form-field-wrapper space-y-2 md:col-span-2">
+                            <label className="form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Select Model</label>
                             <select 
                                 className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all shadow-sm"
                                 value={aiSettings.internalModel}
@@ -113,9 +113,9 @@ export const AISettings: React.FC<AISettingsProps> = ({
                         </div>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in slide-in-from-bottom-4 fade-in duration-300">
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Provider Service</label>
+                    <div className="form-grid !p-0 !border-0 animate-in slide-in-from-bottom-4 fade-in duration-300">
+                        <div className="form-field-wrapper space-y-2">
+                            <label className="form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Provider Service</label>
                             <select 
                                 className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all shadow-sm"
                                 value={aiSettings.externalProvider}
@@ -135,8 +135,8 @@ export const AISettings: React.FC<AISettingsProps> = ({
                             </select>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">
+                        <div className="form-field-wrapper space-y-2">
+                            <label className="form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">
                                 {aiSettings.externalProvider === '9router' ? 'API Key (Managed)' : 'Secret API Key'}
                             </label>
                             <input 
@@ -149,8 +149,8 @@ export const AISettings: React.FC<AISettingsProps> = ({
                             />
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="flex items-center justify-between text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">
+                        <div className="form-field-wrapper space-y-2">
+                            <label className="flex items-center justify-between form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">
                                 <span>{aiSettings.externalProvider === '9router' ? 'Model Selection' : 'Model Identifier'}</span>
                                 {aiSettings.externalProvider === '9router' && (
                                     <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[9px] font-black dark:bg-blue-900/50 dark:text-blue-300">AUTO</span>
@@ -183,8 +183,8 @@ export const AISettings: React.FC<AISettingsProps> = ({
                             )}
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Base URL Configuration</label>
+                        <div className="form-field-wrapper space-y-2">
+                            <label className="form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Base URL Configuration</label>
                             <input 
                                 type="text" 
                                 className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all shadow-sm placeholder:text-gray-300 dark:placeholder:text-gray-600" 
@@ -210,11 +210,11 @@ export const AISettings: React.FC<AISettingsProps> = ({
                         )}
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-3 w-full xl:w-auto shrink-0">
+                    <div className="grid grid-cols-2 gap-3 w-full sm:w-[320px] md:w-[380px] xl:w-[400px] shrink-0">
                         <button 
                             onClick={handleTestConnection}
                             disabled={testStatus.loading}
-                            className={`w-full px-6 py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center ${
+                            className={`w-full px-4 py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center ${
                                 testStatus.loading 
                                 ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 cursor-not-allowed' 
                                 : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm hover:shadow dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700'
@@ -226,7 +226,7 @@ export const AISettings: React.FC<AISettingsProps> = ({
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Connecting...
+                                    Connecting
                                 </>
                             ) : 'Test'}
                         </button>

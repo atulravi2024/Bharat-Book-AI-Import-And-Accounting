@@ -20,7 +20,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
     'debit_note', 'credit_note', 'stock_journal', 'physical_stock', 
     'consumption', 'scrap', 'transfer', 'rejections_in', 'rejections_out',
     'delivery_note', 'receipt_note'
-  ].includes(type.toLowerCase());
+  ].includes((typeof type === 'string' ? type : 'voucher').toLowerCase().replace(/ /g, '_'));
   const [autoScale, setAutoScale] = useState(1);
   const [manualZoom, setManualZoom] = useState<number | null>(null);
   const previewScale = manualZoom !== null ? manualZoom : autoScale;

@@ -1,8 +1,26 @@
 [
   {
-    "id": "costCenters-sample-1",
-    "name": "Sample costCenters 1",
-    "group": "Sundry Debtors",
-    "address": "Sample Address"
+    "id": "cc-1",
+    "name": "Mumbai Branch",
+    "group": "Branches",
+    "address": "Bandra Kurla Complex, Mumbai"
+  },
+  {
+    "id": "cc-2",
+    "name": "Delhi Sales Office",
+    "group": "Branches",
+    "address": "Nehru Place, New Delhi"
+  },
+  {
+    "id": "cc-3",
+    "name": "Marketing Department",
+    "group": "Departments",
+    "address": "HQ, Mumbai"
+  },
+  {
+    "id": "cc-4",
+    "name": "Production Unit 1",
+    "group": "Manufacturing",
+    "address": "Pune Industrial Area"
   }
 ]

@@ -15,15 +15,17 @@ interface VoucherEntryViewProps {
   itemMasters?: any[];
   ledgerMasters?: any[];
   partyMasters?: any[];
+  vouchers?: any[];
   onUpdateItemMaster?: (item: any) => void;
   onAddItemMaster?: (item: any) => void;
   onSaveEntry?: (entry: any, isNew: boolean) => void;
+  onDeleteEntry?: (id: string) => void;
   onOpenPrintSettings?: () => void;
 }
 
 export const VoucherEntryView: React.FC<VoucherEntryViewProps> = (props) => {
   const type = props.initialVoucher?.type || props.defaultType || 'sales';
-  const normalizedType = typeof type === 'string' ? type.toLowerCase().replace(' ', '_') : type;
+  const normalizedType = typeof type === 'string' ? type.toLowerCase().replace(/ /g, '_') : type;
 
   const tabs = [
     { id: 'sales', label: 'Sales' },

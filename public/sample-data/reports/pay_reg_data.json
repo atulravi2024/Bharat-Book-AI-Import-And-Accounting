@@ -1,44 +1,554 @@
 [
   {
-    "id": "pay_reg-0",
+    "id": "payment-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-08-14"
     },
     "type": "Payment",
     "partyName": {
-      "value": "Sample Party"
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2001"
     },
     "amount": {
-      "value": 2000
+      "value": 49060
     },
     "narration": {
-      "value": "Generated for day_book"
+      "value": "Payment Entry No. PAY-2001"
     },
-    "auditLogs": [
+    "items": [
       {
-        "id": "al-1",
-        "action": "CREATE",
-        "timestamp": "2024-05-10T10:00:00Z",
-        "user": "System Auto",
-        "changes": {
-          "status": "Created"
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 49060
         }
       },
       {
-        "id": "al-2",
-        "action": "UPDATE",
-        "timestamp": "2024-05-11T12:30:00Z",
-        "user": "Admin User",
-        "changes": {
-          "amount": "Updated amount"
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 49060
         }
       }
-    ],
-    "paymentMode": {
-      "value": "Cash"
+    ]
+  },
+  {
+    "id": "payment-2",
+    "date": {
+      "value": "2024-02-18"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Samsung Electronics"
     },
     "ledger": {
-      "value": "Vendor A"
-    }
+      "value": "Samsung Electronics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2002"
+    },
+    "amount": {
+      "value": 26092
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2002"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 26092
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Samsung Electronics"
+        },
+        "amount": {
+          "value": 26092
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-3",
+    "date": {
+      "value": "2024-06-22"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Samsung Electronics"
+    },
+    "ledger": {
+      "value": "Samsung Electronics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2003"
+    },
+    "amount": {
+      "value": 39289
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2003"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 39289
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Samsung Electronics"
+        },
+        "amount": {
+          "value": 39289
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-4",
+    "date": {
+      "value": "2024-03-21"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Samsung Electronics"
+    },
+    "ledger": {
+      "value": "Samsung Electronics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2004"
+    },
+    "amount": {
+      "value": 8032
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2004"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 8032
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Samsung Electronics"
+        },
+        "amount": {
+          "value": 8032
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-5",
+    "date": {
+      "value": "2024-08-17"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2005"
+    },
+    "amount": {
+      "value": 26202
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2005"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 26202
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 26202
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-6",
+    "date": {
+      "value": "2024-12-21"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "PAY-2006"
+    },
+    "amount": {
+      "value": 54205
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2006"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 54205
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 54205
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-7",
+    "date": {
+      "value": "2024-10-11"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Samsung Electronics"
+    },
+    "ledger": {
+      "value": "Samsung Electronics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2007"
+    },
+    "amount": {
+      "value": 43675
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2007"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 43675
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Samsung Electronics"
+        },
+        "amount": {
+          "value": 43675
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-8",
+    "date": {
+      "value": "2024-06-03"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Samsung Electronics"
+    },
+    "ledger": {
+      "value": "Samsung Electronics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2008"
+    },
+    "amount": {
+      "value": 25831
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2008"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 25831
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Samsung Electronics"
+        },
+        "amount": {
+          "value": 25831
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-9",
+    "date": {
+      "value": "2024-09-18"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "PAY-2009"
+    },
+    "amount": {
+      "value": 51254
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2009"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 51254
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 51254
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-10",
+    "date": {
+      "value": "2024-11-09"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "PAY-2010"
+    },
+    "amount": {
+      "value": 54161
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2010"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 54161
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 54161
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-11",
+    "date": {
+      "value": "2024-01-20"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2011"
+    },
+    "amount": {
+      "value": 45586
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2011"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 45586
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 45586
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-12",
+    "date": {
+      "value": "2024-06-23"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "PAY-2012"
+    },
+    "amount": {
+      "value": 25475
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2012"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 25475
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 25475
+        }
+      }
+    ]
   }
 ]

@@ -1,15 +1,232 @@
 [
   {
-    "id": "rec-1",
+    "id": "receipt-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-06-16"
     },
     "type": "Receipt",
     "partyName": {
-      "value": "Client Party"
+      "value": "Tata Consultancy Services"
+    },
+    "ledger": {
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "REC-2001"
     },
     "amount": {
-      "value": 15000
-    }
+      "value": 44026
+    },
+    "narration": {
+      "value": "Receipt Entry No. REC-2001"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 44026
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Tata Consultancy Services"
+        },
+        "amount": {
+          "value": 44026
+        }
+      }
+    ]
+  },
+  {
+    "id": "receipt-2",
+    "date": {
+      "value": "2024-01-26"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Future Group"
+    },
+    "ledger": {
+      "value": "Future Group"
+    },
+    "voucherNumber": {
+      "value": "REC-2002"
+    },
+    "amount": {
+      "value": 51899
+    },
+    "narration": {
+      "value": "Receipt Entry No. REC-2002"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 51899
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Future Group"
+        },
+        "amount": {
+          "value": 51899
+        }
+      }
+    ]
+  },
+  {
+    "id": "receipt-3",
+    "date": {
+      "value": "2024-01-21"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Reliance Retail Ltd"
+    },
+    "ledger": {
+      "value": "Reliance Retail Ltd"
+    },
+    "voucherNumber": {
+      "value": "REC-2003"
+    },
+    "amount": {
+      "value": 43402
+    },
+    "narration": {
+      "value": "Receipt Entry No. REC-2003"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 43402
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Reliance Retail Ltd"
+        },
+        "amount": {
+          "value": 43402
+        }
+      }
+    ]
+  },
+  {
+    "id": "receipt-4",
+    "date": {
+      "value": "2024-12-12"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Tata Consultancy Services"
+    },
+    "ledger": {
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "REC-2004"
+    },
+    "amount": {
+      "value": 42855
+    },
+    "narration": {
+      "value": "Receipt Entry No. REC-2004"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 42855
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Tata Consultancy Services"
+        },
+        "amount": {
+          "value": 42855
+        }
+      }
+    ]
+  },
+  {
+    "id": "receipt-5",
+    "date": {
+      "value": "2024-06-18"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Reliance Retail Ltd"
+    },
+    "ledger": {
+      "value": "Reliance Retail Ltd"
+    },
+    "voucherNumber": {
+      "value": "REC-2005"
+    },
+    "amount": {
+      "value": 25624
+    },
+    "narration": {
+      "value": "Receipt Entry No. REC-2005"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 25624
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Reliance Retail Ltd"
+        },
+        "amount": {
+          "value": 25624
+        }
+      }
+    ]
   }
 ]

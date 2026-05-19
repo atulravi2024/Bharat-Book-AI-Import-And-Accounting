@@ -118,14 +118,15 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
             return true;
         });
 
-        if (activeTab === 'purchase') list = list.filter(v => v.type === VoucherType.Purchase);
-        else if (activeTab === 'sales') list = list.filter(v => v.type === VoucherType.Sales);
-        else if (activeTab === 'payment') list = list.filter(v => v.type === VoucherType.Payment);
-        else if (activeTab === 'receipt') list = list.filter(v => v.type === VoucherType.Receipt);
-        else if (activeTab === 'journal') list = list.filter(v => v.type === VoucherType.Journal);
-        else if (activeTab === 'contra') list = list.filter(v => v.type === VoucherType.Contra);
-        else if (activeTab === 'debit_note') list = list.filter(v => v.type === VoucherType.DebitNote);
-        else if (activeTab === 'credit_note') list = list.filter(v => v.type === VoucherType.CreditNote);
+        if (activeTab === 'purchase') list = list.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/ /g, '_') === 'purchase');
+        else if (activeTab === 'sales') list = list.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/ /g, '_') === 'sales');
+        else if (activeTab === 'payment') list = list.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/ /g, '_') === 'payment');
+        else if (activeTab === 'receipt') list = list.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/ /g, '_') === 'receipt');
+        else if (activeTab === 'journal') list = list.filter(v => typeof v.type === 'string' && ['journal', 'general'].includes(v.type.toLowerCase().replace(/[\s_]+/g, '')));
+        else if (activeTab === 'contra') list = list.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/ /g, '_') === 'contra');
+        else if (activeTab === 'debit_note') list = list.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/ /g, '_') === 'debit_note');
+        else if (activeTab === 'credit_note') list = list.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/ /g, '_') === 'credit_note');
+        else if (activeTab === 'inventory') list = list.filter(v => { const t = (v.type || '').toString().toLowerCase().replace(/ /g, '_'); return ['stock_journal', 'physical_stock', 'delivery_note', 'receipt_note', 'material_in', 'material_out', 'rejections_in', 'rejections_out', 'manufacturing_journal', 'consumption'].includes(t); });
         else if (activeTab === 'day_book') {
             return [...list].sort((a, b) => {
                 const dateA = new Date(a.date?.value || 0).getTime();
@@ -285,6 +286,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
         { id: 'contra', label: 'Contra Register' },
         { id: 'debit_note', label: 'Debit Note' },
         { id: 'credit_note', label: 'Credit Note' },
+        { id: 'inventory', label: 'Inventory Register' },
         { id: 'day_book', label: 'Day Book' },
         { id: 'audit_trail', label: 'Audit Trail' }
     ];

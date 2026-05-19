@@ -1,8 +1,26 @@
 [
   {
-    "id": "contacts-sample-1",
-    "name": "Sample contacts 1",
-    "group": "Sundry Debtors",
-    "address": "Sample Address"
+    "id": "contact-1",
+    "name": "Ravi Kumar",
+    "group": "Key Accounts",
+    "phone": "9876543210",
+    "email": "ravi.kumar@example.com",
+    "address": "123 Business Park, Mumbai"
+  },
+  {
+    "id": "contact-2",
+    "name": "Sonia Gandhi",
+    "group": "Suppliers",
+    "phone": "9988776655",
+    "email": "sonia.g@suppliers.com",
+    "address": "45 Industrial Hub, Delhi"
+  },
+  {
+    "id": "contact-3",
+    "name": "Arjun Singh",
+    "group": "Logistics",
+    "phone": "9123456780",
+    "email": "arjun@fleetservices.in",
+    "address": "7 Logistics Park, Pune"
   }
 ]

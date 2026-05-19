@@ -1,18 +1,292 @@
 [
   {
-    "id": "transfer_entry-sample-1",
+    "id": "transfer_entry-1",
+    "date": {
+      "value": "2024-05-10"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 1000
+    },
+    "partyName": {
+      "value": "Vendor Party"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "iPhone 15 Pro 256GB"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 100
+        },
+        "amount": {
+          "value": 1000
+        }
+      }
+    ]
+  },
+  {
+    "id": "transfer_entry-2",
+    "date": {
+      "value": "2024-05-11"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 2000
+    },
+    "partyName": {
+      "value": "Client Party"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Samsung Galaxy S23 Ultra"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 200
+        },
+        "amount": {
+          "value": 2000
+        }
+      }
+    ]
+  },
+  {
+    "id": "transfer_entry-3",
+    "date": {
+      "value": "2024-05-12"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 3000
+    },
+    "partyName": {
+      "value": "Sample Party"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Sony Bravia 65\\\" 4K Smart TV"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 300
+        },
+        "amount": {
+          "value": 3000
+        }
+      }
+    ]
+  },
+  {
+    "id": "transfer_entry-4",
+    "date": {
+      "value": "2024-05-13"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 4000
+    },
+    "partyName": {
+      "value": "Demo Party"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "LG 55\\\" OLED TV C3"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 400
+        },
+        "amount": {
+          "value": 4000
+        }
+      }
+    ]
+  },
+  {
+    "id": "transfer_entry-5",
+    "date": {
+      "value": "2024-05-14"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 5000
+    },
+    "partyName": {
+      "value": "Tech Solutions"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Dell XPS 15 Laptop"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 500
+        },
+        "amount": {
+          "value": 5000
+        }
+      }
+    ]
+  },
+  {
+    "id": "transfer_entry-6",
     "date": {
       "value": "2024-05-15"
     },
     "type": "Journal",
-    "partyName": {
-      "value": "Sample Party"
-    },
     "amount": {
-      "value": 1500
+      "value": 6000
     },
-    "narration": {
-      "value": "Generated for transfer_entry"
-    }
+    "partyName": {
+      "value": "Global Dist"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "MacBook Air M2"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 600
+        },
+        "amount": {
+          "value": 6000
+        }
+      }
+    ]
+  },
+  {
+    "id": "transfer_entry-7",
+    "date": {
+      "value": "2024-05-16"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 7000
+    },
+    "partyName": {
+      "value": "Prime Systems"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1 Carbon"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 700
+        },
+        "amount": {
+          "value": 7000
+        }
+      }
+    ]
+  },
+  {
+    "id": "transfer_entry-8",
+    "date": {
+      "value": "2024-05-17"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 8000
+    },
+    "partyName": {
+      "value": "Apex Corp"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Canon EOS R5 Mirrorless Camera"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 800
+        },
+        "amount": {
+          "value": 8000
+        }
+      }
+    ]
+  },
+  {
+    "id": "transfer_entry-9",
+    "date": {
+      "value": "2024-05-18"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 9000
+    },
+    "partyName": {
+      "value": "Nexus Ltd"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Nikon Z8 Body Only"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 900
+        },
+        "amount": {
+          "value": 9000
+        }
+      }
+    ]
+  },
+  {
+    "id": "transfer_entry-10",
+    "date": {
+      "value": "2024-05-19"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 10000
+    },
+    "partyName": {
+      "value": "Zenith Inc"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Sony WH-1000XM5 Headphones"
+        },
+        "quantity": {
+          "value": 10
+        },
+        "rate": {
+          "value": 1000
+        },
+        "amount": {
+          "value": 10000
+        }
+      }
+    ]
   }
 ]

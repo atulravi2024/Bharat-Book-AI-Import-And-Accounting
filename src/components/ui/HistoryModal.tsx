@@ -5,8 +5,10 @@ import { ConfirmModal } from './ConfirmModal';
 interface HistoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  storageKey: string;
+  storageKey?: string;
+  items?: any[];
   onSelectRecord: (record: any) => void;
+  onDeleteRecord?: (id: string) => void;
   title: string;
 }
 
@@ -14,7 +16,9 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
   isOpen,
   onClose,
   storageKey,
+  items,
   onSelectRecord,
+  onDeleteRecord,
   title
 }) => {
   const [historyDocs, setHistoryDocs] = useState<any[]>([]);
@@ -23,20 +27,29 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      const savedStr = localStorage.getItem(storageKey);
-      if (savedStr) {
-        try {
-          const parsed = JSON.parse(savedStr);
-          if (Array.isArray(parsed)) {
-            // Sort by timestamp descending if available, else just reverse
-            setHistoryDocs([...parsed].reverse());
+      let combined: any[] = [];
+      if (storageKey) {
+        const savedStr = localStorage.getItem(storageKey);
+        if (savedStr) {
+          try {
+            const parsed = JSON.parse(savedStr);
+            if (Array.isArray(parsed)) {
+              combined = [...parsed].reverse();
+            }
+          } catch (e) {
+            console.error("Failed to parse history.");
           }
-        } catch (e) {
-          console.error("Failed to parse history.");
         }
       }
+      if (items && Array.isArray(items)) {
+         // Filter out duplicates if present in both
+         const existingIds = new Set(combined.map(c => c.id));
+         const toAdd = items.filter(i => !existingIds.has(i.id)).reverse();
+         combined = [...combined, ...toAdd];
+      }
+      setHistoryDocs(combined);
     }
-  }, [isOpen, storageKey]);
+  }, [isOpen, storageKey, items]);
 
   if (!isOpen) return null;
 
@@ -47,9 +60,16 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
 
   const confirmDelete = () => {
     if (docToDelete) {
-      const updated = historyDocs.filter(doc => doc.id !== docToDelete);
-      setHistoryDocs(updated);
-      localStorage.setItem(storageKey, JSON.stringify([...updated].reverse()));
+      if (onDeleteRecord) {
+        onDeleteRecord(docToDelete);
+      } else {
+        const updated = historyDocs.filter(doc => doc.id !== docToDelete);
+        setHistoryDocs(updated);
+        if (storageKey) {
+          const onlyNonSample = updated.filter(doc => !doc.isSample && !doc.sampleSetId);
+          localStorage.setItem(storageKey, JSON.stringify([...onlyNonSample].reverse()));
+        }
+      }
       setDocToDelete(null);
     }
   };
@@ -59,8 +79,11 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
   };
 
   const confirmClear = () => {
-    setHistoryDocs([]);
-    localStorage.setItem(storageKey, JSON.stringify([]));
+    const onlySamples = historyDocs.filter(doc => doc.isSample || doc.sampleSetId);
+    setHistoryDocs(onlySamples);
+    if (storageKey) {
+      localStorage.setItem(storageKey, JSON.stringify([]));
+    }
     setShowClearConfirm(false);
   };
 

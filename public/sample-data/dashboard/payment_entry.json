@@ -1,15 +1,232 @@
 [
   {
-    "id": "pay-1",
+    "id": "payment-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-08-14"
     },
     "type": "Payment",
     "partyName": {
-      "value": "Vendor Party"
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2001"
     },
     "amount": {
-      "value": 5000
-    }
+      "value": 49060
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2001"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 49060
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 49060
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-2",
+    "date": {
+      "value": "2024-02-18"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Samsung Electronics"
+    },
+    "ledger": {
+      "value": "Samsung Electronics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2002"
+    },
+    "amount": {
+      "value": 26092
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2002"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 26092
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Samsung Electronics"
+        },
+        "amount": {
+          "value": 26092
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-3",
+    "date": {
+      "value": "2024-06-22"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Samsung Electronics"
+    },
+    "ledger": {
+      "value": "Samsung Electronics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2003"
+    },
+    "amount": {
+      "value": 39289
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2003"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 39289
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Samsung Electronics"
+        },
+        "amount": {
+          "value": 39289
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-4",
+    "date": {
+      "value": "2024-03-21"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Samsung Electronics"
+    },
+    "ledger": {
+      "value": "Samsung Electronics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2004"
+    },
+    "amount": {
+      "value": 8032
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2004"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 8032
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Samsung Electronics"
+        },
+        "amount": {
+          "value": 8032
+        }
+      }
+    ]
+  },
+  {
+    "id": "payment-5",
+    "date": {
+      "value": "2024-08-17"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "PAY-2005"
+    },
+    "amount": {
+      "value": 26202
+    },
+    "narration": {
+      "value": "Payment Entry No. PAY-2005"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 26202
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 26202
+        }
+      }
+    ]
   }
 ]

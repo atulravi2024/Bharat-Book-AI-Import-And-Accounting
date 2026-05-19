@@ -1,36 +1,460 @@
 [
   {
-    "id": "journal_register-sample-1",
+    "id": "journal-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-06-16"
     },
     "type": "Journal",
     "partyName": {
-      "value": "Sample Party"
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "JOU-2001"
     },
     "amount": {
-      "value": 1500
+      "value": 19962
     },
     "narration": {
-      "value": "Generated for journal_register"
+      "value": "Journal Entry No. JOU-2001"
     },
-    "auditLogs": [
+    "items": [
       {
-        "id": "al-1",
-        "action": "CREATE",
-        "timestamp": "2024-05-10T10:00:00Z",
-        "user": "System Auto",
-        "changes": {
-          "status": "Created"
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Internet Expenses"
+        },
+        "amount": {
+          "value": 19962
         }
       },
       {
-        "id": "al-2",
-        "action": "UPDATE",
-        "timestamp": "2024-05-11T12:30:00Z",
-        "user": "Admin User",
-        "changes": {
-          "amount": "Updated amount"
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 19962
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-2",
+    "date": {
+      "value": "2024-05-27"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "JOU-2002"
+    },
+    "amount": {
+      "value": 7449
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2002"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Office Rent"
+        },
+        "amount": {
+          "value": 7449
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 7449
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-3",
+    "date": {
+      "value": "2024-08-02"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "JOU-2003"
+    },
+    "amount": {
+      "value": 23292
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2003"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Office Rent"
+        },
+        "amount": {
+          "value": 23292
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 23292
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-4",
+    "date": {
+      "value": "2024-12-26"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "JOU-2004"
+    },
+    "amount": {
+      "value": 38909
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2004"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Internet Expenses"
+        },
+        "amount": {
+          "value": 38909
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 38909
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-5",
+    "date": {
+      "value": "2024-07-09"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "JOU-2005"
+    },
+    "amount": {
+      "value": 11042
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2005"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Office Rent"
+        },
+        "amount": {
+          "value": 11042
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 11042
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-6",
+    "date": {
+      "value": "2024-07-12"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "JOU-2006"
+    },
+    "amount": {
+      "value": 19248
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2006"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Internet Expenses"
+        },
+        "amount": {
+          "value": 19248
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 19248
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-7",
+    "date": {
+      "value": "2024-12-05"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "JOU-2007"
+    },
+    "amount": {
+      "value": 7006
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2007"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Internet Expenses"
+        },
+        "amount": {
+          "value": 7006
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 7006
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-8",
+    "date": {
+      "value": "2024-06-01"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "JOU-2008"
+    },
+    "amount": {
+      "value": 30470
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2008"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Electricity Charges"
+        },
+        "amount": {
+          "value": 30470
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 30470
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-9",
+    "date": {
+      "value": "2024-11-29"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "JOU-2009"
+    },
+    "amount": {
+      "value": 27243
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2009"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Office Rent"
+        },
+        "amount": {
+          "value": 27243
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 27243
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-10",
+    "date": {
+      "value": "2024-05-26"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Samsung Electronics"
+    },
+    "ledger": {
+      "value": "Samsung Electronics"
+    },
+    "voucherNumber": {
+      "value": "JOU-2010"
+    },
+    "amount": {
+      "value": 40313
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2010"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Internet Expenses"
+        },
+        "amount": {
+          "value": 40313
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Samsung Electronics"
+        },
+        "amount": {
+          "value": 40313
         }
       }
     ]

@@ -1,54 +1,821 @@
 [
   {
-    "id": "sr-1",
+    "id": "sales-1",
     "date": {
-      "value": "2024-05-16"
+      "value": "2024-11-10"
     },
     "type": "Sales",
     "partyName": {
-      "value": "Walkin Customer"
+      "value": "Wipro Technologies"
+    },
+    "voucherNumber": {
+      "value": "SAL-1001"
     },
     "amount": {
-      "value": 5900
+      "value": 1030000
     },
     "narration": {
-      "value": "Sales Invoice #102"
+      "value": "Sales for Wipro Technologies No. SAL-1001"
     },
-    "auditLogs": [
+    "items": [
       {
-        "id": "al-1",
-        "action": "CREATE",
-        "timestamp": "2024-05-10T10:00:00Z",
-        "user": "System Auto",
-        "changes": {
-          "status": "Created"
+        "name": {
+          "value": "Dell XPS 15"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 145000
+        },
+        "amount": {
+          "value": 290000
         }
       },
       {
-        "id": "al-2",
-        "action": "UPDATE",
-        "timestamp": "2024-05-11T12:30:00Z",
-        "user": "Admin User",
-        "changes": {
-          "amount": "Updated amount"
+        "name": {
+          "value": "Asus ROG Zephyrus"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 160000
+        },
+        "amount": {
+          "value": 160000
+        }
+      },
+      {
+        "name": {
+          "value": "Dell XPS 15"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 145000
+        },
+        "amount": {
+          "value": 580000
         }
       }
     ]
   },
   {
-    "id": "sr-2",
+    "id": "sales-2",
     "date": {
-      "value": "2024-05-17"
+      "value": "2024-02-13"
     },
     "type": "Sales",
     "partyName": {
-      "value": "Alpha Traders"
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "SAL-1002"
     },
     "amount": {
-      "value": 15000
+      "value": 790000
     },
     "narration": {
-      "value": "Sales Invoice #103"
-    }
+      "value": "Sales for Tata Consultancy Services No. SAL-1002"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 175000
+        }
+      },
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 15000
+        }
+      },
+      {
+        "name": {
+          "value": "MacBook Pro 14"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 120000
+        },
+        "amount": {
+          "value": 600000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-3",
+    "date": {
+      "value": "2024-03-09"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "SAL-1003"
+    },
+    "amount": {
+      "value": 540000
+    },
+    "narration": {
+      "value": "Sales for Tata Consultancy Services No. SAL-1003"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Asus ROG Zephyrus"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 160000
+        },
+        "amount": {
+          "value": 480000
+        }
+      },
+      {
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 60000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-4",
+    "date": {
+      "value": "2024-01-01"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Reliance Retail Ltd"
+    },
+    "voucherNumber": {
+      "value": "SAL-1004"
+    },
+    "amount": {
+      "value": 600000
+    },
+    "narration": {
+      "value": "Sales for Reliance Retail Ltd No. SAL-1004"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "MacBook Pro 14"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 120000
+        },
+        "amount": {
+          "value": 600000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-5",
+    "date": {
+      "value": "2024-09-23"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Reliance Retail Ltd"
+    },
+    "voucherNumber": {
+      "value": "SAL-1005"
+    },
+    "amount": {
+      "value": 510000
+    },
+    "narration": {
+      "value": "Sales for Reliance Retail Ltd No. SAL-1005"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 135000
+        },
+        "amount": {
+          "value": 135000
+        }
+      },
+      {
+        "name": {
+          "value": "Acer Predator Helios"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 125000
+        },
+        "amount": {
+          "value": 375000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-6",
+    "date": {
+      "value": "2024-05-06"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Future Group"
+    },
+    "voucherNumber": {
+      "value": "SAL-1006"
+    },
+    "amount": {
+      "value": 505000
+    },
+    "narration": {
+      "value": "Sales for Future Group No. SAL-1006"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Dell XPS 15"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 145000
+        },
+        "amount": {
+          "value": 435000
+        }
+      },
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 70000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-7",
+    "date": {
+      "value": "2024-06-01"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Infosys Ltd"
+    },
+    "voucherNumber": {
+      "value": "SAL-1007"
+    },
+    "amount": {
+      "value": 900000
+    },
+    "narration": {
+      "value": "Sales for Infosys Ltd No. SAL-1007"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 345000
+        }
+      },
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 15000
+        }
+      },
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 135000
+        },
+        "amount": {
+          "value": 540000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-8",
+    "date": {
+      "value": "2024-06-19"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "SAL-1008"
+    },
+    "amount": {
+      "value": 985000
+    },
+    "narration": {
+      "value": "Sales for Tata Consultancy Services No. SAL-1008"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Asus ROG Zephyrus"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 160000
+        },
+        "amount": {
+          "value": 640000
+        }
+      },
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 345000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-9",
+    "date": {
+      "value": "2024-12-02"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Infosys Ltd"
+    },
+    "voucherNumber": {
+      "value": "SAL-1009"
+    },
+    "amount": {
+      "value": 805000
+    },
+    "narration": {
+      "value": "Sales for Infosys Ltd No. SAL-1009"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 345000
+        }
+      },
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 115000
+        }
+      },
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 345000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-10",
+    "date": {
+      "value": "2024-08-09"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Infosys Ltd"
+    },
+    "voucherNumber": {
+      "value": "SAL-1010"
+    },
+    "amount": {
+      "value": 20000
+    },
+    "narration": {
+      "value": "Sales for Infosys Ltd No. SAL-1010"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 20000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-11",
+    "date": {
+      "value": "2024-06-09"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "SAL-1011"
+    },
+    "amount": {
+      "value": 230000
+    },
+    "narration": {
+      "value": "Sales for Tata Consultancy Services No. SAL-1011"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 70000
+        }
+      },
+      {
+        "name": {
+          "value": "Asus ROG Zephyrus"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 160000
+        },
+        "amount": {
+          "value": 160000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-12",
+    "date": {
+      "value": "2024-10-14"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Wipro Technologies"
+    },
+    "voucherNumber": {
+      "value": "SAL-1012"
+    },
+    "amount": {
+      "value": 964000
+    },
+    "narration": {
+      "value": "Sales for Wipro Technologies No. SAL-1012"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "MacBook Pro 14"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 120000
+        },
+        "amount": {
+          "value": 480000
+        }
+      },
+      {
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 24000
+        }
+      },
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 460000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-13",
+    "date": {
+      "value": "2024-11-02"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Future Group"
+    },
+    "voucherNumber": {
+      "value": "SAL-1013"
+    },
+    "amount": {
+      "value": 200000
+    },
+    "narration": {
+      "value": "Sales for Future Group No. SAL-1013"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 15000
+        }
+      },
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 115000
+        }
+      },
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 70000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-14",
+    "date": {
+      "value": "2024-10-24"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Future Group"
+    },
+    "voucherNumber": {
+      "value": "SAL-1014"
+    },
+    "amount": {
+      "value": 385000
+    },
+    "narration": {
+      "value": "Sales for Future Group No. SAL-1014"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 115000
+        }
+      },
+      {
+        "name": {
+          "value": "Acer Predator Helios"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 125000
+        },
+        "amount": {
+          "value": 250000
+        }
+      },
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 20000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-15",
+    "date": {
+      "value": "2024-05-04"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Wipro Technologies"
+    },
+    "voucherNumber": {
+      "value": "SAL-1015"
+    },
+    "amount": {
+      "value": 264000
+    },
+    "narration": {
+      "value": "Sales for Wipro Technologies No. SAL-1015"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 230000
+        }
+      },
+      {
+        "name": {
+          "value": "Logitech MX Master 3S"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 8500
+        },
+        "amount": {
+          "value": 25500
+        }
+      },
+      {
+        "name": {
+          "value": "Logitech MX Master 3S"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 8500
+        },
+        "amount": {
+          "value": 8500
+        }
+      }
+    ]
   }
 ]

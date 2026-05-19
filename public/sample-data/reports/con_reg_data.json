@@ -1,47 +1,370 @@
 [
   {
-    "id": "con_reg-0",
+    "id": "contra-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-05-04"
     },
     "type": "Contra",
     "partyName": {
-      "value": "Sample Party"
+      "value": "Cash Deposit"
+    },
+    "ledger": {
+      "value": "Cash Deposit"
+    },
+    "voucherNumber": {
+      "value": "CON-2001"
     },
     "amount": {
-      "value": 10000
+      "value": 10952
     },
     "narration": {
-      "value": "Generated for day_book"
+      "value": "Contra Entry No. CON-2001"
     },
-    "auditLogs": [
+    "items": [
       {
-        "id": "al-1",
-        "action": "CREATE",
-        "timestamp": "2024-05-10T10:00:00Z",
-        "user": "System Auto",
-        "changes": {
-          "status": "Created"
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Cash A/c"
+        },
+        "amount": {
+          "value": 10952
         }
       },
       {
-        "id": "al-2",
-        "action": "UPDATE",
-        "timestamp": "2024-05-11T12:30:00Z",
-        "user": "Admin User",
-        "changes": {
-          "amount": "Updated amount"
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 10952
         }
       }
-    ],
-    "paymentMode": {
-      "value": "Cash"
+    ]
+  },
+  {
+    "id": "contra-2",
+    "date": {
+      "value": "2024-10-05"
     },
-    "debitLedger": {
-      "value": "Bank A/c"
+    "type": "Contra",
+    "partyName": {
+      "value": "Cash Deposit"
     },
-    "creditLedger": {
-      "value": "Cash A/c"
-    }
+    "ledger": {
+      "value": "Cash Deposit"
+    },
+    "voucherNumber": {
+      "value": "CON-2002"
+    },
+    "amount": {
+      "value": 15197
+    },
+    "narration": {
+      "value": "Contra Entry No. CON-2002"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Cash A/c"
+        },
+        "amount": {
+          "value": 15197
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 15197
+        }
+      }
+    ]
+  },
+  {
+    "id": "contra-3",
+    "date": {
+      "value": "2024-06-22"
+    },
+    "type": "Contra",
+    "partyName": {
+      "value": "Cash Deposit"
+    },
+    "ledger": {
+      "value": "Cash Deposit"
+    },
+    "voucherNumber": {
+      "value": "CON-2003"
+    },
+    "amount": {
+      "value": 27004
+    },
+    "narration": {
+      "value": "Contra Entry No. CON-2003"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Cash A/c"
+        },
+        "amount": {
+          "value": 27004
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 27004
+        }
+      }
+    ]
+  },
+  {
+    "id": "contra-4",
+    "date": {
+      "value": "2024-03-18"
+    },
+    "type": "Contra",
+    "partyName": {
+      "value": "Cash Deposit"
+    },
+    "ledger": {
+      "value": "Cash Deposit"
+    },
+    "voucherNumber": {
+      "value": "CON-2004"
+    },
+    "amount": {
+      "value": 28582
+    },
+    "narration": {
+      "value": "Contra Entry No. CON-2004"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Cash A/c"
+        },
+        "amount": {
+          "value": 28582
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 28582
+        }
+      }
+    ]
+  },
+  {
+    "id": "contra-5",
+    "date": {
+      "value": "2024-08-03"
+    },
+    "type": "Contra",
+    "partyName": {
+      "value": "Cash Withdrawal"
+    },
+    "ledger": {
+      "value": "Cash Withdrawal"
+    },
+    "voucherNumber": {
+      "value": "CON-2005"
+    },
+    "amount": {
+      "value": 38652
+    },
+    "narration": {
+      "value": "Contra Entry No. CON-2005"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 38652
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Cash A/c"
+        },
+        "amount": {
+          "value": 38652
+        }
+      }
+    ]
+  },
+  {
+    "id": "contra-6",
+    "date": {
+      "value": "2024-11-29"
+    },
+    "type": "Contra",
+    "partyName": {
+      "value": "Cash Withdrawal"
+    },
+    "ledger": {
+      "value": "Cash Withdrawal"
+    },
+    "voucherNumber": {
+      "value": "CON-2006"
+    },
+    "amount": {
+      "value": 48380
+    },
+    "narration": {
+      "value": "Contra Entry No. CON-2006"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 48380
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Cash A/c"
+        },
+        "amount": {
+          "value": 48380
+        }
+      }
+    ]
+  },
+  {
+    "id": "contra-7",
+    "date": {
+      "value": "2024-09-09"
+    },
+    "type": "Contra",
+    "partyName": {
+      "value": "Cash Deposit"
+    },
+    "ledger": {
+      "value": "Cash Deposit"
+    },
+    "voucherNumber": {
+      "value": "CON-2007"
+    },
+    "amount": {
+      "value": 52556
+    },
+    "narration": {
+      "value": "Contra Entry No. CON-2007"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Cash A/c"
+        },
+        "amount": {
+          "value": 52556
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "HDFC Bank (Current A/c)"
+        },
+        "amount": {
+          "value": 52556
+        }
+      }
+    ]
+  },
+  {
+    "id": "contra-8",
+    "date": {
+      "value": "2024-01-23"
+    },
+    "type": "Contra",
+    "partyName": {
+      "value": "Cash Deposit"
+    },
+    "ledger": {
+      "value": "Cash Deposit"
+    },
+    "voucherNumber": {
+      "value": "CON-2008"
+    },
+    "amount": {
+      "value": 27351
+    },
+    "narration": {
+      "value": "Contra Entry No. CON-2008"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Cash A/c"
+        },
+        "amount": {
+          "value": 27351
+        }
+      },
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "ICICI Bank (CC A/c)"
+        },
+        "amount": {
+          "value": 27351
+        }
+      }
+    ]
   }
 ]

@@ -44,7 +44,7 @@ export const PartySection: React.FC<PartySectionProps> = ({
             <option value="Hybrid">Hybrid</option>
           </select>
         </div>
-        <div>
+        <div className="form-field-wrapper">
           <SearchableDropdown
             label="Party A/c Name"
             options={partyMasters.filter(p => {
@@ -132,7 +132,7 @@ export const PartySection: React.FC<PartySectionProps> = ({
             className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-black text-gray-500 uppercase tracking-widest text-center cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
           />
         </div>
-        <div className="form-field-wrapper form-grid md:col-span-3 gap-4 p-4 bg-indigo-50/20 rounded-2xl border border-indigo-100/50 mt-2">
+        <div className="form-field-wrapper form-grid col-span-full gap-4 p-4 bg-indigo-50/20 rounded-2xl border border-indigo-100/50 mt-2">
           <div className="form-field-wrapper">
 <label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">PO Number</label>
             <input type="text" value={headerDetails.poNumber || ''} onChange={(e) => handleHeaderChange('poNumber', e.target.value)} placeholder="PO-001" className="w-full px-3 py-2 bg-white border border-indigo-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:bg-gray-800" />

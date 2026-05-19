@@ -220,12 +220,12 @@ const AppContent: React.FC = () => {
     purgeLegacy();
 
     const reloadSamples = async () => {
-        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v13');
+        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v18');
         if (!hasLoaded) {
             for (const id of activeSamples) {
                 await toggleSampleDataSet(id, true);
             }
-            localStorage.setItem('bharat_book_samples_hydrated_v13', 'true');
+            localStorage.setItem('bharat_book_samples_hydrated_v18', 'true');
         }
     };
     reloadSamples();
@@ -520,7 +520,7 @@ const AppContent: React.FC = () => {
 
   const handleViewVoucher = (voucher: ParsedVoucher) => {
     setEditingVoucher(voucher);
-    setVoucherEntryActiveTab(typeof voucher.type === 'string' ? voucher.type.toLowerCase().replace(' ', '_') : 'journal');
+    setVoucherEntryActiveTab(typeof voucher.type === 'string' ? voucher.type.toLowerCase().replace(/ /g, '_') : 'journal');
     setView('voucher-entry');
   };
 
@@ -993,6 +993,7 @@ const AppContent: React.FC = () => {
               itemMasters={itemMasters}
               ledgerMasters={ledgerMasters}
               partyMasters={partyMasters}
+              vouchers={allVouchers}
               onUpdateItemMaster={(updatedItem) => {
                 setItemMasters(prev => prev.map(i => i.name === updatedItem.name ? { ...i, ...updatedItem } : i));
               }}
@@ -1012,11 +1013,24 @@ const AppContent: React.FC = () => {
 
                 if (!isNew && editingVoucher) {
                     setAllVouchers(prev => prev.map(v => v.id === editingVoucher.id ? { ...v, ...mappedVoucher } : v));
+                    setEditingVoucher(null);
+                    setView('vouchers');
                 } else {
-                    setAllVouchers(prev => [...prev, { ...mappedVoucher, isManuallyEntered: true }]);
+                    setAllVouchers(prev => {
+                        const existing = prev.findIndex(v => v.id === savedEntry.id);
+                        if (existing >= 0) {
+                            const newArr = [...prev];
+                            newArr[existing] = { ...mappedVoucher, isManuallyEntered: true };
+                            return newArr;
+                        }
+                        return [...prev, { ...mappedVoucher, isManuallyEntered: true }];
+                    });
                 }
-                setEditingVoucher(null);
-                setView('vouchers'); // Optional: go back to ledger report after save
+              }}
+              onDeleteEntry={(id) => {
+                  setAllVouchers(prev => prev.filter(v => v.id !== id));
+                  setEditingVoucher(null);
+                  setView('vouchers');
               }}
               onOpenPrintSettings={() => {
                 setSettingsActiveTab('invoiceprint');
@@ -1033,11 +1047,39 @@ const AppContent: React.FC = () => {
               itemMasters={itemMasters}
               warehouseMasters={locationMasters}
               ledgerMasters={ledgerMasters}
+              partyMasters={partyMasters}
+              vouchers={allVouchers}
               onUpdateItemMaster={(updatedItem) => {
                 setItemMasters(prev => prev.map(i => i.name === updatedItem.name ? { ...i, ...updatedItem } : i));
               }}
               onAddItemMaster={(newItem) => {
                 setItemMasters(prev => [...prev, newItem]);
+              }}
+              onSaveEntry={(savedEntry, isNew) => {
+                  const mappedVoucher = {
+                      ...savedEntry,
+                      date: { value: savedEntry.header?.voucherDate || '', confidence: 'High' },
+                      isEdited: true,
+                      isManuallyEntered: true
+                  };
+                  if (!isNew && editingVoucher) {
+                      setAllVouchers(prev => prev.map(v => v.id === editingVoucher.id ? { ...v, ...mappedVoucher } : v));
+                      setEditingVoucher(null);
+                      setView('vouchers');
+                  } else {
+                      setAllVouchers(prev => {
+                          const existing = prev.findIndex(v => v.id === savedEntry.id);
+                          if (existing >= 0) {
+                              const newArr = [...prev];
+                              newArr[existing] = mappedVoucher;
+                              return newArr;
+                          }
+                          return [...prev, mappedVoucher];
+                      });
+                  }
+              }}
+              onDeleteEntry={(id) => {
+                  setAllVouchers(prev => prev.filter(v => v.id !== id));
               }}
               onOpenPrintSettings={() => {
                 setSettingsActiveTab('invoiceprint');
@@ -1087,7 +1129,7 @@ const AppContent: React.FC = () => {
             setCostCenterMasters(clearSamples);
             setContactMasters(clearSamples);
             setAllVouchers(clearSamples);
-            localStorage.removeItem('bharat_book_samples_hydrated_v13');
+            localStorage.removeItem('bharat_book_samples_hydrated_v18');
         } else if (mode === 'demo') {
             const defaultSamples = [
                 'uoms', 'gst', 'brands', 'categories', 'warehouses', 'skus', 'priceList', 
@@ -1099,7 +1141,11 @@ const AppContent: React.FC = () => {
                 'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
                 'payment_register', 'receipt_register', 'contra_register', 'audit_trail',
                 'item_vouchers', 'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation',
-                'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile'
+                'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile',
+                'demo_vouchers', 'sales_entry', 'purchase_entry', 'payment_entry', 'receipt_entry',
+                'journal_entry', 'contra_entry', 'debit_note_entry', 'credit_note_entry', 'stock_journal_entry',
+                'physical_stock_entry', 'consumption_entry', 'scrap_entry', 'transfer_entry',
+                'rejections_in_entry', 'rejections_out_entry', 'invoice_dummy_data'
             ];
             setActiveSamples(defaultSamples);
         }

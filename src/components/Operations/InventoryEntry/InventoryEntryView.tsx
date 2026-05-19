@@ -42,12 +42,15 @@ interface InventoryEntryViewProps {
   warehouseMasters?: any[];
   ledgerMasters?: any[];
   partyMasters?: any[];
+  vouchers?: any[];
   onUpdateItemMaster?: (item: any) => void;
   onAddItemMaster?: (item: any) => void;
+  onSaveEntry?: (entry: any, isNew: boolean) => void;
+  onDeleteEntry?: (id: string) => void;
   onOpenPrintSettings?: () => void;
 }
 
-export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultType, itemMasters = [], warehouseMasters = [], ledgerMasters = [], partyMasters = [], onUpdateItemMaster, onAddItemMaster, onOpenPrintSettings }) => {
+export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultType, itemMasters = [], warehouseMasters = [], ledgerMasters = [], partyMasters = [], vouchers = [], onUpdateItemMaster, onAddItemMaster, onSaveEntry, onDeleteEntry, onOpenPrintSettings }) => {
   const [editingRowIndex, setEditingRowIndex] = useState<number | null>(null);
   const [expandedRowSection, setExpandedRowSection] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(defaultType || 'stock_journal');
@@ -281,7 +284,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
   useEffect(() => {
     // Auto-detect supply type based on Place of Supply
     // Assuming company base state is Maharashtra (27) for this implementation
-    const currentPlace = (headerDetails.placeOfSupply || '').trim().toLowerCase();
+    const currentPlace = String(headerDetails.placeOfSupply?.value || headerDetails.placeOfSupply || '').trim().toLowerCase();
     
     if (!currentPlace) {
       handleHeaderChange('supplyType', 'Intra-State');
@@ -483,15 +486,8 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
       isDraft,
       createdAt: new Date().toISOString()
     };
-    const saved = safeJsonParse(localStorage.getItem('bharat_book_inventory_entries'), [] as any[]);
-    if (currentRecordId && saved.some((v: any) => v.id === currentRecordId)) {
-        const idx = saved.findIndex((v: any) => v.id === currentRecordId);
-        saved[idx] = entry;
-    } else {
-        saved.push(entry);
-    }
-    localStorage.setItem('bharat_book_inventory_entries', JSON.stringify(saved));
     setCurrentRecordId(entry.id);
+    if (onSaveEntry) onSaveEntry(entry, !currentRecordId);
     
     if (!isDraft) {
       incrementVoucherNumber(activeTab);
@@ -682,15 +678,36 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
     if (entry.header && entry.rows) {
       setHeaderDetails(entry.header);
       setRows(entry.rows);
+    } else {
+      setHeaderDetails(prev => ({
+        ...prev,
+        entryDate: entry.date?.value || entry.date || prev.entryDate,
+        entryNumber: entry.invoiceNumber?.value || entry.invoiceNumber || getNextVoucherNumber(activeTab) || '',
+        location: entry.location?.value || entry.location || prev.location,
+        remarks: entry.narration?.value || entry.narration || prev.remarks
+      }));
+      
+      if (entry.items && entry.items.length > 0) {
+        setRows(entry.items.map((it: any, i: number) => ({
+          id: Date.now() + i,
+          itemName: it.name?.value || it.name || '',
+          qty: it.quantity?.value || it.quantity || '',
+          rate: it.rate?.value || it.rate || '',
+          amount: it.amount?.value || it.amount || '',
+        })));
+      } else {
+        setRows([{ id: Date.now() }, { id: Date.now() + 1 }]);
+      }
     }
   };
 
   const handleNavigate = (direction: 'up' | 'down' | 'first' | 'last') => {
-    const allEntriesRaw = localStorage.getItem('bharat_book_inventory_entries');
-    if (!allEntriesRaw) return;
-    
-    const allEntries = safeJsonParse(allEntriesRaw, [] as any[]);
-    const ofType = allEntries.filter(v => v.type === activeTab);
+    const allEntries = vouchers || [];
+    if (allEntries.length === 0) return;
+    const ofType = allEntries.filter(v => {
+        const vType = (typeof v.type === 'string' ? v.type.toLowerCase().replace(/ /g, '_') : v.type);
+        return vType === activeTab;
+    });
 
     if (ofType.length === 0) {
       if (currentRecordId !== null) loadRecord(null);
@@ -895,11 +912,8 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
   };
 
   const handleConfirmDelete = () => {
-    const savedStr = localStorage.getItem('bharat_book_inventory_entries');
-    if (savedStr) {
-      let saved: any[] = safeJsonParse(savedStr, [] as any[]);
-      saved = saved.filter((v: any) => v.id !== currentRecordId);
-      localStorage.setItem('bharat_book_inventory_entries', JSON.stringify(saved));
+    if (onDeleteEntry && currentRecordId) {
+      onDeleteEntry(currentRecordId);
     }
     showNotify('Entry deleted!', 'error');
     handleNewEntry();
@@ -1146,7 +1160,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
         onClose={() => { setShowHelp(false); setShowKeyboardShortcuts(false); }}
       />
 
-      <HistoryModal 
+      <HistoryModal onDeleteRecord={onDeleteEntry} items={(vouchers || []).filter(v => (typeof v.type === 'string' ? v.type.toLowerCase().replace(/ /g, '_') : v.type) === activeTab)} 
         isOpen={showHistory} 
         onClose={() => setShowHistory(false)} 
         storageKey="bharat_book_inventory_entries" 

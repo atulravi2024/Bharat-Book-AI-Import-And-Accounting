@@ -2,17 +2,297 @@
   {
     "id": "vouchers-sample-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-05-10"
     },
-    "type": "Journal",
-    "partyName": {
-      "value": "Sample Party"
-    },
+    "type": "Purchase",
     "amount": {
       "value": 1500
     },
     "narration": {
-      "value": "Generated for vouchers"
+      "value": "Generated for Purchase"
+    },
+    "partyName": {
+      "value": "Vendor Party"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 500
+        },
+        "amount": {
+          "value": 1500
+        }
+      }
+    ]
+  },
+  {
+    "id": "vouchers-sample-2",
+    "date": {
+      "value": "2024-05-11"
+    },
+    "type": "Payment",
+    "amount": {
+      "value": 3000
+    },
+    "narration": {
+      "value": "Generated for Payment"
+    },
+    "partyName": {
+      "value": "Client Party"
+    },
+    "ledger": {
+      "value": "Client Party"
+    }
+  },
+  {
+    "id": "vouchers-sample-3",
+    "date": {
+      "value": "2024-05-12"
+    },
+    "type": "Receipt",
+    "amount": {
+      "value": 4500
+    },
+    "narration": {
+      "value": "Generated for Receipt"
+    },
+    "partyName": {
+      "value": "Sample Party"
+    },
+    "ledger": {
+      "value": "Sample Party"
+    }
+  },
+  {
+    "id": "vouchers-sample-4",
+    "date": {
+      "value": "2024-05-13"
+    },
+    "type": "Journal",
+    "amount": {
+      "value": 6000
+    },
+    "narration": {
+      "value": "Generated for Journal"
+    },
+    "partyName": {
+      "value": "Demo Party"
+    },
+    "debitLedger": {
+      "value": "Demo Party"
+    },
+    "creditLedger": {
+      "value": "Sales A/c"
+    },
+    "ledger": {
+      "value": "Demo Party"
+    }
+  },
+  {
+    "id": "vouchers-sample-5",
+    "date": {
+      "value": "2024-05-14"
+    },
+    "type": "Contra",
+    "amount": {
+      "value": 7500
+    },
+    "narration": {
+      "value": "Generated for Contra"
+    },
+    "partyName": {
+      "value": "Tech Solutions"
+    },
+    "debitLedger": {
+      "value": "Cash A/c"
+    },
+    "creditLedger": {
+      "value": "Bank A/c"
+    },
+    "ledger": {
+      "value": "Bank A/c"
+    }
+  },
+  {
+    "id": "vouchers-sample-6",
+    "date": {
+      "value": "2024-05-15"
+    },
+    "type": "Credit Note",
+    "amount": {
+      "value": 9000
+    },
+    "narration": {
+      "value": "Generated for Credit Note"
+    },
+    "partyName": {
+      "value": "Global Dist"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "LG 27-inch 4K Monitor"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 1500
+        },
+        "amount": {
+          "value": 3000
+        }
+      },
+      {
+        "name": {
+          "value": "HDMI Cable 2m"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 1500
+        },
+        "amount": {
+          "value": 3000
+        }
+      },
+      {
+        "name": {
+          "value": "Epson EcoTank Printer"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 1000
+        },
+        "amount": {
+          "value": 3000
+        }
+      }
+    ]
+  },
+  {
+    "id": "vouchers-sample-7",
+    "date": {
+      "value": "2024-05-16"
+    },
+    "type": "Debit Note",
+    "amount": {
+      "value": 10500
+    },
+    "narration": {
+      "value": "Generated for Debit Note"
+    },
+    "partyName": {
+      "value": "Prime Systems"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Apple Magic Keyboard"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 5250
+        },
+        "amount": {
+          "value": 10500
+        }
+      }
+    ]
+  },
+  {
+    "id": "vouchers-sample-8",
+    "date": {
+      "value": "2024-05-17"
+    },
+    "type": "Purchase",
+    "amount": {
+      "value": 12000
+    },
+    "narration": {
+      "value": "Generated for Purchase"
+    },
+    "partyName": {
+      "value": "Apex Corp"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Keychron K2 Mechanical Keyboard"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 6000
+        },
+        "amount": {
+          "value": 6000
+        }
+      },
+      {
+        "name": {
+          "value": "Ergonomic Office Chair"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 3000
+        },
+        "amount": {
+          "value": 6000
+        }
+      }
+    ]
+  },
+  {
+    "id": "vouchers-sample-9",
+    "date": {
+      "value": "2024-05-18"
+    },
+    "type": "Payment",
+    "amount": {
+      "value": 13500
+    },
+    "narration": {
+      "value": "Generated for Payment"
+    },
+    "partyName": {
+      "value": "Nexus Ltd"
+    },
+    "ledger": {
+      "value": "Nexus Ltd"
+    }
+  },
+  {
+    "id": "vouchers-sample-10",
+    "date": {
+      "value": "2024-05-19"
+    },
+    "type": "Receipt",
+    "amount": {
+      "value": 15000
+    },
+    "narration": {
+      "value": "Generated for Receipt"
+    },
+    "partyName": {
+      "value": "Zenith Inc"
+    },
+    "ledger": {
+      "value": "Zenith Inc"
     }
   }
 ]

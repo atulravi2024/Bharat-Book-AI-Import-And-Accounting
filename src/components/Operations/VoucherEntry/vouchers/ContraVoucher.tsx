@@ -37,13 +37,14 @@ interface VoucherEntryViewProps {
   itemMasters?: any[];
   ledgerMasters?: any[];
   partyMasters?: any[];
+  vouchers?: any[];
   onUpdateItemMaster?: (item: any) => void;
   onAddItemMaster?: (item: any) => void;
   onSaveEntry?: (entry: any, isNew: boolean) => void;
   onOpenPrintSettings?: () => void;
 }
 
-export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, initialVoucher, itemMasters = [], ledgerMasters = [], partyMasters = [], onUpdateItemMaster, onAddItemMaster, onSaveEntry, onOpenPrintSettings }) => {
+export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, initialVoucher, itemMasters = [], ledgerMasters = [], partyMasters = [], vouchers = [], onUpdateItemMaster, onAddItemMaster, onSaveEntry, onDeleteEntry, onOpenPrintSettings }) => {
   const activeTab = 'contra' as string;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const setActiveTab = (tab: string) => {};
@@ -83,8 +84,8 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
       if (initialVoucher.header && initialVoucher.rows) {
         // Re-derive supplyType so loading a voucher correctly shows IGST/CGST
         const loadedHeader = { ...initialVoucher.header };
-        const place = (loadedHeader.placeOfSupply || '').trim().toLowerCase();
-        const gstin = (loadedHeader.gstNumber || '').trim();
+        const place = String(loadedHeader.placeOfSupply?.value || loadedHeader.placeOfSupply || '').trim().toLowerCase();
+        const gstin = String(loadedHeader.gstNumber?.value || loadedHeader.gstNumber || '').trim();
         if (place) {
           const isLocal = ['maharashtra', 'mh', '27'].some(s => place.includes(s));
           loadedHeader.supplyType = isLocal ? 'Intra-State' : 'Inter-State';
@@ -95,7 +96,7 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
         setRows(initialVoucher.rows);
         setActiveTab(initialVoucher.type || defaultType || 'sales');
       } else {
-        const typeFromInit = (typeof initialVoucher.type === 'string' ? initialVoucher.type.toLowerCase().replace(' ', '_') : initialVoucher.type) || defaultType;
+        const typeFromInit = (typeof initialVoucher.type === 'string' ? initialVoucher.type.toLowerCase().replace(/ /g, '_') : initialVoucher.type) || defaultType;
         if (typeFromInit) setActiveTab(typeFromInit);
 
         // Extract GST-critical fields from imported voucher data
@@ -103,7 +104,7 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
         const importedGstin = initialVoucher.gstin?.value || initialVoucher.gstin || initialVoucher.gstNumber?.value || initialVoucher.gstNumber || '';
         const importedSupplyType = initialVoucher.supplyType?.value || initialVoucher.supplyType || '';
         let computedSupplyType = 'Intra-State';
-        const posLower = (importedPlaceOfSupply || '').trim().toLowerCase();
+        const posLower = String(importedPlaceOfSupply || '').trim().toLowerCase();
         if (posLower) {
           const isLocal = ['maharashtra', 'mh', '27'].some(s => posLower.includes(s));
           computedSupplyType = isLocal ? 'Intra-State' : 'Inter-State';
@@ -140,10 +141,19 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
             }
         } else {
             // Accounting type
-            setRows([
-              { id: Date.now(), ledgerName: initialVoucher.ledger?.value || initialVoucher.ledger || '', amount: initialVoucher.amount?.value || initialVoucher.amount || '' },
-              { id: Date.now() + 1 }
-            ]);
+            if (initialVoucher.items && initialVoucher.items.length > 0) {
+              setRows(initialVoucher.items.map((it: any, i: number) => ({
+                id: Date.now() + i,
+                crDr: it.crDr?.value || it.crDr || (['payment', 'contra'].includes(typeFromInit || activeTab) && i === 0 ? 'Cr' : ['receipt'].includes(typeFromInit || activeTab) && i === 0 ? 'Dr' : typeof it.amount?.value === 'number' && it.amount.value < 0 ? 'Cr' : 'Dr'),
+                ledgerName: it.ledgerName?.value || it.ledgerName || it.name?.value || it.name || '',
+                amount: Math.abs(it.amount?.value || it.amount || 0) || '',
+              })));
+            } else {
+              setRows([
+                { id: Date.now(), crDr: ['payment', 'contra'].includes(typeFromInit || activeTab) ? 'Cr' : 'Dr', ledgerName: initialVoucher.ledger?.value || initialVoucher.ledger || '', amount: initialVoucher.amount?.value || initialVoucher.amount || '' },
+                { id: Date.now() + 1, crDr: ['payment', 'contra'].includes(typeFromInit || activeTab) ? 'Dr' : 'Cr' }
+              ]);
+            }
         }
       }
     } else if (defaultType) {
@@ -332,7 +342,7 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
     // Auto-detect supply type based on Place of Supply
     // Assuming company base state is Maharashtra for this implementation
     const baseState = "Maharashtra";
-    const currentPlace = headerDetails.placeOfSupply?.trim();
+    const currentPlace = String(headerDetails.placeOfSupply?.value || headerDetails.placeOfSupply || '').trim();
     
     if (!currentPlace) {
       handleHeaderChange('supplyType', 'Intra-State');
@@ -524,9 +534,9 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
       }, 0);
 
       // Compute supply type inline from source data — never rely on stale headerDetails.supplyType
-      const _place = (headerDetails.placeOfSupply || '').trim().toLowerCase();
+      const _place = String(headerDetails.placeOfSupply?.value || headerDetails.placeOfSupply || '').trim().toLowerCase();
       const _ledger = (headerDetails.salesLedger || headerDetails.purchaseLedger || '').toLowerCase();
-      const _gstin = (headerDetails.gstNumber || '').trim();
+      const _gstin = String(headerDetails.gstNumber?.value || headerDetails.gstNumber || '').trim();
       let computedIsInterState = headerDetails.supplyType === 'Inter-State'; // fallback
       if (_ledger.includes('igst') || _ledger.includes('inter')) {
         computedIsInterState = true;
@@ -705,15 +715,6 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
       createdAt: initialVoucher?.createdAt || new Date().toISOString()
     };
     
-    const saved = safeJsonParse(localStorage.getItem('bharat_book_all_vouchers_v2'), [] as any[]);
-    const lookupId = currentRecordId || initialVoucher?.id;
-    if (lookupId && saved.some((v: any) => v.id === lookupId)) {
-        const idx = saved.findIndex((v: any) => v.id === lookupId);
-        saved[idx] = entry;
-    } else {
-        saved.push(entry);
-    }
-    localStorage.setItem('bharat_book_all_vouchers_v2', JSON.stringify(saved));
     setCurrentRecordId(entry.id);
     
     if (onSaveEntry) {
@@ -903,8 +904,8 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
     if (voucher.header && voucher.rows) {
       // Re-derive supplyType from placeOfSupply so switching vouchers updates IGST/CGST correctly
       const loadedHeader = { ...voucher.header };
-      const place = (loadedHeader.placeOfSupply || '').trim().toLowerCase();
-      const gstin = (loadedHeader.gstNumber || '').trim();
+      const place = String(loadedHeader.placeOfSupply?.value || loadedHeader.placeOfSupply || '').trim().toLowerCase();
+      const gstin = String(loadedHeader.gstNumber?.value || loadedHeader.gstNumber || '').trim();
       if (place) {
         const isLocal = ['maharashtra', 'mh', '27'].some(s => place.includes(s));
         loadedHeader.supplyType = isLocal ? 'Intra-State' : 'Inter-State';
@@ -922,7 +923,7 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
       
       // Compute supply type from imported data
       let computedSupplyType = 'Intra-State';
-      const posLower = (importedPlaceOfSupply || '').trim().toLowerCase();
+      const posLower = String(importedPlaceOfSupply || '').trim().toLowerCase();
       if (posLower) {
         const isLocal = ['maharashtra', 'mh', '27'].some(s => posLower.includes(s));
         computedSupplyType = isLocal ? 'Intra-State' : 'Inter-State';
@@ -958,22 +959,29 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
           setRows([{ id: Date.now() }, { id: Date.now() + 1 }]);
         }
       } else {
-        setRows([
-          { id: Date.now(), ledgerName: voucher.ledger?.value || voucher.ledger || '', amount: voucher.amount?.value || voucher.amount || '' },
-          { id: Date.now() + 1 }
-        ]);
+        if (voucher.items && voucher.items.length > 0) {
+          setRows(voucher.items.map((it: any, i: number) => ({
+            id: Date.now() + i,
+            crDr: it.crDr?.value || it.crDr || (['payment', 'contra'].includes(activeTab) && i === 0 ? 'Cr' : ['receipt'].includes(activeTab) && i === 0 ? 'Dr' : 'Dr'),
+            ledgerName: it.ledgerName?.value || it.ledgerName || it.name?.value || it.name || '',
+            amount: Math.abs(it.amount?.value || it.amount || 0) || '',
+          })));
+        } else {
+          setRows([
+            { id: Date.now(), crDr: ['payment', 'contra'].includes(activeTab) ? 'Cr' : 'Dr', ledgerName: voucher.ledger?.value || voucher.ledger || '', amount: voucher.amount?.value || voucher.amount || '' },
+            { id: Date.now() + 1, crDr: ['payment', 'contra'].includes(activeTab) ? 'Dr' : 'Cr' }
+          ]);
+        }
       }
     }
   };
 
   const handleNavigate = (direction: 'up' | 'down' | 'first' | 'last') => {
-    const allVouchersRaw = localStorage.getItem('bharat_book_all_vouchers_v2');
-    if (!allVouchersRaw) return;
-    
-    const allVouchers = JSON.parse(allVouchersRaw) as any[];
+    const allVouchers = vouchers || [];
+    if (allVouchers.length === 0) return;
     // Filter by current activeTab type
     const ofType = allVouchers.filter(v => {
-      const vType = (typeof v.type === 'string' ? v.type.toLowerCase().replace(' ', '_') : v.type);
+      const vType = (typeof v.type === 'string' ? v.type.toLowerCase().replace(/ /g, '_') : v.type);
       return vType === activeTab;
     });
 
@@ -1171,11 +1179,8 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
   };
 
   const handleConfirmDelete = () => {
-    const savedStr = localStorage.getItem('bharat_book_all_vouchers_v2');
-    if (savedStr) {
-      let saved: any[] = JSON.parse(savedStr);
-      saved = saved.filter((v: any) => v.id !== currentRecordId);
-      localStorage.setItem('bharat_book_all_vouchers_v2', JSON.stringify(saved));
+    if (onDeleteEntry && currentRecordId) {
+      onDeleteEntry(currentRecordId);
     }
     showNotify('Entry deleted!', 'error');
     handleNewEntry();
@@ -1313,7 +1318,21 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
             <>
               <div className="form-field-wrapper">
 <label className="form-label">Account (Cash/Bank)</label>
-                <input list="ledger-list" value={headerDetails.cashBankAccount || ''} onChange={(e) => handleHeaderChange('cashBankAccount', e.target.value)} placeholder="Search Cash/Bank Account..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+                <SearchableDropdown
+                  options={ledgerMasters.filter(l => l.group?.toLowerCase().includes('cash') || l.group?.toLowerCase().includes('bank') || l.name?.toLowerCase().includes('cash') || l.name?.toLowerCase().includes('bank'))}
+                  value={headerDetails.cashBankAccount || ''}
+                  onChange={(value) => {
+                    handleHeaderChange('cashBankAccount', value);
+                    const r = [...rows];
+                    if (r.length > 0) {
+                      r[0].ledgerName = value;
+                      r[0].crDr = activeTab === 'payment' ? 'Cr' : (activeTab === 'receipt' ? 'Dr' : 'Cr');
+                      setRows(r);
+                    }
+                  }}
+                  placeholder="Select Cash/Bank Account..."
+                  buttonClassName="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus-within:bg-white focus-within:outline-none focus-within:ring-2 focus-within:ring-amber-500/20 focus-within:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus-within:bg-gray-800 text-left flex justify-between items-center"
+                />
               </div>
               <div className="form-field-wrapper">
 <label className="form-label">Instrument No.</label>
@@ -1374,7 +1393,12 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
                     <SearchableDropdown
                       options={(activeTab === 'payment' || activeTab === 'receipt') && index === 0 ? ledgerMasters.filter(l => l.group?.toLowerCase().includes('cash') || l.group?.toLowerCase().includes('bank') || l.name?.toLowerCase().includes('cash') || l.name?.toLowerCase().includes('bank')) : ledgerMasters}
                       value={row.ledgerName || ''}
-                      onChange={(value) => { const r = [...rows]; r[index].ledgerName = value; setRows(r); }}
+                      onChange={(value) => { 
+                        const r = [...rows]; 
+                        r[index].ledgerName = value; 
+                        if (index === 0) handleHeaderChange('cashBankAccount', value);
+                        setRows(r); 
+                      }}
                       placeholder="Select ledger..."
                       buttonClassName="w-full min-w-[300px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus-within:bg-white focus-within:outline-none focus-within:ring-2 focus-within:ring-amber-500/20 focus-within:border-amber-500 transition-all dark:focus-within:bg-gray-700"
                     />
@@ -1609,7 +1633,7 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
       {/* Hidden file input for file attachments */}
       <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} />
       
-      <HistoryModal 
+      <HistoryModal onDeleteRecord={onDeleteEntry} items={(vouchers || []).filter(v => (typeof v.type === 'string' ? v.type.toLowerCase().replace(/ /g, '_') : v.type) === activeTab)} 
         isOpen={showHistory} 
         onClose={() => setShowHistory(false)} 
         storageKey="bharat_book_all_vouchers_v2" 

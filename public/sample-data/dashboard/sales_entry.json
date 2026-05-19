@@ -1,15 +1,261 @@
 [
   {
-    "id": "se-1",
+    "id": "sales-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-11-10"
     },
     "type": "Sales",
     "partyName": {
-      "value": "Demo Party"
+      "value": "Wipro Technologies"
+    },
+    "voucherNumber": {
+      "value": "SAL-1001"
     },
     "amount": {
-      "value": 10000
-    }
+      "value": 1030000
+    },
+    "narration": {
+      "value": "Sales for Wipro Technologies No. SAL-1001"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Dell XPS 15"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 145000
+        },
+        "amount": {
+          "value": 290000
+        }
+      },
+      {
+        "name": {
+          "value": "Asus ROG Zephyrus"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 160000
+        },
+        "amount": {
+          "value": 160000
+        }
+      },
+      {
+        "name": {
+          "value": "Dell XPS 15"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 145000
+        },
+        "amount": {
+          "value": 580000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-2",
+    "date": {
+      "value": "2024-02-13"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "SAL-1002"
+    },
+    "amount": {
+      "value": 790000
+    },
+    "narration": {
+      "value": "Sales for Tata Consultancy Services No. SAL-1002"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 175000
+        }
+      },
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 15000
+        }
+      },
+      {
+        "name": {
+          "value": "MacBook Pro 14"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 120000
+        },
+        "amount": {
+          "value": 600000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-3",
+    "date": {
+      "value": "2024-03-09"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "SAL-1003"
+    },
+    "amount": {
+      "value": 540000
+    },
+    "narration": {
+      "value": "Sales for Tata Consultancy Services No. SAL-1003"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Asus ROG Zephyrus"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 160000
+        },
+        "amount": {
+          "value": 480000
+        }
+      },
+      {
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 60000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-4",
+    "date": {
+      "value": "2024-01-01"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Reliance Retail Ltd"
+    },
+    "voucherNumber": {
+      "value": "SAL-1004"
+    },
+    "amount": {
+      "value": 600000
+    },
+    "narration": {
+      "value": "Sales for Reliance Retail Ltd No. SAL-1004"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "MacBook Pro 14"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 120000
+        },
+        "amount": {
+          "value": 600000
+        }
+      }
+    ]
+  },
+  {
+    "id": "sales-5",
+    "date": {
+      "value": "2024-09-23"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Reliance Retail Ltd"
+    },
+    "voucherNumber": {
+      "value": "SAL-1005"
+    },
+    "amount": {
+      "value": 510000
+    },
+    "narration": {
+      "value": "Sales for Reliance Retail Ltd No. SAL-1005"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 135000
+        },
+        "amount": {
+          "value": 135000
+        }
+      },
+      {
+        "name": {
+          "value": "Acer Predator Helios"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 125000
+        },
+        "amount": {
+          "value": 375000
+        }
+      }
+    ]
   }
 ]

@@ -1,18 +1,232 @@
 [
   {
-    "id": "jou-1",
+    "id": "journal-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-06-16"
     },
     "type": "Journal",
-    "debitLedger": {
-      "value": "Bank A/c"
+    "partyName": {
+      "value": "Supertech Logistics"
     },
-    "creditLedger": {
-      "value": "Cash A/c"
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "JOU-2001"
     },
     "amount": {
-      "value": 2000
-    }
+      "value": 19962
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2001"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Internet Expenses"
+        },
+        "amount": {
+          "value": 19962
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 19962
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-2",
+    "date": {
+      "value": "2024-05-27"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "JOU-2002"
+    },
+    "amount": {
+      "value": 7449
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2002"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Office Rent"
+        },
+        "amount": {
+          "value": 7449
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 7449
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-3",
+    "date": {
+      "value": "2024-08-02"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "JOU-2003"
+    },
+    "amount": {
+      "value": 23292
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2003"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Office Rent"
+        },
+        "amount": {
+          "value": 23292
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 23292
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-4",
+    "date": {
+      "value": "2024-12-26"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "ledger": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "JOU-2004"
+    },
+    "amount": {
+      "value": 38909
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2004"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Internet Expenses"
+        },
+        "amount": {
+          "value": 38909
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Dell India Pvt Ltd"
+        },
+        "amount": {
+          "value": 38909
+        }
+      }
+    ]
+  },
+  {
+    "id": "journal-5",
+    "date": {
+      "value": "2024-07-09"
+    },
+    "type": "Journal",
+    "partyName": {
+      "value": "Supertech Logistics"
+    },
+    "ledger": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "JOU-2005"
+    },
+    "amount": {
+      "value": 11042
+    },
+    "narration": {
+      "value": "Journal Entry No. JOU-2005"
+    },
+    "items": [
+      {
+        "crDr": {
+          "value": "Dr"
+        },
+        "ledgerName": {
+          "value": "Office Rent"
+        },
+        "amount": {
+          "value": 11042
+        }
+      },
+      {
+        "crDr": {
+          "value": "Cr"
+        },
+        "ledgerName": {
+          "value": "Supertech Logistics"
+        },
+        "amount": {
+          "value": 11042
+        }
+      }
+    ]
   }
 ]

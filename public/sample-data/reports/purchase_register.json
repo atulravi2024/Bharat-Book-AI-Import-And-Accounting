@@ -1,54 +1,548 @@
 [
   {
-    "id": "pr-1",
+    "id": "purchase-1",
     "date": {
-      "value": "2024-05-10"
+      "value": "2024-04-20"
     },
     "type": "Purchase",
     "partyName": {
-      "value": "Supplier A"
+      "value": "Redington India"
+    },
+    "voucherNumber": {
+      "value": "PUR-1001"
     },
     "amount": {
-      "value": 120000
+      "value": 227000
     },
     "narration": {
-      "value": "Purchase Invoice #204"
+      "value": "Purchase for Redington India No. PUR-1001"
     },
-    "auditLogs": [
+    "items": [
       {
-        "id": "al-1",
-        "action": "CREATE",
-        "timestamp": "2024-05-10T10:00:00Z",
-        "user": "System Auto",
-        "changes": {
-          "status": "Created"
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 70000
         }
       },
       {
-        "id": "al-2",
-        "action": "UPDATE",
-        "timestamp": "2024-05-11T12:30:00Z",
-        "user": "Admin User",
-        "changes": {
-          "amount": "Updated amount"
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 12000
+        }
+      },
+      {
+        "name": {
+          "value": "Dell XPS 15"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 145000
+        },
+        "amount": {
+          "value": 145000
         }
       }
     ]
   },
   {
-    "id": "pr-2",
+    "id": "purchase-2",
     "date": {
-      "value": "2024-05-11"
+      "value": "2024-09-23"
     },
     "type": "Purchase",
     "partyName": {
-      "value": "Supplier B"
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "PUR-1002"
     },
     "amount": {
-      "value": 45000
+      "value": 700000
     },
     "narration": {
-      "value": "Purchase Invoice #205"
-    }
+      "value": "Purchase for Dell India Pvt Ltd No. PUR-1002"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 15000
+        }
+      },
+      {
+        "name": {
+          "value": "Acer Predator Helios"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 125000
+        },
+        "amount": {
+          "value": 250000
+        }
+      },
+      {
+        "name": {
+          "value": "Dell XPS 15"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 145000
+        },
+        "amount": {
+          "value": 435000
+        }
+      }
+    ]
+  },
+  {
+    "id": "purchase-3",
+    "date": {
+      "value": "2024-10-25"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "PUR-1003"
+    },
+    "amount": {
+      "value": 15000
+    },
+    "narration": {
+      "value": "Purchase for Dell India Pvt Ltd No. PUR-1003"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 15000
+        }
+      }
+    ]
+  },
+  {
+    "id": "purchase-4",
+    "date": {
+      "value": "2024-01-13"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Tech Data India"
+    },
+    "voucherNumber": {
+      "value": "PUR-1004"
+    },
+    "amount": {
+      "value": 735500
+    },
+    "narration": {
+      "value": "Purchase for Tech Data India No. PUR-1004"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Asus ROG Zephyrus"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 160000
+        },
+        "amount": {
+          "value": 640000
+        }
+      },
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 70000
+        }
+      },
+      {
+        "name": {
+          "value": "Logitech MX Master 3S"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 8500
+        },
+        "amount": {
+          "value": 25500
+        }
+      }
+    ]
+  },
+  {
+    "id": "purchase-5",
+    "date": {
+      "value": "2024-06-11"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "PUR-1005"
+    },
+    "amount": {
+      "value": 433000
+    },
+    "narration": {
+      "value": "Purchase for Dell India Pvt Ltd No. PUR-1005"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Acer Predator Helios"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 125000
+        },
+        "amount": {
+          "value": 375000
+        }
+      },
+      {
+        "name": {
+          "value": "Logitech MX Master 3S"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 8500
+        },
+        "amount": {
+          "value": 34000
+        }
+      },
+      {
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 24000
+        }
+      }
+    ]
+  },
+  {
+    "id": "purchase-6",
+    "date": {
+      "value": "2024-03-07"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Redington India"
+    },
+    "voucherNumber": {
+      "value": "PUR-1006"
+    },
+    "amount": {
+      "value": 122000
+    },
+    "narration": {
+      "value": "Purchase for Redington India No. PUR-1006"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 105000
+        }
+      },
+      {
+        "name": {
+          "value": "Logitech MX Master 3S"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 8500
+        },
+        "amount": {
+          "value": 17000
+        }
+      }
+    ]
+  },
+  {
+    "id": "purchase-7",
+    "date": {
+      "value": "2024-03-20"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "PUR-1007"
+    },
+    "amount": {
+      "value": 415000
+    },
+    "narration": {
+      "value": "Purchase for Dell India Pvt Ltd No. PUR-1007"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 10000
+        }
+      },
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 135000
+        },
+        "amount": {
+          "value": 405000
+        }
+      }
+    ]
+  },
+  {
+    "id": "purchase-8",
+    "date": {
+      "value": "2024-01-22"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Tech Data India"
+    },
+    "voucherNumber": {
+      "value": "PUR-1008"
+    },
+    "amount": {
+      "value": 5000
+    },
+    "narration": {
+      "value": "Purchase for Tech Data India No. PUR-1008"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Netgear Router"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 5000
+        },
+        "amount": {
+          "value": 5000
+        }
+      }
+    ]
+  },
+  {
+    "id": "purchase-9",
+    "date": {
+      "value": "2024-07-18"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "PUR-1009"
+    },
+    "amount": {
+      "value": 815000
+    },
+    "narration": {
+      "value": "Purchase for Dell India Pvt Ltd No. PUR-1009"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 135000
+        },
+        "amount": {
+          "value": 135000
+        }
+      },
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 135000
+        },
+        "amount": {
+          "value": 540000
+        }
+      },
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 140000
+        }
+      }
+    ]
+  },
+  {
+    "id": "purchase-10",
+    "date": {
+      "value": "2024-10-04"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "Redington India"
+    },
+    "voucherNumber": {
+      "value": "PUR-1010"
+    },
+    "amount": {
+      "value": 95000
+    },
+    "narration": {
+      "value": "Purchase for Redington India No. PUR-1010"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 12000
+        }
+      },
+      {
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 48000
+        }
+      },
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 35000
+        }
+      }
+    ]
   }
 ]

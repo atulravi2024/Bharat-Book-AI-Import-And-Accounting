@@ -1,8 +1,29 @@
 [
   {
-    "id": "banks-sample-1",
-    "name": "Sample banks 1",
-    "group": "Sundry Debtors",
-    "address": "Sample Address"
+    "id": "bank-1",
+    "name": "HDFC Bank (Current A/c)",
+    "group": "Bank Accounts",
+    "accountNo": "50200012345678",
+    "ifsc": "HDFC0000123",
+    "branch": "Fort, Mumbai",
+    "openingBalance": 1250000
+  },
+  {
+    "id": "bank-2",
+    "name": "ICICI Bank (CC A/c)",
+    "group": "Bank OCC A/c",
+    "accountNo": "001105001234",
+    "ifsc": "ICIC0000011",
+    "branch": "Nariman Point",
+    "openingBalance": -500000
+  },
+  {
+    "id": "bank-3",
+    "name": "State Bank of India (OD)",
+    "group": "Bank OD A/c",
+    "accountNo": "30123456789",
+    "ifsc": "SBIN0001234",
+    "branch": "Connaught Place",
+    "openingBalance": -150000
   }
 ]

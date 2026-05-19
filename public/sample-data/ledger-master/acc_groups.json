@@ -1,8 +1,26 @@
 [
   {
-    "id": "accountGroups-sample-1",
-    "name": "Sample accountGroups 1",
-    "group": "Sundry Debtors",
-    "address": "Sample Address"
+    "id": "group-1",
+    "name": "Indirect Expenses",
+    "parent": "Primary",
+    "description": "General admin and overhead expenses"
+  },
+  {
+    "id": "group-2",
+    "name": "Sundry Debtors",
+    "parent": "Current Assets",
+    "description": "Customers who owe us money"
+  },
+  {
+    "id": "group-3",
+    "name": "Sundry Creditors",
+    "parent": "Current Liabilities",
+    "description": "Suppliers whom we owe money"
+  },
+  {
+    "id": "group-4",
+    "name": "Bank Accounts",
+    "parent": "Current Assets",
+    "description": "Cash at bank"
   }
 ]

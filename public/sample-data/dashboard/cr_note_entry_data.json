@@ -1,15 +1,247 @@
 [
   {
-    "id": "cn-1",
+    "id": "credit_note-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-12-22"
     },
     "type": "Credit Note",
     "partyName": {
-      "value": "Client Party"
+      "value": "Wipro Technologies"
+    },
+    "voucherNumber": {
+      "value": "CRE-1001"
     },
     "amount": {
-      "value": 500
-    }
+      "value": 500000
+    },
+    "narration": {
+      "value": "Credit Note for Wipro Technologies No. CRE-1001"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Acer Predator Helios"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 125000
+        },
+        "amount": {
+          "value": 500000
+        }
+      }
+    ]
+  },
+  {
+    "id": "credit_note-2",
+    "date": {
+      "value": "2024-10-01"
+    },
+    "type": "Credit Note",
+    "partyName": {
+      "value": "Reliance Retail Ltd"
+    },
+    "voucherNumber": {
+      "value": "CRE-1002"
+    },
+    "amount": {
+      "value": 973500
+    },
+    "narration": {
+      "value": "Credit Note for Reliance Retail Ltd No. CRE-1002"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Logitech MX Master 3S"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 8500
+        },
+        "amount": {
+          "value": 8500
+        }
+      },
+      {
+        "name": {
+          "value": "Dell XPS 15"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 145000
+        },
+        "amount": {
+          "value": 290000
+        }
+      },
+      {
+        "name": {
+          "value": "Lenovo ThinkPad X1"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 135000
+        },
+        "amount": {
+          "value": 675000
+        }
+      }
+    ]
+  },
+  {
+    "id": "credit_note-3",
+    "date": {
+      "value": "2024-12-04"
+    },
+    "type": "Credit Note",
+    "partyName": {
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "CRE-1003"
+    },
+    "amount": {
+      "value": 360000
+    },
+    "narration": {
+      "value": "Credit Note for Tata Consultancy Services No. CRE-1003"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "MacBook Pro 14"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 120000
+        },
+        "amount": {
+          "value": 360000
+        }
+      }
+    ]
+  },
+  {
+    "id": "credit_note-4",
+    "date": {
+      "value": "2024-03-13"
+    },
+    "type": "Credit Note",
+    "partyName": {
+      "value": "Wipro Technologies"
+    },
+    "voucherNumber": {
+      "value": "CRE-1004"
+    },
+    "amount": {
+      "value": 635000
+    },
+    "narration": {
+      "value": "Credit Note for Wipro Technologies No. CRE-1004"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 575000
+        }
+      },
+      {
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 60000
+        }
+      }
+    ]
+  },
+  {
+    "id": "credit_note-5",
+    "date": {
+      "value": "2024-04-16"
+    },
+    "type": "Credit Note",
+    "partyName": {
+      "value": "Tata Consultancy Services"
+    },
+    "voucherNumber": {
+      "value": "CRE-1005"
+    },
+    "amount": {
+      "value": 940000
+    },
+    "narration": {
+      "value": "Credit Note for Tata Consultancy Services No. CRE-1005"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Asus ROG Zephyrus"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 160000
+        },
+        "amount": {
+          "value": 640000
+        }
+      },
+      {
+        "name": {
+          "value": "MacBook Pro 14"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 120000
+        },
+        "amount": {
+          "value": 240000
+        }
+      },
+      {
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 60000
+        }
+      }
+    ]
   }
 ]

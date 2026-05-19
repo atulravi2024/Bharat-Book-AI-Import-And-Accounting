@@ -25,7 +25,7 @@ interface DashboardViewProps {
   onTabChange?: (tab: string | null) => void;
 }
 
-type DashboardTab = 'overview' | 'sales' | 'purchase' | 'payment' | 'receipts' | 'journal' | 'contra' | 'bank';
+type DashboardTab = 'overview' | 'sales' | 'purchase' | 'payment' | 'receipts' | 'journal' | 'contra' | 'bank' | 'inventory';
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNavigateToView, defaultTab, onTabChange }) => {
   const getInitialTab = (): DashboardTab => {
@@ -61,12 +61,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
   const stats = useMemo(() => {
     // Volume calculations
     const vol = {
-      sales: vouchers.filter(v => v.type === VoucherType.Sales).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
-      purchase: vouchers.filter(v => v.type === VoucherType.Purchase).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
-      payment: vouchers.filter(v => v.type === VoucherType.Payment).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
-      receipt: vouchers.filter(v => v.type === VoucherType.Receipt).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
-      contra: vouchers.filter(v => v.type === VoucherType.Contra).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
-      journal: vouchers.filter(v => v.type === VoucherType.Journal).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
+      sales: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Sales'.toLowerCase()).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
+      purchase: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Purchase'.toLowerCase()).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
+      payment: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Payment'.toLowerCase()).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
+      receipt: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Receipt'.toLowerCase()).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
+      contra: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Contra'.toLowerCase()).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
+      journal: vouchers.filter(v => typeof v.type === 'string' && ['journal', 'general'].includes(v.type.toLowerCase().replace(/[\s_]+/g, ''))).reduce((sum, v) => sum + Number(v.amount?.value || 0), 0),
       withdrawals: vouchers.reduce((sum, v) => sum + Number(v.withdrawalAmount?.value || 0), 0),
       deposits: vouchers.reduce((sum, v) => sum + Number(v.depositAmount?.value || 0), 0),
     };
@@ -79,26 +79,26 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
     };
     
     const counts = {
-        sales: vouchers.filter(v => v.type === VoucherType.Sales).length,
-        purchase: vouchers.filter(v => v.type === VoucherType.Purchase).length,
-        payment: vouchers.filter(v => v.type === VoucherType.Payment).length,
-        receipt: vouchers.filter(v => v.type === VoucherType.Receipt).length,
-        journal: vouchers.filter(v => v.type === VoucherType.Journal).length,
-        contra: vouchers.filter(v => v.type === VoucherType.Contra).length,
-        bank: vouchers.filter(v => v.type === VoucherType.BankStatement || !!v.withdrawalAmount || !!v.depositAmount).length,
-        rawBank: vouchers.filter(v => (v.type === VoucherType.BankStatement || !!v.withdrawalAmount || !!v.depositAmount) && !hasLedgerOrParty(v)).length,
+        sales: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Sales'.toLowerCase()).length,
+        purchase: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Purchase'.toLowerCase()).length,
+        payment: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Payment'.toLowerCase()).length,
+        receipt: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Receipt'.toLowerCase()).length,
+        journal: vouchers.filter(v => typeof v.type === 'string' && ['journal', 'general'].includes(v.type.toLowerCase().replace(/[\s_]+/g, ''))).length,
+        contra: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === 'Contra'.toLowerCase()).length,
+        bank: vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\\s_]+/g, '') === 'bankstatement' || !!v.withdrawalAmount || !!v.depositAmount).length,
+        rawBank: vouchers.filter(v => (typeof v.type === 'string' && v.type.toLowerCase().replace(/[\\s_]+/g, '') === 'bankstatement' || !!v.withdrawalAmount || !!v.depositAmount) && !hasLedgerOrParty(v)).length,
     };
 
     // Trends grouping
     const dateGroups = vouchers.reduce((acc: any, v) => {
       const d = (v.date?.value || 'N/A').toString().split('T')[0];
       if (!acc[d]) acc[d] = { date: d, sales: 0, purchase: 0, payment: 0, receipt: 0, journal: 0, contra: 0 };
-      if (v.type === VoucherType.Sales) acc[d].sales += Number(v.amount?.value || 0);
-      if (v.type === VoucherType.Purchase) acc[d].purchase += Number(v.amount?.value || 0);
-      if (v.type === VoucherType.Payment) acc[d].payment += Number(v.amount?.value || 0);
-      if (v.type === VoucherType.Receipt) acc[d].receipt += Number(v.amount?.value || 0);
-      if (v.type === VoucherType.Journal) acc[d].journal += Number(v.amount?.value || 0);
-      if (v.type === VoucherType.Contra) acc[d].contra += Number(v.amount?.value || 0);
+      if (typeof v.type === 'string' && v.type.toLowerCase().replace(/[\\s_]+/g, '') === 'sales') acc[d].sales += Number(v.amount?.value || 0);
+      if (typeof v.type === 'string' && v.type.toLowerCase().replace(/[\\s_]+/g, '') === 'purchase') acc[d].purchase += Number(v.amount?.value || 0);
+      if (typeof v.type === 'string' && v.type.toLowerCase().replace(/[\\s_]+/g, '') === 'payment') acc[d].payment += Number(v.amount?.value || 0);
+      if (typeof v.type === 'string' && v.type.toLowerCase().replace(/[\\s_]+/g, '') === 'receipt') acc[d].receipt += Number(v.amount?.value || 0);
+      if (typeof v.type === 'string' && v.type.toLowerCase().replace(/[\\s_]+/g, '') === 'journal') acc[d].journal += Number(v.amount?.value || 0);
+      if (typeof v.type === 'string' && v.type.toLowerCase().replace(/[\\s_]+/g, '') === 'contra') acc[d].contra += Number(v.amount?.value || 0);
       return acc;
     }, {});
 

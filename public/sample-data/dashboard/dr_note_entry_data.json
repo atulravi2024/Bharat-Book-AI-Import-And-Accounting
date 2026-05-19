@@ -1,15 +1,219 @@
 [
   {
-    "id": "dn-1",
+    "id": "debit_note-1",
     "date": {
-      "value": "2024-05-15"
+      "value": "2024-03-16"
     },
     "type": "Debit Note",
     "partyName": {
-      "value": "Vendor Party"
+      "value": "Tech Data India"
+    },
+    "voucherNumber": {
+      "value": "DEB-1001"
     },
     "amount": {
-      "value": 500
-    }
+      "value": 625000
+    },
+    "narration": {
+      "value": "Debit Note for Tech Data India No. DEB-1001"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Acer Predator Helios"
+        },
+        "quantity": {
+          "value": 5
+        },
+        "rate": {
+          "value": 125000
+        },
+        "amount": {
+          "value": 625000
+        }
+      }
+    ]
+  },
+  {
+    "id": "debit_note-2",
+    "date": {
+      "value": "2024-02-22"
+    },
+    "type": "Debit Note",
+    "partyName": {
+      "value": "Tech Data India"
+    },
+    "voucherNumber": {
+      "value": "DEB-1002"
+    },
+    "amount": {
+      "value": 380000
+    },
+    "narration": {
+      "value": "Debit Note for Tech Data India No. DEB-1002"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "HP Spectre x360"
+        },
+        "quantity": {
+          "value": 3
+        },
+        "rate": {
+          "value": 115000
+        },
+        "amount": {
+          "value": 345000
+        }
+      },
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 35000
+        }
+      }
+    ]
+  },
+  {
+    "id": "debit_note-3",
+    "date": {
+      "value": "2024-11-10"
+    },
+    "type": "Debit Note",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "DEB-1003"
+    },
+    "amount": {
+      "value": 640000
+    },
+    "narration": {
+      "value": "Debit Note for Dell India Pvt Ltd No. DEB-1003"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Asus ROG Zephyrus"
+        },
+        "quantity": {
+          "value": 4
+        },
+        "rate": {
+          "value": 160000
+        },
+        "amount": {
+          "value": 640000
+        }
+      }
+    ]
+  },
+  {
+    "id": "debit_note-4",
+    "date": {
+      "value": "2024-10-04"
+    },
+    "type": "Debit Note",
+    "partyName": {
+      "value": "Supertech Logistics"
+    },
+    "voucherNumber": {
+      "value": "DEB-1004"
+    },
+    "amount": {
+      "value": 59000
+    },
+    "narration": {
+      "value": "Debit Note for Supertech Logistics No. DEB-1004"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "Office Chair Ergonomic"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 12000
+        },
+        "amount": {
+          "value": 24000
+        }
+      },
+      {
+        "name": {
+          "value": "Standing Desk"
+        },
+        "quantity": {
+          "value": 1
+        },
+        "rate": {
+          "value": 35000
+        },
+        "amount": {
+          "value": 35000
+        }
+      }
+    ]
+  },
+  {
+    "id": "debit_note-5",
+    "date": {
+      "value": "2024-05-12"
+    },
+    "type": "Debit Note",
+    "partyName": {
+      "value": "Dell India Pvt Ltd"
+    },
+    "voucherNumber": {
+      "value": "DEB-1005"
+    },
+    "amount": {
+      "value": 490000
+    },
+    "narration": {
+      "value": "Debit Note for Dell India Pvt Ltd No. DEB-1005"
+    },
+    "items": [
+      {
+        "name": {
+          "value": "MacBook Pro 14"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 120000
+        },
+        "amount": {
+          "value": 240000
+        }
+      },
+      {
+        "name": {
+          "value": "Acer Predator Helios"
+        },
+        "quantity": {
+          "value": 2
+        },
+        "rate": {
+          "value": 125000
+        },
+        "amount": {
+          "value": 250000
+        }
+      }
+    ]
   }
 ]

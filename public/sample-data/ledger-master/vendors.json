@@ -1,8 +1,38 @@
 [
   {
-    "id": "vendors-sample-1",
-    "name": "Sample vendors 1",
-    "group": "Sundry Debtors",
-    "address": "Sample Address"
+    "id": "vendor-1",
+    "name": "Dell India Pvt Ltd",
+    "group": "Sundry Creditors",
+    "openingBalance": 150000,
+    "type": "Vendor",
+    "status": "Active",
+    "contactPerson": "Ramesh Kumar",
+    "phone": "9876543210",
+    "email": "sales@dell.co.in",
+    "address": "12/A, Electronic City, Bangalore"
+  },
+  {
+    "id": "vendor-2",
+    "name": "Samsung Electronics",
+    "group": "Sundry Creditors",
+    "openingBalance": 75000,
+    "type": "Vendor",
+    "status": "Active",
+    "contactPerson": "Shivani Singh",
+    "phone": "9812345670",
+    "email": "orders@samsung.com",
+    "address": "Sector 62, Noida, UP"
+  },
+  {
+    "id": "vendor-3",
+    "name": "Supertech Logistics",
+    "group": "Sundry Creditors",
+    "openingBalance": 20000,
+    "type": "Vendor",
+    "status": "Active",
+    "contactPerson": "Vikram Singh",
+    "phone": "9765412345",
+    "email": "billing@supertechlog.in",
+    "address": "Andheri East, Mumbai"
   }
 ]
