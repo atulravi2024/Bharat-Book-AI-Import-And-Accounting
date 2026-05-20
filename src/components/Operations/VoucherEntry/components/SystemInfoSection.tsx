@@ -2359,7 +2359,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
         )}
       </div>
 
-      {/* 4. Voucher Audit Trail Section */}
+      {/* 4. Voucher Audit Info Section */}
       <div
         className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[48] ${auditCollapsed ? "px-6 py-3 rounded-xl" : "p-6 rounded-2xl"} dark:bg-gray-800`}
       >
@@ -2370,7 +2370,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
         >
           <h3 className="text-sm font-black text-indigo-700 uppercase tracking-widest flex items-center dark:text-indigo-400">
             <ClipboardCheck size={16} className="mr-2 text-indigo-500" />{" "}
-            <span className="hidden sm:inline">Voucher&nbsp;</span>Audit Trail
+            Audit Info
           </h3>
           <button
             className="text-gray-400 hover:text-gray-600 transition-colors"
