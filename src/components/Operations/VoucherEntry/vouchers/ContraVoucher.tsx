@@ -13,6 +13,7 @@ import { VoucherHelpModal } from '../components/VoucherHelpModal';
 import { VoucherKeyboardShortcutsModal } from '../components/VoucherKeyboardShortcutsModal';
 import { VoucherItemEditModal } from '../components/VoucherItemEditModal';
 import { VoucherTotalsSummary } from '../components/VoucherTotalsSummary';
+import { SystemInfoSection } from '../components/SystemInfoSection';
 import { VoucherPreview } from '../VoucherPreview';
 import { WebBillRequirements } from '../components/WebBillRequirements';
 import { toPng } from 'html-to-image';
@@ -698,7 +699,7 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
     const enrichedRows = getEnrichedRows();
 
     const entry = {
-      id: currentRecordId || initialVoucher?.id || Date.now().toString(),
+      id: currentRecordId || initialVoucher?.id || (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()),
       type: activeTab,
       header: headerDetails,
       rows: enrichedRows,
@@ -1229,6 +1230,7 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
   };
 
   const [collapsedSections, setCollapsedSections] = useState({
+    systemInfo: true,
     header: true,
     party: false,
     lineItems: false,
@@ -1264,6 +1266,16 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
             </div>
         </div>
       )}
+            <SystemInfoSection
+        collapsed={collapsedSections.systemInfo}
+        toggleSection={() => toggleSection('systemInfo')}
+        createdAt={currentRecordId ? (initialVoucher?.createdAt || new Date().toISOString()) : undefined}
+        updatedAt={currentRecordId ? (initialVoucher?.updatedAt || new Date().toISOString()) : undefined}
+        recordId={currentRecordId || (initialVoucher?.id) || null}
+        createdBy="Administrator"
+        rowNumber={currentRecordId && vouchers ? vouchers.findIndex(v => v.id === currentRecordId) + 1 : 0}
+      voucherType={activeTab}
+      />
       <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[50] ${collapsedSections.header ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
         <div className="absolute top-0 left-0 w-1 h-full bg-amber-500 rounded-l-[inherit]"></div>
         <div className={`flex items-center justify-between cursor-pointer ${collapsedSections.header ? '' : 'mb-5'}`} onClick={() => toggleSection('header')}>
@@ -1294,10 +1306,7 @@ export const ContraVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, in
 <label className="form-label">Voucher Number</label>
             <input type="text" value={headerDetails.voucherNumber || ''} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
-          <div className="form-field-wrapper">
-<label className="form-label">Creation Stamp (System)</label>
-            <input type="text" value={systemStamp || ''} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
-          </div>
+          
           {activeTab !== 'journal' && (
             <>
               <div className="form-field-wrapper">

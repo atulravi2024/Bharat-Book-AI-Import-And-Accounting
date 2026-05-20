@@ -13,6 +13,7 @@ import { VoucherHelpModal } from '../components/VoucherHelpModal';
 import { VoucherKeyboardShortcutsModal } from '../components/VoucherKeyboardShortcutsModal';
 import { VoucherItemEditModal } from '../components/VoucherItemEditModal';
 import { VoucherTotalsSummary } from '../components/VoucherTotalsSummary';
+import { SystemInfoSection } from '../components/SystemInfoSection';
 import { VoucherPreview } from '../VoucherPreview';
 import { WebBillRequirements } from '../components/WebBillRequirements';
 import { toPng } from 'html-to-image';
@@ -44,8 +45,12 @@ interface VoucherEntryViewProps {
   onOpenPrintSettings?: () => void;
 }
 
-export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, initialVoucher, itemMasters = [], ledgerMasters = [], partyMasters = [], vouchers = [], onUpdateItemMaster, onAddItemMaster, onSaveEntry, onDeleteEntry, onOpenPrintSettings }) => {
-  const activeTab = 'journal' as string;
+export interface AccountingVoucherProps extends VoucherEntryViewProps {
+  type?: string;
+}
+
+export const JournalVoucher: React.FC<AccountingVoucherProps> = ({ type = 'journal', defaultType, initialVoucher, itemMasters = [], ledgerMasters = [], partyMasters = [], vouchers = [], onUpdateItemMaster, onAddItemMaster, onSaveEntry, onDeleteEntry, onOpenPrintSettings }) => {
+  const activeTab = type;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const setActiveTab = (tab: string) => {};
   
@@ -125,7 +130,7 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
           supplyType: computedSupplyType,
         }));
         
-        const isInventoryType = ['sales', 'purchase', 'debit_note', 'credit_note'].includes(typeFromInit || 'sales');
+        const isInventoryType = false;
         
         if (isInventoryType) {
             if (initialVoucher.items && initialVoucher.items.length > 0) {
@@ -504,7 +509,7 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
   };
 
   const totals = React.useMemo(() => {
-    if (activeTab === 'sales' || activeTab === 'purchase' || activeTab === 'debit_note' || activeTab === 'credit_note') {
+    if (false) {
       const subtotal = rows.reduce((sum, row) => {
         const qty = parseFloat(row.qty) || 0;
         const rate = parseFloat(row.rate) || 0;
@@ -659,7 +664,7 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
       return false;
     }
 
-    const isInventoryType = ['sales', 'purchase', 'debit_note', 'credit_note'].includes(activeTab);
+    const isInventoryType = false;
 
     if (isInventoryType) {
       const hasValidRows = rows.some(r => r.itemName && (parseFloat(r.qty) > 0 || parseFloat(r.rate) > 0));
@@ -680,15 +685,9 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
   };
 
   const getEnrichedRows = () => rows.map((r, i) => {
-      if (['sales', 'purchase', 'sales_order', 'purchase_order', 'debit_note', 'credit_note', 'delivery_note', 'receipt_note'].includes(activeTab)) {
-          return {
-              ...r,
-              amount: calculateRowNetAmount(r).toFixed(2)
-          };
-      }
       return {
           ...r,
-          crDr: r.crDr || (activeTab === 'payment' && i === 0 ? 'Cr' : activeTab === 'payment' ? 'Dr' : activeTab === 'receipt' && i === 0 ? 'Dr' : activeTab === 'receipt' ? 'Cr' : activeTab === 'journal' ? 'Dr' : 'Cr')
+          crDr: r.crDr || (activeTab === 'payment' && i === 0 ? 'Cr' : activeTab === 'payment' ? 'Dr' : activeTab === 'receipt' && i === 0 ? 'Dr' : activeTab === 'receipt' ? 'Cr' : 'Dr')
       };
   });
 
@@ -698,7 +697,7 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
     const enrichedRows = getEnrichedRows();
 
     const entry = {
-      id: currentRecordId || initialVoucher?.id || Date.now().toString(),
+      id: currentRecordId || initialVoucher?.id || (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()),
       type: activeTab,
       header: headerDetails,
       rows: enrichedRows,
@@ -926,7 +925,7 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
         supplyType: computedSupplyType,
       }));
       
-      const isInventoryType = ['sales', 'purchase', 'debit_note', 'credit_note'].includes(activeTab);
+      const isInventoryType = false;
       if (isInventoryType) {
         if (voucher.items && voucher.items.length > 0) {
           setRows(voucher.items.map((it: any, i: number) => ({
@@ -1226,6 +1225,7 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
   };
 
   const [collapsedSections, setCollapsedSections] = useState({
+    systemInfo: true,
     header: true,
     party: false,
     lineItems: false,
@@ -1261,6 +1261,16 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
             </div>
         </div>
       )}
+            <SystemInfoSection
+        collapsed={collapsedSections.systemInfo}
+        toggleSection={() => toggleSection('systemInfo')}
+        createdAt={currentRecordId ? (initialVoucher?.createdAt || new Date().toISOString()) : undefined}
+        updatedAt={currentRecordId ? (initialVoucher?.updatedAt || new Date().toISOString()) : undefined}
+        recordId={currentRecordId || (initialVoucher?.id) || null}
+        createdBy="Administrator"
+        rowNumber={currentRecordId && vouchers ? vouchers.findIndex(v => v.id === currentRecordId) + 1 : 0}
+      voucherType={activeTab}
+      />
       <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[50] ${collapsedSections.header ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
         <div className="absolute top-0 left-0 w-1 h-full bg-amber-500 rounded-l-[inherit]"></div>
         <div className={`flex items-center justify-between cursor-pointer ${collapsedSections.header ? '' : 'mb-5'}`} onClick={() => toggleSection('header')}>
@@ -1291,11 +1301,71 @@ export const JournalVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
 <label className="form-label">Voucher Number</label>
             <input type="text" value={headerDetails.voucherNumber || ''} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
-          <div className="form-field-wrapper">
-<label className="form-label">Creation Stamp (System)</label>
-            <input type="text" value={systemStamp || ''} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
-          </div>
-          {activeTab !== 'journal' && (
+          
+          {['debit_note', 'credit_note'].includes(activeTab) ? (
+            <>
+              <div className="form-field-wrapper">
+<label className="form-label">Entity Category</label>
+                <select 
+                  value={headerDetails.entityCategory || 'Customer'} 
+                  onChange={(e) => handleHeaderChange('entityCategory', e.target.value)} 
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                >
+                  <option value="Customer">Customer</option>
+                  <option value="Vendor">Vendor</option>
+                  <option value="Both">Both</option>
+                  <option value="Internal">Internal</option>
+                  <option value="Hybrid">Hybrid</option>
+                </select>
+              </div>
+              <div className="form-field-wrapper">
+                <SearchableDropdown
+                  label="Party A/c Name"
+                  options={partyMasters.filter(p => {
+                    const cat = headerDetails.entityCategory;
+                    if (cat === 'Both') return true;
+                    if (cat === 'Customer' && (p.type === 'Customer' || p.type === 'Both')) return true;
+                    if (cat === 'Vendor' && (p.type === 'Vendor' || p.type === 'Both')) return true;
+                    if (cat === 'Internal' && p.type === 'Internal') return true;
+                    if (cat === 'Hybrid' && p.type === 'Hybrid') return true;
+                    return p.type === cat;
+                  })}
+                  value={headerDetails.partyName || ''}
+                  onChange={(value) => handleHeaderChange('partyName', value)}
+                  placeholder={`Search ${headerDetails.entityCategory || 'Party'}...`}
+                />
+              </div>
+              <div className="form-field-wrapper">
+<label className="form-label">Business Role</label>
+                <select 
+                  value={headerDetails.businessRole || 'Trader'} 
+                  onChange={(e) => handleHeaderChange('businessRole', e.target.value)} 
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
+                >
+                  {(headerDetails.entityCategory === 'Customer' || headerDetails.entityCategory === 'Both') && (
+                    <>
+                      <option value="Trader">Trader</option>
+                      <option value="Consumer">Consumer</option>
+                    </>
+                  )}
+                  {(headerDetails.entityCategory === 'Vendor' || headerDetails.entityCategory === 'Both') && (
+                    <>
+                      <option value="Supplier">Supplier</option>
+                      <option value="Manufacturer">Manufacturer</option>
+                    </>
+                  )}
+                  {(headerDetails.entityCategory === 'Internal' || headerDetails.entityCategory === 'Hybrid') && (
+                    <>
+                      <option value="Operator">Operator</option>
+                      <option value="Staff">Staff</option>
+                      <option value="Supervisor">Supervisor</option>
+                      <option value="Contractor">Contractor</option>
+                    </>
+                  )}
+                </select>
+              </div>
+            </>
+          ) : activeTab !== 'journal' && (
             <>
               <div className="form-field-wrapper">
 <label className="form-label">Account (Cash/Bank)</label>

@@ -50,6 +50,20 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
+  // Expose endpoint returning real tracked client IP address
+  app.get("/api/ip", (req, res) => {
+    let clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress || req.ip;
+    if (Array.isArray(clientIp)) {
+      clientIp = clientIp[0];
+    } else if (typeof clientIp === "string") {
+      clientIp = clientIp.split(",")[0].trim();
+    }
+    if (typeof clientIp === "string" && clientIp.startsWith("::ffff:")) {
+      clientIp = clientIp.substring(7);
+    }
+    res.json({ ip: clientIp || "127.0.0.1" });
+  });
+
   // Serve sample data explicitly if needed (Vite handles this in dev via public, but just in case)
   app.use("/sample-data", express.static(path.join(process.cwd(), "public/sample-data")));
 
