@@ -194,6 +194,17 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
   // Accordion state - only one section can be open at a time, collapsed by default
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev: any) => ({ ...prev, [fieldName]: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Reset accordion to collapsed when modal is opened or closed
   React.useEffect(() => {
     setExpandedSection(null);
@@ -388,23 +399,10 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
       const constructedAddress = addressParts.join(", ");
 
       const contactToSave = {
+        ...formData,
         id: editingId || `item-${Date.now()}`,
-        code: formData.code,
-        name: formData.name,
         contactType: contactTypeVal,
-        status: formData.status || "Active",
-        designation: formData.designation || "",
-        department: formData.department || "",
-        email: formData.email || "",
-        phone: formData.phone || "",
         address: constructedAddress || formData.address || "",
-        streetAddress: formData.streetAddress || "",
-        district: formData.district || "",
-        city: formData.city || "",
-        state: formData.state || "",
-        country: formData.country || "",
-        zipCode: formData.zipCode || "",
-        dateOfJoining: formData.dateOfJoining || "",
         resignationDate:
           formData.status === "Inactive" || formData.status === "Resigned"
             ? formData.resignationDate || ""
@@ -417,43 +415,6 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
           formData.status === "Inactive" || formData.status === "Resigned"
             ? formData.resignationDescription || ""
             : "",
-        description: formData.description || "",
-        aadhaarCard: formData.aadhaarCard || "",
-        panCard: formData.panCard || "",
-        drivingLicense: formData.drivingLicense || "",
-        bloodGroup: formData.bloodGroup || "",
-        photoUrl: formData.photoUrl || "",
-        alternateName: formData.alternateName || "",
-        alternatePhone: formData.alternatePhone || "",
-        alternateRelation: formData.alternateRelation || "",
-        salary: formData.salary || "",
-        dateOfBirth: formData.dateOfBirth || "",
-        maritalStatus: formData.maritalStatus || "",
-        bankName: formData.bankName || "",
-        bankAccountNumber: formData.bankAccountNumber || "",
-        bankIfscCode: formData.bankIfscCode || "",
-        bankBranch: formData.bankBranch || "",
-        reportingManager: formData.reportingManager || "",
-        workEmail: formData.workEmail || "",
-        workPhone: formData.workPhone || "",
-        shiftTiming: formData.shiftTiming || "",
-        noticePeriod: formData.noticePeriod || "",
-        probationPeriod: formData.probationPeriod || "",
-        workLocation: formData.workLocation || "",
-        highestQualification: formData.highestQualification || "",
-        totalExperience: formData.totalExperience || "",
-        guardianName: formData.guardianName || "",
-        permanentAddress: formData.permanentAddress || "",
-        uanNumber: formData.uanNumber || "",
-        esiNumber: formData.esiNumber || "",
-        passportNumber: formData.passportNumber || "",
-        passportExpiryDate: formData.passportExpiryDate || "",
-        linkedInUrl: formData.linkedInUrl || "",
-        portfolioUrl: formData.portfolioUrl || "",
-        twitterUrl: formData.twitterUrl || "",
-        nomineeName: formData.nomineeName || "",
-        nomineeRelation: formData.nomineeRelation || "",
-        nomineePhone: formData.nomineePhone || "",
       };
       const newList = editingId
         ? data.map((m: any) => (m.id === editingId ? contactToSave : m))
@@ -591,7 +552,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
               </span>
             )}
           </div>
-          {(item.aadhaarCard || item.panCard || item.drivingLicense) && (
+          {(item.aadhaarCard || item.panCard || item.voterIdCard || item.drivingLicense) && (
             <div className="flex flex-wrap gap-1 mt-1 pt-1 border-t border-gray-100 dark:border-gray-800">
               {item.aadhaarCard && (
                 <span
@@ -607,6 +568,14 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                   title="PAN Card"
                 >
                   💳 {item.panCard}
+                </span>
+              )}
+              {item.voterIdCard && (
+                <span
+                  className="inline-flex items-center gap-0.5 px-1 py-0.5 bg-sky-50 text-sky-700 border border-sky-200 rounded text-[9px] font-mono dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800"
+                  title="Voter ID Card"
+                >
+                  🗳️ {item.voterIdCard}
                 </span>
               )}
               {item.drivingLicense && (
@@ -988,6 +957,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
 
                             {(m.aadhaarCard ||
                               m.panCard ||
+                              m.voterIdCard ||
                               m.drivingLicense) && (
                               <div className="flex flex-wrap gap-1 mt-1 pt-1 border-t border-gray-100 dark:border-gray-800">
                                 {m.aadhaarCard && (
@@ -1004,6 +974,14 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                     title="PAN Card"
                                   >
                                     💳 {m.panCard}
+                                  </span>
+                                )}
+                                {m.voterIdCard && (
+                                  <span
+                                    className="inline-flex items-center gap-0.5 px-1 py-0.5 bg-sky-50 text-sky-700 border border-sky-200 rounded text-[9px] font-mono dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800"
+                                    title="Voter ID Card"
+                                  >
+                                    🗳️ {m.voterIdCard}
                                   </span>
                                 )}
                                 {m.drivingLicense && (
@@ -1186,8 +1164,8 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         transition={{ duration: 0.2 }}
                       >
                         <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {/* Type Selector - Always visible inside collapsible section */}
-                          <div className="form-field-wrapper col-span-1 md:col-span-2">
+                          {/* Type Selector and Status - Always visible inside collapsible section */}
+                          <div className="form-field-wrapper col-span-1">
                             <label className="form-label font-bold text-gray-700 dark:text-gray-300">
                               Contact Classification
                             </label>
@@ -1225,6 +1203,26 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                               <option value="Customer">Customer</option>
                               <option value="Vendor">Vendor</option>
                               <option value="Partner">Partner</option>
+                            </select>
+                          </div>
+
+                          <div className="form-field-wrapper col-span-1">
+                            <label className="form-label font-bold text-gray-700 dark:text-gray-300">
+                              Status
+                            </label>
+                            <select
+                              id="contact-status"
+                              value={formData.status || "Active"}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  status: e.target.value,
+                                })
+                              }
+                              className="form-input"
+                            >
+                              <option value="Active">Active / Enable</option>
+                              <option value="Inactive">Inactive / Disable</option>
                             </select>
                           </div>
 
@@ -1744,7 +1742,45 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
 
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
-                                  Emergency Contact Name
+                                  Alternative Contact Number
+                                </label>
+                                <input
+                                  type="text"
+                                  id="staff-alternate-phone"
+                                  value={formData.alternatePhone || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      alternatePhone: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                  placeholder="e.g. 9822334455"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Alternative WhatsApp Number
+                                </label>
+                                <input
+                                  type="text"
+                                  id="staff-alternate-whatsapp"
+                                  value={formData.alternateWhatsapp || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      alternateWhatsapp: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                  placeholder="e.g. 9822334455"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Name of that person of alternative
                                 </label>
                                 <input
                                   type="text"
@@ -1778,7 +1814,6 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   <option value="">Select Relation...</option>
                                   <option value="Father">Father</option>
                                   <option value="Mother">Mother</option>
-                                  <option value="Spouse">Spouse</option>
                                   <option value="Husband">Husband</option>
                                   <option value="Wife">Wife</option>
                                   <option value="Brother">Brother</option>
@@ -1788,25 +1823,6 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   <option value="Guardian">Guardian</option>
                                   <option value="Other">Other</option>
                                 </select>
-                              </div>
-
-                              <div className="form-field-wrapper col-span-1">
-                                <label className="form-label text-xs">
-                                  Alternate Contact Number
-                                </label>
-                                <input
-                                  type="text"
-                                  id="staff-alternate-phone"
-                                  value={formData.alternatePhone || ""}
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      alternatePhone: e.target.value,
-                                    })
-                                  }
-                                  className="form-input font-mono"
-                                  placeholder="e.g. 9822334455"
-                                />
                               </div>
                             </div>
                           </motion.div>
@@ -1885,24 +1901,6 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 </select>
                               </div>
 
-                              <div className="form-field-wrapper col-span-1 md:col-span-2">
-                                <label className="form-label text-xs">
-                                  Father's / Husband's Name
-                                </label>
-                                <input
-                                  type="text"
-                                  value={formData.guardianName || ""}
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      guardianName: e.target.value,
-                                    })
-                                  }
-                                  className="form-input"
-                                  placeholder="e.g. Ramesh Kumar"
-                                />
-                              </div>
-
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Gender
@@ -1922,44 +1920,6 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   <option value="Male">Male</option>
                                   <option value="Female">Female</option>
                                 </select>
-                              </div>
-
-                              <div className="form-field-wrapper col-span-1">
-                                <label className="form-label text-xs">
-                                  Highest Qualification
-                                </label>
-                                <input
-                                  type="text"
-                                  value={formData.highestQualification || ""}
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      highestQualification: e.target.value,
-                                    })
-                                  }
-                                  className="form-input"
-                                  placeholder="e.g. B.Tech, MBA"
-                                />
-                              </div>
-
-                              <div className="form-field-wrapper col-span-1">
-                                <label className="form-label text-xs">
-                                  Total Experience (Years)
-                                </label>
-                                <input
-                                  type="number"
-                                  value={formData.totalExperience || ""}
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      totalExperience: e.target.value,
-                                    })
-                                  }
-                                  className="form-input"
-                                  placeholder="e.g. 5"
-                                  min="0"
-                                  step="0.5"
-                                />
                               </div>
 
                               <div className="form-field-wrapper col-span-1">
@@ -1988,6 +1948,715 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   <option value="O+">O+ (O Positive)</option>
                                   <option value="O-">O- (O Negative)</option>
                                 </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Nationality
+                                </label>
+                                <select
+                                  value={formData.nationality || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      nationality: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Nationality...</option>
+                                  <option value="Indian">Indian</option>
+                                  <option value="Other">Other</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Religion
+                                </label>
+                                <select
+                                  value={formData.religion || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      religion: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Religion...</option>
+                                  <option value="Hinduism">Hinduism</option>
+                                  <option value="Islam">Islam</option>
+                                  <option value="Christianity">Christianity</option>
+                                  <option value="Sikhism">Sikhism</option>
+                                  <option value="Buddhism">Buddhism</option>
+                                  <option value="Jainism">Jainism</option>
+                                  <option value="Other">Other</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Category
+                                </label>
+                                <select
+                                  value={formData.category || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      category: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Category...</option>
+                                  <option value="General">General</option>
+                                  <option value="OBC">OBC</option>
+                                  <option value="SC">SC</option>
+                                  <option value="ST">ST</option>
+                                  <option value="Other">Other</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Mother Tongue
+                                </label>
+                                <select
+                                  value={formData.motherTongue || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      motherTongue: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Mother Tongue...</option>
+                                  <option value="Assamese">Assamese</option>
+                                  <option value="Bengali">Bengali</option>
+                                  <option value="Bodo">Bodo</option>
+                                  <option value="Dogri">Dogri</option>
+                                  <option value="English">English</option>
+                                  <option value="Gujarati">Gujarati</option>
+                                  <option value="Hindi">Hindi</option>
+                                  <option value="Kannada">Kannada</option>
+                                  <option value="Kashmiri">Kashmiri</option>
+                                  <option value="Konkani">Konkani</option>
+                                  <option value="Maithili">Maithili</option>
+                                  <option value="Malayalam">Malayalam</option>
+                                  <option value="Manipuri">Manipuri</option>
+                                  <option value="Marathi">Marathi</option>
+                                  <option value="Nepali">Nepali</option>
+                                  <option value="Odia">Odia</option>
+                                  <option value="Punjabi">Punjabi</option>
+                                  <option value="Sanskrit">Sanskrit</option>
+                                  <option value="Santali">Santali</option>
+                                  <option value="Sindhi">Sindhi</option>
+                                  <option value="Tamil">Tamil</option>
+                                  <option value="Telugu">Telugu</option>
+                                  <option value="Urdu">Urdu</option>
+                                  <option value="Other">Other</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Known Languages
+                                </label>
+                                <input
+                                  type="text"
+                                  value={Array.isArray(formData.knownLanguages) ? formData.knownLanguages.join(', ') : formData.knownLanguages || ""}
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      knownLanguages: e.target.value,
+                                    });
+                                  }}
+                                  className="form-input"
+                                  placeholder="e.g. English, Hindi, Marathi"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Physically Handicapped
+                                </label>
+                                <select
+                                  value={formData.physicallyHandicapped || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      physicallyHandicapped: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Option...</option>
+                                  <option value="No">No</option>
+                                  <option value="Yes - VH">Yes - Visually Handicapped</option>
+                                  <option value="Yes - HH">Yes - Hearing Handicapped</option>
+                                  <option value="Yes - OH">Yes - Orthopedically Handicapped</option>
+                                </select>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Collapsible Section: Education & Qualification */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "education" ? null : "education",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "education"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          🎓 Education & Qualification
+                        </span>
+                        {expandedSection === "education" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "education" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 flex flex-col gap-6">
+                              {/* Matriculation (10th) */}
+                              <div>
+                                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 border-b border-gray-100 dark:border-gray-700 pb-2">Matriculation (10th)</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">School Name</label>
+                                    <input type="text" value={formData.matriculationSchool || ""} onChange={(e) => setFormData({ ...formData, matriculationSchool: e.target.value })} className="form-input" placeholder="e.g. DPS" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Board/University Name</label>
+                                    <input type="text" value={formData.matriculationBoard || ""} onChange={(e) => setFormData({ ...formData, matriculationBoard: e.target.value })} className="form-input" placeholder="e.g. CBSE" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Year of Passing</label>
+                                    <input type="number" value={formData.matriculationYear || ""} onChange={(e) => setFormData({ ...formData, matriculationYear: e.target.value })} className="form-input" placeholder="e.g. 2012" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Percentage</label>
+                                    <input type="text" value={formData.matriculationPercentage || ""} onChange={(e) => setFormData({ ...formData, matriculationPercentage: e.target.value })} className="form-input" placeholder="e.g. 85%" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">CGPA</label>
+                                    <input type="text" value={formData.matriculationCGPA || ""} onChange={(e) => setFormData({ ...formData, matriculationCGPA: e.target.value })} className="form-input" placeholder="e.g. 9.0" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Intermediate (12th) */}
+                              <div>
+                                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 border-b border-gray-100 dark:border-gray-700 pb-2">Intermediate (12th)</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Stream</label>
+                                    <select value={formData.intermediateStream || ""} onChange={(e) => setFormData({ ...formData, intermediateStream: e.target.value })} className="form-input">
+                                      <option value="">Select Stream...</option>
+                                      <option value="Arts">Arts</option>
+                                      <option value="Science">Science</option>
+                                      <option value="Commerce">Commerce</option>
+                                      <option value="Other">Other</option>
+                                    </select>
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">School/College Name</label>
+                                    <input type="text" value={formData.intermediateSchool || ""} onChange={(e) => setFormData({ ...formData, intermediateSchool: e.target.value })} className="form-input" placeholder="e.g. DPS" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Board/University Name</label>
+                                    <input type="text" value={formData.intermediateBoard || ""} onChange={(e) => setFormData({ ...formData, intermediateBoard: e.target.value })} className="form-input" placeholder="e.g. CBSE" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Year of Passing</label>
+                                    <input type="number" value={formData.intermediateYear || ""} onChange={(e) => setFormData({ ...formData, intermediateYear: e.target.value })} className="form-input" placeholder="e.g. 2014" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Percentage</label>
+                                    <input type="text" value={formData.intermediatePercentage || ""} onChange={(e) => setFormData({ ...formData, intermediatePercentage: e.target.value })} className="form-input" placeholder="e.g. 80%" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">CGPA</label>
+                                    <input type="text" value={formData.intermediateCGPA || ""} onChange={(e) => setFormData({ ...formData, intermediateCGPA: e.target.value })} className="form-input" placeholder="e.g. 8.5" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Graduation */}
+                              <div>
+                                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 border-b border-gray-100 dark:border-gray-700 pb-2">Graduation</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Degree Name</label>
+                                    <select value={formData.graduationDegreeName || ""} onChange={(e) => setFormData({ ...formData, graduationDegreeName: e.target.value })} className="form-input">
+                                      <option value="">Select Degree...</option>
+                                      <option value="BA">BA</option>
+                                      <option value="B.Sc">B.Sc</option>
+                                      <option value="B.Com">B.Com</option>
+                                      <option value="B.Tech">B.Tech</option>
+                                      <option value="BBA">BBA</option>
+                                      <option value="BCA">BCA</option>
+                                      <option value="Other">Other</option>
+                                    </select>
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Stream/Specialization</label>
+                                    <input type="text" value={formData.graduationStream || ""} onChange={(e) => setFormData({ ...formData, graduationStream: e.target.value })} className="form-input" placeholder="e.g. IT" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">College Name</label>
+                                    <input type="text" value={formData.graduationCollege || ""} onChange={(e) => setFormData({ ...formData, graduationCollege: e.target.value })} className="form-input" placeholder="e.g. MIT" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">University Name</label>
+                                    <input type="text" value={formData.graduationUniversity || ""} onChange={(e) => setFormData({ ...formData, graduationUniversity: e.target.value })} className="form-input" placeholder="e.g. Pune Univ" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Year of Passing</label>
+                                    <input type="number" value={formData.graduationYear || ""} onChange={(e) => setFormData({ ...formData, graduationYear: e.target.value })} className="form-input" placeholder="e.g. 2018" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Percentage</label>
+                                    <input type="text" value={formData.graduationPercentage || ""} onChange={(e) => setFormData({ ...formData, graduationPercentage: e.target.value })} className="form-input" placeholder="e.g. 75%" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">CGPA</label>
+                                    <input type="text" value={formData.graduationCGPA || ""} onChange={(e) => setFormData({ ...formData, graduationCGPA: e.target.value })} className="form-input" placeholder="e.g. 8.0" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Post Graduation */}
+                              <div>
+                                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 border-b border-gray-100 dark:border-gray-700 pb-2">Post Graduation</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Degree Name</label>
+                                    <select value={formData.postGraduationDegreeName || ""} onChange={(e) => setFormData({ ...formData, postGraduationDegreeName: e.target.value })} className="form-input">
+                                      <option value="">Select Degree...</option>
+                                      <option value="MA">MA</option>
+                                      <option value="M.Sc">M.Sc</option>
+                                      <option value="M.Com">M.Com</option>
+                                      <option value="M.Tech">M.Tech</option>
+                                      <option value="MBA">MBA</option>
+                                      <option value="MCA">MCA</option>
+                                      <option value="Other">Other</option>
+                                    </select>
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Stream/Specialization</label>
+                                    <input type="text" value={formData.postGraduationStream || ""} onChange={(e) => setFormData({ ...formData, postGraduationStream: e.target.value })} className="form-input" placeholder="e.g. Finance" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">College Name</label>
+                                    <input type="text" value={formData.postGraduationCollege || ""} onChange={(e) => setFormData({ ...formData, postGraduationCollege: e.target.value })} className="form-input" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">University Name</label>
+                                    <input type="text" value={formData.postGraduationUniversity || ""} onChange={(e) => setFormData({ ...formData, postGraduationUniversity: e.target.value })} className="form-input" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Year of Passing</label>
+                                    <input type="number" value={formData.postGraduationYear || ""} onChange={(e) => setFormData({ ...formData, postGraduationYear: e.target.value })} className="form-input" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Percentage</label>
+                                    <input type="text" value={formData.postGraduationPercentage || ""} onChange={(e) => setFormData({ ...formData, postGraduationPercentage: e.target.value })} className="form-input" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">CGPA</label>
+                                    <input type="text" value={formData.postGraduationCGPA || ""} onChange={(e) => setFormData({ ...formData, postGraduationCGPA: e.target.value })} className="form-input" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Diploma */}
+                              <div>
+                                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 border-b border-gray-100 dark:border-gray-700 pb-2">Diploma</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Course Name</label>
+                                    <input type="text" value={formData.diplomaCourse || ""} onChange={(e) => setFormData({ ...formData, diplomaCourse: e.target.value })} className="form-input" placeholder="e.g. Diploma in IT" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Institute/College</label>
+                                    <input type="text" value={formData.diplomaCollege || ""} onChange={(e) => setFormData({ ...formData, diplomaCollege: e.target.value })} className="form-input" placeholder="e.g. Govt Polytechnic" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Board/University Name</label>
+                                    <input type="text" value={formData.diplomaUniversity || ""} onChange={(e) => setFormData({ ...formData, diplomaUniversity: e.target.value })} className="form-input" placeholder="e.g. State Board" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Year of Passing</label>
+                                    <input type="number" value={formData.diplomaYear || ""} onChange={(e) => setFormData({ ...formData, diplomaYear: e.target.value })} className="form-input" placeholder="e.g. 2016" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Percentage</label>
+                                    <input type="text" value={formData.diplomaPercentage || ""} onChange={(e) => setFormData({ ...formData, diplomaPercentage: e.target.value })} className="form-input" placeholder="e.g. 80%" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">CGPA</label>
+                                    <input type="text" value={formData.diplomaCGPA || ""} onChange={(e) => setFormData({ ...formData, diplomaCGPA: e.target.value })} className="form-input" placeholder="e.g. 8.5" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Certifications */}
+                              <div>
+                                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 border-b border-gray-100 dark:border-gray-700 pb-2">Certifications</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Certification Course 1</label>
+                                    <input type="text" value={formData.certification1 || ""} onChange={(e) => setFormData({ ...formData, certification1: e.target.value })} className="form-input" placeholder="e.g. AWS Solutions Architect" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Certification Course 2</label>
+                                    <input type="text" value={formData.certification2 || ""} onChange={(e) => setFormData({ ...formData, certification2: e.target.value })} className="form-input" placeholder="e.g. Google Cloud Developer" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Certification Course 3</label>
+                                    <input type="text" value={formData.certification3 || ""} onChange={(e) => setFormData({ ...formData, certification3: e.target.value })} className="form-input" placeholder="e.g. Certified Scrum Master" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Highest Qualification */}
+                              <div>
+                                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 border-b border-gray-100 dark:border-gray-700 pb-2">Highest Qualification Details</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Highest Qualification</label>
+                                    <select value={formData.highestQualification || ""} onChange={(e) => setFormData({ ...formData, highestQualification: e.target.value })} className="form-input">
+                                      <option value="">Select Qualification...</option>
+                                      <option value="10th">10th (Matriculation)</option>
+                                      <option value="12th">12th (Intermediate)</option>
+                                      <option value="Diploma">Diploma</option>
+                                      <option value="Graduate">Graduate</option>
+                                      <option value="Post Graduate">Post Graduate</option>
+                                      <option value="Doctorate">Doctorate</option>
+                                      <option value="Other">Other</option>
+                                    </select>
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">Percentage</label>
+                                    <input type="text" value={formData.highestQualificationPercentage || ""} onChange={(e) => setFormData({ ...formData, highestQualificationPercentage: e.target.value })} className="form-input" placeholder="e.g. 85%" />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">CGPA</label>
+                                    <input type="text" value={formData.highestQualificationCGPA || ""} onChange={(e) => setFormData({ ...formData, highestQualificationCGPA: e.target.value })} className="form-input" placeholder="e.g. 8.5" />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Collapsible Section: Experience Detail */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "experience" ? null : "experience",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "experience"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          💼 Experience Section
+                        </span>
+                        {expandedSection === "experience" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "experience" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">Total Experience (Years)</label>
+                                <input type="number" value={formData.totalExperience || ""} onChange={(e) => setFormData({ ...formData, totalExperience: e.target.value })} className="form-input" placeholder="e.g. 5" min="0" step="0.5" />
+                              </div>
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">Relevant Experience (Years)</label>
+                                <input type="number" value={formData.relevantExperience || ""} onChange={(e) => setFormData({ ...formData, relevantExperience: e.target.value })} className="form-input" placeholder="e.g. 3" min="0" step="0.5" />
+                              </div>
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">Current/Last Company Name</label>
+                                <input type="text" value={formData.lastCompanyName || ""} onChange={(e) => setFormData({ ...formData, lastCompanyName: e.target.value })} className="form-input" placeholder="e.g. Tech Solutions Inc." />
+                              </div>
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">Current/Last Designation</label>
+                                <input type="text" value={formData.lastDesignation || ""} onChange={(e) => setFormData({ ...formData, lastDesignation: e.target.value })} className="form-input" placeholder="e.g. Senior Software Engineer" />
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Collapsible Section: Family Detail */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "family" ? null : "family",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "family"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          👨‍👩‍👧 Family Detail
+                        </span>
+                        {expandedSection === "family" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "family" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                <label className="form-label text-xs">
+                                  Father's Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.guardianName || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      guardianName: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Ramesh Kumar"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Mother's Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.motherName || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      motherName: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Sita Devi"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Husband's Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.husbandName || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      husbandName: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Shyam Sharma"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Wife's Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.wifeName || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      wifeName: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Radica Sharma"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Father's Occupation
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.fatherOccupation || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      fatherOccupation: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Retired"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Mother's Occupation
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.motherOccupation || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      motherOccupation: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Homemaker"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Husband/Wife Occupation
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.spouseOccupation || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      spouseOccupation: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Teacher"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Wedding Anniversary Date
+                                </label>
+                                <input
+                                  type="date"
+                                  value={formData.anniversaryDate || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      anniversaryDate: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Is Family Residing Together?
+                                </label>
+                                <select
+                                  value={formData.isFamilyResidingTogether || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      isFamilyResidingTogether: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Option...</option>
+                                  <option value="Yes">Yes</option>
+                                  <option value="No">No</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Number of Sons
+                                </label>
+                                <input
+                                  type="number"
+                                  value={formData.numberOfSons || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      numberOfSons: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. 1"
+                                  min="0"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Number of Daughters
+                                </label>
+                                <input
+                                  type="number"
+                                  value={formData.numberOfDaughters || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      numberOfDaughters: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. 1"
+                                  min="0"
+                                />
                               </div>
                             </div>
                           </motion.div>
@@ -2249,8 +2918,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 <label className="form-label text-xs">
                                   State
                                 </label>
-                                <input
-                                  type="text"
+                                <select
                                   value={formData.state || ""}
                                   onChange={(e) =>
                                     setFormData({
@@ -2259,8 +2927,45 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                     })
                                   }
                                   className="form-input"
-                                  placeholder="e.g. Maharashtra, Delhi"
-                                />
+                                >
+                                  <option value="">Select State...</option>
+                                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                  <option value="Assam">Assam</option>
+                                  <option value="Bihar">Bihar</option>
+                                  <option value="Chhattisgarh">Chhattisgarh</option>
+                                  <option value="Goa">Goa</option>
+                                  <option value="Gujarat">Gujarat</option>
+                                  <option value="Haryana">Haryana</option>
+                                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                  <option value="Jharkhand">Jharkhand</option>
+                                  <option value="Karnataka">Karnataka</option>
+                                  <option value="Kerala">Kerala</option>
+                                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                  <option value="Maharashtra">Maharashtra</option>
+                                  <option value="Manipur">Manipur</option>
+                                  <option value="Meghalaya">Meghalaya</option>
+                                  <option value="Mizoram">Mizoram</option>
+                                  <option value="Nagaland">Nagaland</option>
+                                  <option value="Odisha">Odisha</option>
+                                  <option value="Punjab">Punjab</option>
+                                  <option value="Rajasthan">Rajasthan</option>
+                                  <option value="Sikkim">Sikkim</option>
+                                  <option value="Tamil Nadu">Tamil Nadu</option>
+                                  <option value="Telangana">Telangana</option>
+                                  <option value="Tripura">Tripura</option>
+                                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                  <option value="Uttarakhand">Uttarakhand</option>
+                                  <option value="West Bengal">West Bengal</option>
+                                  <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                  <option value="Chandigarh">Chandigarh</option>
+                                  <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                                  <option value="Delhi">Delhi</option>
+                                  <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                  <option value="Ladakh">Ladakh</option>
+                                  <option value="Lakshadweep">Lakshadweep</option>
+                                  <option value="Puducherry">Puducherry</option>
+                                </select>
                               </div>
 
                               {/* Country */}
@@ -2268,8 +2973,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 <label className="form-label text-xs font-sans">
                                   Country
                                 </label>
-                                <input
-                                  type="text"
+                                <select
                                   value={formData.country || ""}
                                   onChange={(e) =>
                                     setFormData({
@@ -2278,8 +2982,10 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                     })
                                   }
                                   className="form-input font-sans"
-                                  placeholder="e.g. India"
-                                />
+                                >
+                                  <option value="">Select Country...</option>
+                                  <option value="India">India</option>
+                                </select>
                               </div>
 
                               {/* Zip Code */}
@@ -2301,21 +3007,164 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 />
                               </div>
 
-                              <div className="form-field-wrapper col-span-1 md:col-span-2 mt-2 pt-4 border-t border-slate-100 dark:border-slate-800">
-                                <label className="form-label text-xs font-bold text-gray-600 dark:text-gray-300">
-                                  Permanent Address
-                                </label>
-                                <textarea
-                                  value={formData.permanentAddress || ""}
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      permanentAddress: e.target.value,
-                                    })
-                                  }
-                                  className="form-input min-h-[70px] resize-y"
-                                  placeholder="Enter complete permanent address (if different)..."
-                                />
+                              <div className="form-field-wrapper col-span-1 md:col-span-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+                                  <label className="form-label text-xs font-bold text-gray-600 dark:text-gray-300 mb-0">
+                                    Permanent Address
+                                  </label>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const isSame = 
+                                        formData.streetAddress === formData.permStreetAddress &&
+                                        formData.district === formData.permDistrict &&
+                                        formData.city === formData.permCity &&
+                                        formData.state === formData.permState &&
+                                        formData.country === formData.permCountry &&
+                                        formData.zipCode === formData.permZipCode;
+                                      
+                                      if (isSame) {
+                                        // Uncheck -> clear perm address
+                                        setFormData({
+                                          ...formData,
+                                          permStreetAddress: "",
+                                          permDistrict: "",
+                                          permCity: "",
+                                          permState: "",
+                                          permCountry: "India",
+                                          permZipCode: "",
+                                        });
+                                      } else {
+                                        // Check -> copy local to perm
+                                        setFormData({
+                                          ...formData,
+                                          permStreetAddress: formData.streetAddress,
+                                          permDistrict: formData.district,
+                                          permCity: formData.city,
+                                          permState: formData.state,
+                                          permCountry: formData.country,
+                                          permZipCode: formData.zipCode,
+                                        });
+                                      }
+                                    }}
+                                    className="text-[10px] sm:text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center justify-center gap-1.5 font-medium border border-slate-200 dark:border-slate-600 shadow-sm"
+                                  >
+                                    <div className="w-3.5 h-3.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-500 rounded-sm flex items-center justify-center shrink-0">
+                                      {(
+                                        formData.streetAddress === formData.permStreetAddress &&
+                                        formData.district === formData.permDistrict &&
+                                        formData.city === formData.permCity &&
+                                        formData.state === formData.permState &&
+                                        formData.country === formData.permCountry &&
+                                        formData.zipCode === formData.permZipCode
+                                      ) && (
+                                        <svg className="w-2.5 h-2.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                      )}
+                                    </div>
+                                    Same as Local Address
+                                  </button>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                    <label className="form-label text-xs">Street Address</label>
+                                    <input
+                                      type="text"
+                                      value={formData.permStreetAddress || ""}
+                                      onChange={(e) => setFormData({ ...formData, permStreetAddress: e.target.value })}
+                                      className="form-input"
+                                      placeholder="Street name, building etc."
+                                    />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">District</label>
+                                    <input
+                                      type="text"
+                                      value={formData.permDistrict || ""}
+                                      onChange={(e) => setFormData({ ...formData, permDistrict: e.target.value })}
+                                      className="form-input"
+                                      placeholder="e.g. Bandra West"
+                                    />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">City</label>
+                                    <input
+                                      type="text"
+                                      value={formData.permCity || ""}
+                                      onChange={(e) => setFormData({ ...formData, permCity: e.target.value })}
+                                      className="form-input"
+                                      placeholder="e.g. Mumbai, New Delhi"
+                                    />
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1">
+                                    <label className="form-label text-xs">State</label>
+                                    <select
+                                      value={formData.permState || ""}
+                                      onChange={(e) => setFormData({ ...formData, permState: e.target.value })}
+                                      className="form-input"
+                                    >
+                                      <option value="">Select State...</option>
+                                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                      <option value="Assam">Assam</option>
+                                      <option value="Bihar">Bihar</option>
+                                      <option value="Chhattisgarh">Chhattisgarh</option>
+                                      <option value="Goa">Goa</option>
+                                      <option value="Gujarat">Gujarat</option>
+                                      <option value="Haryana">Haryana</option>
+                                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                      <option value="Jharkhand">Jharkhand</option>
+                                      <option value="Karnataka">Karnataka</option>
+                                      <option value="Kerala">Kerala</option>
+                                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                      <option value="Maharashtra">Maharashtra</option>
+                                      <option value="Manipur">Manipur</option>
+                                      <option value="Meghalaya">Meghalaya</option>
+                                      <option value="Mizoram">Mizoram</option>
+                                      <option value="Nagaland">Nagaland</option>
+                                      <option value="Odisha">Odisha</option>
+                                      <option value="Punjab">Punjab</option>
+                                      <option value="Rajasthan">Rajasthan</option>
+                                      <option value="Sikkim">Sikkim</option>
+                                      <option value="Tamil Nadu">Tamil Nadu</option>
+                                      <option value="Telangana">Telangana</option>
+                                      <option value="Tripura">Tripura</option>
+                                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                      <option value="Uttarakhand">Uttarakhand</option>
+                                      <option value="West Bengal">West Bengal</option>
+                                      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                      <option value="Chandigarh">Chandigarh</option>
+                                      <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                                      <option value="Delhi">Delhi</option>
+                                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                      <option value="Ladakh">Ladakh</option>
+                                      <option value="Lakshadweep">Lakshadweep</option>
+                                      <option value="Puducherry">Puducherry</option>
+                                    </select>
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1 font-sans">
+                                    <label className="form-label text-xs font-sans">Country</label>
+                                    <select
+                                      value={formData.permCountry || ""}
+                                      onChange={(e) => setFormData({ ...formData, permCountry: e.target.value })}
+                                      className="form-input font-sans"
+                                    >
+                                      <option value="">Select Country...</option>
+                                      <option value="India">India</option>
+                                    </select>
+                                  </div>
+                                  <div className="form-field-wrapper col-span-1 font-sans">
+                                    <label className="form-label text-xs font-sans">Zip Code</label>
+                                    <input
+                                      type="text"
+                                      value={formData.permZipCode || ""}
+                                      onChange={(e) => setFormData({ ...formData, permZipCode: e.target.value })}
+                                      className="form-input font-mono"
+                                      placeholder="e.g. 400050"
+                                    />
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </motion.div>
@@ -2391,7 +3240,24 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   maxLength={10}
                                 />
                               </div>
-                              <div className="form-field-wrapper col-span-1 md:col-span-2">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-[11px] font-semibold text-gray-500 dark:text-gray-400">
+                                  Voter ID Card Number
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.voterIdCard || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      voterIdCard: e.target.value.toUpperCase(),
+                                    })
+                                  }
+                                  className="form-input font-mono uppercase"
+                                  placeholder="e.g. ABC1234567"
+                                />
+                              </div>
+                              <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-[11px] font-semibold text-gray-500 dark:text-gray-400">
                                   Driving License
                                 </label>
@@ -2485,7 +3351,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                       </AnimatePresence>
                     </div>
 
-                    {/* Collapsible Section: Family & Nominee Details */}
+                    {/* Collapsible Section: Nominee Detail */}
                     <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
                       <button
                         type="button"
@@ -2498,7 +3364,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         data-open={expandedSection === "family_nominee"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
-                          👨‍👩‍👧 Family & Nominee Details
+                          🧑‍⚖️ Nominee Detail
                         </span>
                         {expandedSection === "family_nominee" ? (
                           <ChevronUp className="w-4 h-4 text-gray-500" />
@@ -2519,20 +3385,40 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
-                                  Nominee Name
+                                  Select Nominee From Family
                                 </label>
-                                <input
-                                  type="text"
-                                  value={formData.nomineeName || ""}
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      nomineeName: e.target.value,
-                                    })
+                                <select
+                                  value={
+                                    (formData.nomineeName && [formData.guardianName, formData.motherName, formData.husbandName, formData.wifeName].includes(formData.nomineeName))
+                                      ? formData.nomineeName
+                                      : "Other"
                                   }
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    if (val === "Other") {
+                                      setFormData({ ...formData, nomineeName: "", nomineeRelation: "" });
+                                    } else {
+                                      let rel = "";
+                                      if (val === formData.guardianName) rel = "Father";
+                                      else if (val === formData.motherName) rel = "Mother";
+                                      else if (val === formData.husbandName) rel = "Husband";
+                                      else if (val === formData.wifeName) rel = "Wife";
+                                      
+                                      setFormData({
+                                        ...formData,
+                                        nomineeName: val,
+                                        nomineeRelation: rel,
+                                      });
+                                    }
+                                  }}
                                   className="form-input"
-                                  placeholder="e.g. Meera Sharma"
-                                />
+                                >
+                                  <option value="Other">Custom / Other Details</option>
+                                  {formData.guardianName && <option value={formData.guardianName}>{formData.guardianName} (Father)</option>}
+                                  {formData.motherName && <option value={formData.motherName}>{formData.motherName} (Mother)</option>}
+                                  {formData.husbandName && <option value={formData.husbandName}>{formData.husbandName} (Husband)</option>}
+                                  {formData.wifeName && <option value={formData.wifeName}>{formData.wifeName} (Wife)</option>}
+                                </select>
                               </div>
 
                               <div className="form-field-wrapper col-span-1">
@@ -2563,7 +3449,25 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 </select>
                               </div>
 
-                              <div className="form-field-wrapper col-span-1 md:col-span-2">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Type Nominee Name Manually
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.nomineeName || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      nomineeName: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Meera Sharma"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Nominee Phone Number
                                 </label>
@@ -2654,7 +3558,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 />
                               </div>
 
-                              <div className="form-field-wrapper col-span-1 md:col-span-2">
+                              <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Personal Portfolio / Website
                                 </label>
@@ -2669,6 +3573,60 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   }
                                   className="form-input"
                                   placeholder="https://www.example.com"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  YouTube URL
+                                </label>
+                                <input
+                                  type="url"
+                                  value={formData.youtubeUrl || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      youtubeUrl: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="https://youtube.com/..."
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Instagram URL
+                                </label>
+                                <input
+                                  type="url"
+                                  value={formData.instagramUrl || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      instagramUrl: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="https://instagram.com/..."
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Facebook URL
+                                </label>
+                                <input
+                                  type="url"
+                                  value={formData.facebookUrl || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      facebookUrl: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="https://facebook.com/..."
                                 />
                               </div>
                             </div>
@@ -2898,8 +3856,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 <label className="form-label text-xs">
                                   Bank Name
                                 </label>
-                                <input
-                                  type="text"
+                                <select
                                   value={formData.bankName || ""}
                                   onChange={(e) =>
                                     setFormData({
@@ -2908,8 +3865,46 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                     })
                                   }
                                   className="form-input"
-                                  placeholder="e.g. HDFC Bank"
-                                />
+                                >
+                                  <option value="">Select Bank...</option>
+                                  <option value="State Bank of India (SBI)">State Bank of India (SBI)</option>
+                                  <option value="Punjab National Bank (PNB)">Punjab National Bank (PNB)</option>
+                                  <option value="Bank of Baroda (BOB)">Bank of Baroda (BOB)</option>
+                                  <option value="Canara Bank">Canara Bank</option>
+                                  <option value="Union Bank of India">Union Bank of India</option>
+                                  <option value="Bank of India (BOI)">Bank of India (BOI)</option>
+                                  <option value="Indian Bank">Indian Bank</option>
+                                  <option value="Central Bank of India">Central Bank of India</option>
+                                  <option value="Indian Overseas Bank (IOB)">Indian Overseas Bank (IOB)</option>
+                                  <option value="UCO Bank">UCO Bank</option>
+                                  <option value="Bank of Maharashtra">Bank of Maharashtra</option>
+                                  <option value="Punjab & Sind Bank">Punjab & Sind Bank</option>
+                                  <option value="HDFC Bank">HDFC Bank</option>
+                                  <option value="ICICI Bank">ICICI Bank</option>
+                                  <option value="Axis Bank">Axis Bank</option>
+                                  <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                                  <option value="IndusInd Bank">IndusInd Bank</option>
+                                  <option value="Yes Bank">Yes Bank</option>
+                                  <option value="IDFC First Bank">IDFC First Bank</option>
+                                  <option value="Federal Bank">Federal Bank</option>
+                                  <option value="South Indian Bank">South Indian Bank</option>
+                                  <option value="Karur Vysya Bank">Karur Vysya Bank</option>
+                                  <option value="City Union Bank">City Union Bank</option>
+                                  <option value="Bandhan Bank">Bandhan Bank</option>
+                                  <option value="RBL Bank">RBL Bank</option>
+                                  <option value="Jammu & Kashmir Bank">Jammu & Kashmir Bank</option>
+                                  <option value="Karnataka Bank">Karnataka Bank</option>
+                                  <option value="Tamilnad Mercantile Bank">Tamilnad Mercantile Bank</option>
+                                  <option value="CSB Bank">CSB Bank</option>
+                                  <option value="Dhanlaxmi Bank">Dhanlaxmi Bank</option>
+                                  <option value="Nainital Bank">Nainital Bank</option>
+                                  <option value="Standard Chartered Bank">Standard Chartered Bank</option>
+                                  <option value="Citibank">Citibank</option>
+                                  <option value="HSBC">HSBC</option>
+                                  <option value="Deutsche Bank">Deutsche Bank</option>
+                                  <option value="Barclays Bank">Barclays Bank</option>
+                                  <option value="Other Bank">Other Bank</option>
+                                </select>
                               </div>
 
                               <div className="form-field-wrapper col-span-1">
@@ -2965,6 +3960,439 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   className="form-input"
                                   placeholder="e.g. Connaught Place"
                                 />
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Collapsible Section: Assets & Equipment */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "assets_info" ? null : "assets_info",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "assets_info"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          💻 Assets & Equipment
+                        </span>
+                        {expandedSection === "assets_info" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "assets_info" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Assigned Laptop / PC
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.assignedLaptop || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      assignedLaptop: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. MacBook Pro M2"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Assigned Mobile / SIM
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.assignedMobile || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      assignedMobile: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. iPhone 13"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                <label className="form-label text-xs">
+                                  Other Assigned Assets
+                                </label>
+                                <textarea
+                                  value={formData.assignedOtherAssets || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      assignedOtherAssets: e.target.value,
+                                    })
+                                  }
+                                  className="form-input min-h-[60px] resize-y"
+                                  placeholder="e.g. ID Card, Office Keys..."
+                                />
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Collapsible Section: Compliance & Verification */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "compliance_info" ? null : "compliance_info",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "compliance_info"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          🛡️ Compliance & Verification
+                        </span>
+                        {expandedSection === "compliance_info" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "compliance_info" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Police Verification
+                                </label>
+                                <select
+                                  value={formData.policeVerificationStatus || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      policeVerificationStatus: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Status...</option>
+                                  <option value="Pending">Pending</option>
+                                  <option value="Initiated">Initiated</option>
+                                  <option value="Completed">Completed</option>
+                                  <option value="Not Required">Not Required</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Background Check (BGC)
+                                </label>
+                                <select
+                                  value={formData.backgroundCheckStatus || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      backgroundCheckStatus: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select...</option>
+                                  <option value="Pending">Pending</option>
+                                  <option value="In Progress">In Progress</option>
+                                  <option value="Cleared">Cleared</option>
+                                  <option value="Not Required">Not Required</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Medical Fitness
+                                </label>
+                                <select
+                                  value={formData.medicalFitnessStatus || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      medicalFitnessStatus: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select...</option>
+                                  <option value="Pending">Pending</option>
+                                  <option value="Fit">Fit</option>
+                                  <option value="Unfit">Unfit</option>
+                                </select>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Collapsible Section: Documents & Proofs */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "document_upload" ? null : "document_upload",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "document_upload"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          📄 Document Upload
+                        </span>
+                        {expandedSection === "document_upload" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "document_upload" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Aadhaar Card
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentAadhaarUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentAadhaarUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  PAN Card
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentPanUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentPanUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+                              
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Voter ID Card
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentVoterIdUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentVoterIdUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Driving License
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentDrivingLicenseUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentDrivingLicenseUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Passport
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentPassportUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentPassportUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Resume
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="application/pdf,.doc,.docx"
+                                  onChange={(e) => handleFileUpload(e, "documentResumeUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentResumeUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+                              
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Matriculation (10th) Marksheet
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentMatricMarksheetUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentMatricMarksheetUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Intermediate / Diploma Marksheet
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentIntermediateMarksheetUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentIntermediateMarksheetUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Highest Qual. Marksheet / Degree
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentMarksheetUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentMarksheetUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+                              
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Relieving / Experience Letter
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentExperienceLetterUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentExperienceLetterUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+                              
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Cancelled Cheque / Bank Passbook
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentBankProofUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentBankProofUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Other Certificates
+                                </label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  onChange={(e) => handleFileUpload(e, "documentOtherUrl")}
+                                  className="form-input !p-1.5 text-xs file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300"
+                                />
+                                {formData.documentOtherUrl && (
+                                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> Document Uploaded
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </motion.div>
@@ -3323,8 +4751,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                     <label className="form-label dark:text-gray-400">
                                       Bank Name
                                     </label>
-                                    <input
-                                      type="text"
+                                    <select
                                       value={formData.bankName || ""}
                                       onChange={(e) =>
                                         setFormData({
@@ -3333,8 +4760,46 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                         })
                                       }
                                       className="form-input bg-transparent"
-                                      placeholder="Bank Name"
-                                    />
+                                    >
+                                      <option value="">Select Bank...</option>
+                                      <option value="State Bank of India (SBI)">State Bank of India (SBI)</option>
+                                      <option value="Punjab National Bank (PNB)">Punjab National Bank (PNB)</option>
+                                      <option value="Bank of Baroda (BOB)">Bank of Baroda (BOB)</option>
+                                      <option value="Canara Bank">Canara Bank</option>
+                                      <option value="Union Bank of India">Union Bank of India</option>
+                                      <option value="Bank of India (BOI)">Bank of India (BOI)</option>
+                                      <option value="Indian Bank">Indian Bank</option>
+                                      <option value="Central Bank of India">Central Bank of India</option>
+                                      <option value="Indian Overseas Bank (IOB)">Indian Overseas Bank (IOB)</option>
+                                      <option value="UCO Bank">UCO Bank</option>
+                                      <option value="Bank of Maharashtra">Bank of Maharashtra</option>
+                                      <option value="Punjab & Sind Bank">Punjab & Sind Bank</option>
+                                      <option value="HDFC Bank">HDFC Bank</option>
+                                      <option value="ICICI Bank">ICICI Bank</option>
+                                      <option value="Axis Bank">Axis Bank</option>
+                                      <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                                      <option value="IndusInd Bank">IndusInd Bank</option>
+                                      <option value="Yes Bank">Yes Bank</option>
+                                      <option value="IDFC First Bank">IDFC First Bank</option>
+                                      <option value="Federal Bank">Federal Bank</option>
+                                      <option value="South Indian Bank">South Indian Bank</option>
+                                      <option value="Karur Vysya Bank">Karur Vysya Bank</option>
+                                      <option value="City Union Bank">City Union Bank</option>
+                                      <option value="Bandhan Bank">Bandhan Bank</option>
+                                      <option value="RBL Bank">RBL Bank</option>
+                                      <option value="Jammu & Kashmir Bank">Jammu & Kashmir Bank</option>
+                                      <option value="Karnataka Bank">Karnataka Bank</option>
+                                      <option value="Tamilnad Mercantile Bank">Tamilnad Mercantile Bank</option>
+                                      <option value="CSB Bank">CSB Bank</option>
+                                      <option value="Dhanlaxmi Bank">Dhanlaxmi Bank</option>
+                                      <option value="Nainital Bank">Nainital Bank</option>
+                                      <option value="Standard Chartered Bank">Standard Chartered Bank</option>
+                                      <option value="Citibank">Citibank</option>
+                                      <option value="HSBC">HSBC</option>
+                                      <option value="Deutsche Bank">Deutsche Bank</option>
+                                      <option value="Barclays Bank">Barclays Bank</option>
+                                      <option value="Other Bank">Other Bank</option>
+                                    </select>
                                   </div>
                                   <div className="form-field-wrapper col-span-1 md:col-span-2">
                                     <label className="form-label dark:text-gray-400">
