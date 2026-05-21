@@ -10,7 +10,7 @@ import {
 import { CustomersTab } from "./CustomersTab";
 import { VendorsTab } from "./VendorsTab";
 import { PartnersTab } from "./PartnersTab";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Fingerprint } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 const DEPARTMENT_DESIGNATION_MAP: Record<string, string[]> = {
@@ -419,6 +419,16 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
         drivingLicense: formData.drivingLicense || "",
         bloodGroup: formData.bloodGroup || "",
         photoUrl: formData.photoUrl || "",
+        alternateName: formData.alternateName || "",
+        alternatePhone: formData.alternatePhone || "",
+        alternateRelation: formData.alternateRelation || "",
+        salary: formData.salary || "",
+        dateOfBirth: formData.dateOfBirth || "",
+        maritalStatus: formData.maritalStatus || "",
+        bankName: formData.bankName || "",
+        bankAccountNumber: formData.bankAccountNumber || "",
+        bankIfscCode: formData.bankIfscCode || "",
+        bankBranch: formData.bankBranch || "",
       };
       const newList = editingId
         ? data.map((m: any) => (m.id === editingId ? contactToSave : m))
@@ -546,9 +556,15 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
               )}
             </div>
           )}
-          <div className="flex space-x-2 text-[11px] text-gray-400 font-mono mt-0.5">
+          <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[11px] text-gray-400 font-mono mt-0.5">
             {item.phone && <span>{item.phone}</span>}
             {item.email && <span>• {item.email}</span>}
+            {item.alternatePhone && (
+              <span className="text-gray-500 dark:text-gray-400">
+                • Alt: {item.alternatePhone}
+                {item.alternateRelation ? ` (${item.alternateRelation})` : ""}
+              </span>
+            )}
           </div>
           {(item.aadhaarCard || item.panCard || item.drivingLicense) && (
             <div className="flex flex-wrap gap-1 mt-1 pt-1 border-t border-gray-100 dark:border-gray-800">
@@ -1126,7 +1142,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                     data-open={expandedSection === "profile_info"}
                   >
                     <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
-                      📋 Classification & Profile Info
+                      📋 Profile Info
                     </span>
                     {expandedSection === "profile_info" ? (
                       <ChevronUp className="w-4 h-4 text-gray-500" />
@@ -1244,7 +1260,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         data-open={expandedSection === "general"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
-                          📂 General Category
+                          📂 Job Details
                         </span>
                         {expandedSection === "general" ? (
                           <ChevronUp className="w-4 h-4 text-gray-500" />
@@ -1445,6 +1461,24 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 </select>
                               </div>
 
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Salary / Pay Amount
+                                </label>
+                                <input
+                                  type="number"
+                                  value={formData.salary || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      salary: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                  placeholder="0.00"
+                                />
+                              </div>
+
                               <div className="form-field-wrapper col-span-1 md:col-span-2">
                                 <label className="form-label text-xs">
                                   Duties / Operational Description
@@ -1483,7 +1517,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         data-open={expandedSection === "contact_mode"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
-                          📞 Contact Mode of Contact
+                          📞 Contact Info
                         </span>
                         {expandedSection === "contact_mode" ? (
                           <ChevronUp className="w-4 h-4 text-gray-500" />
@@ -1538,6 +1572,79 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   placeholder="e.g. 9811223344"
                                 />
                               </div>
+
+                              <div className="form-field-wrapper col-span-1 md:col-span-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+                                <h4 className="text-xs font-bold text-slate-800 dark:text-gray-200 mb-4">
+                                  Emergency / Alternate Contact
+                                </h4>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Emergency Contact Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.alternateName || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      alternateName: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="Contact Person Name"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs font-semibold text-gray-500 dark:text-gray-400">
+                                  Relation of Alternate Contact
+                                </label>
+                                <select
+                                  id="staff-alternate-relation"
+                                  value={formData.alternateRelation || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      alternateRelation: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Relation...</option>
+                                  <option value="Father">Father</option>
+                                  <option value="Mother">Mother</option>
+                                  <option value="Spouse">Spouse</option>
+                                  <option value="Husband">Husband</option>
+                                  <option value="Wife">Wife</option>
+                                  <option value="Brother">Brother</option>
+                                  <option value="Sister">Sister</option>
+                                  <option value="Son">Son</option>
+                                  <option value="Daughter">Daughter</option>
+                                  <option value="Guardian">Guardian</option>
+                                  <option value="Other">Other</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Alternate Contact Number
+                                </label>
+                                <input
+                                  type="text"
+                                  id="staff-alternate-phone"
+                                  value={formData.alternatePhone || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      alternatePhone: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                  placeholder="e.g. 9822334455"
+                                />
+                              </div>
                             </div>
                           </motion.div>
                         )}
@@ -1557,7 +1664,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         data-open={expandedSection === "personal"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
-                          👤 Personal Detail
+                          👤 Personal Details
                         </span>
                         {expandedSection === "personal" ? (
                           <ChevronUp className="w-4 h-4 text-gray-500" />
@@ -1576,6 +1683,45 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             transition={{ duration: 0.2 }}
                           >
                             <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Date of Birth
+                                </label>
+                                <input
+                                  type="date"
+                                  value={formData.dateOfBirth || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      dateOfBirth: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Marital Status
+                                </label>
+                                <select
+                                  value={formData.maritalStatus || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      maritalStatus: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Status...</option>
+                                  <option value="Single">Single</option>
+                                  <option value="Married">Married</option>
+                                  <option value="Divorced">Divorced</option>
+                                  <option value="Widowed">Widowed</option>
+                                </select>
+                              </div>
+
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Gender
@@ -1867,7 +2013,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         data-open={expandedSection === "identity"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
-                          🪪 Identity / ID
+                          <Fingerprint className="w-4 h-4 text-slate-500 dark:text-gray-400" /> Identity Details
                         </span>
                         {expandedSection === "identity" ? (
                           <ChevronUp className="w-4 h-4 text-gray-500" />
@@ -1958,7 +2104,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         data-open={expandedSection === "photo"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
-                          📷 Photo
+                          📷 Profile Photo
                         </span>
                         {expandedSection === "photo" ? (
                           <ChevronUp className="w-4 h-4 text-gray-500" />
@@ -2129,6 +2275,116 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         )}
                       </AnimatePresence>
                     </div>
+
+                    {/* Collapsible Section: Bank Detail */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "bank_detail" ? null : "bank_detail",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "bank_detail"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          🏦 Bank Details
+                        </span>
+                        {expandedSection === "bank_detail" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "bank_detail" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Bank Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.bankName || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      bankName: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. HDFC Bank"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Account Number
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.bankAccountNumber || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      bankAccountNumber: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                  placeholder="e.g. 50100234..."
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  IFSC Code
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.bankIfscCode || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      bankIfscCode: e.target.value.toUpperCase(),
+                                    })
+                                  }
+                                  className="form-input font-mono uppercase"
+                                  placeholder="e.g. HDFC0001234"
+                                  maxLength={11}
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Branch Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.bankBranch || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      bankBranch: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Connaught Place"
+                                />
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </>
                 )}
 
@@ -2150,7 +2406,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         data-open={expandedSection === "biz_profile"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
-                          💼 General Business Info
+                          💼 Business Profile
                         </span>
                         {expandedSection === "biz_profile" ? (
                           <ChevronUp className="w-4 h-4 text-gray-500" />
@@ -2400,7 +2656,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         data-open={expandedSection === "biz_finance"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
-                          🏦 Finance & Banking
+                          🏦 Banking Details
                         </span>
                         {expandedSection === "biz_finance" ? (
                           <ChevronUp className="w-4 h-4 text-gray-500" />
