@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { ImportExportButtons } from "../../../shared/ImportExportButtons";
 import {
   AddIcon,
@@ -1087,16 +1088,17 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
       )}
 
       {/* Unified Contact Modal (Supports Staff, Customer, Vendor, Partner dynamically!) */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-[1.25rem] w-full max-w-2xl shadow-2xl animate-in zoom-in-95 overflow-hidden flex flex-col max-h-[90vh] dark:bg-gray-800">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
-              <h2 className="font-bold text-xl text-gray-900 flex items-center dark:text-white">
-                {editingId ? "Edit" : "Add"} {formData.unifiedType || "Staff"}{" "}
-                Contact
-              </h2>
-              <div className="flex items-center space-x-2">
-                <button
+      {isModalOpen && typeof document !== "undefined" && document.getElementById("main-content")
+        ? createPortal(
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-0">
+              <div className="bg-white w-full h-full shadow-2xl animate-in zoom-in-95 overflow-hidden flex flex-col dark:bg-gray-800">
+                <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800 shrink-0">
+                  <h2 className="font-bold text-xl text-gray-900 flex items-center dark:text-white">
+                    {editingId ? "Edit" : "Add"} {formData.unifiedType || "Staff"}{" "}
+                    Contact
+                  </h2>
+                  <div className="flex items-center space-x-2">
+                    <button
                   onClick={() => {
                     fetch("/sample_js_injection.js")
                       .then((r) => r.text())
@@ -4862,8 +4864,9 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
               </button>
             </div>
           </div>
-        </div>
-      )}
+        </div>,
+        document.getElementById("main-content")!
+      ) : null}
 
       {/* Unified Delete Confirmation Modal */}
       {deleteConfirmation?.isOpen && (

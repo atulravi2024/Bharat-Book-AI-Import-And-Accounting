@@ -34,9 +34,9 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView,
           }
         }}
       />
-      <div className="flex-1 flex flex-col w-full min-w-0 overflow-hidden print-reset-container">
+      <div id="main-wrapper" className="flex-1 flex flex-col w-full min-w-0 overflow-hidden relative print-reset-container">
         <Header pageTitle={pageTitle} onMenuClick={() => setIsSidebarOpen(true)} />
-        <main className="flex-1 min-h-0 bg-gray-100 dark:bg-gray-900 overflow-hidden relative print-reset-main">
+        <main id="main-content" className="flex-1 min-h-0 bg-gray-100 dark:bg-gray-900 overflow-hidden relative print-reset-main">
           <div className="absolute inset-0 overflow-y-auto print-reset-content">
             {children}
           </div>

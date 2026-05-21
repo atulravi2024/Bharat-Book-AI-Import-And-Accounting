@@ -220,12 +220,12 @@ const AppContent: React.FC = () => {
     purgeLegacy();
 
     const reloadSamples = async () => {
-        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v19');
+        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v21');
         if (!hasLoaded) {
             for (const id of activeSamples) {
                 await toggleSampleDataSet(id, true);
             }
-            localStorage.setItem('bharat_book_samples_hydrated_v19', 'true');
+            localStorage.setItem('bharat_book_samples_hydrated_v21', 'true');
         }
     };
     reloadSamples();
