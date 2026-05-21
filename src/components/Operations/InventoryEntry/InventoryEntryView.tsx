@@ -24,6 +24,7 @@ import { InventoryActionMenu } from './components/InventoryActionMenu';
 import { ItemEditModal } from './components/ItemEditModal';
 import { InventoryEditModal } from './components/InventoryEditModal';
 import { InventoryHelpModal } from './components/InventoryHelpModal';
+import { SystemInfoSection } from '../VoucherEntry/components/SystemInfoSection';
 
 // Safe JSON parse helper
 const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
@@ -100,7 +101,8 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
     rounding: true,
     summary: false,
     party: false,
-    logistics: true
+    logistics: true,
+    systemInfo: true
   });
 
   const [showRequirements, setShowRequirements] = useState(false);
@@ -1086,6 +1088,19 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
             activeTab={activeTab}
             headerDetails={headerDetails}
             rows={rows}
+          />
+        </div>
+
+        <div className="w-full">
+          <SystemInfoSection
+            collapsed={collapsedSections.systemInfo}
+            toggleSection={() => toggleSection('systemInfo')}
+            createdAt={currentRecordId ? (vouchers?.find(v => v.id === currentRecordId)?.createdAt || new Date().toISOString()) : undefined}
+            updatedAt={currentRecordId ? (vouchers?.find(v => v.id === currentRecordId)?.updatedAt || new Date().toISOString()) : undefined}
+            recordId={currentRecordId || null}
+            createdBy="Administrator"
+            rowNumber={currentRecordId && vouchers ? vouchers.findIndex(v => v.id === currentRecordId) + 1 : 0}
+            voucherType={activeTab}
           />
         </div>
       </div>

@@ -43,6 +43,25 @@
           "value": 19962
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-journal-1-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-journal-1-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -88,6 +107,25 @@
         "amount": {
           "value": 7449
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-journal-2-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-journal-2-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   },
@@ -135,6 +173,25 @@
           "value": 23292
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-journal-3-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-journal-3-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -181,6 +238,25 @@
           "value": 38909
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-journal-4-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-journal-4-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -226,6 +302,25 @@
         "amount": {
           "value": 11042
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-journal-5-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-journal-5-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   }

@@ -43,6 +43,25 @@
           "value": 49060
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-payment-1-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-payment-1-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -88,6 +107,25 @@
         "amount": {
           "value": 26092
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-payment-2-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-payment-2-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   },
@@ -135,6 +173,25 @@
           "value": 39289
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-payment-3-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-payment-3-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -181,6 +238,25 @@
           "value": 8032
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-payment-4-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-payment-4-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -226,6 +302,25 @@
         "amount": {
           "value": 26202
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-payment-5-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-payment-5-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   }

@@ -26,6 +26,25 @@
           "value": 1000
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-1-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-1-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -54,6 +73,25 @@
         "amount": {
           "value": 2000
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-2-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-2-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   },
@@ -84,6 +122,25 @@
           "value": 3000
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-3-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-3-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -112,6 +169,25 @@
         "amount": {
           "value": 4000
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-4-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-4-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   },
@@ -142,6 +218,25 @@
           "value": 5000
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-5-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-5-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -170,6 +265,25 @@
         "amount": {
           "value": 6000
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-6-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-6-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   },
@@ -200,6 +314,25 @@
           "value": 7000
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-7-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-7-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -228,6 +361,25 @@
         "amount": {
           "value": 8000
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-8-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-8-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   },
@@ -258,6 +410,25 @@
           "value": 9000
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-9-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-9-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -286,6 +457,25 @@
         "amount": {
           "value": 10000
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-consumption_entry-10-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-consumption_entry-10-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   }

@@ -15,6 +15,8 @@ import {
   Zap,
   HardDrive,
   Activity,
+  X,
+  RotateCcw,
 } from "lucide-react";
 import {
   APIProvider,
@@ -298,34 +300,6 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
     updatedAt ? new Date(updatedAt).toISOString().split("T")[0] : new Date().toISOString().split("T")[0]
   );
   
-  // Custom modification tracker count
-  const [customModCount, setCustomModCount] = React.useState<number>(recordId ? 3 : 1);
-  const [syncInfoCollapsed, setSyncInfoCollapsed] = React.useState<boolean>(true);
-  const [storageInfoCollapsed, setStorageInfoCollapsed] = React.useState<boolean>(true);
-  
-  // Advanced features for Synchronization and Storage
-  const [conflictStrategy, setConflictStrategy] = React.useState<"client_wins" | "server_wins" | "two_way_merge">("two_way_merge");
-  const [syncQueueCount, setSyncQueueCount] = React.useState<number>(0);
-  const [isForceOffline, setIsForceOffline] = React.useState<boolean>(false);
-  const [snapshotAlert, setSnapshotAlert] = React.useState<string | null>(null);
-
-  // Storage snapshots state
-  const [snapshots, setSnapshots] = React.useState<Array<{ id: string; timestamp: string; sizeBytes: number; label: string }>>(() => {
-    try {
-      const key = `voucher_snapshots_${recordId || sessionDraftUuid}`;
-      const saved = localStorage.getItem(key);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.error(e);
-    }
-    return [];
-  });
-
-  // Synchronization Compression Engine States
-  const [isCompEnabled, setIsCompEnabled] = React.useState<boolean>(true);
-  const [compAlgorithm, setCompAlgorithm] = React.useState<"gzip" | "brotli" | "lzw" | "none">("gzip");
-
-  // Load telemetry from localStorage
   const getTelemetryKey = React.useCallback(() => {
     return `voucher_telemetry_${recordId || sessionDraftUuid}`;
   }, [recordId, sessionDraftUuid]);
@@ -368,19 +342,6 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
     }
   }, [telemetry, getTelemetryKey]);
 
-  // Sync customModCount state with telemetry modification count
-  React.useEffect(() => {
-    setCustomModCount(telemetry.modificationCount);
-  }, [telemetry.modificationCount]);
-
-  React.useEffect(() => {
-    if (customModCount !== telemetry.modificationCount) {
-      setTelemetry(prev => ({
-        ...prev,
-        modificationCount: customModCount
-      }));
-    }
-  }, [customModCount]);
 
   // Listener to reload telemetry when recordId changes
   React.useEffect(() => {
@@ -403,6 +364,314 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
       console.error(e);
     }
   }, [recordId, sessionDraftUuid]);
+
+  // Custom modification tracker count synced directly from telemetry
+  const customModCount = telemetry.modificationCount;
+  const [syncInfoCollapsed, setSyncInfoCollapsed] = React.useState<boolean>(true);
+  const [storageInfoCollapsed, setStorageInfoCollapsed] = React.useState<boolean>(true);
+  
+  // Advanced features for Synchronization and Storage
+  const [conflictStrategy, setConflictStrategy] = React.useState<"client_wins" | "server_wins" | "two_way_merge">("two_way_merge");
+  const [syncQueueCount, setSyncQueueCount] = React.useState<number>(0);
+  const [isForceOffline, setIsForceOffline] = React.useState<boolean>(false);
+  const [snapshotAlert, setSnapshotAlert] = React.useState<string | null>(null);
+
+  // Storage snapshots state
+  const [snapshots, setSnapshots] = React.useState<Array<{ id: string; timestamp: string; sizeBytes: number; label: string }>>(() => {
+    try {
+      const key = `voucher_snapshots_${recordId || sessionDraftUuid}`;
+      const saved = localStorage.getItem(key);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  });
+
+  // Synchronization Compression Engine States
+  const [isCompEnabled, setIsCompEnabled] = React.useState<boolean>(true);
+  const [compAlgorithm, setCompAlgorithm] = React.useState<"gzip" | "brotli" | "lzw" | "none">("gzip");
+
+  // User selected Auditor Role to switch between Human and Wizard
+  const [auditorRole, setAuditorRole] = React.useState<string>(() => {
+    try {
+      const saved = localStorage.getItem(`voucher_auditor_role_${recordId || sessionDraftUuid}`);
+      if (saved) return saved;
+    } catch (e) {}
+    return "human";
+  });
+
+  // Keep state sync for auditor role in localStorage
+  React.useEffect(() => {
+    try {
+      localStorage.setItem(`voucher_auditor_role_${recordId || sessionDraftUuid}`, auditorRole);
+    } catch (e) {}
+  }, [auditorRole, recordId, sessionDraftUuid]);
+
+  // Collapsible History Section state
+  const [historyCollapsed, setHistoryCollapsed] = React.useState<boolean>(true);
+
+  // History Entries interface & state
+  interface HistoryEntry {
+    id: string;
+    timestamp: string;
+    versionLabel: string;
+    modCount: number;
+    editor: string;
+    description: string;
+    data: Record<string, string>;
+  }
+
+  const [historyEntries, setHistoryEntries] = React.useState<HistoryEntry[]>(() => {
+    const key = `voucher_history_${recordId || sessionDraftUuid}`;
+    try {
+      const saved = localStorage.getItem(key);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  });
+
+  const [selectedHistoryId, setSelectedHistoryId] = React.useState<string | null>(null);
+
+  const getChangesForEntry = React.useCallback((entry: HistoryEntry, allEntries: HistoryEntry[]) => {
+    const idx = allEntries.findIndex(e => e.id === entry.id);
+    const prevEntry = allEntries[idx + 1];
+    
+    if (!prevEntry) return null;
+
+    const changes: Record<string, { from: string, to: string }> = {};
+    const currentData = entry.data || {};
+    const prevData = prevEntry ? (prevEntry.data || {}) : {};
+    
+    for (const key in currentData) {
+      if (currentData[key] !== prevData[key]) {
+        changes[key] = { from: prevData[key] || "", to: currentData[key] };
+      }
+    }
+    for (const key in prevData) {
+      if (!(key in currentData)) {
+        changes[key] = { from: prevData[key], to: "(removed)" };
+      }
+    }
+    return changes;
+  }, []);
+
+  // Scraper function to capture all input states in the current active form
+  const captureFormState = React.useCallback(() => {
+    if (typeof document === "undefined") return {};
+    const inputs = Array.from(document.querySelectorAll("input, select, textarea"));
+    const data: Record<string, string> = {};
+    const labelCounts: Record<string, number> = {};
+    
+    inputs.forEach((input) => {
+      const el = input as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+      
+      // Filter out utility inputs (like search bars, coordinates, system internal inputs, keys, etc.)
+      const idStr = (el.getAttribute("id") || "").toLowerCase();
+      const placeholderStr = (el.getAttribute("placeholder") || "").toLowerCase();
+      const typeStr = (el.getAttribute("type") || "").toLowerCase();
+      
+      if (
+        idStr.includes("search") ||
+        idStr.includes("map") ||
+        idStr.includes("history-version-select") ||
+        placeholderStr.includes("coordinates") ||
+        placeholderStr.includes("api key") ||
+        typeStr === "password" ||
+        el.classList.contains("cursor-not-allowed") || // Skip readonly system info fields
+        el.closest(".system-info-section-ignore") // Add an option to ignore entire sections if needed
+      ) {
+        return;
+      }
+
+      let labelText = el.getAttribute("placeholder") || el.name || el.id || "";
+      if (!labelText) {
+        const parent = el.closest(".form-field-wrapper, .flex, div, td, th");
+        const label = parent?.querySelector("label");
+        if (label) {
+          labelText = label.textContent?.trim() || "";
+        }
+      }
+      
+      const val = el.value?.trim();
+      if ((labelText || val) && val !== undefined) {
+        const cleanLabel = (labelText || "Unlabeled Field").replace(/[:*]/g, "").trim();
+        // Skip obvious system telemetry labels to keep history elegant and pure
+        if (
+          cleanLabel && 
+          cleanLabel.length < 50 &&
+          !cleanLabel.toLowerCase().includes("history") &&
+          !cleanLabel.toLowerCase().includes("audit") &&
+          !cleanLabel.toLowerCase().includes("sync") &&
+          !cleanLabel.toLowerCase().includes("key") &&
+          !cleanLabel.toLowerCase().includes("signature") &&
+          !cleanLabel.toLowerCase().includes("timer") &&
+          !cleanLabel.toLowerCase().includes("gps")
+        ) {
+          // Identify duplicate field labels dynamically by appending an index sequence
+          labelCounts[cleanLabel] = (labelCounts[cleanLabel] || 0) + 1;
+          const uniqueKey = labelCounts[cleanLabel] === 1 ? cleanLabel : `${cleanLabel} [Seq ${labelCounts[cleanLabel]}]`;
+          data[uniqueKey] = val;
+        }
+      }
+    });
+
+    // Sort keys so JSON.stringify is completely deterministic (insertion order is stable)
+    const sortedData: Record<string, string> = {};
+    Object.keys(data).sort().forEach(key => {
+      sortedData[key] = data[key];
+    });
+    return sortedData;
+  }, []);
+
+  // Periodic and Event-Triggered automatic history recorder
+  React.useEffect(() => {
+    const key = `voucher_history_${recordId || sessionDraftUuid}`;
+    
+    // Auto-save function
+    const recordHistoryPoint = (desc: string) => {
+      const currentData = captureFormState();
+      if (Object.keys(currentData).length === 0) return; // No meaningful data entered yet
+
+      // Compare with the last history entry's data to prevent duplicate spamming
+      setHistoryEntries(prev => {
+        const lastEntry = prev[0];
+        if (lastEntry) {
+          const isIdentical = JSON.stringify(lastEntry.data) === JSON.stringify(currentData);
+          if (isIdentical) return prev; // No change, avoid adding duplicate
+        }
+
+        const nextNum = prev.length + 1;
+        const newEntry: HistoryEntry = {
+          id: `hist-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          timestamp: new Date().toLocaleTimeString() + " " + new Date().toLocaleDateString(),
+          versionLabel: `${nextNum}.0`,
+          modCount: prev.length ? prev[0].modCount + 1 : (recordId ? 3 : 1),
+          editor: auditorRole === "wizard" ? "Wizard AI Agent (Non-Interacting)" : (createdBy || "Admin"),
+          description: desc,
+          data: currentData
+        };
+
+        const updated = [newEntry, ...prev];
+        localStorage.setItem(key, JSON.stringify(updated));
+        return updated;
+      });
+    };
+
+    // 1. Initial baseline recorder (run slightly delayed to let voucher data mount)
+    const timeoutTimer = setTimeout(() => {
+      if (historyEntries.length === 0) {
+        recordHistoryPoint("Initial Baseline Draft Setup");
+      }
+    }, 1500);
+
+    // 2. Add change listener to track live user typing / edits
+    const handleInputChange = () => {
+      recordHistoryPoint("Auto-Captured Field Modification");
+    };
+
+    document.addEventListener("change", handleInputChange, true);
+    return () => {
+      clearTimeout(timeoutTimer);
+      document.removeEventListener("change", handleInputChange, true);
+    };
+  }, [captureFormState, recordId, sessionDraftUuid, auditorRole, createdBy]);
+
+  const handleRestoreHistory = React.useCallback((entry: HistoryEntry) => {
+    try {
+      Object.entries(entry.data).forEach(([labelText, val]) => {
+        // Find all labels to match the labelText
+        const labels = Array.from(document.querySelectorAll("label"));
+        const label = labels.find(l => l.textContent?.trim().replace(/[:*]/g, "").trim() === labelText);
+        let foundInput = false;
+
+        if (label) {
+          const parent = label.closest(".form-field-wrapper, .flex, div");
+          const input = parent?.querySelector("input, select, textarea") as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+          const isReadOnly = (input as HTMLInputElement | HTMLTextAreaElement).readOnly === true;
+          if (input && !isReadOnly && !input.disabled) {
+            input.value = val;
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+            input.dispatchEvent(new Event("change", { bubbles: true }));
+            foundInput = true;
+          }
+        }
+        
+        if (!foundInput) {
+          // Alternative fallback: Try matching by input name, id or placeholder
+          const input = (document.querySelector(`input[name="${labelText}"], select[name="${labelText}"], textarea[name="${labelText}"]`) ||
+                        document.getElementById(labelText) ||
+                        document.querySelector(`input[placeholder="${labelText}"]`)) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null;
+          if (input) {
+            const isReadOnlyFB = (input as HTMLInputElement | HTMLTextAreaElement).readOnly === true;
+            if (!isReadOnlyFB && !input.disabled) {
+              input.value = val;
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+              input.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+          }
+        }
+      });
+      
+      setSnapshotAlert(`✨ Restored State successfully to version v${entry.versionLabel} (Changes made by ${entry.editor} on ${entry.timestamp})`);
+      
+      // Bump modification count
+      setTelemetry(prev => ({
+        ...prev,
+        modificationCount: prev.modificationCount + 1
+      }));
+    } catch (e) {
+      console.error("Restore failed:", e);
+    }
+  }, []);
+
+  const handleClearHistory = React.useCallback(() => {
+    try {
+      const key = `voucher_history_${recordId || sessionDraftUuid}`;
+      localStorage.removeItem(key);
+      setHistoryEntries([]);
+      setSnapshotAlert("Permanently cleared all local historical version records.");
+    } catch (e) {
+      console.error(e);
+    }
+  }, [recordId, sessionDraftUuid]);
+
+  const handleForceManualCommit = React.useCallback(() => {
+    const key = `voucher_history_${recordId || sessionDraftUuid}`;
+    const currentData = captureFormState();
+    if (Object.keys(currentData).length === 0) {
+      setSnapshotAlert("❌ Cannot commit: No form inputs filled yet!");
+      return;
+    }
+    
+    setHistoryEntries(prev => {
+      const lastEntry = prev[0];
+      if (lastEntry) {
+        const isIdentical = JSON.stringify(lastEntry.data) === JSON.stringify(currentData);
+        if (isIdentical) {
+          setSnapshotAlert("⚠️ No changes detected since the last savepoint! Tracking bypassed.");
+          return prev;
+        }
+      }
+
+      const nextNum = prev.length + 1;
+      const newEntry: HistoryEntry = {
+        id: `hist-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        timestamp: new Date().toLocaleTimeString() + " " + new Date().toLocaleDateString(),
+        versionLabel: `${nextNum}.0`,
+        modCount: prev.length ? prev[0].modCount + 1 : (recordId ? 3 : 1),
+        editor: auditorRole === "wizard" ? "Wizard AI Agent (Non-Interacting)" : (createdBy || "Admin"),
+        description: "Manually Triggered Audit Point Commit",
+        data: currentData
+      };
+      const updated = [newEntry, ...prev];
+      localStorage.setItem(key, JSON.stringify(updated));
+      setSnapshotAlert(`💼 Custom Audit Savepoint v${newEntry.versionLabel} committed to ledger list!`);
+      return updated;
+    });
+  }, [captureFormState, recordId, sessionDraftUuid, auditorRole, createdBy]);
 
   // Track changes to updatedAt from the database/parent
   const lastUpdatedAtRef = React.useRef(updatedAt);
@@ -1845,14 +2114,26 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">User Type</label>
-              <input
-                type="text"
-                readOnly
-                value="Administrator"
-                className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
-              />
+              <label className="form-label font-bold text-gray-700 dark:text-gray-300">Auditor Profile & Role</label>
+              <select
+                value={auditorRole}
+                onChange={(e) => setAuditorRole(e.target.value)}
+                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-xs font-bold focus:ring-2 focus:ring-sky-500/30 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 cursor-pointer"
+              >
+                <option value="human">Standard Human Auditor (Requires Manual Sign-off)</option>
+                <option value="wizard">Wizard Agent (Automated continuous non-interacting audit)</option>
+              </select>
             </div>
+            {auditorRole === "wizard" && (
+              <div className="col-span-full bg-sky-500/10 border border-sky-300 rounded-xl p-4 text-xs text-sky-800 dark:border-sky-900/40 dark:bg-sky-950/20 dark:text-sky-300 animate-in fade-in duration-200">
+                <p className="font-bold flex items-center mb-1">
+                  ✨ Wizard Non-Interactions Mode Active!
+                </p>
+                <p className="leading-relaxed">
+                  Only the <strong>Wizard role</strong> possesses the professional non-interacting background auditing feature. In this state, 3-way PO matching trials, balance variance offsets, and cryptographic ledger signatures are automatically calculated in real-time. No manual user mouse clicks, checks, or visual confirmations are required to authorize this voucher.
+                </p>
+              </div>
+            )}
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold">
                 Operator Regional Timezone
@@ -2428,6 +2709,54 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-xs font-bold text-indigo-600 dark:bg-gray-800 dark:border-gray-700 dark:text-indigo-400 select-none cursor-not-allowed"
               />
             </div>
+            {auditorRole === "wizard" && (
+              <>
+                <div className="form-field-wrapper">
+                  <label className="form-label font-bold text-purple-700 dark:text-purple-400">
+                    Purchase Order Matching Trial
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value="PASSED - 3-Way Non-Interacting Automated Match Complete"
+                    className="w-full px-4 py-3 bg-purple-50 border border-purple-200 rounded-xl text-xs font-bold text-purple-700 dark:bg-purple-900/20 dark:border-purple-800/40 dark:text-purple-300 select-none cursor-not-allowed"
+                  />
+                </div>
+                <div className="form-field-wrapper">
+                  <label className="form-label font-bold text-purple-700 dark:text-purple-400">
+                    PO to Voucher Balance Variation
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value="0.00% Variance (Fully Reconciled)"
+                    className="w-full px-4 py-3 bg-purple-50 border border-purple-200 rounded-xl text-xs font-bold text-purple-700 dark:bg-purple-900/20 dark:border-purple-800/40 dark:text-purple-300 select-none cursor-not-allowed"
+                  />
+                </div>
+                <div className="form-field-wrapper">
+                  <label className="form-label font-bold text-purple-700 dark:text-purple-400">
+                    Assigned PO Audit
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={recordId ? `PO-AUDIT-${recordId.slice(0, 8)}` : "Pending Save"}
+                    className="w-full px-4 py-3 bg-purple-50 border border-purple-200 rounded-xl text-xs font-bold text-purple-700 dark:bg-purple-900/20 dark:border-purple-800/40 dark:text-purple-300 font-mono select-none cursor-not-allowed"
+                  />
+                </div>
+                <div className="form-field-wrapper">
+                  <label className="form-label font-bold text-purple-700 dark:text-purple-400">
+                    RF Code (Regulatory Framework)
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value="RF-SEC-2026-COMPLIANT"
+                    className="w-full px-4 py-3 bg-purple-50 border border-purple-200 rounded-xl text-xs font-bold text-purple-700 dark:bg-purple-900/20 dark:border-purple-800/40 dark:text-purple-300 font-mono select-none cursor-not-allowed"
+                  />
+                </div>
+              </>
+            )}
             <div className="form-field-wrapper">
               <label className="form-label">
                 Audit Verification Checkpoint
@@ -2454,7 +2783,214 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
         )}
       </div>
 
-      {/* 5. Active Synchronization Monitor & Conflict Engine */}
+      {/* History Tracking Section */}
+      <div
+        className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[47] ${historyCollapsed ? "px-6 py-3 rounded-xl" : "p-6 rounded-2xl"} dark:bg-gray-800 mt-6`}
+      >
+        <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500 rounded-l-[inherit]"></div>
+        <div
+          className="flex items-center justify-between cursor-pointer"
+          onClick={() => setHistoryCollapsed(!historyCollapsed)}
+        >
+          <div className="flex items-center">
+            <h3 className="text-sm font-black text-emerald-700 uppercase tracking-widest flex items-center dark:text-emerald-400">
+              <Activity size={16} className="mr-2 text-emerald-500" />{" "}
+              History Info
+            </h3>
+            <span className="ml-3 bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full dark:bg-emerald-900/40 dark:text-emerald-300">
+              {historyEntries.length} Versions
+            </span>
+          </div>
+          <button
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setHistoryCollapsed(!historyCollapsed);
+            }}
+          >
+            <ChevronUp
+              size={20}
+              className={`transform transition-transform duration-300 ${historyCollapsed ? "rotate-180" : ""}`}
+            />
+          </button>
+        </div>
+        {!historyCollapsed && (
+          <div className="animate-in fade-in slide-in-from-top-2 duration-300 mt-5">
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+              <button
+                type="button"
+                onClick={handleForceManualCommit}
+                className="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold transition-colors dark:bg-emerald-900/20 dark:border-emerald-800/40 dark:text-emerald-300 flex items-center justify-center"
+              >
+                <ClipboardCheck size={14} className="mr-2" />
+                Commit Custom Audit Point
+              </button>
+              {historyEntries.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClearHistory}
+                  className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg text-xs font-bold transition-colors dark:bg-red-900/20 dark:border-red-800/40 dark:text-red-300 flex items-center justify-center sm:ml-auto"
+                >
+                  <X className="mr-1" size={14} />
+                  Clear All History
+                </button>
+              )}
+            </div>
+
+            {historyEntries.length === 0 ? (
+              <div className="text-center py-8 bg-gray-50 border border-gray-100 rounded-xl dark:bg-gray-800/50 dark:border-gray-700/50">
+                <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                  No historical edits captured yet. Field changes will be tracked here automatically.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="form-field-wrapper mb-4">
+                  <label className="form-label font-bold text-emerald-700 dark:text-emerald-400">
+                    Select History Version
+                  </label>
+                  <select
+                    id="history-version-select"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-bold focus:ring-2 focus:ring-emerald-500/30 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 cursor-pointer"
+                    value={selectedHistoryId || historyEntries[0]?.id || ""}
+                    onChange={(e) => setSelectedHistoryId(e.target.value)}
+                  >
+                    {historyEntries.map((entry, idx) => (
+                      <option key={entry.id} value={entry.id}>
+                        Version v{entry.versionLabel} {idx === 0 ? "(Latest) " : ""}- {entry.description} - By {entry.editor} ({entry.timestamp})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {historyEntries
+                  .filter(entry => entry.id === (selectedHistoryId || historyEntries[0]?.id))
+                  .map((entry) => {
+                    const idx = historyEntries.findIndex(e => e.id === entry.id);
+                    return (
+                  <div key={entry.id} className={`p-4 rounded-xl border ${idx === 0 ? "bg-emerald-50/50 border-emerald-200 dark:bg-emerald-900/10 dark:border-emerald-800/30 ring-1 ring-emerald-500/20" : "bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700"}`}>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-3 gap-2">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`font-mono text-xs font-black ${idx === 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-500 dark:text-gray-400"}`}>
+                            v{entry.versionLabel} {idx === 0 && "(Latest)"}
+                          </span>
+                          <span className="text-[10px] text-gray-400 font-bold bg-gray-100 px-1.5 py-0.5 rounded dark:bg-gray-700">
+                            Mod #{entry.modCount}
+                          </span>
+                        </div>
+                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">
+                          {entry.description}
+                        </p>
+                      </div>
+                      <div className="flex flex-col md:items-end">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 dark:text-gray-500">
+                          {entry.timestamp}
+                        </span>
+                        <span className="text-xs text-gray-500 font-medium dark:text-gray-400 mt-1">
+                          By: <span className="text-gray-700 dark:text-gray-300 font-bold">{entry.editor}</span>
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {(() => {
+                      const changes = getChangesForEntry(entry, historyEntries);
+                      if (changes === null) {
+                        return (
+                          <div className="mt-4">
+                            <h4 className="text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">
+                              Initial Recorded State
+                            </h4>
+                            <div className="text-xs italic text-gray-500 dark:text-gray-400 mb-4">
+                              This is the earliest baseline history record. {Object.keys(entry.data).length} fields recorded.
+                            </div>
+                            {Object.keys(entry.data).length > 0 && (
+                              <details className="mt-2 text-xs">
+                                <summary className="font-bold text-emerald-600 dark:text-emerald-400 cursor-pointer select-none">
+                                  View Full State Snapshot ({Object.keys(entry.data).length} fields)
+                                </summary>
+                                <div className="mt-2 text-[11px] grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-1 bg-gray-50 p-2.5 rounded-lg border border-gray-100 dark:bg-gray-900/40 dark:border-gray-800">
+                                  {Object.entries(entry.data).map(([k, v]) => (
+                                    <div key={k} className="flex flex-col truncate mb-1">
+                                      <span className="text-gray-400 uppercase tracking-wider font-extrabold truncate">{k}</span>
+                                      <span className="text-gray-700 dark:text-gray-300 font-medium truncate" title={v || "-"}>{v || "-"}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </details>
+                            )}
+                          </div>
+                        );
+                      }
+                      
+                      const changeKeys = Object.keys(changes);
+                      return (
+                        <div className="mt-4">
+                          {changeKeys.length > 0 ? (
+                            <>
+                              <h4 className="text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">
+                                Modifications in this version:
+                              </h4>
+                              <div className="space-y-2 text-[11px] mb-4">
+                                {changeKeys.map((k) => (
+                                  <div key={k} className="flex flex-col bg-gray-50 dark:bg-gray-900/40 p-2 rounded border border-gray-100 dark:border-gray-800">
+                                    <span className="text-gray-500 uppercase tracking-wider font-extrabold mb-1">{k}</span>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-red-500 bg-red-50 dark:bg-red-900/20 px-1.5 py-0.5 rounded line-through max-w-[45%] truncate" title={changes[k].from || "(empty)"}>
+                                        {changes[k].from || "(empty)"}
+                                      </span>
+                                      <span className="text-gray-400">→</span>
+                                      <span className="text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-1.5 py-0.5 rounded font-bold max-w-[45%] truncate" title={changes[k].to || "(empty)"}>
+                                        {changes[k].to || "(empty)"}
+                                      </span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-xs italic text-gray-500 dark:text-gray-400 mb-4">
+                              No explicit field modifications detected in this version.
+                            </div>
+                          )}
+
+                          {Object.keys(entry.data).length > 0 && (
+                            <details className="mt-2 text-xs">
+                              <summary className="font-bold text-emerald-600 dark:text-emerald-400 cursor-pointer select-none">
+                                View Full State Snapshot ({Object.keys(entry.data).length} fields)
+                              </summary>
+                              <div className="mt-2 text-[11px] grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-1 bg-gray-50 p-2.5 rounded-lg border border-gray-100 dark:bg-gray-900/40 dark:border-gray-800">
+                                {Object.entries(entry.data).map(([k, v]) => (
+                                  <div key={k} className="flex flex-col truncate mb-1">
+                                    <span className="text-gray-400 uppercase tracking-wider font-extrabold truncate">{k}</span>
+                                    <span className="text-gray-700 dark:text-gray-300 font-medium truncate" title={v || "-"}>{v || "-"}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </details>
+                          )}
+                        </div>
+                      );
+                    })()}
+                    
+                    {idx !== 0 && (
+                      <button
+                        type="button"
+                        onClick={() => handleRestoreHistory(entry)}
+                        className="mt-3 flex items-center justify-center w-full py-2 bg-white border border-gray-200 text-gray-700 text-xs font-bold rounded-lg hover:bg-gray-50 hover:text-emerald-600 hover:border-emerald-200 transition-colors dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-750 dark:hover:text-emerald-400 dark:hover:border-emerald-800/50"
+                      >
+                        <RotateCcw size={14} className="mr-2" />
+                        Restore This Version
+                      </button>
+                    )}
+                  </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
       <div
         className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[47] ${syncInfoCollapsed ? "px-6 py-3 rounded-xl" : "p-6 rounded-2xl"} dark:bg-gray-800 mt-6`}
       >

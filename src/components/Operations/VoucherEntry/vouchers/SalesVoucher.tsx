@@ -1311,16 +1311,6 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
             </div>
         </div>
       )}
-            <SystemInfoSection
-        collapsed={collapsedSections.systemInfo}
-        toggleSection={() => toggleSection('systemInfo')}
-        createdAt={currentRecordId ? (initialVoucher?.createdAt || new Date().toISOString()) : undefined}
-        updatedAt={currentRecordId ? (initialVoucher?.updatedAt || new Date().toISOString()) : undefined}
-        recordId={currentRecordId || (initialVoucher?.id) || null}
-        createdBy="Administrator"
-        rowNumber={currentRecordId && vouchers ? vouchers.findIndex(v => v.id === currentRecordId) + 1 : 0}
-      voucherType={activeTab}
-      />
       <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[50] ${collapsedSections.header ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
         <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 rounded-l-[inherit]"></div>
         <div className={`flex items-center justify-between cursor-pointer ${collapsedSections.header ? '' : 'mb-5'}`} onClick={() => toggleSection('header')}>
@@ -1854,6 +1844,19 @@ export const SalesVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, ini
             totals={totals}
             activeTab={activeTab}
           />
+          
+          <div className="mt-6">
+            <SystemInfoSection
+              collapsed={collapsedSections.systemInfo}
+              toggleSection={() => toggleSection('systemInfo')}
+              createdAt={currentRecordId ? (initialVoucher?.createdAt || new Date().toISOString()) : undefined}
+              updatedAt={currentRecordId ? (initialVoucher?.updatedAt || new Date().toISOString()) : undefined}
+              recordId={currentRecordId || (initialVoucher?.id) || null}
+              createdBy="Administrator"
+              rowNumber={currentRecordId && vouchers ? vouchers.findIndex(v => v.id === currentRecordId) + 1 : 0}
+              voucherType={activeTab}
+            />
+          </div>
         </div>
       </div>
 

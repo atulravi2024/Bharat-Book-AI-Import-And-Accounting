@@ -32,6 +32,25 @@
           "value": 625000
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-debit_note-1-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-debit_note-1-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -81,6 +100,25 @@
           "value": 35000
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-debit_note-2-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-debit_note-2-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -115,6 +153,25 @@
         "amount": {
           "value": 640000
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-debit_note-3-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-debit_note-3-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   },
@@ -165,6 +222,25 @@
           "value": 35000
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-debit_note-4-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-debit_note-4-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -213,6 +289,25 @@
         "amount": {
           "value": 250000
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-debit_note-5-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-debit_note-5-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   }

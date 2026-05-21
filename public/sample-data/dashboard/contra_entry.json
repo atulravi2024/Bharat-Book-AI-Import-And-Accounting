@@ -43,6 +43,25 @@
           "value": 10952
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-contra-1-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-contra-1-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -88,6 +107,25 @@
         "amount": {
           "value": 15197
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-contra-2-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-contra-2-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   },
@@ -135,6 +173,25 @@
           "value": 27004
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-contra-3-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-contra-3-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -181,6 +238,25 @@
           "value": 28582
         }
       }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-contra-4-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-contra-4-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
+      }
     ]
   },
   {
@@ -226,6 +302,25 @@
         "amount": {
           "value": 38652
         }
+      }
+    ],
+    "createdAt": "2024-05-10T10:00:00Z",
+    "updatedAt": "2024-05-11T12:00:00Z",
+    "createdBy": "Administrator",
+    "auditLogs": [
+      {
+        "id": "al-contra-5-1",
+        "action": "CREATE",
+        "timestamp": "2024-05-10T10:00:00Z",
+        "user": "Administrator",
+        "details": "Initial system import of clean sample data"
+      },
+      {
+        "id": "al-contra-5-2",
+        "action": "VERIFY",
+        "timestamp": "2024-05-11T12:00:00Z",
+        "user": "System Auto",
+        "details": "Voucher audited and synchronized with inventory logs"
       }
     ]
   }
