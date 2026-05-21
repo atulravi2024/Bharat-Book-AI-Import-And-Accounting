@@ -111,8 +111,11 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                     <button 
                     onClick={() => { 
                         setEditingId(null); 
+                        const count = (data || []).length + 1;
+                        const nextCode = `LOC-${String(count).padStart(3, '0')}`;
                         setFormData({ 
                             name: "", 
+                            code: nextCode,
                             type: 'Distribution Center', 
                             isActive: true, 
                             capacity: { totalArea: 0, uomArea: 'sq ft', maxWeight: 0, totalVolume: 0 },
@@ -125,7 +128,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                             compliance: { taxId: '', leaseExpiry: '', headcount: 0 }
                         }); 
                         setIsModalOpen(true); 
-                        setActiveAccordion(null);
+                        setActiveAccordion('identity');
                     }} 
                     className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center justify-center text-xs shadow-lg shadow-blue-200 dark:shadow-none whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all"
                 >
@@ -263,8 +266,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                         <input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder="e.g. Master Distribution Center" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Location Code</label>
-                                                        <input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-mono font-bold shadow-sm" placeholder="e.g. LOC-001" />
+                                                        <label className="form-label ml-1">Location Code *</label>
+                                                        <input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input rounded-2xl bg-white dark:bg-gray-900 focus:ring-4 focus:ring-blue-500/10 text-sm font-mono font-bold shadow-sm" placeholder="e.g. LOC-001" />
                                                     </div>
                                                     <div className="space-y-1.5">
                                                         <label className="form-label ml-1">Location Type</label>

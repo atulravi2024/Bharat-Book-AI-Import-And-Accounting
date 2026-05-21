@@ -25,7 +25,8 @@
     "ledgers",
     "banks",
     "costCenters",
-    "contacts"
+    "contacts",
+    "partners"
   ],
   "reportIds": [
     "vouchers",

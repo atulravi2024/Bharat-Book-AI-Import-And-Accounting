@@ -47,9 +47,13 @@ export const BankMastersTab: React.FC<BankMastersTabProps> = ({ data, onSave, ac
                 </div>
                 <div className="flex items-center">
                     <ImportExportButtons data={data} onSave={onSave} entityName="BankMastersTab" />
-                    <button onClick={() => { setEditingId(null); setFormData(
-                    {name: "", group: "Bank Accounts"}
-                ); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
+                    <button onClick={() => { 
+                        setEditingId(null); 
+                        const count = (data || []).length + 1;
+                        const nextCode = `BNK-${String(count).padStart(3, '0')}`;
+                        setFormData({ name: "", code: nextCode, group: "Bank Accounts" }); 
+                        setIsModalOpen(true); 
+                    }} className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
                     <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">Add Bank Master
                 </span></button>
                 </div>
@@ -140,9 +144,9 @@ export const BankMastersTab: React.FC<BankMastersTabProps> = ({ data, onSave, ac
                         <div className="overflow-y-auto flex-1 p-6 space-y-4 custom-scrollbar">
                             <div className="form-grid gap-4">
                                 <div className="form-field-wrapper col-span-1">
-<label className="form-label">Code *</label>
-<input type="text" value={formData.code || ""} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input bg-transparent font-mono" placeholder="Enter code..." autoFocus />
-</div>
+                                    <label className="form-label text-xs">Code *</label>
+                                    <input type="text" value={formData.code || ""} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input bg-white dark:bg-gray-900 font-mono" placeholder="Enter code..." autoFocus />
+                                </div>
 <div className="form-field-wrapper col-span-1">
 <label className="form-label">Name *</label>
 <input type="text" value={formData.name || ""} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input" placeholder="Enter name..." />

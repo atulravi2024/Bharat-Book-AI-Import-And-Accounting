@@ -126,7 +126,7 @@ const AppContent: React.FC = () => {
     'uoms', 'gst', 'brands', 'categories', 'warehouses', 'skus', 'priceList', 
     'weights', 'volumes', 'colors', 'sizes', 'variants', 'dimensions', 'stockGroups', 
     'grades', 'assertionCategories', 'assertionCodes', 
-    'ledgers', 'items', 'bom', 'parties', 'vendors', 'accountGroups', 'banks', 'costCenters', 'contacts',
+    'ledgers', 'items', 'bom', 'parties', 'vendors', 'partners', 'accountGroups', 'banks', 'costCenters', 'contacts',
     'balance_sheet', 'profit_loss', 'cash_flow', 'bank_flow', 'trial_balance', 
     'sales_register', 'purchase_register', 'financial_vouchers', 'gstr1',
     'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
@@ -220,12 +220,12 @@ const AppContent: React.FC = () => {
     purgeLegacy();
 
     const reloadSamples = async () => {
-        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v18');
+        const hasLoaded = localStorage.getItem('bharat_book_samples_hydrated_v19');
         if (!hasLoaded) {
             for (const id of activeSamples) {
                 await toggleSampleDataSet(id, true);
             }
-            localStorage.setItem('bharat_book_samples_hydrated_v18', 'true');
+            localStorage.setItem('bharat_book_samples_hydrated_v19', 'true');
         }
     };
     reloadSamples();
@@ -606,7 +606,7 @@ const AppContent: React.FC = () => {
       
       const missingSamples = activeSamples.filter(id => {
         let hasData = false;
-        if (['parties', 'vendors'].includes(id)) hasData = (Array.isArray(partyMasters) ? partyMasters : []).some((m: any) => m.sampleSetId === id);
+        if (['parties', 'vendors', 'partners'].includes(id)) hasData = (Array.isArray(partyMasters) ? partyMasters : []).some((m: any) => m.sampleSetId === id);
         else if (['ledgers', 'banks'].includes(id)) hasData = (Array.isArray(ledgerMasters) ? ledgerMasters : []).some((m: any) => m.sampleSetId === id);
         else if (id === 'items') hasData = (Array.isArray(itemMasters) ? itemMasters : []).some((m: any) => m.sampleSetId === id);
         else if (id === 'uoms') hasData = (Array.isArray(uomMasters) ? uomMasters : []).some((m: any) => m.sampleSetId === id);
@@ -701,7 +701,8 @@ const AppContent: React.FC = () => {
             case 'items': setItemMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'bom': setBomMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'parties':
-            case 'vendors': setPartyMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
+            case 'vendors':
+            case 'partners': setPartyMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'accountGroups': setAccountGroupMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'ledgers':
             case 'banks': setLedgerMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
@@ -799,7 +800,8 @@ const AppContent: React.FC = () => {
                 case 'items': setItemMasters(merge); break;
                 case 'bom': setBomMasters(merge); break;
                 case 'parties':
-                case 'vendors': setPartyMasters(merge); break;
+                case 'vendors':
+                case 'partners': setPartyMasters(merge); break;
                 case 'accountGroups': setAccountGroupMasters(merge); break;
                 case 'ledgers':
                 case 'banks': setLedgerMasters(merge); break;
@@ -1129,7 +1131,7 @@ const AppContent: React.FC = () => {
             setCostCenterMasters(clearSamples);
             setContactMasters(clearSamples);
             setAllVouchers(clearSamples);
-            localStorage.removeItem('bharat_book_samples_hydrated_v18');
+            localStorage.removeItem('bharat_book_samples_hydrated_v19');
         } else if (mode === 'demo') {
             const defaultSamples = [
                 'uoms', 'gst', 'brands', 'categories', 'warehouses', 'skus', 'priceList', 

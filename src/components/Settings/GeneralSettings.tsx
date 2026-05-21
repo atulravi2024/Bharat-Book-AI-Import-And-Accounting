@@ -26,6 +26,8 @@ interface GeneralSettingsProps {
     setWeekStartsOn: (val: string) => void;
     paginationSize: string;
     setPaginationSize: (val: string) => void;
+    showSystemInfo: string;
+    setShowSystemInfo: (val: string) => void;
     displayId: string;
     setDisplayId: (val: string) => void;
     appMode: string;
@@ -50,6 +52,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
     keyboardShortcuts, setKeyboardShortcuts,
     weekStartsOn, setWeekStartsOn,
     paginationSize, setPaginationSize,
+    showSystemInfo, setShowSystemInfo,
     displayId, setDisplayId,
     appMode, setAppMode,
     handleSave, handleLoad, handleDeleteAll, handleReset, handleClear, isSaved
@@ -74,6 +77,21 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                         onChange={(e) => setDisplayId(e.target.value)}
                     />
                     <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">A unique prefix assigned to generated vouchers (e.g., BBE-JV-001).</p>
+                </div>
+
+                <div className="form-field-wrapper">
+                    <label className="form-label">Where should this provide the detail?</label>
+                    <select 
+                        className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
+                        value={showSystemInfo}
+                        onChange={(e) => setShowSystemInfo(e.target.value)}
+                    >
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">
+                        To view this section detail or info voucher: Display on user interface or not (Dynamically updated).
+                    </p>
                 </div>
 
                 <div className="form-field-wrapper">

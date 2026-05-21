@@ -79,6 +79,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [keyboardShortcuts, setKeyboardShortcuts] = useState("enabled");
   const [weekStartsOn, setWeekStartsOn] = useState("sunday");
   const [paginationSize, setPaginationSize] = useState("50");
+  const [showSystemInfo, setShowSystemInfo] = useState("yes");
 
   // Noise Lists
   const [bankShortCodes, setBankShortCodes] = useState<string>(
@@ -394,6 +395,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         if (parsed.keyboardShortcuts) setKeyboardShortcuts(parsed.keyboardShortcuts);
         if (parsed.weekStartsOn) setWeekStartsOn(parsed.weekStartsOn);
         if (parsed.paginationSize) setPaginationSize(parsed.paginationSize);
+        if (parsed.showSystemInfo) setShowSystemInfo(parsed.showSystemInfo);
         if (parsed.bankMappings) setBankMappings(parsed.bankMappings);
 
         // Load Noise Lists
@@ -552,6 +554,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     setKeyboardShortcuts("enabled");
     setWeekStartsOn("sunday");
     setPaginationSize("50");
+    setShowSystemInfo("yes");
   };
 
   const handleClear = () => {
@@ -569,6 +572,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     setKeyboardShortcuts("");
     setWeekStartsOn("");
     setPaginationSize("");
+    setShowSystemInfo("");
   };
 
   const handleSave = () => {
@@ -587,6 +591,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       keyboardShortcuts,
       weekStartsOn,
       paginationSize,
+      showSystemInfo,
       bankMappings,
       bankShortCodes,
       bankIgnoreWords,
@@ -615,6 +620,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     const previousAppMode = previousSettings.appMode || "demo";
 
     localStorage.setItem("bharat_book_app_settings", JSON.stringify(settings));
+    window.dispatchEvent(new Event("bharat_book_settings_updated"));
     if (onAppModeChange && appMode !== previousAppMode) {
       onAppModeChange(appMode);
     }
@@ -771,6 +777,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               setWeekStartsOn={setWeekStartsOn}
               paginationSize={paginationSize}
               setPaginationSize={setPaginationSize}
+              showSystemInfo={showSystemInfo}
+              setShowSystemInfo={setShowSystemInfo}
               displayId={displayId}
               setDisplayId={setDisplayId}
               appMode={appMode}

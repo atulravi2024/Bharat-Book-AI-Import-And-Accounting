@@ -8,8 +8,6 @@ import {
     CostCenterMaster,
     AccountGroupMaster
 } from '../../../types';
-import { CustomersTab } from './Tabs/CustomersTab';
-import { VendorsTab } from './Tabs/VendorsTab';
 import { GeneralLedgersTab } from './Tabs/GeneralLedgersTab';
 import { BankMastersTab } from './Tabs/BankMastersTab';
 import { ContactsTab } from './Tabs/ContactsTab';
@@ -18,7 +16,7 @@ import { LocationsTab } from './Tabs/LocationsTab';
 import { CostCentersTab } from './Tabs/CostCentersTab';
 
 interface LedgerMasterViewProps {
-  initialTab?: 'parties' | 'vendors' | 'banks' | 'ledgers' | 'contacts' | 'locations' | 'costCenters' | 'accountGroups';
+  initialTab?: 'parties' | 'vendors' | 'partners' | 'banks' | 'ledgers' | 'contacts' | 'locations' | 'costCenters' | 'accountGroups';
   partyMasters: PartyMaster[];
   ledgerMasters: LedgerMaster[];
   contactMasters: ContactMaster[];
@@ -33,7 +31,7 @@ interface LedgerMasterViewProps {
   setAccountGroupMasters: (masters: AccountGroupMaster[]) => void;
 }
 
-type MasterTab = 'parties' | 'vendors' | 'banks' | 'ledgers' | 'contacts' | 'locations' | 'costCenters' | 'accountGroups';
+type MasterTab = 'parties' | 'vendors' | 'partners' | 'banks' | 'ledgers' | 'contacts' | 'locations' | 'costCenters' | 'accountGroups';
 
 export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
   partyMasters,
@@ -51,17 +49,24 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
   initialTab
 }) => {
     const validTabs: MasterTab[] = [
-        'parties', 'vendors', 'banks', 'ledgers', 'contacts', 
+        'ledgers', 'banks', 'contacts', 
         'locations', 'costCenters', 'accountGroups'
     ];
 
-    const [activeTab, setActiveTab] = useState<MasterTab>(
-        (initialTab && validTabs.includes(initialTab as MasterTab)) ? initialTab : 'parties'
-    );
+    const parseTab = (t: string | undefined): MasterTab => {
+        if (!t) return 'contacts';
+        if (t === 'parties' || t === 'vendors' || t === 'partners') {
+            return 'contacts';
+        }
+        return validTabs.includes(t as MasterTab) ? (t as MasterTab) : 'contacts';
+    };
+
+    const [activeTab, setActiveTab ] = useState<MasterTab>(parseTab(initialTab));
 
     useEffect(() => {
-        if (initialTab && validTabs.includes(initialTab as MasterTab) && initialTab !== activeTab) {
-            setActiveTab(initialTab as MasterTab);
+        const parsed = parseTab(initialTab);
+        if (parsed !== activeTab) {
+            setActiveTab(parsed);
         }
     }, [initialTab]);
 
@@ -94,22 +99,23 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
     }, [activeTab]);
 
     const renderActiveTab = () => {
-        const customers = (partyMasters || []).filter(m => m.type !== 'Vendor');
-        const vendors = (partyMasters || []).filter(m => m.type === 'Vendor');
         const banks = (ledgerMasters || []).filter(m => m.group?.toLowerCase().includes('bank'));
         const ledgers = (ledgerMasters || []).filter(m => !m.group?.toLowerCase().includes('bank'));
 
         switch (activeTab) {
-            case 'parties':
-                return <CustomersTab data={customers} onSave={(newC) => setPartyMasters([...newC, ...vendors])} />;
-            case 'vendors':
-                return <VendorsTab data={vendors} onSave={(newV) => setPartyMasters([...newV, ...customers])} />;
             case 'ledgers':
                 return <GeneralLedgersTab data={ledgers} onSave={(newL) => setLedgerMasters([...newL, ...banks])} accountGroupMasters={accountGroupMasters} />;
             case 'banks':
                 return <BankMastersTab data={banks} onSave={(newB) => setLedgerMasters([...newB, ...ledgers])} accountGroupMasters={accountGroupMasters} />;
             case 'contacts':
-                return <ContactsTab data={contactMasters} onSave={setContactMasters} />;
+                return (
+                    <ContactsTab 
+                        data={contactMasters} 
+                        onSave={setContactMasters} 
+                        partyMasters={partyMasters}
+                        setPartyMasters={setPartyMasters}
+                    />
+                );
             case 'accountGroups':
                 return <GroupsTab data={accountGroupMasters} onSave={setAccountGroupMasters} />;
             case 'locations':
@@ -127,11 +133,9 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
                 <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-x-auto custom-scrollbar justify-between items-center pr-4">
                     <div className="flex">
                         {[
-                            { id: 'parties', label: 'Customers' },
-                            { id: 'vendors', label: 'Vendors' },
+                            { id: 'contacts', label: 'Contacts' },
                             { id: 'ledgers', label: 'General Ledgers' },
                             { id: 'banks', label: 'Bank Masters' },
-                            { id: 'contacts', label: 'Contacts' },
                             { id: 'accountGroups', label: 'Groups' },
                             { id: 'locations', label: 'Locations' },
                             { id: 'costCenters', label: 'Cost Centers' },

@@ -256,6 +256,51 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
   rowNumber,
   voucherType,
 }) => {
+  const [shouldDisplay, setShouldDisplay] = React.useState<boolean>(() => {
+    try {
+      const savedSettings = localStorage.getItem("bharat_book_app_settings");
+      if (savedSettings) {
+        const parsed = JSON.parse(savedSettings);
+        if (parsed.showSystemInfo === "no") {
+          return false;
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return true;
+  });
+
+  React.useEffect(() => {
+    const handleStorageChange = () => {
+      try {
+        const savedSettings = localStorage.getItem("bharat_book_app_settings");
+        if (savedSettings) {
+          const parsed = JSON.parse(savedSettings);
+          setShouldDisplay(parsed.showSystemInfo !== "no");
+        } else {
+          setShouldDisplay(true);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    handleStorageChange();
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("bharat_book_settings_updated", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("bharat_book_settings_updated", handleStorageChange);
+    };
+  }, []);
+
+  if (!shouldDisplay) {
+    return null;
+  }
+
   // Generate a premium stable draft UUID for the current active form session when record is unsaved
   const sessionDraftUuid = React.useMemo(() => {
     if (typeof crypto !== "undefined" && crypto.randomUUID) {
