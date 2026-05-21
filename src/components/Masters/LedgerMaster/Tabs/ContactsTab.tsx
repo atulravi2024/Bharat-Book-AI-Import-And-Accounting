@@ -196,11 +196,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
 
   // Reset accordion to collapsed when modal is opened or closed
   React.useEffect(() => {
-    if (!isModalOpen) {
-      setExpandedSection(null);
-    } else {
-      setExpandedSection("profile_info");
-    }
+    setExpandedSection(null);
   }, [isModalOpen]);
 
   // Sync React effect to automatically generate the code when details are modified
@@ -413,6 +409,14 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
           formData.status === "Inactive" || formData.status === "Resigned"
             ? formData.resignationDate || ""
             : "",
+        resignationReason:
+          formData.status === "Inactive" || formData.status === "Resigned"
+            ? formData.resignationReason || ""
+            : "",
+        resignationDescription:
+          formData.status === "Inactive" || formData.status === "Resigned"
+            ? formData.resignationDescription || ""
+            : "",
         description: formData.description || "",
         aadhaarCard: formData.aadhaarCard || "",
         panCard: formData.panCard || "",
@@ -429,6 +433,27 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
         bankAccountNumber: formData.bankAccountNumber || "",
         bankIfscCode: formData.bankIfscCode || "",
         bankBranch: formData.bankBranch || "",
+        reportingManager: formData.reportingManager || "",
+        workEmail: formData.workEmail || "",
+        workPhone: formData.workPhone || "",
+        shiftTiming: formData.shiftTiming || "",
+        noticePeriod: formData.noticePeriod || "",
+        probationPeriod: formData.probationPeriod || "",
+        workLocation: formData.workLocation || "",
+        highestQualification: formData.highestQualification || "",
+        totalExperience: formData.totalExperience || "",
+        guardianName: formData.guardianName || "",
+        permanentAddress: formData.permanentAddress || "",
+        uanNumber: formData.uanNumber || "",
+        esiNumber: formData.esiNumber || "",
+        passportNumber: formData.passportNumber || "",
+        passportExpiryDate: formData.passportExpiryDate || "",
+        linkedInUrl: formData.linkedInUrl || "",
+        portfolioUrl: formData.portfolioUrl || "",
+        twitterUrl: formData.twitterUrl || "",
+        nomineeName: formData.nomineeName || "",
+        nomineeRelation: formData.nomineeRelation || "",
+        nomineePhone: formData.nomineePhone || "",
       };
       const newList = editingId
         ? data.map((m: any) => (m.id === editingId ? contactToSave : m))
@@ -1439,6 +1464,24 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
 
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
+                                  Reporting Manager
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.reportingManager || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      reportingManager: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="Manager Name"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
                                   Employment Type
                                 </label>
                                 <select
@@ -1476,6 +1519,90 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   }
                                   className="form-input font-mono"
                                   placeholder="0.00"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Shift Timing
+                                </label>
+                                <select
+                                  value={formData.shiftTiming || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      shiftTiming: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Shift...</option>
+                                  <option value="General Shift">General Shift</option>
+                                  <option value="Morning Shift">Morning Shift</option>
+                                  <option value="Evening Shift">Evening Shift</option>
+                                  <option value="Night Shift">Night Shift</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Notice Period
+                                </label>
+                                <select
+                                  value={formData.noticePeriod || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      noticePeriod: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Notice Period...</option>
+                                  <option value="15 Days">15 Days</option>
+                                  <option value="30 Days">30 Days</option>
+                                  <option value="60 Days">60 Days</option>
+                                  <option value="90 Days">90 Days</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Probation Period
+                                </label>
+                                <select
+                                  value={formData.probationPeriod || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      probationPeriod: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Probation...</option>
+                                  <option value="None">None</option>
+                                  <option value="1 Month">1 Month</option>
+                                  <option value="3 Months">3 Months</option>
+                                  <option value="6 Months">6 Months</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Work Location / Branch
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.workLocation || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      workLocation: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Head Office, Branch A"
                                 />
                               </div>
 
@@ -1570,6 +1697,42 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   }
                                   className="form-input font-mono"
                                   placeholder="e.g. 9811223344"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-[11px] text-gray-500 font-semibold">
+                                  Work Email Address
+                                </label>
+                                <input
+                                  type="email"
+                                  value={formData.workEmail || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      workEmail: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. work@company.com"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-[11px] text-gray-500 font-semibold">
+                                  Work Phone Number
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.workPhone || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      workPhone: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                  placeholder="e.g. 022-12345678"
                                 />
                               </div>
 
@@ -1722,6 +1885,24 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 </select>
                               </div>
 
+                              <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                <label className="form-label text-xs">
+                                  Father's / Husband's Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.guardianName || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      guardianName: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Ramesh Kumar"
+                                />
+                              </div>
+
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Gender
@@ -1741,6 +1922,44 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   <option value="Male">Male</option>
                                   <option value="Female">Female</option>
                                 </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Highest Qualification
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.highestQualification || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      highestQualification: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. B.Tech, MBA"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Total Experience (Years)
+                                </label>
+                                <input
+                                  type="number"
+                                  value={formData.totalExperience || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      totalExperience: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. 5"
+                                  min="0"
+                                  step="0.5"
+                                />
                               </div>
 
                               <div className="form-field-wrapper col-span-1">
@@ -1770,7 +1989,44 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   <option value="O-">O- (O Negative)</option>
                                 </select>
                               </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
 
+                    {/* Collapsible Section: Employment Status */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "employment_status" ? null : "employment_status",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "employment_status"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          💼 Employment Status
+                        </span>
+                        {expandedSection === "employment_status" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "employment_status" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Currently Working?
@@ -1792,6 +2048,14 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                         val === "Active"
                                           ? ""
                                           : formData.resignationDate || "",
+                                      resignationReason:
+                                        val === "Active"
+                                          ? ""
+                                          : formData.resignationReason || "",
+                                      resignationDescription:
+                                        val === "Active"
+                                          ? ""
+                                          : formData.resignationDescription || "",
                                     });
                                   }}
                                   className="form-input font-semibold"
@@ -1823,26 +2087,68 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 />
                               </div>
 
-                              {formData.status === "Inactive" ||
-                              formData.status === "Resigned" ? (
-                                <div className="form-field-wrapper col-span-1 md:col-span-2 animate-in fade-in duration-300">
-                                  <label className="form-label text-xs text-rose-600 dark:text-rose-400 font-bold">
-                                    Date of Resigning *
-                                  </label>
-                                  <input
-                                    type="date"
-                                    value={formData.resignationDate || ""}
-                                    onChange={(e) =>
-                                      setFormData({
-                                        ...formData,
-                                        resignationDate: e.target.value,
-                                      })
-                                    }
-                                    className="form-input border-rose-300 dark:border-rose-950 text-rose-700 dark:text-rose-400 font-mono focus:border-rose-500"
-                                    required
-                                  />
-                                </div>
-                              ) : null}
+                              <div className="form-field-wrapper col-span-1 animate-in fade-in duration-300">
+                                <label className={`form-label text-xs font-bold ${formData.status === "Inactive" || formData.status === "Resigned" ? "text-rose-600 dark:text-rose-400" : "text-gray-500"}`}>
+                                  Date of Resigning
+                                </label>
+                                <input
+                                  type="date"
+                                  value={formData.resignationDate || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      resignationDate: e.target.value,
+                                    })
+                                  }
+                                  disabled={!(formData.status === "Inactive" || formData.status === "Resigned")}
+                                  className="form-input disabled:opacity-50 disabled:cursor-not-allowed font-mono disabled:border-gray-200 dark:disabled:border-gray-800 focus:border-rose-500"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1 animate-in fade-in duration-300">
+                                <label className={`form-label text-xs font-bold ${formData.status === "Inactive" || formData.status === "Resigned" ? "text-rose-600 dark:text-rose-400" : "text-gray-500"}`}>
+                                  Reason for Resigning
+                                </label>
+                                <select
+                                  value={formData.resignationReason || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      resignationReason: e.target.value,
+                                    })
+                                  }
+                                  disabled={!(formData.status === "Inactive" || formData.status === "Resigned")}
+                                  className="form-input disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-200 dark:disabled:border-gray-800"
+                                >
+                                  <option value="">Select Reason...</option>
+                                  <option value="Better Opportunity">Better Opportunity</option>
+                                  <option value="Personal Reasons">Personal Reasons</option>
+                                  <option value="Health Issues">Health Issues</option>
+                                  <option value="Relocation">Relocation</option>
+                                  <option value="Further Education">Further Education</option>
+                                  <option value="Termination">Termination</option>
+                                  <option value="Retirement">Retirement</option>
+                                  <option value="Other">Other</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1 md:col-span-2 animate-in fade-in duration-300">
+                                <label className={`form-label text-xs font-bold ${formData.status === "Inactive" || formData.status === "Resigned" ? "text-rose-600 dark:text-rose-400" : "text-gray-500"}`}>
+                                  Detailed Reason / Description for Resigning
+                                </label>
+                                <textarea
+                                  value={formData.resignationDescription || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      resignationDescription: e.target.value,
+                                    })
+                                  }
+                                  disabled={!(formData.status === "Inactive" || formData.status === "Resigned")}
+                                  className="form-input min-h-[60px] resize-y disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-200 dark:disabled:border-gray-800"
+                                  placeholder="Provide any additional details or context about the resignation manually..."
+                                />
+                              </div>
                             </div>
                           </motion.div>
                         )}
@@ -1994,6 +2300,23 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   placeholder="e.g. 400050"
                                 />
                               </div>
+
+                              <div className="form-field-wrapper col-span-1 md:col-span-2 mt-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <label className="form-label text-xs font-bold text-gray-600 dark:text-gray-300">
+                                  Permanent Address
+                                </label>
+                                <textarea
+                                  value={formData.permanentAddress || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      permanentAddress: e.target.value,
+                                    })
+                                  }
+                                  className="form-input min-h-[70px] resize-y"
+                                  placeholder="Enter complete permanent address (if different)..."
+                                />
+                              </div>
                             </div>
                           </motion.div>
                         )}
@@ -2083,6 +2406,269 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   }
                                   className="form-input font-mono"
                                   placeholder="e.g. DL-1420110123456"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-[11px] font-semibold text-gray-500 dark:text-gray-400">
+                                  UAN / PF Number
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.uanNumber || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      uanNumber: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono uppercase"
+                                  placeholder="e.g. 100001234567"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-[11px] font-semibold text-gray-500 dark:text-gray-400">
+                                  ESI Number
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.esiNumber || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      esiNumber: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono uppercase"
+                                  placeholder="e.g. 31000123450001001"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-[11px] font-semibold text-gray-500 dark:text-gray-400">
+                                  Passport Number
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.passportNumber || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      passportNumber: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono uppercase"
+                                  placeholder="e.g. Z1234567"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-[11px] font-semibold text-gray-500 dark:text-gray-400">
+                                  Passport Expiry Date
+                                </label>
+                                <input
+                                  type="date"
+                                  value={formData.passportExpiryDate || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      passportExpiryDate: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                />
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Collapsible Section: Family & Nominee Details */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "family_nominee" ? null : "family_nominee",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "family_nominee"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          👨‍👩‍👧 Family & Nominee Details
+                        </span>
+                        {expandedSection === "family_nominee" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "family_nominee" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Nominee Name
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.nomineeName || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      nomineeName: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="e.g. Meera Sharma"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Nominee Relation
+                                </label>
+                                <select
+                                  value={formData.nomineeRelation || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      nomineeRelation: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                >
+                                  <option value="">Select Relation...</option>
+                                  <option value="Spouse">Spouse</option>
+                                  <option value="Husband">Husband</option>
+                                  <option value="Wife">Wife</option>
+                                  <option value="Father">Father</option>
+                                  <option value="Mother">Mother</option>
+                                  <option value="Brother">Brother</option>
+                                  <option value="Sister">Sister</option>
+                                  <option value="Son">Son</option>
+                                  <option value="Daughter">Daughter</option>
+                                  <option value="Other">Other</option>
+                                </select>
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                <label className="form-label text-xs">
+                                  Nominee Phone Number
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.nomineePhone || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      nomineePhone: e.target.value,
+                                    })
+                                  }
+                                  className="form-input font-mono"
+                                  placeholder="e.g. 9811001100"
+                                />
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Collapsible Section: Social & Links */}
+                    <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedSection(
+                            expandedSection === "social_links" ? null : "social_links",
+                          )
+                        }
+                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        data-open={expandedSection === "social_links"}
+                      >
+                        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
+                          🔗 Social & Links
+                        </span>
+                        {expandedSection === "social_links" ? (
+                          <ChevronUp className="w-4 h-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expandedSection === "social_links" && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  LinkedIn Profile
+                                </label>
+                                <input
+                                  type="url"
+                                  value={formData.linkedInUrl || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      linkedInUrl: e.target.value,
+                                    })
+                                  }
+                                  className="form-input text-blue-600 dark:text-blue-400"
+                                  placeholder="https://linkedin.com/in/username"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1">
+                                <label className="form-label text-xs">
+                                  Twitter / X Profile
+                                </label>
+                                <input
+                                  type="url"
+                                  value={formData.twitterUrl || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      twitterUrl: e.target.value,
+                                    })
+                                  }
+                                  className="form-input text-sky-500 dark:text-sky-400"
+                                  placeholder="https://twitter.com/username"
+                                />
+                              </div>
+
+                              <div className="form-field-wrapper col-span-1 md:col-span-2">
+                                <label className="form-label text-xs">
+                                  Personal Portfolio / Website
+                                </label>
+                                <input
+                                  type="url"
+                                  value={formData.portfolioUrl || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      portfolioUrl: e.target.value,
+                                    })
+                                  }
+                                  className="form-input"
+                                  placeholder="https://www.example.com"
                                 />
                               </div>
                             </div>
