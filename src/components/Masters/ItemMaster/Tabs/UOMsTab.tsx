@@ -1,4 +1,7 @@
 import React, { useState, useMemo } from 'react';
+import { useFormSettings } from "../../../../useFormSettings";
+
+import { createPortal } from 'react-dom';
 import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon } from '../../../icons/IconComponents';
 
@@ -9,6 +12,8 @@ interface UOMsTabProps {
 }
 
 export const UOMsTab: React.FC<UOMsTabProps> = ({ data, onSave }) => {
+  const formSettings = useFormSettings();
+
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -107,11 +112,11 @@ export const UOMsTab: React.FC<UOMsTabProps> = ({ data, onSave }) => {
                 )}
             </div>
 
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-[1.25rem] w-full max-w-2xl shadow-2xl animate-in zoom-in-95 overflow-hidden flex flex-col max-h-[90vh] dark:bg-gray-800">
-                        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
-                            <h2 className="font-bold text-xl text-gray-900 flex items-center dark:text-white">
+            {isModalOpen && typeof document !== "undefined" && document.getElementById("main-content") ? createPortal(
+   <div className={`absolute inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center ${formSettings.currentModalMode === 'fullscreen' ? 'p-0' : 'p-4 sm:p-6 md:p-8'}`}>
+                    <div className={`bg-white w-full h-full overflow-hidden flex flex-col dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl animate-in zoom-in-95 ${formSettings.currentModalMode === 'fullscreen' ? 'rounded-none max-w-full max-h-full' : 'rounded-2xl max-w-5xl max-h-[90vh]'}`}>
+                        <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
+                            <h2 className="font-bold text-base text-gray-900 flex items-center dark:text-white">
                                 {editingId ? 'Edit' : 'Add'} UOM
                             </h2>
                             <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full dark:hover:bg-gray-600">
@@ -183,7 +188,7 @@ export const UOMsTab: React.FC<UOMsTabProps> = ({ data, onSave }) => {
                         </div>
                     </div>
                 </div>
-            )}
+            , document.getElementById("main-content")!) : null}
 
             {deleteConfirmation?.isOpen && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">

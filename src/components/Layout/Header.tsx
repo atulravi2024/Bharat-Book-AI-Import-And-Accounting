@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SearchIcon,
   NotificationsIcon,
@@ -7,15 +7,21 @@ import {
   SunIcon,
   MoonIcon
 } from '../icons/IconComponents';
-import { useTheme } from './ThemeContext';
+import { ThemeProvider, useTheme } from './ThemeContext';
+import { GlobalSearch } from '../Search/GlobalSearch';
+import { MainView } from '../../types';
+import { NotificationDropdown } from './NotificationDropdown';
+import { ProfileDropdown } from './ProfileDropdown';
 
 interface HeaderProps {
   pageTitle: string;
   onMenuClick?: () => void;
+  onViewChange?: (view: MainView) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
+export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, onViewChange }) => {
   const { theme, toggleTheme } = useTheme();
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   const handleToggle = () => {
     console.log('Theme toggle clicked, current theme:', theme);
@@ -23,14 +29,15 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
   };
 
   return (
-    <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-premium-slate-100 dark:border-gray-700 sticky top-0 z-10">
+    <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-premium-slate-100 dark:border-gray-700 sticky top-0 z-[60]">
       <div className="mx-auto px-4 sm:px-6 lg:px-10">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <div className="flex items-center">
+        <div className="flex items-center justify-between h-12 md:h-14 relative">
+          
+          <div className={`flex items-center ${isSearchExpanded ? 'hidden md:flex' : 'flex'}`}>
             {onMenuClick && (
               <button 
                 onClick={onMenuClick}
-                className="md:hidden mr-4 p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 hover:bg-premium-slate-100 dark:hover:bg-gray-700 transition-all border border-transparent hover:border-premium-slate-200 dark:hover:border-gray-600"
+                className="md:hidden mr-2 sm:mr-4 p-2 sm:p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 hover:bg-premium-slate-100 dark:hover:bg-gray-700 transition-all border border-transparent hover:border-premium-slate-200 dark:hover:border-gray-600"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -39,44 +46,44 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick }) => {
                 </svg>
               </button>
             )}
-            <h1 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none truncate max-w-[150px] sm:max-w-xs capitalize">{pageTitle}</h1>
+            <h1 className="text-base sm:text-lg md:text-xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none truncate max-w-[140px] sm:max-w-[200px] md:max-w-xs capitalize">{pageTitle}</h1>
           </div>
           
-          <div className="hidden lg:flex flex-1 justify-center px-10">
-            <div className="max-w-md w-full">
-              <label htmlFor="search" className="sr-only">Search</label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                  <SearchIcon className="text-gray-400 group-focus-within:text-blue-500 transition-colors" />
-                </div>
-                <input
-                  id="search"
-                  name="search"
-                  className="block w-full pl-14 pr-6 py-4 bg-premium-slate-50 dark:bg-gray-700 border-none transition-all rounded-3xl leading-5 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-800 focus:bg-white dark:bg-gray-600 sm:text-xs font-bold uppercase tracking-widest text-gray-700 dark:text-gray-200 dark:focus:bg-gray-700"
-                  placeholder="Global Command Search..."
-                  type="search"
-                />
-              </div>
+          <div className={`md:hidden flex items-center justify-end flex-1 pr-2 ${isSearchExpanded ? 'hidden' : 'flex'}`}>
+            <button onClick={() => setIsSearchExpanded(true)} className="w-8 h-8 flex items-center justify-center rounded-xl text-gray-400 hover:bg-premium-slate-50 dark:hover:bg-gray-700 hover:text-blue-600 transition-all">
+               <SearchIcon />
+            </button>
+          </div>
+
+          <div className={`flex-1 justify-center px-0 md:px-10 ${isSearchExpanded ? 'flex absolute inset-0 z-50 bg-white/95 dark:bg-gray-800/95 items-center px-4 md:px-0' : 'hidden md:flex'}`}>
+            <div className="max-w-md w-full flex items-center gap-2">
+              {isSearchExpanded && (
+                <button onClick={() => setIsSearchExpanded(false)} className="md:hidden p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              )}
+              <GlobalSearch 
+                onViewChange={onViewChange} 
+                isSearchExpanded={isSearchExpanded} 
+                setIsSearchExpanded={setIsSearchExpanded}
+              />
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <button className="w-12 h-12 flex items-center justify-center rounded-2xl text-gray-400 hover:bg-premium-slate-50 dark:hover:bg-gray-700 hover:text-blue-600 transition-all">
-              <NotificationsIcon className="scale-110" />
-            </button>
+          <div className={`items-center space-x-1 sm:space-x-2 ${isSearchExpanded ? 'hidden md:flex' : 'flex'}`}>
+            <NotificationDropdown onViewChange={onViewChange} />
             <button
               onClick={handleToggle}
-              className="w-12 h-12 flex items-center justify-center rounded-2xl text-gray-400 hover:bg-premium-slate-50 dark:hover:bg-gray-700 hover:text-amber-500 transition-all"
+              className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-2xl text-gray-400 hover:bg-premium-slate-50 dark:hover:bg-gray-700 hover:text-amber-500 transition-all"
               title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
             >
-              <span className="text-xl">{theme === 'light' ? '🌙' : '☀️'}</span>
+              <span className="text-lg sm:text-xl">{theme === 'light' ? '🌙' : '☀️'}</span>
             </button>
-            <div className="h-8 w-px bg-premium-slate-100 dark:bg-gray-600 mx-2"></div>
-            <button className="flex items-center p-1 rounded-2xl text-gray-500 hover:bg-premium-slate-50 dark:hover:bg-gray-700 transition-all border border-transparent hover:border-premium-slate-100 dark:hover:border-gray-500 dark:text-gray-400">
-               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50">
-                  <AccountIcon />
-               </div>
-            </button>
+            <div className="h-5 sm:h-6 w-px bg-premium-slate-100 dark:bg-gray-600 mx-1 sm:mx-2"></div>
+            <ProfileDropdown onViewChange={onViewChange} />
           </div>
         </div>
       </div>

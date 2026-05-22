@@ -3,6 +3,7 @@ import React, { useState, useEffect, Component } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { Layout } from './components/Layout/Layout';
 import { ThemeProvider } from './components/Layout/ThemeContext';
+import { NotificationProvider, useNotifications } from './context/NotificationContext';
 import { Step1Upload } from './components/Operations/Import/Step1Upload';
 import { Step2Correction } from './components/Operations/Import/Step2Correction';
 import { Step3Summary } from './components/Operations/Import/Step3Summary';
@@ -73,10 +74,17 @@ function useStorageState<T>(key: string, defaultValue: T): [T, React.Dispatch<Re
 
 
 const App: React.FC = () => {
-  return <AppContent />;
+  return (
+    <ThemeProvider>
+      <NotificationProvider>
+        <AppContent />
+      </NotificationProvider>
+    </ThemeProvider>
+  );
 };
 
 const AppContent: React.FC = () => {
+  const { addNotification } = useNotifications();
   const [view, setView] = useState<MainView>(() => {
     const saved = localStorage.getItem('bharat_book_navigation_defaults');
     if (saved) {
@@ -396,6 +404,14 @@ const AppContent: React.FC = () => {
       });
       
       localStorage.removeItem(DRAFT_KEY);
+      
+      addNotification({
+        title: 'Vouchers Imported',
+        message: `Successfully processed ${vouchers.length} vouchers via AI Import.`,
+        type: 'Alert',
+        link: 'vouchers'
+      });
+      
       setIsLoading(false);
       setStep('success');
     }, 1500);
@@ -1028,6 +1044,13 @@ const AppContent: React.FC = () => {
                         return [...prev, { ...mappedVoucher, isManuallyEntered: true }];
                     });
                 }
+                
+                addNotification({
+                  title: isNew ? 'Voucher Created' : 'Voucher Updated',
+                  message: `${savedEntry.type || 'Voucher'} has been ${isNew ? 'saved' : 'updated'} successfully.`,
+                  type: 'Message',
+                  link: 'vouchers'
+                });
               }}
               onDeleteEntry={(id) => {
                   setAllVouchers(prev => prev.filter(v => v.id !== id));
@@ -1317,7 +1340,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <ThemeProvider>
+    <>
       {syncProgress && (
         <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 w-full max-w-sm shadow-2xl border border-gray-100 dark:border-gray-700 flex flex-col items-center text-center">
@@ -1349,7 +1372,7 @@ const AppContent: React.FC = () => {
       >
         {renderContent()}
       </Layout>
-    </ThemeProvider>
+    </>
   );
 };
 

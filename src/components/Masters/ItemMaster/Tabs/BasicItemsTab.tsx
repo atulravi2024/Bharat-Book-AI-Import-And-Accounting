@@ -1,6 +1,10 @@
 import React, { useState, useMemo } from 'react';
+import { useFormSettings } from "../../../../useFormSettings";
+
+import { createPortal } from 'react-dom';
 import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon } from '../../../icons/IconComponents';
+import { Edit2, Trash2 } from 'lucide-react';
 
 
 interface BasicItemsTabProps {
@@ -11,6 +15,8 @@ interface BasicItemsTabProps {
 }
 
 export const BasicItemsTab: React.FC<BasicItemsTabProps> = ({ data, onSave, uomMasters = [], categoryMasters = [] }) => {
+  const formSettings = useFormSettings();
+
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -83,10 +89,14 @@ export const BasicItemsTab: React.FC<BasicItemsTabProps> = ({ data, onSave, uomM
                                             <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-bold text-[10px] uppercase">Inactive</span>
                                         )}
                                     </td>
-                                    <td className="p-4">
-                                        <div className="flex items-center justify-center space-x-2">
-                                            <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"><EditIcon className="w-4 h-4" /></button>
-                                            <button onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name||m.code})} className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title="Delete"><DeleteIcon className="w-4 h-4" /></button>
+                                    <td className="p-4 align-middle">
+                                        <div className="flex items-center justify-center space-x-2 w-full h-full m-auto">
+                                            <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95 mx-auto" title="Edit">
+                                                <Edit2 size={16} className="m-auto" />
+                                            </button>
+                                            <button onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name||m.code})} className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95 mx-auto" title="Delete">
+                                                <Trash2 size={16} className="m-auto" />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -103,9 +113,9 @@ export const BasicItemsTab: React.FC<BasicItemsTabProps> = ({ data, onSave, uomM
                 )}
             </div>
 
-            {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col dark:bg-gray-900 dark:border dark:border-gray-800 zoom-in-95 duration-200">
+            {isModalOpen && typeof document !== "undefined" && document.getElementById("main-content") ? createPortal(
+   <div className={`absolute inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center ${formSettings.currentModalMode === 'fullscreen' ? 'p-0' : 'p-4 sm:p-6 md:p-8'}`}>
+                    <div className={`bg-white w-full h-full overflow-hidden flex flex-col dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl animate-in zoom-in-95 ${formSettings.currentModalMode === 'fullscreen' ? 'rounded-none max-w-full max-h-full' : 'rounded-2xl max-w-5xl max-h-[90vh]'}`}>
                         <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50 dark:border-gray-800">
                             <h2 className="text-lg font-bold text-gray-900 font-display tracking-tight dark:text-white">{editingId ? 'Edit Item' : 'Add New Item'}</h2>
                             <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"><CancelIcon /></button>
@@ -145,7 +155,7 @@ export const BasicItemsTab: React.FC<BasicItemsTabProps> = ({ data, onSave, uomM
                         </div>
                     </div>
                 </div>
-            )}
+            , document.getElementById("main-content")!) : null}
 
             {deleteConfirmation?.isOpen && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">

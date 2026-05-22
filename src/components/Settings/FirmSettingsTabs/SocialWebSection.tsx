@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy } from 'lucide-react';
+import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Globe } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
 import { SearchableDropdown } from "../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../lib/firmSettingsConstants";
@@ -23,9 +23,14 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                   onClick={() => toggleAccordion("social")}
                   className="w-full flex items-center justify-between p-6 sm:px-8 bg-gray-50/50 hover:bg-gray-50 dark:bg-gray-800/50 dark:hover:bg-gray-700/50 transition-colors"
                 >
-                  <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                    Social Presence
-                  </h3>
+                  <div className="flex items-center gap-3">
+                    <span className="p-1.5 rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                      <Globe className="w-4 h-4" />
+                    </span>
+                    <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
+                      Social Presence
+                    </h3>
+                  </div>
                   {activeAccordion === "social" ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (

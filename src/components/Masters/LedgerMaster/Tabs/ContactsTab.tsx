@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ImportExportButtons } from "../../../shared/ImportExportButtons";
+import { useFormSettings } from "../../../../useFormSettings";
 import {
   AddIcon,
   EditIcon,
@@ -11,7 +12,7 @@ import {
 import { CustomersTab } from "./CustomersTab";
 import { VendorsTab } from "./VendorsTab";
 import { PartnersTab } from "./PartnersTab";
-import { ChevronDown, ChevronUp, Fingerprint } from "lucide-react";
+import { ChevronDown, ChevronUp, Fingerprint , Edit2, Trash2} from 'lucide-react';
 import { motion, AnimatePresence } from "motion/react";
 
 const DEPARTMENT_DESIGNATION_MAP: Record<string, string[]> = {
@@ -191,6 +192,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
     "all" | "staff" | "customers" | "vendors" | "partners"
   >("all");
   const [copiedScript, setCopiedScript] = useState(false);
+  const formSettings = useFormSettings();
 
   // Accordion state - only one section can be open at a time, collapsed by default
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -744,9 +746,9 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         {renderClassificationBadge(m)}
                       </td>
                       <td className="p-4">{renderDetailsCell(m)}</td>
-                      <td className="p-4">
-                        <div className="flex items-center justify-center space-x-2">
-                          <button
+                      <td className="p-4 align-middle">
+                                        <div className="flex items-center justify-center space-x-2 w-full h-full m-auto">
+                                            <button
                             onClick={() => {
                               setEditingId(m.id);
                               const isStaff = m.unifiedType === "Staff";
@@ -772,12 +774,12 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                               });
                               setIsModalOpen(true);
                             }}
-                            className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95"
+                            className="mx-auto flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95"
                             title="Edit"
                           >
-                            <EditIcon className="w-4 h-4" />
+                            <Edit2 size={16} className="m-auto" />
                           </button>
-                          <button
+                                            <button
                             onClick={() =>
                               setDeleteConfirmation({
                                 isOpen: true,
@@ -786,13 +788,13 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 type: m.unifiedType,
                               })
                             }
-                            className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95"
+                            className="mx-auto flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95"
                             title="Delete"
                           >
-                            <DeleteIcon className="w-4 h-4" />
+                            <Trash2 size={16} className="m-auto" />
                           </button>
-                        </div>
-                      </td>
+                                        </div>
+                                    </td>
                     </tr>
                   ))}
                 </tbody>
@@ -1028,9 +1030,9 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             {m.description || m.notes || "-"}
                           </div>
                         </td>
-                        <td className="p-4">
-                          <div className="flex items-center justify-center space-x-2">
-                            <button
+                        <td className="p-4 align-middle">
+                                        <div className="flex items-center justify-center space-x-2 w-full h-full m-auto">
+                                            <button
                               onClick={() => {
                                 setEditingId(m.id);
                                 setFormData({
@@ -1047,12 +1049,12 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                 });
                                 setIsModalOpen(true);
                               }}
-                              className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95"
+                              className="mx-auto flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95"
                               title="Edit"
                             >
-                              <EditIcon className="w-4 h-4" />
+                              <Edit2 size={16} className="m-auto" />
                             </button>
-                            <button
+                                            <button
                               onClick={() =>
                                 setDeleteConfirmation({
                                   isOpen: true,
@@ -1061,13 +1063,13 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                                   type: "Staff",
                                 })
                               }
-                              className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95"
+                              className="mx-auto flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95"
                               title="Delete"
                             >
-                              <DeleteIcon className="w-4 h-4" />
+                              <Trash2 size={16} className="m-auto" />
                             </button>
-                          </div>
-                        </td>
+                                        </div>
+                                    </td>
                       </tr>
                     );
                   })}
@@ -1090,10 +1092,10 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
       {/* Unified Contact Modal (Supports Staff, Customer, Vendor, Partner dynamically!) */}
       {isModalOpen && typeof document !== "undefined" && document.getElementById("main-content")
         ? createPortal(
-            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-0">
-              <div className="bg-white w-full h-full shadow-2xl animate-in zoom-in-95 overflow-hidden flex flex-col dark:bg-gray-800">
-                <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800 shrink-0">
-                  <h2 className="font-bold text-xl text-gray-900 flex items-center dark:text-white">
+            <div className={`absolute inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center ${formSettings.currentModalMode === 'fullscreen' ? 'p-0' : 'p-4 sm:p-6 md:p-8'}`}>
+              <div className={`bg-white w-full h-full overflow-hidden flex flex-col dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl animate-in zoom-in-95 ${formSettings.currentModalMode === 'fullscreen' ? 'rounded-none max-w-full max-h-full' : 'rounded-2xl max-w-5xl max-h-[90vh]'}`}>
+                <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800 shrink-0">
+                  <h2 className="font-bold text-base text-gray-900 flex items-center dark:text-white">
                     {editingId ? "Edit" : "Add"} {formData.unifiedType || "Staff"}{" "}
                     Contact
                   </h2>
@@ -1130,7 +1132,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
               </div>
             </div>
 
-            <div className="overflow-y-auto flex-1 py-6 px-0 space-y-4 custom-scrollbar">
+            <div className="overflow-y-auto flex-1 py-4 px-0 space-y-2 custom-scrollbar">
               <div className="form-grid gap-4">
                 {/* Collapsible Section: Classification & Profile Info */}
                 <div className="col-span-full border-y border-slate-100 dark:border-slate-800 rounded-none overflow-hidden shadow-none mt-1">
@@ -1143,7 +1145,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                           : "profile_info",
                       )
                     }
-                    className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                    className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                     data-open={expandedSection === "profile_info"}
                   >
                     <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -1165,7 +1167,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                         className="overflow-hidden"
                         transition={{ duration: 0.2 }}
                       >
-                        <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                           {/* Type Selector and Status - Always visible inside collapsible section */}
                           <div className="form-field-wrapper col-span-1">
                             <label className="form-label font-bold text-gray-700 dark:text-gray-300">
@@ -1281,7 +1283,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "general" ? null : "general",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "general"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -1303,7 +1305,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Department *
@@ -1640,7 +1642,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                               : "contact_mode",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "contact_mode"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -1662,7 +1664,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Email Address
@@ -1841,7 +1843,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "personal" ? null : "personal",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "personal"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -1863,7 +1865,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Date of Birth
@@ -2116,7 +2118,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "education" ? null : "education",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "education"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -2138,7 +2140,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 flex flex-col gap-6">
+                            <div className="p-4 bg-white dark:bg-gray-800 flex flex-col gap-6">
                               {/* Matriculation (10th) */}
                               <div>
                                 <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 border-b border-gray-100 dark:border-gray-700 pb-2">Matriculation (10th)</h3>
@@ -2383,7 +2385,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "experience" ? null : "experience",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "experience"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -2405,7 +2407,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">Total Experience (Years)</label>
                                 <input type="number" value={formData.totalExperience || ""} onChange={(e) => setFormData({ ...formData, totalExperience: e.target.value })} className="form-input" placeholder="e.g. 5" min="0" step="0.5" />
@@ -2437,7 +2439,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "family" ? null : "family",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "family"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -2459,7 +2461,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1 md:col-span-2">
                                 <label className="form-label text-xs">
                                   Father's Name
@@ -2675,7 +2677,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "employment_status" ? null : "employment_status",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "employment_status"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -2697,7 +2699,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Currently Working?
@@ -2835,7 +2837,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "address" ? null : "address",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "address"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -2857,7 +2859,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               {/* Street Address */}
                               <div className="form-field-wrapper col-span-1 md:col-span-2">
                                 <label className="form-label text-xs">
@@ -3183,7 +3185,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "identity" ? null : "identity",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "identity"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -3205,7 +3207,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-[11px] font-semibold text-gray-500 dark:text-gray-400">
                                   Aadhaar Card Number
@@ -3362,7 +3364,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "family_nominee" ? null : "family_nominee",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "family_nominee"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -3384,7 +3386,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Select Nominee From Family
@@ -3501,7 +3503,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "social_links" ? null : "social_links",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "social_links"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -3523,7 +3525,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   LinkedIn Profile
@@ -3646,7 +3648,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "photo" ? null : "photo",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "photo"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -3668,7 +3670,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800">
+                            <div className="p-4 bg-white dark:bg-gray-800">
                               <div className="flex flex-col sm:flex-row gap-4 items-center">
                                 {/* Preview container */}
                                 <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 shadow-inner flex-shrink-0 dark:bg-slate-900 dark:border-slate-800">
@@ -3831,7 +3833,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "bank_detail" ? null : "bank_detail",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "bank_detail"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -3853,7 +3855,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Bank Name
@@ -3978,7 +3980,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "assets_info" ? null : "assets_info",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "assets_info"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -4000,7 +4002,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Assigned Laptop / PC
@@ -4068,7 +4070,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "compliance_info" ? null : "compliance_info",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "compliance_info"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -4090,7 +4092,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Police Verification
@@ -4170,7 +4172,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             expandedSection === "document_upload" ? null : "document_upload",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "document_upload"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -4192,7 +4194,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1">
                                 <label className="form-label text-xs">
                                   Aadhaar Card
@@ -4418,7 +4420,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                               : "biz_profile",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "biz_profile"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -4440,7 +4442,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1 md:col-span-2">
                                 <label className="form-label">
                                   Description / Notes
@@ -4563,7 +4565,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                               : "biz_address",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "biz_address"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -4585,7 +4587,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1 md:col-span-2">
                                 <label className="form-label dark:text-gray-400">
                                   Address Line
@@ -4668,7 +4670,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                               : "biz_finance",
                           )
                         }
-                        className="w-full flex items-center justify-between py-3 px-6 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
+                        className="w-full flex items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-900 font-bold text-gray-800 dark:text-gray-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs border-b border-transparent data-[open=true]:border-slate-100 dark:data-[open=true]:border-slate-800"
                         data-open={expandedSection === "biz_finance"}
                       >
                         <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-gray-300">
@@ -4690,7 +4692,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                             className="overflow-hidden"
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-6 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-white dark:bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="form-field-wrapper col-span-1 md:col-span-2">
                                 <label className="form-label dark:text-gray-400">
                                   Credit Days
@@ -4849,16 +4851,16 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
               </div>
             </div>
 
-            <div className="flex space-x-3 p-6 border-t border-gray-100 bg-gray-50/50 dark:border-gray-800">
+            <div className="flex space-x-3 px-4 py-3 border-t border-gray-100 bg-gray-50/50 dark:border-gray-800">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition"
+                className="flex-1 py-2 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveUnified}
-                className="flex-1 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-md shadow-blue-200 transition"
+                className="flex-1 py-2 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-md shadow-blue-200 transition"
               >
                 Save Changes
               </button>

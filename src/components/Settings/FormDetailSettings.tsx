@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { SettingsIcon, CheckCircleIcon, UploadIcon, DownloadIcon, UndoIcon } from "../icons/IconComponents";
+import { useFormSettings, defaultSettings } from "../../useFormSettings";
 
 const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
@@ -23,42 +24,6 @@ const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; o
     </button>
   </div>
 );
-
-const defaultSettings = {
-    // Form Layout - Desktop
-    desktopLayoutType: "standard",
-    desktopColumns: "3",
-    desktopLabelPosition: "top",
-    desktopInputSize: "medium",
-    desktopShowBorders: true,
-    desktopStickyHeader: true,
-    
-    // Form Layout - Tablet
-    tabletLayoutType: "standard",
-    tabletColumns: "2",
-    tabletLabelPosition: "top",
-    tabletInputSize: "medium",
-    tabletShowBorders: true,
-    tabletStickyHeader: false,
-    
-    // Form Layout - Mobile
-    mobileLayoutType: "stacked",
-    mobileColumns: "1",
-    mobileLabelPosition: "top",
-    mobileInputSize: "large",
-    mobileShowBorders: false,
-    mobileStickyHeader: true,
-    
-    // Form Defaults & Behaviors
-    showAdditionalFields: true,
-    requireApprovalOptions: false,
-    autofillEnabled: true,
-    showTooltips: true,
-    dynamicValidation: true,
-    highlightMandatory: true,
-    autoSaveDrafts: false,
-    floatingLabels: false,
-  };
 
 export const FormDetailSettings: React.FC = () => {
   const [isSaved, setIsSaved] = useState(false);
@@ -230,6 +195,20 @@ export const FormDetailSettings: React.FC = () => {
                   <option value="large">Large</option>
                 </select>
               </div>
+
+              <div className="space-y-2">
+                <label className="form-label">
+                  Desktop Modal Mode
+                </label>
+                <select
+                  value={settings.desktopModalMode || "popup"}
+                  onChange={(e) => updateSetting("desktopModalMode", e.target.value)}
+                  className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
+                >
+                  <option value="popup">Pop-up Mode</option>
+                  <option value="fullscreen">Full Screen Mode</option>
+                </select>
+              </div>
             </div>
 
             <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
@@ -312,6 +291,20 @@ export const FormDetailSettings: React.FC = () => {
                   <option value="large">Large</option>
                 </select>
               </div>
+
+              <div className="space-y-2">
+                <label className="form-label">
+                  Tablet Modal Mode
+                </label>
+                <select
+                  value={settings.tabletModalMode || "popup"}
+                  onChange={(e) => updateSetting("tabletModalMode", e.target.value)}
+                  className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
+                >
+                  <option value="popup">Pop-up Mode</option>
+                  <option value="fullscreen">Full Screen Mode</option>
+                </select>
+              </div>
             </div>
 
             <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
@@ -389,6 +382,20 @@ export const FormDetailSettings: React.FC = () => {
                 >
                   <option value="medium">Medium (44px min)</option>
                   <option value="large">Large (56px min)</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="form-label">
+                  Mobile Modal Mode
+                </label>
+                <select
+                  value={settings.mobileModalMode || "fullscreen"}
+                  onChange={(e) => updateSetting("mobileModalMode", e.target.value)}
+                  className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
+                >
+                  <option value="popup">Pop-up Mode</option>
+                  <option value="fullscreen">Full Screen Mode</option>
                 </select>
               </div>
             </div>

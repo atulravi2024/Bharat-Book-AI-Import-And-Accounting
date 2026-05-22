@@ -17,7 +17,7 @@ import {
 } from "../icons/IconComponents";
 import { GeneralSettings } from "./GeneralSettings";
 import { UserSettings } from "./UserSettings";
-import { AlertSettings } from "./AlertSettings";
+import { AlertChannel } from "./AlertChannel";
 import { SecuritySettings } from "./SecuritySettings";
 import { PrivacySettings } from "./PrivacySettings";
 import { ImportSettings } from "./ImportSettings";
@@ -30,6 +30,7 @@ import { VoucherNumberingSettings } from "./VoucherNumberingSettings";
 import { InvoicePrintSettings } from "./InvoicePrintSettings";
 import { FormDetailSettings } from "./FormDetailSettings";
 import { FirmSettings } from "./FirmSettings";
+import { useNotifications } from "../../context/NotificationContext";
 
 // Import default noise lists
 import {
@@ -63,6 +64,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   ledgerMasters = [],
   onAppModeChange,
 }) => {
+  const { addNotification } = useNotifications();
   const [displayId, setDisplayId] = useState("BBE-2026-IND");
   const [fiscalYear, setFiscalYear] = useState(
     "April to March (Indian Standard)",
@@ -155,9 +157,96 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   ]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [toggles, setToggles] = useState({
-    dailyAlerts: true,
-    unmappedAlerts: true,
-    weeklyAnalysis: false,
+    // In-App
+    inApp_dailyAlerts: true,
+    inApp_weeklyAnalysis: false,
+    inApp_systemUpdateAlerts: true,
+    inApp_stockThresholdAlerts: true,
+    inApp_paymentOverdueAlerts: true,
+    inApp_largeTransactionAlerts: true,
+    inApp_unmappedAlerts: true,
+    inApp_securityLoginAlerts: true,
+    inApp_gstFilingReminders: true,
+    inApp_incomeTaxReminders: true,
+    inApp_bankSyncErrors: true,
+    inApp_approvalRequests: true,
+    inApp_dataAnomalyAlerts: true,
+    inApp_taxComplianceAlerts: true,
+    inApp_budgetUtilizationAlerts: true,
+    inApp_cashflowAlerts: true,
+    
+    // Email
+    email_dailyAlerts: true,
+    email_weeklyAnalysis: true,
+    email_systemUpdateAlerts: true,
+    email_stockThresholdAlerts: true,
+    email_paymentOverdueAlerts: true,
+    email_largeTransactionAlerts: true,
+    email_unmappedAlerts: true,
+    email_securityLoginAlerts: true,
+    email_gstFilingReminders: true,
+    email_incomeTaxReminders: true,
+    email_bankSyncErrors: true,
+    email_approvalRequests: true,
+    email_dataAnomalyAlerts: false,
+    email_taxComplianceAlerts: true,
+    email_budgetUtilizationAlerts: false,
+    email_cashflowAlerts: true,
+    
+    // SMS
+    sms_dailyAlerts: false,
+    sms_weeklyAnalysis: false,
+    sms_systemUpdateAlerts: false,
+    sms_stockThresholdAlerts: false,
+    sms_paymentOverdueAlerts: false,
+    sms_largeTransactionAlerts: false,
+    sms_unmappedAlerts: false,
+    sms_securityLoginAlerts: false,
+    sms_gstFilingReminders: false,
+    sms_incomeTaxReminders: false,
+    sms_bankSyncErrors: false,
+    sms_approvalRequests: false,
+    sms_dataAnomalyAlerts: false,
+    sms_taxComplianceAlerts: false,
+    sms_budgetUtilizationAlerts: false,
+    sms_cashflowAlerts: false,
+    
+    // WhatsApp
+    whatsapp_dailyAlerts: false,
+    whatsapp_weeklyAnalysis: false,
+    whatsapp_systemUpdateAlerts: false,
+    whatsapp_stockThresholdAlerts: false,
+    whatsapp_paymentOverdueAlerts: false,
+    whatsapp_largeTransactionAlerts: false,
+    whatsapp_unmappedAlerts: false,
+    whatsapp_securityLoginAlerts: false,
+    whatsapp_gstFilingReminders: false,
+    whatsapp_incomeTaxReminders: false,
+    whatsapp_bankSyncErrors: false,
+    whatsapp_approvalRequests: false,
+    whatsapp_dataAnomalyAlerts: false,
+    whatsapp_taxComplianceAlerts: false,
+    whatsapp_budgetUtilizationAlerts: false,
+    whatsapp_cashflowAlerts: false,
+
+    // Telegram
+    telegram_dailyAlerts: false,
+    telegram_weeklyAnalysis: false,
+    telegram_systemUpdateAlerts: false,
+    telegram_stockThresholdAlerts: false,
+    telegram_paymentOverdueAlerts: false,
+    telegram_largeTransactionAlerts: false,
+    telegram_unmappedAlerts: false,
+    telegram_securityLoginAlerts: false,
+    telegram_gstFilingReminders: false,
+    telegram_incomeTaxReminders: false,
+    telegram_bankSyncErrors: false,
+    telegram_approvalRequests: false,
+    telegram_dataAnomalyAlerts: false,
+    telegram_taxComplianceAlerts: false,
+    telegram_budgetUtilizationAlerts: false,
+    telegram_cashflowAlerts: false,
+    
     anonymousReporting: true,
     autoClassifyImports: true,
     autoCreateMissing: false,
@@ -341,6 +430,21 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       setActiveTab(defaultTab as any);
     }
   }, [defaultTab, activeTab]);
+
+  useEffect(() => {
+    const checkAndApplyOverride = () => {
+      const override = localStorage.getItem('bharat_book_settings_active_tab_override');
+      if (override) {
+        setActiveTab(override as any);
+        localStorage.removeItem('bharat_book_settings_active_tab_override');
+      }
+    };
+    checkAndApplyOverride();
+    window.addEventListener('bharat_book_settings_tab_trigger', checkAndApplyOverride);
+    return () => {
+      window.removeEventListener('bharat_book_settings_tab_trigger', checkAndApplyOverride);
+    };
+  }, []);
 
   useEffect(() => {
     const scrollToTab = () => {
@@ -624,6 +728,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     if (onAppModeChange && appMode !== previousAppMode) {
       onAppModeChange(appMode);
     }
+    
+    addNotification({
+      title: 'Settings Saved',
+      message: 'Your system preferences have been updated successfully.',
+      type: 'System',
+    });
+    
     setIsSaved(true);
     setTimeout(() => {
       setIsSaved(false);
@@ -689,7 +800,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               onClick={() => handleTabChange("alerts")}
               className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === "alerts" ? "bg-blue-600 text-white shadow-lg shadow-blue-100 border border-transparent" : "bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 border border-transparent"} dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700`}
             >
-              <NotificationsIcon className="mr-3" /> Alerts
+              <NotificationsIcon className="mr-3" /> Alert Channel
             </button>
             <button
               id="settings-tab-security"
@@ -802,7 +913,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           {activeTab === "users" && <UserSettings />}
 
           {activeTab === "alerts" && (
-            <AlertSettings toggles={toggles} handleToggle={handleToggle} />
+            <AlertChannel toggles={toggles} handleToggle={handleToggle} />
           )}
 
           {activeTab === "security" && <SecuritySettings />}

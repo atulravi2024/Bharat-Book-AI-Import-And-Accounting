@@ -1,5 +1,7 @@
+import { Edit2, Trash2 } from 'lucide-react';
+import { createPortal } from "react-dom";
 import React, { useState, useMemo } from "react";
-import { useFormSettings } from '../../../../context/FormSettingsContext';
+import { useFormSettings } from '../../../../useFormSettings';
 import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import {
   AddIcon,
@@ -38,6 +40,8 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
   gstMasters = [],
   weightMasters = [],
 }) => {
+  const formSettings = useFormSettings();
+
   const { layoutType } = useFormSettings();
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -286,20 +290,20 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                     </div>
                   </td>
 
-                  <td className="p-4">
-                    <div className="flex items-center justify-center space-x-2">
-                      <button
+                  <td className="p-4 align-middle">
+                                        <div className="flex items-center justify-center space-x-2 w-full h-full m-auto">
+                                            <button
                         onClick={() => {
                           setEditingId(m.id);
                           setFormData(m);
                           setIsModalOpen(true);
                         }}
-                        className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95"
+                        className="mx-auto flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95"
                         title="Edit"
                       >
-                        <EditIcon className="w-4 h-4" />
+                        <Edit2 size={16} className="m-auto" />
                       </button>
-                      <button
+                                            <button
                         onClick={() =>
                           setDeleteConfirmation({
                             isOpen: true,
@@ -307,13 +311,13 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
                             name: m.name || m.code,
                           })
                         }
-                        className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95"
+                        className="mx-auto flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95"
                         title="Delete"
                       >
-                        <DeleteIcon className="w-4 h-4" />
+                        <Trash2 size={16} className="m-auto" />
                       </button>
-                    </div>
-                  </td>
+                                        </div>
+                                    </td>
                 </tr>
               ))}
             </tbody>
@@ -330,11 +334,11 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
         )}
       </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-[1.25rem] w-full max-w-2xl shadow-2xl animate-in zoom-in-95 overflow-hidden flex flex-col max-h-[90vh] dark:bg-gray-800">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
-              <h2 className="font-bold text-xl text-gray-900 flex items-center dark:text-white">
+      {isModalOpen && typeof document !== "undefined" && document.getElementById("main-content") ? createPortal(
+   <div className={`absolute inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center ${formSettings.currentModalMode === 'fullscreen' ? 'p-0' : 'p-4 sm:p-6 md:p-8'}`}>
+          <div className={`bg-white w-full h-full overflow-hidden flex flex-col dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl animate-in zoom-in-95 ${formSettings.currentModalMode === 'fullscreen' ? 'rounded-none max-w-full max-h-full' : 'rounded-2xl max-w-5xl max-h-[90vh]'}`}>
+            <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
+              <h2 className="font-bold text-base text-gray-900 flex items-center dark:text-white">
                 {editingId ? "Edit" : "Add"} Item
               </h2>
               <button
@@ -1364,7 +1368,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
             </div>
           </div>
         </div>
-      )}
+      , document.getElementById("main-content")!) : null}
 
       {deleteConfirmation?.isOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">

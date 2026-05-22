@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useFormSettings } from "../../../../useFormSettings";
+
+import { createPortal } from 'react-dom';
 import { ImportExportButtons } from '../../../shared/ImportExportButtons';
-import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon, InfoIcon } from '../../../icons/IconComponents';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon, InfoIcon, UndoIcon, SaveIcon } from '../../../icons/IconComponents';
+import { ChevronDown, ChevronUp, Edit2, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BomMaster, ItemMaster } from '../../../../types';
 
@@ -12,6 +15,8 @@ interface BillOfMaterialsTabProps {
 }
 
 export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, onSave, itemMasters }) => {
+  const formSettings = useFormSettings();
+
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -233,10 +238,14 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                                             <span className="px-2 py-1 bg-gray-50 text-gray-500 rounded text-[10px] font-bold ring-1 ring-gray-200 uppercase">Inactive</span>
                                         }
                                     </td>
-                                    <td className="p-4">
-                                        <div className="flex items-center justify-center space-x-2">
-                                            <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"><EditIcon className="w-4 h-4" /></button>
-                                            <button onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name})} className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title="Delete"><DeleteIcon className="w-4 h-4" /></button>
+                                    <td className="p-4 align-middle">
+                                        <div className="flex items-center justify-center space-x-2 w-full h-full m-auto">
+                                            <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit">
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name})} className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title="Delete">
+                                                <Trash2 size={16} />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -253,43 +262,37 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                 )}
             </div>
 
-            {isModalOpen && (
-                <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden">
-                    {/* Backdrop */}
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={() => setIsModalOpen(false)}></div>
-                    
-                    {/* Modal Content */}
-                    <div className="relative transform overflow-hidden rounded-[1.5rem] bg-white text-left shadow-2xl transition-all w-full max-w-5xl dark:bg-gray-900 flex flex-col max-h-[95vh] border border-gray-200 dark:border-gray-800 animate-in zoom-in-95 duration-200 m-2 sm:m-0">
+            {isModalOpen && typeof document !== "undefined" && document.getElementById("main-content") ? createPortal(
+   <div className={`absolute inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center ${formSettings.currentModalMode === 'fullscreen' ? 'p-0' : 'p-4 sm:p-6 md:p-8'}`}>
+                    <div className={`bg-white w-full h-full overflow-hidden flex flex-col dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl animate-in zoom-in-95 ${formSettings.currentModalMode === 'fullscreen' ? 'rounded-none max-w-full max-h-full' : 'rounded-[1.5rem] max-w-5xl max-h-[95vh] m-2 sm:m-0'}`}>
                         {/* Header */}
-                        <div className="flex justify-between items-center px-4 sm:px-8 py-4 sm:py-5 border-b border-gray-100 bg-gray-50/80 dark:bg-gray-800/50 dark:border-gray-800 shrink-0">
+                        <div className="flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 bg-gray-50/80 dark:bg-gray-800/50 dark:border-gray-800 shrink-0">
                             <div>
-                                <h2 className="font-extrabold text-lg sm:text-2xl text-gray-900 flex items-center dark:text-white tracking-tight">
+                                <h2 className="font-bold text-base sm:text-xl text-gray-900 flex items-center dark:text-white tracking-tight">
                                     {editingId ? 'Edit' : 'Create'} Bill of Materials (BOM)
                                 </h2>
-                                <p className="text-[10px] sm:text-sm text-gray-500 font-medium">Define production recipe and manufacturing steps</p>
                             </div>
-                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-red-500 transition-all p-1.5 sm:p-2.5 hover:bg-red-50 rounded-full dark:hover:bg-red-900/30">
-                                <CancelIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-red-500 transition-all p-1.5 sm:p-2 hover:bg-red-50 rounded-full dark:hover:bg-red-900/30">
+                                <CancelIcon className="w-5 h-5" />
                             </button>
                         </div>
                         
-                        <div className="overflow-y-auto flex-1 p-4 sm:p-8 space-y-4 custom-scrollbar bg-white dark:bg-gray-900">
+                        <div className="overflow-y-auto flex-1 p-4 sm:p-6 space-y-3 custom-scrollbar bg-white dark:bg-gray-900">
                             {/* Accordion 1: Identity & Lifecycle */}
                             <div className="border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                 <button 
                                     onClick={() => setActiveAccordion(activeAccordion === 'basic' ? null : 'basic')}
-                                    className="w-full flex items-center justify-between p-4 sm:p-6 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
+                                    className="w-full flex items-center justify-between p-3 sm:p-4 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
                                 >
-                                    <div className="flex items-center space-x-4">
-                                        <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600">
-                                            <InfoIcon className="w-6 h-6" />
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600">
+                                            <InfoIcon className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">1. Identity & Lifecycle</h3>
-                                            <p className="text-xs text-gray-500 font-medium">BOM ID, version, type and validity</p>
+                                            <h3 className="text-base font-bold text-gray-900 dark:text-white">1. Identity & Lifecycle</h3>
                                         </div>
                                     </div>
-                                    {activeAccordion === 'basic' ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    {activeAccordion === 'basic' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 
                                 <AnimatePresence>
@@ -370,18 +373,17 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                             <div className="border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                 <button 
                                     onClick={() => setActiveAccordion(activeAccordion === 'materials' ? null : 'materials')}
-                                    className="w-full flex items-center justify-between p-4 sm:p-6 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
+                                    className="w-full flex items-center justify-between p-3 sm:p-4 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
                                 >
-                                    <div className="flex items-center space-x-4">
-                                        <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600">
-                                            <div className="font-black text-xs">RM</div>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600">
+                                            <div className="font-black text-[10px]">RM</div>
                                         </div>
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">2. Material and Component</h3>
-                                            <p className="text-xs text-gray-500 font-medium">Standard raw materials and component lists</p>
+                                            <h3 className="text-base font-bold text-gray-900 dark:text-white">2. Material and Component</h3>
                                         </div>
                                     </div>
-                                    {activeAccordion === 'materials' ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    {activeAccordion === 'materials' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 
                                 <AnimatePresence>
@@ -460,18 +462,17 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                             <div className="border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                 <button 
                                     onClick={() => setActiveAccordion(activeAccordion === 'process' ? null : 'process')}
-                                    className="w-full flex items-center justify-between p-4 sm:p-6 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
+                                    className="w-full flex items-center justify-between p-3 sm:p-4 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
                                 >
-                                    <div className="flex items-center space-x-4">
-                                        <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600">
-                                            <div className="font-black text-xs">M</div>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600">
+                                            <div className="font-black text-[10px]">M</div>
                                         </div>
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">3. Manufacturing Process</h3>
-                                            <p className="text-xs text-gray-500 font-medium">Step-by-step routing and labor requirements</p>
+                                            <h3 className="text-base font-bold text-gray-900 dark:text-white">3. Manufacturing Process</h3>
                                         </div>
                                     </div>
-                                    {activeAccordion === 'process' ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    {activeAccordion === 'process' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 
                                 <AnimatePresence>
@@ -541,18 +542,17 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                             <div className="border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                 <button 
                                     onClick={() => setActiveAccordion(activeAccordion === 'secondary' ? null : 'secondary')}
-                                    className="w-full flex items-center justify-between p-4 sm:p-6 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
+                                    className="w-full flex items-center justify-between p-3 sm:p-4 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
                                 >
-                                    <div className="flex items-center space-x-4">
-                                        <div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600">
-                                            <div className="font-black text-xs">CO</div>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600">
+                                            <div className="font-black text-[10px]">CO</div>
                                         </div>
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">4. Secondary Outputs</h3>
-                                            <p className="text-xs text-gray-500 font-medium">By-products and co-products generated</p>
+                                            <h3 className="text-base font-bold text-gray-900 dark:text-white">4. Secondary Outputs</h3>
                                         </div>
                                     </div>
-                                    {activeAccordion === 'secondary' ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    {activeAccordion === 'secondary' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 
                                 <AnimatePresence>
@@ -616,18 +616,17 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                             <div className="border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                 <button 
                                     onClick={() => setActiveAccordion(activeAccordion === 'finance' ? null : 'finance')}
-                                    className="w-full flex items-center justify-between p-4 sm:p-6 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
+                                    className="w-full flex items-center justify-between p-3 sm:p-4 text-left hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
                                 >
-                                    <div className="flex items-center space-x-4">
-                                        <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300">
-                                            <div className="font-bold text-xs">₹</div>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-8 h-8 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                            <div className="font-bold text-[10px]">₹</div>
                                         </div>
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">5. Financials & Notes</h3>
-                                            <p className="text-xs text-gray-500 font-medium">Cost estimates and special manual instructions</p>
+                                            <h3 className="text-base font-bold text-gray-900 dark:text-white">5. Financials & Notes</h3>
                                         </div>
                                     </div>
-                                    {activeAccordion === 'finance' ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    {activeAccordion === 'finance' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 
                                 <AnimatePresence>
@@ -682,14 +681,23 @@ export const BillOfMaterialsTab: React.FC<BillOfMaterialsTabProps> = ({ data, on
                         </div>
 
                         {/* Footer */}
-                        <div className="form-grid gap-2 px-4 sm:px-8 py-4 sm:py-6 border-t border-gray-100 bg-gray-50/80 dark:bg-gray-800/80 dark:border-gray-800 shrink-0">
-                             <button onClick={resetForm} className="py-3 sm:py-3.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-bold rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-all text-[10px] sm:text-sm">Reset</button>
-                             <button onClick={handleSave} className="py-3 sm:py-3.5 bg-blue-600 text-white font-black rounded-2xl hover:bg-blue-700 shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-all active:scale-[0.98] text-[10px] sm:text-sm">Save</button>
-                             <button onClick={() => setIsModalOpen(false)} className="py-3 sm:py-3.5 bg-white border border-gray-200 text-gray-700 font-bold rounded-2xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition-all text-[10px] sm:text-sm">Cancel</button>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 px-4 sm:px-8 py-4 sm:py-6 border-t border-gray-100 bg-gray-50/80 dark:bg-gray-800/80 dark:border-gray-800 shrink-0">
+                             <button onClick={resetForm} className="flex items-center justify-center gap-2 py-3 sm:py-3.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-bold rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-all text-sm sm:text-base">
+                                 <UndoIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                                 Reset
+                             </button>
+                             <button onClick={handleSave} className="flex items-center justify-center gap-2 py-3 sm:py-3.5 bg-blue-600 text-white font-black rounded-2xl hover:bg-blue-700 shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 transition-all active:scale-[0.98] text-sm sm:text-base">
+                                 <SaveIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                                 Save
+                             </button>
+                             <button onClick={() => setIsModalOpen(false)} className="flex items-center justify-center gap-2 py-3 sm:py-3.5 bg-white border border-gray-200 text-gray-700 font-bold rounded-2xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition-all text-sm sm:text-base">
+                                 <CancelIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                                 Cancel
+                             </button>
                         </div>
                     </div>
                 </div>
-            )}
+            , document.getElementById("main-content")!) : null}
 
             {deleteConfirmation?.isOpen && (
                 <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden">

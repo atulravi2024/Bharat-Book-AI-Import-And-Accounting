@@ -1,4 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useFormSettings } from "../../../../useFormSettings";
+
+import { createPortal } from 'react-dom';
 import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { 
     Plus, 
@@ -24,6 +27,8 @@ interface LocationsTabProps {
 }
 
 export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
+  const formSettings = useFormSettings();
+
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -180,19 +185,33 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             <span className="text-xs text-gray-400 font-mono">{m.contactNumber || '-'}</span>
                                         </div>
                                     </td>
-                                    <td className="p-4">
-                                        <div className="flex items-center justify-center space-x-2">
+                                    <td className="p-4 align-middle">
+                                        <div className="flex items-center justify-center space-x-2 w-full h-full m-auto">
                                             <button 
-                                                onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} 
-                                                className="flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"
+                                                onClick={() => {
+                                                    setEditingId(m.id); 
+                                                    setFormData({
+                                                        ...m,
+                                                        capacity: typeof m.capacity === 'object' && m.capacity !== null ? m.capacity : { totalArea: 0, uomArea: 'sq ft', maxWeight: 0, totalVolume: 0 },
+                                                        contact: m.contact || { manager: m.manager || '', number: m.contactNumber || '', address: '' },
+                                                        ops: m.ops || { pickingLeadTime: 0, packingLeadTime: 0, workingHours: '', zones: 0, docks: 0 },
+                                                        security: m.security || { hasCctv: true, hasGuard: true, fireRating: 'A', hasSprinklers: true },
+                                                        tech: m.tech || { equipment: '', scanSystem: 'BARCODE', ecomIntegrated: false },
+                                                        inventory: m.inventory || { cycleCountFreq: 'Monthly', shrinkageAllow: 0.5, qaSampleSize: 10 },
+                                                        compliance: m.compliance || { taxId: '', leaseExpiry: '', headcount: 0 }
+                                                    }); 
+                                                    setIsModalOpen(true);
+                                                    setActiveAccordion('identity');
+                                                }} 
+                                                className="mx-auto flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"
                                             >
-                                                <Edit2 className="w-4 h-4" />
+                                                <Edit2 size={16} className="m-auto" />
                                             </button>
                                             <button 
                                                 onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name})} 
-                                                className="flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title="Delete"
+                                                className="mx-auto flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title="Delete"
                                             >
-                                                <Trash2 className="w-4 h-4" />
+                                                <Trash2 size={16} className="m-auto" />
                                             </button>
                                         </div>
                                     </td>
@@ -212,29 +231,14 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
             </div>
 
             {/* Editing / Addition Modal with Accordions */}
-            <AnimatePresence>
-                {isModalOpen && (
-                    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-300">
-                        <motion.div 
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="bg-white dark:bg-gray-900 rounded-[2.5rem] w-full max-w-4xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col max-h-[95vh] border border-white/20 ml-0 sm:ml-16 lg:ml-64"
-                        >
-                            {/* Modal Header */}
-                            <div className="flex justify-between items-center p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
-                                <div className="flex items-center space-x-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-200 dark:shadow-none">
-                                        <LocationIcon className="w-6 h-6" />
-                                    </div>
-                                    <div>
-                                        <h2 className="font-black text-xl text-gray-900 dark:text-white tracking-tight">
-                                            {editingId ? 'Edit Location' : 'Create New Location'}
-                                        </h2>
-                                        <p className="text-xs text-gray-500 font-medium uppercase tracking-widest">{formData.name || 'Unnamed Asset'}</p>
-                                    </div>
-                                </div>
-                                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all">
+            {isModalOpen && typeof document !== "undefined" && document.getElementById("main-content") ? createPortal(
+            <div className={`absolute inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center ${formSettings.currentModalMode === 'fullscreen' ? 'p-0' : 'p-4 sm:p-6 md:p-8'}`}>
+              <div className={`bg-white w-full h-full overflow-hidden flex flex-col dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl animate-in zoom-in-95 ${formSettings.currentModalMode === 'fullscreen' ? 'rounded-none max-w-full max-h-full' : 'rounded-2xl max-w-5xl max-h-[90vh]'}`}>
+                <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800 shrink-0">
+                  <h2 className="font-bold text-base text-gray-900 flex items-center dark:text-white">
+                    {editingId ? 'Edit' : 'Add'} Location / Warehouse
+                  </h2>
+                  <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all">
                                     <X className="w-6 h-6" />
                                 </button>
                             </div>
@@ -642,10 +646,9 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     </button>
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     </div>
-                )}
-            </AnimatePresence>
+                    , document.getElementById("main-content")!) : null}
 
             {/* Delete Confirmation */}
             <AnimatePresence>

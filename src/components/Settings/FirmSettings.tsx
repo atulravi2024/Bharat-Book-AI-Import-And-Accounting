@@ -18,6 +18,7 @@ import { InventoryLogisticsSection } from './FirmSettingsTabs/InventoryLogistics
 import { BrandingAssetsSection } from './FirmSettingsTabs/BrandingAssetsSection';
 import { LegalRemarksSection } from './FirmSettingsTabs/LegalRemarksSection';
 import { SystemDataSection } from './FirmSettingsTabs/SystemDataSection';
+import { AlertChannels } from './FirmSettingsTabs/AlertChannels';
 
 import { STATE_DATA } from "../../lib/states";
 import { INDIAN_BANKS } from "../../lib/banks";
@@ -307,6 +308,14 @@ const BUSINESS_ROLES: Record<string, { label: string; value: string }[]> = {
 
 const initialFirmData = {
   companyName: "",
+  alertEmail: "",
+  alertSms: "",
+  alertWhatsapp: "",
+  alertTelegram: "",
+  alertEmailEnabled: false,
+  alertSmsEnabled: false,
+  alertWhatsappEnabled: false,
+  alertTelegramEnabled: false,
   tradeName: "",
   businessSlogan: "",
   businessType: "llc",
@@ -555,6 +564,12 @@ const ALL_SEARCH_FIELDS = [
   { label: "Format Validation", id: "systemCompliance" },
   { label: "Retention Period", id: "systemCompliance" },
   { label: "Backup", id: "systemCompliance" },
+
+  // Alert Destinations
+  { label: "Alert Email", id: "alertDestinations" },
+  { label: "Alert SMS", id: "alertDestinations" },
+  { label: "Alert WhatsApp", id: "alertDestinations" },
+  { label: "Alert Telegram", id: "alertDestinations" },
 ];
 
 export interface FirmSettingsProps {
@@ -890,23 +905,24 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
   const SECTIONS = [
     { id: "basicCompany", label: "Basic Details", component: BasicSection },
     { id: "businessProfile", label: "Profile Details", component: ProfileSection },
-    { id: "primaryContacts", label: "Contacts & Support", component: ContactsSection },
+    { id: "primaryContacts", label: "Primary Contacts", component: ContactsSection },
+    { id: "alertDestinations", label: "Alert Channels", component: AlertChannels },
     { id: "addressDetails", label: "Registered Address", component: AddressSection },
     { id: "statutoryTax", label: "Tax Registrations", component: TaxRegistrationSection },
     { id: "businessLicenses", label: "Business Licenses", component: LicensesSection },
-    { id: "hrPayroll", label: "HR & Payroll Setup", component: HrPayrollSection },
+    { id: "hrPayroll", label: "Payroll Setup", component: HrPayrollSection },
     { id: "financial_general", label: "Financial General", component: FinancialGeneralSection },
     { id: "financial_tax", label: "Financial Taxation", component: FinancialTaxationSection },
     { id: "financial_formatting", label: "Financial Formatting", component: FinancialFormattingSection },
     { id: "financial_advanced", label: "Financial Advanced", component: FinancialAdvancedSection },
-    { id: "bank", label: "Bank Account Details", component: BankDetailsSection },
-    { id: "social", label: "Social & Web Assets", component: SocialWebSection },
+    { id: "bank", label: "Bank Details", component: BankDetailsSection },
+    { id: "social", label: "Social Presence", component: SocialWebSection },
     { id: "operational", label: "Operational Preferences", component: OperationalSection },
-    { id: "billing", label: "Billing & Sales Setup", component: BillingSalesSection },
-    { id: "inventoryLogistics", label: "Inventory & Logistics", component: InventoryLogisticsSection },
+    { id: "billing", label: "Billing Sales", component: BillingSalesSection },
+    { id: "inventoryLogistics", label: "Inventory Logistics", component: InventoryLogisticsSection },
     { id: "branding", label: "Branding Assets", component: BrandingAssetsSection },
-    { id: "legal Remarks", label: "Legal & Remarks", component: LegalRemarksSection },
-    { id: "systemCompliance", label: "System & Backup", component: SystemDataSection },
+    { id: "legal Remarks", label: "Legal Remarks", component: LegalRemarksSection },
+    { id: "systemCompliance", label: "System Backup", component: SystemDataSection },
   ];
 
   const filteredSections = SECTIONS;

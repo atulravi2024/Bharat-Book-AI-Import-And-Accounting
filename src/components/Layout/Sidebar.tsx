@@ -106,17 +106,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
         ? 'w-64 max-md:translate-x-0'
         : 'w-20 max-md:-translate-x-full md:translate-x-0'
     }`}>
-        <div className={`flex items-center p-6 border-b border-premium-slate-100 dark:border-gray-700 h-16 md:h-20 shrink-0 ${!isSidebarOpen ? 'md:px-0 md:justify-center' : ''}`}>
+        <div className={`flex items-center p-3 border-b border-premium-slate-100 dark:border-gray-700 h-12 md:h-14 shrink-0 ${!isSidebarOpen ? 'md:px-0 md:justify-center' : ''}`}>
             <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className={`flex items-center justify-center w-full transition-all group ${!isSidebarOpen ? 'md:space-x-0' : 'space-x-3 justify-start'}`}
+                className={`flex items-center justify-center w-full transition-all group ${!isSidebarOpen ? 'md:space-x-0' : 'space-x-2 justify-start'}`}
             >
-                <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-600 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 dark:shadow-blue-900/50 shrink-0 group-hover:scale-105 transition-transform">
-                    <CheckCircleIcon className="text-white text-lg md:text-xl" />
+                <div className="w-7 h-7 md:w-8 md:h-8 bg-blue-600 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-blue-200 dark:shadow-blue-900/50 shrink-0 group-hover:scale-105 transition-transform">
+                    <CheckCircleIcon className="text-white text-base md:text-lg" />
                 </div>
                 <div className={`flex flex-col items-start transition-opacity duration-300 overflow-hidden ${!isSidebarOpen ? 'w-0 opacity-0 md:hidden' : 'opacity-100 flex-1'}`}>
-                    <span className="text-base md:text-lg font-black text-gray-900 dark:text-white leading-none font-display text-nowrap truncate w-full">Bharat Book</span>
-                    <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 mt-1 text-nowrap">Enterprise</span>
+                    <span className="text-sm md:text-base font-black text-gray-900 dark:text-white leading-none font-display text-nowrap truncate w-full">Bharat Book</span>
+                    <span className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-blue-600 mt-1 text-nowrap">Enterprise</span>
                 </div>
             </button>
         </div>
