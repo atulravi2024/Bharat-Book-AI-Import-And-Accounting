@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { User, Settings, LogOut, Shield, Compass, HelpCircle } from 'lucide-react';
 import { AccountIcon } from '../icons/IconComponents';
 import { MainView } from '../../types';
+import { ManagedUser, INITIAL_USERS } from '../Settings/UserSettings';
 
 interface ProfileDropdownProps {
   onViewChange?: (view: MainView) => void;
@@ -10,6 +11,12 @@ interface ProfileDropdownProps {
 export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  const currentLoggedInUserId = localStorage.getItem('bharat_book_current_logged_in_user_id');
+  
+  const storedUsers = localStorage.getItem('bharat_book_managed_users');
+  const users = storedUsers ? JSON.parse(storedUsers) : INITIAL_USERS;
+  const loggedInUser: ManagedUser = users.find((u: ManagedUser) => u.id === currentLoggedInUserId) || users[0] || INITIAL_USERS[0];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -34,6 +41,12 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
     setIsOpen(false);
   };
 
+  const handleLogout = () => {
+    setIsOpen(false);
+    localStorage.removeItem('bharat_book_current_logged_in_user_id');
+    setTimeout(() => window.location.reload(), 300);
+  };
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button 
@@ -49,11 +62,11 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
       {isOpen && (
         <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700 py-2 z-[70] animate-in slide-in-from-top-2 fade-in duration-200">
           <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-            <p className="text-sm font-black text-gray-900 dark:text-white capitalize">Super Admin</p>
-            <p className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400 mt-0.5">superadmin@bharatbook.com</p>
+            <p className="text-sm font-black text-gray-900 dark:text-white capitalize">{loggedInUser.name}</p>
+            <p className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400 mt-0.5">{loggedInUser.email}</p>
             <div className="mt-2 inline-flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded border border-blue-100 dark:border-blue-800/50">
                <Shield className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-               <span className="text-[9px] font-black tracking-widest uppercase text-blue-700 dark:text-blue-400">Core Governance</span>
+               <span className="text-[9px] font-black tracking-widest uppercase text-blue-700 dark:text-blue-400">{loggedInUser.role}</span>
             </div>
           </div>
 
@@ -102,10 +115,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
               <span className="text-xs font-bold">Help & Support</span>
             </button>
             <button
-              onClick={() => {
-                setIsOpen(false);
-                setTimeout(() => window.location.reload(), 300); // Simulate log out
-              }}
+              onClick={handleLogout}
               className="w-full px-4 py-2 text-left flex items-center space-x-3 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors"
             >
               <LogOut className="w-4 h-4" />
@@ -117,3 +127,4 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
     </div>
   );
 };
+

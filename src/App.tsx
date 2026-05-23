@@ -22,6 +22,7 @@ import { GSTReportView } from './components/Reports/GSTReport/GSTReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
 import { parseVoucherFile } from './services/aiService';
 import { InfoIcon, UndoIcon, ErrorIcon } from './components/icons/IconComponents';
+import { ManagedUser, INITIAL_USERS } from './components/Settings/UserSettings';
 
 const DRAFT_KEY = 'bharat_book_voucher_draft';
 const PARTY_MASTERS_KEY = 'bharat_book_party_masters';
@@ -73,7 +74,21 @@ function useStorageState<T>(key: string, defaultValue: T): [T, React.Dispatch<Re
 }
 
 
+import { LoginScreen } from './LoginScreen';
+
 const App: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    return !!localStorage.getItem('bharat_book_current_logged_in_user_id');
+  });
+
+  const handleLogin = (id: string) => {
+    setIsLoggedIn(true);
+  };
+
+  if (!isLoggedIn) {
+    return <LoginScreen onLogin={handleLogin} />;
+  }
+
   return (
     <ThemeProvider>
       <NotificationProvider>

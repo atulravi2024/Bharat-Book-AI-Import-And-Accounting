@@ -25,7 +25,8 @@ export interface ManagedUser {
   name: string;
   email: string;
   phone: string;
-  role: 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer';
+  password?: string;
+  role: 'Super Admin' | 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer';
   department: string;
   status: 'Active' | 'Invited' | 'Suspended';
   lastActive: string;
@@ -40,7 +41,8 @@ export const INITIAL_USERS: ManagedUser[] = [
     name: 'Super Admin',
     email: 'superadmin@bharatbook.com',
     phone: '+91 90000 00001',
-    role: 'Owner',
+    password: 'password123',
+    role: 'Super Admin',
     department: 'Core Security Governance',
     status: 'Active',
     lastActive: 'Active now',
@@ -63,6 +65,7 @@ export const INITIAL_USERS: ManagedUser[] = [
     name: 'Sales Team',
     email: 'sales@bharatbook.com',
     phone: '+91 99887 76655',
+    password: 'password123',
     role: 'Editor',
     department: 'Sales',
     status: 'Active',
@@ -85,6 +88,7 @@ export const INITIAL_USERS: ManagedUser[] = [
     name: 'Accountant Pro',
     email: 'accountant@bharatbook.com',
     phone: '+91 97766 55443',
+    password: 'password123',
     role: 'Manager',
     department: 'Finance',
     status: 'Active',
@@ -107,6 +111,7 @@ export const INITIAL_USERS: ManagedUser[] = [
     name: 'Audit Guest',
     email: 'audit@bharatbook.com',
     phone: '+91 91122 33445',
+    password: 'password123',
     role: 'Viewer',
     department: 'Audit',
     status: 'Suspended',
@@ -122,6 +127,50 @@ export const INITIAL_USERS: ManagedUser[] = [
     activityLogs: [
       { timestamp: '2026-05-19 11:00:00', action: 'User Suspended', details: 'Access temporarily revoked by admin', ip: 'System' },
       { timestamp: '2026-05-19 09:15:22', action: 'Financial Statement Exported', details: 'Exported trial ledger reports', ip: '192.168.4.20' }
+    ]
+  },
+  {
+    id: 'usr-5',
+    name: 'Business Owner',
+    email: 'owner@bharatbook.com',
+    phone: '+91 90000 00002',
+    password: 'password123',
+    role: 'Owner',
+    department: 'Management',
+    status: 'Active',
+    lastActive: '10 mins ago',
+    avatarColor: 'from-indigo-600 to-purple-600',
+    permissions: {
+      vouchers: { read: true, create: true, edit: true, delete: true },
+      masters: { read: true, create: true, edit: true, delete: true },
+      reports: { read: true, create: true, edit: true, delete: true },
+      system: { read: true, create: true, edit: true, delete: true },
+      audits: { read: true, create: true, edit: true, delete: true },
+    },
+    activityLogs: [
+      { timestamp: '2026-05-22 17:00:00', action: 'Viewed Financial Dashboard', details: 'Dashboard accessed', ip: '192.168.1.102' }
+    ]
+  },
+  {
+    id: 'usr-6',
+    name: 'System Admin',
+    email: 'admin@bharatbook.com',
+    phone: '+91 98888 77777',
+    password: 'password123',
+    role: 'Admin',
+    department: 'IT Support',
+    status: 'Active',
+    lastActive: '1 hour ago',
+    avatarColor: 'from-green-600 to-teal-600',
+    permissions: {
+      vouchers: { read: true, create: true, edit: true, delete: true },
+      masters: { read: true, create: true, edit: true, delete: true },
+      reports: { read: true, create: true, edit: true, delete: true },
+      system: { read: true, create: false, edit: true, delete: false },
+      audits: { read: true, create: true, edit: true, delete: false },
+    },
+    activityLogs: [
+      { timestamp: '2026-05-22 16:00:00', action: 'User Created', details: 'Created Accountant Profile', ip: '192.168.1.103' }
     ]
   }
 ];

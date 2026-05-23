@@ -14,6 +14,17 @@ export const ActiveUsersSettings = () => {
     }
   }, []);
 
+  const handleForceLogout = (userId: string) => {
+    const updatedUsers = users.map(u => {
+      if (u.id === userId) {
+        return { ...u, status: 'Suspended' as const, lastActive: 'Session Terminated' };
+      }
+      return u;
+    });
+    setUsers(updatedUsers);
+    localStorage.setItem('bharat_book_managed_users', JSON.stringify(updatedUsers));
+  };
+
   const activeUsers = users.filter(u => u.status === 'Active');
 
   const getInitials = (fullName: string) => {
@@ -74,10 +85,20 @@ export const ActiveUsersSettings = () => {
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Session Status</span>
-                  <div className="flex items-center text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    <Activity className="w-3.5 h-3.5 mr-2 text-green-500" /> 
-                    <span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded text-[10px] uppercase font-black tracking-widest mr-2">Online</span>
-                    {user.lastActive}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-xs font-semibold text-gray-700 dark:text-gray-300">
+                      <Activity className="w-3.5 h-3.5 mr-2 text-green-500" /> 
+                      <span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded text-[10px] uppercase font-black tracking-widest mr-2">Online</span>
+                      {user.lastActive}
+                    </div>
+                    {user.id !== 'usr-1' && (
+                      <button 
+                        onClick={() => handleForceLogout(user.id)}
+                        className="text-[10px] bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-900/30 dark:text-rose-400 dark:hover:bg-rose-900/50 px-2 py-1 rounded-lg font-bold uppercase tracking-widest transition-colors"
+                      >
+                        Force Logout
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

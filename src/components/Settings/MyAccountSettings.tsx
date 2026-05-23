@@ -13,22 +13,26 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useNotifications } from '../../context/NotificationContext';
-import { ManagedUser, INITIAL_USERS } from './UserSettings'; // We'll move types to types.ts later if needed
+import { ManagedUser, INITIAL_USERS } from './UserSettings';
 
 export const MyAccountSettings = () => {
   const { addNotification } = useNotifications();
 
-  // Load active user profile from local storage if available
-  const [profileName, setProfileName] = useState('Admin User');
-  const [profileEmail, setProfileEmail] = useState('admin@bharatbook.com');
-  const [profilePhone, setProfilePhone] = useState('+91 98765 43210');
-  const [profileDept, setProfileDept] = useState('Management');
-  const [profileBio, setProfileBio] = useState('System owner, authorized for all security overrides & matching criteria rules.');
-  
   const [loggedInUserId, setLoggedInUserId] = useState<string>('usr-1');
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [isSaved, setIsSaved] = useState(false);
   const [sessionSeconds, setSessionSeconds] = useState(0);
+
+  const [profileName, setProfileName] = useState('');
+  const [profileEmail, setProfileEmail] = useState('');
+  const [profilePhone, setProfilePhone] = useState('');
+  const [profileDept, setProfileDept] = useState('');
+  const [profileBio, setProfileBio] = useState('System owner, authorized for all security overrides & matching criteria rules.');
+
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -51,10 +55,26 @@ export const MyAccountSettings = () => {
     }
     
     const db = localStorage.getItem('bharat_book_managed_users');
+    let loadedUsers = INITIAL_USERS;
     if (db) {
-      setUsers(JSON.parse(db));
-    } else {
-      setUsers(INITIAL_USERS);
+       try { loadedUsers = JSON.parse(db); } catch(e) {}
+    }
+    setUsers(loadedUsers);
+
+    const currentUser = loadedUsers.find((u: ManagedUser) => u.id === (savedLoggedIn || 'usr-1')) || loadedUsers[0];
+    if (currentUser) {
+       setProfileName(currentUser.name);
+       setProfileEmail(currentUser.email);
+       setProfilePhone(currentUser.phone);
+       setProfileDept(currentUser.department);
+    }
+    
+    const savedProfile = localStorage.getItem('bharat_book_loggedIn_profile');
+    if (savedProfile) {
+       try {
+         const parsed = JSON.parse(savedProfile);
+         if (parsed.bio) setProfileBio(parsed.bio);
+       } catch(e) {}
     }
   }, []);
 
@@ -83,6 +103,31 @@ export const MyAccountSettings = () => {
 
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
+  };
+
+  const handleUpdatePassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      addNotification({ title: 'Error', message: 'New passwords do not match.', type: 'Warning' });
+      return;
+    }
+    
+    const updatedUsers = users.map(u => {
+      if (u.id === loggedInUserId) {
+        return { ...u, password: newPassword };
+      }
+      return u;
+    });
+    setUsers(updatedUsers);
+    localStorage.setItem('bharat_book_managed_users', JSON.stringify(updatedUsers));
+
+    setTimeout(() => {
+      addNotification({ title: 'Success', message: 'Password updated successfully.', type: 'System' });
+      setIsPasswordModalOpen(false);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    }, 500);
   };
 
   return (
@@ -220,11 +265,19 @@ export const MyAccountSettings = () => {
                   Enabled & Verified <CheckCircle className="w-3 h-3 ml-1.5" />
                 </span>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
-                <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Last Password Change</span>
-                <span className="text-sm font-bold text-gray-700 dark:text-gray-300 flex items-center">
-                  45 days ago
-                </span>
+              <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                <div>
+                  <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Last Password Change</span>
+                  <span className="text-sm font-bold text-gray-700 dark:text-gray-300 flex items-center">
+                    45 days ago
+                  </span>
+                </div>
+                <button 
+                  onClick={() => setIsPasswordModalOpen(true)}
+                  className="text-[10px] uppercase font-bold tracking-widest bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/60 px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  Update
+                </button>
               </div>
               <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
                 <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Current Role Permissions</span>
@@ -242,6 +295,75 @@ export const MyAccountSettings = () => {
           </div>           
         </div>
       </div>
+      
+      <div className="flex justify-end mt-4">
+        <button 
+          onClick={() => {
+            localStorage.removeItem('bharat_book_current_logged_in_user_id');
+            window.location.reload();
+          }}
+          className="border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 font-black uppercase text-[10px] tracking-widest py-3 px-6 rounded-xl transition-colors cursor-pointer"
+        >
+          Sign Out of Portal
+        </button>
+      </div>
+
+      {isPasswordModalOpen && (
+        <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-sm shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700 animate-in zoom-in-95 duration-200">
+            <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest mb-1 border-b border-gray-100 dark:border-gray-700 pb-3">Update Password</h3>
+            
+            <form onSubmit={handleUpdatePassword} className="space-y-4 pt-3">
+              <div>
+                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Current Password</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full p-3 bg-gray-50 dark:bg-gray-900 border-none rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full p-3 bg-gray-50 dark:bg-gray-900 border-none rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Confirm New Password</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full p-3 bg-gray-50 dark:bg-gray-900 border-none rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
+                  required
+                />
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsPasswordModalOpen(false)}
+                  className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-900 dark:hover:bg-gray-950 text-gray-700 dark:text-gray-300 rounded-lg font-bold uppercase tracking-widest text-[10px] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold uppercase tracking-widest text-[10px] transition-colors"
+                >
+                  Save Password
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

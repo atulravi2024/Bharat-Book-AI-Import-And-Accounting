@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   User, Plus, Search, Check, Trash2, Edit2, Mail, Phone, Briefcase, Lock, Unlock, 
-  Shield, Activity, Settings, UserCheck, UserX, CheckSquare, Square, Info, Key, AlertTriangle, Compass 
+  Shield, Activity, Settings, UserCheck, UserX, CheckSquare, Square, Info, Key, AlertTriangle, Compass, Download, Send, Upload, ChevronDown 
 } from 'lucide-react';
 import { useNotifications } from '../../context/NotificationContext';
 import { ManagedUser, INITIAL_USERS, UserPermissions, ActivityLog } from './UserSettings';
@@ -14,6 +14,11 @@ export const CompanyDirectorySettings = () => {
   const [roleFilter, setRoleFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
 
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [showImportMenu, setShowImportMenu] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [importType, setImportType] = useState<'csv' | 'json'>('csv');
+
   // Editor state
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<ManagedUser | null>(null);
@@ -22,22 +27,37 @@ export const CompanyDirectorySettings = () => {
   const [formName, setFormName] = useState('');
   const [formEmail, setFormEmail] = useState('');
   const [formPhone, setFormPhone] = useState('');
-  const [formRole, setFormRole] = useState<'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer'>('Editor');
+  const [formRole, setFormRole] = useState<'Super Admin' | 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer'>('Editor');
   const [formDept, setFormDept] = useState('Finance');
   const [formStatus, setFormStatus] = useState<'Active' | 'Invited' | 'Suspended'>('Active');
 
   useEffect(() => {
     const saved = localStorage.getItem('bharat_book_managed_users');
+    let loadedUsers: ManagedUser[] = [];
     if (saved) {
       try {
-        setUsers(JSON.parse(saved));
+        loadedUsers = JSON.parse(saved);
       } catch (e) {
-        setUsers(INITIAL_USERS);
+        loadedUsers = INITIAL_USERS;
       }
     } else {
-      setUsers(INITIAL_USERS);
+      loadedUsers = INITIAL_USERS;
       localStorage.setItem('bharat_book_managed_users', JSON.stringify(INITIAL_USERS));
     }
+
+    let needsSave = false;
+    INITIAL_USERS.forEach(initialUser => {
+       if (!loadedUsers.find(u => u.id === initialUser.id)) {
+           loadedUsers.push(initialUser);
+           needsSave = true;
+       }
+    });
+
+    if (needsSave) {
+       localStorage.setItem('bharat_book_managed_users', JSON.stringify(loadedUsers));
+    }
+
+    setUsers(loadedUsers);
   }, []);
 
   const saveUsersToStorage = (updatedUsers: ManagedUser[]) => {
@@ -47,12 +67,41 @@ export const CompanyDirectorySettings = () => {
 
   const selectedUser = users.find(u => u.id === selectedUserId) || users[0];
 
+  const currentLoggedInUserId = localStorage.getItem('bharat_book_current_logged_in_user_id');
+  const loggedInUser = users.find(u => u.id === currentLoggedInUserId) || users[0] || { role: 'Viewer' };
+
+  const getRoleLevel = (role: string) => {
+    switch (role) {
+      case 'Super Admin': return 0;
+      case 'Owner': return 1;
+      case 'Admin': return 2;
+      case 'Manager': return 3;
+      case 'Editor': return 4;
+      case 'Viewer': return 5;
+      default: return 6;
+    }
+  };
+
+  const canModifyTarget = (targetRole: string) => {
+    if (targetRole === 'Super Admin') return false;
+    if (loggedInUser.role === 'Super Admin') return true;
+    return getRoleLevel(loggedInUser.role) < getRoleLevel(targetRole);
+  };
+
   const handleTogglePermission = (entity: keyof UserPermissions, action: 'read' | 'create' | 'edit' | 'delete') => {
     if (!selectedUser) return;
-    if (selectedUser.role === 'Owner') {
+    if (selectedUser.role === 'Super Admin') {
       addNotification({
         title: 'Action Restrained',
-        message: 'Owner permissions cannot be restricted or edited to avoid system lockouts.',
+        message: 'Super Admin permissions cannot be restricted or edited to avoid system lockouts.',
+        type: 'Alert'
+      });
+      return;
+    }
+    if (!canModifyTarget(selectedUser.role)) {
+      addNotification({
+        title: 'Permission Denied',
+        message: 'You do not have permission to modify this user.',
         type: 'Alert'
       });
       return;
@@ -82,10 +131,18 @@ export const CompanyDirectorySettings = () => {
   const handleToggleStatus = (userId: string) => {
     const target = users.find(u => u.id === userId);
     if (!target) return;
-    if (target.role === 'Owner') {
+    if (target.role === 'Super Admin') {
       addNotification({
         title: 'Forbidden Action',
-        message: 'The workspace Owner account cannot be suspended.',
+        message: 'The workspace Super Admin account cannot be suspended.',
+        type: 'Alert'
+      });
+      return;
+    }
+    if (!canModifyTarget(target.role)) {
+      addNotification({
+        title: 'Permission Denied',
+        message: 'You do not have permission to change the status of this user.',
         type: 'Alert'
       });
       return;
@@ -121,10 +178,18 @@ export const CompanyDirectorySettings = () => {
   const handleDeleteUser = (userId: string) => {
     const target = users.find(u => u.id === userId);
     if (!target) return;
-    if (target.role === 'Owner') {
+    if (target.role === 'Super Admin') {
       addNotification({
         title: 'Forbidden Action',
-        message: 'The workspace Owner cannot be removed.',
+        message: 'The workspace Super Admin cannot be removed.',
+        type: 'Alert'
+      });
+      return;
+    }
+    if (!canModifyTarget(target.role)) {
+      addNotification({
+        title: 'Permission Denied',
+        message: 'You do not have permission to delete this user.',
         type: 'Alert'
       });
       return;
@@ -143,8 +208,52 @@ export const CompanyDirectorySettings = () => {
     });
   };
 
+  const handleResetPassword = (userId: string) => {
+    if (loggedInUser.role !== 'Super Admin' && loggedInUser.id !== userId) {
+      addNotification({
+        title: 'Permission Denied',
+        message: 'Only a Super Admin can reset other users\' passwords.',
+        type: 'Alert'
+      });
+      return;
+    }
+    const target = users.find(u => u.id === userId);
+    if (!target) return;
+    
+    if (target.role === 'Super Admin') {
+      addNotification({
+        title: 'Forbidden Action',
+        message: 'The workspace Super Admin password cannot be reset from this interface.',
+        type: 'Alert'
+      });
+      return;
+    }
+    
+    // In a real app, this would trigger an email or open a secure dialog.
+    // Here we use a simple JS prompt for demonstration.
+    const newPassword = window.prompt(`Enter new password for ${target.name}:`, 'password123');
+    if (!newPassword) return;
+
+    const updated = users.map(u => u.id === userId ? { ...u, password: newPassword } : u);
+    saveUsersToStorage(updated);
+    
+    addNotification({
+      title: 'Password Updated',
+      message: `The password for ${target.name} has been successfully updated.`,
+      type: 'System'
+    });
+  };
+
   const handleOpenForm = (user?: ManagedUser) => {
     if (user) {
+      if (!canModifyTarget(user.role) && user.id !== loggedInUser.id) {
+         addNotification({
+           title: 'Permission Denied',
+           message: 'You do not have permission to edit this profile based on your role.',
+           type: 'Alert'
+         });
+         return;
+      }
       setEditingUser(user);
       setFormName(user.name);
       setFormEmail(user.email);
@@ -169,6 +278,15 @@ export const CompanyDirectorySettings = () => {
     if (!formName || !formEmail) {
       alert('Please fill out Name and Email.');
       return;
+    }
+
+    if (!canModifyTarget(formRole) && !(editingUser && editingUser.id === loggedInUser.id && formRole === editingUser.role)) {
+       addNotification({
+         title: 'Permission Denied',
+         message: `You cannot create or upgrade a user to the "${formRole}" role based on your permission level.`,
+         type: 'Alert'
+       });
+       return;
     }
 
     if (editingUser) {
@@ -214,6 +332,7 @@ export const CompanyDirectorySettings = () => {
         id: `usr-${Date.now()}`,
         name: formName,
         email: formEmail,
+        password: 'password123',
         phone: formPhone || '+91 99999 99999',
         role: formRole,
         department: formDept,
@@ -251,6 +370,162 @@ export const CompanyDirectorySettings = () => {
     setIsFormOpen(false);
   };
 
+  const handleExport = (type: 'csv' | 'json') => {
+    setShowExportMenu(false);
+    if (type === 'csv') {
+      const headers = ['ID', 'Name', 'Email', 'Phone', 'Role', 'Department', 'Status', 'Last Active'];
+      const rows = users.map(u => [
+        u.id, 
+        `"${u.name}"`, 
+        u.email, 
+        u.phone, 
+        u.role, 
+        u.department, 
+        u.status, 
+        `"${u.lastActive}"`
+      ]);
+
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(e => e.join(','))
+      ].join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `company_directory_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      addNotification({
+        title: 'Directory Exported',
+        message: 'The company directory has been successfully exported as CSV.',
+        type: 'System'
+      });
+    } else {
+      const jsonContent = JSON.stringify(users, null, 2);
+      const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `company_directory_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      addNotification({
+        title: 'Directory Exported',
+        message: 'The company directory has been successfully exported as JSON.',
+        type: 'System'
+      });
+    }
+  };
+
+  const handleImportClick = (type: 'csv' | 'json') => {
+    setShowImportMenu(false);
+    setImportType(type);
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const result = e.target?.result as string;
+        if (importType === 'json') {
+          const parsed = JSON.parse(result);
+          if (Array.isArray(parsed)) {
+            // Basic validation
+            const validUsers = parsed.filter(u => u.id && u.name && u.email);
+            if (validUsers.length > 0) {
+              setUsers(prev => {
+                const newUsers = [...prev];
+                validUsers.forEach(vu => {
+                  if (!newUsers.find(nu => nu.id === vu.id)) {
+                    newUsers.push(vu as ManagedUser);
+                  }
+                });
+                return newUsers;
+              });
+              addNotification({
+                title: 'Import Successful',
+                message: `Successfully imported ${validUsers.length} users from JSON.`,
+                type: 'System'
+              });
+            }
+          }
+        } else if (importType === 'csv') {
+           const lines = result.split('\n');
+           if (lines.length > 1) {
+             const newUsersArray: any[] = [];
+             for (let i = 1; i < lines.length; i++) {
+               const row = lines[i].split(',');
+               if (row.length >= 3) {
+                 const newId = row[0].replace(/"/g, '').trim() || `usr-import-${Date.now()}-${i}`;
+                 newUsersArray.push({
+                   id: newId,
+                   name: (row[1] || '').replace(/"/g, '').trim() || 'Imported User',
+                   email: (row[2] || '').trim(),
+                   phone: (row[3] || '').trim(),
+                   role: (row[4] || 'User').trim(),
+                   department: (row[5] || 'Operations').trim(),
+                   status: (row[6] || 'Active').trim() as any,
+                   lastActive: (row[7] || 'New').replace(/"/g, '').trim(),
+                   avatarColor: 'from-gray-400 to-gray-500',
+                   permissions: { vouchers: [], reports: [], ledgers: [], settings: false },
+                   recentActivity: []
+                 });
+               }
+             }
+             if (newUsersArray.length > 0) {
+               setUsers(prev => {
+                  const currentIds = new Set(prev.map(p => p.id));
+                  const combined = [...prev];
+                  newUsersArray.forEach(nu => {
+                     if (!currentIds.has(nu.id)) {
+                        combined.push(nu as ManagedUser);
+                     }
+                  });
+                  return combined;
+               });
+               addNotification({
+                  title: 'Import Successful',
+                  message: `Successfully imported ${newUsersArray.length} users from CSV.`,
+                  type: 'System'
+               });
+             }
+           }
+        }
+      } catch (err) {
+        addNotification({
+          title: 'Import Failed',
+          message: 'There was an error parsing the file. Please check the format.',
+          type: 'Warning'
+        });
+      }
+    };
+    reader.readAsText(file);
+    // Reset input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleResendInvite = (user: ManagedUser) => {
+    addNotification({
+      title: 'Invitation Resent',
+      message: `A new invitation email has been sent to ${user.email}.`,
+      type: 'System'
+    });
+  };
+
   const filteredUsers = users.filter(u => {
     const matchesSearch = u.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -259,7 +534,7 @@ export const CompanyDirectorySettings = () => {
     const matchesRole = roleFilter === 'all' || u.role.toLowerCase() === roleFilter.toLowerCase();
     const matchesStatus = statusFilter === 'all' || u.status.toLowerCase() === statusFilter.toLowerCase();
     return matchesSearch && matchesRole && matchesStatus;
-  });
+  }).sort((a, b) => getRoleLevel(a.role) - getRoleLevel(b.role));
 
   const getInitials = (fullName: string) => {
     return fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
@@ -275,12 +550,51 @@ export const CompanyDirectorySettings = () => {
             <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center">
               <User className="mr-2 text-blue-600 w-4 h-4" /> Team Directory
             </h3>
-            <button 
-              onClick={() => handleOpenForm()}
-              className="py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
-            >
-              <Plus className="w-3.5 h-3.5 mr-1" strokeWidth={3} /> Invite
-            </button>
+            <div className="flex items-center gap-2">
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleFileUpload} 
+                accept={importType === 'csv' ? '.csv' : '.json'} 
+                className="hidden" 
+              />
+              <div className="relative">
+                <button 
+                  onClick={() => setShowImportMenu(!showImportMenu)}
+                  className="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
+                  title="Import directory data"
+                >
+                  <Upload className="w-3.5 h-3.5 mr-1" strokeWidth={3} /> Import <ChevronDown className="w-3 h-3 ml-1" />
+                </button>
+                {showImportMenu && (
+                  <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-10 animate-in slide-in-from-top-2">
+                     <button onClick={() => handleImportClick('csv')} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Import CSV</button>
+                     <button onClick={() => handleImportClick('json')} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Import JSON</button>
+                  </div>
+                )}
+              </div>
+              <div className="relative">
+                <button 
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  className="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
+                  title="Export directory data"
+                >
+                  <Download className="w-3.5 h-3.5 mr-1" strokeWidth={3} /> Export <ChevronDown className="w-3 h-3 ml-1" />
+                </button>
+                {showExportMenu && (
+                  <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-10 animate-in slide-in-from-top-2">
+                     <button onClick={() => handleExport('csv')} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Export CSV</button>
+                     <button onClick={() => handleExport('json')} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Export JSON</button>
+                  </div>
+                )}
+              </div>
+              <button 
+                onClick={() => handleOpenForm()}
+                className="py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
+              >
+                <Plus className="w-3.5 h-3.5 mr-1" strokeWidth={3} /> Invite
+              </button>
+            </div>
           </div>
 
           {/* Filter Bar */}
@@ -305,6 +619,7 @@ export const CompanyDirectorySettings = () => {
                   className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl p-2.5 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none"
                 >
                   <option value="all">All Roles</option>
+                  <option value="super admin">Super Admin</option>
                   <option value="owner">Owner</option>
                   <option value="admin">Admin</option>
                   <option value="manager">Manager</option>
@@ -382,31 +697,53 @@ export const CompanyDirectorySettings = () => {
                     </div>
 
                     <div className="flex items-center space-x-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleOpenForm(user); }}
-                        className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700"
-                        title="Modify account information"
-                      >
-                        <Edit2 className="w-3 h-3" />
-                      </button>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleToggleStatus(user.id); }}
-                        className={`p-1.5 rounded-lg transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700 ${
-                          user.status === 'Suspended' 
-                            ? 'text-green-500 hover:text-green-600 hover:bg-green-50/50 dark:hover:bg-green-900/20' 
-                            : 'text-amber-500 hover:text-amber-600 hover:bg-amber-50/50 dark:hover:bg-amber-900/20'
-                        }`}
-                        title={user.status === 'Suspended' ? 'Unsuspend User Account' : 'Suspend Account'}
-                      >
-                        {user.status === 'Suspended' ? <Unlock className="w-3 h-3" /> : <Lock className="w-3 h-3" />}
-                      </button>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleDeleteUser(user.id); }}
-                        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors border border-transparent hover:border-red-100 dark:hover:border-red-900/30"
-                        title="Delete User permanently"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
+                      {user.status === 'Invited' && (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleResendInvite(user); }}
+                          className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700"
+                          title="Resend invitation email"
+                        >
+                          <Send className="w-3 h-3" />
+                        </button>
+                      )}
+                      {user.role !== 'Super Admin' && (
+                        <>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleOpenForm(user); }}
+                            className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700"
+                            title="Modify account information"
+                          >
+                            <Edit2 className="w-3 h-3" />
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleToggleStatus(user.id); }}
+                            className={`p-1.5 rounded-lg transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700 ${
+                              user.status === 'Suspended' 
+                                ? 'text-green-500 hover:text-green-600 hover:bg-green-50/50 dark:hover:bg-green-900/20' 
+                                : 'text-amber-500 hover:text-amber-600 hover:bg-amber-50/50 dark:hover:bg-amber-900/20'
+                            }`}
+                            title={user.status === 'Suspended' ? 'Unsuspend User Account' : 'Suspend Account'}
+                          >
+                            {user.status === 'Suspended' ? <Unlock className="w-3 h-3" /> : <Lock className="w-3 h-3" />}
+                          </button>
+                          {(loggedInUser.role === 'Super Admin' || user.id === loggedInUser.id) && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleResetPassword(user.id); }}
+                              className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors border border-transparent hover:border-indigo-100 dark:hover:border-indigo-900/30"
+                              title="Reset User Password"
+                            >
+                              <Key className="w-3 h-3" />
+                            </button>
+                          )}
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleDeleteUser(user.id); }}
+                            className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors border border-transparent hover:border-red-100 dark:hover:border-red-900/30"
+                            title="Delete User permanently"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 );
@@ -468,18 +805,18 @@ export const CompanyDirectorySettings = () => {
                   <h4 className="text-xs font-black text-slate-800 dark:text-gray-200 uppercase tracking-widest flex items-center">
                     <Shield className="w-4 h-4 mr-1.5 text-blue-600" /> Custom System Permissions Matrix
                   </h4>
-                  {selectedUser.role === 'Owner' && (
+                  {selectedUser.role === 'Super Admin' && (
                     <span className="text-[10px] font-black text-rose-600 uppercase tracking-widest">
-                      🛡️ OWNER LOGICAL ROOT LOCK
+                      🛡️ SUPER ADMIN LOGICAL ROOT LOCK
                     </span>
                   )}
                 </div>
 
-                {selectedUser.role === 'Owner' ? (
+                {selectedUser.role === 'Super Admin' ? (
                   <div className="p-4 bg-slate-50 dark:bg-gray-900 rounded-2xl flex items-start gap-3">
                     <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                     <p className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-relaxed">
-                      To guarantee uninterrupted enterprise governance, Owner privileges are non-configurable. This root administrator maintains absolute read, write, execution, and deleting permissions across all ERP modules.
+                      To guarantee uninterrupted enterprise governance, Super Admin privileges are non-configurable. This root administrator maintains absolute read, write, execution, and deleting permissions across all ERP modules.
                     </p>
                   </div>
                 ) : (
@@ -608,9 +945,11 @@ export const CompanyDirectorySettings = () => {
                     onChange={(e) => setFormRole(e.target.value as any)}
                     className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none"
                   >
-                    <option value="Admin">Admin</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Editor">Editor</option>
+                    {getRoleLevel(loggedInUser.role) <= 0 && <option value="Super Admin">Super Admin</option>}
+                    {getRoleLevel(loggedInUser.role) <= 0 && <option value="Owner">Owner</option>}
+                    {getRoleLevel(loggedInUser.role) <= 1 && <option value="Admin">Admin</option>}
+                    {getRoleLevel(loggedInUser.role) <= 2 && <option value="Manager">Manager</option>}
+                    {getRoleLevel(loggedInUser.role) <= 3 && <option value="Editor">Editor</option>}
                     <option value="Viewer">Viewer</option>
                   </select>
                 </div>
