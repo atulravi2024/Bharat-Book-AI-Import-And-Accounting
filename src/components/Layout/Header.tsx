@@ -16,7 +16,7 @@ import { ProfileDropdown } from './ProfileDropdown';
 interface HeaderProps {
   pageTitle: string;
   onMenuClick?: () => void;
-  onViewChange?: (view: MainView) => void;
+  onViewChange?: (view: MainView, settingsTab?: string, usersSubTab?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, onViewChange }) => {

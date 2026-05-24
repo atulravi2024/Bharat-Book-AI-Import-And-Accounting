@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { User, UserCheck, Compass, Shield, Activity } from 'lucide-react';
+import { User, UserCheck, Compass, Shield, Activity, Sliders, HelpCircle } from 'lucide-react';
 import { MyAccountSettings } from './MyAccountSettings';
 import { CompanyDirectorySettings } from './CompanyDirectorySettings';
 import { SuperAdminSettings } from './SuperAdminSettings';
 import { ActiveUsersSettings } from './ActiveUsersSettings';
+import { GroupRulesSettings } from './GroupRulesSettings';
+import { UserHelpSettings } from './UserHelpSettings';
 
 export interface UserPermissions {
   vouchers: { read: boolean; create: boolean; edit: boolean; delete: boolean };
@@ -26,13 +28,25 @@ export interface ManagedUser {
   email: string;
   phone: string;
   password?: string;
-  role: 'Super Admin' | 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer';
+  role: 'Developer' | 'Super Admin' | 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer';
   department: string;
   status: 'Active' | 'Invited' | 'Suspended';
   lastActive: string;
   avatarColor: string;
   permissions: UserPermissions;
   activityLogs: ActivityLog[];
+  dob?: string;
+  gender?: string;
+  aadhaarId?: string;
+  voterId?: string;
+  panCard?: string;
+  drivingLicense?: string;
+  profilePhoto?: string;
+  internalStaffId?: string;
+  isLockedOut?: boolean;
+  failedLoginAttempts?: number;
+  maxLoginAttempts?: number;
+  inactivityTimeoutMinutes?: number;
 }
 
 export const INITIAL_USERS: ManagedUser[] = [
@@ -43,7 +57,7 @@ export const INITIAL_USERS: ManagedUser[] = [
     phone: '+91 90000 00001',
     password: 'password123',
     role: 'Super Admin',
-    department: 'Core Security Governance',
+    department: 'Developer',
     status: 'Active',
     lastActive: 'Active now',
     avatarColor: 'from-blue-600 to-indigo-600',
@@ -176,54 +190,117 @@ export const INITIAL_USERS: ManagedUser[] = [
 ];
 
 export const UserSettings: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'my-account' | 'directory' | 'profile' | 'active-users'>('active-users');
+  const [activeTab, setActiveTab] = useState<'my-account' | 'directory' | 'profile' | 'active-users' | 'group-rules' | 'help'>('active-users');
+
+  React.useEffect(() => {
+    const checkUserOverride = () => {
+      const subOverride = localStorage.getItem('bharat_book_users_subtab_override');
+      if (subOverride) {
+        setActiveTab(subOverride as any);
+        localStorage.removeItem('bharat_book_users_subtab_override');
+      }
+    };
+    checkUserOverride();
+    window.addEventListener('bharat_book_users_subtab_trigger', checkUserOverride);
+    return () => {
+      window.removeEventListener('bharat_book_users_subtab_trigger', checkUserOverride);
+    };
+  }, []);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
-      <div className="flex items-center justify-between p-4 xl:px-6 xl:py-4 gap-4 border-b border-gray-50 dark:border-gray-700/50">
-        <h2 className="text-lg font-black text-gray-900 dark:text-white flex items-center whitespace-nowrap">
-          <User className="mr-2 text-blue-600 w-5 h-5" /> 
-          User Settings
-        </h2>
+    <div className="bg-gradient-to-br from-white to-slate-50/50 dark:from-gray-800 dark:to-gray-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-100 dark:shadow-none border border-gray-100 dark:border-gray-700/80 transition-all duration-300">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 gap-4 border-b border-gray-100 dark:border-gray-700/50">
+        <div>
+          <h2 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider flex items-center">
+            <span className="p-2 bg-blue-50 dark:bg-blue-950/40 rounded-xl mr-2.5 text-blue-600 dark:text-blue-400 border border-blue-100/50 dark:border-blue-900/30">
+              <User className="w-5 h-5" /> 
+            </span>
+            Security & User Workspace
+          </h2>
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1 pl-1">Configure profile thresholds, directories, & group policy permissions</p>
+        </div>
+        <div className="hidden xl:flex items-center gap-2 text-[10px] font-mono bg-blue-50/50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-100/30 px-3 py-1.5 rounded-xl">
+          <span>ROOT PRIVILEGES COMPLIANCE APPLIED</span>
+        </div>
       </div>
 
       {/* Sub Tabs */}
-      <div className="flex px-4 sm:px-6 pt-2 space-x-2 border-b border-gray-100 dark:border-gray-700 pb-2 overflow-x-auto custom-scrollbar bg-slate-50 dark:bg-gray-800/80">
+      <div className="flex px-6 py-3 space-x-2 border-b border-gray-100 dark:border-gray-700/50 overflow-x-auto custom-scrollbar bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm">
           <button 
               onClick={() => setActiveTab('active-users')}
-              className={`px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap flex items-center ${activeTab === 'active-users' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-white dark:text-gray-400 dark:hover:bg-gray-700'}`}
+              className={`px-4 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-300 flex items-center shrink-0 border ${
+                activeTab === 'active-users' 
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/45 border-transparent' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-gray-700 border-transparent hover:border-slate-100'
+              }`}
           >
               <Activity className="w-4 h-4 mr-2" />
               Active Users
           </button>
           <button 
               onClick={() => setActiveTab('my-account')}
-              className={`px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap flex items-center ${activeTab === 'my-account' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-white dark:text-gray-400 dark:hover:bg-gray-700'}`}
+              className={`px-4 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-300 flex items-center shrink-0 border ${
+                activeTab === 'my-account' 
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/45 border-transparent' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-gray-700 border-transparent hover:border-slate-100'
+              }`}
           >
               <UserCheck className="w-4 h-4 mr-2" />
               My Account
           </button>
           <button 
               onClick={() => setActiveTab('directory')}
-              className={`px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap flex items-center ${activeTab === 'directory' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-white dark:text-gray-400 dark:hover:bg-gray-700'}`}
+              className={`px-4 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-300 flex items-center shrink-0 border ${
+                activeTab === 'directory' 
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/45 border-transparent' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-gray-700 border-transparent hover:border-slate-100'
+              }`}
           >
               <Compass className="w-4 h-4 mr-2" />
               Company Directory
           </button>
           <button 
+              onClick={() => setActiveTab('group-rules')}
+              className={`px-4 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-300 flex items-center shrink-0 border ${
+                activeTab === 'group-rules' 
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/45 border-transparent' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-gray-700 border-transparent hover:border-slate-100'
+              }`}
+          >
+              <Sliders className="w-4 h-4 mr-2" />
+              Group Rules
+          </button>
+          <button 
               onClick={() => setActiveTab('profile')}
-              className={`px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap flex items-center ${activeTab === 'profile' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-white dark:text-gray-400 dark:hover:bg-gray-700'}`}
+              className={`px-4 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-300 flex items-center shrink-0 border ${
+                activeTab === 'profile' 
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/45 border-transparent' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-gray-700 border-transparent hover:border-slate-100'
+              }`}
           >
               <Shield className="w-4 h-4 mr-2" />
               Super Admin
           </button>
+          <button 
+              onClick={() => setActiveTab('help')}
+              className={`px-4 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-300 flex items-center shrink-0 border ${
+                activeTab === 'help' 
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/45 border-transparent' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-gray-700 border-transparent hover:border-slate-100'
+              }`}
+          >
+              <HelpCircle className="w-4 h-4 mr-2" />
+              User Help Center
+          </button>
       </div>
-
-      <div className="p-4 sm:p-6 bg-slate-50 dark:bg-gray-900 min-h-[500px]">
+ 
+      <div className="p-6 bg-slate-50/40 dark:bg-gray-900/30 min-h-[550px] transition-all">
         {activeTab === 'active-users' && <ActiveUsersSettings />}
         {activeTab === 'my-account' && <MyAccountSettings />}
         {activeTab === 'directory' && <CompanyDirectorySettings />}
+        {activeTab === 'group-rules' && <GroupRulesSettings />}
         {activeTab === 'profile' && <SuperAdminSettings />}
+        {activeTab === 'help' && <UserHelpSettings />}
       </div>
     </div>
   );

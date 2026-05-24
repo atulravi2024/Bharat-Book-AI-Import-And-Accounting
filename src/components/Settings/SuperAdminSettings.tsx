@@ -6,22 +6,34 @@ export const SuperAdminSettings = () => {
   const profileName = 'Super Admin';
   const profileEmail = 'superadmin@bharatbook.com';
   const profilePhone = '+91 90000 00001';
-  const profileDept = 'Core Security Governance';
+  const profileDept = 'Developer';
   const profileBio = 'Root Authority. Absolute programmatic control, system locks, and database backup overrides. Security criteria can only be altered directly via raw source code recompilation.';
+  const lastLogin = 'Today, 10:14 AM (UTC)';
+  const loginIP = '192.168.1.104';
+  const twoFactorAuth = 'Enabled (Hardware Key)';
+  const encryptionProtocol = 'AES-256-GCM / TLS 1.3';
+  const rootLedgerAccess = 'Unrestricted (R/W/E/D)';
+  const sessionTimeout = '15 Minutes (Strict)';
 
   return (
     <div className="relative max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4">
-      <div className="flex items-center gap-4 bg-gray-50/50 dark:bg-gray-800/40 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-sm font-black shadow-sm">
-          SA
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50/50 dark:bg-gray-800/40 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-sm font-black shadow-sm shrink-0">
+            SA
+          </div>
+          <div>
+            <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest dark:text-white leading-none flex items-center mb-1">
+              Super Admin Workspace Identity <Lock className="w-3 h-3 ml-2 text-rose-500" />
+            </h3>
+            <p className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
+              Core regulatory system master profile. Programmatically locked.
+            </p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest dark:text-white leading-none flex items-center mb-1">
-            Super Admin Workspace Identity <Lock className="w-3 h-3 ml-2 text-rose-500" />
-          </h3>
-          <p className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
-            Core regulatory system master profile. Programmatically locked.
-          </p>
+        <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 border border-green-100 dark:border-green-800 px-3 py-1.5 rounded-lg shrink-0">
+          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+          <span className="text-[10px] uppercase font-bold tracking-widest text-green-700 dark:text-green-400">System Online</span>
         </div>
       </div>
 
@@ -38,7 +50,7 @@ export const SuperAdminSettings = () => {
       </div>
 
       <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-slate-50 dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 relative group">
             <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Full Identity Name</span>
             <span className="text-sm font-black text-gray-800 dark:text-white flex items-center">
@@ -48,8 +60,8 @@ export const SuperAdminSettings = () => {
 
           <div className="bg-slate-50 dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 relative group">
             <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Auth Email address</span>
-            <span className="text-sm font-black text-gray-800 dark:text-white flex items-center">
-              {profileEmail} <Lock className="w-3 h-3 ml-1.5 text-gray-400" />
+            <span className="text-sm font-black text-gray-800 dark:text-white flex items-center break-all">
+              {profileEmail} <Lock className="w-3 h-3 ml-1.5 text-gray-400 shrink-0" />
             </span>
           </div>
 
@@ -64,6 +76,42 @@ export const SuperAdminSettings = () => {
             <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Department Division</span>
             <span className="text-sm font-black text-gray-800 dark:text-white flex items-center">
               {profileDept} <Lock className="w-3 h-3 ml-1.5 text-gray-400" />
+            </span>
+          </div>
+
+          <div className="bg-slate-50 dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 relative group">
+            <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Last System Login</span>
+            <span className="text-sm flex flex-col gap-1 font-black text-gray-800 dark:text-white">
+              <div className="flex items-center">{lastLogin} <Lock className="w-3 h-3 ml-1.5 text-gray-400" /></div>
+              <div className="text-[10px] text-gray-500 font-mono tracking-wider">{loginIP}</div>
+            </span>
+          </div>
+
+          <div className="bg-slate-50 dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 relative group">
+            <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">2FA Verification Status</span>
+            <span className="text-sm font-black text-green-600 dark:text-green-400 flex items-center">
+              {twoFactorAuth} <Lock className="w-3 h-3 ml-1.5 text-gray-400" />
+            </span>
+          </div>
+
+          <div className="bg-slate-50 dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 relative group">
+            <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Data Encryption Info</span>
+            <span className="text-sm font-black text-gray-800 dark:text-white flex items-center">
+              {encryptionProtocol} <Lock className="w-3 h-3 ml-1.5 text-gray-400" />
+            </span>
+          </div>
+
+          <div className="bg-slate-50 dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 relative group">
+            <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Global System Permissions</span>
+            <span className="text-sm font-black text-rose-600 dark:text-rose-400 flex items-center">
+              {rootLedgerAccess} <Lock className="w-3 h-3 ml-1.5 text-gray-400" />
+            </span>
+          </div>
+
+          <div className="bg-slate-50 dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 relative group">
+            <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Idle Session Timeout</span>
+            <span className="text-sm font-black text-gray-800 dark:text-white flex items-center">
+              {sessionTimeout} <Lock className="w-3 h-3 ml-1.5 text-gray-400" />
             </span>
           </div>
         </div>

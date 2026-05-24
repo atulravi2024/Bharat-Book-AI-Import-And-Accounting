@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, Component } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Lock, Shield } from 'lucide-react';
 import { Layout } from './components/Layout/Layout';
 import { ThemeProvider } from './components/Layout/ThemeContext';
 import { NotificationProvider, useNotifications } from './context/NotificationContext';
@@ -18,6 +18,8 @@ import { VoucherEntryView } from './components/Operations/VoucherEntry/VoucherEn
 import { InventoryEntryView } from './components/Operations/InventoryEntry/InventoryEntryView';
 import { SystemDecideView } from './components/Operations/BulkOperation/SystemDecideView';
 import { SettingsView } from './components/Settings/SettingsView';
+import { HelpSettings } from './components/Settings/HelpSettings';
+import { SupportSettings } from './components/Settings/SupportSettings';
 import { GSTReportView } from './components/Reports/GSTReport/GSTReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
 import { parseVoucherFile } from './services/aiService';
@@ -75,6 +77,7 @@ function useStorageState<T>(key: string, defaultValue: T): [T, React.Dispatch<Re
 
 
 import { LoginScreen } from './LoginScreen';
+import { getEffectivePolicy, isWithinAllowedHours, getCurrentUser, getVouchersPostedTodayCount } from './utils/security';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
@@ -84,6 +87,71 @@ const App: React.FC = () => {
   const handleLogin = (id: string) => {
     setIsLoggedIn(true);
   };
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    // Initialize/update last activity on mount
+    localStorage.setItem('bharat_book_last_activity', Date.now().toString());
+
+    const handleActivity = () => {
+      localStorage.setItem('bharat_book_last_activity', Date.now().toString());
+    };
+
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('keydown', handleActivity);
+    window.addEventListener('click', handleActivity);
+    window.addEventListener('scroll', handleActivity);
+    window.addEventListener('touchstart', handleActivity);
+
+    const checkInterval = setInterval(() => {
+      const lastActivityStr = localStorage.getItem('bharat_book_last_activity');
+      
+      let userTimeout = 30; // standard 30 minutes fallback
+      try {
+        const policy = getEffectivePolicy();
+        if (policy && policy.inactivityTimeoutMinutes) {
+          userTimeout = policy.inactivityTimeoutMinutes;
+        }
+      } catch (err) {
+        console.error("Error evaluating inactivity limits:", err);
+      }
+
+      const timeoutMs = userTimeout * 60 * 1000;
+      
+      if (lastActivityStr) {
+        const lastActivity = parseInt(lastActivityStr, 10);
+        if (Date.now() - lastActivity > timeoutMs) {
+          // Perform Logout due to inactivity
+          const currentSessionId = localStorage.getItem('bharat_book_current_session_id');
+          if (currentSessionId) {
+            const existingSessions = JSON.parse(localStorage.getItem('bharat_book_sessions') || '[]');
+            const sessionIndex = existingSessions.findIndex((s: any) => s.id === currentSessionId);
+            if (sessionIndex >= 0) {
+               existingSessions[sessionIndex].logoutTime = Date.now();
+               localStorage.setItem('bharat_book_sessions', JSON.stringify(existingSessions));
+            }
+            localStorage.removeItem('bharat_book_current_session_id');
+          }
+
+          localStorage.removeItem('bharat_book_current_logged_in_user_id');
+          localStorage.removeItem('bharat_book_session_start');
+          localStorage.setItem('bharat_book_logout_due_to_inactivity', 'true');
+          setIsLoggedIn(false);
+          window.location.reload();
+        }
+      }
+    }, 10000); // Check every 10 seconds
+
+    return () => {
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      window.removeEventListener('click', handleActivity);
+      window.removeEventListener('scroll', handleActivity);
+      window.removeEventListener('touchstart', handleActivity);
+      clearInterval(checkInterval);
+    };
+  }, [isLoggedIn]);
 
   if (!isLoggedIn) {
     return <LoginScreen onLogin={handleLogin} />;
@@ -145,6 +213,7 @@ const AppContent: React.FC = () => {
   const [voucherEntryActiveTab, setVoucherEntryActiveTab] = useState<string | null>(() => getSubPageForView('voucher-entry'));
   const [inventoryEntryActiveTab, setInventoryEntryActiveTab] = useState<string | null>(() => getSubPageForView('inventory-entry'));
   const [settingsActiveTab, setSettingsActiveTab] = useState<string | null>(() => getSubPageForView('settings'));
+  const [supportActiveTab, setSupportActiveTab] = useState<string | null>(() => getSubPageForView('support'));
   const [activeSamples, setActiveSamples] = useStorageState<string[]>('bharat_book_active_samples_v12', [
     'uoms', 'gst', 'brands', 'categories', 'warehouses', 'skus', 'priceList', 
     'weights', 'volumes', 'colors', 'sizes', 'variants', 'dimensions', 'stockGroups', 
@@ -384,6 +453,40 @@ const AppContent: React.FC = () => {
   };
 
   const handleSubmit = () => {
+    const policy = getEffectivePolicy();
+
+    // 1. Daily voucher limit check
+    if (policy.dailyVoucherLimit > 0) {
+      const postedCount = getVouchersPostedTodayCount(allVouchers);
+      const newVouchersCount = vouchers.filter(v => !allVouchers.some(av => av.id === v.id)).length;
+      if (postedCount + newVouchersCount > policy.dailyVoucherLimit) {
+        addNotification({
+          title: 'Daily Limit Exceeded',
+          message: `Your active group security policy restricts posts to max ${policy.dailyVoucherLimit} daily vouchers. (Today: ${postedCount}, attempted: ${newVouchersCount})`,
+          type: 'Error'
+        });
+        return;
+      }
+    }
+
+    // 2. Max transaction amount check
+    if (policy.maxTransactionAmount > 0) {
+      const exceedingVoucher = vouchers.find(v => {
+        const amt = parseFloat(String(v.amount?.value || '0').replace(/[^0-9.]/g, ''));
+        return amt > policy.maxTransactionAmount;
+      });
+      if (exceedingVoucher) {
+        const formattedLimit = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(policy.maxTransactionAmount);
+        const formattedAmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(parseFloat(String(exceedingVoucher.amount?.value || '0').replace(/[^0-9.]/g, '')));
+        addNotification({
+          title: 'Transaction Limit Violated',
+          message: `Voucher amount (${formattedAmt}) exceeds single transaction limit (${formattedLimit}) configured in your group rules.`,
+          type: 'Error'
+        });
+        return;
+      }
+    }
+
     setIsLoading(true);
     setTimeout(() => {
       const timestamp = new Date().toLocaleString();
@@ -863,6 +966,59 @@ const AppContent: React.FC = () => {
   }, []);
 
   const renderContent = () => {
+    const policy = getEffectivePolicy();
+    const timeCheck = isWithinAllowedHours(policy.workHoursMode);
+
+    if (!timeCheck.allowed) {
+      return (
+        <div className="flex flex-col items-center justify-center p-8 md:p-12 text-center h-[calc(100vh-80px)]">
+          <div className="w-20 h-20 bg-rose-50 dark:bg-rose-950/30 rounded-[2rem] flex items-center justify-center mb-6 border border-rose-100 dark:border-rose-900/50">
+            <Lock className="text-3xl text-rose-600 dark:text-rose-400" />
+          </div>
+          <h3 className="text-lg font-black text-gray-900 dark:text-white uppercase tracking-tight">Security Access Locked</h3>
+          <p className="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-widest mt-1">Group Work-Hours Restriction</p>
+          <p className="text-gray-500 mt-4 max-w-md dark:text-gray-400 text-xs font-semibold leading-relaxed">
+            {timeCheck.reason}
+          </p>
+          <p className="text-gray-400 mt-2 max-w-sm dark:text-gray-500 text-[10px] font-bold uppercase tracking-widest pl-1">
+            Your active Role/Department policy regulates this terminal.
+          </p>
+        </div>
+      );
+    }
+
+    const isViewProhibited = () => {
+      const p = policy.permissions;
+      if (view === 'ledger-master' || view === 'item-master') return !p.masters.read;
+      if (view === 'vouchers' || view === 'bank') return !p.vouchers.read;
+      if (view === 'reports' || view === 'gst-report' || view === 'item-report') return !p.reports.read;
+      if (view === 'settings') return !p.system.read;
+      if (view === 'import' || view === 'bulk-operation' || view === 'voucher-entry' || view === 'inventory-entry') return !p.vouchers.create;
+      return false;
+    };
+
+    if (isViewProhibited()) {
+      return (
+        <div className="flex flex-col items-center justify-center p-8 md:p-12 text-center h-[calc(100vh-80px)]">
+          <div className="w-20 h-20 bg-amber-50 dark:bg-amber-950/20 rounded-[2rem] flex items-center justify-center mb-6 border border-amber-150 dark:border-amber-900/40 animate-bounce">
+            <Shield className="text-3xl text-amber-600 dark:text-amber-400" />
+          </div>
+          <h3 className="text-lg font-black text-gray-900 dark:text-white uppercase tracking-tight">Security Privilege Blocked</h3>
+          <p className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest mt-1">Insufficient Component Authorities</p>
+          <p className="text-gray-500 mt-4 max-w-md dark:text-gray-400 text-xs font-semibold leading-relaxed">
+            You do not have the required access permissions configured to view or interact with this secure accounting module. Please request your Owner or Administrator to adjust your group permission matrix.
+          </p>
+          <button 
+            type="button"
+            onClick={() => setView('dashboard')}
+            className="mt-8 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-md transition-all active:scale-95"
+          >
+            Return to Dashboard
+          </button>
+        </div>
+      );
+    }
+
     if (view === 'ledger-master' || view === 'item-master') {
        return (
           <MasterView 
@@ -1034,6 +1190,37 @@ const AppContent: React.FC = () => {
                 setItemMasters(prev => [...prev, newItem]);
               }}
               onSaveEntry={(savedEntry, isNew) => {
+                const policy = getEffectivePolicy();
+
+                // 1. Check max single transaction limit
+                if (policy.maxTransactionAmount > 0) {
+                    const amtStr = savedEntry.totals?.grandTotal?.toString() || savedEntry.totals?.subtotal?.toString() || '0';
+                    const amt = parseFloat(amtStr.replace(/[^0-9.]/g, ''));
+                    if (amt > policy.maxTransactionAmount) {
+                        const formattedLimit = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(policy.maxTransactionAmount);
+                        const formattedAmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amt);
+                        addNotification({
+                            title: 'Transaction Limit Violated',
+                            message: `Voucher amount (${formattedAmt}) exceeds single transaction limit (${formattedLimit}) configured in your group rules.`,
+                            type: 'Error'
+                        });
+                        return;
+                    }
+                }
+
+                // 2. Check daily voucher uploading limits
+                if (isNew && policy.dailyVoucherLimit > 0) {
+                    const posted = getVouchersPostedTodayCount(allVouchers);
+                    if (posted >= policy.dailyVoucherLimit) {
+                        addNotification({
+                            title: 'Daily Limit Exceeded',
+                            message: `Your active group security policy restricts posts to max ${policy.dailyVoucherLimit} daily vouchers.`,
+                            type: 'Error'
+                        });
+                        return;
+                    }
+                }
+
                 const mappedVoucher = {
                     ...savedEntry,
                     date: { value: savedEntry.header?.voucherDate || '', confidence: 'High' },
@@ -1096,6 +1283,37 @@ const AppContent: React.FC = () => {
                 setItemMasters(prev => [...prev, newItem]);
               }}
               onSaveEntry={(savedEntry, isNew) => {
+                  const policy = getEffectivePolicy();
+
+                  // 1. Check max single transaction limit
+                  if (policy.maxTransactionAmount > 0) {
+                      const amtStr = savedEntry.totals?.grandTotal?.toString() || savedEntry.totals?.subtotal?.toString() || '0';
+                      const amt = parseFloat(amtStr.replace(/[^0-9.]/g, ''));
+                      if (amt > policy.maxTransactionAmount) {
+                          const formattedLimit = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(policy.maxTransactionAmount);
+                          const formattedAmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amt);
+                          addNotification({
+                              title: 'Transaction Limit Violated',
+                              message: `Voucher amount (${formattedAmt}) exceeds single transaction limit (${formattedLimit}) configured in your group rules.`,
+                              type: 'Error'
+                          });
+                          return;
+                      }
+                  }
+
+                  // 2. Check daily voucher uploading limits
+                  if (isNew && policy.dailyVoucherLimit > 0) {
+                      const posted = getVouchersPostedTodayCount(allVouchers);
+                      if (posted >= policy.dailyVoucherLimit) {
+                          addNotification({
+                              title: 'Daily Limit Exceeded',
+                              message: `Your active group security policy restricts posts to max ${policy.dailyVoucherLimit} daily vouchers.`,
+                              type: 'Error'
+                          });
+                          return;
+                      }
+                  }
+
                   const mappedVoucher = {
                       ...savedEntry,
                       date: { value: savedEntry.header?.voucherDate || '', confidence: 'High' },
@@ -1202,6 +1420,25 @@ const AppContent: React.FC = () => {
                 ledgerMasters={ledgerMasters}
                 onAppModeChange={handleAppModeChange}
             />
+        );
+    }
+
+    if (view === 'help') {
+        return (
+            <div className="max-w-7xl mx-auto space-y-6">
+                <HelpSettings />
+            </div>
+        );
+    }
+
+    if (view === 'support') {
+        return (
+            <div className="max-w-7xl mx-auto space-y-6">
+                <SupportSettings 
+                    defaultTab={supportActiveTab}
+                    onTabChange={setSupportActiveTab}
+                />
+            </div>
         );
     }
 
@@ -1317,7 +1554,7 @@ const AppContent: React.FC = () => {
     }
   };
 
-  const handleViewChange = (newView: MainView) => {
+  const handleViewChange = (newView: MainView, settingsTab?: string, usersSubTab?: string) => {
     if (newView === 'import' && view !== 'import') {
       setOriginView(view);
     }
@@ -1327,27 +1564,43 @@ const AppContent: React.FC = () => {
       setDashboardActiveTab('overview');
     }
 
-    // Apply routing defaults if configured
-    const savedNav = localStorage.getItem('bharat_book_navigation_defaults');
-    if (savedNav) {
-      try {
-        const { routing } = JSON.parse(savedNav);
-        if (routing && routing[newView]) {
-          const subPage = routing[newView];
-          
-          if (newView === 'reports') setReportActiveTab(subPage);
-          else if (newView === 'bank') setBankActiveTab(subPage);
-          else if (newView === 'ledger-master' || newView === 'item-master') setActiveMasterTab(subPage);
-          else if (newView === 'dashboard') setDashboardActiveTab(subPage);
-          else if (newView === 'vouchers') setVouchersActiveTab(subPage);
-          else if (newView === 'gst-report') setGstActiveTab(subPage);
-          else if (newView === 'item-report') setItemReportActiveTab(subPage);
-          else if (newView === 'voucher-entry') setVoucherEntryActiveTab(subPage);
-          else if (newView === 'inventory-entry') setInventoryEntryActiveTab(subPage);
-          else if (newView === 'settings') setSettingsActiveTab(subPage);
+    if (newView === 'settings' && settingsTab) {
+      setSettingsActiveTab(settingsTab);
+      if (settingsTab === 'users' && usersSubTab) {
+        localStorage.setItem('bharat_book_users_subtab_override', usersSubTab);
+        setTimeout(() => {
+           window.dispatchEvent(new Event('bharat_book_users_subtab_trigger'));
+        }, 50);
+      } else if (settingsTab === 'support' && usersSubTab) {
+        localStorage.setItem('bharat_book_support_subtab_override', usersSubTab);
+        setTimeout(() => {
+           window.dispatchEvent(new Event('bharat_book_support_subtab_trigger'));
+        }, 50);
+      }
+    } else {
+      // Apply routing defaults if configured
+      const savedNav = localStorage.getItem('bharat_book_navigation_defaults');
+      if (savedNav) {
+        try {
+          const { routing } = JSON.parse(savedNav);
+          if (routing && routing[newView]) {
+            const subPage = routing[newView];
+            
+            if (newView === 'reports') setReportActiveTab(subPage);
+            else if (newView === 'bank') setBankActiveTab(subPage);
+            else if (newView === 'ledger-master' || newView === 'item-master') setActiveMasterTab(subPage);
+            else if (newView === 'dashboard') setDashboardActiveTab(subPage);
+            else if (newView === 'vouchers') setVouchersActiveTab(subPage);
+            else if (newView === 'gst-report') setGstActiveTab(subPage);
+            else if (newView === 'item-report') setItemReportActiveTab(subPage);
+            else if (newView === 'voucher-entry') setVoucherEntryActiveTab(subPage);
+            else if (newView === 'inventory-entry') setInventoryEntryActiveTab(subPage);
+            else if (newView === 'settings') setSettingsActiveTab(subPage);
+            else if (newView === 'support') setSupportActiveTab(subPage);
+          }
+        } catch (e) {
+          console.error("Error applying routing defaults", e);
         }
-      } catch (e) {
-        console.error("Error applying routing defaults", e);
       }
     }
     
@@ -1383,6 +1636,7 @@ const AppContent: React.FC = () => {
       <Layout
         pageTitle={view === 'import' ? "Import" : view.charAt(0).toUpperCase() + view.slice(1)}
         activeView={view}
+        settingsActiveTab={settingsActiveTab}
         onViewChange={handleViewChange}
       >
         {renderContent()}

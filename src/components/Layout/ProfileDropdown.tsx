@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, Settings, LogOut, Shield, Compass, HelpCircle } from 'lucide-react';
+import { User, Settings, LogOut, Shield, Compass, HelpCircle, LifeBuoy } from 'lucide-react';
 import { AccountIcon } from '../icons/IconComponents';
 import { MainView } from '../../types';
 import { ManagedUser, INITIAL_USERS } from '../Settings/UserSettings';
 
 interface ProfileDropdownProps {
-  onViewChange?: (view: MainView) => void;
+  onViewChange?: (view: MainView, settingsTab?: string, usersSubTab?: string) => void;
 }
 
 export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }) => {
@@ -28,22 +28,30 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleNavigate = (view: MainView, tabOverride?: string) => {
+  const handleNavigate = (view: MainView, settingsTab?: string, usersSubTab?: string) => {
     if (onViewChange) {
-      onViewChange(view);
-      if (tabOverride) {
-        localStorage.setItem('bharat_book_settings_active_tab_override', tabOverride);
-        setTimeout(() => {
-           window.dispatchEvent(new Event('bharat_book_settings_tab_trigger'));
-        }, 50);
-      }
+      onViewChange(view, settingsTab, usersSubTab);
     }
     setIsOpen(false);
   };
 
   const handleLogout = () => {
     setIsOpen(false);
+    
+    // Update session logout time
+    const currentSessionId = localStorage.getItem('bharat_book_current_session_id');
+    if (currentSessionId) {
+      const existingSessions = JSON.parse(localStorage.getItem('bharat_book_sessions') || '[]');
+      const sessionIndex = existingSessions.findIndex((s: any) => s.id === currentSessionId);
+      if (sessionIndex >= 0) {
+         existingSessions[sessionIndex].logoutTime = Date.now();
+         localStorage.setItem('bharat_book_sessions', JSON.stringify(existingSessions));
+      }
+      localStorage.removeItem('bharat_book_current_session_id');
+    }
+
     localStorage.removeItem('bharat_book_current_logged_in_user_id');
+    localStorage.removeItem('bharat_book_session_start');
     setTimeout(() => window.location.reload(), 300);
   };
 
@@ -72,7 +80,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
 
           <div className="py-2">
             <button
-              onClick={() => handleNavigate('settings', 'my-account')}
+              onClick={() => handleNavigate('settings', 'users', 'my-account')}
               className="w-full px-4 py-2 text-left flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
             >
               <User className="w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -82,7 +90,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
               </div>
             </button>
             <button
-              onClick={() => handleNavigate('settings', 'directory')}
+              onClick={() => handleNavigate('settings', 'users', 'directory')}
               className="w-full px-4 py-2 text-left flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
             >
               <Compass className="w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -92,7 +100,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
               </div>
             </button>
             <button
-              onClick={() => handleNavigate('settings')}
+              onClick={() => handleNavigate('settings', 'firm')}
               className="w-full px-4 py-2 text-left flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
             >
               <Settings className="w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -105,18 +113,28 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
 
           <div className="border-t border-gray-100 dark:border-gray-700 py-2">
             <button
-              onClick={() => {
-                // Here we would normally implement help menu or feedback
-                setIsOpen(false);
-              }}
-              className="w-full px-4 py-2 text-left flex items-center space-x-3 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+              onClick={() => handleNavigate('settings', 'help')}
+              className="w-full px-4 py-2 text-left flex items-center space-x-3 text-gray-655 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
             >
               <HelpCircle className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-              <span className="text-xs font-bold">Help & Support</span>
+              <div>
+                 <p className="text-xs font-bold">Help Center</p>
+                 <p className="text-[9px] text-gray-400">Knowledgebase & documents</p>
+              </div>
+            </button>
+            <button
+              onClick={() => handleNavigate('settings', 'support', 'tickets')}
+              className="w-full px-4 py-2 text-left flex items-center space-x-3 text-gray-655 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            >
+              <LifeBuoy className="w-4 h-4 text-violet-500" />
+              <div>
+                 <p className="text-xs font-bold text-violet-600 dark:text-violet-400">Support & Tickets</p>
+                 <p className="text-[9px] text-violet-450 dark:text-violet-500">AI Support chat & submit tickets</p>
+              </div>
             </button>
             <button
               onClick={handleLogout}
-              className="w-full px-4 py-2 text-left flex items-center space-x-3 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors"
+              className="w-full px-4 py-2 text-left flex items-center space-x-3 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors mt-1"
             >
               <LogOut className="w-4 h-4" />
               <span className="text-xs font-bold">Log out securely</span>

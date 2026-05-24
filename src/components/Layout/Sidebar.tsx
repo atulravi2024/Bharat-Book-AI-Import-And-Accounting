@@ -21,7 +21,8 @@ interface SidebarProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   activeView: MainView;
-  onViewChange: (view: MainView) => void;
+  onViewChange: (view: MainView, settingsTab?: string, usersSubTab?: string) => void;
+  settingsActiveTab?: string | null;
 }
 
 interface NavItemProps {
@@ -93,7 +94,7 @@ const NavGroup: React.FC<{
     );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpen, activeView, onViewChange }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpen, activeView, onViewChange, settingsActiveTab }) => {
   const [openGroup, setOpenGroup] = React.useState<string | null>(null);
 
   const toggleGroup = (id: string) => {
@@ -255,7 +256,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 </NavGroup>
             </div>
         </nav>
-        <div className="px-4 py-2 border-t border-slate-100 shrink-0">
+        <div className="px-4 py-2 border-t border-slate-100 dark:border-gray-700 shrink-0 space-y-1">
             <NavItem 
                 icon={<SettingsIcon className="text-xl" />} 
                 label="Settings" 

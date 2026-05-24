@@ -80,9 +80,19 @@ export const AppNavigationSettings: React.FC = () => {
     { id: "item-report", label: "Item Report", icon: "📉" },
     { id: "reports", label: "Financial Report", icon: "📑" },
     { id: "settings", label: "Settings", icon: "⚙️" },
+    { id: "help", label: "Help Center", icon: "❓" },
+    { id: "support", label: "Support & Tickets", icon: "🎫" },
   ];
 
   const subPages: Record<string, { id: string; label: string }[]> = {
+    help: [
+      { id: "main", label: "Help Hub" },
+    ],
+    support: [
+      { id: "chat", label: "AI Diagnostic Chat" },
+      { id: "diagnostics", label: "Systems Integrity Suite" },
+      { id: "tickets", label: "Submit & Track Tickets" },
+    ],
     dashboard: [
       { id: "overview", label: "Overview" },
       { id: "sales", label: "Sales" },
@@ -233,6 +243,8 @@ export const AppNavigationSettings: React.FC = () => {
       { id: "ai", label: "AI Engines" },
       { id: "admin", label: "Admin" },
       { id: "data", label: "Data Explorer" },
+      { id: "help", label: "Help Center" },
+      { id: "support", label: "Support & Tickets" },
     ],
   };
 

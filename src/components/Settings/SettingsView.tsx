@@ -31,6 +31,9 @@ import { InvoicePrintSettings } from "./InvoicePrintSettings";
 import { FormDetailSettings } from "./FormDetailSettings";
 import { FirmSettings } from "./FirmSettings";
 import { useNotifications } from "../../context/NotificationContext";
+import { HelpCircle, LifeBuoy } from "lucide-react";
+import { HelpSettings } from "./HelpSettings";
+import { SupportSettings } from "./SupportSettings";
 
 // Import default noise lists
 import {
@@ -423,6 +426,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     | "invoiceprint"
     | "formdetails"
     | "firm"
+    | "help"
+    | "support"
   >((defaultTab as any) || "general");
 
   useEffect(() => {
@@ -435,7 +440,15 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     const checkAndApplyOverride = () => {
       const override = localStorage.getItem('bharat_book_settings_active_tab_override');
       if (override) {
-        setActiveTab(override as any);
+        if (['my-account', 'directory', 'group-rules', 'profile', 'active-users', 'help'].includes(override)) {
+          setActiveTab('users');
+          localStorage.setItem('bharat_book_users_subtab_override', override);
+          setTimeout(() => {
+             window.dispatchEvent(new Event('bharat_book_users_subtab_trigger'));
+          }, 50);
+        } else {
+          setActiveTab(override as any);
+        }
         localStorage.removeItem('bharat_book_settings_active_tab_override');
       }
     };
@@ -851,6 +864,20 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             >
               <CodeIcon className="mr-3" /> Data Explorer
             </button>
+            <button
+              id="settings-tab-help"
+              onClick={() => handleTabChange("help")}
+              className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === "help" ? "bg-blue-600 text-white shadow-lg border border-transparent" : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent"}`}
+            >
+              <HelpCircle className="mr-3 w-4 h-4" /> Help Center
+            </button>
+            <button
+              id="settings-tab-support"
+              onClick={() => handleTabChange("support")}
+              className={`flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap ${activeTab === "support" ? "bg-blue-600 text-white shadow-lg border border-transparent" : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent"}`}
+            >
+              <LifeBuoy className="mr-3 w-4 h-4" /> Support & Tickets
+            </button>
           </div>
         </div>
 
@@ -930,7 +957,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           {activeTab === "navigation" && <AppNavigationSettings />}
 
-          {activeTab === "data" && <DataExplorer />}
+           {activeTab === "data" && <DataExplorer />}
+
+          {activeTab === "help" && <HelpSettings />}
+
+          {activeTab === "support" && <SupportSettings />}
 
           {activeTab === "mapping" && (
             <MappingSettings

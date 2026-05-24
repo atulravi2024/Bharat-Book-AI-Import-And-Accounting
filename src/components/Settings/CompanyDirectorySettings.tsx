@@ -17,7 +17,25 @@ export const CompanyDirectorySettings = () => {
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [showImportMenu, setShowImportMenu] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const exportDropdownRef = useRef<HTMLDivElement>(null);
+  const importDropdownRef = useRef<HTMLDivElement>(null);
   const [importType, setImportType] = useState<'csv' | 'json'>('csv');
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (exportDropdownRef.current && !exportDropdownRef.current.contains(event.target as Node)) {
+        setShowExportMenu(false);
+      }
+      if (importDropdownRef.current && !importDropdownRef.current.contains(event.target as Node)) {
+        setShowImportMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Editor state
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -27,9 +45,45 @@ export const CompanyDirectorySettings = () => {
   const [formName, setFormName] = useState('');
   const [formEmail, setFormEmail] = useState('');
   const [formPhone, setFormPhone] = useState('');
-  const [formRole, setFormRole] = useState<'Super Admin' | 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer'>('Editor');
+  const [formRole, setFormRole] = useState<'Developer' | 'Super Admin' | 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer'>('Editor');
   const [formDept, setFormDept] = useState('Finance');
   const [formStatus, setFormStatus] = useState<'Active' | 'Invited' | 'Suspended'>('Active');
+  
+  // New customized profile fields
+  const [formDob, setFormDob] = useState('');
+  const [formGender, setFormGender] = useState('');
+  const [formAadhaar, setFormAadhaar] = useState('');
+  const [formVoterId, setFormVoterId] = useState('');
+  const [formPan, setFormPan] = useState('');
+  const [formDl, setFormDl] = useState('');
+  const [formProfilePhoto, setFormProfilePhoto] = useState('');
+  const [formLinkedStaffId, setFormLinkedStaffId] = useState('');
+  const [formInactivityTimeoutMinutes, setFormInactivityTimeoutMinutes] = useState<string>('0');
+  const [formMaxLoginAttempts, setFormMaxLoginAttempts] = useState<string>('0');
+
+  const [staffMasters, setStaffMasters] = useState<any[]>([]);
+
+  // Password reset state
+  const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
+  const [resetTargetUser, setResetTargetUser] = useState<ManagedUser | null>(null);
+  const [resetRole, setResetRole] = useState<'Developer' | 'Super Admin' | 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer'>('Editor');
+  const [resetDept, setResetDept] = useState('Finance');
+  const [resetMethod, setResetMethod] = useState<'email' | 'manual'>('email');
+  const [newPassword, setNewPassword] = useState('password123');
+  const [confirmPassword, setConfirmPassword] = useState('password123');
+  const [passwordError, setPasswordError] = useState('');
+  const [requirePasswordChange, setRequirePasswordChange] = useState(true);
+
+  const generateSecurePassword = () => {
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    let pass = "";
+    for(let i = 0; i < 12; i++) {
+       pass += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setNewPassword(pass);
+    setConfirmPassword(pass);
+    setPasswordError('');
+  };
 
   useEffect(() => {
     const saved = localStorage.getItem('bharat_book_managed_users');
@@ -58,6 +112,15 @@ export const CompanyDirectorySettings = () => {
     }
 
     setUsers(loadedUsers);
+
+    // Load Staff Masters
+    const savedContacts = localStorage.getItem('bharat_book_contact_masters');
+    if (savedContacts) {
+      try {
+        const parsed = JSON.parse(savedContacts);
+        setStaffMasters(parsed.filter((c: any) => c.unifiedType === 'Staff' || c.contactType === 'Internal'));
+      } catch (e) {}
+    }
   }, []);
 
   const saveUsersToStorage = (updatedUsers: ManagedUser[]) => {
@@ -229,19 +292,44 @@ export const CompanyDirectorySettings = () => {
       return;
     }
     
-    // In a real app, this would trigger an email or open a secure dialog.
-    // Here we use a simple JS prompt for demonstration.
-    const newPassword = window.prompt(`Enter new password for ${target.name}:`, 'password123');
-    if (!newPassword) return;
+    setResetTargetUser(target);
+    setResetRole(target.role);
+    setResetDept(target.department);
+    setNewPassword('password123'); // Default password
+    setConfirmPassword('password123');
+    setPasswordError('');
+    setIsResetPasswordOpen(true);
+  };
 
-    const updated = users.map(u => u.id === userId ? { ...u, password: newPassword } : u);
-    saveUsersToStorage(updated);
+  const executePasswordReset = () => {
+    if (!resetTargetUser) return;
+
+    if (resetMethod === 'manual') {
+      if (!newPassword.trim()) {
+        setPasswordError('Password cannot be empty');
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        setPasswordError('Passwords do not match');
+        return;
+      }
+      const updated = users.map(u => u.id === resetTargetUser.id ? { ...u, password: newPassword, role: resetRole, department: resetDept } : u);
+      saveUsersToStorage(updated);
+      
+      addNotification({
+        title: 'Password Updated',
+        message: `The password for ${resetTargetUser.name} has been successfully updated.`,
+        type: 'System'
+      });
+    } else {
+      addNotification({
+        title: 'Password Reset Link Sent',
+        message: `A secure password reset link has been dispatched to ${resetTargetUser.email}.`,
+        type: 'System'
+      });
+    }
     
-    addNotification({
-      title: 'Password Updated',
-      message: `The password for ${target.name} has been successfully updated.`,
-      type: 'System'
-    });
+    setIsResetPasswordOpen(false);
   };
 
   const handleOpenForm = (user?: ManagedUser) => {
@@ -261,6 +349,16 @@ export const CompanyDirectorySettings = () => {
       setFormRole(user.role);
       setFormDept(user.department);
       setFormStatus(user.status);
+      setFormDob(user.dob || '');
+      setFormGender(user.gender || '');
+      setFormAadhaar(user.aadhaarId || '');
+      setFormVoterId(user.voterId || '');
+      setFormPan(user.panCard || '');
+      setFormDl(user.drivingLicense || '');
+      setFormProfilePhoto(user.profilePhoto || '');
+      setFormLinkedStaffId(user.internalStaffId || '');
+      setFormInactivityTimeoutMinutes(user.inactivityTimeoutMinutes !== undefined ? String(user.inactivityTimeoutMinutes) : '0');
+      setFormMaxLoginAttempts(user.maxLoginAttempts !== undefined ? String(user.maxLoginAttempts) : '0');
     } else {
       setEditingUser(null);
       setFormName('');
@@ -269,6 +367,16 @@ export const CompanyDirectorySettings = () => {
       setFormRole('Editor');
       setFormDept('Finance');
       setFormStatus('Active');
+      setFormDob('');
+      setFormGender('');
+      setFormAadhaar('');
+      setFormVoterId('');
+      setFormPan('');
+      setFormDl('');
+      setFormProfilePhoto('');
+      setFormLinkedStaffId('');
+      setFormInactivityTimeoutMinutes('0');
+      setFormMaxLoginAttempts('0');
     }
     setIsFormOpen(true);
   };
@@ -306,6 +414,16 @@ export const CompanyDirectorySettings = () => {
             role: formRole,
             department: formDept,
             status: formStatus,
+            dob: formDob,
+            gender: formGender,
+            aadhaarId: formAadhaar,
+            voterId: formVoterId,
+            panCard: formPan,
+            drivingLicense: formDl,
+            profilePhoto: formProfilePhoto,
+            internalStaffId: formLinkedStaffId,
+            inactivityTimeoutMinutes: formInactivityTimeoutMinutes && formInactivityTimeoutMinutes !== '0' ? parseInt(formInactivityTimeoutMinutes, 10) : undefined,
+            maxLoginAttempts: formMaxLoginAttempts && formMaxLoginAttempts !== '0' ? parseInt(formMaxLoginAttempts, 10) : undefined,
             activityLogs: [log, ...u.activityLogs]
           };
         }
@@ -339,6 +457,16 @@ export const CompanyDirectorySettings = () => {
         status: 'Invited',
         lastActive: 'Invitation Pending',
         avatarColor: selectedColor,
+        dob: formDob,
+        gender: formGender,
+        aadhaarId: formAadhaar,
+        voterId: formVoterId,
+        panCard: formPan,
+        drivingLicense: formDl,
+        profilePhoto: formProfilePhoto,
+        internalStaffId: formLinkedStaffId,
+        inactivityTimeoutMinutes: formInactivityTimeoutMinutes && formInactivityTimeoutMinutes !== '0' ? parseInt(formInactivityTimeoutMinutes, 10) : undefined,
+        maxLoginAttempts: formMaxLoginAttempts && formMaxLoginAttempts !== '0' ? parseInt(formMaxLoginAttempts, 10) : undefined,
         permissions: {
           vouchers: { read: true, create: formRole !== 'Viewer', edit: formRole !== 'Viewer' && formRole !== 'Editor', delete: false },
           masters: { read: true, create: formRole === 'Admin' || formRole === 'Manager', edit: formRole === 'Admin' || formRole === 'Manager', delete: false },
@@ -558,7 +686,7 @@ export const CompanyDirectorySettings = () => {
                 accept={importType === 'csv' ? '.csv' : '.json'} 
                 className="hidden" 
               />
-              <div className="relative">
+              <div className="relative" ref={importDropdownRef}>
                 <button 
                   onClick={() => setShowImportMenu(!showImportMenu)}
                   className="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
@@ -568,12 +696,12 @@ export const CompanyDirectorySettings = () => {
                 </button>
                 {showImportMenu && (
                   <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-10 animate-in slide-in-from-top-2">
-                     <button onClick={() => handleImportClick('csv')} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Import CSV</button>
-                     <button onClick={() => handleImportClick('json')} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Import JSON</button>
+                     <button onClick={() => { handleImportClick('csv'); setShowImportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Import CSV</button>
+                     <button onClick={() => { handleImportClick('json'); setShowImportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Import JSON</button>
                   </div>
                 )}
               </div>
-              <div className="relative">
+              <div className="relative" ref={exportDropdownRef}>
                 <button 
                   onClick={() => setShowExportMenu(!showExportMenu)}
                   className="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
@@ -583,8 +711,8 @@ export const CompanyDirectorySettings = () => {
                 </button>
                 {showExportMenu && (
                   <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-10 animate-in slide-in-from-top-2">
-                     <button onClick={() => handleExport('csv')} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Export CSV</button>
-                     <button onClick={() => handleExport('json')} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Export JSON</button>
+                     <button onClick={() => { handleExport('csv'); setShowExportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Export CSV</button>
+                     <button onClick={() => { handleExport('json'); setShowExportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Export JSON</button>
                   </div>
                 )}
               </div>
@@ -799,6 +927,54 @@ export const CompanyDirectorySettings = () => {
                 </div>
               </div>
 
+              {/* Organizational Binding Block */}
+              <div className="bg-slate-50/30 dark:bg-gray-900/10 p-4 rounded-2xl border border-dashed border-gray-200/50 dark:border-gray-700 mb-6 space-y-3">
+                <h5 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Binding Security</h5>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-[11px] font-bold">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[9px] text-gray-400 font-extrabold uppercase tracking-wider">Inactivity Timeout</span>
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {(() => {
+                        if (selectedUser.inactivityTimeoutMinutes !== undefined && selectedUser.inactivityTimeoutMinutes !== null && selectedUser.inactivityTimeoutMinutes !== 0) {
+                          return `${selectedUser.inactivityTimeoutMinutes} Minutes (User Custom)`;
+                        }
+                        try {
+                          const pols = localStorage.getItem('bharat_book_security_policies');
+                          if (pols) {
+                            const parsed = JSON.parse(pols);
+                            if (parsed.roleInactivityTimeouts && parsed.roleInactivityTimeouts[selectedUser.role]) {
+                              return `${parsed.roleInactivityTimeouts[selectedUser.role]} Minutes (Role Default)`;
+                            }
+                          }
+                        } catch {}
+                        return `${localStorage.getItem('bharat_book_inactivity_timeout_minutes') || '30'} Minutes (Inherited Global)`;
+                      })()}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[9px] text-gray-400 font-extrabold uppercase tracking-wider">Max Login Attempts</span>
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {(() => {
+                        if (selectedUser.maxLoginAttempts !== undefined && selectedUser.maxLoginAttempts !== null && selectedUser.maxLoginAttempts !== 0) {
+                          return selectedUser.maxLoginAttempts === 999 ? 'Unlimited attempts (User Custom)' : `${selectedUser.maxLoginAttempts} Attempts (User Custom)`;
+                        }
+                        try {
+                          const pols = localStorage.getItem('bharat_book_security_policies');
+                          if (pols) {
+                            const parsed = JSON.parse(pols);
+                            if (parsed.roleMaxAttempts && parsed.roleMaxAttempts[selectedUser.role]) {
+                              const limit = parsed.roleMaxAttempts[selectedUser.role];
+                              return limit === 999 ? 'Unlimited attempts (Role Default)' : `${limit} Attempts (Role Default)`;
+                            }
+                          }
+                        } catch {}
+                        return '5 Attempts (Role Default)';
+                      })()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               {/* Permissions Access Matrix Grid */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
@@ -895,97 +1071,282 @@ export const CompanyDirectorySettings = () => {
 
       {/* Invite / Edit User modal */}
       {isFormOpen && (
-        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white dark:bg-gray-800 rounded-[2rem] p-8 max-w-md w-full border border-gray-100 dark:border-gray-700 shadow-2xl relative">
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in overflow-y-auto pt-10 pb-10">
+          <div className="bg-white dark:bg-gray-800 rounded-[2rem] p-8 max-w-4xl w-full border border-gray-100 dark:border-gray-700 shadow-2xl relative my-auto">
             <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest mb-6 border-b border-gray-100 dark:border-gray-700 pb-3 flex items-center">
               <User className="mr-2 text-blue-600 w-4 h-4" /> {editingUser ? 'Modify credentials' : 'Invite New Team member'}
             </h3>
 
-            <form onSubmit={handleSaveFormUser} className="space-y-4">
-              <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Full Identity Name</label>
-                <input
-                  type="text"
-                  value={formName}
-                  onChange={(e) => setFormName(e.target.value)}
-                  placeholder="e.g. Rahul Sharma"
-                  className="w-full p-3.5 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
-                  required
-                />
+            <form onSubmit={handleSaveFormUser} className="space-y-6">
+              
+              {/* Linked Staff Member Section */}
+              <div className="bg-blue-50/50 dark:bg-blue-900/10 p-4 rounded-2xl border border-blue-100 dark:border-blue-900/30">
+                <label className="block text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-2 pl-1">
+                  Linked Staff Master Account (Internal Context)
+                </label>
+                <select
+                  value={formLinkedStaffId}
+                  onChange={(e) => {
+                    setFormLinkedStaffId(e.target.value);
+                    const staff = staffMasters.find(s => s.id === e.target.value);
+                    if (staff) {
+                      setFormName(staff.name || formName);
+                      setFormEmail(staff.email || formEmail);
+                      setFormPhone(staff.phone || formPhone);
+                      if (staff.department) setFormDept(staff.department);
+                      setFormGender(staff.gender || formGender);
+                      setFormDob(staff.dateOfBirth || formDob);
+                      setFormAadhaar(staff.aadhaarCard || formAadhaar);
+                      setFormVoterId(staff.voterIdCard || formVoterId);
+                      setFormPan(staff.panCard || formPan);
+                      setFormDl(staff.drivingLicense || formDl);
+                      setFormProfilePhoto(staff.photoUrl || formProfilePhoto);
+                    }
+                  }}
+                  className="w-full p-3 bg-white dark:bg-gray-900 border border-blue-100 dark:border-gray-700 rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-300 outline-none text-xs cursor-pointer"
+                >
+                  <option value="">-- Disconnected / Standalone Account --</option>
+                  {staffMasters.map((staff) => (
+                    <option key={staff.id} value={staff.id}>
+                      {staff.name} ({staff.code}) - {staff.designation || 'Staff'} - {staff.department}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-2 pl-1 font-medium bg-transparent">Connecting a staff master will auto-fill profile details</p>
               </div>
+              
+              {/* Photo Upload & Main details */}
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex-shrink-0 flex flex-col items-center justify-center space-y-3">
+                  <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-600 overflow-hidden relative group cursor-pointer" onClick={() => document.getElementById('profile-photo-upload')?.click()}>
+                    {formProfilePhoto ? (
+                      <img src={formProfilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full text-gray-400 group-hover:text-blue-500 transition-colors">
+                        <User className="w-10 h-10" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center transition-all">
+                       <Upload className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <input 
+                    type="file" 
+                    id="profile-photo-upload" 
+                    className="hidden" 
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = (ev) => setFormProfilePhoto(ev.target?.result as string);
+                        reader.readAsDataURL(e.target.files[0]);
+                      }
+                    }} 
+                  />
+                  <span className="text-[10px] uppercase font-bold text-gray-500">Profile Photo</span>
+                </div>
+                
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Full Identity Name</label>
+                    <input
+                      type="text"
+                      value={formName}
+                      onChange={(e) => setFormName(e.target.value)}
+                      placeholder="e.g. Rahul Sharma"
+                      className="w-full p-3.5 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
+                      required
+                    />
+                  </div>
 
-              <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Email address</label>
-                <input
-                  type="email"
-                  value={formEmail}
-                  onChange={(e) => setFormEmail(e.target.value)}
-                  placeholder="e.g. rahul@bharatbook.com"
-                  className="w-full p-3.5 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
-                  required
-                />
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Email address</label>
+                    <input
+                      type="email"
+                      value={formEmail}
+                      onChange={(e) => setFormEmail(e.target.value)}
+                      placeholder="e.g. rahul@bharatbook.com"
+                      className="w-full p-3.5 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Contact Phone</label>
+                    <input
+                      type="text"
+                      value={formPhone}
+                      onChange={(e) => setFormPhone(e.target.value)}
+                      placeholder="e.g. +91 99000 88000"
+                      className="w-full p-3.5 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                     <div>
+                      <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Gender</label>
+                      <select
+                        value={formGender}
+                        onChange={(e) => setFormGender(e.target.value)}
+                        className="w-full p-3.5 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
+                      >
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Date of Birth</label>
+                      <input
+                        type="date"
+                        value={formDob}
+                        onChange={(e) => setFormDob(e.target.value)}
+                        className="w-full p-3 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Contact Phone</label>
-                <input
-                  type="text"
-                  value={formPhone}
-                  onChange={(e) => setFormPhone(e.target.value)}
-                  placeholder="e.g. +91 99000 88000"
-                  className="w-full p-3.5 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Security Role</label>
-                  <select
-                    value={formRole}
-                    onChange={(e) => setFormRole(e.target.value as any)}
-                    className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none"
-                  >
-                    {getRoleLevel(loggedInUser.role) <= 0 && <option value="Super Admin">Super Admin</option>}
-                    {getRoleLevel(loggedInUser.role) <= 0 && <option value="Owner">Owner</option>}
-                    {getRoleLevel(loggedInUser.role) <= 1 && <option value="Admin">Admin</option>}
-                    {getRoleLevel(loggedInUser.role) <= 2 && <option value="Manager">Manager</option>}
-                    {getRoleLevel(loggedInUser.role) <= 3 && <option value="Editor">Editor</option>}
-                    <option value="Viewer">Viewer</option>
-                  </select>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl space-y-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Government IDs</h4>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Aadhaar Card Number</label>
+                    <input
+                      type="text"
+                      value={formAadhaar}
+                      onChange={(e) => setFormAadhaar(e.target.value)}
+                      placeholder="xxxx-xxxx-xxxx"
+                      className="w-full p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs shadow-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Voter ID Card Number</label>
+                    <input
+                      type="text"
+                      value={formVoterId}
+                      onChange={(e) => setFormVoterId(e.target.value)}
+                      placeholder="Voter ID"
+                      className="w-full p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs shadow-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">PAN Card Number</label>
+                    <input
+                      type="text"
+                      value={formPan}
+                      onChange={(e) => setFormPan(e.target.value)}
+                      placeholder="ABCDE1234F"
+                      className="w-full p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs shadow-sm uppercase uppercase"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Driving License Number</label>
+                    <input
+                      type="text"
+                      value={formDl}
+                      onChange={(e) => setFormDl(e.target.value)}
+                      placeholder="DL Number"
+                      className="w-full p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs shadow-sm uppercase uppercase"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Department</label>
-                  <select
-                    value={formDept}
-                    onChange={(e) => setFormDept(e.target.value)}
-                    className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none"
-                  >
-                    <option value="Finance">Finance</option>
-                    <option value="Sales">Sales</option>
-                    <option value="IT Operations">IT Operations</option>
-                    <option value="Audit">Audit</option>
-                    <option value="Management">Management</option>
-                  </select>
+                <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl space-y-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-rose-600 dark:text-rose-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Organizational Binding</h4>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Security Role</label>
+                    <select
+                        value={formRole}
+                        onChange={(e) => setFormRole(e.target.value as any)}
+                        className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer"
+                      >
+                        <option value="Owner">Owner</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Editor">Editor</option>
+                        <option value="Viewer">Viewer</option>
+                      </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Department</label>
+                    <select
+                        value={formDept}
+                        onChange={(e) => setFormDept(e.target.value)}
+                        className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer"
+                      >
+                        <option value="Developer">Developer</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Sales">Sales</option>
+                        <option value="IT Operations">IT Operations</option>
+                        <option value="Audit">Audit</option>
+                        <option value="Management">Management</option>
+                      </select>
+                  </div>
+                  
+                  {editingUser && (
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Access Status</label>
+                      <select
+                        value={formStatus}
+                        onChange={(e) => setFormStatus(e.target.value as any)}
+                        className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer"
+                      >
+                        <option value="Active">Active</option>
+                        <option value="Invited">Invited</option>
+                        <option value="Suspended">Suspended</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Individual Inactivity Session Timeout */}
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Inactivity Session Timeout</label>
+                    <select
+                      disabled={editingUser ? !(loggedInUser.role === 'Super Admin' || (loggedInUser.role === 'Owner' && editingUser.role !== 'Super Admin') || (loggedInUser.role === 'Admin' && editingUser.role !== 'Super Admin' && editingUser.role !== 'Owner' && editingUser.role !== 'Admin')) : false}
+                      value={formInactivityTimeoutMinutes}
+                      onChange={(e) => setFormInactivityTimeoutMinutes(e.target.value)}
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer disabled:opacity-50"
+                    >
+                      <option value="0">Default (Inherit Group/Global)</option>
+                      <option value="10">10 Minutes</option>
+                      <option value="15">15 Minutes</option>
+                      <option value="30">30 Minutes</option>
+                      <option value="45">45 Minutes</option>
+                      <option value="60">1 Hour (60 Minutes)</option>
+                      <option value="120">2 Hours (120 Minutes)</option>
+                      <option value="360">6 Hours (360 Minutes)</option>
+                    </select>
+                  </div>
+
+                  {/* Individual Max Login Attempts Override */}
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Max Login Attempts Override</label>
+                    <select
+                      disabled={editingUser ? !(loggedInUser.role === 'Super Admin' || (loggedInUser.role === 'Owner' && editingUser.role !== 'Super Admin') || (loggedInUser.role === 'Admin' && editingUser.role !== 'Super Admin' && editingUser.role !== 'Owner' && editingUser.role !== 'Admin')) : false}
+                      value={formMaxLoginAttempts}
+                      onChange={(e) => setFormMaxLoginAttempts(e.target.value)}
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer disabled:opacity-50"
+                    >
+                      <option value="0">Default (Inherit Role Default)</option>
+                      <option value="3">3 Attempts before Lockout</option>
+                      <option value="5">5 Attempts before Lockout</option>
+                      <option value="10">10 Attempts before Lockout</option>
+                      <option value="15">15 Attempts before Lockout</option>
+                      <option value="999">Unlimited Attempts Allowed</option>
+                    </select>
+                    {editingUser && !(loggedInUser.role === 'Super Admin' || (loggedInUser.role === 'Owner' && editingUser.role !== 'Super Admin') || (loggedInUser.role === 'Admin' && editingUser.role !== 'Super Admin' && editingUser.role !== 'Owner' && editingUser.role !== 'Admin')) && (
+                      <p className="text-[9px] text-red-500 dark:text-red-400 font-semibold mt-1">
+                        Only higher roles are authorized to decide security restrictions.
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {editingUser && (
-                <div>
-                  <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Access pulse Status</label>
-                  <select
-                    value={formStatus}
-                    onChange={(e) => setFormStatus(e.target.value as any)}
-                    className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Invited">Invited</option>
-                    <option value="Suspended">Suspended</option>
-                  </select>
-                </div>
-              )}
-
-              <div className="flex items-center justify-end space-x-2 pt-4 border-t border-gray-100 dark:border-gray-700 mt-4 font-sans">
+              <div className="flex items-center justify-end space-x-2 pt-4 border-t border-gray-100 dark:border-gray-700 mt-6 font-sans">
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
@@ -1001,6 +1362,155 @@ export const CompanyDirectorySettings = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* Password Reset Modal */}
+      {isResetPasswordOpen && resetTargetUser && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white dark:bg-gray-800 rounded-[2rem] p-8 max-w-2xl w-full border border-gray-100 dark:border-gray-700 shadow-2xl relative">
+            <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest mb-6 border-b border-gray-100 dark:border-gray-700 pb-3 flex items-center">
+              <Key className="mr-2 text-indigo-600 w-4 h-4" /> Reset Identity Details
+            </h3>
+            
+            <div className="space-y-4">
+              <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl flex items-start gap-3 border border-amber-100 dark:border-amber-900/30">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <p className="text-[10px] font-medium text-amber-800 dark:text-amber-400 leading-relaxed">
+                  Resetting the password or modifying these settings will instantly terminate all active sessions for <span className="font-bold">{resetTargetUser.name}</span>. They will be required to log in with the new credentials.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Reset Method</label>
+                <div className="relative">
+                  <select
+                    value={resetMethod}
+                    onChange={(e) => setResetMethod(e.target.value as 'email' | 'manual')}
+                    className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl py-3 pl-4 pr-10 text-xs font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-indigo-200 outline-none appearance-none cursor-pointer"
+                  >
+                    <option value="email">Send Email Link</option>
+                    <option value="manual">Set Manually</option>
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+              
+              {resetMethod === 'manual' ? (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Department</label>
+                        <select
+                          value={resetDept}
+                          onChange={(e) => setResetDept(e.target.value)}
+                          className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl py-3 px-4 text-xs font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-indigo-200 outline-none cursor-pointer"
+                        >
+                          <option value="Developer">Developer</option>
+                          <option value="Finance">Finance</option>
+                          <option value="Sales">Sales</option>
+                          <option value="IT Operations">IT Operations</option>
+                          <option value="Audit">Audit</option>
+                          <option value="Management">Management</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Job Role</label>
+                        <select
+                          value={resetRole}
+                          onChange={(e) => setResetRole(e.target.value as any)}
+                          className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl py-3 px-4 text-xs font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-indigo-200 outline-none cursor-pointer"
+                        >
+                          <option value="Owner">Owner</option>
+                          <option value="Admin">Admin</option>
+                          <option value="Manager">Manager</option>
+                          <option value="Editor">Editor</option>
+                          <option value="Viewer">Viewer</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 bg-gray-50/50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
+                      <div>
+                        <div className="flex items-center justify-between mb-1.5 pl-1">
+                          <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500">New Password</label>
+                          <button 
+                            onClick={generateSecurePassword} 
+                            className="text-[10px] font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors uppercase tracking-wider"
+                          >
+                            Auto-Generate
+                          </button>
+                        </div>
+                        <div className="relative">
+                          <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <input
+                            type="text"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl py-3 pl-10 pr-4 text-xs font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-indigo-200 outline-none shadow-sm"
+                            placeholder="Enter new password"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Confirm New Password</label>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <input
+                            type="text"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className={`w-full bg-white dark:bg-gray-900 border ${passwordError ? 'border-red-400 focus:ring-red-200' : 'border-gray-100 dark:border-gray-700 focus:ring-indigo-200'} rounded-xl py-3 pl-10 pr-4 text-xs font-bold text-gray-700 dark:text-gray-200 focus:ring-2 outline-none shadow-sm`}
+                            placeholder="Confirm new password"
+                          />
+                        </div>
+                        {passwordError && (
+                          <p className="text-red-500 text-[10px] font-semibold mt-1.5 pl-1 flex items-center">
+                            <AlertTriangle className="w-3 h-3 mr-1" />
+                            {passwordError}
+                          </p>
+                        )}
+                      </div>
+                      
+                      <label className="flex items-start gap-3 p-3 border border-gray-100 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group mt-2 bg-white dark:bg-gray-800">
+                        <input 
+                           type="checkbox" 
+                           checked={requirePasswordChange} 
+                           onChange={(e) => setRequirePasswordChange(e.target.checked)}
+                           className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 disabled:opacity-50 mt-0.5"
+                        />
+                        <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors tracking-wider">Require password change on login</span>
+                      </label>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="p-4 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/20 rounded-xl">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 font-medium text-center leading-relaxed">
+                    A secure password reset link valid for 24 hours will be sent to<br/>
+                    <strong className="text-gray-900 dark:text-white mt-1 block">{resetTargetUser.email}</strong>
+                  </p>
+                </div>
+              )}
+
+              <div className="flex items-center justify-end space-x-2 pt-4 border-t border-gray-100 dark:border-gray-700 mt-4 font-sans">
+                <button
+                  onClick={() => setIsResetPasswordOpen(false)}
+                  className="py-3 px-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={executePasswordReset}
+                  className="py-3 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all shadow-md shadow-indigo-200 dark:shadow-none cursor-pointer"
+                >
+                  Update Password
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

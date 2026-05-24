@@ -8,10 +8,11 @@ interface LayoutProps {
   pageTitle: string;
   children: React.ReactNode;
   activeView: MainView;
-  onViewChange: (view: MainView) => void;
+  onViewChange: (view: MainView, settingsTab?: string, usersSubTab?: string) => void;
+  settingsActiveTab?: string | null;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView, onViewChange }) => {
+export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView, onViewChange, settingsActiveTab }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -26,8 +27,9 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView,
         isSidebarOpen={isSidebarOpen} 
         setIsSidebarOpen={setIsSidebarOpen} 
         activeView={activeView}
-        onViewChange={(view) => {
-          onViewChange(view);
+        settingsActiveTab={settingsActiveTab}
+        onViewChange={(view, settingsTab, usersSubTab) => {
+          onViewChange(view, settingsTab, usersSubTab);
           // Close on mobile after selection
           if (window.innerWidth < 768) {
             setIsSidebarOpen(false);
