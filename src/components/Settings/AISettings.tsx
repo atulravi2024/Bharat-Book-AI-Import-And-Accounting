@@ -98,8 +98,8 @@ export const AISettings: React.FC<AISettingsProps> = ({
                 {/* Engine Configuration */}
                 {aiSettings.provider === 'internal' ? (
                     <div className="form-grid !p-0 !border-0 animate-in slide-in-from-bottom-4 fade-in duration-300">
-                        <div className="form-field-wrapper space-y-2 md:col-span-2">
-                            <label className="form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Select Model</label>
+                        <div className="form-field-wrapper space-y-2 md:col-span-1">
+                            <label className="form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Select Model (System Tasks)</label>
                             <select 
                                 className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all shadow-sm"
                                 value={aiSettings.internalModel}
@@ -109,7 +109,33 @@ export const AISettings: React.FC<AISettingsProps> = ({
                                     <option key={m.id} value={m.id}>{m.name}</option>
                                 ))}
                             </select>
-                            <p className="text-[11px] text-gray-400 pt-1 font-medium italic">* Internal models are optimized for system tasks.</p>
+                            <p className="text-[11px] text-gray-400 pt-1 font-medium italic">* Internal models are optimized for system parsing.</p>
+                        </div>
+                        <div className="form-field-wrapper space-y-2 md:col-span-1">
+                            <label className="flex items-center justify-between form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">
+                                <span>Chatbot Model</span>
+                                <a 
+                                  href="https://ai.google.dev/gemini-api/docs/models/gemini" 
+                                  target="_blank" 
+                                  rel="noreferrer"
+                                  className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 text-[10px] underline lowercase"
+                                >
+                                  supported models
+                                </a>
+                            </label>
+                            <select 
+                                className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all shadow-sm"
+                                value={aiSettings.chatModel || 'gemini-2.5-flash'}
+                                onChange={(e) => setAiSettings({...aiSettings, chatModel: e.target.value})}
+                            >
+                                <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                                <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B</option>
+                                <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                                <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash-Lite</option>
+                                <option value="gemini-2.0-flash-lite-preview-02-05">Gemini 2.0 Flash-Lite Preview</option>
+                                <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                            </select>
+                            <p className="text-[11px] text-gray-400 pt-1 font-medium italic">* This model powers the support chatbot.</p>
                         </div>
                     </div>
                 ) : (

@@ -3,10 +3,10 @@ import {
   User, Plus, Search, Check, Trash2, Edit2, Mail, Phone, Briefcase, Lock, Unlock, 
   Shield, Activity, Settings, UserCheck, UserX, CheckSquare, Square, Info, Key, AlertTriangle, Compass, Download, Send, Upload, ChevronDown 
 } from 'lucide-react';
-import { useNotifications } from '../../context/NotificationContext';
-import { ManagedUser, INITIAL_USERS, UserPermissions, ActivityLog } from './UserSettings';
+import { useNotifications } from '../../../context/NotificationContext';
+import { ManagedUser, INITIAL_USERS, UserPermissions, ActivityLog } from '../UserSettings';
 
-export const CompanyDirectorySettings = () => {
+export const CompanyDirectoryTab = () => {
   const { addNotification } = useNotifications();
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string>('usr-1');
@@ -47,7 +47,7 @@ export const CompanyDirectorySettings = () => {
   const [formPhone, setFormPhone] = useState('');
   const [formRole, setFormRole] = useState<'Developer' | 'Super Admin' | 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer'>('Editor');
   const [formDept, setFormDept] = useState('Finance');
-  const [formStatus, setFormStatus] = useState<'Active' | 'Invited' | 'Suspended'>('Active');
+  const [formStatus, setFormStatus] = useState<'Active' | 'Invited' | 'Suspended' | 'Permanently Disabled' | 'Archived' | 'Terminated' | 'Deactivated'>('Active');
   
   // New customized profile fields
   const [formDob, setFormDob] = useState('');
@@ -146,8 +146,8 @@ export const CompanyDirectorySettings = () => {
   };
 
   const canModifyTarget = (targetRole: string) => {
-    if (targetRole === 'Super Admin') return false;
     if (loggedInUser.role === 'Super Admin') return true;
+    if (targetRole === 'Super Admin') return false;
     return getRoleLevel(loggedInUser.role) < getRoleLevel(targetRole);
   };
 
@@ -757,7 +757,7 @@ export const CompanyDirectorySettings = () => {
               </div>
 
               <div>
-                <label className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1 pl-1">Status Filter</label>
+                <label className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1 mb-1 pl-1">Status Filter</label>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
@@ -767,6 +767,10 @@ export const CompanyDirectorySettings = () => {
                   <option value="active">Active</option>
                   <option value="invited">Invited</option>
                   <option value="suspended">Suspended</option>
+                  <option value="permanently disabled">Permanently Disabled</option>
+                  <option value="archived">Archived</option>
+                  <option value="terminated">Terminated</option>
+                  <option value="deactivated">Deactivated</option>
                 </select>
               </div>
             </div>
@@ -805,6 +809,11 @@ export const CompanyDirectorySettings = () => {
                           <span className={`text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider ${
                             user.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
                             user.status === 'Invited' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' :
+                            user.status === 'Suspended' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400' :
+                            user.status === 'Permanently Disabled' ? 'bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-400' :
+                            user.status === 'Archived' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400' :
+                            user.status === 'Terminated' ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-400' :
+                            user.status === 'Deactivated' ? 'bg-gray-300 text-gray-800 dark:bg-gray-800 dark:text-gray-400' :
                             'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                           }`}>
                             {user.status}
@@ -834,7 +843,7 @@ export const CompanyDirectorySettings = () => {
                           <Send className="w-3 h-3" />
                         </button>
                       )}
-                      {user.role !== 'Super Admin' && (
+                      {(user.role !== 'Super Admin' || loggedInUser.role === 'Super Admin') && (
                         <>
                           <button
                             onClick={(e) => { e.stopPropagation(); handleOpenForm(user); }}
@@ -1263,6 +1272,7 @@ export const CompanyDirectorySettings = () => {
                         onChange={(e) => setFormRole(e.target.value as any)}
                         className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer"
                       >
+                        <option value="Super Admin">Super Admin</option>
                         <option value="Owner">Owner</option>
                         <option value="Admin">Admin</option>
                         <option value="Manager">Manager</option>
@@ -1277,6 +1287,7 @@ export const CompanyDirectorySettings = () => {
                         onChange={(e) => setFormDept(e.target.value)}
                         className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer"
                       >
+                        <option value="Super Admin">Super Admin</option>
                         <option value="Developer">Developer</option>
                         <option value="Finance">Finance</option>
                         <option value="Sales">Sales</option>
@@ -1297,6 +1308,10 @@ export const CompanyDirectorySettings = () => {
                         <option value="Active">Active</option>
                         <option value="Invited">Invited</option>
                         <option value="Suspended">Suspended</option>
+                        <option value="Permanently Disabled">Permanently Disabled</option>
+                        <option value="Archived">Archived</option>
+                        <option value="Terminated">Terminated</option>
+                        <option value="Deactivated">Deactivated</option>
                       </select>
                     </div>
                   )}

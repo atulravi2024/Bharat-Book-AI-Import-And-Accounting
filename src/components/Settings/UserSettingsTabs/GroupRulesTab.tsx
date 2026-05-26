@@ -20,7 +20,7 @@ import {
   RefreshCw,
   Info
 } from 'lucide-react';
-import { ManagedUser, INITIAL_USERS, UserPermissions } from './UserSettings';
+import { ManagedUser, INITIAL_USERS, UserPermissions } from '../UserSettings';
 
 interface GroupPolicy {
   inactivityTimeoutMinutes: number; // 0 means inherit global
@@ -111,7 +111,7 @@ const createDefaultPermissions = (groupName: string, isRole: boolean): UserPermi
   };
 };
 
-export const GroupRulesSettings: React.FC = () => {
+export const GroupRulesTab: React.FC = () => {
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [currentUser, setCurrentUser] = useState<ManagedUser | null>(null);
   const [activePane, setActivePane] = useState<'role' | 'department'>('role');

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   HelpCircle, Search, BookOpen, Sparkles, ChevronRight, CheckCircle, ArrowRight, 
   ShieldCheck, Database, RefreshCw, Settings, Sliders, Activity, Lock, Layers, 
-  Cpu, FileCode, Check, AlertTriangle, Building, Globe, Mail, Printer, LayoutGrid, Eye, HelpCircle as HelpIcon 
+  Cpu, FileCode, Check, AlertTriangle, Building, Globe, Mail, Printer, LayoutGrid, Eye, HelpCircle as HelpIcon, Clock 
 } from 'lucide-react';
 
 interface Article {
@@ -129,10 +129,14 @@ export const HelpSettings: React.FC = () => {
   const [activeSegment, setActiveSegment] = useState<'faq' | 'explorer' | 'trainer'>('explorer');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [expandedArticle, setExpandedArticle] = useState<string | null>('art-1');
+  const [expandedArticle, setExpandedArticle] = useState<string | null>(null);
 
   // Explorer Tab State
-  const [selectedFeatureId, setSelectedFeatureId] = useState<string>('vouchernumbering');
+  const [selectedFeatureId, setSelectedFeatureId] = useState<string>('');
+  const [selectedTrainerId, setSelectedTrainerId] = useState<string>('');
+  const [explorerGroups, setExplorerGroups] = useState({ config: false, data: false, security: false });
+  const toggleExpGroup = (g: 'config' | 'data' | 'security') => setExplorerGroups(p => ({ ...p, [g]: !p[g] }));
+  const [testUserRole, setTestUserRole] = useState<string>('Accountant');
 
   // Interactive Trainer States
   const [selectedCol, setSelectedCol] = useState<string | null>(null);
@@ -486,404 +490,230 @@ export const HelpSettings: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
-      {/* Compact Header Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-700 to-indigo-800 rounded-3xl p-4 sm:p-6 text-white shadow-md flex items-center justify-between gap-4">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-xl -ml-16 -mb-16 pointer-events-none" />
-        
-        <div className="relative z-10 flex items-center gap-3">
-          <div className="p-2.5 bg-white/10 rounded-xl shrink-0">
-            <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6 text-blue-100" />
+    <div className="max-w-6xl mx-auto space-y-4 animate-in fade-in duration-300">
+      {/* Compact Header Row */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-gray-900 p-3.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-[0.6rem] bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-100/50 dark:border-blue-500/20">
+            <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-black tracking-wider text-white uppercase leading-none">
-              Help Center
-            </h1>
-            <p className="text-[10px] sm:text-[11px] text-blue-100 mt-1 font-bold tracking-wider leading-none">
-              Knowledge Hub & Intelligent Manual
-            </p>
+            <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight">Help Center</h2>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">Knowledge Hub & Intelligent Manual</p>
           </div>
         </div>
-        <div className="relative z-10 hidden sm:flex items-center gap-2 font-mono text-[10px] bg-white/10 px-3 py-1.5 rounded-xl border border-white/10 shrink-0">
-          <span className="text-blue-200">BHARAT BOOK</span>
-          <span className="w-1 h-1 bg-emerald-400 rounded-full" />
-          <span className="text-white font-bold">INFO LEVEL SECURE</span>
-        </div>
-      </div>
 
-      {/* Main Module Segment Selectors */}
-      <div className="flex p-1 bg-gray-150 dark:bg-gray-950 rounded-2xl w-full max-w-2xl border border-gray-100 dark:border-gray-905">
-        <button
-          onClick={() => setActiveSegment('explorer')}
-          className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
-            activeSegment === 'explorer' 
-              ? 'bg-blue-600 text-white shadow-md' 
-              : 'text-gray-500 dark:text-gray-400 hover:text-gray-800'
-          }`}
-        >
-          <Settings className="w-4 h-4" /> 
-          Preferences Explorer
-        </button>
-        <button
-          onClick={() => setActiveSegment('trainer')}
-          className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
-            activeSegment === 'trainer' 
-              ? 'bg-blue-600 text-white shadow-md' 
-              : 'text-gray-500 dark:text-gray-400 hover:text-gray-800'
-          }`}
-        >
-          <Sparkles className="w-4 h-4" /> 
-          Mapping Trainer
-        </button>
-        <button
-          onClick={() => setActiveSegment('faq')}
-          className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
-            activeSegment === 'faq' 
-              ? 'bg-blue-600 text-white shadow-md' 
-              : 'text-gray-500 dark:text-gray-400 hover:text-gray-800'
-          }`}
-        >
-          <BookOpen className="w-4 h-4" /> 
-          Knowledge Articles
-        </button>
-      </div>
-
-      {/* SEGMENT 1: PREFERENCES EXPLORER (Highlights ALL 15 preference tabs in full detail) */}
-      {activeSegment === 'explorer' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-2 w-full md:w-auto mt-3 md:mt-0">
+          <div className="flex items-center justify-between md:justify-start gap-2 font-mono text-[10px] bg-gray-50 dark:bg-gray-800/50 px-3 py-2 md:py-1.5 rounded-lg border border-gray-200/50 dark:border-gray-700/50 shrink-0">
+            <span className="text-gray-500 dark:text-gray-400 font-semibold">BHARAT BOOK</span>
+            <div className="flex items-center gap-1.5 border-l border-gray-200 dark:border-gray-700 pl-2">
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-sm shadow-emerald-200" />
+              <span className="text-gray-700 dark:text-gray-300 font-bold tracking-tight">SECURE MODE</span>
+            </div>
+          </div>
           
-          {/* Navigation/Features List Sidebar */}
-          <div className="lg:col-span-4 bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-sm border border-gray-100 dark:border-gray-750 flex flex-col h-full max-h-[750px]">
-            <div className="mb-4">
-              <h3 className="text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white">Preference Modules</h3>
-              <p className="text-[10px] text-gray-400 font-bold uppercase mt-0.5 tracking-wider">Explore all 15 active system controls</p>
-            </div>
-            
-            <div className="space-y-1.5 overflow-y-auto pr-1 flex-1 custom-scrollbar">
-              {FEATURES_LIST.map(feat => {
-                const IsSelected = selectedFeatureId === feat.id;
-                const IconComp = feat.icon;
-                return (
-                  <button
-                    key={feat.id}
-                    onClick={() => setSelectedFeatureId(feat.id)}
-                    className={`w-full p-3 rounded-xl text-left border flex items-center gap-3 transition-all ${
-                      IsSelected 
-                        ? 'bg-blue-600 text-white border-transparent shadow shadow-blue-100' 
-                        : 'bg-gray-50 hover:bg-gray-100 dark:bg-gray-900/50 dark:hover:bg-gray-900 border-gray-100 dark:border-gray-800 text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    <div className={`p-1.5 rounded-lg shrink-0 ${IsSelected ? 'bg-white/20' : 'bg-slate-200 dark:bg-gray-800'}`}>
-                      <IconComp className={`w-4 h-4 ${IsSelected ? 'text-white' : 'text-blue-600 dark:text-blue-400'}`} />
-                    </div>
-                    <div className="truncate">
-                      <p className="text-xs font-black uppercase tracking-wider leading-tight">{feat.name}</p>
-                      <p className={`text-[9px] truncate tracking-normal font-medium ${IsSelected ? 'text-blue-100' : 'text-gray-400'}`}>
-                        Settings tab: {feat.tabKey}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+          <div className="grid grid-cols-3 md:flex items-center bg-gray-100 dark:bg-gray-800 p-1 rounded-lg shrink-0 gap-1 shadow-sm md:shadow-none">
+             <button
+               onClick={() => setActiveSegment('explorer')}
+               className={`flex items-center gap-1.5 px-2 py-1.5 md:py-1 md:min-w-[90px] justify-center rounded-md text-[11px] font-bold transition-all ${
+                 activeSegment === 'explorer' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+               }`}
+             >
+               <Settings className="w-3 h-3" /> Explorer
+             </button>
+             <button
+               onClick={() => setActiveSegment('trainer')}
+               className={`flex items-center gap-1.5 px-2 py-1.5 md:py-1 md:min-w-[90px] justify-center rounded-md text-[11px] font-bold transition-all ${
+                 activeSegment === 'trainer' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+               }`}
+             >
+               <Sparkles className="w-3 h-3" /> Trainer
+             </button>
+             <button
+               onClick={() => setActiveSegment('faq')}
+               className={`flex items-center gap-1.5 px-2 py-1.5 md:py-1 md:min-w-[90px] justify-center rounded-md text-[11px] font-bold transition-all ${
+                 activeSegment === 'faq' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+               }`}
+             >
+               <BookOpen className="w-3 h-3" /> Knowledge
+             </button>
           </div>
+        </div>
+      </div>
 
-          {/* Interactive Feature Deep Dive Panel */}
-          <div className="lg:col-span-8 space-y-6">
-            <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700 space-y-6">
-              
-              {/* Module Header */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-50 dark:border-gray-700 pb-5">
+      {/* SEGMENT 1: PREFERENCES EXPLORER */}
+      {activeSegment === 'explorer' && (
+        <div className="space-y-5">
+          {/* Group 1: Configuration & UI */}
+          <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border ${explorerGroups.config ? 'border-blue-200 dark:border-blue-800/50' : 'border-gray-100 dark:border-gray-700'}`}>
+             <button 
+                onClick={() => toggleExpGroup('config')}
+                className="w-full flex items-center justify-between p-5 focus:outline-none"
+             >
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-2xl text-blue-600 dark:text-blue-400 border border-blue-100/40">
-                    <FeatureIcon className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <span className="bg-blue-50 dark:bg-blue-900/30 px-2.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest text-blue-700 dark:text-blue-300 border border-blue-100/20">
-                      Settings Tab: {selectedFeature.tabKey}
-                    </span>
-                    <h2 className="text-base sm:text-lg font-black text-gray-950 dark:text-white uppercase tracking-normal mt-0.5">{selectedFeature.name}</h2>
-                  </div>
+                   <div className={`p-2 rounded-lg transition-colors ${explorerGroups.config ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300' : 'bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400'}`}>
+                      <Settings className="w-5 h-5" />
+                   </div>
+                   <div className="text-left">
+                      <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Configuration & UI</h4>
+                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Firm Setup, Numbers & Visuals</p>
+                   </div>
                 </div>
-              </div>
-
-              {/* Comprehensive Feature Description */}
-              <div className="space-y-2">
-                <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-400">Core Functional Scope</h4>
-                <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold leading-relaxed">
-                  {selectedFeature.description}
-                </p>
-                <div className="p-4 bg-slate-50 dark:bg-gray-950/60 rounded-2xl border border-gray-100 dark:border-gray-800 text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold">
-                  <span className="font-bold text-gray-800 dark:text-gray-200 block uppercase text-[9px] tracking-widest mb-1 text-blue-600">Accounting Concept:</span>
-                  {selectedFeature.concept}
-                </div>
-              </div>
-
-              {/* LIVE PLAYGROUND SIMULATORS (Based on Selected Setting Function) */}
-              <div className="p-5 bg-gradient-to-b from-indigo-50/20 to-indigo-100/10 dark:from-indigo-950/10 dark:to-indigo-900/10 rounded-2xl border border-indigo-100/30 space-y-4">
-                <div className="flex items-center gap-1.5 text-indigo-700 dark:text-indigo-400">
-                  <Sparkles className="w-4 h-4 shrink-0" />
-                  <h4 className="text-[10px] font-black uppercase tracking-widest">Configuration Simulator</h4>
-                </div>
-
-                {/* Voucher Numbering Simulator */}
-                {selectedFeature.id === 'vouchernumbering' && (
-                  <div className="space-y-4">
-                    <p className="text-[11px] text-gray-400 font-semibold uppercase tracking-widest">Toggle starting sequentials to inspect output registration formats:</p>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white dark:bg-gray-900 p-3 rounded-xl border border-indigo-100/20">
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Prefix</label>
-                        <input type="text" value={simPrefix} onChange={e => setSimPrefix(e.target.value)} className="w-full bg-slate-50 dark:bg-gray-950 border p-1.5 text-xs text-gray-700 dark:text-gray-300 font-bold rounded" />
-                      </div>
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Padding Width</label>
-                        <input type="number" min={2} max={8} value={simPadding} onChange={e => setSimPadding(Number(e.target.value))} className="w-full bg-slate-50 dark:bg-gray-950 border p-1.5 text-xs text-gray-700 dark:text-gray-300 font-bold rounded" />
-                      </div>
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Start seq</label>
-                        <input type="number" min={1} value={simStartSeq} onChange={e => setSimStartSeq(Number(e.target.value))} className="w-full bg-slate-50 dark:bg-gray-950 border p-1.5 text-xs text-gray-700 dark:text-gray-300 font-bold rounded" />
-                      </div>
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Suffix</label>
-                        <input type="text" value={simSuffix} onChange={e => setSimSuffix(e.target.value)} className="w-full bg-slate-50 dark:bg-gray-950 border p-1.5 text-xs text-gray-700 dark:text-gray-300 font-bold rounded" />
-                      </div>
-                    </div>
-                    <div className="p-3 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/40 rounded-xl flex justify-between items-center text-xs font-mono">
-                      <span className="text-indigo-700 font-black tracking-widest text-[10px] uppercase">Generated ID Output:</span>
-                      <span className="font-bold text-indigo-900 dark:text-white bg-white dark:bg-gray-950 px-3 py-1 rounded border border-indigo-100">{compiledSimVoucher()}</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Mapping Cleanser Simulator */}
-                {selectedFeature.id === 'mapping' && (
-                  <div className="space-y-4">
-                    <p className="text-[11px] text-gray-400 font-semibold uppercase tracking-widest">Simulate raw narration text-filters before ledger match checks:</p>
-                    <div className="bg-white dark:bg-gray-900 p-3 rounded-xl border border-indigo-100/20 space-y-3">
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Raw Narration Input</label>
-                        <input type="text" value={rawNarration} onChange={e => setRawNarration(e.target.value)} className="w-full bg-slate-50 dark:bg-gray-950 border p-1.5 text-xs text-gray-700 dark:text-gray-300 font-bold rounded" />
-                      </div>
-                      <div className="flex flex-wrap gap-4 pt-1">
-                        <label className="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 cursor-pointer">
-                          <input type="checkbox" checked={cleanUPI} onChange={e => setCleanUPI(e.target.checked)} className="rounded" /> Strip "UPI/" noise
-                        </label>
-                        <label className="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 cursor-pointer">
-                          <input type="checkbox" checked={cleanCHQ} onChange={e => setCleanCHQ(e.checked)} className="rounded" /> Strip "CHQ/" codes
-                        </label>
-                        <div className="flex-1 min-w-[120px]">
-                          <input type="text" placeholder="Custom Ignore Word" value={cleansedIgnore} onChange={e => setCleansedIgnore(e.target.value)} className="w-full bg-slate-50 dark:bg-gray-950 border px-2 py-0.5 text-[10px] font-bold rounded" />
+                <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${explorerGroups.config ? 'rotate-90 text-blue-500' : ''}`} />
+             </button>
+             {explorerGroups.config && (
+                <div className="px-5 pb-5 pt-2 border-t border-gray-100 dark:border-gray-700 space-y-3">
+                   {FEATURES_LIST.filter(f => ['firm', 'general', 'vouchernumbering', 'invoiceprint', 'navigation'].includes(f.id)).map(feat => {
+                     const isExpanded = selectedFeatureId === feat.id;
+                     const FeatureIcon = feat.icon;
+                     return (
+                        <div key={feat.id} className={`border rounded-lg transition-colors ${isExpanded ? 'border-blue-200 dark:border-blue-900/50 bg-blue-50/20 dark:bg-blue-900/10' : 'border-gray-100 dark:border-gray-700 hover:border-blue-200 cursor-pointer'}`}>
+                           {/* Item button */}
+                           <button onClick={() => setSelectedFeatureId(isExpanded ? '' : feat.id)} className="w-full p-4 text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 focus:outline-none">
+                              <div className="flex items-center gap-3">
+                                 <div className={`p-2.5 rounded-md transition-colors ${isExpanded ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-gray-800 text-blue-600 dark:text-blue-400'}`}><FeatureIcon className="w-5 h-5" /></div>
+                                 <div className="text-left">
+                                    <h4 className="text-[12px] font-black text-gray-900 dark:text-white uppercase tracking-tight">{feat.name}</h4>
+                                 </div>
+                              </div>
+                              <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
+                           </button>
+                           {/* Item details */}
+                           {isExpanded && (
+                              <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200 space-y-3">
+                                 <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold">{feat.description}</p>
+                                 <div className="p-3 bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 text-[11px] text-gray-600 dark:text-gray-400 font-semibold"><span className="font-bold uppercase text-[9px] text-blue-600 block mb-1">Concept:</span>{feat.concept}</div>
+                              </div>
+                           )}
                         </div>
-                      </div>
-                    </div>
-                    <div className="p-3 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/40 rounded-xl flex justify-between items-center text-xs font-mono">
-                      <span className="text-indigo-700 font-black tracking-widest text-[10px] uppercase font-sans">Cleansed Candidate Output:</span>
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400 bg-white dark:bg-gray-950 px-3 py-1 rounded border border-indigo-100">{compileCleansedNarrationOutput() || '(Empty - input cleared)'}</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* AI Classifier engine simulator */}
-                {selectedFeature.id === 'ai' && (
-                  <div className="space-y-4">
-                    <p className="text-[11px] text-gray-400 font-semibold uppercase tracking-widest">Adjust temperature limits to balance matching consistency vs random creativity:</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white dark:bg-gray-900 p-3 rounded-xl border border-indigo-100/20">
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">AI Engine Model</label>
-                        <select value={aiEngine} onChange={e => setAiEngine(e.target.value as any)} className="w-full bg-slate-50 dark:bg-gray-950 border p-1 text-xs text-gray-700 dark:text-gray-300 font-bold rounded">
-                          <option value="gemini">Google Gemini 1.5 Cluster</option>
-                          <option value="9router">9Router External Endpoint</option>
-                          <option value="local">Local Matching Dictionary</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Temperature ({aiTemperature})</label>
-                        <input type="range" min={0} max={1} step={0.1} value={aiTemperature} onChange={e => setAiTemperature(Number(e.target.value))} className="w-full" />
-                      </div>
-                    </div>
-                    <div className="p-4 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/40 rounded-xl space-y-2">
-                      <div className="flex justify-between items-center text-[10px] font-mono">
-                        <span className="text-indigo-700 font-black uppercase font-sans">Simulated Confidence Rate:</span>
-                        <span className="font-bold text-blue-600">{getSimulatedAiMatchingOutput().confidence}% Confidence</span>
-                      </div>
-                      <div className="w-full bg-slate-100 dark:bg-gray-900 rounded-full h-2 overflow-hidden border border-gray-150">
-                        <div className="bg-blue-600 h-full rounded-full transition-all duration-300" style={{ width: `${getSimulatedAiMatchingOutput().confidence}%` }} />
-                      </div>
-                      <p className="text-[9px] text-gray-400 italic text-right font-medium">{getSimulatedAiMatchingOutput().response} in {getSimulatedAiMatchingOutput().duration}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Security Limits & operational Hours simulator */}
-                {selectedFeature.id === 'security' && (
-                  <div className="space-y-4">
-                    <p className="text-[11px] text-gray-400 font-semibold uppercase tracking-widest">Test lock-outs by tweaking simulation times against allowable work periods:</p>
-                    <div className="grid grid-cols-3 gap-3 bg-white dark:bg-gray-900 p-3 rounded-xl border border-indigo-100/20">
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Shift Start</label>
-                        <input type="time" value={workStart} onChange={e => setWorkStart(e.target.value)} className="w-full bg-slate-50 dark:bg-gray-950 border p-1 text-xs text-gray-700 dark:text-gray-300 font-bold rounded" />
-                      </div>
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Shift End</label>
-                        <input type="time" value={workEnd} onChange={e => setWorkEnd(e.target.value)} className="w-full bg-slate-50 dark:bg-gray-950 border p-1 text-xs text-gray-700 dark:text-gray-300 font-bold rounded" />
-                      </div>
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Simulated time</label>
-                        <input type="time" value={simulatedTime} onChange={e => setSimulatedTime(e.target.value)} className="w-full bg-slate-50 dark:bg-gray-950 border p-1 text-xs text-gray-700 dark:text-gray-300 font-bold rounded" />
-                      </div>
-                    </div>
-                    <div className={`p-3 border rounded-xl flex items-center justify-between text-xs font-black ${
-                      getWorkingHoursSimulationStatus().allowed 
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-                        : 'bg-rose-50 text-rose-700 border-rose-200 animate-pulse'
-                    }`}>
-                      <span className="text-[10px] font-serif tracking-widest uppercase">System Evaluation limit:</span>
-                      <span className="font-mono text-[10px] font-bold">{getWorkingHoursSimulationStatus().text}</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* GSTIN State Code extractor */}
-                {selectedFeature.id === 'firm' && (
-                  <div className="space-y-4">
-                    <p className="text-[11px] text-gray-400 font-semibold uppercase tracking-widest">Verify state ledger binding by inputting a mock GSTIN code:</p>
-                    <div className="bg-white dark:bg-gray-900 p-3 rounded-xl border border-indigo-100/20">
-                      <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Mock 15-character GSTID code</label>
-                      <input type="text" maxLength={15} value={gstinValue} onChange={e => setGstinValue(e.target.value)} className="w-full bg-slate-50 dark:bg-gray-950 border p-1.5 text-xs text-gray-700 dark:text-gray-300 font-bold rounded text-center tracking-widest uppercase" />
-                    </div>
-                    <div className="p-3 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/40 rounded-xl flex justify-between items-center text-xs font-mono">
-                      <span className="text-indigo-700 font-black tracking-widest text-[10px] uppercase font-sans">Extracted Registered State Location:</span>
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400 bg-white dark:bg-gray-950 px-3 py-1 rounded border border-indigo-100">{getGSTINStateCodeSimulation()}</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Invoice Printing Layout mock */}
-                {selectedFeature.id === 'invoiceprint' && (
-                  <div className="space-y-4">
-                    <p className="text-[11px] text-gray-400 font-semibold uppercase tracking-widest">Modify corporate styling variables to simulate print sheets:</p>
-                    <div className="grid grid-cols-2 gap-3 bg-white dark:bg-gray-900 p-3 rounded-xl border border-indigo-100/20">
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Brand Ascent Color</label>
-                        <div className="flex gap-1.5 mt-0.5">
-                          {['#2563eb', '#dc2626', '#16a34a', '#4f46e5', '#db2777'].map(col => (
-                            <button key={col} onClick={() => setSimInvoiceThemeColor(col)} className="w-6 h-6 rounded-lg transition-transform hover:scale-110 border" style={{ backgroundColor: col, borderColor: simInvoiceThemeColor === col ? '#000' : 'transparent' }} />
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Grid Margin Density</label>
-                        <select value={simLayoutDensity} onChange={e => setSimLayoutDensity(e.target.value as any)} className="w-full bg-slate-50 dark:bg-gray-950 border p-1 text-xs text-gray-700 dark:text-gray-300 font-bold rounded">
-                          <option value="comfort">Business Space (Comfortable)</option>
-                          <option value="compact">Data Heavy (Tight Grid)</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p-4 bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl space-y-3 shadow-inner">
-                      <div className="flex justify-between items-center border-b pb-1.5" style={{ borderBottomColor: simInvoiceThemeColor }}>
-                        <span className="text-[10px] font-black tracking-tight" style={{ color: simInvoiceThemeColor }}>BHARAT BOOK AI BILL</span>
-                        <span className="text-[8px] text-gray-400 font-mono">Invoice #INV-2101</span>
-                      </div>
-                      <div className={`space-y-1 ${simLayoutDensity === 'compact' ? 'py-0.5' : 'py-3'}`}>
-                        <div className="h-2 w-3/4 bg-gray-100 dark:bg-gray-905 rounded" />
-                        <div className="h-2 w-1/2 bg-gray-100 dark:bg-gray-905 rounded" />
-                      </div>
-                      <div className="flex justify-end pt-1 bg-slate-50 dark:bg-gray-900 text-[10px] font-bold p-1 rounded">
-                        <span style={{ color: simInvoiceThemeColor }}>TAX ACCRUAL ACCORDING</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* General explanation placeholder simulator for generic fallback modules */}
-                {!['vouchernumbering', 'mapping', 'ai', 'security', 'firm', 'invoiceprint'].includes(selectedFeature.id) && (
-                  <div className="space-y-2">
-                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">Generic preference parameter auditor:</p>
-                    <div className="p-4 bg-white dark:bg-slate-900 border rounded-xl space-y-2 font-semibold">
-                      <div className="flex justify-between text-[11px] text-gray-500 border-b pb-1">
-                        <span>Active Database Node Location</span>
-                        <span className="font-mono text-emerald-600 font-bold">CLIENT_LOCAL_MEMORY</span>
-                      </div>
-                      <div className="flex justify-between text-[11px] text-gray-500 border-b pb-1">
-                        <span>Dynamic Parameter Compliance Status</span>
-                        <span className="font-mono text-blue-600 font-bold">VERIFIED_ACTIVE</span>
-                      </div>
-                      <div className="flex justify-between text-[11px] text-gray-500">
-                        <span>Security Level Status</span>
-                        <span className="font-mono text-purple-600 font-bold">SHA-256 ENCRYPTED</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-
-              {/* Setting Parameters details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2 flex items-center">
-                    <Sliders className="w-3.5 h-3.5 mr-1.5 text-blue-600" />
-                    Key Settings Properties
-                  </h4>
-                  <ul className="space-y-2">
-                    {selectedFeature.parameters.map(param => (
-                      <li key={param} className="p-2 bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl text-xs font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-blue-600 rounded-full" />
-                        {param}
-                      </li>
-                    ))}
-                  </ul>
+                     );
+                   })}
                 </div>
-
-                <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2 flex items-center">
-                    <CheckCircle className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
-                    Administrative Checklist
-                  </h4>
-                  <ul className="space-y-2">
-                    {selectedFeature.checklist.map((step, idx) => (
-                      <li key={idx} className="text-xs text-gray-500 dark:text-gray-400 font-semibold flex items-start gap-2 leading-relaxed">
-                        <span className="bg-emerald-50 text-emerald-600 dark:bg-emerald-950 rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5 border border-emerald-100">
-                          {idx + 1}
-                        </span>
-                        <span>{step}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-            </div>
+             )}
           </div>
 
+          {/* Group 2: Data & Imports */}
+          <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border ${explorerGroups.data ? 'border-indigo-200 dark:border-indigo-800/50' : 'border-gray-100 dark:border-gray-700'}`}>
+             <button 
+                onClick={() => toggleExpGroup('data')}
+                className="w-full flex items-center justify-between p-5 focus:outline-none"
+             >
+                <div className="flex items-center gap-3">
+                   <div className={`p-2 rounded-lg transition-colors ${explorerGroups.data ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300' : 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400'}`}>
+                      <Database className="w-5 h-5" />
+                   </div>
+                   <div className="text-left">
+                      <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Data & Imports</h4>
+                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Schemas, Aliases & AI Engine</p>
+                   </div>
+                </div>
+                <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${explorerGroups.data ? 'rotate-90 text-indigo-500' : ''}`} />
+             </button>
+             {explorerGroups.data && (
+                <div className="px-5 pb-5 pt-2 border-t border-gray-100 dark:border-gray-700 space-y-3">
+                   {FEATURES_LIST.filter(f => ['imports', 'mapping', 'ai', 'data', 'formdetails'].includes(f.id)).map(feat => {
+                     const isExpanded = selectedFeatureId === feat.id;
+                     const FeatureIcon = feat.icon;
+                     return (
+                        <div key={feat.id} className={`border rounded-lg transition-colors ${isExpanded ? 'border-indigo-200 dark:border-indigo-900/50 bg-indigo-50/20 dark:bg-indigo-900/10' : 'border-gray-100 dark:border-gray-700 hover:border-indigo-200 cursor-pointer'}`}>
+                           {/* Item button */}
+                           <button onClick={() => setSelectedFeatureId(isExpanded ? '' : feat.id)} className="w-full p-4 text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 focus:outline-none">
+                              <div className="flex items-center gap-3">
+                                 <div className={`p-2.5 rounded-md transition-colors ${isExpanded ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400'}`}><FeatureIcon className="w-5 h-5" /></div>
+                                 <div className="text-left">
+                                    <h4 className="text-[12px] font-black text-gray-900 dark:text-white uppercase tracking-tight">{feat.name}</h4>
+                                 </div>
+                              </div>
+                              <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${isExpanded ? 'rotate-90 text-indigo-500' : ''}`} />
+                           </button>
+                           {/* Item details */}
+                           {isExpanded && (
+                              <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200 space-y-3">
+                                 <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold">{feat.description}</p>
+                                 <div className="p-3 bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 text-[11px] text-gray-600 dark:text-gray-400 font-semibold"><span className="font-bold uppercase text-[9px] text-indigo-600 block mb-1">Concept:</span>{feat.concept}</div>
+                              </div>
+                           )}
+                        </div>
+                     );
+                   })}
+                </div>
+             )}
+          </div>
+
+          {/* Group 3: Security & Admins */}
+          <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border ${explorerGroups.security ? 'border-amber-200 dark:border-amber-800/50' : 'border-gray-100 dark:border-gray-700'}`}>
+             <button 
+                onClick={() => toggleExpGroup('security')}
+                className="w-full flex items-center justify-between p-5 focus:outline-none"
+             >
+                <div className="flex items-center gap-3">
+                   <div className={`p-2 rounded-lg transition-colors ${explorerGroups.security ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300' : 'bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-400'}`}>
+                      <ShieldCheck className="w-5 h-5" />
+                   </div>
+                   <div className="text-left">
+                      <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Security & Access</h4>
+                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Privacy, Alerts & Directory</p>
+                   </div>
+                </div>
+                <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${explorerGroups.security ? 'rotate-90 text-amber-500' : ''}`} />
+             </button>
+             {explorerGroups.security && (
+                <div className="px-5 pb-5 pt-2 border-t border-gray-100 dark:border-gray-700 space-y-3">
+                   {FEATURES_LIST.filter(f => ['users', 'alerts', 'security', 'privacy', 'admin'].includes(f.id)).map(feat => {
+                     const isExpanded = selectedFeatureId === feat.id;
+                     const FeatureIcon = feat.icon;
+                     return (
+                        <div key={feat.id} className={`border rounded-lg transition-colors ${isExpanded ? 'border-amber-200 dark:border-amber-900/50 bg-amber-50/20 dark:bg-amber-900/10' : 'border-gray-100 dark:border-gray-700 hover:border-amber-200 cursor-pointer'}`}>
+                           {/* Item button */}
+                           <button onClick={() => setSelectedFeatureId(isExpanded ? '' : feat.id)} className="w-full p-4 text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 focus:outline-none">
+                              <div className="flex items-center gap-3">
+                                 <div className={`p-2.5 rounded-md transition-colors ${isExpanded ? 'bg-amber-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-gray-800 text-amber-600 dark:text-amber-400'}`}><FeatureIcon className="w-5 h-5" /></div>
+                                 <div className="text-left">
+                                    <h4 className="text-[12px] font-black text-gray-900 dark:text-white uppercase tracking-tight">{feat.name}</h4>
+                                 </div>
+                              </div>
+                              <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${isExpanded ? 'rotate-90 text-amber-500' : ''}`} />
+                           </button>
+                           {/* Item details */}
+                           {isExpanded && (
+                              <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200 space-y-3">
+                                 <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold">{feat.description}</p>
+                                 <div className="p-3 bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 text-[11px] text-gray-600 dark:text-gray-400 font-semibold"><span className="font-bold uppercase text-[9px] text-amber-600 block mb-1">Concept:</span>{feat.concept}</div>
+                              </div>
+                           )}
+                        </div>
+                     );
+                   })}
+                </div>
+             )}
+          </div>
         </div>
       )}
 
       {/* SEGMENT 2: FAQS & KNOWLEDGE ARTICLES */}
       {activeSegment === 'faq' && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 space-y-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 space-y-4">
           {/* Search and Filters */}
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="Query titles, tagging keywords, fallback filters..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900/50 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 dark:text-gray-200"
+                className="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900/50 text-[12px] font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 dark:text-gray-200 shadow-sm"
               />
             </div>
-            <div className="flex gap-1 overflow-x-auto pb-1 sm:pb-0">
+            <div className="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none snap-x">
               {['all', 'getting-started', 'vouchers', 'ai-engines', 'security'].map(cat => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                  className={`px-3 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider whitespace-nowrap transition-all shrink-0 snap-center ${
                     selectedCategory === cat
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800'
                   }`}
                 >
                   {cat.replace('-', ' ')}
@@ -893,11 +723,11 @@ export const HelpSettings: React.FC = () => {
           </div>
 
           {/* Articles list */}
-          <div className="space-y-3 mt-4">
+          <div className="space-y-2.5 mt-3 border-t border-gray-100 dark:border-gray-800 pt-4">
             {filteredArticles.length === 0 ? (
-              <div className="text-center py-10">
-                <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest font-sans">No articles match your filters</p>
-                <p className="text-[10px] text-gray-400 mt-1">Try searching for other terms like 'limit', '9router', or 'suspense'</p>
+              <div className="text-center py-8">
+                <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest font-sans">No matching articles</p>
+                <p className="text-[10px] text-gray-400 mt-1">Try another search term</p>
               </div>
             ) : (
               filteredArticles.map(art => {
@@ -905,42 +735,37 @@ export const HelpSettings: React.FC = () => {
                 return (
                   <div
                     key={art.id}
-                    className={`border rounded-2xl transition-all ${
+                    className={`border rounded-lg transition-all ${
                       isExpanded
-                        ? 'border-blue-200 dark:border-blue-900/60 bg-blue-50/10 dark:bg-blue-950/5'
+                        ? 'border-blue-200 dark:border-blue-900/60 bg-blue-50/10 dark:bg-blue-950/5 shadow-sm'
                         : 'border-gray-100 dark:border-gray-700/50 bg-white dark:bg-gray-800/40 hover:bg-gray-50 dark:hover:bg-gray-700/30'
                     }`}
                   >
                     <button
                       onClick={() => setExpandedArticle(isExpanded ? null : art.id)}
-                      className="w-full p-4 text-left flex items-start justify-between gap-4"
+                      className="w-full p-3.5 text-left flex items-start justify-between gap-3"
                     >
                       <div className="space-y-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-slate-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400">
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-slate-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400">
                             {art.category}
                           </span>
-                          {art.tags.slice(0, 2).map(t => (
-                            <span key={t} className="text-[9px] font-bold text-blue-600 dark:text-blue-400">
-                              #{t}
-                            </span>
-                          ))}
                         </div>
-                        <h3 className="text-xs sm:text-sm font-black text-gray-900 dark:text-white uppercase tracking-tight">{art.title}</h3>
-                        <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">{art.summary}</p>
+                        <h3 className="text-[13px] font-bold text-gray-900 dark:text-white mt-1 leading-tight">{art.title}</h3>
+                        <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium leading-relaxed mt-0.5 max-w-[95%]">{art.summary}</p>
                       </div>
-                      <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform mt-1 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
+                      <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform mt-1 shrink-0 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
                     </button>
 
                     {isExpanded && (
-                      <div className="px-4 pb-5 pt-1 border-t border-dashed border-gray-100 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-300 font-semibold leading-relaxed space-y-3 animate-in fade-in duration-200">
-                        <div className="prose prose-sm dark:prose-invert">
+                      <div className="px-3.5 pb-4 pt-2 mb-2 border-t border-dashed border-gray-100 dark:border-gray-700 text-[12px] text-gray-600 dark:text-gray-300 leading-relaxed font-medium space-y-3 animate-in fade-in duration-200">
+                        <div className="bg-white dark:bg-gray-900 p-4 border border-blue-50 dark:border-blue-900/20 rounded-md">
                           <p>{art.content}</p>
                         </div>
-                        <div className="flex gap-2 pt-2 flex-wrap">
+                        <div className="flex gap-2 pt-1 flex-wrap">
                           {art.tags.map(t => (
-                            <span key={t} className="px-2 py-0.5 rounded bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 text-[10px] text-gray-500">
-                              {t}
+                            <span key={t} className="px-2 py-0.5 rounded-md bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 text-[10px] uppercase font-bold text-gray-500">
+                              #{t}
                             </span>
                           ))}
                         </div>
@@ -956,138 +781,617 @@ export const HelpSettings: React.FC = () => {
 
       {/* SEGMENT 3: MAPPING TRAINER SIMULATOR */}
       {activeSegment === 'trainer' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-8 bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700 space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="p-2 bg-blue-105 dark:bg-blue-950 rounded-2xl text-blue-600 dark:text-blue-400">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-black uppercase text-gray-900 dark:text-indigo-200 tracking-wider">Map Trainer Simulator</h3>
-                <p className="text-[10px] text-indigo-500 font-bold uppercase tracking-widest pl-0.5">Learn interactive sheet alignments</p>
-              </div>
-            </div>
-
-            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-semibold">
-              Before the system can extract ledger records from Excel/CSV files, it matches sheet column names to internal accounting fields. Click a statement column on the left block then pair it on the ERP target list below to simulate:
-            </p>
-
-            <div className="border border-indigo-150/40 dark:border-indigo-900/30 bg-slate-50/50 dark:bg-gray-900/40 rounded-2xl p-5 space-y-5">
-              
-              <div>
-                <label className="block text-[8px] font-black uppercase tracking-widest text-indigo-500 mb-2 font-sans">
-                  1. Choose a Statement column:
-                </label>
-                <div className="flex flex-wrap gap-1.5">
-                  {sampleColumns.map(col => {
-                    const isMatched = !!matchedFields[col];
-                    const isSelected = selectedCol === col;
-                    return (
-                      <button
-                        key={col}
-                        onClick={() => handleDragCol(col)}
-                        disabled={isMatched}
-                        className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border ${
-                          isSelected 
-                            ? 'bg-indigo-600 text-white border-transparent scale-105 shadow-md shadow-indigo-100' 
-                            : isMatched 
-                              ? 'bg-emerald-50 dark:bg-emerald-950/25 text-emerald-600 border-emerald-100 dark:border-emerald-900/40' 
-                              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-400'
-                        }`}
-                      >
-                        {col} {isMatched ? '✓' : ''}
-                      </button>
-                    );
-                  })}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <div className="lg:col-span-8 space-y-4">
+            
+            {/* Feature 1: Mapping Trainer */}
+            <div className={`border rounded-lg transition-colors ${selectedTrainerId === 'mapping' ? 'border-blue-200 dark:border-blue-900/50 bg-blue-50/20 dark:bg-blue-900/10' : 'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800'}`}>
+              <button 
+                onClick={() => setSelectedTrainerId(selectedTrainerId === 'mapping' ? '' : 'mapping')}
+                className="w-full p-4 text-left flex items-start justify-between gap-3 focus:outline-none"
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`p-2.5 rounded-md shadow-sm ${selectedTrainerId === 'mapping' ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-gray-800 text-blue-600'}`}>
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Map Trainer Simulator</h4>
+                    <p className="text-[10px] text-blue-500 font-bold uppercase tracking-widest mt-0.5">Learn interactive sheet alignments</p>
+                  </div>
                 </div>
-              </div>
+                <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'mapping' ? 'rotate-90 text-blue-500' : ''}`} />
+              </button>
 
-              <div>
-                <label className="block text-[8px] font-black uppercase tracking-widest text-indigo-500 mb-2 font-sans">
-                  2. Select matching ERP target field:
-                </label>
-                <div className="space-y-2">
-                  {targetFields.map(field => {
-                    const matchedColumn = Object.keys(matchedFields).find(k => matchedFields[k] === field.key);
-                    const isTargetMatched = !!matchedColumn;
-                    return (
+              {selectedTrainerId === 'mapping' && (
+              <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200 space-y-4">
+                <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold">
+                  Before the system can extract ledger records from Excel/CSV files, it matches sheet column names to internal accounting fields. Click a statement column on the left block then pair it on the ERP target list below to simulate:
+                </p>
+
+                <div className="border border-indigo-150/40 dark:border-indigo-900/30 bg-slate-50/50 dark:bg-gray-900/40 rounded-xl p-4 space-y-4">
+                  <div>
+                    <label className="block text-[9px] font-bold uppercase tracking-widest text-indigo-500 mb-2 font-sans">
+                      1. Choose a Statement column:
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {sampleColumns.map(col => {
+                        const isMatched = !!matchedFields[col];
+                        const isSelected = selectedCol === col;
+                        return (
+                          <button
+                            key={col}
+                            onClick={() => handleDragCol(col)}
+                            disabled={isMatched}
+                            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                              isSelected 
+                                ? 'bg-indigo-600 text-white border-transparent scale-105 shadow-sm shadow-indigo-100' 
+                                : isMatched 
+                                  ? 'bg-emerald-50 dark:bg-emerald-950/25 text-emerald-600 border-emerald-100 dark:border-emerald-900/40' 
+                                  : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-400'
+                            }`}
+                          >
+                            {col} {isMatched ? '✓' : ''}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] font-bold uppercase tracking-widest text-indigo-500 mb-2 font-sans">
+                      2. Select matching ERP target field:
+                    </label>
+                    <div className="space-y-1.5">
+                      {targetFields.map(field => {
+                        const matchedColumn = Object.keys(matchedFields).find(k => matchedFields[k] === field.key);
+                        const isTargetMatched = !!matchedColumn;
+                        return (
+                          <button
+                            key={field.key}
+                            onClick={() => handlePairFields(field.key)}
+                            disabled={!selectedCol || isTargetMatched}
+                            className={`w-full p-2.5 rounded-lg text-left text-[12px] font-semibold flex items-center justify-between border transition-all ${
+                              isTargetMatched 
+                                ? 'bg-emerald-50/40 dark:bg-emerald-950/10 text-emerald-600 border-emerald-150'
+                                : selectedCol 
+                                  ? 'bg-indigo-50/20 dark:bg-indigo-950/10 hover:bg-slate-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border-dashed border-indigo-200 animate-pulse' 
+                                  : 'bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500 border-gray-200 cursor-not-allowed'
+                            }`}
+                          >
+                            <span>{field.label}</span>
+                            {isTargetMatched ? (
+                              <span className="text-[9px] font-black bg-emerald-100 dark:bg-emerald-900/50 px-1.5 py-0.5 rounded-sm text-emerald-700 uppercase">
+                                ← {matchedColumn}
+                              </span>
+                            ) : selectedCol ? (
+                              <ArrowRight className="w-3.5 h-3.5 text-indigo-400" />
+                            ) : null}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-indigo-100/50 dark:border-indigo-920 flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase">
+                      Mapped {Object.keys(matchedFields).length} of {sampleColumns.length} fields
+                    </span>
+                    {Object.keys(matchedFields).length > 0 && (
                       <button
-                        key={field.key}
-                        onClick={() => handlePairFields(field.key)}
-                        disabled={!selectedCol || isTargetMatched}
-                        className={`w-full p-3 rounded-xl text-left text-xs font-semibold flex items-center justify-between border transition-all ${
-                          isTargetMatched 
-                            ? 'bg-emerald-50/40 dark:bg-emerald-950/10 text-emerald-600 border-emerald-150'
-                            : selectedCol 
-                              ? 'bg-indigo-50/20 dark:bg-indigo-950/10 hover:bg-slate-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border-dashed border-indigo-200 animate-pulse' 
-                              : 'bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500 border-gray-200 cursor-not-allowed'
-                        }`}
+                        onClick={resetSimulator}
+                        className="text-[10px] font-black text-rose-500 hover:text-rose-600 uppercase tracking-widest flex items-center gap-1"
                       >
-                        <span>{field.label}</span>
-                        {isTargetMatched ? (
-                          <span className="text-[9px] font-black bg-emerald-100 dark:bg-emerald-900/50 px-2 py-0.5 rounded text-emerald-700 uppercase">
-                            ← {matchedColumn}
-                          </span>
-                        ) : selectedCol ? (
-                          <ArrowRight className="w-4 h-4 text-indigo-400" />
-                        ) : null}
+                        <RefreshCw className="w-3 h-3" /> Reset
                       </button>
-                    );
-                  })}
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div className="pt-3 border-t border-indigo-100/50 dark:border-indigo-920 flex items-center justify-between">
-                <span className="text-[10px] font-bold text-gray-400 uppercase">
-                  Mapped {Object.keys(matchedFields).length} of {sampleColumns.length} fields
-                </span>
-                {Object.keys(matchedFields).length > 0 && (
-                  <button
-                    onClick={resetSimulator}
-                    className="text-[10px] font-black text-rose-500 hover:text-rose-600 uppercase tracking-widest flex items-center gap-1.5"
-                  >
-                    <RefreshCw className="w-3.5 h-3.5" /> Reset Trainer
-                  </button>
+                {Object.keys(matchedFields).length === sampleColumns.length && (
+                  <div className="bg-emerald-500/10 border border-emerald-200 rounded-xl p-3.5 flex gap-2 text-emerald-700 dark:text-emerald-400 items-start animate-in zoom-in duration-300 mt-4">
+                    <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-wider">Perfect Alignment Learned!</p>
+                      <p className="text-[10px] font-semibold leading-normal mt-0.5">
+                        Bharat Book AI generates rules under **{"Mapping -> Mapping Rules"}** to save this alignment layout. Next uploads format instantly.
+                      </p>
+                    </div>
+                  </div>
                 )}
               </div>
-
+              )}
+            </div>
+            
+            {/* Feature 2: Ledger Reconciliation */}
+            <div className={`border rounded-lg transition-colors ${selectedTrainerId === 'ledger' ? 'border-purple-200 dark:border-purple-900/50 bg-purple-50/20 dark:bg-purple-900/10' : 'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800'}`}>
+              <button 
+                onClick={() => setSelectedTrainerId(selectedTrainerId === 'ledger' ? '' : 'ledger')}
+                className="w-full p-4 text-left flex items-start justify-between gap-3 focus:outline-none"
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`p-2.5 rounded-md shadow-sm ${selectedTrainerId === 'ledger' ? 'bg-purple-600 text-white' : 'bg-slate-100 dark:bg-gray-800 text-purple-600'}`}>
+                    <Database className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Ledger Reconciliation Trainer</h4>
+                    <p className="text-[10px] text-purple-500 font-bold uppercase tracking-widest mt-0.5">Learn how vouchers get mapped</p>
+                  </div>
+                </div>
+                <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'ledger' ? 'rotate-90 text-purple-500' : ''}`} />
+              </button>
+              
+              {selectedTrainerId === 'ledger' && (
+                <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
+                  <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
+                    The AI matches raw bank transaction narratives strings against your Chart of Accounts. Here, you can test how the matching logic works behind the scenes before uploading files.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-white dark:bg-gray-900 p-3 rounded border border-gray-200 dark:border-gray-700">
+                       <label className="text-[10px] font-black uppercase text-gray-500 block mb-1">Raw Narration Input:</label>
+                       <input 
+                         type="text" 
+                         value={rawNarration} 
+                         onChange={(e) => setRawNarration(e.target.value)}
+                         className="w-full rounded text-[13px] font-mono p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-shadow outline-none flex items-center" 
+                         placeholder="e.g. UPI/9812/DR-NET/CHQ/HDFC-OFFICE-RENT"
+                       />
+                    </div>
+                    
+                    <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded border border-purple-100 dark:border-purple-900">
+                       <label className="text-[10px] font-black uppercase text-purple-700 dark:text-purple-400 block mb-2">Simulated Neural Match Result:</label>
+                       {rawNarration.toUpperCase().includes('RENT') ? (
+                          <div className="flex items-center gap-2">
+                             <CheckCircle className="w-4 h-4 text-emerald-500" />
+                             <span className="text-[12px] font-bold text-gray-800 dark:text-gray-200">Office Rent Account (Indirect Expense)</span>
+                             <span className="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase shadow-sm">98% Match</span>
+                          </div>
+                       ) : rawNarration.toUpperCase().includes('UPI') ? (
+                          <div className="flex items-center gap-2">
+                             <CheckCircle className="w-4 h-4 text-blue-500" />
+                             <span className="text-[12px] font-bold text-gray-800 dark:text-gray-200">Suspense / Undefined UPI (Current Asset)</span>
+                             <span className="px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 text-[10px] font-black uppercase shadow-sm">65% Match</span>
+                          </div>
+                       ) : (
+                          <div className="flex items-center gap-2">
+                             <span className="text-[12px] font-bold text-gray-500 dark:text-gray-400">No strong match found. Requires manual mapping.</span>
+                             <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 text-[10px] font-black uppercase shadow-sm">12% Match</span>
+                          </div>
+                       )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {Object.keys(matchedFields).length === sampleColumns.length && (
-              <div className="bg-emerald-500/10 border border-emerald-200 rounded-3xl p-4 flex gap-3 text-emerald-700 dark:text-emerald-400 items-start animate-in zoom-in duration-300">
-                <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs font-black uppercase tracking-wider">Perfect Alignment Learned!</p>
-                  <p className="text-[11px] font-semibold leading-normal mt-0.5">
-                    Bharat Book AI generates rules under **{"Mapping -> Mapping Rules"}** to save this alignment layout. Next uploads of this type clean columns in milliseconds.
-                  </p>
+            {/* Feature 3: Security Rules */}
+            <div className={`border rounded-lg transition-colors ${selectedTrainerId === 'security' ? 'border-amber-200 dark:border-amber-900/50 bg-amber-50/20 dark:bg-amber-900/10' : 'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800'}`}>
+              <button 
+                onClick={() => setSelectedTrainerId(selectedTrainerId === 'security' ? '' : 'security')}
+                className="w-full p-4 text-left flex items-start justify-between gap-3 focus:outline-none"
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`p-2.5 rounded-md shadow-sm ${selectedTrainerId === 'security' ? 'bg-amber-600 text-white' : 'bg-slate-100 dark:bg-gray-800 text-amber-600'}`}>
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Security Rules Trainer</h4>
+                    <p className="text-[10px] text-amber-600 font-bold uppercase tracking-widest mt-0.5">Simulate role access boundaries</p>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-
-          {/* Guidelines Sidebar */}
-          <div className="lg:col-span-4 space-y-6">
-            <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 space-y-4">
-              <h4 className="text-xs font-black uppercase text-gray-950 dark:text-white tracking-wider">Useful checklists</h4>
+                <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'security' ? 'rotate-90 text-amber-500' : ''}`} />
+              </button>
               
-              <div className="space-y-4">
-                <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-2xl flex gap-3 items-start">
-                  <Database className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+              {selectedTrainerId === 'security' && (
+                <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
+                  <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
+                    Users have different permission layers when dealing with vouchers, masters, and settings. Simulate access levels by switching the active user role below.
+                  </p>
+                  
+                  <div className="mb-4">
+                     <label className="text-[10px] font-black uppercase text-gray-500 block mb-2">Simulate Active Role:</label>
+                     <div className="flex gap-2">
+                        {['Accountant', 'Manager', 'Administrator'].map(role => (
+                           <button 
+                             key={role}
+                             onClick={() => setTestUserRole(role)}
+                             className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${testUserRole === role ? 'bg-amber-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'}`}
+                           >
+                             {role}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                     <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                        <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200">Draft Vouchers</span>
+                        <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">Allowed</span>
+                     </div>
+                     <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                        <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200">Post Vouchers to Production</span>
+                        {testUserRole === 'Accountant' ? (
+                           <span className="px-2 py-1 rounded bg-rose-100 text-rose-800 text-[10px] font-black uppercase">Denied</span>
+                        ) : (
+                           <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">Allowed</span>
+                        )}
+                     </div>
+                     <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                        <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200">Modify GST / System Settings</span>
+                        {testUserRole === 'Administrator' ? (
+                           <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">Allowed</span>
+                        ) : (
+                           <span className="px-2 py-1 rounded bg-rose-100 text-rose-800 text-[10px] font-black uppercase">Denied</span>
+                        )}
+                     </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+
+            {/* Feature 4: Confidence Score Threshold */}
+            <div className={`border rounded-lg transition-colors ${selectedTrainerId === 'confidence' ? 'border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/20 dark:bg-emerald-900/10' : 'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800'}`}>
+              <button 
+                onClick={() => setSelectedTrainerId(selectedTrainerId === 'confidence' ? '' : 'confidence')}
+                className="w-full p-4 text-left flex items-start justify-between gap-3 focus:outline-none"
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`p-2.5 rounded-md shadow-sm ${selectedTrainerId === 'confidence' ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-gray-800 text-emerald-600'}`}>
+                    <Activity className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">AI Confidence Thresholds</h4>
+                    <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest mt-0.5">Test Auto-Approval Logic</p>
+                  </div>
+                </div>
+                <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'confidence' ? 'rotate-90 text-emerald-500' : ''}`} />
+              </button>
+              
+              {selectedTrainerId === 'confidence' && (
+                <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
+                  <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
+                    The AI engine assigns a confidence score to every ledger prediction. If the score is higher than your firm's threshold, it goes to "Auto-Approve". Otherwise, it routes to "Requires Manual Review".
+                  </p>
+                  
+                  <div className="mb-4">
+                     <label className="text-[10px] font-black uppercase text-gray-500 block mb-2">Simulate System Threshold:</label>
+                     <div className="flex gap-2 mb-4">
+                        {[50, 75, 90, 95].map(threshold => (
+                           <button 
+                             key={threshold}
+                             onClick={() => setTestUserRole(`Threshold${threshold}`)}
+                             className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${testUserRole === `Threshold${threshold}` ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'}`}
+                           >
+                             {threshold}%
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    {[
+                      { txt: 'HDFC BANK FUND TRANSFER', score: 98 },
+                      { txt: 'AMAZON WEB SERVICES CC ENDING 4022', score: 85 },
+                      { txt: 'SWIGGY FOOD ORDER', score: 65 },
+                      { txt: 'CASH DEPOSIT BRANCH 1234', score: 45 },
+                    ].map(mockTx => {
+                       const currentThreshMatch = testUserRole.startsWith('Threshold') ? parseInt(testUserRole.replace('Threshold', '')) : 75;
+                       const isApproved = mockTx.score >= currentThreshMatch;
+                       return (
+                         <div key={mockTx.txt} className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                            <div>
+                               <div className="text-[12px] font-bold text-gray-700 dark:text-gray-200">{mockTx.txt}</div>
+                               <div className="text-[10px] text-emerald-600 font-bold uppercase mt-0.5">Score: {mockTx.score}%</div>
+                            </div>
+                            {isApproved ? (
+                               <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase shadow-sm">Auto-Approve</span>
+                            ) : (
+                               <span className="px-2 py-1 rounded bg-amber-100 text-amber-800 text-[10px] font-black uppercase shadow-sm">Manual Review</span>
+                            )}
+                         </div>
+                       );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Feature 5: Shift Boundaries Simulator */}
+            <div className={`border rounded-lg transition-colors ${selectedTrainerId === 'shift' ? 'border-fuchsia-200 dark:border-fuchsia-900/50 bg-fuchsia-50/20 dark:bg-fuchsia-900/10' : 'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800'}`}>
+              <button 
+                onClick={() => setSelectedTrainerId(selectedTrainerId === 'shift' ? '' : 'shift')}
+                className="w-full p-4 text-left flex items-start justify-between gap-3 focus:outline-none"
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`p-2.5 rounded-md shadow-sm ${selectedTrainerId === 'shift' ? 'bg-fuchsia-600 text-white' : 'bg-slate-100 dark:bg-gray-800 text-fuchsia-600'}`}>
+                    <Lock className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Shift Constraint Simulator</h4>
+                    <p className="text-[10px] text-fuchsia-600 font-bold uppercase tracking-widest mt-0.5">Test Temporal Access Rules</p>
+                  </div>
+                </div>
+                <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'shift' ? 'rotate-90 text-fuchsia-500' : ''}`} />
+              </button>
+              
+              {selectedTrainerId === 'shift' && (
+                <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
+                  <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
+                    The enterprise shield enforces shift constraints (e.g. 09:00 to 18:00 on Weekdays only). Test how the application responds when attempting to post vouchers outside simulated operational hours.
+                  </p>
+                  
+                  <div className="mb-4">
+                     <label className="text-[10px] font-black uppercase text-gray-500 block mb-2">Simulate Current Time:</label>
+                     <div className="flex flex-wrap gap-2 mb-4">
+                        {[
+                          { label: 'Weekday 10:00 AM', val: 'wd_10am' },
+                          { label: 'Weekday 07:30 PM', val: 'wd_730pm' },
+                          { label: 'Sunday 02:00 PM', val: 'we_2pm' },
+                        ].map(st => (
+                           <button 
+                             key={st.val}
+                             onClick={() => setTestUserRole(st.val)}
+                             className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${testUserRole === st.val ? 'bg-fuchsia-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'}`}
+                           >
+                             {st.label}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+                  
+                  <div className="space-y-4 pt-2 border-t border-fuchsia-100 dark:border-fuchsia-900 border-dashed">
+                    {testUserRole === 'wd_10am' || (!['wd_10am', 'wd_730pm', 'we_2pm'].includes(testUserRole)) ? (
+                       <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 flex items-start gap-3">
+                          <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">Shift Active</div>
+                            <div className="text-[11px] mt-1 font-semibold">User can post entries, mapping rules, and run auto-imports smoothly. Full API access is granted.</div>
+                          </div>
+                       </div>
+                    ) : testUserRole === 'wd_730pm' ? (
+                       <div className="p-3 rounded-lg border border-rose-200 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-400 flex items-start gap-3">
+                          <Clock className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">After-Hours Boundary Hit</div>
+                            <div className="text-[11px] mt-1 font-semibold">Access restricted. System generates an Audit Incident log (Severity: Medium) - "Posting attempt outside user shift."</div>
+                          </div>
+                       </div>
+                    ) : (
+                       <div className="p-3 rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950/20 text-amber-800 dark:text-amber-400 flex items-start gap-3">
+                          <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">Weekend Lockdown Active</div>
+                            <div className="text-[11px] mt-1 font-semibold">The UI falls into Read-Only mode. High-Security lockdown triggered for weekend.</div>
+                          </div>
+                       </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Feature 6: Notification Routing Simulator */}
+            <div className={`border rounded-lg transition-colors ${selectedTrainerId === 'notifications' ? 'border-sky-200 dark:border-sky-900/50 bg-sky-50/20 dark:bg-sky-900/10' : 'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800'}`}>
+              <button 
+                onClick={() => setSelectedTrainerId(selectedTrainerId === 'notifications' ? '' : 'notifications')}
+                className="w-full p-4 text-left flex items-start justify-between gap-3 focus:outline-none"
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`p-2.5 rounded-md shadow-sm ${selectedTrainerId === 'notifications' ? 'bg-sky-600 text-white' : 'bg-slate-100 dark:bg-gray-800 text-sky-600'}`}>
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Alert Routing Simulator</h4>
+                    <p className="text-[10px] text-sky-600 font-bold uppercase tracking-widest mt-0.5">Test Auto-Email Dispatches</p>
+                  </div>
+                </div>
+                <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'notifications' ? 'rotate-90 text-sky-500' : ''}`} />
+              </button>
+              
+              {selectedTrainerId === 'notifications' && (
+                <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
+                  <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
+                    The platform automatically dispatches emails to management upon large volume imports or suspicious voucher creation. Test the routing logic here.
+                  </p>
+                  
+                  <div className="mb-4">
+                     <label className="text-[10px] font-black uppercase text-gray-500 block mb-2">Simulate System Event:</label>
+                     <div className="flex flex-wrap gap-2 mb-4">
+                        {[
+                          { label: 'Bulk Import 500+', val: 'event_bulk' },
+                          { label: 'Nightly Sync Complete', val: 'event_sync' },
+                          { label: 'High-Value Voucher Detected', val: 'event_highval' },
+                        ].map(st => (
+                           <button 
+                             key={st.val}
+                             onClick={() => setTestUserRole(st.val)}
+                             className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${testUserRole === st.val ? 'bg-sky-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'}`}
+                           >
+                             {st.label}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+                  
+                  <div className="space-y-4 pt-2 border-t border-sky-100 dark:border-sky-900 border-dashed">
+                    {testUserRole === 'event_bulk' ? (
+                       <div className="p-3 rounded-lg border border-sky-200 bg-sky-50 dark:bg-sky-950/20 text-sky-800 dark:text-sky-400 flex items-start gap-3">
+                          <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">Email Routed: Admin Team</div>
+                            <div className="text-[11px] mt-1 font-semibold">Subject: "Bulk Import Alert: 500+ records successfully mapped."</div>
+                          </div>
+                       </div>
+                    ) : testUserRole === 'event_sync' ? (
+                       <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 flex items-start gap-3">
+                          <Clock className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">Silent Notification</div>
+                            <div className="text-[11px] mt-1 font-semibold">Logged to Audit table, no emails dispatched per preference settings.</div>
+                          </div>
+                       </div>
+                    ) : testUserRole === 'event_highval' ? (
+                       <div className="p-3 rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950/20 text-amber-800 dark:text-amber-400 flex items-start gap-3">
+                          <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">Email Routed: Finance Directors</div>
+                            <div className="text-[11px] mt-1 font-semibold">Subject: "CRITICAL: High-Value Voucher over threshold requires multi-signature."</div>
+                          </div>
+                       </div>
+                    ) : (
+                       <div className="p-3 rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 flex items-center justify-center">
+                          <div className="text-[11px] font-bold uppercase tracking-wider">Select an event</div>
+                       </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+
+            {/* Feature 7: Validation Schema Simulator */}
+            <div className={`border rounded-lg transition-colors ${selectedTrainerId === 'validation' ? 'border-orange-200 dark:border-orange-900/50 bg-orange-50/20 dark:bg-orange-900/10' : 'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800'}`}>
+              <button 
+                onClick={() => setSelectedTrainerId(selectedTrainerId === 'validation' ? '' : 'validation')}
+                className="w-full p-4 text-left flex items-start justify-between gap-3 focus:outline-none"
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`p-2.5 rounded-md shadow-sm ${selectedTrainerId === 'validation' ? 'bg-orange-600 text-white' : 'bg-slate-100 dark:bg-gray-800 text-orange-600'}`}>
+                    <LayoutGrid className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Validation Schema Simulator</h4>
+                    <p className="text-[10px] text-orange-600 font-bold uppercase tracking-widest mt-0.5">Test Ledger Data Integrity Checks</p>
+                  </div>
+                </div>
+                <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'validation' ? 'rotate-90 text-orange-500' : ''}`} />
+              </button>
+              
+              {selectedTrainerId === 'validation' && (
+                <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
+                  <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
+                    The platform rejects invalid voucher lines. Test the JSON schema validation mechanisms used to reject corrupt CSV records.
+                  </p>
+                  
+                  <div className="mb-4">
+                     <label className="text-[10px] font-black uppercase text-gray-500 block mb-2">Simulate Raw Record payload:</label>
+                     <div className="flex flex-wrap gap-2 mb-4">
+                        {[
+                          { label: 'Valid Record', val: 'rec_valid' },
+                          { label: 'Missing Amount', val: 'rec_noamt' },
+                          { label: 'Date Out of Sync', val: 'rec_baddate' },
+                        ].map(st => (
+                           <button 
+                             key={st.val}
+                             onClick={() => setTestUserRole(st.val)}
+                             className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${testUserRole === st.val ? 'bg-orange-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'}`}
+                           >
+                             {st.label}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+                  
+                  <div className="space-y-4 pt-2 border-t border-orange-100 dark:border-orange-900 border-dashed">
+                    {testUserRole === 'rec_valid' ? (
+                       <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 flex items-start gap-3">
+                          <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">Record Passed</div>
+                            <div className="text-[11px] mt-1 font-semibold">Schema valid. The voucher is correctly formatted and goes into processing queue.</div>
+                          </div>
+                       </div>
+                    ) : testUserRole === 'rec_noamt' ? (
+                       <div className="p-3 rounded-lg border border-rose-200 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-400 flex items-start gap-3">
+                          <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">Schema Error: Missing Required Field</div>
+                            <div className="text-[11px] mt-1 font-semibold">Row 45: property `amount` is undefined or non-numeric. Import paused.</div>
+                          </div>
+                       </div>
+                    ) : testUserRole === 'rec_baddate' ? (
+                       <div className="p-3 rounded-lg border border-rose-200 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-400 flex items-start gap-3">
+                          <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">Constraint Error: Out of bounds</div>
+                            <div className="text-[11px] mt-1 font-semibold">Row 112: The `txn_date` field is from a closed financial year (2020-2021). Rejected.</div>
+                          </div>
+                       </div>
+                    ) : (
+                       <div className="p-3 rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 flex items-center justify-center">
+                          <div className="text-[11px] font-bold uppercase tracking-wider">Select a raw payload</div>
+                       </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
+          
+      {/* Guidelines Sidebar */}
+          <div className="lg:col-span-4 space-y-4">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 border border-gray-100 dark:border-gray-700 space-y-3">
+              <h4 className="text-[12px] font-bold uppercase text-gray-950 dark:text-white tracking-wider">Useful checklists</h4>
+              
+              <div className="space-y-2">
+                <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
+                  <Mail className="w-3.5 h-3.5 text-sky-600 mt-0.5 shrink-0" />
                   <div>
-                    <h5 className="text-[11px] font-black text-gray-850 dark:text-white uppercase tracking-tight">Ledger Auditing Guidelines</h5>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-550 font-semibold leading-relaxed mt-0.5">
-                      Double-check counterparty invoice references against real GST codes before posting imported vouchers into production ledger databases.
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Email Recipient Audit</h5>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
+                      Periodically review who is receiving the "High-Value Voucher" alerts to ensure correct hierarchy.
                     </p>
                   </div>
                 </div>
 
-                <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-2xl flex gap-3 items-start">
-                  <ShieldCheck className="w-4 h-4 text-purple-600 mt-0.5 shrink-0" />
+                <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
+                  <LayoutGrid className="w-3.5 h-3.5 text-orange-600 mt-0.5 shrink-0" />
                   <div>
-                    <h5 className="text-[11px] font-black text-gray-850 dark:text-white uppercase tracking-tight">Operational Security Bounds</h5>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-550 font-semibold leading-relaxed mt-0.5">
-                      Users bound by workspace timeframes cannot log into portlets after corporate hours. If your terminal locks, request administrative changes immediately.
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Schema Error Review</h5>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
+                      Monitor schema constraints rejection rates to identify if user training on templates is required.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
+                  <Activity className="w-3.5 h-3.5 text-emerald-600 mt-0.5 shrink-0" />
+                  <div>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">AI Confidence Checks</h5>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
+                      Routinely scan the "Manual Review" queue to train the AI and improve auto-approval precision.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
+                  <Lock className="w-3.5 h-3.5 text-fuchsia-600 mt-0.5 shrink-0" />
+                  <div>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Shift Boundary Audit</h5>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
+                      Verify incident logs frequently if users attempt to bypass temporal shift barriers during weekends.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
+                  <Database className="w-3.5 h-3.5 text-blue-600 mt-0.5 shrink-0" />
+                  <div>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Ledger Auditing</h5>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
+                      Double-check counterparty invoice references before posting vouchers.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
+                  <ShieldCheck className="w-3.5 h-3.5 text-purple-600 mt-0.5 shrink-0" />
+                  <div>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Security Bounds</h5>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
+                      Users restricted by timeframes cannot operate outside corporate hours.
                     </p>
                   </div>
                 </div>

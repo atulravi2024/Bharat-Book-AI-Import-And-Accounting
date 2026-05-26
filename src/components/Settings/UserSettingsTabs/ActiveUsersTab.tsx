@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { User, Mail, Phone, Briefcase, Lock, Shield, Info, CheckSquare, Square, Activity } from 'lucide-react';
-import { ManagedUser, INITIAL_USERS } from './UserSettings';
+import { ManagedUser, INITIAL_USERS } from '../UserSettings';
 
-export const ActiveUsersSettings = () => {
+export const ActiveUsersTab = () => {
   const [users, setUsers] = useState<ManagedUser[]>([]);
 
   useEffect(() => {

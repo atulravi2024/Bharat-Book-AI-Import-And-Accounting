@@ -12,10 +12,10 @@ import {
   CheckCircle,
   HelpCircle
 } from 'lucide-react';
-import { useNotifications } from '../../context/NotificationContext';
-import { ManagedUser, INITIAL_USERS } from './UserSettings';
+import { useNotifications } from '../../../context/NotificationContext';
+import { ManagedUser, INITIAL_USERS } from '../UserSettings';
 
-export const MyAccountSettings = () => {
+export const MyAccountTab = () => {
   const { addNotification } = useNotifications();
 
   const [loggedInUserId, setLoggedInUserId] = useState<string>('usr-1');

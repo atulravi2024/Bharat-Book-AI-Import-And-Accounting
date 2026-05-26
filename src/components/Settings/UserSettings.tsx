@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { User, UserCheck, Compass, Shield, Activity, Sliders, HelpCircle } from 'lucide-react';
-import { MyAccountSettings } from './MyAccountSettings';
-import { CompanyDirectorySettings } from './CompanyDirectorySettings';
-import { SuperAdminSettings } from './SuperAdminSettings';
-import { ActiveUsersSettings } from './ActiveUsersSettings';
-import { GroupRulesSettings } from './GroupRulesSettings';
-import { UserHelpSettings } from './UserHelpSettings';
+import { MyAccountTab } from './UserSettingsTabs/MyAccountTab';
+import { CompanyDirectoryTab } from './UserSettingsTabs/CompanyDirectoryTab';
+import { SuperAdminTab } from './UserSettingsTabs/SuperAdminTab';
+import { ActiveUsersTab } from './UserSettingsTabs/ActiveUsersTab';
+import { GroupRulesTab } from './UserSettingsTabs/GroupRulesTab';
+import { UserHelpTab } from './UserSettingsTabs/UserHelpTab';
 
 export interface UserPermissions {
   vouchers: { read: boolean; create: boolean; edit: boolean; delete: boolean };
@@ -30,7 +30,7 @@ export interface ManagedUser {
   password?: string;
   role: 'Developer' | 'Super Admin' | 'Owner' | 'Admin' | 'Manager' | 'Editor' | 'Viewer';
   department: string;
-  status: 'Active' | 'Invited' | 'Suspended';
+  status: 'Active' | 'Invited' | 'Suspended' | 'Permanently Disabled' | 'Archived' | 'Terminated' | 'Deactivated';
   lastActive: string;
   avatarColor: string;
   permissions: UserPermissions;
@@ -57,7 +57,7 @@ export const INITIAL_USERS: ManagedUser[] = [
     phone: '+91 90000 00001',
     password: 'password123',
     role: 'Super Admin',
-    department: 'Developer',
+    department: 'Super Admin',
     status: 'Active',
     lastActive: 'Active now',
     avatarColor: 'from-blue-600 to-indigo-600',
@@ -295,12 +295,12 @@ export const UserSettings: React.FC = () => {
       </div>
  
       <div className="p-6 bg-slate-50/40 dark:bg-gray-900/30 min-h-[550px] transition-all">
-        {activeTab === 'active-users' && <ActiveUsersSettings />}
-        {activeTab === 'my-account' && <MyAccountSettings />}
-        {activeTab === 'directory' && <CompanyDirectorySettings />}
-        {activeTab === 'group-rules' && <GroupRulesSettings />}
-        {activeTab === 'profile' && <SuperAdminSettings />}
-        {activeTab === 'help' && <UserHelpSettings />}
+        {activeTab === 'active-users' && <ActiveUsersTab />}
+        {activeTab === 'my-account' && <MyAccountTab />}
+        {activeTab === 'directory' && <CompanyDirectoryTab />}
+        {activeTab === 'group-rules' && <GroupRulesTab />}
+        {activeTab === 'profile' && <SuperAdminTab />}
+        {activeTab === 'help' && <UserHelpTab />}
       </div>
     </div>
   );

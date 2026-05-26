@@ -155,6 +155,26 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
       return;
     }
 
+    if (user.status === 'Permanently Disabled') {
+      setError('Your access is permanently disabled. Please contact system administrators.');
+      return;
+    }
+
+    if (user.status === 'Archived') {
+      setError('Your user profile has been archived. Active workspace access is no longer permitted.');
+      return;
+    }
+
+    if (user.status === 'Terminated') {
+      setError('This account is terminated. Workspace access has been revoked.');
+      return;
+    }
+
+    if (user.status === 'Deactivated') {
+      setError('Your account is currently deactivated. Please contact an Administrator to reactivate.');
+      return;
+    }
+
     // Reset failed login attempts on successful login
     if (user.failedLoginAttempts && user.failedLoginAttempts > 0) {
       const updatedUsers = users.map(u => {

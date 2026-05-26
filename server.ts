@@ -3,6 +3,7 @@ import { createServer as createViteServer } from "vite";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { GoogleGenAI } from "@google/genai";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,6 +49,79 @@ async function startServer() {
 
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
+  });
+
+  app.post("/api/gemini/chat", async (req, res) => {
+    try {
+      const { message } = req.body;
+      const apiKey = process.env.GEMINI_API_KEY;
+      
+      if (!apiKey) {
+        return res.json({ 
+          reply: "I am operating in limited mode. Please configure GEMINI_API_KEY to enable full diagnostic analysis.",
+          diagnosticResults: [
+             { testName: "API Connection", passed: false, recommendation: "Add your Gemini API key." }
+          ]
+        });
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
+      const systemInstruction = `You are the Technical Analyst Chatbot for Bharat Book AI, an ERP and Voucher Management System. 
+Your primary goal is to provide problem-specific answers related to this software, its functionality, tools, vouchers, accounting, ledgers, or technical analysis.
+If the user asks a question completely unrelated to this system or software, politely decline and state you can only assist with Bharat Book AI.
+Exception: If the user asks about your identity, developer, manufacturer, creation date, or what AI model you are, you must answer this exception strictly by stating:
+- Developer: Developer Manufacturer: Kansya Digital Service
+- Creation Date: 2026
+- AI Model: Real Model which are currently using (Gemini 2.5 Flash)
+Do not provide additional fictional details about this.
+
+Please structure your response strictly into four clearly labeled sections, using clean markdown format (bold headers, bullet points, italics), avoiding excessive unstructured text:
+
+**1. Human-Readable Summary**
+[Explain the core problem or solution in a simple, non-technical, and easily understandable format.]
+
+**2. Feature Analysis**
+[Break down the specific modules, tools, vouchers, or features of Bharat Book AI that relate to the user's query.]
+
+**3. Technical Specifications**
+[Provide the technical details, step-by-step logic, system configurations, or data flow analysis related to the problem.]
+
+**4. Recommended Actions**
+[Provide a concise list of actionable steps or best practices for the user to resolve the issue or optimize their use of the system.]
+
+User asks: `;
+      
+      let targetModel = req.body.model || 'gemini-1.5-flash';
+
+      let response;
+      try {
+        response = await ai.models.generateContent({
+          model: targetModel,
+          contents: systemInstruction + message,
+        });
+      } catch (err: any) {
+        if (err.message?.includes('not found') || err.message?.includes('not supported')) {
+           // Fallback to a guaranteed supported model if the selected one fails
+           response = await ai.models.generateContent({
+             model: 'gemini-1.5-flash',
+             contents: systemInstruction + message,
+           });
+        } else {
+           throw err;
+        }
+      }
+
+      const replyText = response.text || "No response generated.";
+      
+      return res.json({ reply: replyText });
+    } catch (e: any) {
+      console.error(e);
+      let errorMessage = e.message || "Internal server error.";
+      if (errorMessage.includes("503") || errorMessage.includes("high demand")) {
+        errorMessage = "The AI service is currently experiencing high demand. Please wait a moment and try again.";
+      }
+      return res.json({ reply: `API Error: ${errorMessage}` });
+    }
   });
 
   // Expose endpoint returning real tracked client IP address

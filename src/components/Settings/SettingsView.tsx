@@ -403,6 +403,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [aiSettings, setAiSettings] = useState({
     provider: "internal", // 'internal' | 'external'
     internalModel: "gemini-1.5-flash",
+    chatModel: "gemini-2.5-flash",
     externalProvider: "9router",
     apiKey: "",
     model: "llama-3-70b",
@@ -961,7 +962,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           {activeTab === "help" && <HelpSettings />}
 
-          {activeTab === "support" && <SupportSettings />}
+          {activeTab === "support" && <SupportSettings aiSettings={aiSettings} setAiSettings={setAiSettings} />}
 
           {activeTab === "mapping" && (
             <MappingSettings

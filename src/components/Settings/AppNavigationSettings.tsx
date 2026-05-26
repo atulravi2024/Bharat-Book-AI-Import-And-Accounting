@@ -80,8 +80,6 @@ export const AppNavigationSettings: React.FC = () => {
     { id: "item-report", label: "Item Report", icon: "📉" },
     { id: "reports", label: "Financial Report", icon: "📑" },
     { id: "settings", label: "Settings", icon: "⚙️" },
-    { id: "help", label: "Help Center", icon: "❓" },
-    { id: "support", label: "Support & Tickets", icon: "🎫" },
   ];
 
   const subPages: Record<string, { id: string; label: string }[]> = {
