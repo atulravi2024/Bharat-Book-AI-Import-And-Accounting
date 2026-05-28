@@ -17,7 +17,7 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, 
   const isBankImport = vouchers.some(v => v.origin === 'bank');
 
   const handleExportExcel = () => {
-    const exportData = vouchers.flatMap(v => {
+    const exportData = vouchers.flatMap((v): any => {
       if (v.items && v.items.length > 0) {
         return v.items.map(item => ({
           'Voucher ID': v.id,

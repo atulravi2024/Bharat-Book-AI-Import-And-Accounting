@@ -1,4 +1,5 @@
 import React from "react";
+import { useLanguage } from "../../../context/LanguageContext";
 
 const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
@@ -29,27 +30,28 @@ interface MobileTabProps {
 }
 
 export const MobileTab: React.FC<MobileTabProps> = ({ settings, handleSettingChange }) => {
+  const { t } = useLanguage();
   const updateSetting = (key: string, val: any) => handleSettingChange(key, val);
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
-          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">Mobile Ergonomics</h4>
+          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">{t("Mobile Ergonomics")}</h4>
           <div className="mb-4">
-            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Modal Behavior</label>
+            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">{t("Modal Behavior")}</label>
             <select
               value={settings.mobileModalMode || "fullscreen"}
               onChange={(e) => updateSetting("mobileModalMode", e.target.value)}
               className="w-full p-4 bg-white dark:bg-gray-900 border-none rounded-2xl shadow-sm font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none"
             >
-              <option value="popup">Pop-up Mode</option>
-              <option value="fullscreen">Full Screen Mode</option>
+              <option value="popup">{t("Pop-up Mode")}</option>
+              <option value="fullscreen">{t("Full Screen Mode")}</option>
             </select>
           </div>
         </div>
 
         <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
-          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">Display Toggles</h4>
+          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">{t("Display Toggles")}</h4>
           <Toggle 
             label="Show Custom Field Borders" 
             enabled={settings.mobileShowBorders} 

@@ -1,4 +1,5 @@
 import React from "react";
+import { useLanguage } from "../../../context/LanguageContext";
 
 const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
@@ -29,14 +30,15 @@ interface DesktopTabProps {
 }
 
 export const DesktopTab: React.FC<DesktopTabProps> = ({ settings, handleSettingChange }) => {
+  const { t } = useLanguage();
   const updateSetting = (key: string, val: any) => handleSettingChange(key, val);
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
-          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">Layout Options</h4>
+          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">{t("Layout Options")}</h4>
           <div className="mb-4">
-            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Primary Form Layout</label>
+            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">{t("Primary Form Layout")}</label>
             <select
               value={settings.desktopLayout || "grid"}
               onChange={(e) => updateSetting("desktopLayout", e.target.value)}
@@ -45,7 +47,7 @@ export const DesktopTab: React.FC<DesktopTabProps> = ({ settings, handleSettingC
               <option value="grid">Side-by-Side (Grid)</option>
               <option value="stacked">Vertical (Stacked)</option>
             </select>
-            <p className="text-xs text-gray-500 mt-2 ml-2">Controls how labels and inputs align.</p>
+            <p className="text-xs text-gray-500 mt-2 ml-2">{t("Controls how labels and inputs align.")}</p>
           </div>
           <Toggle 
             label="Enable Split Pane" 
@@ -56,9 +58,9 @@ export const DesktopTab: React.FC<DesktopTabProps> = ({ settings, handleSettingC
         </div>
 
         <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
-          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">Sizing</h4>
+          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">{t("Sizing")}</h4>
           <div className="mb-4">
-            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Input Field Size</label>
+            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">{t("Input Field Size")}</label>
             <select
               value={settings.desktopInputSize || "md"}
               onChange={(e) => updateSetting("desktopInputSize", e.target.value)}

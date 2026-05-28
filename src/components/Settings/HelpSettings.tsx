@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLanguage } from "../../context/LanguageContext";
 import { 
   HelpCircle, Search, BookOpen, Sparkles, ChevronRight, CheckCircle, ArrowRight, 
   ShieldCheck, Database, RefreshCw, Settings, Sliders, Activity, Lock, Layers, 
@@ -126,6 +127,7 @@ interface FeatureDefinition {
 }
 
 export const HelpSettings: React.FC = () => {
+  const { t } = useLanguage();
   const [activeSegment, setActiveSegment] = useState<'faq' | 'explorer' | 'trainer'>('explorer');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -498,17 +500,17 @@ export const HelpSettings: React.FC = () => {
             <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight">Help Center</h2>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">Knowledge Hub & Intelligent Manual</p>
+            <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight">{t("Help Center")}</h2>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">{t("Knowledge Hub & Intelligent Manual")}</p>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-2 w-full md:w-auto mt-3 md:mt-0">
           <div className="flex items-center justify-between md:justify-start gap-2 font-mono text-[10px] bg-gray-50 dark:bg-gray-800/50 px-3 py-2 md:py-1.5 rounded-lg border border-gray-200/50 dark:border-gray-700/50 shrink-0">
-            <span className="text-gray-500 dark:text-gray-400 font-semibold">BHARAT BOOK</span>
+            <span className="text-gray-500 dark:text-gray-400 font-semibold">{t("BHARAT BOOK")}</span>
             <div className="flex items-center gap-1.5 border-l border-gray-200 dark:border-gray-700 pl-2">
               <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-sm shadow-emerald-200" />
-              <span className="text-gray-700 dark:text-gray-300 font-bold tracking-tight">SECURE MODE</span>
+              <span className="text-gray-700 dark:text-gray-300 font-bold tracking-tight">{t("SECURE MODE")}</span>
             </div>
           </div>
           
@@ -519,7 +521,7 @@ export const HelpSettings: React.FC = () => {
                  activeSegment === 'explorer' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                }`}
              >
-               <Settings className="w-3 h-3" /> Explorer
+               <Settings className="w-3 h-3" /> {t("Explorer")}
              </button>
              <button
                onClick={() => setActiveSegment('trainer')}
@@ -527,7 +529,7 @@ export const HelpSettings: React.FC = () => {
                  activeSegment === 'trainer' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                }`}
              >
-               <Sparkles className="w-3 h-3" /> Trainer
+               <Sparkles className="w-3 h-3" /> {t("Trainer")}
              </button>
              <button
                onClick={() => setActiveSegment('faq')}
@@ -535,7 +537,7 @@ export const HelpSettings: React.FC = () => {
                  activeSegment === 'faq' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                }`}
              >
-               <BookOpen className="w-3 h-3" /> Knowledge
+               <BookOpen className="w-3 h-3" /> {t("Knowledge")}
              </button>
           </div>
         </div>
@@ -555,8 +557,8 @@ export const HelpSettings: React.FC = () => {
                       <Settings className="w-5 h-5" />
                    </div>
                    <div className="text-left">
-                      <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Configuration & UI</h4>
-                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Firm Setup, Numbers & Visuals</p>
+                      <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("Configuration & UI")}</h4>
+                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">{t("Firm Setup, Numbers & Visuals")}</p>
                    </div>
                 </div>
                 <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${explorerGroups.config ? 'rotate-90 text-blue-500' : ''}`} />
@@ -603,8 +605,8 @@ export const HelpSettings: React.FC = () => {
                       <Database className="w-5 h-5" />
                    </div>
                    <div className="text-left">
-                      <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Data & Imports</h4>
-                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Schemas, Aliases & AI Engine</p>
+                      <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("Data & Imports")}</h4>
+                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">{t("Schemas, Aliases & AI Engine")}</p>
                    </div>
                 </div>
                 <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${explorerGroups.data ? 'rotate-90 text-indigo-500' : ''}`} />
@@ -651,8 +653,8 @@ export const HelpSettings: React.FC = () => {
                       <ShieldCheck className="w-5 h-5" />
                    </div>
                    <div className="text-left">
-                      <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Security & Access</h4>
-                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Privacy, Alerts & Directory</p>
+                      <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("Security & Access")}</h4>
+                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">{t("Privacy, Alerts & Directory")}</p>
                    </div>
                 </div>
                 <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${explorerGroups.security ? 'rotate-90 text-amber-500' : ''}`} />
@@ -726,8 +728,8 @@ export const HelpSettings: React.FC = () => {
           <div className="space-y-2.5 mt-3 border-t border-gray-100 dark:border-gray-800 pt-4">
             {filteredArticles.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest font-sans">No matching articles</p>
-                <p className="text-[10px] text-gray-400 mt-1">Try another search term</p>
+                <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest font-sans">{t("No matching articles")}</p>
+                <p className="text-[10px] text-gray-400 mt-1">{t("Try another search term")}</p>
               </div>
             ) : (
               filteredArticles.map(art => {
@@ -795,8 +797,8 @@ export const HelpSettings: React.FC = () => {
                     <Sparkles className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Map Trainer Simulator</h4>
-                    <p className="text-[10px] text-blue-500 font-bold uppercase tracking-widest mt-0.5">Learn interactive sheet alignments</p>
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("Map Trainer Simulator")}</h4>
+                    <p className="text-[10px] text-blue-500 font-bold uppercase tracking-widest mt-0.5">{t("Learn interactive sheet alignments")}</p>
                   </div>
                 </div>
                 <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'mapping' ? 'rotate-90 text-blue-500' : ''}`} />
@@ -881,7 +883,7 @@ export const HelpSettings: React.FC = () => {
                         onClick={resetSimulator}
                         className="text-[10px] font-black text-rose-500 hover:text-rose-600 uppercase tracking-widest flex items-center gap-1"
                       >
-                        <RefreshCw className="w-3 h-3" /> Reset
+                        <RefreshCw className="w-3 h-3" /> {t("Reset")}
                       </button>
                     )}
                   </div>
@@ -891,7 +893,7 @@ export const HelpSettings: React.FC = () => {
                   <div className="bg-emerald-500/10 border border-emerald-200 rounded-xl p-3.5 flex gap-2 text-emerald-700 dark:text-emerald-400 items-start animate-in zoom-in duration-300 mt-4">
                     <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-[11px] font-bold uppercase tracking-wider">Perfect Alignment Learned!</p>
+                      <p className="text-[11px] font-bold uppercase tracking-wider">{t("Perfect Alignment Learned!")}</p>
                       <p className="text-[10px] font-semibold leading-normal mt-0.5">
                         Bharat Book AI generates rules under **{"Mapping -> Mapping Rules"}** to save this alignment layout. Next uploads format instantly.
                       </p>
@@ -913,8 +915,8 @@ export const HelpSettings: React.FC = () => {
                     <Database className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Ledger Reconciliation Trainer</h4>
-                    <p className="text-[10px] text-purple-500 font-bold uppercase tracking-widest mt-0.5">Learn how vouchers get mapped</p>
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("Ledger Reconciliation Trainer")}</h4>
+                    <p className="text-[10px] text-purple-500 font-bold uppercase tracking-widest mt-0.5">{t("Learn how vouchers get mapped")}</p>
                   </div>
                 </div>
                 <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'ledger' ? 'rotate-90 text-purple-500' : ''}`} />
@@ -923,7 +925,7 @@ export const HelpSettings: React.FC = () => {
               {selectedTrainerId === 'ledger' && (
                 <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
                   <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
-                    The AI matches raw bank transaction narratives strings against your Chart of Accounts. Here, you can test how the matching logic works behind the scenes before uploading files.
+                    {t("The AI matches raw bank transaction narratives strings against your Chart of Accounts. Here, you can test how the matching logic works behind the scenes before uploading files.")}
                   </p>
                   
                   <div className="space-y-4">
@@ -954,7 +956,7 @@ export const HelpSettings: React.FC = () => {
                           </div>
                        ) : (
                           <div className="flex items-center gap-2">
-                             <span className="text-[12px] font-bold text-gray-500 dark:text-gray-400">No strong match found. Requires manual mapping.</span>
+                             <span className="text-[12px] font-bold text-gray-500 dark:text-gray-400">{t("No strong match found. Requires manual mapping.")}</span>
                              <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 text-[10px] font-black uppercase shadow-sm">12% Match</span>
                           </div>
                        )}
@@ -975,8 +977,8 @@ export const HelpSettings: React.FC = () => {
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Security Rules Trainer</h4>
-                    <p className="text-[10px] text-amber-600 font-bold uppercase tracking-widest mt-0.5">Simulate role access boundaries</p>
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("Security Rules Trainer")}</h4>
+                    <p className="text-[10px] text-amber-600 font-bold uppercase tracking-widest mt-0.5">{t("Simulate role access boundaries")}</p>
                   </div>
                 </div>
                 <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'security' ? 'rotate-90 text-amber-500' : ''}`} />
@@ -985,7 +987,7 @@ export const HelpSettings: React.FC = () => {
               {selectedTrainerId === 'security' && (
                 <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
                   <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
-                    Users have different permission layers when dealing with vouchers, masters, and settings. Simulate access levels by switching the active user role below.
+                    {t("Users have different permission layers when dealing with vouchers, masters, and settings. Simulate access levels by switching the active user role below.")}
                   </p>
                   
                   <div className="mb-4">
@@ -1005,23 +1007,23 @@ export const HelpSettings: React.FC = () => {
                   
                   <div className="space-y-2">
                      <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-                        <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200">Draft Vouchers</span>
-                        <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">Allowed</span>
+                        <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200">{t("Draft Vouchers")}</span>
+                        <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">{t("Allowed")}</span>
                      </div>
                      <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-                        <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200">Post Vouchers to Production</span>
+                        <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200">{t("Post Vouchers to Production")}</span>
                         {testUserRole === 'Accountant' ? (
-                           <span className="px-2 py-1 rounded bg-rose-100 text-rose-800 text-[10px] font-black uppercase">Denied</span>
+                           <span className="px-2 py-1 rounded bg-rose-100 text-rose-800 text-[10px] font-black uppercase">{t("Denied")}</span>
                         ) : (
-                           <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">Allowed</span>
+                           <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">{t("Allowed")}</span>
                         )}
                      </div>
                      <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-                        <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200">Modify GST / System Settings</span>
+                        <span className="text-[12px] font-bold text-gray-700 dark:text-gray-200">{t("Modify GST / System Settings")}</span>
                         {testUserRole === 'Administrator' ? (
-                           <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">Allowed</span>
+                           <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">{t("Allowed")}</span>
                         ) : (
-                           <span className="px-2 py-1 rounded bg-rose-100 text-rose-800 text-[10px] font-black uppercase">Denied</span>
+                           <span className="px-2 py-1 rounded bg-rose-100 text-rose-800 text-[10px] font-black uppercase">{t("Denied")}</span>
                         )}
                      </div>
                   </div>
@@ -1041,8 +1043,8 @@ export const HelpSettings: React.FC = () => {
                     <Activity className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">AI Confidence Thresholds</h4>
-                    <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest mt-0.5">Test Auto-Approval Logic</p>
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("AI Confidence Thresholds")}</h4>
+                    <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest mt-0.5">{t("Test Auto-Approval Logic")}</p>
                   </div>
                 </div>
                 <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'confidence' ? 'rotate-90 text-emerald-500' : ''}`} />
@@ -1051,7 +1053,7 @@ export const HelpSettings: React.FC = () => {
               {selectedTrainerId === 'confidence' && (
                 <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
                   <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
-                    The AI engine assigns a confidence score to every ledger prediction. If the score is higher than your firm's threshold, it goes to "Auto-Approve". Otherwise, it routes to "Requires Manual Review".
+                    {t("The AI engine assigns a confidence score to every ledger prediction. If the score is higher than your firm's threshold, it goes to \"Auto-Approve\". Otherwise, it routes to \"Requires Manual Review\".")}
                   </p>
                   
                   <div className="mb-4">
@@ -1085,9 +1087,9 @@ export const HelpSettings: React.FC = () => {
                                <div className="text-[10px] text-emerald-600 font-bold uppercase mt-0.5">Score: {mockTx.score}%</div>
                             </div>
                             {isApproved ? (
-                               <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase shadow-sm">Auto-Approve</span>
+                               <span className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase shadow-sm">{t("Auto-Approve")}</span>
                             ) : (
-                               <span className="px-2 py-1 rounded bg-amber-100 text-amber-800 text-[10px] font-black uppercase shadow-sm">Manual Review</span>
+                               <span className="px-2 py-1 rounded bg-amber-100 text-amber-800 text-[10px] font-black uppercase shadow-sm">{t("Manual Review")}</span>
                             )}
                          </div>
                        );
@@ -1108,8 +1110,8 @@ export const HelpSettings: React.FC = () => {
                     <Lock className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Shift Constraint Simulator</h4>
-                    <p className="text-[10px] text-fuchsia-600 font-bold uppercase tracking-widest mt-0.5">Test Temporal Access Rules</p>
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("Shift Constraint Simulator")}</h4>
+                    <p className="text-[10px] text-fuchsia-600 font-bold uppercase tracking-widest mt-0.5">{t("Test Temporal Access Rules")}</p>
                   </div>
                 </div>
                 <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'shift' ? 'rotate-90 text-fuchsia-500' : ''}`} />
@@ -1118,7 +1120,7 @@ export const HelpSettings: React.FC = () => {
               {selectedTrainerId === 'shift' && (
                 <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
                   <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
-                    The enterprise shield enforces shift constraints (e.g. 09:00 to 18:00 on Weekdays only). Test how the application responds when attempting to post vouchers outside simulated operational hours.
+                    {t("The enterprise shield enforces shift constraints (e.g. 09:00 to 18:00 on Weekdays only). Test how the application responds when attempting to post vouchers outside simulated operational hours.")}
                   </p>
                   
                   <div className="mb-4">
@@ -1145,15 +1147,15 @@ export const HelpSettings: React.FC = () => {
                        <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 flex items-start gap-3">
                           <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
-                            <div className="text-[12px] font-bold uppercase tracking-wider">Shift Active</div>
-                            <div className="text-[11px] mt-1 font-semibold">User can post entries, mapping rules, and run auto-imports smoothly. Full API access is granted.</div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">{t("Shift Active")}</div>
+                            <div className="text-[11px] mt-1 font-semibold">{t("User can post entries, mapping rules, and run auto-imports smoothly. Full API access is granted.")}</div>
                           </div>
                        </div>
                     ) : testUserRole === 'wd_730pm' ? (
                        <div className="p-3 rounded-lg border border-rose-200 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-400 flex items-start gap-3">
                           <Clock className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
-                            <div className="text-[12px] font-bold uppercase tracking-wider">After-Hours Boundary Hit</div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">{t("After-Hours Boundary Hit")}</div>
                             <div className="text-[11px] mt-1 font-semibold">Access restricted. System generates an Audit Incident log (Severity: Medium) - "Posting attempt outside user shift."</div>
                           </div>
                        </div>
@@ -1161,8 +1163,8 @@ export const HelpSettings: React.FC = () => {
                        <div className="p-3 rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950/20 text-amber-800 dark:text-amber-400 flex items-start gap-3">
                           <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
-                            <div className="text-[12px] font-bold uppercase tracking-wider">Weekend Lockdown Active</div>
-                            <div className="text-[11px] mt-1 font-semibold">The UI falls into Read-Only mode. High-Security lockdown triggered for weekend.</div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">{t("Weekend Lockdown Active")}</div>
+                            <div className="text-[11px] mt-1 font-semibold">{t("The UI falls into Read-Only mode. High-Security lockdown triggered for weekend.")}</div>
                           </div>
                        </div>
                     )}
@@ -1182,8 +1184,8 @@ export const HelpSettings: React.FC = () => {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Alert Routing Simulator</h4>
-                    <p className="text-[10px] text-sky-600 font-bold uppercase tracking-widest mt-0.5">Test Auto-Email Dispatches</p>
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("Alert Routing Simulator")}</h4>
+                    <p className="text-[10px] text-sky-600 font-bold uppercase tracking-widest mt-0.5">{t("Test Auto-Email Dispatches")}</p>
                   </div>
                 </div>
                 <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'notifications' ? 'rotate-90 text-sky-500' : ''}`} />
@@ -1192,7 +1194,7 @@ export const HelpSettings: React.FC = () => {
               {selectedTrainerId === 'notifications' && (
                 <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
                   <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
-                    The platform automatically dispatches emails to management upon large volume imports or suspicious voucher creation. Test the routing logic here.
+                    {t("The platform automatically dispatches emails to management upon large volume imports or suspicious voucher creation. Test the routing logic here.")}
                   </p>
                   
                   <div className="mb-4">
@@ -1219,7 +1221,7 @@ export const HelpSettings: React.FC = () => {
                        <div className="p-3 rounded-lg border border-sky-200 bg-sky-50 dark:bg-sky-950/20 text-sky-800 dark:text-sky-400 flex items-start gap-3">
                           <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
-                            <div className="text-[12px] font-bold uppercase tracking-wider">Email Routed: Admin Team</div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">{t("Email Routed: Admin Team")}</div>
                             <div className="text-[11px] mt-1 font-semibold">Subject: "Bulk Import Alert: 500+ records successfully mapped."</div>
                           </div>
                        </div>
@@ -1227,21 +1229,21 @@ export const HelpSettings: React.FC = () => {
                        <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 flex items-start gap-3">
                           <Clock className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
-                            <div className="text-[12px] font-bold uppercase tracking-wider">Silent Notification</div>
-                            <div className="text-[11px] mt-1 font-semibold">Logged to Audit table, no emails dispatched per preference settings.</div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">{t("Silent Notification")}</div>
+                            <div className="text-[11px] mt-1 font-semibold">{t("Logged to Audit table, no emails dispatched per preference settings.")}</div>
                           </div>
                        </div>
                     ) : testUserRole === 'event_highval' ? (
                        <div className="p-3 rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950/20 text-amber-800 dark:text-amber-400 flex items-start gap-3">
                           <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
-                            <div className="text-[12px] font-bold uppercase tracking-wider">Email Routed: Finance Directors</div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">{t("Email Routed: Finance Directors")}</div>
                             <div className="text-[11px] mt-1 font-semibold">Subject: "CRITICAL: High-Value Voucher over threshold requires multi-signature."</div>
                           </div>
                        </div>
                     ) : (
                        <div className="p-3 rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 flex items-center justify-center">
-                          <div className="text-[11px] font-bold uppercase tracking-wider">Select an event</div>
+                          <div className="text-[11px] font-bold uppercase tracking-wider">{t("Select an event")}</div>
                        </div>
                     )}
                   </div>
@@ -1261,8 +1263,8 @@ export const HelpSettings: React.FC = () => {
                     <LayoutGrid className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">Validation Schema Simulator</h4>
-                    <p className="text-[10px] text-orange-600 font-bold uppercase tracking-widest mt-0.5">Test Ledger Data Integrity Checks</p>
+                    <h4 className="text-[14px] font-black uppercase text-gray-900 dark:text-white tracking-wider">{t("Validation Schema Simulator")}</h4>
+                    <p className="text-[10px] text-orange-600 font-bold uppercase tracking-widest mt-0.5">{t("Test Ledger Data Integrity Checks")}</p>
                   </div>
                 </div>
                 <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${selectedTrainerId === 'validation' ? 'rotate-90 text-orange-500' : ''}`} />
@@ -1271,7 +1273,7 @@ export const HelpSettings: React.FC = () => {
               {selectedTrainerId === 'validation' && (
                 <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200">
                   <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold mb-4">
-                    The platform rejects invalid voucher lines. Test the JSON schema validation mechanisms used to reject corrupt CSV records.
+                    {t("The platform rejects invalid voucher lines. Test the JSON schema validation mechanisms used to reject corrupt CSV records.")}
                   </p>
                   
                   <div className="mb-4">
@@ -1298,15 +1300,15 @@ export const HelpSettings: React.FC = () => {
                        <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 flex items-start gap-3">
                           <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
-                            <div className="text-[12px] font-bold uppercase tracking-wider">Record Passed</div>
-                            <div className="text-[11px] mt-1 font-semibold">Schema valid. The voucher is correctly formatted and goes into processing queue.</div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">{t("Record Passed")}</div>
+                            <div className="text-[11px] mt-1 font-semibold">{t("Schema valid. The voucher is correctly formatted and goes into processing queue.")}</div>
                           </div>
                        </div>
                     ) : testUserRole === 'rec_noamt' ? (
                        <div className="p-3 rounded-lg border border-rose-200 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-400 flex items-start gap-3">
                           <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
-                            <div className="text-[12px] font-bold uppercase tracking-wider">Schema Error: Missing Required Field</div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">{t("Schema Error: Missing Required Field")}</div>
                             <div className="text-[11px] mt-1 font-semibold">Row 45: property `amount` is undefined or non-numeric. Import paused.</div>
                           </div>
                        </div>
@@ -1314,13 +1316,13 @@ export const HelpSettings: React.FC = () => {
                        <div className="p-3 rounded-lg border border-rose-200 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-400 flex items-start gap-3">
                           <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                           <div>
-                            <div className="text-[12px] font-bold uppercase tracking-wider">Constraint Error: Out of bounds</div>
+                            <div className="text-[12px] font-bold uppercase tracking-wider">{t("Constraint Error: Out of bounds")}</div>
                             <div className="text-[11px] mt-1 font-semibold">Row 112: The `txn_date` field is from a closed financial year (2020-2021). Rejected.</div>
                           </div>
                        </div>
                     ) : (
                        <div className="p-3 rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 flex items-center justify-center">
-                          <div className="text-[11px] font-bold uppercase tracking-wider">Select a raw payload</div>
+                          <div className="text-[11px] font-bold uppercase tracking-wider">{t("Select a raw payload")}</div>
                        </div>
                     )}
                   </div>
@@ -1333,15 +1335,15 @@ export const HelpSettings: React.FC = () => {
       {/* Guidelines Sidebar */}
           <div className="lg:col-span-4 space-y-4">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 border border-gray-100 dark:border-gray-700 space-y-3">
-              <h4 className="text-[12px] font-bold uppercase text-gray-950 dark:text-white tracking-wider">Useful checklists</h4>
+              <h4 className="text-[12px] font-bold uppercase text-gray-950 dark:text-white tracking-wider">{t("Useful checklists")}</h4>
               
               <div className="space-y-2">
                 <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
                   <Mail className="w-3.5 h-3.5 text-sky-600 mt-0.5 shrink-0" />
                   <div>
-                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Email Recipient Audit</h5>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">{t("Email Recipient Audit")}</h5>
                     <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
-                      Periodically review who is receiving the "High-Value Voucher" alerts to ensure correct hierarchy.
+                      {t("Periodically review who is receiving the \"High-Value Voucher\" alerts to ensure correct hierarchy.")}
                     </p>
                   </div>
                 </div>
@@ -1349,9 +1351,9 @@ export const HelpSettings: React.FC = () => {
                 <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
                   <LayoutGrid className="w-3.5 h-3.5 text-orange-600 mt-0.5 shrink-0" />
                   <div>
-                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Schema Error Review</h5>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">{t("Schema Error Review")}</h5>
                     <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
-                      Monitor schema constraints rejection rates to identify if user training on templates is required.
+                      {t("Monitor schema constraints rejection rates to identify if user training on templates is required.")}
                     </p>
                   </div>
                 </div>
@@ -1359,9 +1361,9 @@ export const HelpSettings: React.FC = () => {
                 <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
                   <Activity className="w-3.5 h-3.5 text-emerald-600 mt-0.5 shrink-0" />
                   <div>
-                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">AI Confidence Checks</h5>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">{t("AI Confidence Checks")}</h5>
                     <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
-                      Routinely scan the "Manual Review" queue to train the AI and improve auto-approval precision.
+                      {t("Routinely scan the \"Manual Review\" queue to train the AI and improve auto-approval precision.")}
                     </p>
                   </div>
                 </div>
@@ -1369,9 +1371,9 @@ export const HelpSettings: React.FC = () => {
                 <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
                   <Lock className="w-3.5 h-3.5 text-fuchsia-600 mt-0.5 shrink-0" />
                   <div>
-                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Shift Boundary Audit</h5>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">{t("Shift Boundary Audit")}</h5>
                     <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
-                      Verify incident logs frequently if users attempt to bypass temporal shift barriers during weekends.
+                      {t("Verify incident logs frequently if users attempt to bypass temporal shift barriers during weekends.")}
                     </p>
                   </div>
                 </div>
@@ -1379,9 +1381,9 @@ export const HelpSettings: React.FC = () => {
                 <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
                   <Database className="w-3.5 h-3.5 text-blue-600 mt-0.5 shrink-0" />
                   <div>
-                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Ledger Auditing</h5>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">{t("Ledger Auditing")}</h5>
                     <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
-                      Double-check counterparty invoice references before posting vouchers.
+                      {t("Double-check counterparty invoice references before posting vouchers.")}
                     </p>
                   </div>
                 </div>
@@ -1389,9 +1391,9 @@ export const HelpSettings: React.FC = () => {
                 <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg flex gap-2.5 items-start">
                   <ShieldCheck className="w-3.5 h-3.5 text-purple-600 mt-0.5 shrink-0" />
                   <div>
-                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">Security Bounds</h5>
+                    <h5 className="text-[11px] font-bold text-gray-850 dark:text-white uppercase tracking-tight">{t("Security Bounds")}</h5>
                     <p className="text-[10px] text-gray-400 dark:text-gray-550 font-medium leading-relaxed mt-0.5">
-                      Users restricted by timeframes cannot operate outside corporate hours.
+                      {t("Users restricted by timeframes cannot operate outside corporate hours.")}
                     </p>
                   </div>
                 </div>

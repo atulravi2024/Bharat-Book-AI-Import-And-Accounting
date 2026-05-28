@@ -6,6 +6,7 @@ import { SuperAdminTab } from './UserSettingsTabs/SuperAdminTab';
 import { ActiveUsersTab } from './UserSettingsTabs/ActiveUsersTab';
 import { GroupRulesTab } from './UserSettingsTabs/GroupRulesTab';
 import { UserHelpTab } from './UserSettingsTabs/UserHelpTab';
+import { useLanguage } from '../../context/LanguageContext';
 
 export interface UserPermissions {
   vouchers: { read: boolean; create: boolean; edit: boolean; delete: boolean };
@@ -190,7 +191,8 @@ export const INITIAL_USERS: ManagedUser[] = [
 ];
 
 export const UserSettings: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'my-account' | 'directory' | 'profile' | 'active-users' | 'group-rules' | 'help'>('active-users');
+  const { t } = useLanguage();
+  const [activeTab, setActiveTab] = useState<'my-account' | 'directory' | 'profile' | 'active-users' | 'group-rules' | 'help'>('help');
 
   React.useEffect(() => {
     const checkUserOverride = () => {
@@ -215,12 +217,12 @@ export const UserSettings: React.FC = () => {
             <span className="p-2 bg-blue-50 dark:bg-blue-950/40 rounded-xl mr-2.5 text-blue-600 dark:text-blue-400 border border-blue-100/50 dark:border-blue-900/30">
               <User className="w-5 h-5" /> 
             </span>
-            Security & User Workspace
+            {t("Security & User Workspace")}
           </h2>
-          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1 pl-1">Configure profile thresholds, directories, & group policy permissions</p>
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1 pl-1">{t("Configure profile thresholds, directories, & group policy permissions")}</p>
         </div>
         <div className="hidden xl:flex items-center gap-2 text-[10px] font-mono bg-blue-50/50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-100/30 px-3 py-1.5 rounded-xl">
-          <span>ROOT PRIVILEGES COMPLIANCE APPLIED</span>
+          <span>{t("ROOT PRIVILEGES COMPLIANCE APPLIED")}</span>
         </div>
       </div>
 
@@ -235,7 +237,7 @@ export const UserSettings: React.FC = () => {
               }`}
           >
               <Activity className="w-4 h-4 mr-2" />
-              Active Users
+              {t("Active Users")}
           </button>
           <button 
               onClick={() => setActiveTab('my-account')}
@@ -246,7 +248,7 @@ export const UserSettings: React.FC = () => {
               }`}
           >
               <UserCheck className="w-4 h-4 mr-2" />
-              My Account
+              {t("My Account")}
           </button>
           <button 
               onClick={() => setActiveTab('directory')}
@@ -257,7 +259,7 @@ export const UserSettings: React.FC = () => {
               }`}
           >
               <Compass className="w-4 h-4 mr-2" />
-              Company Directory
+              {t("Company Directory")}
           </button>
           <button 
               onClick={() => setActiveTab('group-rules')}
@@ -268,7 +270,7 @@ export const UserSettings: React.FC = () => {
               }`}
           >
               <Sliders className="w-4 h-4 mr-2" />
-              Group Rules
+              {t("Group Rules")}
           </button>
           <button 
               onClick={() => setActiveTab('profile')}
@@ -279,7 +281,7 @@ export const UserSettings: React.FC = () => {
               }`}
           >
               <Shield className="w-4 h-4 mr-2" />
-              Super Admin
+              {t("Super Admin")}
           </button>
           <button 
               onClick={() => setActiveTab('help')}
@@ -290,7 +292,7 @@ export const UserSettings: React.FC = () => {
               }`}
           >
               <HelpCircle className="w-4 h-4 mr-2" />
-              User Help Center
+              {t("User Help Center")}
           </button>
       </div>
  

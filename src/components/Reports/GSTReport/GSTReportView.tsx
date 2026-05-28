@@ -136,13 +136,14 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
        const sign = isCreditNote ? -1 : 1;
        
        const hasGstin = !!v.gstin?.value && String(v.gstin.value).trim().length > 0;
-       const narrationExplicityB2B = v.narration?.value?.includes('B2B');
+       const narrationStr = String(v.narration?.value || '');
+       const narrationExplicityB2B = narrationStr.includes('B2B');
        const isB2B = hasGstin || narrationExplicityB2B;
        
-       const isB2CL = v.narration?.value?.includes('B2C Large');
-       const isB2CS = v.narration?.value?.includes('B2C Small');
-       const isExport = v.narration?.value?.includes('Export');
-       const isExempt = v.narration?.value?.includes('Exempt');
+       const isB2CL = narrationStr.includes('B2C Large');
+       const isB2CS = narrationStr.includes('B2C Small');
+       const isExport = narrationStr.includes('Export');
+       const isExempt = narrationStr.includes('Exempt');
 
        let recType = 'B2C Small'; // Default
        if (isExport) recType = 'Export';
@@ -219,7 +220,9 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
             totalTaxable += taxable;
             totalTax += tax;
             let vCgst = 0, vSgst = 0, vIgst = 0;
-            if (v.partyName?.value?.includes('Inter-state') || v.narration?.value?.includes('Inter-state') || v.narration?.value?.includes('IGST') || v.narration?.value?.includes('Export')) {
+            const pNameStr = String(v.partyName?.value || '');
+            const narrStr = String(v.narration?.value || '');
+            if (pNameStr.includes('Inter-state') || narrStr.includes('Inter-state') || narrStr.includes('IGST') || narrStr.includes('Export')) {
                 totalIgst += tax;
                 vIgst = tax;
             } else {
@@ -263,11 +266,12 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
             const isDebitNote = v.type === VoucherType.DebitNote;
             
             const hasGstin = !!v.gstin?.value && String(v.gstin.value).trim().length > 0;
-            const isB2B = hasGstin || v.narration?.value?.includes('B2B');
-            const isB2CL = v.narration?.value?.includes('B2C Large');
-            const isB2CS = v.narration?.value?.includes('B2C Small');
-            const isExport = v.narration?.value?.includes('Export');
-            const isExempt = v.narration?.value?.includes('Exempt');
+            const narrStr = String(v.narration?.value || '');
+            const isB2B = hasGstin || narrStr.includes('B2B');
+            const isB2CL = narrStr.includes('B2C Large');
+            const isB2CS = narrStr.includes('B2C Small');
+            const isExport = narrStr.includes('Export');
+            const isExempt = narrStr.includes('Exempt');
 
             let typeStr = 'B2C Small';
             if (isExport) typeStr = 'Export';

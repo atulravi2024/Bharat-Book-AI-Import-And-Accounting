@@ -27,7 +27,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
   const containerRef = useRef<HTMLDivElement>(null);
   const documentRef = useRef<HTMLDivElement>(null);
 
-    const [printConfig, setPrintConfig] = useState({
+    const [printConfig, setPrintConfig] = useState<any>({
         showLogo: true,
         showHeader: true,
         showBilling: true,
@@ -83,7 +83,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
   }, []);
 
   // Design Theme Logic
-  const layout = printConfig.designLayout || 'Modern';
+  const layout = (printConfig.designLayout || 'Modern') as any;
 
   const isTally = layout === 'Tally';
   const isVyapar = layout === 'Vyapar' || layout === 'Retail';

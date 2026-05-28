@@ -8,7 +8,7 @@ interface LogisticsSectionProps {
   toggleSection: (section: string) => void;
   headerDetails: any;
   handleHeaderChange: (field: string, value: any) => void;
-  partyMasters: any[];
+  partyMasters?: any[];
 }
 
 export const LogisticsSection: React.FC<LogisticsSectionProps> = ({

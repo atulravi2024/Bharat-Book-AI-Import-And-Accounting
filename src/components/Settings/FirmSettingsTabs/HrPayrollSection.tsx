@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Users } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 6: HR & Payroll Compliance */}
@@ -28,7 +30,7 @@ export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activ
                       <Users className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Payroll Setup
+                      {t("Payroll Setup")}
                     </h3>
                   </div>
                   {activeAccordion === "hrPayroll" ? (
@@ -73,7 +75,7 @@ export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activ
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            ESIC Number
+                            {t("ESIC Number")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input

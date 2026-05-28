@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Coins } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 8: Financial - Taxation */}
@@ -28,7 +30,7 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                       <Coins className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Financial Taxation
+                      {t("Financial Taxation")}
                     </h3>
                   </div>
                   {activeAccordion === "financial_tax" ? (
@@ -48,7 +50,7 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            Tax Filing Frequency
+                            {t("Tax Filing Frequency")}
                           </label>
                           <select
                             value={firmData.taxFilingFrequency}
@@ -57,14 +59,14 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 cursor-pointer dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="monthly">Monthly</option>
-                            <option value="quarterly">Quarterly</option>
-                            <option value="annually">Annually</option>
+                            <option value="monthly">{t("Monthly")}</option>
+                            <option value="quarterly">{t("Quarterly")}</option>
+                            <option value="annually">{t("Annually")}</option>
                           </select>
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Default Tax System
+                            {t("Default Tax System")}
                           </label>
                           <select
                             value={firmData.defaultTaxCategory}
@@ -74,9 +76,9 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                             className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 cursor-pointer dark:bg-gray-900 dark:text-gray-200"
                           >
                             <option value="GST">GST (India)</option>
-                            <option value="VAT">VAT</option>
-                            <option value="SalesTax">Sales Tax</option>
-                            <option value="Exempt">Tax Exempt</option>
+                            <option value="VAT">{t("VAT")}</option>
+                            <option value="SalesTax">{t("Sales Tax")}</option>
+                            <option value="Exempt">{t("Tax Exempt")}</option>
                           </select>
                         </div>
                       </div>

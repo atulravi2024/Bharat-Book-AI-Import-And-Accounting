@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, PhoneCall } from 'l
 import { STATE_DATA } from "../../../lib/states";
 import { SearchableDropdown } from "../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../lib/firmSettingsConstants";
+import { useLanguage } from "../../../context/LanguageContext";
 
 interface Props {
   firmData: any;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 3: Primary Contacts */}
@@ -28,7 +30,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                       <PhoneCall className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Primary Contacts
+                      {t("Primary Contacts")}
                     </h3>
                   </div>
                   {activeAccordion === "primaryContacts" ? (
@@ -48,11 +50,11 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            Primary Contact Name
+                            {t("Primary Contact Name")}
                           </label>
                           <input
                             type="text"
-                            placeholder="Enter Full Name"
+                            placeholder={t("Enter Full Name")}
                             value={firmData.primaryContactName}
                             onChange={(e) =>
                               setFirmData({
@@ -65,7 +67,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Contact Designation
+                            {t("Contact Designation")}
                           </label>
                           <input
                             type="text"
@@ -82,7 +84,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Primary Email
+                            {t("Primary Email")}
                           </label>
                           <input
                             type="email"
@@ -96,7 +98,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Phone Number
+                            {t("Phone Number")}
                           </label>
                           <input
                             type="tel"
@@ -110,7 +112,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            WhatsApp Business Number
+                            {t("WhatsApp Business Number")}
                           </label>
                           <input
                             type="tel"
@@ -124,7 +126,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Support Email
+                            {t("Support Email")}
                           </label>
                           <input
                             type="email"
@@ -141,7 +143,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Support Phone Number
+                            {t("Support Phone Number")}
                           </label>
                           <input
                             type="tel"
@@ -158,7 +160,7 @@ export const ContactsSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Website
+                            {t("Website")}
                           </label>
                           <input
                             type="url"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { 
   User, 
   MapPin, 
@@ -16,6 +17,7 @@ import { useNotifications } from '../../../context/NotificationContext';
 import { ManagedUser, INITIAL_USERS } from '../UserSettings';
 
 export const MyAccountTab = () => {
+  const { t } = useLanguage();
   const { addNotification } = useNotifications();
 
   const [loggedInUserId, setLoggedInUserId] = useState<string>('usr-1');
@@ -58,7 +60,7 @@ export const MyAccountTab = () => {
     } else {
       setAvatarClicks(newClicks);
       if (newClicks === 1) {
-        addNotification({ title: 'Access Denied', message: 'It does not provide an option to change the password.', type: 'Warning' });
+        addNotification({ title: 'Access Denied', message: 'It does not provide an option to change the password.', type: 'Alert' });
       }
     }
   };
@@ -212,7 +214,7 @@ export const MyAccountTab = () => {
   const handleUpdatePassword = (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      addNotification({ title: 'Error', message: 'New passwords do not match.', type: 'Warning' });
+      addNotification({ title: 'Error', message: 'New passwords do not match.', type: 'Alert' });
       return;
     }
     
@@ -252,7 +254,7 @@ export const MyAccountTab = () => {
             <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
               {loggedInUserData?.name}
               <span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded text-[9px]">
-                Online
+                {t("Online")}
               </span>
             </h3>
             <p className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mt-0.5">
@@ -263,22 +265,22 @@ export const MyAccountTab = () => {
         
         <div className="hidden md:flex bg-white dark:bg-gray-900 py-2 px-4 rounded-xl border border-gray-100 dark:border-gray-800 gap-6 shadow-sm">
           <div className="flex flex-col justify-center">
-            <span className="text-[9px] font-black uppercase text-gray-400 mb-0.5">ID</span>
+            <span className="text-[9px] font-black uppercase text-gray-400 mb-0.5">{t("ID")}</span>
             <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold">{loggedInUserData?.id}</span>
           </div>
           <div className="w-px bg-gray-100 dark:bg-gray-800" />
           <div className="flex flex-col justify-center">
-            <span className="text-[9px] font-black uppercase text-gray-400 mb-0.5">IP Address</span>
+            <span className="text-[9px] font-black uppercase text-gray-400 mb-0.5">{t("IP Address")}</span>
             <span className="text-xs font-mono text-gray-600 dark:text-gray-300 font-bold">{sessionIp}</span>
           </div>
           <div className="w-px bg-gray-100 dark:bg-gray-800" />
           <div className="flex flex-col justify-center">
-            <span className="text-[9px] font-black uppercase text-gray-400 mb-0.5">Login Time</span>
+            <span className="text-[9px] font-black uppercase text-gray-400 mb-0.5">{t("Login Time")}</span>
             <span className="text-xs font-mono text-gray-600 dark:text-gray-300 font-bold">{loginTimeStr}</span>
           </div>
           <div className="w-px bg-gray-100 dark:bg-gray-800" />
           <div className="flex flex-col justify-center">
-            <span className="text-[9px] font-black uppercase text-gray-400 mb-0.5">Session</span>
+            <span className="text-[9px] font-black uppercase text-gray-400 mb-0.5">{t("Session")}</span>
             <span className="text-xs font-mono text-indigo-600 dark:text-indigo-400 font-bold">{formatSessionTime(sessionSeconds)}</span>
           </div>
         </div>
@@ -286,19 +288,19 @@ export const MyAccountTab = () => {
         {/* Mobile View Summary */}
         <div className="flex md:hidden w-full flex-wrap gap-2 items-center">
           <div className="flex items-center gap-1.5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 px-2.5 py-1 rounded-md shadow-sm">
-            <span className="text-[9px] font-black uppercase text-gray-400">ID</span>
+            <span className="text-[9px] font-black uppercase text-gray-400">{t("ID")}</span>
             <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold">{loggedInUserData?.id}</span>
           </div>
           <div className="flex items-center gap-1.5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 px-2.5 py-1 rounded-md shadow-sm">
-            <span className="text-[9px] font-black uppercase text-gray-400">IP</span>
+            <span className="text-[9px] font-black uppercase text-gray-400">{t("IP")}</span>
             <span className="text-[10px] font-mono text-gray-600 dark:text-gray-300 font-bold">{sessionIp}</span>
           </div>
           <div className="flex items-center gap-1.5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 px-2.5 py-1 rounded-md shadow-sm">
-            <span className="text-[9px] font-black uppercase text-gray-400">Login</span>
+            <span className="text-[9px] font-black uppercase text-gray-400">{t("Login")}</span>
             <span className="text-[10px] font-mono text-gray-600 dark:text-gray-300 font-bold">{loginTimeStr}</span>
           </div>
           <div className="flex items-center gap-1.5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 px-2.5 py-1 rounded-md shadow-sm">
-            <span className="text-[9px] font-black uppercase text-gray-400">Session</span>
+            <span className="text-[9px] font-black uppercase text-gray-400">{t("Session")}</span>
             <span className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400 font-bold">{formatSessionTime(sessionSeconds)}</span>
           </div>
         </div>
@@ -310,12 +312,12 @@ export const MyAccountTab = () => {
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex items-center justify-between mb-4 border-b border-gray-100 dark:border-gray-700 pb-3">
               <h4 className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center">
-                <User className="w-4 h-4 mr-2 text-blue-600" /> Account Preferences
+                <User className="w-4 h-4 mr-2 text-blue-600" /> {t("Account Preferences")}
               </h4>
               <div className="h-6 flex items-center">
                 {isSaved && (
                   <div className="flex items-center text-green-600 dark:text-green-400 text-xs font-bold bg-green-50 dark:bg-green-950/40 px-2 py-1 rounded-md animate-in fade-in slide-in-from-right-2">
-                    <CheckCircle className="w-3 h-3 mr-1" /> Saved
+                    <CheckCircle className="w-3 h-3 mr-1" /> {t("Saved")}
                   </div>
                 )}
               </div>
@@ -339,7 +341,7 @@ export const MyAccountTab = () => {
                     )}
                     {loggedInUserData?.role !== 'Super Admin' && (
                        <div className="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center transition-all">
-                         <span className="text-white text-[10px] font-bold">CHANGE</span>
+                         <span className="text-white text-[10px] font-bold">{t("CHANGE")}</span>
                        </div>
                     )}
                   </div>
@@ -357,12 +359,12 @@ export const MyAccountTab = () => {
                       }
                     }} 
                   />
-                  <span className="text-[10px] uppercase font-bold text-gray-500">Profile Photo</span>
+                  <span className="text-[10px] uppercase font-bold text-gray-500">{t("Profile Photo")}</span>
                 </div>
                 
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Full Name</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Full Name")}</label>
                     <input
                       type="text"
                       value={profileName}
@@ -374,7 +376,7 @@ export const MyAccountTab = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Primary Email</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Primary Email")}</label>
                     <input
                       type="email"
                       value={profileEmail}
@@ -386,7 +388,7 @@ export const MyAccountTab = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Contact Number</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Contact Number")}</label>
                     <input
                       type="text"
                       value={profilePhone}
@@ -397,38 +399,38 @@ export const MyAccountTab = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Department</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Department")}</label>
                     <select
                       value={profileDept}
                       onChange={(e) => setProfileDept(e.target.value)}
                       disabled={loggedInUserData?.role === 'Super Admin'}
                       className={`w-full p-3 bg-gray-50 dark:bg-gray-900 border-none rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs ${loggedInUserData?.role === 'Super Admin' ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
-                      <option value="Developer">Developer</option>
-                      <option value="Management">Management</option>
-                      <option value="Finance">Finance</option>
-                      <option value="Operations">Operations</option>
-                      <option value="Sales">Sales</option>
-                      <option value="Audit">Audit</option>
+                      <option value="Developer">{t("Developer")}</option>
+                      <option value="Management">{t("Management")}</option>
+                      <option value="Finance">{t("Finance")}</option>
+                      <option value="Operations">{t("Operations")}</option>
+                      <option value="Sales">{t("Sales")}</option>
+                      <option value="Audit">{t("Audit")}</option>
                     </select>
                   </div>
                   
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Gender</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Gender")}</label>
                     <select
                       value={profileGender}
                       onChange={(e) => setProfileGender(e.target.value)}
                       disabled={loggedInUserData?.role === 'Super Admin'}
                       className={`w-full p-3 bg-gray-50 dark:bg-gray-900 border-none rounded-xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs ${loggedInUserData?.role === 'Super Admin' ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
-                      <option value="">Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
+                      <option value="">{t("Select")}</option>
+                      <option value="Male">{t("Male")}</option>
+                      <option value="Female">{t("Female")}</option>
+                      <option value="Other">{t("Other")}</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Date of Birth</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Date of Birth")}</label>
                     <input
                       type="date"
                       value={profileDob}
@@ -442,10 +444,10 @@ export const MyAccountTab = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl">
                  <div className="md:col-span-2">
-                   <h5 className="text-[9px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-2">Government IDs</h5>
+                   <h5 className="text-[9px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-2">{t("Government IDs")}</h5>
                  </div>
                  <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Aadhaar Card Number</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Aadhaar Card Number")}</label>
                     <input
                       type="text"
                       value={profileAadhaar}
@@ -456,7 +458,7 @@ export const MyAccountTab = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Voter ID Card Number</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Voter ID Card Number")}</label>
                     <input
                       type="text"
                       value={profileVoterId}
@@ -467,7 +469,7 @@ export const MyAccountTab = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">PAN Card Number</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("PAN Card Number")}</label>
                     <input
                       type="text"
                       value={profilePan}
@@ -478,7 +480,7 @@ export const MyAccountTab = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Driving License Number</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Driving License Number")}</label>
                     <input
                       type="text"
                       value={profileDl}
@@ -491,7 +493,7 @@ export const MyAccountTab = () => {
               </div>
 
               <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Role Biography / Notes</label>
+                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Role Biography / Notes")}</label>
                 <textarea
                   value={profileBio}
                   onChange={(e) => setProfileBio(e.target.value)}
@@ -507,7 +509,7 @@ export const MyAccountTab = () => {
                     type="submit"
                     className="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold uppercase tracking-widest text-[10px] transition-colors shadow-sm"
                   >
-                    Save Changes
+                    {t("Save Changes")}
                   </button>
                 </div>
               )}
@@ -519,19 +521,19 @@ export const MyAccountTab = () => {
         <div className="space-y-4">
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
             <h4 className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center mb-4 border-b border-gray-100 dark:border-gray-700 pb-3">
-              <ShieldCheck className="w-4 h-4 mr-2 text-rose-500" /> Security Posture
+              <ShieldCheck className="w-4 h-4 mr-2 text-rose-500" /> {t("Security Posture")}
             </h4>
             
             <div className="space-y-4">
               <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
                 <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Two-Factor Authentication (2FA)</span>
                 <span className="text-sm font-black text-green-600 dark:text-green-400 flex items-center">
-                  Enabled & Verified <CheckCircle className="w-3 h-3 ml-1.5" />
+                  {t("Enabled & Verified")} <CheckCircle className="w-3 h-3 ml-1.5" />
                 </span>
               </div>
               <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800 flex items-center justify-between relative">
                 <div>
-                  <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Last Password Change</span>
+                  <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">{t("Last Password Change")}</span>
                   <span className="text-sm font-bold text-gray-700 dark:text-gray-300 flex items-center">
                     {lastPasswordChange}
                   </span>
@@ -541,16 +543,16 @@ export const MyAccountTab = () => {
                     onClick={() => setIsPasswordModalOpen(true)}
                     className="text-[10px] uppercase font-bold tracking-widest bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/60 px-3 py-1.5 rounded-lg transition-colors"
                   >
-                    Update
+                    {t("Update")}
                   </button>
                 ) : (
                   <div className="text-[10px] font-bold text-gray-400 dark:text-gray-500 max-w-[200px] text-right leading-tight">
-                    Does not provide an option to change the password
+                    {t("Does not provide an option to change the password")}
                   </div>
                 )}
               </div>
               <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
-                <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">Current Role Permissions</span>
+                <span className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1">{t("Current Role Permissions")}</span>
                 <span className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center">
                   {loggedInUserData?.role} Authority Level
                 </span>
@@ -559,7 +561,7 @@ export const MyAccountTab = () => {
             
             <div className="mt-4 border-t border-gray-100 dark:border-gray-700 pt-4">
               <button className="w-full py-2.5 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-900 dark:hover:bg-gray-950 text-gray-700 dark:text-gray-300 rounded-lg font-bold text-xs transition-colors border border-gray-200 dark:border-gray-800">
-                Request Permission Change
+                {t("Request Permission Change")}
               </button>
             </div>
           </div>           
@@ -569,16 +571,16 @@ export const MyAccountTab = () => {
       {/* Session History Summary */}
       <div className="mt-8 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
         <h4 className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center mb-4 border-b border-gray-100 dark:border-gray-700 pb-3">
-          <Activity className="w-4 h-4 mr-2 text-indigo-500" /> Recent Sessions
+          <Activity className="w-4 h-4 mr-2 text-indigo-500" /> {t("Recent Sessions")}
         </h4>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-gray-100 dark:border-gray-700">
-                <th className="py-2 px-2 text-[10px] font-black uppercase text-gray-400">Date/Time</th>
-                <th className="py-2 px-2 text-[10px] font-black uppercase text-gray-400">IP Address</th>
-                <th className="py-2 px-2 text-[10px] font-black uppercase text-gray-400">Duration</th>
-                <th className="py-2 px-2 text-[10px] font-black uppercase text-gray-400">Status</th>
+                <th className="py-2 px-2 text-[10px] font-black uppercase text-gray-400">{t("Date/Time")}</th>
+                <th className="py-2 px-2 text-[10px] font-black uppercase text-gray-400">{t("IP Address")}</th>
+                <th className="py-2 px-2 text-[10px] font-black uppercase text-gray-400">{t("Duration")}</th>
+                <th className="py-2 px-2 text-[10px] font-black uppercase text-gray-400">{t("Status")}</th>
               </tr>
             </thead>
             <tbody>
@@ -606,11 +608,11 @@ export const MyAccountTab = () => {
                     <td className="py-3 px-2">
                       {isCurrent ? (
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                          Active
+                          {t("Active")}
                         </span>
                       ) : (
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
-                          Closed
+                          {t("Closed")}
                         </span>
                       )}
                     </td>
@@ -619,7 +621,7 @@ export const MyAccountTab = () => {
               })}
               {sessionHistory.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="py-4 text-center text-xs text-gray-500 uppercase tracking-widest font-bold">No recent sessions found</td>
+                  <td colSpan={4} className="py-4 text-center text-xs text-gray-500 uppercase tracking-widest font-bold">{t("No recent sessions found")}</td>
                 </tr>
               )}
             </tbody>
@@ -646,18 +648,18 @@ export const MyAccountTab = () => {
           }}
           className="border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 font-black uppercase text-[10px] tracking-widest py-3 px-6 rounded-xl transition-colors cursor-pointer"
         >
-          Sign Out of Portal
+          {t("Sign Out of Portal")}
         </button>
       </div>
 
       {isPasswordModalOpen && (
         <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-sm shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700 animate-in zoom-in-95 duration-200">
-            <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest mb-1 border-b border-gray-100 dark:border-gray-700 pb-3">Update Password</h3>
+            <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest mb-1 border-b border-gray-100 dark:border-gray-700 pb-3">{t("Update Password")}</h3>
             
             <form onSubmit={handleUpdatePassword} className="space-y-4 pt-3">
               <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Current Password</label>
+                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Current Password")}</label>
                 <input
                   type="password"
                   value={currentPassword}
@@ -667,7 +669,7 @@ export const MyAccountTab = () => {
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">New Password</label>
+                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("New Password")}</label>
                 <input
                   type="password"
                   value={newPassword}
@@ -677,7 +679,7 @@ export const MyAccountTab = () => {
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Confirm New Password</label>
+                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Confirm New Password")}</label>
                 <input
                   type="password"
                   value={confirmPassword}
@@ -693,13 +695,13 @@ export const MyAccountTab = () => {
                   onClick={() => setIsPasswordModalOpen(false)}
                   className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-900 dark:hover:bg-gray-950 text-gray-700 dark:text-gray-300 rounded-lg font-bold uppercase tracking-widest text-[10px] transition-colors"
                 >
-                  Cancel
+                  {t("Cancel")}
                 </button>
                 <button
                   type="submit"
                   className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold uppercase tracking-widest text-[10px] transition-colors"
                 >
-                  Save Password
+                  {t("Save Password")}
                 </button>
               </div>
             </form>

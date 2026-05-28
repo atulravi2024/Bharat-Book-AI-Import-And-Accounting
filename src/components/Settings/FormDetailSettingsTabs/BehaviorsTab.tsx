@@ -1,4 +1,5 @@
 import React from "react";
+import { useLanguage } from "../../../context/LanguageContext";
 
 const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
@@ -29,12 +30,13 @@ interface BehaviorsTabProps {
 }
 
 export const BehaviorsTab: React.FC<BehaviorsTabProps> = ({ settings, handleSettingChange }) => {
+  const { t } = useLanguage();
   const updateSetting = (key: string, val: any) => handleSettingChange(key, val);
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
-          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">Input Validation</h4>
+          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">{t("Input Validation")}</h4>
           <Toggle 
             label="Real-time Validation" 
             description="Show errors immediately as you type instead of on submit"
@@ -50,7 +52,7 @@ export const BehaviorsTab: React.FC<BehaviorsTabProps> = ({ settings, handleSett
         </div>
 
         <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
-          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">Form Mechanics</h4>
+          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">{t("Form Mechanics")}</h4>
           <Toggle 
             label="Auto-save Drafts" 
             description="Automatically save form progress every 30 seconds"

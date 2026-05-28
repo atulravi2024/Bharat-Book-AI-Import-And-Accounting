@@ -4,16 +4,18 @@ import { KPIComponent, COLORS, CustomTooltip, SafeResponsiveContainer } from './
 import { FileText, Zap, ShieldAlert, Users, ShieldCheck, Activity, TrendingUp, Package, ArrowDownRight, CreditCard, Receipt, Repeat } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, Legend, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
 import { TransactionFlow } from './TransactionFlow';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
     const activeColors = colors || COLORS;
+    const { t } = useLanguage();
     return (
         <motion.div key="main" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <KPIComponent label="Total Volume" val={stats.totalVouchers} sub="Documents ingested" icon={FileText} color="text-blue-600" bg="bg-blue-50 dark:bg-blue-900/30" isDemo={isDemo} />
                 <KPIComponent label="Total Sales" val={`₹${stats.vol.sales.toLocaleString()}`} sub="Revenue generated" icon={TrendingUp} color="text-emerald-600" bg="bg-emerald-50 dark:bg-emerald-900/30" isDemo={isDemo} />
                 <KPIComponent label="Total Purchase" val={`₹${stats.vol.purchase.toLocaleString()}`} sub="Capital expenditure" icon={Package} color="text-amber-600" bg="bg-amber-50 dark:bg-amber-900/30" isDemo={isDemo} />
-                <KPIComponent label="Raw Bank Status" val={stats.counts.rawBank} sub={`${stats.counts.rawBank} Records to classify`} icon={ArrowDownRight} color="text-indigo-600" bg="bg-indigo-50 dark:bg-indigo-900/30" isDemo={isDemo} />
+                <KPIComponent label="Raw Bank Status" val={stats.counts.rawBank} sub="Records to classify" icon={ArrowDownRight} color="text-indigo-600" bg="bg-indigo-50 dark:bg-indigo-900/30" isDemo={isDemo} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -22,9 +24,9 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                         <Zap size={20} strokeWidth={2.5} />
                     </div>
                     <div>
-                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none mb-1">Latency Avg</p>
+                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none mb-1">{t('Latency Avg')}</p>
                         <h4 className="text-xl font-black text-gray-900 dark:text-white font-display">{stats.advanceMetrics.processingSpeed}</h4>
-                        <p className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter mt-1">Extraction cycle</p>
+                        <p className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter mt-1">{t('Extraction cycle')}</p>
                     </div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-[2rem] border border-premium-slate-100 dark:border-gray-700 flex items-center gap-4">
@@ -32,9 +34,9 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                         <ShieldAlert size={20} strokeWidth={2.5} />
                     </div>
                     <div>
-                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none mb-1">Error Rate</p>
+                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none mb-1">{t('Error Rate')}</p>
                         <h4 className="text-xl font-black text-gray-900 dark:text-white font-display">{stats.advanceMetrics.errorRate}</h4>
-                        <p className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter mt-1">Quality divergence</p>
+                        <p className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter mt-1">{t('Quality divergence')}</p>
                     </div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-[2rem] border border-premium-slate-100 dark:border-gray-700 flex items-center gap-4">
@@ -42,9 +44,9 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                         <Users size={20} strokeWidth={2.5} />
                     </div>
                     <div>
-                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none mb-1">Active Operatives</p>
+                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none mb-1">{t('Active Operatives')}</p>
                         <h4 className="text-xl font-black text-gray-900 dark:text-white font-display">{stats.advanceMetrics.activeUsers}</h4>
-                        <p className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter mt-1">Current session</p>
+                        <p className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tighter mt-1">{t('Current session')}</p>
                     </div>
                 </div>
             </div>
@@ -52,7 +54,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700 relative overflow-hidden">
                     <div className="flex justify-between items-center mb-8 relative z-10">
-                        <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">Performance Trajectory</h3>
+                        <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">{t('Performance Trajectory')}</h3>
                         {isDemo && <span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg dark:shadow-amber-900/50 border border-amber-600 animate-pulse">DEMO</span>}
                     </div>
                     <div className="h-[400px]">
@@ -62,22 +64,22 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                                 <XAxis dataKey="date" hide />
                                 <YAxis hide />
                                 <Tooltip content={<CustomTooltip />} />
-                                <Area type="monotone" dataKey="sales" name="Sales" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.05} strokeWidth={3} />
-                                <Area type="monotone" dataKey="purchase" name="Purchase" stroke="#F59E0B" fill="#F59E0B" fillOpacity={0.05} strokeWidth={3} />
+                                <Area type="monotone" dataKey="sales" name={t('Sales')} stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.05} strokeWidth={3} />
+                                <Area type="monotone" dataKey="purchase" name={t('Purchase')} stroke="#F59E0B" fill="#F59E0B" fillOpacity={0.05} strokeWidth={3} />
                             </AreaChart>
                         </SafeResponsiveContainer>
                     </div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700 relative overflow-hidden">
                     <div className="flex justify-between items-center mb-8 relative z-10">
-                        <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">Distribution</h3>
+                        <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">{t('Distribution')}</h3>
                         {isDemo && <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[8px] font-black uppercase tracking-widest rounded-lg border border-amber-200 dark:border-amber-700">DEMO</span>}
                     </div>
                     <div className="h-[300px]">
                         <SafeResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                             <RechartsPieChart>
-                                <Pie data={stats.typeDistribution} innerRadius={60} outerRadius={90} dataKey="value" stroke="none">
-                                    {stats.typeDistribution.map((_: any, i: number) => <Cell key={i} fill={activeColors[i % activeColors.length]} cornerRadius={4} />)}
+                                <Pie data={stats.typeDistribution} innerRadius={60} outerRadius={90} dataKey="value" stroke="none" cornerRadius={4}>
+                                    {stats.typeDistribution.map((_: any, i: number) => <Cell key={i} fill={activeColors[i % activeColors.length]} />)}
                                 </Pie>
                                 <Tooltip />
                             </RechartsPieChart>
@@ -87,7 +89,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                         {stats.typeDistribution.map((item: any, i: number) => (
                             <div key={i} className="flex items-center text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase">
                                 <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: activeColors[i % activeColors.length] }}></div>
-                                {item.name}
+                                {t(item.name)}
                             </div>
                         ))}
                     </div>
@@ -97,7 +99,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700">
                     <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">Operative Pulse</h3>
+                        <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">{t('Operative Pulse')}</h3>
                         {isDemo && <span className="text-[8px] font-black text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full border border-amber-100 dark:border-amber-700 uppercase tracking-tighter">DEMO</span>}
                     </div>
                     <div className="space-y-4">
@@ -124,7 +126,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                     <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mb-4">
                         <ShieldCheck size={40} />
                     </div>
-                    <h3 className="text-xl font-black text-gray-900 font-display dark:text-white">System Integrity</h3>
+                    <h3 className="text-xl font-black text-gray-900 font-display dark:text-white">{t('System Integrity')}</h3>
                     <p className="text-sm text-gray-500 font-medium max-w-xs mt-2 dark:text-gray-400">All extraction engines are operating within nominal parameters. Real-time auditing is active.</p>
                     <div className="mt-6 flex gap-4">
                         <div className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest">Healthy</div>

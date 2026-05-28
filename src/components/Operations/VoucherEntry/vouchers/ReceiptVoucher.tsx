@@ -42,6 +42,7 @@ interface VoucherEntryViewProps {
   onUpdateItemMaster?: (item: any) => void;
   onAddItemMaster?: (item: any) => void;
   onSaveEntry?: (entry: any, isNew: boolean) => void;
+  onDeleteEntry?: (id: string) => void;
   onOpenPrintSettings?: () => void;
 }
 
@@ -215,7 +216,7 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
     { id: 'credit_note', label: 'Credit Note', type: VoucherType.CreditNote },
   ];
 
-  const [headerDetails, setHeaderDetails] = useState({
+  const [headerDetails, setHeaderDetails] = useState<any>({
     voucherDate: new Date().toISOString().substring(0, 10),
     voucherNumber: getNextVoucherNumber(defaultType || 'sales') || '',
     referenceNo: '',
@@ -550,36 +551,37 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
       const postTaxDiscountSum = rows.reduce((sum, row) => sum + getRowPostTaxDiscount(row), 0);
       const rowRoundOffs = rows.reduce((sum, row) => sum + getRowRoundOff(row), 0);
       const preTaxRoundOffs = rows.reduce((sum, row) => sum + getRowPreTaxRoundOff(row), 0);
+      const hDetails = headerDetails as any;
       let taxableOtherAdjustmentAmount = 0;
-      if (headerDetails.taxableOtherAdjustmentPct) {
-        taxableOtherAdjustmentAmount += amountAfterDiscount * (parseFloat(headerDetails.taxableOtherAdjustmentPct) / 100);
+      if (hDetails.taxableOtherAdjustmentPct) {
+        taxableOtherAdjustmentAmount += amountAfterDiscount * (parseFloat(hDetails.taxableOtherAdjustmentPct) / 100);
       }
-      if (headerDetails.taxableOtherAdjustment) {
-        taxableOtherAdjustmentAmount += parseFloat(headerDetails.taxableOtherAdjustment) || 0;
+      if (hDetails.taxableOtherAdjustment) {
+        taxableOtherAdjustmentAmount += parseFloat(hDetails.taxableOtherAdjustment) || 0;
       }
 
       let nonTaxableOtherAdjustmentAmount = 0;
-      if (headerDetails.nonTaxableOtherAdjustmentPct) {
-        nonTaxableOtherAdjustmentAmount += amountAfterDiscount * (parseFloat(headerDetails.nonTaxableOtherAdjustmentPct) / 100);
+      if (hDetails.nonTaxableOtherAdjustmentPct) {
+        nonTaxableOtherAdjustmentAmount += amountAfterDiscount * (parseFloat(hDetails.nonTaxableOtherAdjustmentPct) / 100);
       }
-      if (headerDetails.nonTaxableOtherAdjustment) {
-        nonTaxableOtherAdjustmentAmount += parseFloat(headerDetails.nonTaxableOtherAdjustment) || 0;
+      if (hDetails.nonTaxableOtherAdjustment) {
+        nonTaxableOtherAdjustmentAmount += parseFloat(hDetails.nonTaxableOtherAdjustment) || 0;
       }
 
       let nonTaxableVoucherDiscountAmt = 0;
-      if (headerDetails.nonTaxableVoucherDiscountPct) {
-        nonTaxableVoucherDiscountAmt += amountAfterDiscount * (parseFloat(headerDetails.nonTaxableVoucherDiscountPct) / 100);
+      if (hDetails.nonTaxableVoucherDiscountPct) {
+        nonTaxableVoucherDiscountAmt += amountAfterDiscount * (parseFloat(hDetails.nonTaxableVoucherDiscountPct) / 100);
       }
-      if (headerDetails.nonTaxableVoucherDiscountAmount) {
-        nonTaxableVoucherDiscountAmt += parseFloat(headerDetails.nonTaxableVoucherDiscountAmount) || 0;
+      if (hDetails.nonTaxableVoucherDiscountAmount) {
+        nonTaxableVoucherDiscountAmt += parseFloat(hDetails.nonTaxableVoucherDiscountAmount) || 0;
       }
 
       let voucherDiscountAmt = 0;
-      if (headerDetails.voucherDiscountPct) {
-        voucherDiscountAmt += amountAfterDiscount * (parseFloat(headerDetails.voucherDiscountPct) / 100);
+      if (hDetails.voucherDiscountPct) {
+        voucherDiscountAmt += amountAfterDiscount * (parseFloat(hDetails.voucherDiscountPct) / 100);
       }
-      if (headerDetails.voucherDiscountAmount) {
-        voucherDiscountAmt += parseFloat(headerDetails.voucherDiscountAmount) || 0;
+      if (hDetails.voucherDiscountAmount) {
+        voucherDiscountAmt += parseFloat(hDetails.voucherDiscountAmount) || 0;
       }
 
       const preRoundValue = amountAfterDiscount + taxAmount - postTaxDiscountSum + rowRoundOffs + taxableOtherAdjustmentAmount + nonTaxableOtherAdjustmentAmount - voucherDiscountAmt - nonTaxableVoucherDiscountAmt;

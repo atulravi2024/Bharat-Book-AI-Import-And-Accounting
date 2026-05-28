@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Award } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 5B: Business & Operational Licenses */}
@@ -28,7 +30,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                       <Award className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Operational Licenses
+                      {t("Operational Licenses")}
                     </h3>
                   </div>
                   {activeAccordion === "businessLicenses" ? (
@@ -73,7 +75,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            MSME / Udyam Number
+                            {t("MSME / Udyam Number")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input
@@ -123,7 +125,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Trade License Number
+                            {t("Trade License Number")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input

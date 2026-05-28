@@ -12,6 +12,7 @@ import { GlobalSearch } from '../Search/GlobalSearch';
 import { MainView } from '../../types';
 import { NotificationDropdown } from './NotificationDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface HeaderProps {
   pageTitle: string;
@@ -21,6 +22,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, onViewChange }) => {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   const handleToggle = () => {
@@ -46,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, onViewCh
                 </svg>
               </button>
             )}
-            <h1 className="text-base sm:text-lg md:text-xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none truncate max-w-[140px] sm:max-w-[200px] md:max-w-xs capitalize">{pageTitle}</h1>
+            <h1 className="text-base sm:text-lg md:text-xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none truncate max-w-[140px] sm:max-w-[200px] md:max-w-xs capitalize">{t(pageTitle)}</h1>
           </div>
           
           <div className={`md:hidden flex items-center justify-end flex-1 pr-2 ${isSearchExpanded ? 'hidden' : 'flex'}`}>

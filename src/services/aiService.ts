@@ -39,6 +39,26 @@ export const getFiscalYearDates = (format = 'April to March (Indian Standard)') 
     to: formatDate(to)
   };
 };
+export const getModelDisplayName = (modelId?: string): string => {
+  if (!modelId) return 'Gemini 1.5 Flash';
+  const mapping: Record<string, string> = {
+    'gemini-2.5-flash': 'Gemini 2.5 Flash',
+    'gemini-2.5-pro': 'Gemini 2.5 Pro',
+    'gemini-3.5-flash': 'Gemini 3.5 Flash',
+    'gemini-3.1-pro-preview': 'Gemini 3.1 Pro Preview',
+    'gemini-2.0-flash': 'Gemini 2.0 Flash',
+    'gemini-2.0-flash-thinking-exp': 'Gemini 2.0 Flash Thinking',
+    'gemini-1.5-pro': 'Gemini 1.5 Pro',
+    'gemini-1.5-flash': 'Gemini 1.5 Flash',
+    'gemini-1.5-flash-8b': 'Gemini 1.5 Flash-8B',
+    'vllm': 'vLLM (Private Host)',
+    'Gemini 1.5 Flash': 'Gemini 1.5 Flash',
+    'Gemini 1.5 Pro': 'Gemini 1.5 Pro',
+    'Vision Transformer-L': 'Vision Transformer-L'
+  };
+  return mapping[modelId] || modelId;
+};
+
 export const parseVoucherFile = async (
   file: File, 
   voucherType: VoucherType, 
@@ -119,7 +139,7 @@ export const parseVoucherFile = async (
         createMockVoucher(i, voucherType, mapping, settings, sourceBank)
       );
       resolve(vouchers);
-    }, settings?.aiModel === 'Gemini 1.5 Pro' ? 4000 : 2000);
+    }, (settings?.aiModel === 'Gemini 1.5 Pro' || settings?.aiModel === 'gemini-1.5-pro' || settings?.aiModel === 'gemini-2.0-flash-thinking-exp') ? 4000 : 2000);
   });
 };
 
@@ -495,7 +515,7 @@ const createMockVoucher = (
   if (settings?.ocrSensitivity && settings.ocrSensitivity < 50) discrepancies.push('Low OCR sensitivity may have resulted in partial character skipping.');
   
   (baseVoucher as any).aiSummary = {
-    summary: `AI simulation for ${voucherType}. Processed using ${settings?.aiModel || 'Gemini 1.5 Flash'}. Key details include ${isPurchase || isSales ? 'inventory line items' : 'ledger distribution'} and tax validation.`,
+    summary: `AI simulation for ${voucherType}. Processed using ${getModelDisplayName(settings?.aiModel)}. Key details include ${isPurchase || isSales ? 'inventory line items' : 'ledger distribution'} and tax validation.`,
     discrepancies
   };
 

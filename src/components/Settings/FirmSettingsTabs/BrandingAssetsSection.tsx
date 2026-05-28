@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Image } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 13: Branding & Assets */}
@@ -28,7 +30,7 @@ export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, 
                       <Image className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Branding Assets
+                      {t("Branding Assets")}
                     </h3>
                   </div>
                   {activeAccordion === "branding" ? (
@@ -48,7 +50,7 @@ export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, 
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            Company Logo URL
+                            {t("Company Logo URL")}
                           </label>
                           <input
                             type="url"
@@ -62,7 +64,7 @@ export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, 
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Theme Color
+                            {t("Theme Color")}
                           </label>
                           <div className="flex space-x-4 items-center">
                             <input
@@ -91,7 +93,7 @@ export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, 
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Authorized Signature URL
+                            {t("Authorized Signature URL")}
                           </label>
                           <input
                             type="url"
@@ -108,7 +110,7 @@ export const BrandingAssetsSection: React.FC<Props> = ({ firmData, setFirmData, 
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Company Stamp URL
+                            {t("Company Stamp URL")}
                           </label>
                           <input
                             type="url"

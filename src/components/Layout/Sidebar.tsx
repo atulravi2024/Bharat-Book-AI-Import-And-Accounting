@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   DashboardIcon,
   MastersIcon,
@@ -96,6 +97,7 @@ const NavGroup: React.FC<{
 
 export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpen, activeView, onViewChange, settingsActiveTab }) => {
   const [openGroup, setOpenGroup] = React.useState<string | null>(null);
+  const { t } = useLanguage();
 
   const toggleGroup = (id: string) => {
     setOpenGroup(prev => prev === id ? null : id);
@@ -124,7 +126,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
         <nav className="flex-1 p-4 overflow-y-auto overflow-x-hidden custom-scrollbar">
             <NavItem 
                 icon={<DashboardIcon className="text-xl" />} 
-                label="Dashboard" 
+                label={t('Dashboard')} 
                 active={activeView === 'dashboard'} 
                 isCollapsed={!isSidebarOpen} 
                 onClick={() => onViewChange('dashboard')}
@@ -132,7 +134,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
 
             <div className="mt-2 space-y-1">
                 <NavGroup 
-                    label="Operations" 
+                    label={t('Operations')} 
                     icon={<AIToolsIcon className="text-base" />} 
                     isOpen={openGroup === 'ops'} 
                     onToggle={() => toggleGroup('ops')}
@@ -140,7 +142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 >
                     <NavItem 
                         icon={<AIToolsIcon className="text-xl" />} 
-                        label="Import" 
+                        label={t('Import')} 
                         active={activeView === 'import'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('import')}
@@ -148,7 +150,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     />
                     <NavItem 
                         icon={<AIToolsIcon className="text-xl" />} 
-                        label="Bulk Operation" 
+                        label={t('Bulk Operation')} 
                         active={activeView === 'bulk-operation'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('bulk-operation')}
@@ -157,7 +159,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 </NavGroup>
 
                 <NavGroup 
-                    label="Entry" 
+                    label={t('Entry')} 
                     icon={<AddBoxIcon className="text-base" />} 
                     isOpen={openGroup === 'entry'} 
                     onToggle={() => toggleGroup('entry')}
@@ -165,7 +167,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 >
                     <NavItem 
                         icon={<AddBoxIcon className="text-xl" />} 
-                        label="Transactions" 
+                        label={t('Transactions')} 
                         active={activeView === 'voucher-entry'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('voucher-entry')}
@@ -173,7 +175,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     />
                     <NavItem 
                         icon={<SwapHorizIcon className="text-xl" />} 
-                        label="Inventory Trans." 
+                        label={t('Inventory Trans.')} 
                         active={activeView === 'inventory-entry'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('inventory-entry')}
@@ -182,7 +184,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 </NavGroup>
 
                 <NavGroup 
-                    label="Masters" 
+                    label={t('Masters')} 
                     icon={<MastersIcon className="text-base" />} 
                     isOpen={openGroup === 'masters'} 
                     onToggle={() => toggleGroup('masters')}
@@ -190,7 +192,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 >
                     <NavItem 
                         icon={<MastersIcon className="text-xl" />} 
-                        label="Ledger Master" 
+                        label={t('Ledger Master')} 
                         active={activeView === 'ledger-master'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('ledger-master')}
@@ -198,7 +200,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     />
                     <NavItem 
                         icon={<InventoryIcon className="text-xl" />} 
-                        label="Item Master" 
+                        label={t('Item Master')} 
                         active={activeView === 'item-master'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('item-master')}
@@ -207,7 +209,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 </NavGroup>
 
                 <NavGroup 
-                    label="Report" 
+                    label={t('Reports')} 
                     icon={<ReportsIcon className="text-base" />} 
                     isOpen={openGroup === 'reports'} 
                     onToggle={() => toggleGroup('reports')}

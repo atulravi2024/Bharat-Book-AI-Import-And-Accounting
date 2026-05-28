@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Package } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 12: Inventory & Logistics */}
@@ -28,7 +30,7 @@ export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmDa
                       <Package className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Inventory Logistics
+                      {t("Inventory Logistics")}
                     </h3>
                   </div>
                   {activeAccordion === "inventoryLogistics" ? (
@@ -48,7 +50,7 @@ export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmDa
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            Inventory Valuation Method
+                            {t("Inventory Valuation Method")}
                           </label>
                           <select
                             value={firmData.inventoryValuation}
@@ -62,7 +64,7 @@ export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmDa
                           >
                             <option value="FIFO">First In, First Out (FIFO)</option>
                             <option value="LIFO">Last In, First Out (LIFO)</option>
-                            <option value="AVERAGE">Weighted Average Cost</option>
+                            <option value="AVERAGE">{t("Weighted Average Cost")}</option>
                           </select>
                         </div>
                         <div className="space-y-2 flex items-center pt-8">
@@ -82,12 +84,12 @@ export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmDa
                             htmlFor="enableNegativeStock"
                             className="ml-3 block text-sm font-bold text-gray-700 dark:text-gray-300"
                           >
-                            Enable Negative Stock Billing
+                            {t("Enable Negative Stock Billing")}
                           </label>
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Preferred Shipping Partner
+                            {t("Preferred Shipping Partner")}
                           </label>
                           <input
                             type="text"
@@ -104,7 +106,7 @@ export const InventoryLogisticsSection: React.FC<Props> = ({ firmData, setFirmDa
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Standard Delivery Time
+                            {t("Standard Delivery Time")}
                           </label>
                           <input
                             type="text"

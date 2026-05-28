@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLanguage } from "../../context/LanguageContext";
 import {
   SettingsIcon,
   CheckCircleIcon,
@@ -8,6 +9,7 @@ import {
 } from "../icons/IconComponents";
 
 export const AppNavigationSettings: React.FC = () => {
+  const { t } = useLanguage();
   const [defaultPage, setDefaultPage] = useState("import");
   const [defaultSubPage, setDefaultSubPage] = useState("upload");
   const [routingDefaults, setRoutingDefaults] = useState<
@@ -25,7 +27,7 @@ export const AppNavigationSettings: React.FC = () => {
     "voucher-entry": "sales",
     "inventory-entry": "stock_journal",
     reports: "pl",
-    settings: "firm",
+    settings: "about",
   });
   const [isSaved, setIsSaved] = useState(false);
 
@@ -66,183 +68,184 @@ export const AppNavigationSettings: React.FC = () => {
     }, 1000);
   };
 
-  const pages = [
-    { id: "dashboard", label: "Dashboard", icon: "📊" },
-    { id: "voucher-entry", label: "Transactions", icon: "➕" },
-    { id: "inventory-entry", label: "Inventory Trans.", icon: "📦" },
-    { id: "import", label: "Import", icon: "📥" },
-    { id: "bulk-operation", label: "Bulk Operation", icon: "⚡" },
-    { id: "ledger-master", label: "Ledger Master", icon: "🏛️" },
-    { id: "item-master", label: "Item Master", icon: "📦" },
-    { id: "bank", label: "Bank Vouchers", icon: "🏦" },
-    { id: "vouchers", label: "Ledger Report", icon: "📝" },
-    { id: "gst-report", label: "GST Report", icon: "📊" },
-    { id: "item-report", label: "Item Report", icon: "📉" },
-    { id: "reports", label: "Financial Report", icon: "📑" },
-    { id: "settings", label: "Settings", icon: "⚙️" },
-  ];
+    const pages = [
+      { id: "dashboard", label: t("Dashboard"), icon: "📊" },
+      { id: "voucher-entry", label: t("Transactions"), icon: "➕" },
+      { id: "inventory-entry", label: t("Inventory Trans."), icon: "📦" },
+      { id: "import", label: t("Import"), icon: "📥" },
+      { id: "bulk-operation", label: t("Bulk Operation"), icon: "⚡" },
+      { id: "ledger-master", label: t("Ledger Master"), icon: "🏛️" },
+      { id: "item-master", label: t("Item Master"), icon: "📦" },
+      { id: "bank", label: t("Bank Vouchers"), icon: "🏦" },
+      { id: "vouchers", label: t("Ledger Report"), icon: "📝" },
+      { id: "gst-report", label: t("GST Report"), icon: "📊" },
+      { id: "item-report", label: t("Item Report"), icon: "📉" },
+      { id: "reports", label: t("Financial Report"), icon: "📑" },
+      { id: "settings", label: t("Settings"), icon: "⚙️" },
+    ];
 
   const subPages: Record<string, { id: string; label: string }[]> = {
     help: [
-      { id: "main", label: "Help Hub" },
+      { id: "main", label: t("Help Hub") },
     ],
     support: [
-      { id: "chat", label: "AI Diagnostic Chat" },
-      { id: "diagnostics", label: "Systems Integrity Suite" },
-      { id: "tickets", label: "Submit & Track Tickets" },
+      { id: "chat", label: t("AI Diagnostic Chat") },
+      { id: "diagnostics", label: t("Systems Integrity Suite") },
+      { id: "tickets", label: t("Submit & Track Tickets") },
     ],
     dashboard: [
-      { id: "overview", label: "Overview" },
-      { id: "sales", label: "Sales" },
-      { id: "purchase", label: "Purchase" },
-      { id: "payment", label: "Payment" },
-      { id: "receipts", label: "Receipt" },
-      { id: "bank", label: "Bank Report" },
-      { id: "journal", label: "Journal" },
-      { id: "contra", label: "Contra" },
+      { id: "overview", label: t("Overview") },
+      { id: "sales", label: t("Sales") },
+      { id: "purchase", label: t("Purchase") },
+      { id: "payment", label: t("Payment") },
+      { id: "receipts", label: t("Receipt") },
+      { id: "bank", label: t("Bank Report") },
+      { id: "journal", label: t("Journal") },
+      { id: "contra", label: t("Contra") },
     ],
     "voucher-entry": [
-      { id: "sales", label: "Sales Entry" },
-      { id: "purchase", label: "Purchase Entry" },
-      { id: "payment", label: "Payment Entry" },
-      { id: "receipt", label: "Receipt Entry" },
-      { id: "journal", label: "Journal Entry" },
-      { id: "contra", label: "Contra Entry" },
-      { id: "debit_note", label: "Debit Note" },
-      { id: "credit_note", label: "Credit Note" },
+      { id: "sales", label: t("Sales Entry") },
+      { id: "purchase", label: t("Purchase Entry") },
+      { id: "payment", label: t("Payment Entry") },
+      { id: "receipt", label: t("Receipt Entry") },
+      { id: "journal", label: t("Journal Entry") },
+      { id: "contra", label: t("Contra Entry") },
+      { id: "debit_note", label: t("Debit Note") },
+      { id: "credit_note", label: t("Credit Note") },
     ],
     "inventory-entry": [
-      { id: "stock_journal", label: "Stock Journal" },
-      { id: "physical_stock", label: "Physical Stock" },
-      { id: "consumption", label: "Item Consumption" },
-      { id: "scrap", label: "Item Scrap" },
-      { id: "transfer", label: "Inter-Location" },
-      { id: "rejections_in", label: "Rejections In" },
-      { id: "rejections_out", label: "Rejections Out" },
+      { id: "stock_journal", label: t("Stock Journal") },
+      { id: "physical_stock", label: t("Physical Stock") },
+      { id: "consumption", label: t("Item Consumption") },
+      { id: "scrap", label: t("Item Scrap") },
+      { id: "transfer", label: t("Inter-Location") },
+      { id: "rejections_in", label: t("Rejections In") },
+      { id: "rejections_out", label: t("Rejections Out") },
     ],
     import: [
-      { id: "upload", label: "Upload" },
-      { id: "correction", label: "Correction" },
-      { id: "summary", label: "Summary" },
-      { id: "success", label: "Success" },
+      { id: "upload", label: t("Upload") },
+      { id: "correction", label: t("Correction") },
+      { id: "summary", label: t("Summary") },
+      { id: "success", label: t("Success") },
     ],
-    "bulk-operation": [{ id: "decide", label: "Bulk Action" }],
+    "bulk-operation": [{ id: "decide", label: t("Bulk Action") }],
     "ledger-master": [
-      { id: "parties", label: "Customers" },
-      { id: "vendors", label: "Vendors" },
-      { id: "ledgers", label: "General Ledgers" },
-      { id: "banks", label: "Bank Masters" },
-      { id: "contacts", label: "Contacts" },
-      { id: "accountGroups", label: "Groups" },
-      { id: "locations", label: "Locations" },
-      { id: "costCenters", label: "Cost Centers" },
+      { id: "parties", label: t("Customers") },
+      { id: "vendors", label: t("Vendors") },
+      { id: "ledgers", label: t("General Ledgers") },
+      { id: "banks", label: t("Bank Masters") },
+      { id: "contacts", label: t("Contacts") },
+      { id: "accountGroups", label: t("Groups") },
+      { id: "locations", label: t("Locations") },
+      { id: "costCenters", label: t("Cost Centers") },
     ],
     "item-master": [
-      { id: "items", label: "Items" },
-      { id: "bom", label: "Bill of Materials" },
-      { id: "warehouses", label: "Warehouses" },
-      { id: "uoms", label: "UOMs" },
-      { id: "stockGroups", label: "Stock Groups" },
-      { id: "gst", label: "HSN" },
-      { id: "brands", label: "Brands" },
-      { id: "categories", label: "Categories" },
-      { id: "assertionCategories", label: "Assertion Categories" },
-      { id: "assertionCodes", label: "Assertion Codes" },
-      { id: "colors", label: "Colors" },
-      { id: "sizes", label: "Sizes" },
-      { id: "variants", label: "Variants" },
-      { id: "dimensions", label: "Dimensions" },
-      { id: "skus", label: "SKUs" },
-      { id: "priceList", label: "Price List" },
-      { id: "weights", label: "Weights" },
-      { id: "volumes", label: "Volumes" },
-      { id: "grades", label: "Grades" },
+      { id: "items", label: t("Items") },
+      { id: "bom", label: t("Bill of Materials") },
+      { id: "warehouses", label: t("Warehouses") },
+      { id: "uoms", label: t("UOMs") },
+      { id: "stockGroups", label: t("Stock Groups") },
+      { id: "gst", label: t("HSN") },
+      { id: "brands", label: t("Brands") },
+      { id: "categories", label: t("Categories") },
+      { id: "assertionCategories", label: t("Assertion Categories") },
+      { id: "assertionCodes", label: t("Assertion Codes") },
+      { id: "colors", label: t("Colors") },
+      { id: "sizes", label: t("Sizes") },
+      { id: "variants", label: t("Variants") },
+      { id: "dimensions", label: t("Dimensions") },
+      { id: "skus", label: t("SKUs") },
+      { id: "priceList", label: t("Price List") },
+      { id: "weights", label: t("Weights") },
+      { id: "volumes", label: t("Volumes") },
+      { id: "grades", label: t("Grades") },
     ],
     bank: [
-      { id: "bank", label: "Bank" },
-      { id: "classify", label: "To Classify" },
-      { id: "reconcile", label: "Reconcile" },
-      { id: "auto-matched", label: "Matched" },
-      { id: "missing-masters", label: "Exceptions" },
-      { id: "unidentify", label: "Unidentified" },
+      { id: "bank", label: t("Bank") },
+      { id: "classify", label: t("To Classify") },
+      { id: "reconcile", label: t("Reconcile") },
+      { id: "auto-matched", label: t("Matched") },
+      { id: "missing-masters", label: t("Exceptions") },
+      { id: "unidentify", label: t("Unidentified") },
     ],
     vouchers: [
-      { id: "standard", label: "General Ledger" },
-      { id: "purchase", label: "Purchase Register" },
-      { id: "sales", label: "Sales Register" },
-      { id: "payment", label: "Payment Register" },
-      { id: "receipt", label: "Receipt Register" },
-      { id: "journal", label: "Journal Register" },
-      { id: "contra", label: "Contra Register" },
-      { id: "debit_note", label: "Debit Note" },
-      { id: "credit_note", label: "Credit Note" },
-      { id: "day_book", label: "Day Book" },
-      { id: "audit_trail", label: "Audit Trail" },
+      { id: "standard", label: t("General Ledger") },
+      { id: "purchase", label: t("Purchase Register") },
+      { id: "sales", label: t("Sales Register") },
+      { id: "payment", label: t("Payment Register") },
+      { id: "receipt", label: t("Receipt Register") },
+      { id: "journal", label: t("Journal Register") },
+      { id: "contra", label: t("Contra Register") },
+      { id: "debit_note", label: t("Debit Note") },
+      { id: "credit_note", label: t("Credit Note") },
+      { id: "day_book", label: t("Day Book") },
+      { id: "audit_trail", label: t("Audit Trail") },
     ],
     "gst-report": [
-      { id: "generate_gst", label: "Generate GST" },
-      { id: "summary", label: "Summary" },
-      { id: "filing", label: "Filing" },
-      { id: "invoice_detail", label: "Invoice Detail" },
-      { id: "hsn_detail", label: "HSN Detail" },
-      { id: "gstr2b_report", label: "GSTR-2B" },
-      { id: "gstr3b_report", label: "GSTR-3B" },
-      { id: "gstr9_report", label: "GSTR-9" },
-      { id: "gstr9c_report", label: "GSTR-9C" },
-      { id: "others_report", label: "Others" },
+      { id: "generate_gst", label: t("Generate GST") },
+      { id: "summary", label: t("Summary") },
+      { id: "filing", label: t("Filing") },
+      { id: "invoice_detail", label: t("Invoice Detail") },
+      { id: "hsn_detail", label: t("HSN Detail") },
+      { id: "gstr2b_report", label: t("GSTR-2B") },
+      { id: "gstr3b_report", label: t("GSTR-3B") },
+      { id: "gstr9_report", label: t("GSTR-9") },
+      { id: "gstr9c_report", label: t("GSTR-9C") },
+      { id: "others_report", label: t("Others") },
     ],
     "item-report": [
-      { id: "summary", label: "Stock Summary" },
-      { id: "analysis", label: "Rate Analysis" },
-      { id: "movement", label: "Stock Movement" },
-      { id: "aging", label: "Stock Aging" },
-      { id: "reorder", label: "Reorder List" },
-      { id: "category", label: "Category View" },
-      { id: "hsn", label: "HSN/SAC Summary" },
-      { id: "tax", label: "Tax Rate Wise" },
-      { id: "brand", label: "Brand Analysis" },
-      { id: "location", label: "Location View" },
-      { id: "unit", label: "Unit Wise" },
-      { id: "batch", label: "Batch Wise" },
-      { id: "negative", label: "Negative Stock" },
-      { id: "fast_moving", label: "Fast Moving" },
-      { id: "slow_moving", label: "Slow Moving" },
-      { id: "profitability", label: "Item Profitability" },
-      { id: "valuation", label: "Stock Valuation" },
-      { id: "top_selling", label: "Top Selling" },
-      { id: "dead_stock", label: "Dead Stock" },
-      { id: "reconciliation", label: "Reconciliation" },
-      { id: "procurement", label: "Procurement" },
-      { id: "price_list", label: "Price List" },
-      { id: "lead_time", label: "Lead Time" },
+      { id: "summary", label: t("Stock Summary") },
+      { id: "analysis", label: t("Rate Analysis") },
+      { id: "movement", label: t("Stock Movement") },
+      { id: "aging", label: t("Stock Aging") },
+      { id: "reorder", label: t("Reorder List") },
+      { id: "category", label: t("Category View") },
+      { id: "hsn", label: t("HSN/SAC Summary") },
+      { id: "tax", label: t("Tax Rate Wise") },
+      { id: "brand", label: t("Brand Analysis") },
+      { id: "location", label: t("Location View") },
+      { id: "unit", label: t("Unit Wise") },
+      { id: "batch", label: t("Batch Wise") },
+      { id: "negative", label: t("Negative Stock") },
+      { id: "fast_moving", label: t("Fast Moving") },
+      { id: "slow_moving", label: t("Slow Moving") },
+      { id: "profitability", label: t("Item Profitability") },
+      { id: "valuation", label: t("Stock Valuation") },
+      { id: "top_selling", label: t("Top Selling") },
+      { id: "dead_stock", label: t("Dead Stock") },
+      { id: "reconciliation", label: t("Reconciliation") },
+      { id: "procurement", label: t("Procurement") },
+      { id: "price_list", label: t("Price List") },
+      { id: "lead_time", label: t("Lead Time") },
     ],
     reports: [
-      { id: "pl", label: "Profit & Loss" },
-      { id: "bs", label: "Balance Sheet" },
-      { id: "cash_flow", label: "Cash Flow" },
-      { id: "bank_flow", label: "Bank Flow" },
-      { id: "trial_balance", label: "Trial Balance" },
-      { id: "sales", label: "Sales Register" },
-      { id: "purchase", label: "Purchase Register" },
+      { id: "pl", label: t("Profit & Loss") },
+      { id: "bs", label: t("Balance Sheet") },
+      { id: "cash_flow", label: t("Cash Flow") },
+      { id: "bank_flow", label: t("Bank Flow") },
+      { id: "trial_balance", label: t("Trial Balance") },
+      { id: "sales", label: t("Sales Register") },
+      { id: "purchase", label: t("Purchase Register") },
     ],
     settings: [
-      { id: "firm", label: "Firm" },
-      { id: "general", label: "General" },
-      { id: "navigation", label: "App Defaults" },
-      { id: "invoiceprint", label: "Invoice & Print" },
-      { id: "formdetails", label: "Form Detail" },
-      { id: "vouchernumbering", label: "Voucher Numbering" },
-      { id: "users", label: "Users" },
-      { id: "alerts", label: "Alerts" },
-      { id: "security", label: "Security" },
-      { id: "privacy", label: "Privacy" },
-      { id: "imports", label: "Import Rules" },
-      { id: "mapping", label: "Mapping" },
-      { id: "ai", label: "AI Engines" },
-      { id: "admin", label: "Admin" },
-      { id: "data", label: "Data Explorer" },
-      { id: "help", label: "Help Center" },
-      { id: "support", label: "Support & Tickets" },
+      { id: "firm", label: t("Firm") },
+      { id: "general", label: t("General") },
+      { id: "navigation", label: t("App Defaults") },
+      { id: "invoiceprint", label: t("Invoice & Print") },
+      { id: "formdetails", label: t("Form Detail") },
+      { id: "vouchernumbering", label: t("Voucher Numbering") },
+      { id: "users", label: t("Users") },
+      { id: "alerts", label: t("Alerts") },
+      { id: "security", label: t("Security") },
+      { id: "privacy", label: t("Privacy") },
+      { id: "imports", label: t("Import Rules") },
+      { id: "mapping", label: t("Mapping") },
+      { id: "ai", label: t("AI Engines") },
+      { id: "admin", label: t("Admin") },
+      { id: "data", label: t("Data Explorer") },
+      { id: "help", label: t("Help Center") },
+      { id: "support", label: t("Support") },
+      { id: "about", label: t("About") },
     ],
   };
 
@@ -263,7 +266,7 @@ export const AppNavigationSettings: React.FC = () => {
         "voucher-entry": "sales",
         "inventory-entry": "stock_journal",
         reports: "pl",
-        settings: "firm",
+        settings: "about",
       },
     };
     setDefaultPage(defaults.page);
@@ -287,65 +290,65 @@ export const AppNavigationSettings: React.FC = () => {
           </div>
           <div>
             <h2 className="text-xl font-black text-gray-900 tracking-tight leading-tight dark:text-white">
-              Navigation Architecture
+              {t("Navigation Architecture")}
             </h2>
             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1.5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-              App Entry & Routing Intelligence
+              {t("App Entry & Routing Intelligence")}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 p-1 bg-white border border-gray-100 rounded-[1.25rem] shadow-sm dark:bg-gray-800 dark:border-gray-800">
-          <button
-            onClick={handleReset}
-            className="px-5 py-2.5 rounded-xl font-bold text-gray-400 hover:text-gray-900 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest dark:hover:bg-gray-700"
-          >
-            Reset Defaults
-          </button>
-          <button
-            onClick={handleSave}
-            className={`flex items-center gap-2.5 px-6 py-2.5 rounded-xl font-black transition-all text-[10px] uppercase tracking-wider ${isSaved ? "bg-emerald-50 text-emerald-600" : "bg-blue-600 text-white shadow-lg shadow-blue-100 hover:scale-[1.02] active:scale-95"}`}
-          >
-            {isSaved ? (
-              <>
-                <CheckCircleIcon className="w-4 h-4" />
-                Updated
-              </>
-            ) : (
-              "Save Configuration"
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Section 1: Application Entry Defaults */}
-      <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm relative overflow-hidden group dark:bg-gray-800 dark:border-gray-800">
-        <div className="absolute top-0 right-0 p-8 opacity-[0.03] grayscale pointer-events-none group-hover:scale-110 transition-transform duration-700">
-          <SettingsIcon className="w-48 h-48" />
-        </div>
-
-        <div className="flex items-center gap-4 mb-10">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100 shadow-sm">
-            <SettingsIcon className="w-6 h-6" />
-          </div>
-          <div>
-            <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight dark:text-white">
-              Startup Priority
-            </h3>
-            <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-              Global Entry Point
-            </p>
+          <div className="flex items-center gap-2.5 p-1 bg-white border border-gray-100 rounded-[1.25rem] shadow-sm dark:bg-gray-800 dark:border-gray-800">
+            <button
+              onClick={handleReset}
+              className="px-5 py-2.5 rounded-xl font-bold text-gray-400 hover:text-gray-900 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest dark:hover:bg-gray-700"
+            >
+              {t("Reset Defaults")}
+            </button>
+            <button
+              onClick={handleSave}
+              className={`flex items-center gap-2.5 px-6 py-2.5 rounded-xl font-black transition-all text-[10px] uppercase tracking-wider ${isSaved ? "bg-emerald-50 text-emerald-600" : "bg-blue-600 text-white shadow-lg shadow-blue-100 hover:scale-[1.02] active:scale-95"}`}
+            >
+              {isSaved ? (
+                <>
+                  <CheckCircleIcon className="w-4 h-4" />
+                  {t("Updated")}
+                </>
+              ) : (
+                t("Save Configuration")
+              )}
+            </button>
           </div>
         </div>
 
-        <div className="form-grid gap-12 relative z-10">
-          {/* Default Page Dropdown */}
-          <div className="flex flex-col gap-4">
-            <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 flex items-center gap-2 dark:text-gray-400">
-              <div className="w-1 h-3 bg-blue-600 rounded-full"></div>
-              Main Landing Category
-            </label>
+        {/* Section 1: Application Entry Defaults */}
+        <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm relative overflow-hidden group dark:bg-gray-800 dark:border-gray-800">
+          <div className="absolute top-0 right-0 p-8 opacity-[0.03] grayscale pointer-events-none group-hover:scale-110 transition-transform duration-700">
+            <SettingsIcon className="w-48 h-48" />
+          </div>
+
+          <div className="flex items-center gap-4 mb-10">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100 shadow-sm">
+              <SettingsIcon className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight dark:text-white">
+                {t("Startup Priority")}
+              </h3>
+              <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+                {t("Global Entry Point")}
+              </p>
+            </div>
+          </div>
+
+          <div className="form-grid gap-12 relative z-10">
+            {/* Default Page Dropdown */}
+            <div className="flex flex-col gap-4">
+              <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 flex items-center gap-2 dark:text-gray-400">
+                <div className="w-1 h-3 bg-blue-600 rounded-full"></div>
+                {t("Main Landing Category")}
+              </label>
             <div className="relative">
               <select
                 value={defaultPage}
@@ -380,7 +383,7 @@ export const AppNavigationSettings: React.FC = () => {
           <div className="flex flex-col gap-4">
             <label className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 flex items-center gap-2 dark:text-gray-400">
               <div className="w-1 h-3 bg-blue-400 rounded-full"></div>
-              Target Sub-Section
+              {t("Target Sub-Section")}
             </label>
             <div className="relative">
               <select
@@ -399,7 +402,7 @@ export const AppNavigationSettings: React.FC = () => {
               </div>
             </div>
             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest px-2 text-right">
-              Immediate access to:{" "}
+              {t("Immediate access to:")}{" "}
               {
                 subPages[defaultPage]?.find((sp) => sp.id === defaultSubPage)
                   ?.label
@@ -421,10 +424,10 @@ export const AppNavigationSettings: React.FC = () => {
           </div>
           <div>
             <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight dark:text-white">
-              Sidebar Routing Intelligence
+              {t("Sidebar Routing Intelligence")}
             </h3>
             <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-              Automated Contextual Navigation
+              {t("Automated Contextual Navigation")}
             </p>
           </div>
         </div>
@@ -457,7 +460,7 @@ export const AppNavigationSettings: React.FC = () => {
               <div className="space-y-3 relative z-10">
                 <label className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-                  Default Route
+                  {t("Default Route")}
                 </label>
                 <div className="relative">
                   <select
@@ -486,13 +489,11 @@ export const AppNavigationSettings: React.FC = () => {
             <InfoIcon className="w-8 h-8" />
           </div>
           <div>
-            <h4 className="text-sm font-black text-blue-900 uppercase tracking-[0.15em] mb-2">
-              Architectural Integrity
+            <h4 className="text-sm font-black text-blue-900 uppercase tracking-[0.15em] mb-2 dark:text-blue-200">
+              {t("Architectural Integrity")}
             </h4>
-            <p className="text-xs text-blue-700/60 font-medium leading-[1.8] max-w-2xl italic">
-              "These routing rules persist across user sessions, ensuring your
-              workflow remains uninterrupted by creating dedicated direct-access
-              pathways to your most critical data silos."
+            <p className="text-xs text-blue-700/60 font-medium leading-[1.8] max-w-2xl italic dark:text-blue-300">
+              {t('"These routing rules persist across user sessions, ensuring your workflow remains uninterrupted by creating dedicated direct-access pathways to your most critical data silos."')}
             </p>
           </div>
         </div>

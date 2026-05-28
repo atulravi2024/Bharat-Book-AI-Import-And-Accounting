@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { Send, Clock, Sparkles, Terminal, Trash2, Check, AlertCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
@@ -6,6 +7,7 @@ export const ChatTab = ({
   chatMessages, isAiTyping, currentChatInput, setCurrentChatInput,
   handleSendChatMessage, handleClearChat, handleKeyPress, messagesEndRef
 }: any) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* VIEW 1: AI DIAGNOSTIC CHAT */}
@@ -22,7 +24,7 @@ export const ChatTab = ({
                   <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-emerald-500 border-2 border-white dark:border-gray-900 rounded-full"></div>
                 </div>
                 <div>
-                  <h3 className="text-[12px] font-bold text-gray-900 dark:text-gray-100">Chatbot</h3>
+                  <h3 className="text-[12px] font-bold text-gray-900 dark:text-gray-100">{t("Chatbot")}</h3>
                   <p className="text-[9px] text-gray-500">Technical Analysis (Function and Feature)</p>
                 </div>
               </div>

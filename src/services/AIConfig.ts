@@ -473,9 +473,10 @@ export const EXTERNAL_PROVIDERS: AIProvider[] = [
 ];
 
 export const INTERNAL_GEMINI_MODELS = [
-    { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash (Latest & Fast)' },
-    { id: 'gemini-2.0-flash-thinking-exp', name: 'Gemini 2.0 Flash Thinking (Deep Reasoning)' },
-    { id: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro (High Intelligence)' },
-    { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash (Stable Performance)' },
-    { id: 'gemini-1.5-flash-8b', name: 'Gemini 1.5 Flash-8B (Ultra Fast)' }
+    { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash (Latest & Fast)' },
+    { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro (High Performance)' },
+    { id: 'gemini-3.5-flash', name: 'Gemini 3.5 Flash (Advanced Preview)' },
+    { id: 'gemini-3.1-pro-preview', name: 'Gemini 3.1 Pro Preview (Deep Intelligence)' },
+    { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash (Fast & Stable)' },
+    { id: 'gemini-2.0-flash-thinking-exp', name: 'Gemini 2.0 Flash Thinking (Deep Reasoning)' }
 ];

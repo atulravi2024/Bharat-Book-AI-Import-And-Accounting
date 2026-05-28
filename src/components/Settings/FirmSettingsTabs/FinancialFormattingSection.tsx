@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Hash } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 9: Financial - Formatting */}
@@ -28,7 +30,7 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                       <Hash className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Financial Formatting
+                      {t("Financial Formatting")}
                     </h3>
                   </div>
                   {activeAccordion === "financial_formatting" ? (
@@ -48,7 +50,7 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            Currency Symbol Position
+                            {t("Currency Symbol Position")}
                           </label>
                           <select
                             value={firmData.currencySymbolPosition}
@@ -63,7 +65,7 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Decimal Precision
+                            {t("Decimal Precision")}
                           </label>
                           <select
                             value={firmData.decimalPlaces}
@@ -81,7 +83,7 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Rounding Method
+                            {t("Rounding Method")}
                           </label>
                           <select
                             value={firmData.roundingMethod}
@@ -90,14 +92,14 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 cursor-pointer dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="nearest">Round to Nearest</option>
-                            <option value="up">Round Up</option>
-                            <option value="down">Round Down</option>
+                            <option value="nearest">{t("Round to Nearest")}</option>
+                            <option value="up">{t("Round Up")}</option>
+                            <option value="down">{t("Round Down")}</option>
                           </select>
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Number System
+                            {t("Number System")}
                           </label>
                           <select
                             value={firmData.numberGroupingStyle}
@@ -112,7 +114,7 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Thousand Separator
+                            {t("Thousand Separator")}
                           </label>
                           <select
                             value={firmData.thousandSeparator}
@@ -128,7 +130,7 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Decimal Separator
+                            {t("Decimal Separator")}
                           </label>
                           <select
                             value={firmData.decimalSeparator}

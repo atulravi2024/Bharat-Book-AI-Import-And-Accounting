@@ -1,4 +1,5 @@
 import React from "react";
+import { useLanguage } from "../../../context/LanguageContext";
 
 const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
@@ -29,12 +30,13 @@ interface TabletTabProps {
 }
 
 export const TabletTab: React.FC<TabletTabProps> = ({ settings, handleSettingChange }) => {
+  const { t } = useLanguage();
   const updateSetting = (key: string, val: any) => handleSettingChange(key, val);
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
-          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">Tablet Optimization</h4>
+          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">{t("Tablet Optimization")}</h4>
           <Toggle 
             label="Enable Touch Spacing" 
             description="Increases padding and tap targets for touchscreens"
@@ -49,7 +51,7 @@ export const TabletTab: React.FC<TabletTabProps> = ({ settings, handleSettingCha
           />
         </div>
         <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
-          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">Input Controls</h4>
+          <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4">{t("Input Controls")}</h4>
           <Toggle 
             label="Show Clear Buttons" 
             description="Display a clear icon (x) inside input fields"

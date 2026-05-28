@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Mail, MessageSquare, Phone, Send } from 'lucide-react';
 
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion: Alert Destinations */}
@@ -23,7 +25,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
               <Send className="w-4 h-4" />
             </span>
             <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-              Alert Channels
+              {t("Alert Channels")}
             </h3>
           </div>
           {activeAccordion === "alertDestinations" ? (
@@ -43,7 +45,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
               <div className="p-6 sm:px-8 bg-white dark:bg-gray-800 space-y-6">
                 <div>
                   <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 max-w-2xl">
-                    Configure alert delivery channels where real-time critical system notifications, automated GST filing, tax reminders, overdue tasks, and payment compliance warnings are routed.
+                    {t("Configure alert delivery channels where real-time critical system notifications, automated GST filing, tax reminders, overdue tasks, and payment compliance warnings are routed.")}
                   </p>
                 </div>
 
@@ -53,7 +55,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Mail className="w-4 h-4 text-blue-500" />
-                        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">Email Alerts</span>
+                        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">{t("Email Alerts")}</span>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
@@ -66,7 +68,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                       </label>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Email for Alert</label>
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">{t("Email for Alert")}</label>
                       <input
                         type="email"
                         placeholder="alerts@yourfirm.com"
@@ -83,7 +85,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4 text-emerald-500" />
-                        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">SMS Alerts</span>
+                        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">{t("SMS Alerts")}</span>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
@@ -96,7 +98,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                       </label>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">SMS Number for Alert</label>
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">{t("SMS Number for Alert")}</label>
                       <input
                         type="tel"
                         placeholder="+91 XXXXX XXXXX"
@@ -113,7 +115,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <MessageSquare className="w-4 h-4 text-green-500" />
-                        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">WhatsApp Alerts</span>
+                        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">{t("WhatsApp Alerts")}</span>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
@@ -126,7 +128,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                       </label>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">WhatsApp Number for Alert</label>
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">{t("WhatsApp Number for Alert")}</label>
                       <input
                         type="tel"
                         placeholder="+91 XXXXX XXXXX"
@@ -143,7 +145,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Send className="w-4 h-4 text-sky-500" />
-                        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">Telegram Alerts</span>
+                        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">{t("Telegram Alerts")}</span>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
@@ -156,7 +158,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                       </label>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Telegram handle/ID</label>
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">{t("Telegram handle/ID")}</label>
                       <input
                         type="text"
                         placeholder="@your_firm_bot"

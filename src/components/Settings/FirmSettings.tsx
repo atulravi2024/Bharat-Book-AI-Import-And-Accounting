@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLanguage } from "../../context/LanguageContext";
 import { BasicSection } from './FirmSettingsTabs/BasicSection';
 import { ProfileSection } from './FirmSettingsTabs/ProfileSection';
 import { ContactsSection } from './FirmSettingsTabs/ContactsSection';
@@ -577,6 +578,7 @@ export interface FirmSettingsProps {
 }
 
 export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }) => {
+  const { t } = useLanguage();
   const [isSaved, setIsSaved] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -903,26 +905,26 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
   };
 
   const SECTIONS = [
-    { id: "basicCompany", label: "Basic Details", component: BasicSection },
-    { id: "businessProfile", label: "Profile Details", component: ProfileSection },
-    { id: "primaryContacts", label: "Primary Contacts", component: ContactsSection },
-    { id: "alertDestinations", label: "Alert Channels", component: AlertChannels },
-    { id: "addressDetails", label: "Registered Address", component: AddressSection },
-    { id: "statutoryTax", label: "Tax Registrations", component: TaxRegistrationSection },
-    { id: "businessLicenses", label: "Business Licenses", component: LicensesSection },
-    { id: "hrPayroll", label: "Payroll Setup", component: HrPayrollSection },
-    { id: "financial_general", label: "Financial General", component: FinancialGeneralSection },
-    { id: "financial_tax", label: "Financial Taxation", component: FinancialTaxationSection },
-    { id: "financial_formatting", label: "Financial Formatting", component: FinancialFormattingSection },
-    { id: "financial_advanced", label: "Financial Advanced", component: FinancialAdvancedSection },
-    { id: "bank", label: "Bank Details", component: BankDetailsSection },
-    { id: "social", label: "Social Presence", component: SocialWebSection },
-    { id: "operational", label: "Operational Preferences", component: OperationalSection },
-    { id: "billing", label: "Billing Sales", component: BillingSalesSection },
-    { id: "inventoryLogistics", label: "Inventory Logistics", component: InventoryLogisticsSection },
-    { id: "branding", label: "Branding Assets", component: BrandingAssetsSection },
-    { id: "legal Remarks", label: "Legal Remarks", component: LegalRemarksSection },
-    { id: "systemCompliance", label: "System Backup", component: SystemDataSection },
+    { id: "basicCompany", label: t("Basic Details"), component: BasicSection },
+    { id: "businessProfile", label: t("Profile Details"), component: ProfileSection },
+    { id: "primaryContacts", label: t("Primary Contacts"), component: ContactsSection },
+    { id: "alertDestinations", label: t("Alert Channels"), component: AlertChannels },
+    { id: "addressDetails", label: t("Registered Address"), component: AddressSection },
+    { id: "statutoryTax", label: t("Tax Registrations"), component: TaxRegistrationSection },
+    { id: "businessLicenses", label: t("Business Licenses"), component: LicensesSection },
+    { id: "hrPayroll", label: t("Payroll Setup"), component: HrPayrollSection },
+    { id: "financial_general", label: t("Financial General"), component: FinancialGeneralSection },
+    { id: "financial_tax", label: t("Financial Taxation"), component: FinancialTaxationSection },
+    { id: "financial_formatting", label: t("Financial Formatting"), component: FinancialFormattingSection },
+    { id: "financial_advanced", label: t("Financial Advanced"), component: FinancialAdvancedSection },
+    { id: "bank", label: t("Bank Details"), component: BankDetailsSection },
+    { id: "social", label: t("Social Presence"), component: SocialWebSection },
+    { id: "operational", label: t("Operational Preferences"), component: OperationalSection },
+    { id: "billing", label: t("Billing Sales"), component: BillingSalesSection },
+    { id: "inventoryLogistics", label: t("Inventory Logistics"), component: InventoryLogisticsSection },
+    { id: "branding", label: t("Branding Assets"), component: BrandingAssetsSection },
+    { id: "legal Remarks", label: t("Legal Remarks"), component: LegalRemarksSection },
+    { id: "systemCompliance", label: t("System Backup"), component: SystemDataSection },
   ];
 
   const filteredSections = SECTIONS;
@@ -942,7 +944,7 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
         <div className="flex items-center w-full xl:w-auto shrink-0 justify-between md:justify-start gap-4">
           <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white flex items-center whitespace-nowrap">
             <AdminIcon className="mr-3 text-blue-600 w-6 h-6 sm:w-8 sm:h-8" /> 
-            Firm Details
+            {t("Firm Details")}
           </h2>
         </div>
 
@@ -954,7 +956,7 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
               </div>
               <input
                 type="text"
-                placeholder="Search settings..."
+                placeholder={t("Search settings...")}
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -976,12 +978,12 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
                       className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition-colors"
                     >
                       <span className="font-bold">{field.label}</span>
-                      <span className="text-xs text-gray-400 dark:text-gray-500 block">in {SECTIONS.find(s => s.id === field.id)?.label || 'Settings'}</span>
+                      <span className="text-xs text-gray-400 dark:text-gray-500 block">in {SECTIONS.find(s => s.id === field.id)?.label || t('Settings')}</span>
                     </button>
                   ))}
                   {ALL_SEARCH_FIELDS.filter(field => field.label.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (
                     <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center font-medium">
-                      No settings found matching "{searchTerm}"
+                      {t("No settings found matching")} "{searchTerm}"
                     </div>
                   )}
                 </div>
@@ -994,49 +996,49 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
               <div className="flex shrink-0 items-center bg-gray-50 dark:bg-gray-900 p-1 rounded-xl border border-gray-200 dark:border-gray-700">
                  <button
                     onClick={() => fileInputRef.current?.click()}
-                    title="Import (JSON/CSV)"
+                    title={t("Import (JSON/CSV)")}
                     className="px-3 py-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   >
-                    <Upload className="w-4 h-4" /> <span className="hidden xl:inline">Import</span>
+                    <Upload className="w-4 h-4" /> <span className="hidden xl:inline">{t("Import")}</span>
                  </button>
                  <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
                  <button
                     onClick={handleExportBackup}
-                    title="Export JSON"
+                    title={t("Export JSON")}
                     className="px-3 py-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   >
-                    <Download className="w-4 h-4" /> <span className="hidden xl:inline">JSON</span>
+                    <Download className="w-4 h-4" /> <span className="hidden xl:inline">{t("JSON")}</span>
                  </button>
                  <button
                     onClick={handleExportCSV}
-                    title="Export CSV"
+                    title={t("Export CSV")}
                     className="px-3 py-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   >
-                    <Download className="w-4 h-4" /> <span className="hidden xl:inline">CSV</span>
+                    <Download className="w-4 h-4" /> <span className="hidden xl:inline">{t("CSV")}</span>
                  </button>
               </div>
 
               <button
                 onClick={handleClear}
-                title="Clear All Fields"
+                title={t("Clear All Fields")}
                 className="shrink-0 p-2 xl:px-4 xl:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-orange-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-sm active:scale-95 group"
               >
                 <Trash2 className="w-5 h-5 text-gray-500 group-hover:text-orange-500 transition-colors xl:mr-2" />
-                <span className="hidden xl:inline">Clear</span>
+                <span className="hidden xl:inline">{t("Clear")}</span>
               </button>
 
               <button
                 onClick={handleResetToDefault}
-                title="Reset to Defaults"
+                title={t("Reset to Defaults")}
                 className="shrink-0 p-2 xl:px-4 xl:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-sm active:scale-95 group"
               >
                 <RotateCcw className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors xl:mr-2" />
-                <span className="hidden xl:inline">Reset</span>
+                <span className="hidden xl:inline">{t("Reset")}</span>
               </button>
 
               <button
                 onClick={handleSave}
-                title="Save Configuration"
+                title={t("Save Configuration")}
                 className={`shrink-0 p-2.5 xl:px-6 xl:py-2.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-md active:scale-95 ${
                   isSaved 
                     ? "bg-emerald-500 text-white shadow-emerald-200 dark:shadow-none" 
@@ -1046,12 +1048,12 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
                 {isSaved ? (
                   <>
                     <CheckCircleIcon className="w-5 h-5 xl:mr-2" />
-                    <span className="hidden xl:inline">Saved!</span>
+                    <span className="hidden xl:inline">{t("Saved!")}</span>
                   </>
                 ) : (
                   <>
                     <Save className="w-5 h-5 xl:mr-2" />
-                    <span className="hidden xl:inline">Save</span>
+                    <span className="hidden xl:inline">{t("Save")}</span>
                   </>
                 )}
               </button>
@@ -1153,7 +1155,7 @@ export const FirmSettings: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }
                 onClick={() => setAlertConfig(null)}
                 className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-colors"
               >
-                OK
+                {t("OK")}
               </button>
             </motion.div>
           </div>

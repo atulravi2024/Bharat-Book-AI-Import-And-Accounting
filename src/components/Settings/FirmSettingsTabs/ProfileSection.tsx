@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Briefcase } from 'l
 import { STATE_DATA } from "../../../lib/states";
 import { SearchableDropdown } from "../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../lib/firmSettingsConstants";
+import { useLanguage } from "../../../context/LanguageContext";
 
 interface Props {
   firmData: any;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 2: Business Profile */}
@@ -28,7 +30,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                       <Briefcase className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Business Profile
+                      {t("Business Profile")}
                     </h3>
                   </div>
                   {activeAccordion === "businessProfile" ? (
@@ -48,7 +50,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            Business Constitution
+                            {t("Business Constitution")}
                           </label>
                           <select
                             value={firmData.businessType}
@@ -60,17 +62,17 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 cursor-pointer dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="proprietorship">Sole Proprietorship</option>
-                            <option value="partnership">Partnership</option>
-                            <option value="llc">LLP / LLC</option>
-                            <option value="pvt_ltd">Private Limited</option>
-                            <option value="public_ltd">Public Limited</option>
-                            <option value="trust">Trust / NGO</option>
+                            <option value="proprietorship">{t("Sole Proprietorship")}</option>
+                            <option value="partnership">{t("Partnership")}</option>
+                            <option value="llc">{t("LLP / LLC")}</option>
+                            <option value="pvt_ltd">{t("Private Limited")}</option>
+                            <option value="public_ltd">{t("Public Limited")}</option>
+                            <option value="trust">{t("Trust / NGO")}</option>
                           </select>
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Nature of Business
+                            {t("Nature of Business")}
                           </label>
                           <select
                             value={firmData.businessNature}
@@ -90,14 +92,14 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                             }}
                             className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 cursor-pointer dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="product">Inventory / Product Based</option>
-                            <option value="service">Service Provider</option>
-                            <option value="professional">Professional / Consultation</option>
+                            <option value="product">{t("Inventory / Product Based")}</option>
+                            <option value="service">{t("Service Provider")}</option>
+                            <option value="professional">{t("Professional / Consultation")}</option>
                           </select>
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Sales Channel / E-Commerce
+                            {t("Sales Channel / E-Commerce")}
                           </label>
                           <select
                             value={firmData.isEcommerceInfo}
@@ -109,14 +111,14 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 cursor-pointer dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="offline">Offline / Physical Store Only</option>
-                            <option value="online">Online / E-Commerce Only</option>
+                            <option value="offline">{t("Offline / Physical Store Only")}</option>
+                            <option value="online">{t("Online / E-Commerce Only")}</option>
                             <option value="omnichannel">Both Online and Offline (Omnichannel)</option>
                           </select>
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Select the Business Type
+                            {t("Select the Business Type")}
                           </label>
                           <select
                             value={firmData.businessRole}
@@ -137,7 +139,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            What business is involved?
+                            {t("What business is involved?")}
                           </label>
                           <select
                             value={firmData.businessDomain}
@@ -162,7 +164,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                         {BUSINESS_SUBDOMAINS[firmData.businessDomain] && (
                           <div className="space-y-2">
                             <label className="form-label">
-                              Specific Business Type
+                              {t("Specific Business Type")}
                             </label>
                             <select
                               value={firmData.businessSubDomain}

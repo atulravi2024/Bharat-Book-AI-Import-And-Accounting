@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Settings } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 10: Financial - Advanced */}
@@ -28,7 +30,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                       <Settings className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Financial Advanced
+                      {t("Financial Advanced")}
                     </h3>
                   </div>
                   {activeAccordion === "financial_advanced" ? (
@@ -59,7 +61,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               <div className={`w-10 h-5 rounded-full transition-colors ${firmData.showCurrencySymbol ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
                               <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${firmData.showCurrencySymbol ? 'translate-x-5' : 'translate-x-0'}`}></div>
                             </div>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Show Currency Symbol</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{t("Show Currency Symbol")}</span>
                           </label>
       
                           <label className="flex items-center space-x-3 cursor-pointer group">
@@ -73,7 +75,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               <div className={`w-10 h-5 rounded-full transition-colors ${firmData.enableDiscount ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
                               <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${firmData.enableDiscount ? 'translate-x-5' : 'translate-x-0'}`}></div>
                             </div>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Enable Discounts</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{t("Enable Discounts")}</span>
                           </label>
       
                           <label className="flex items-center space-x-3 cursor-pointer group">
@@ -87,7 +89,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               <div className={`w-10 h-5 rounded-full transition-colors ${firmData.enableTax ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
                               <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${firmData.enableTax ? 'translate-x-5' : 'translate-x-0'}`}></div>
                             </div>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Enable Tax Columns</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{t("Enable Tax Columns")}</span>
                           </label>
       
                           <label className="flex items-center space-x-3 cursor-pointer group">
@@ -101,7 +103,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               <div className={`w-10 h-5 rounded-full transition-colors ${firmData.autoRoundOff ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
                               <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${firmData.autoRoundOff ? 'translate-x-5' : 'translate-x-0'}`}></div>
                             </div>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Auto Round Off</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{t("Auto Round Off")}</span>
                           </label>
       
                           <label className="flex items-center space-x-3 cursor-pointer group">
@@ -115,7 +117,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               <div className={`w-10 h-5 rounded-full transition-colors ${firmData.allowBackdatedEntries ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
                               <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${firmData.allowBackdatedEntries ? 'translate-x-5' : 'translate-x-0'}`}></div>
                             </div>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Allow Backdated Entries</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{t("Allow Backdated Entries")}</span>
                           </label>
       
                           <label className="flex items-center space-x-3 cursor-pointer group">
@@ -129,7 +131,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               <div className={`w-10 h-5 rounded-full transition-colors ${firmData.enableBackdatedGracePeriod ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
                               <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${firmData.enableBackdatedGracePeriod ? 'translate-x-5' : 'translate-x-0'}`}></div>
                             </div>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Backdated Grace Period</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{t("Backdated Grace Period")}</span>
                           </label>
       
                           <label className="flex items-center space-x-3 cursor-pointer group">
@@ -143,7 +145,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               <div className={`w-10 h-5 rounded-full transition-colors ${firmData.enableMultiCurrency ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
                               <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${firmData.enableMultiCurrency ? 'translate-x-5' : 'translate-x-0'}`}></div>
                             </div>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Enable Multi-Currency</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{t("Enable Multi-Currency")}</span>
                           </label>
       
                           <label className="flex items-center space-x-3 cursor-pointer group">
@@ -157,7 +159,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               <div className={`w-10 h-5 rounded-full transition-colors ${firmData.enableAutoTds ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
                               <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${firmData.enableAutoTds ? 'translate-x-5' : 'translate-x-0'}`}></div>
                             </div>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Auto TDS Calculation</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{t("Auto TDS Calculation")}</span>
                           </label>
       
                           <label className="flex items-center space-x-3 cursor-pointer group">
@@ -171,16 +173,16 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               <div className={`w-10 h-5 rounded-full transition-colors ${firmData.requireVoucherApproval ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
                               <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${firmData.requireVoucherApproval ? 'translate-x-5' : 'translate-x-0'}`}></div>
                             </div>
-                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">Voucher Approval Worklow</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{t("Voucher Approval Worklow")}</span>
                           </label>
                         </div>
       
                         <div className="form-field-wrapper form-grid md:col-span-2 gap-6 pt-6 border-t border-gray-100 dark:border-gray-800">
                           <div className="space-y-4">
-                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Currency & Exchange</h4>
+                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("Currency & Exchange")}</h4>
                             <div className="space-y-2">
                               <label className="form-label">
-                                Exchange Rate Update
+                                {t("Exchange Rate Update")}
                               </label>
                               <select
                                 disabled={!firmData.enableMultiCurrency}
@@ -188,7 +190,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                 onChange={(e) => setFirmData({ ...firmData, exchangeRateUpdateMode: e.target.value })}
                                 className={`w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 ${!firmData.enableMultiCurrency ? 'opacity-50 cursor-not-allowed' : ''}`}
                               >
-                                <option value="manual">Manual Entry</option>
+                                <option value="manual">{t("Manual Entry")}</option>
                                 <option value="api">Auto via API (Real-time)</option>
                                 <option value="daily">Auto via API (Daily Avg)</option>
                               </select>
@@ -196,7 +198,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                           </div>
       
                           <div className="space-y-4">
-                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">TDS / TCS Compliance</h4>
+                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("TDS / TCS Compliance")}</h4>
                             <div className="form-grid gap-4">
                               <div className="space-y-2">
                                 <label className="form-label">
@@ -212,7 +214,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               </div>
                               <div className="space-y-2">
                                 <label className="form-label">
-                                  Threshold Limit
+                                  {t("Threshold Limit")}
                                 </label>
                                 <input
                                   type="text"
@@ -226,7 +228,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                           </div>
       
                           <div className="space-y-4">
-                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Approval Control</h4>
+                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("Approval Control")}</h4>
                             <div className="space-y-2">
                               <label className="form-label">
                                 Approval Threshold (₹)
@@ -243,7 +245,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                           </div>
       
                           <div className="space-y-4">
-                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Interest Calculation</h4>
+                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("Interest Calculation")}</h4>
                             <div className="form-grid gap-4">
                               <div className="space-y-2">
                                 <label className="form-label">
@@ -259,14 +261,14 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               </div>
                               <div className="space-y-2">
                                 <label className="form-label">
-                                  Method
+                                  {t("Method")}
                                 </label>
                                 <select
                                   value={firmData.interestCalculationMethod}
                                   onChange={(e) => setFirmData({ ...firmData, interestCalculationMethod: e.target.value })}
                                   className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200"
                                 >
-                                  <option value="simple">Simple</option>
+                                  <option value="simple">{t("Simple")}</option>
                                   <option value="compound_monthly">Compound (Mo)</option>
                                   <option value="compound_yearly">Compound (Yr)</option>
                                 </select>
@@ -275,11 +277,11 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                           </div>
       
                           <div className="space-y-4">
-                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Compliance & Closing</h4>
+                            <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("Compliance & Closing")}</h4>
                             <div className="form-grid gap-4">
                               <div className="space-y-2">
                                 <label className="form-label">
-                                  Soft Close Date
+                                  {t("Soft Close Date")}
                                 </label>
                                 <input
                                   type="date"
@@ -290,7 +292,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                               </div>
                               <div className="space-y-2">
                                 <label className="form-label">
-                                  Hard Freeze Date
+                                  {t("Hard Freeze Date")}
                                 </label>
                                 <input
                                   type="date"

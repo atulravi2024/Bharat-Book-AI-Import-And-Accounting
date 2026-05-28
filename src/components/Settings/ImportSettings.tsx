@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useLanguage } from "../../context/LanguageContext";
 import { SettingsIcon } from '../icons/IconComponents';
 import { ChevronDown, FileUp, ShoppingCart, Tag, CreditCard, Download, BookOpen, Repeat, Landmark } from 'lucide-react';
 import { 
@@ -22,6 +23,7 @@ interface ImportSettingsProps {
 }
 
 export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleToggle }) => {
+  const { t } = useLanguage();
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
     // Specific Import Settings State
@@ -140,7 +142,7 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleT
     return (
         <div className="bg-white w-full border-t border-b border-gray-100 relative dark:bg-gray-800 dark:border-gray-800">
             <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest my-6 flex items-center px-4 dark:text-white">
-                <SettingsIcon className="mr-3 text-blue-600" /> Voucher Import Configuration
+                <SettingsIcon className="mr-3 text-blue-600" /> {t("Voucher Import Configuration")}
             </h3>
             
             <div className="space-y-0">
@@ -155,8 +157,8 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleT
                                 <Landmark size={16} />
                             </div>
                             <div>
-                                <span className={`text-[11px] font-black tracking-wide uppercase ${expandedSection === 'global' ? 'text-indigo-700' : 'text-gray-800'} dark:text-gray-100`}>Global AI Import Rules</span>
-                                <p className="text-[10px] text-gray-400 font-medium">Standard behavior across all voucher types</p>
+                                <span className={`text-[11px] font-black tracking-wide uppercase ${expandedSection === 'global' ? 'text-indigo-700' : 'text-gray-800'} dark:text-gray-100`}>{t("Global AI Import Rules")}</span>
+                                <p className="text-[10px] text-gray-400 font-medium">{t("Standard behavior across all voucher types")}</p>
                             </div>
                         </div>
                         <div className={`p-1 rounded-full transition-transform duration-300 ${expandedSection === 'global' ? 'rotate-180 bg-indigo-100 text-indigo-600' : 'bg-gray-50 text-gray-400'} dark:bg-gray-900`}>
@@ -169,8 +171,8 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleT
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between gap-4 py-2 border-b border-gray-100/50">
                                     <div>
-                                        <p className="text-xs text-gray-800 font-bold dark:text-gray-100">Auto-create missing items</p>
-                                        <p className="text-[10px] text-gray-400 font-medium max-w-sm mt-0.5">Automatically create stock items for unrecognized entries.</p>
+                                        <p className="text-xs text-gray-800 font-bold dark:text-gray-100">{t("Auto-create missing items")}</p>
+                                        <p className="text-[10px] text-gray-400 font-medium max-w-sm mt-0.5">{t("Automatically create stock items for unrecognized entries.")}</p>
                                     </div>
                                     <div onClick={() => handleToggle('autoCreateMissing')} className={`${toggles.autoCreateMissing ? 'bg-indigo-600' : 'bg-gray-300'} w-10 h-5 rounded-full relative cursor-pointer transition-all shrink-0`}>
                                         <div className={`bg-white w-3 h-3 rounded-full absolute top-1 ${toggles.autoCreateMissing ? 'right-1' : 'left-1'} shadow-sm transition-all dark:bg-gray-800`}></div>
@@ -178,8 +180,8 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleT
                                 </div>
                                 <div className="flex items-center justify-between gap-4 py-2 border-b border-gray-100/50">
                                     <div>
-                                        <p className="text-xs text-gray-800 font-bold dark:text-gray-100">Auto-match ledgers by GSTIN</p>
-                                        <p className="text-[10px] text-gray-400 font-medium max-w-sm mt-0.5">Prioritize GSTIN mapping over fuzzy name matching.</p>
+                                        <p className="text-xs text-gray-800 font-bold dark:text-gray-100">{t("Auto-match ledgers by GSTIN")}</p>
+                                        <p className="text-[10px] text-gray-400 font-medium max-w-sm mt-0.5">{t("Prioritize GSTIN mapping over fuzzy name matching.")}</p>
                                     </div>
                                     <div onClick={() => handleToggle('autoMatchLedgerGstin')} className={`${toggles.autoMatchLedgerGstin ? 'bg-indigo-600' : 'bg-gray-300'} w-10 h-5 rounded-full relative cursor-pointer transition-all shrink-0`}>
                                         <div className={`bg-white w-3 h-3 rounded-full absolute top-1 ${toggles.autoMatchLedgerGstin ? 'right-1' : 'left-1'} shadow-sm transition-all dark:bg-gray-800`}></div>
@@ -187,8 +189,8 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleT
                                 </div>
                                 <div className="flex items-center justify-between gap-4 py-2 border-b border-gray-100/50">
                                     <div>
-                                        <p className="text-xs text-gray-800 font-bold dark:text-gray-100">Smart Narration Cleanup</p>
-                                        <p className="text-[10px] text-gray-400 font-medium max-w-sm mt-0.5">Remove dates and payment handles from extracted narrations.</p>
+                                        <p className="text-xs text-gray-800 font-bold dark:text-gray-100">{t("Smart Narration Cleanup")}</p>
+                                        <p className="text-[10px] text-gray-400 font-medium max-w-sm mt-0.5">{t("Remove dates and payment handles from extracted narrations.")}</p>
                                     </div>
                                     <div onClick={() => handleToggle('smartNarrationCleanup' as any)} className={`${(toggles as any).smartNarrationCleanup ? 'bg-indigo-600' : 'bg-gray-300'} w-10 h-5 rounded-full relative cursor-pointer transition-all shrink-0`}>
                                         <div className={`bg-white w-3 h-3 rounded-full absolute top-1 ${(toggles as any).smartNarrationCleanup ? 'right-1' : 'left-1'} shadow-sm transition-all dark:bg-gray-800`}></div>
@@ -196,8 +198,8 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleT
                                 </div>
                                 <div className="flex items-center justify-between gap-4 py-2">
                                     <div>
-                                        <p className="text-xs text-gray-800 font-bold dark:text-gray-100">FileName Date Extraction</p>
-                                        <p className="text-[10px] text-gray-400 font-medium max-w-sm mt-0.5">Automatically use the date from the imported file name if missing.</p>
+                                        <p className="text-xs text-gray-800 font-bold dark:text-gray-100">{t("FileName Date Extraction")}</p>
+                                        <p className="text-[10px] text-gray-400 font-medium max-w-sm mt-0.5">{t("Automatically use the date from the imported file name if missing.")}</p>
                                     </div>
                                     <div onClick={() => handleToggle('extractDateFromFileName' as any)} className={`${(toggles as any).extractDateFromFileName ? 'bg-indigo-600' : 'bg-gray-300'} w-10 h-5 rounded-full relative cursor-pointer transition-all shrink-0`}>
                                         <div className={`bg-white w-3 h-3 rounded-full absolute top-1 ${(toggles as any).extractDateFromFileName ? 'right-1' : 'left-1'} shadow-sm transition-all dark:bg-gray-800`}></div>

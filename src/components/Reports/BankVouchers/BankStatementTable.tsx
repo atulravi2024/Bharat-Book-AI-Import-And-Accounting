@@ -126,7 +126,7 @@ export const BankStatementTable: React.FC<BankStatementTableProps> = ({
                                     <td className="px-6 py-4 whitespace-nowrap text-xs cursor-pointer" onClick={() => setExpandedId(expandedId === v.id ? null : v.id)}>
                                         {isMapped ? (
                                             <div className="flex flex-col">
-                                                <span className="font-bold text-indigo-700 truncate max-w-[150px] flex items-center" title={name}>
+                                                <span className="font-bold text-indigo-700 truncate max-w-[150px] flex items-center" title={name ? String(name) : undefined}>
                                                     {name}
                                                     <ConfidenceIndicator confidence={v.partyName?.confidence || v.toAccount?.confidence || v.fromAccount?.confidence} />
                                                 </span>

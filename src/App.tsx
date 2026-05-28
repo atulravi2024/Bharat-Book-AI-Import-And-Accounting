@@ -4,6 +4,7 @@ import { RefreshCw, Lock, Shield } from 'lucide-react';
 import { Layout } from './components/Layout/Layout';
 import { ThemeProvider } from './components/Layout/ThemeContext';
 import { NotificationProvider, useNotifications } from './context/NotificationContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { Step1Upload } from './components/Operations/Import/Step1Upload';
 import { Step2Correction } from './components/Operations/Import/Step2Correction';
 import { Step3Summary } from './components/Operations/Import/Step3Summary';
@@ -158,11 +159,13 @@ const App: React.FC = () => {
   }
 
   return (
-    <ThemeProvider>
-      <NotificationProvider>
-        <AppContent />
-      </NotificationProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider>
+        <NotificationProvider>
+          <AppContent />
+        </NotificationProvider>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 };
 
@@ -463,7 +466,7 @@ const AppContent: React.FC = () => {
         addNotification({
           title: 'Daily Limit Exceeded',
           message: `Your active group security policy restricts posts to max ${policy.dailyVoucherLimit} daily vouchers. (Today: ${postedCount}, attempted: ${newVouchersCount})`,
-          type: 'Error'
+          type: 'Alert'
         });
         return;
       }
@@ -481,7 +484,7 @@ const AppContent: React.FC = () => {
         addNotification({
           title: 'Transaction Limit Violated',
           message: `Voucher amount (${formattedAmt}) exceeds single transaction limit (${formattedLimit}) configured in your group rules.`,
-          type: 'Error'
+          type: 'Alert'
         });
         return;
       }
@@ -824,16 +827,16 @@ const AppContent: React.FC = () => {
             case 'priceList': setPriceListMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'weights': setWeightMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'volumes': setVolumeMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
-            case 'colors': setColorMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
-            case 'sizes': setSizeMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
+            case 'colors': setColorMasters((prev: any) => prev.filter((m: any) => m.sampleSetId !== id)); break;
+            case 'sizes': setSizeMasters((prev: any) => prev.filter((m: any) => m.sampleSetId !== id)); break;
             case 'variants': setVariantMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
-            case 'dimensions': setDimensionMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
+            case 'dimensions': setDimensionMasters((prev: any) => prev.filter((m: any) => m.sampleSetId !== id)); break;
             case 'stockGroups': setStockGroupMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'grades': setGradeMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'assertionCategories': setAssertionCategoryMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'assertionCodes': setAssertionCodeMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
             case 'items': setItemMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
-            case 'bom': setBomMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
+            case 'bom': setBomMasters((prev: any) => prev.filter((m: any) => m.sampleSetId !== id)); break;
             case 'parties':
             case 'vendors':
             case 'partners': setPartyMasters(prev => prev.filter(m => m.sampleSetId !== id)); break;
@@ -1202,7 +1205,7 @@ const AppContent: React.FC = () => {
                         addNotification({
                             title: 'Transaction Limit Violated',
                             message: `Voucher amount (${formattedAmt}) exceeds single transaction limit (${formattedLimit}) configured in your group rules.`,
-                            type: 'Error'
+                            type: 'Alert'
                         });
                         return;
                     }
@@ -1215,7 +1218,7 @@ const AppContent: React.FC = () => {
                         addNotification({
                             title: 'Daily Limit Exceeded',
                             message: `Your active group security policy restricts posts to max ${policy.dailyVoucherLimit} daily vouchers.`,
-                            type: 'Error'
+                            type: 'Alert'
                         });
                         return;
                     }
@@ -1295,7 +1298,7 @@ const AppContent: React.FC = () => {
                           addNotification({
                               title: 'Transaction Limit Violated',
                               message: `Voucher amount (${formattedAmt}) exceeds single transaction limit (${formattedLimit}) configured in your group rules.`,
-                              type: 'Error'
+                              type: 'Alert'
                           });
                           return;
                       }
@@ -1308,7 +1311,7 @@ const AppContent: React.FC = () => {
                           addNotification({
                               title: 'Daily Limit Exceeded',
                               message: `Your active group security policy restricts posts to max ${policy.dailyVoucherLimit} daily vouchers.`,
-                              type: 'Error'
+                              type: 'Alert'
                           });
                           return;
                       }

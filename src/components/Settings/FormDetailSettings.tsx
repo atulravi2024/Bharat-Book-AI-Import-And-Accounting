@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { SettingsIcon, CheckCircleIcon, UploadIcon, DownloadIcon, UndoIcon } from "../icons/IconComponents";
 import { useFormSettings, defaultSettings } from "../../useFormSettings";
+import { useLanguage } from "../../context/LanguageContext";
 
 const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
@@ -30,6 +31,7 @@ import { TabletTab } from "./FormDetailSettingsTabs/TabletTab";
 import { MobileTab } from "./FormDetailSettingsTabs/MobileTab";
 import { BehaviorsTab } from "./FormDetailSettingsTabs/BehaviorsTab";
 export const FormDetailSettings: React.FC = () => {
+  const { t } = useLanguage();
   const [isSaved, setIsSaved] = useState(false);
   const [activeViewTab, setActiveViewTab] = useState<"desktop" | "tablet" | "mobile" | "behaviors">("desktop");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -100,7 +102,7 @@ export const FormDetailSettings: React.FC = () => {
     <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700">
       <div className="flex items-center justify-between mb-6 sm:mb-8">
         <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white flex items-center">
-          <SettingsIcon className="mr-3 text-blue-600" /> Form Detail Settings
+          <SettingsIcon className="mr-3 text-blue-600" /> {t("Form Detail Settings")}
         </h2>
       </div>
 
@@ -109,25 +111,25 @@ export const FormDetailSettings: React.FC = () => {
           onClick={() => setActiveViewTab("desktop")}
           className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${activeViewTab === "desktop" ? "bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
         >
-          Desktop View
+          {t("Desktop View")}
         </button>
         <button
           onClick={() => setActiveViewTab("tablet")}
           className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${activeViewTab === "tablet" ? "bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
         >
-          Tablet View
+          {t("Tablet View")}
         </button>
         <button
           onClick={() => setActiveViewTab("mobile")}
           className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${activeViewTab === "mobile" ? "bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
         >
-          Mobile View
+          {t("Mobile View")}
         </button>
         <button
           onClick={() => setActiveViewTab("behaviors")}
           className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${activeViewTab === "behaviors" ? "bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
         >
-          Form Behaviors
+          {t("Form Behaviors")}
         </button>
       </div>
 

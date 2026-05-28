@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, MapPin } from 'luci
 import { STATE_DATA } from "../../../lib/states";
 import { SearchableDropdown } from "../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../lib/firmSettingsConstants";
+import { useLanguage } from "../../../context/LanguageContext";
 
 interface Props {
   firmData: any;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 4: Address Details */}
@@ -28,7 +30,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                       <MapPin className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Registered Address
+                      {t("Registered Address")}
                     </h3>
                   </div>
                   {activeAccordion === "addressDetails" ? (
@@ -48,10 +50,10 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="form-field-wrapper space-y-2 md:col-span-2">
                           <label className="form-label">
-                            Registered Address
+                            {t("Registered Address")}
                           </label>
                           <textarea
-                            placeholder="Enter full registered address"
+                            placeholder={t("Enter full registered address")}
                             value={firmData.address}
                             onChange={(e) =>
                               setFirmData({ ...firmData, address: e.target.value })
@@ -62,7 +64,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            State / Province
+                            {t("State / Province")}
                           </label>
                           <select
                             value={firmData.state}
@@ -78,7 +80,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                             }}
                             className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 cursor-pointer dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="">Select State</option>
+                            <option value="">{t("Select State")}</option>
                             {Object.keys(STATE_DATA).map((stateName) => (
                               <option key={stateName} value={stateName}>
                                 {stateName}
@@ -88,7 +90,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            District
+                            {t("District")}
                           </label>
                           {STATE_DATA[firmData.state]?.districts.length > 0 ? (
                             <select
@@ -116,7 +118,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            City
+                            {t("City")}
                           </label>
                           <input
                             type="text"
@@ -144,7 +146,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Pincode / ZIP Code
+                            {t("Pincode / ZIP Code")}
                           </label>
                           <input
                             type="text"
@@ -158,7 +160,7 @@ export const AddressSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Country
+                            {t("Country")}
                           </label>
                           <input
                             type="text"

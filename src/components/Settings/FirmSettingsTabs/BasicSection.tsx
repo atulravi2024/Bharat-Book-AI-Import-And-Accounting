@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Building } from 'lu
 import { STATE_DATA } from "../../../lib/states";
 import { SearchableDropdown } from "../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../lib/firmSettingsConstants";
+import { useLanguage } from "../../../context/LanguageContext";
 
 interface Props {
   firmData: any;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 1: Basic Company Details */}
@@ -28,7 +30,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                       <Building className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Basic Details
+                      {t("Basic Details")}
                     </h3>
                   </div>
                   {activeAccordion === "basicCompany" ? (
@@ -48,11 +50,11 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            Company Name
+                            {t("Company Name")}
                           </label>
                           <input
                             type="text"
-                            placeholder="Enter Company Name"
+                            placeholder={t("Enter Company Name")}
                             value={firmData.companyName}
                             onChange={(e) =>
                               setFirmData({
@@ -65,11 +67,11 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Trade Name / Brand Name
+                            {t("Trade Name / Brand Name")}
                           </label>
                           <input
                             type="text"
-                            placeholder="Enter Trade Name"
+                            placeholder={t("Enter Trade Name")}
                             value={firmData.tradeName}
                             onChange={(e) =>
                               setFirmData({
@@ -82,11 +84,11 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Business Slogan / Tagline
+                            {t("Business Slogan / Tagline")}
                           </label>
                           <input
                             type="text"
-                            placeholder="Enter Business Slogan"
+                            placeholder={t("Enter Business Slogan")}
                             value={firmData.businessSlogan}
                             onChange={(e) =>
                               setFirmData({
@@ -99,7 +101,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Date of Incorporation
+                            {t("Date of Incorporation")}
                           </label>
                           <input
                             type="date"
@@ -115,7 +117,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Employee Count
+                            {t("Employee Count")}
                           </label>
                           <select
                             value={firmData.employeeCount}
@@ -127,7 +129,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="">Select Size</option>
+                            <option value="">{t("Select Size")}</option>
                             <option value="1-10">1-10 (Micro)</option>
                             <option value="11-50">11-50 (Small)</option>
                             <option value="51-200">51-200 (Medium)</option>
@@ -137,7 +139,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Annual Turnover
+                            {t("Annual Turnover")}
                           </label>
                           <select
                             value={firmData.annualTurnover}
@@ -149,12 +151,12 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="">Select Turnover Range</option>
-                            <option value="<10L">Up to ₹10 Lakhs</option>
-                            <option value="10L-50L">₹10 Lakhs - ₹50 Lakhs</option>
-                            <option value="50L-5Cr">₹50 Lakhs - ₹5 Crores</option>
-                            <option value="5Cr-50Cr">₹5 Crores - ₹50 Crores</option>
-                            <option value=">50Cr">Above ₹50 Crores</option>
+                            <option value="">{t("Select Turnover Range")}</option>
+                            <option value="<10L">{t("Up to ₹10 Lakhs")}</option>
+                            <option value="10L-50L">{t("₹10 Lakhs - ₹50 Lakhs")}</option>
+                            <option value="50L-5Cr">{t("₹50 Lakhs - ₹5 Crores")}</option>
+                            <option value="5Cr-50Cr">{t("₹5 Crores - ₹50 Crores")}</option>
+                            <option value=">50Cr">{t("Above ₹50 Crores")}</option>
                           </select>
                         </div>
                       </div>

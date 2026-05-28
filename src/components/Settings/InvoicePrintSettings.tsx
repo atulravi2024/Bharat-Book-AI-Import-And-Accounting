@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLanguage } from "../../context/LanguageContext";
 import { numberToWords } from '../../lib/numberToWords';
 import { SettingsIcon, CheckCircleIcon } from '../icons/IconComponents';
 import { ToggleLeft, ToggleRight, Layout, Type, FileText, Image as ImageIcon, Signature, Hash, Calculator, Printer, Maximize, Focus, Palette, Columns, ZoomIn, ZoomOut, RotateCcw, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Upload, Download } from 'lucide-react';
@@ -33,6 +34,7 @@ const INVOICE_FONTS = [
 ];
 
 export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode = 'working' }) => {
+  const { t } = useLanguage();
     const [settings, setSettings] = useState({
         itemsPerFirstPage: 12,
         itemsPerSecondPage: 15,
@@ -802,7 +804,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                                     } dark:bg-gray-800 dark:border-gray-800 dark:text-gray-400`}
                                                 >
                                                     <div className={`p-1 rounded-lg transition-colors shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'} dark:bg-gray-900`}>
-                                                        {React.isValidElement(opt.icon) ? React.cloneElement(opt.icon as React.ReactElement, { size: 12 }) : opt.icon}
+                                                        {React.isValidElement(opt.icon) ? React.cloneElement(opt.icon as any, { size: 12 }) : opt.icon}
                                                     </div>
                                                     <div className="flex-grow text-left overflow-hidden">
                                                         <span className={`block text-[8px] font-black uppercase tracking-tight whitespace-nowrap mb-[-2px] ${active ? 'text-white' : 'text-gray-900'} dark:text-white`}>{opt.label}</span>
@@ -853,7 +855,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                                     } dark:bg-gray-800 dark:border-gray-800 dark:text-gray-400`}
                                                 >
                                                     <div className={`p-1 rounded-lg transition-colors shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'} dark:bg-gray-900`}>
-                                                        {React.isValidElement(opt.icon) ? React.cloneElement(opt.icon as React.ReactElement, { size: 12 }) : opt.icon}
+                                                        {React.isValidElement(opt.icon) ? React.cloneElement(opt.icon as any, { size: 12 }) : opt.icon}
                                                     </div>
                                                     <div className="flex-grow text-left overflow-hidden">
                                                         <span className={`block text-[8px] font-black uppercase tracking-tight whitespace-nowrap mb-[-2px] ${active ? 'text-white' : 'text-gray-900'} dark:text-white`}>{opt.label}</span>
@@ -1829,7 +1831,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
 
                     <div className="mt-8 pt-6 border-t border-gray-100 space-y-4 px-8 dark:border-gray-800 relative z-50">
                         <div className={`transition-all duration-500 flex items-center justify-center gap-2 ${isSaved ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`}>
-                            <CheckCircleIcon size={14} className="text-emerald-500" />
+                            <CheckCircleIcon className="w-3.5 h-3.5 text-emerald-500" />
                             <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Settings Synchronized</span>
                         </div>
                         
@@ -1888,7 +1890,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                     <div>
                         <h4 className="text-sm font-black text-amber-900 uppercase tracking-tight mb-1">Expert Formatting Tip</h4>
                         <p className="text-xs text-amber-700 font-medium leading-relaxed uppercase tracking-tighter opacity-80 italic">
-                            Disabling HSN/SAC and Tax details creates a cleaner "Commercial Invoice" look for non-taxable transactions.
+                            {t("Disabling HSN/SAC and Tax details creates a cleaner \"Commercial Invoice\" look for non-taxable transactions.")}
                         </p>
                     </div>
                 </div>
@@ -2077,7 +2079,7 @@ const ToggleButton: React.FC<{
         } dark:bg-gray-800 dark:border-gray-800 dark:text-gray-400`}
     >
         <div className={`p-1.5 rounded-lg transition-colors ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'} dark:bg-gray-900`}>
-            {React.isValidElement(icon) ? React.cloneElement(icon as React.ReactElement, { size: 14 }) : icon}
+            {React.isValidElement(icon) ? React.cloneElement(icon as any, { size: 14 }) : icon}
         </div>
         <div className="flex-grow text-left flex items-center gap-2 overflow-hidden">
             <span className={`text-[9px] font-black uppercase tracking-widest whitespace-nowrap ${active ? 'text-white' : 'text-gray-900'} dark:text-white`}>{label}</span>
@@ -2111,7 +2113,7 @@ const SegmentedControl: React.FC<{
                 >
                     {opt.icon && (
                         <div className={`p-1.5 rounded-lg transition-colors shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-gray-50 text-blue-600'} dark:bg-gray-900`}>
-                            {React.isValidElement(opt.icon) ? React.cloneElement(opt.icon as React.ReactElement, { size: 14 }) : opt.icon}
+                            {React.isValidElement(opt.icon) ? React.cloneElement(opt.icon as any, { size: 14 }) : opt.icon}
                         </div>
                     )}
                     <div className="flex-grow text-left flex items-baseline gap-1.5 overflow-hidden">

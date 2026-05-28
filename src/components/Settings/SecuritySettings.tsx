@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Lock, Unlock, Clock, Users, ArrowUpRight, AlertTriangle, CheckCircle, Save } from 'lucide-react';
 import { ManagedUser, INITIAL_USERS } from './UserSettings';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const SecuritySettings: React.FC = () => {
+    const { t } = useLanguage();
     const [users, setUsers] = useState<ManagedUser[]>([]);
     const [currentUser, setCurrentUser] = useState<ManagedUser | null>(null);
     const [successMsg, setSuccessMsg] = useState('');
@@ -246,12 +248,12 @@ export const SecuritySettings: React.FC = () => {
                         <Shield className="w-6 h-6 animate-pulse" />
                     </div>
                     <div>
-                        <h3 className="text-md font-black text-gray-900 dark:text-white uppercase tracking-tight">Security & Access Management Panel</h3>
-                        <p className="text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-widest mt-0.5">Maintain roles, session timers, and login attempts</p>
+                        <h3 className="text-md font-black text-gray-900 dark:text-white uppercase tracking-tight">{t("Security & Access Management Panel")}</h3>
+                        <p className="text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-widest mt-0.5">{t("Maintain roles, session timers, and login attempts")}</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-gray-900 border border-slate-100 dark:border-gray-700 rounded-xl">
-                    <span className="text-[10px] uppercase font-black tracking-widest text-slate-400">Context:</span>
+                    <span className="text-[10px] uppercase font-black tracking-widest text-slate-400">{t("Context:")}</span>
                     <span className="text-[10px] uppercase font-black bg-blue-600 text-white px-2 py-0.5 rounded-md tracking-wider">
                         {currentRoleLabel}
                     </span>
@@ -279,32 +281,32 @@ export const SecuritySettings: React.FC = () => {
                 <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 dark:bg-gray-800 dark:border-gray-700">
                     <h4 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-2">
                         <Clock className="w-4 h-4 text-blue-600" />
-                        Inactivity Auto-Logout Timeout
+                        {t("Inactivity Auto-Logout Timeout")}
                     </h4>
                     <p className="text-xs text-gray-400 font-medium mb-6">
-                        Automatically terminate active system sessions after continuous idle time to defend against physical desk-based endpoint breaches.
+                        {t("Automatically terminate active system sessions after continuous idle time to defend against physical desk-based endpoint breaches.")}
                     </p>
 
                     <div className="space-y-4">
                         <div className="p-4 bg-slate-50 dark:bg-gray-900/50 rounded-2xl border border-slate-100 dark:border-gray-800 flex items-center justify-between">
-                            <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Set Timeout Threshold</label>
+                            <label className="text-xs font-bold text-gray-700 dark:text-gray-300">{t("Set Timeout Threshold")}</label>
                             <select
                                 value={inactivityTimeout}
                                 onChange={(e) => handleTimeoutChange(e.target.value)}
                                 className="p-2.5 px-4 bg-white dark:bg-gray-900 border border-sky-100 dark:border-gray-700 rounded-xl font-bold text-xs text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-300 outline-none text-right cursor-pointer"
                             >
-                                <option value="10">10 Minutes</option>
-                                <option value="15">15 Minutes</option>
-                                <option value="30">30 Minutes (Recommended)</option>
-                                <option value="45">45 Minutes</option>
-                                <option value="60">1 Hour</option>
-                                <option value="120">2 Hours</option>
-                                <option value="360">6 Hours</option>
+                                <option value="10">{t("10 Minutes")}</option>
+                                <option value="15">{t("15 Minutes")}</option>
+                                <option value="30">{t("30 Minutes (Recommended)")}</option>
+                                <option value="45">{t("45 Minutes")}</option>
+                                <option value="60">{t("1 Hour")}</option>
+                                <option value="120">{t("2 Hours")}</option>
+                                <option value="360">{t("6 Hours")}</option>
                             </select>
                         </div>
                         <div className="text-[10px] text-gray-400 dark:text-gray-500 font-medium leading-relaxed pl-1 flex items-start gap-1.5">
                             <ArrowUpRight className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
-                            <span>This setting runs dynamically on the frontend. Active browser inputs (key presses, mouse operations, scroll, touch) continuously reset the timeout.</span>
+                            <span>{t("This setting runs dynamically on the frontend. Active browser inputs (key presses, mouse operations, scroll, touch) continuously reset the timeout.")}</span>
                         </div>
                     </div>
                 </div>
@@ -313,10 +315,10 @@ export const SecuritySettings: React.FC = () => {
                 <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 dark:bg-gray-800 dark:border-gray-700">
                     <h4 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-2">
                         <Users className="w-4 h-4 text-indigo-600" />
-                        Role-Group Default Policies
+                        {t("Role-Group Default Policies")}
                     </h4>
                     <p className="text-xs text-gray-400 font-medium mb-6">
-                        Establish defense policies per user classification. Select default inactivity session timeouts and default login attempt counts for role-wise groups.
+                        {t("Establish defense policies per user classification. Select default inactivity session timeouts and default login attempt counts for role-wise groups.")}
                     </p>
 
                     <div className="space-y-3.5">
@@ -328,36 +330,36 @@ export const SecuritySettings: React.FC = () => {
                                 <div className="flex flex-wrap items-center gap-2">
                                     {/* Default Attempts selection */}
                                     <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-gray-900 px-2.5 py-1 rounded-xl border border-slate-100 dark:border-gray-800">
-                                        <span className="text-[9px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-wider">Attempts:</span>
+                                        <span className="text-[9px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-wider">{t("Attempts:")}</span>
                                         <select
                                             disabled={!canChangeRolePolicies()}
                                             value={limit}
                                             onChange={(e) => handleRoleAttemptUpdate(role, parseInt(e.target.value, 10))}
                                             className="bg-transparent text-[11px] font-bold text-slate-800 dark:text-slate-100 outline-none cursor-pointer disabled:opacity-50"
                                         >
-                                            <option value="3">3 Tries</option>
-                                            <option value="5">5 Tries</option>
-                                            <option value="10">10 Tries</option>
-                                            <option value="15">15 Tries</option>
-                                            <option value="999">Unlimited</option>
+                                            <option value="3">{t("3 Tries")}</option>
+                                            <option value="5">{t("5 Tries")}</option>
+                                            <option value="10">{t("10 Tries")}</option>
+                                            <option value="15">{t("15 Tries")}</option>
+                                            <option value="999">{t("Unlimited")}</option>
                                         </select>
                                     </div>
                                     {/* Default Inactivity Timeout selection */}
                                     <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-gray-900 px-2.5 py-1 rounded-xl border border-slate-100 dark:border-gray-800">
-                                        <span className="text-[9px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-wider">Timeout:</span>
+                                        <span className="text-[9px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-wider">{t("Timeout:")}</span>
                                         <select
                                             disabled={!canChangeRolePolicies()}
                                             value={roleInactivityTimeouts[role] || 30}
                                             onChange={(e) => handleRoleTimeoutUpdate(role, parseInt(e.target.value, 10))}
                                             className="bg-transparent text-[11px] font-bold text-slate-800 dark:text-slate-100 outline-none cursor-pointer disabled:opacity-50"
                                         >
-                                            <option value="10">10 Min</option>
-                                            <option value="15">15 Min</option>
-                                            <option value="30">30 Min</option>
-                                            <option value="45">45 Min</option>
-                                            <option value="60">1 Hour</option>
-                                            <option value="120">2 Hours</option>
-                                            <option value="360">6 Hours</option>
+                                            <option value="10">{t("10 Min")}</option>
+                                            <option value="15">{t("15 Min")}</option>
+                                            <option value="30">{t("30 Min")}</option>
+                                            <option value="45">{t("45 Min")}</option>
+                                            <option value="60">{t("1 Hour")}</option>
+                                            <option value="120">{t("2 Hours")}</option>
+                                            <option value="360">{t("6 Hours")}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -365,7 +367,7 @@ export const SecuritySettings: React.FC = () => {
                         ))}
                         {!canChangeRolePolicies() && (
                             <p className="text-[10px] text-rose-500 dark:text-rose-400 font-semibold mt-2 text-center pl-1 bg-rose-50 dark:bg-rose-950/20 p-2 rounded-xl">
-                                Only Super Admin, Owner, or Admin can configure global role-group lockout rules.
+                                {t("Only Super Admin, Owner, or Admin can configure global role-group lockout rules.")}
                             </p>
                         )}
                     </div>
@@ -378,19 +380,19 @@ export const SecuritySettings: React.FC = () => {
                     <div>
                         <h4 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                             <Lock className="w-4 h-4 text-emerald-600" />
-                            User Specific Security Decisions
+                            {t("User Specific Security Decisions")}
                         </h4>
                         <p className="text-xs text-gray-400 font-medium mt-1">
-                            Fine tune security thresholds. Enforce individual login attempt controls, unlock locked-out portals, and monitor suspicious access counts.
+                            {t("Fine tune security thresholds. Enforce individual login attempt controls, unlock locked-out portals, and monitor suspicious access counts.")}
                         </p>
                     </div>
                     
                     <div className="text-[10px] bg-sky-50 dark:bg-sky-950/20 text-sky-800 dark:text-sky-300 p-3 rounded-xl border border-sky-100 dark:border-sky-900/30 max-w-sm">
                         <p className="font-bold uppercase tracking-wider text-[9px] text-sky-900 dark:text-sky-200 mb-1">Hierarchy Rules Enforced:</p>
                         <ul className="list-disc pl-4 space-y-1">
-                            <li>Super Admin decides all users</li>
-                            <li>Owner decides everyone except Super Admin</li>
-                            <li>Admin decides non-manager, and roles except Admin, Owner, Super Admin</li>
+                            <li>{t("Super Admin decides all users")}</li>
+                            <li>{t("Owner decides everyone except Super Admin")}</li>
+                            <li>{t("Admin decides non-manager, and roles except Admin, Owner, Super Admin")}</li>
                         </ul>
                     </div>
                 </div>
@@ -399,12 +401,12 @@ export const SecuritySettings: React.FC = () => {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-gray-900/70 border-b border-slate-100 dark:border-gray-800 text-[10px] font-black tracking-widest text-slate-400 uppercase">
-                                <th className="p-4 pl-6">User Context</th>
-                                <th className="p-4">Global Role Defaults</th>
-                                <th className="p-4">Custom Desired Limit</th>
-                                <th className="p-4">Failed Counts</th>
-                                <th className="p-4">Lock Status</th>
-                                <th className="p-4 pr-6 text-right">Protection Actions</th>
+                                <th className="p-4 pl-6">{t("User Context")}</th>
+                                <th className="p-4">{t("Global Role Defaults")}</th>
+                                <th className="p-4">{t("Custom Desired Limit")}</th>
+                                <th className="p-4">{t("Failed Counts")}</th>
+                                <th className="p-4">{t("Lock Status")}</th>
+                                <th className="p-4 pr-6 text-right">{t("Protection Actions")}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50 dark:divide-gray-800 text-xs">
@@ -425,7 +427,7 @@ export const SecuritySettings: React.FC = () => {
                                                 <p className="font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
                                                     {item.name}
                                                     {item.id === currentUser?.id && (
-                                                        <span className="text-[9px] bg-slate-100 dark:bg-gray-800 text-slate-500 font-extrabold px-1.5 py-0.5 rounded uppercase">You</span>
+                                                        <span className="text-[9px] bg-slate-100 dark:bg-gray-800 text-slate-500 font-extrabold px-1.5 py-0.5 rounded uppercase">{t("You")}</span>
                                                     )}
                                                 </p>
                                                 <p className="text-[10px] text-gray-400 font-medium mt-0.5">{item.email} • <span className="text-blue-500 text-[9px] font-bold uppercase tracking-wider">{item.role}</span></p>
@@ -448,12 +450,12 @@ export const SecuritySettings: React.FC = () => {
                                                 onChange={(e) => handleUserMaxAttemptsChange(item, e.target.value)}
                                                 className="p-1 px-2.5 bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-lg text-xs font-bold text-slate-700 dark:text-gray-300 outline-none disabled:opacity-50"
                                             >
-                                                <option value="0">Inherit Default</option>
-                                                <option value="3">Max 3 tries</option>
-                                                <option value="5">Max 5 tries</option>
-                                                <option value="10">Max 10 tries</option>
-                                                <option value="15">Max 15 tries</option>
-                                                <option value="999">Unlimited</option>
+                                                <option value="0">{t("Inherit Default")}</option>
+                                                <option value="3">{t("Max 3 tries")}</option>
+                                                <option value="5">{t("Max 5 tries")}</option>
+                                                <option value="10">{t("Max 10 tries")}</option>
+                                                <option value="15">{t("Max 15 tries")}</option>
+                                                <option value="999">{t("Unlimited")}</option>
                                             </select>
                                         </td>
                                         <td className="p-4">
@@ -470,11 +472,11 @@ export const SecuritySettings: React.FC = () => {
                                         <td className="p-4">
                                             {isUserLocked ? (
                                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg bg-red-50 text-red-700 border border-red-100 dark:bg-red-950/20 dark:text-red-400 dark:border-red-900/30">
-                                                    <Lock className="w-3 h-3 shrink-0" /> Locked Out
+                                                    <Lock className="w-3 h-3 shrink-0" /> {t("Locked Out")}
                                                 </span>
                                             ) : (
                                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30">
-                                                    <Unlock className="w-3 h-3 shrink-0" /> Active / OK
+                                                    <Unlock className="w-3 h-3 shrink-0" /> {t("Active / OK")}
                                                 </span>
                                             )}
                                         </td>
@@ -492,7 +494,7 @@ export const SecuritySettings: React.FC = () => {
                                                 </button>
                                             ) : (
                                                 <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider flex items-center justify-end gap-1">
-                                                    <Lock className="w-3 h-3 text-slate-300" /> Insufficient Level
+                                                    <Lock className="w-3 h-3 text-slate-300" /> {t("Insufficient Level")}
                                                 </div>
                                             )}
                                         </td>

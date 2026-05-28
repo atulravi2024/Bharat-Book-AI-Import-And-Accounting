@@ -11,6 +11,7 @@ import { ContraTab } from './components/ContraTab';
 import { TransactionFlow } from './components/TransactionFlow';
 import { motion, AnimatePresence } from 'motion/react';
 import { ParsedVoucher, VoucherType, Confidence } from '../../types';
+import { useLanguage } from '../../context/LanguageContext';
 import { 
   TrendingUp, TrendingDown, FileText, Users,
   ArrowUpRight, ArrowDownRight, Clock, 
@@ -28,6 +29,7 @@ interface DashboardViewProps {
 type DashboardTab = 'overview' | 'sales' | 'purchase' | 'payment' | 'receipts' | 'journal' | 'contra' | 'bank' | 'inventory';
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNavigateToView, defaultTab, onTabChange }) => {
+  const { t } = useLanguage();
   const getInitialTab = (): DashboardTab => {
     let tab = defaultTab as string;
     if (tab === 'main') tab = 'overview';
@@ -114,7 +116,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
     // Advanced Metrics
     const advanceMetrics = {
         processingSpeed: vouchers.length > 0 ? "1.2s" : "0.0s",
-        errorRate: vouchers.length > 0 ? (vouchers.filter(v => v.confidence === "low").length / vouchers.length * 100).toFixed(1) + "%" : "0.0%",
+        errorRate: vouchers.length > 0 ? (vouchers.filter((v: any) => v.confidence === "low").length / vouchers.length * 100).toFixed(1) + "%" : "0.0%",
         activeUsers: 4,
         avgCompletion: "98.2%",
         userActivity: [
@@ -157,7 +159,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
       }`}
     >
       <Icon size={14} className="sm:w-4 sm:h-4 mr-2 sm:mr-3" />
-      <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">{label}</span>
+      <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">{t(label)}</span>
       {activeTab === id && (
         <motion.div 
           layoutId="activeTabUnderline"

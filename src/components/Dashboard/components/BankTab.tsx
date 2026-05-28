@@ -48,9 +48,10 @@ export const BankTab = ({ stats, isDemo }: any) => {
                                     outerRadius={100} 
                                     dataKey="value" 
                                     stroke="none"
+                                    cornerRadius={6}
                                 >
-                                    <Cell fill="#EF4444" cornerRadius={6} />
-                                    <Cell fill="#10B981" cornerRadius={6} />
+                                    <Cell fill="#EF4444" />
+                                    <Cell fill="#10B981" />
                                 </Pie>
                                 <Tooltip />
                             </RechartsPieChart>

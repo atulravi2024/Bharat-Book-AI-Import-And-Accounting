@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { 
   Shield, 
   Clock, 
@@ -112,6 +113,7 @@ const createDefaultPermissions = (groupName: string, isRole: boolean): UserPermi
 };
 
 export const GroupRulesTab: React.FC = () => {
+  const { t } = useLanguage();
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [currentUser, setCurrentUser] = useState<ManagedUser | null>(null);
   const [activePane, setActivePane] = useState<'role' | 'department'>('role');
@@ -438,8 +440,8 @@ export const GroupRulesTab: React.FC = () => {
             <Sliders className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <h3 className="text-md font-black text-gray-900 dark:text-white uppercase tracking-tight">Group Policy & Rule Controller</h3>
-            <p className="text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-widest mt-0.5">Configure unified security, operational, and financial rules group-wise</p>
+            <h3 className="text-md font-black text-gray-900 dark:text-white uppercase tracking-tight">{t("Group Policy & Rule Controller")}</h3>
+            <p className="text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-widest mt-0.5">{t("Configure unified security, operational, and financial rules group-wise")}</p>
           </div>
         </div>
         <div className="flex flex-col items-end gap-1.5 self-start md:self-auto">
@@ -471,7 +473,7 @@ export const GroupRulesTab: React.FC = () => {
         <div className="flex items-start gap-4">
           <HelpCircle className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mt-1 shrink-0" />
           <div>
-            <h4 className="text-xs font-black uppercase text-indigo-950 dark:text-indigo-200 tracking-wider">How Group Rules Apply</h4>
+            <h4 className="text-xs font-black uppercase text-indigo-950 dark:text-indigo-200 tracking-wider">{t("How Group Rules Apply")}</h4>
             <p className="text-xs text-indigo-700 dark:text-indigo-300 mt-1 font-medium leading-relaxed">
               Instead of micro-managing settings for individual users, you can deploy policies directly to **Roles (e.g., Manager, Editor)** and **Departments (e.g., Finance, Sales)**.
               When a user belongs to a group, they inherit that group's rule. If both role-wise and department-wise policies apply, the system prioritizes the more restrictive security threshold.
@@ -487,14 +489,14 @@ export const GroupRulesTab: React.FC = () => {
           className={`pb-3 px-1 text-xs font-black uppercase tracking-widest border-b-2 transition-all flex items-center gap-2 ${activePane === 'role' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
         >
           <Users className="w-4 h-4" />
-          Role-Wise Groups
+          {t("Role-Wise Groups")}
         </button>
         <button
           onClick={() => setActivePane('department')}
           className={`pb-3 px-1 text-xs font-black uppercase tracking-widest border-b-2 transition-all flex items-center gap-2 ${activePane === 'department' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
         >
           <Building className="w-4 h-4" />
-          Department-Wise Groups
+          {t("Department-Wise Groups")}
         </button>
       </div>
 
@@ -533,7 +535,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 text-gray-400" />
-                      Inactivity Autologout
+                      {t("Inactivity Autologout")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit() || isSuperAdmin}
@@ -541,13 +543,13 @@ export const GroupRulesTab: React.FC = () => {
                       onChange={(e) => updateRoleProperty(roleName, 'inactivityTimeoutMinutes', parseInt(e.target.value, 10))}
                       className="p-1.5 rounded-xl border border-slate-200 bg-white dark:bg-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200 outline-none focus:ring-1 focus:ring-indigo-300 cursor-pointer text-right min-w-[120px] disabled:opacity-50"
                     >
-                      <option value="10">10 Minutes</option>
-                      <option value="15">15 Minutes</option>
-                      <option value="30">30 Minutes</option>
-                      <option value="45">45 Minutes</option>
-                      <option value="60">1 Hour</option>
-                      <option value="120">2 Hours</option>
-                      <option value="360">6 Hours</option>
+                      <option value="10">{t("10 Minutes")}</option>
+                      <option value="15">{t("15 Minutes")}</option>
+                      <option value="30">{t("30 Minutes")}</option>
+                      <option value="45">{t("45 Minutes")}</option>
+                      <option value="60">{t("1 Hour")}</option>
+                      <option value="120">{t("2 Hours")}</option>
+                      <option value="360">{t("6 Hours")}</option>
                     </select>
                   </div>
 
@@ -555,7 +557,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <Lock className="w-3.5 h-3.5 text-gray-400" />
-                      Login Defend Count
+                      {t("Login Defend Count")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit() || isSuperAdmin}
@@ -563,11 +565,11 @@ export const GroupRulesTab: React.FC = () => {
                       onChange={(e) => updateRoleProperty(roleName, 'maxLoginAttempts', parseInt(e.target.value, 10))}
                       className="p-1.5 rounded-xl border border-slate-200 bg-white dark:bg-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200 outline-none focus:ring-1 focus:ring-indigo-300 cursor-pointer text-right min-w-[120px] disabled:opacity-50"
                     >
-                      <option value="3">3 continuous failed</option>
-                      <option value="5">5 continuous failed</option>
-                      <option value="10">10 continuous failed</option>
-                      <option value="15">15 continuous failed</option>
-                      <option value="999">Unlimited Safety</option>
+                      <option value="3">{t("3 continuous failed")}</option>
+                      <option value="5">{t("5 continuous failed")}</option>
+                      <option value="10">{t("10 continuous failed")}</option>
+                      <option value="15">{t("15 continuous failed")}</option>
+                      <option value="999">{t("Unlimited Safety")}</option>
                     </select>
                   </div>
 
@@ -575,7 +577,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <FileSpreadsheet className="w-3.5 h-3.5 text-gray-400" />
-                      Daily Upload Limit
+                      {t("Daily Upload Limit")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit() || isSuperAdmin}
@@ -583,11 +585,11 @@ export const GroupRulesTab: React.FC = () => {
                       onChange={(e) => updateRoleProperty(roleName, 'dailyVoucherLimit', parseInt(e.target.value, 10))}
                       className="p-1.5 rounded-xl border border-slate-200 bg-white dark:bg-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200 outline-none focus:ring-1 focus:ring-indigo-300 cursor-pointer text-right min-w-[120px] disabled:opacity-50"
                     >
-                      <option value="0">Unlimited Posts</option>
-                      <option value="10">Max 10 / day</option>
-                      <option value="50">Max 50 / day</option>
-                      <option value="100">Max 100 / day</option>
-                      <option value="300">Max 300 / day</option>
+                      <option value="0">{t("Unlimited Posts")}</option>
+                      <option value="10">{t("Max 10 / day")}</option>
+                      <option value="50">{t("Max 50 / day")}</option>
+                      <option value="100">{t("Max 100 / day")}</option>
+                      <option value="300">{t("Max 300 / day")}</option>
                     </select>
                   </div>
 
@@ -595,7 +597,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <Coins className="w-3.5 h-3.5 text-gray-400" />
-                      Max Single Trxn Limit
+                      {t("Max Single Trxn Limit")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit() || isSuperAdmin}
@@ -615,7 +617,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <Calendar className="w-3.5 h-3.5 text-gray-400" />
-                      Working Hour Windows
+                      {t("Working Hour Windows")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit() || isSuperAdmin}
@@ -623,7 +625,7 @@ export const GroupRulesTab: React.FC = () => {
                       onChange={(e) => updateRoleProperty(roleName, 'workHoursMode', e.target.value as any)}
                       className="p-1.5 rounded-xl border border-slate-200 bg-white dark:bg-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200 outline-none focus:ring-1 focus:ring-indigo-300 cursor-pointer text-right min-w-[120px] disabled:opacity-50"
                     >
-                      <option value="any">24 / 7 Accessible</option>
+                      <option value="any">{t("24 / 7 Accessible")}</option>
                       <option value="business">Business hr (9am-6pm)</option>
                       <option value="weekdays">Weekdays Only (Mon-Fri)</option>
                     </select>
@@ -638,7 +640,7 @@ export const GroupRulesTab: React.FC = () => {
                     >
                       <span className="flex items-center gap-1.5">
                         <Shield className="w-3.5 h-3.5 shrink-0" />
-                        Custom System Permissions Matrix
+                        {t("Custom System Permissions Matrix")}
                       </span>
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
@@ -651,7 +653,7 @@ export const GroupRulesTab: React.FC = () => {
                         <div className="p-3 bg-slate-100 dark:bg-gray-905 rounded-xl flex gap-2">
                           <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                           <p className="text-[10px] text-gray-500 font-semibold leading-relaxed">
-                            Super Admin maintains absolute read, create, edit, and deleting privileges across all backend corporate ERP modules. These logical keys are automatically locked down.
+                            {t("Super Admin maintains absolute read, create, edit, and deleting privileges across all backend corporate ERP modules. These logical keys are automatically locked down.")}
                           </p>
                         </div>
                       ) : (
@@ -659,11 +661,11 @@ export const GroupRulesTab: React.FC = () => {
                           <table className="w-full min-w-[320px] border-collapse">
                             <thead>
                               <tr className="border-b border-gray-200 dark:border-gray-700 text-[9px] uppercase font-black text-gray-400 dark:text-gray-500 text-left">
-                                <th className="pb-2">Section Area</th>
-                                <th className="pb-2 text-center">Read</th>
-                                <th className="pb-2 text-center">Create</th>
-                                <th className="pb-2 text-center">Edit</th>
-                                <th className="pb-2 text-center">Del</th>
+                                <th className="pb-2">{t("Section Area")}</th>
+                                <th className="pb-2 text-center">{t("Read")}</th>
+                                <th className="pb-2 text-center">{t("Create")}</th>
+                                <th className="pb-2 text-center">{t("Edit")}</th>
+                                <th className="pb-2 text-center">{t("Del")}</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-[11px] font-bold text-gray-700 dark:text-gray-300">
@@ -748,7 +750,7 @@ export const GroupRulesTab: React.FC = () => {
                     <Building className="w-4 h-4 text-emerald-500" />
                     {deptName} Group
                   </h4>
-                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5 font-sans">Rules automatically apply to all departmental members</p>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5 font-sans">{t("Rules automatically apply to all departmental members")}</p>
                 </div>
 
                 {/* Configurations Fields Stack */}
@@ -758,7 +760,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 text-gray-400" />
-                      Inactivity Timeout
+                      {t("Inactivity Timeout")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit()}
@@ -767,13 +769,13 @@ export const GroupRulesTab: React.FC = () => {
                       className="p-1.5 rounded-xl border border-slate-200 bg-white dark:bg-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200 outline-none focus:ring-1 focus:ring-indigo-300 cursor-pointer text-right min-w-[120px] disabled:opacity-50"
                     >
                       <option value="0">Default (Inherit)</option>
-                      <option value="10">10 Minutes</option>
-                      <option value="15">15 Minutes</option>
-                      <option value="30">30 Minutes</option>
-                      <option value="45">45 Minutes</option>
-                      <option value="60">1 Hour</option>
-                      <option value="120">2 Hours</option>
-                      <option value="360">6 Hours</option>
+                      <option value="10">{t("10 Minutes")}</option>
+                      <option value="15">{t("15 Minutes")}</option>
+                      <option value="30">{t("30 Minutes")}</option>
+                      <option value="45">{t("45 Minutes")}</option>
+                      <option value="60">{t("1 Hour")}</option>
+                      <option value="120">{t("2 Hours")}</option>
+                      <option value="360">{t("6 Hours")}</option>
                     </select>
                   </div>
 
@@ -781,7 +783,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <Lock className="w-3.5 h-3.5 text-gray-400" />
-                      Lockout Threshold
+                      {t("Lockout Threshold")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit()}
@@ -790,11 +792,11 @@ export const GroupRulesTab: React.FC = () => {
                       className="p-1.5 rounded-xl border border-slate-200 bg-white dark:bg-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200 outline-none focus:ring-1 focus:ring-indigo-300 cursor-pointer text-right min-w-[120px] disabled:opacity-50"
                     >
                       <option value="0">Default (Inherit)</option>
-                      <option value="3">3 Tries limit</option>
-                      <option value="5">5 Tries limit</option>
-                      <option value="10">10 Tries limit</option>
-                      <option value="15">15 Tries limit</option>
-                      <option value="999">Unlimited Safety</option>
+                      <option value="3">{t("3 Tries limit")}</option>
+                      <option value="5">{t("5 Tries limit")}</option>
+                      <option value="10">{t("10 Tries limit")}</option>
+                      <option value="15">{t("15 Tries limit")}</option>
+                      <option value="999">{t("Unlimited Safety")}</option>
                     </select>
                   </div>
 
@@ -802,7 +804,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <FileSpreadsheet className="w-3.5 h-3.5 text-gray-400" />
-                      Daily Upload Limit
+                      {t("Daily Upload Limit")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit()}
@@ -811,10 +813,10 @@ export const GroupRulesTab: React.FC = () => {
                       className="p-1.5 rounded-xl border border-slate-200 bg-white dark:bg-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200 outline-none focus:ring-1 focus:ring-indigo-300 cursor-pointer text-right min-w-[120px] disabled:opacity-50"
                     >
                       <option value="0">Default (Inherit)</option>
-                      <option value="10">Max 10 / day</option>
-                      <option value="50">Max 50 / day</option>
-                      <option value="100">Max 100 / day</option>
-                      <option value="300">Max 300 / day</option>
+                      <option value="10">{t("Max 10 / day")}</option>
+                      <option value="50">{t("Max 50 / day")}</option>
+                      <option value="100">{t("Max 100 / day")}</option>
+                      <option value="300">{t("Max 300 / day")}</option>
                     </select>
                   </div>
 
@@ -822,7 +824,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <Coins className="w-3.5 h-3.5 text-gray-400" />
-                      Max Transaction limit
+                      {t("Max Transaction limit")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit()}
@@ -842,7 +844,7 @@ export const GroupRulesTab: React.FC = () => {
                   <div className="flex items-center justify-between p-2.5 bg-slate-50/50 dark:bg-gray-900/35 rounded-2xl border border-slate-100/60 dark:border-gray-850">
                     <span className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                       <Calendar className="w-3.5 h-3.5 text-gray-400" />
-                      Working Hours Only
+                      {t("Working Hours Only")}
                     </span>
                     <select
                       disabled={!isAuthorizedToEdit()}
@@ -850,7 +852,7 @@ export const GroupRulesTab: React.FC = () => {
                       onChange={(e) => updateDeptProperty(deptName, 'workHoursMode', e.target.value as any)}
                       className="p-1.5 rounded-xl border border-slate-200 bg-white dark:bg-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200 outline-none focus:ring-1 focus:ring-indigo-300 cursor-pointer text-right min-w-[120px] disabled:opacity-50"
                     >
-                      <option value="any">24 / 7 Unlimited</option>
+                      <option value="any">{t("24 / 7 Unlimited")}</option>
                       <option value="business">Business hr (9am-6pm)</option>
                       <option value="weekdays">Weekdays Only (Mon-Fri)</option>
                     </select>
@@ -865,7 +867,7 @@ export const GroupRulesTab: React.FC = () => {
                     >
                       <span className="flex items-center gap-1.5">
                         <Shield className="w-3.5 h-3.5 shrink-0" />
-                        Custom System Permissions Matrix
+                        {t("Custom System Permissions Matrix")}
                       </span>
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
@@ -878,11 +880,11 @@ export const GroupRulesTab: React.FC = () => {
                         <table className="w-full min-w-[320px] border-collapse">
                           <thead>
                             <tr className="border-b border-gray-200 dark:border-gray-700 text-[9px] uppercase font-black text-gray-400 dark:text-gray-500 text-left">
-                              <th className="pb-2">Section Area</th>
-                              <th className="pb-2 text-center">Read</th>
-                              <th className="pb-2 text-center">Create</th>
-                              <th className="pb-2 text-center">Edit</th>
-                              <th className="pb-2 text-center">Del</th>
+                              <th className="pb-2">{t("Section Area")}</th>
+                              <th className="pb-2 text-center">{t("Read")}</th>
+                              <th className="pb-2 text-center">{t("Create")}</th>
+                              <th className="pb-2 text-center">{t("Edit")}</th>
+                              <th className="pb-2 text-center">{t("Del")}</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-[11px] font-bold text-gray-700 dark:text-gray-300">
@@ -943,7 +945,7 @@ export const GroupRulesTab: React.FC = () => {
       <div className="p-6 bg-slate-50 dark:bg-gray-900 border border-slate-100 dark:border-gray-800 rounded-[2rem] flex items-center justify-between text-xs font-bold text-slate-500">
         <span className="flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-indigo-500" />
-          Active group policies are evaluated in real-time. Any changes will instantly cascade down to logged-in user group contexts.
+          {t("Active group policies are evaluated in real-time. Any changes will instantly cascade down to logged-in user group contexts.")}
         </span>
       </div>
     </div>

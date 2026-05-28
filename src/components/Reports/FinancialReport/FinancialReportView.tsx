@@ -163,7 +163,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
     let source = filteredVouchers;
     return source.filter(v => {
       if (v.isSample) return v.sampleSetId === 'balance_sheet' && activeSamples?.includes('balance_sheet');
-      return v.narration?.value?.toLowerCase().includes('balance sheet');
+      return String(v.narration?.value || '').toLowerCase().includes('balance sheet');
     });
   }, [filteredVouchers, activeSamples]);
 
@@ -172,10 +172,10 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
 
     balanceSheetData.forEach(v => {
       const amt = Number(v.amount?.value || 0);
-      const debit = v.debitLedger?.value;
-      const credit = v.creditLedger?.value;
+      const debit = String(v.debitLedger?.value || '');
+      const credit = String(v.creditLedger?.value || '');
 
-      const ignored = ['Trading A/c', 'Profit & Loss A/c', 'Purchases A/c', 'Sales A/c', 'Freight & Forwarding A/c'];
+      const ignored = ['Trading A/c', 'Profit & Loss A/c', 'Purchases A/c', 'Sales A/c', 'Freight & Forwarding A/c', ''];
 
       if (debit && !ignored.includes(debit)) {
          balances.set(debit, (balances.get(debit) || 0) + amt);

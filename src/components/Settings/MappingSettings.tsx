@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useLanguage } from "../../context/LanguageContext";
 import { SettingsIcon, DeleteIcon, AddIcon } from '../icons/IconComponents';
 import { BasicRuleSection } from './MappingRuleSettings/BasicRuleSection.tsx';
 import { ListRuleSection } from './MappingRuleSettings/ListRuleSection.tsx';
@@ -108,6 +109,7 @@ export const MappingSettings: React.FC<MappingSettingsProps> = ({
     paymentChannels, setPaymentChannels,
     ifscPrefixes, setIfscPrefixes
 }) => {
+    const { t } = useLanguage();
     const [activeSection, setActiveSection] = React.useState<string | null>(null);
     const [sandboxMode, setSandboxMode] = React.useState<'single' | 'bulk'>('single');
 
@@ -120,7 +122,7 @@ export const MappingSettings: React.FC<MappingSettingsProps> = ({
     return (
         <div className="bg-white w-full border-t border-b border-gray-100 relative overflow-hidden dark:bg-gray-800 dark:border-gray-800">
             <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest my-6 flex items-center px-4 dark:text-white">
-                <SettingsIcon className="mr-3 text-blue-600" /> Mapping & Narration Parsing
+                <SettingsIcon className="mr-3 text-blue-600" /> {t("Mapping & Narration Parsing")}
             </h3>
 
             {/* 1. Basic Rule Section */}

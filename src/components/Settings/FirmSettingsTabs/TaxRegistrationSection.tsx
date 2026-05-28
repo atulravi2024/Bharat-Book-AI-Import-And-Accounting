@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Percent } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 5: Statutory & Tax Registrations */}
@@ -28,7 +30,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                       <Percent className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Tax Registration
+                      {t("Tax Registration")}
                     </h3>
                   </div>
                   {activeAccordion === "statutoryTax" ? (
@@ -48,7 +50,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            GSTIN / Tax ID
+                            {t("GSTIN / Tax ID")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input
@@ -73,7 +75,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            PAN Number
+                            {t("PAN Number")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input
@@ -98,7 +100,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            TAN Number
+                            {t("TAN Number")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input
@@ -148,7 +150,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Professional Tax (PT) Reg No.
+                            {t("Professional Tax (PT) Reg No.")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input

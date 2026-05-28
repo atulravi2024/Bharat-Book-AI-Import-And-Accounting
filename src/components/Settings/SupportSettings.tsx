@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLanguage } from "../../context/LanguageContext";
 import { useNotifications } from '../../context/NotificationContext';
 import { 
   Sparkles, Activity, FileText, Send, Clock, AlertTriangle, HardDrive, 
@@ -23,6 +24,7 @@ interface Ticket {
 const DEFAULT_TICKETS: Ticket[] = [];
 
 export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSettings, setAiSettings }) => {
+  const { t } = useLanguage();
   const { addNotification } = useNotifications();
   const [internalTab, setInternalTab] = useState<'chat' | 'integrity' | 'tickets'>('chat');
   const activeTab = defaultTab === 'diagnostics' ? 'integrity' : (defaultTab || internalTab);
@@ -38,19 +40,6 @@ export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSett
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [currentChatInput, setCurrentChatInput] = useState('');
-  
-  const [dbStats, setDbStats] = useState({ size: '1.4 KB', count: 12 });
-  const [repairState, setRepairState] = useState<string | null>(null);
-  const [diagnosticSuiteStatus, setDiagnosticSuiteStatus] = useState<string>('idle');
-  
-  const INITIAL_STEPS = [
-    { id: 'storage', name: 'Storage Partition Validation', status: 'idle', result: '' },
-    { id: 'schema', name: 'Schema Integrity Check', status: 'idle', result: '' },
-    { id: 'network', name: 'API Gateway Latency', status: 'idle', result: '' },
-    { id: 'cache', name: 'Memory Cache Consistency', status: 'idle', result: '' },
-    { id: 'sync', name: 'Background Sync Queue', status: 'idle', result: '' }
-  ];
-  const [diagnosticSteps, setDiagnosticSteps] = useState<any[]>(INITIAL_STEPS);
   
   const handleClearChat = () => setChatMessages([]);
 
@@ -102,39 +91,6 @@ export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSett
   const handleKeyPress = (e: any) => {
       if (e.key === 'Enter') handleSendChatMessage();
   };
-  const executeFullDiagnosticSuite = async () => {
-    setDiagnosticSuiteStatus('running');
-    
-    let currentSteps = [...INITIAL_STEPS];
-    setDiagnosticSteps(currentSteps);
-
-    for (let i = 0; i < currentSteps.length; i++) {
-        // Set to running
-        currentSteps[i] = { ...currentSteps[i], status: 'running', result: 'Scanning...' };
-        setDiagnosticSteps([...currentSteps]);
-        
-        await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 800));
-        
-        // Random results
-        let status = 'success';
-        let result = 'Validation passed successfully.';
-        
-        if (currentSteps[i].id === 'sync' && Math.random() > 0.8) {
-           status = 'warning';
-           result = '1 pending item in queue.';
-        } else if (currentSteps[i].id === 'storage') {
-           result = 'No corrupted blocks detected.';
-        }
-
-        currentSteps[i] = { ...currentSteps[i], status, result };
-        setDiagnosticSteps([...currentSteps]);
-    }
-    
-    setDiagnosticSuiteStatus('completed');
-    addNotification('Integrity diagnostic suite completed.');
-  };
-  const handleQuickRepair = () => {};
-  const handleFlushCache = () => {};
 
   return (
     <div className="max-w-6xl mx-auto space-y-4 animate-in fade-in duration-300">
@@ -145,17 +101,17 @@ export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSett
             <Activity className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight">Support & Tickets</h2>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">Diagnostic Tools & Issue Tracking</p>
+            <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight">{t("Support")}</h2>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">{t("Diagnostic Tools & Issue Tracking")}</p>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-2 w-full md:w-auto mt-3 md:mt-0">
           <div className="flex items-center justify-between md:justify-start gap-2 font-mono text-[10px] bg-gray-50 dark:bg-gray-800/50 px-3 py-2 md:py-1.5 rounded-lg border border-gray-200/50 dark:border-gray-700/50 shrink-0">
-            <span className="text-gray-500 dark:text-gray-400 font-semibold">BHARAT BOOK</span>
+            <span className="text-gray-500 dark:text-gray-400 font-semibold">{t("BHARAT BOOK")}</span>
             <div className="flex items-center gap-1.5 border-l border-gray-200 dark:border-gray-700 pl-2">
               <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-sm shadow-emerald-200" />
-              <span className="text-gray-700 dark:text-gray-300 font-bold tracking-tight">SECURE MODE</span>
+              <span className="text-gray-700 dark:text-gray-300 font-bold tracking-tight">{t("SECURE MODE")}</span>
             </div>
           </div>
           
@@ -166,7 +122,7 @@ export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSett
                  activeTab === 'chat' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                }`}
              >
-               <Sparkles className="w-3 h-3" /> Chatbot
+               <Sparkles className="w-3 h-3" /> {t("Chatbot")}
              </button>
              <button
                onClick={() => setActiveTab('integrity')}
@@ -174,7 +130,7 @@ export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSett
                  activeTab === 'integrity' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                }`}
              >
-               <Activity className="w-3 h-3" /> Integrity
+               <Activity className="w-3 h-3" /> {t("Integrity")}
              </button>
              <button
                onClick={() => setActiveTab('tickets')}
@@ -182,7 +138,7 @@ export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSett
                  activeTab === 'tickets' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                }`}
              >
-               <FileText className="w-3 h-3" /> Tickets
+               <FileText className="w-3 h-3" /> {t("Tickets")}
              </button>
           </div>
         </div>
@@ -194,13 +150,7 @@ export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSett
             handleSendChatMessage={handleSendChatMessage} handleClearChat={handleClearChat} handleKeyPress={handleKeyPress} 
             messagesEndRef={messagesEndRef} 
         />}
-        {activeTab === 'integrity' && <IntegrityTab 
-            dbStats={dbStats} repairState={repairState} 
-            handleQuickRepair={handleQuickRepair} handleFlushCache={handleFlushCache}
-            executeFullDiagnosticSuite={executeFullDiagnosticSuite}
-            diagnosticSuiteStatus={diagnosticSuiteStatus}
-            diagnosticSteps={diagnosticSteps}
-        />}
+        {activeTab === 'integrity' && <IntegrityTab />}
         {activeTab === 'tickets' && <TicketsTab />}
       </div>
     </div>

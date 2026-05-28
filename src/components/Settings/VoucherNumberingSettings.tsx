@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { SettingsIcon, CheckCircleIcon } from '../icons/IconComponents';
 import { ChevronDown, ChevronUp, Save, Upload, Download, RotateCcw } from 'lucide-react';
 import { defaultVoucherSettings } from '../../services/voucherNumbering';
 
 
 export const VoucherNumberingSettings: React.FC = () => {
+    const { t } = useLanguage();
     const defaultSettings = defaultVoucherSettings;
 
     const [settings, setSettings] = useState<any>(defaultSettings);
@@ -108,28 +110,28 @@ export const VoucherNumberingSettings: React.FC = () => {
 
     const voucherGroups = [
         {
-            title: "Accounting Vouchers",
+            title: t("Accounting Vouchers"),
             types: [
-                { id: 'sales', label: 'Sales' },
-                { id: 'purchase', label: 'Purchase' },
-                { id: 'payment', label: 'Payment' },
-                { id: 'receipt', label: 'Receipt' },
-                { id: 'journal', label: 'Journal' },
-                { id: 'contra', label: 'Contra' },
-                { id: 'debit_note', label: 'Debit Note' },
-                { id: 'credit_note', label: 'Credit Note' },
+                { id: 'sales', label: t('Sales') },
+                { id: 'purchase', label: t('Purchase') },
+                { id: 'payment', label: t('Payment') },
+                { id: 'receipt', label: t('Receipt') },
+                { id: 'journal', label: t('Journal') },
+                { id: 'contra', label: t('Contra') },
+                { id: 'debit_note', label: t('Debit Note') },
+                { id: 'credit_note', label: t('Credit Note') },
             ]
         },
         {
-            title: "Inventory Vouchers",
+            title: t("Inventory Vouchers"),
             types: [
-                { id: 'stock_journal', label: 'Stock Journal' },
-                { id: 'transfer', label: 'Material Transfer' },
-                { id: 'physical_stock', label: 'Physical Stock' },
-                { id: 'consumption', label: 'Item Consumption' },
-                { id: 'scrap', label: 'Item Scrap' },
-                { id: 'rejections_in', label: 'Rejections In' },
-                { id: 'rejections_out', label: 'Rejections Out' },
+                { id: 'stock_journal', label: t('Stock Journal') },
+                { id: 'transfer', label: t('Material Transfer') },
+                { id: 'physical_stock', label: t('Physical Stock') },
+                { id: 'consumption', label: t('Item Consumption') },
+                { id: 'scrap', label: t('Item Scrap') },
+                { id: 'rejections_in', label: t('Rejections In') },
+                { id: 'rejections_out', label: t('Rejections Out') },
             ]
         }
     ];  return (
@@ -137,9 +139,9 @@ export const VoucherNumberingSettings: React.FC = () => {
             <div className="flex justify-between items-start mb-8 p-6 md:p-8 pb-0">
                 <div>
                     <h2 className="text-2xl font-black text-gray-800 flex items-center dark:text-gray-100">
-                        <SettingsIcon className="mr-3 text-blue-600" /> Voucher Numbering Settings
+                        <SettingsIcon className="mr-3 text-blue-600" /> {t("Voucher Numbering Settings")}
                     </h2>
-                    <p className="text-gray-500 text-sm mt-2 font-medium dark:text-gray-400">Configure automatic voucher numbering for different transaction types.</p>
+                    <p className="text-gray-500 text-sm mt-2 font-medium dark:text-gray-400">{t("Configure automatic voucher numbering for different transaction types.")}</p>
                 </div>
             </div>
 
@@ -167,7 +169,7 @@ export const VoucherNumberingSettings: React.FC = () => {
                                             </div>
                                             <div className="flex items-center">
                                                 <label className="flex items-center space-x-2 cursor-pointer z-10" onClick={(e) => e.stopPropagation()}>
-                                                    <span className="form-label tracking-wider mr-2 dark:text-gray-400">Auto Generate</span>
+                                                    <span className="form-label tracking-wider mr-2 dark:text-gray-400">{t("Auto Generate")}</span>
                                                     <input 
                                                         type="checkbox" 
                                                         className="form-input form-checkbox h-5 w-5 text-blue-600 rounded"
@@ -185,7 +187,7 @@ export const VoucherNumberingSettings: React.FC = () => {
                                                         <>
                                                             <div className="form-grid gap-4">
                                                                 <div className="form-field-wrapper">
-<label className="form-label">Prefix</label>
+<label className="form-label">{t("Prefix")}</label>
                                                                     <input 
                                                                         type="text" 
                                                                         value={currentSettings.prefix || ''}
@@ -195,7 +197,7 @@ export const VoucherNumberingSettings: React.FC = () => {
                                                                     />
                                                                 </div>
                                                                 <div className="form-field-wrapper">
-<label className="form-label">Starting No.</label>
+<label className="form-label">{t("Starting No.")}</label>
                                                                     <input 
                                                                         type="number" 
                                                                         value={currentSettings.startAt || 1}
@@ -206,7 +208,7 @@ export const VoucherNumberingSettings: React.FC = () => {
                                                                     />
                                                                 </div>
                                                                 <div className="form-field-wrapper">
-<label className="form-label">Zero Padding</label>
+<label className="form-label">{t("Zero Padding")}</label>
                                                                     <input 
                                                                         type="number" 
                                                                         value={currentSettings.padding !== undefined ? currentSettings.padding : 3}
@@ -218,7 +220,7 @@ export const VoucherNumberingSettings: React.FC = () => {
                                                                     />
                                                                 </div>
                                                                 <div className="form-field-wrapper">
-<label className="form-label">Suffix</label>
+<label className="form-label">{t("Suffix")}</label>
                                                                     <input 
                                                                         type="text" 
                                                                         value={currentSettings.suffix || ''}
@@ -228,33 +230,33 @@ export const VoucherNumberingSettings: React.FC = () => {
                                                                     />
                                                                 </div>
                                                                 <div className="form-field-wrapper">
-<label className="form-label">Restart</label>
+<label className="form-label">{t("Restart")}</label>
                                                                     <select 
                                                                         value={currentSettings.resetPattern || 'yearly'}
                                                                         onChange={(e) => handleSettingChange(type.id, 'resetPattern', e.target.value)}
                                                                         className="form-input text-sm font-semibold"
                                                                     >
                                                                         {resetPatterns.map(pattern => (
-                                                                            <option key={pattern.id} value={pattern.id}>{pattern.label}</option>
+                                                                            <option key={pattern.id} value={pattern.id}>{t(pattern.label)}</option>
                                                                         ))}
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                             <div className="mt-4 p-2 bg-gradient-to-r from-blue-50 to-indigo-50/30 border border-blue-100/50 rounded-lg flex items-center justify-between shadow-sm">
                                                                 <div className="flex items-center gap-2 w-full sm:w-auto overflow-hidden">
-                                                                    <span className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 bg-blue-100/50 text-blue-600 text-[9px] font-black uppercase tracking-widest rounded shrink-0">Preview</span>
+                                                                    <span className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 bg-blue-100/50 text-blue-600 text-[9px] font-black uppercase tracking-widest rounded shrink-0">{t("Preview")}</span>
                                                                     <div className="font-mono text-sm font-bold text-slate-700 tracking-wider truncate w-full text-center sm:text-left">
                                                                         <span className="text-slate-400">{currentSettings.prefix}</span>
                                                                         <span className="text-blue-600 font-black">{String(currentSettings.startAt || 1).padStart(currentSettings.padding !== undefined ? currentSettings.padding : 3, '0')}</span>
                                                                         <span className="text-slate-400">{currentSettings.suffix}</span>
                                                                     </div>
                                                                 </div>
-                                                                <span className="hidden sm:block text-[8px] text-slate-400 uppercase tracking-widest font-bold whitespace-nowrap pl-2">Auto-generated</span>
+                                                                <span className="hidden sm:block text-[8px] text-slate-400 uppercase tracking-widest font-bold whitespace-nowrap pl-2">{t("Auto-generated")}</span>
                                                             </div>
                                                         </>
                                                     ) : (
                                                         <div className="flex items-center justify-center py-6 text-gray-400 font-medium text-sm">
-                                                            Manual numbering is enabled. Turn on Auto Generate to configure numbering patterns.
+                                                            {t("Manual numbering is enabled. Turn on Auto Generate to configure numbering patterns.")}
                                                         </div>
                                                     )}
                                                 </div>
@@ -274,7 +276,7 @@ export const VoucherNumberingSettings: React.FC = () => {
                         className="flex items-center justify-center gap-2 px-2 md:px-5 py-3 md:py-2.5 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold transition-all active:scale-95 shadow-sm cursor-pointer hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700" 
                         title="Import Settings"
                     >
-                        <Upload size={18} className="w-5 h-5" /> <span className="hidden md:inline">Import</span>
+                        <Upload size={18} className="w-5 h-5" /> <span className="hidden md:inline">{t("Import")}</span>
                         <input type="file" accept=".json" className="hidden" onChange={handleImportSettings} />
                     </label>
                     <button 
@@ -282,14 +284,14 @@ export const VoucherNumberingSettings: React.FC = () => {
                         className="flex items-center justify-center gap-2 px-2 md:px-5 py-3 md:py-2.5 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold transition-all active:scale-95 shadow-sm hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700"
                         title="Export Settings"
                     >
-                        <Download size={18} className="w-5 h-5" /> <span className="hidden md:inline">Export</span>
+                        <Download size={18} className="w-5 h-5" /> <span className="hidden md:inline">{t("Export")}</span>
                     </button>
                     <button 
                         onClick={resetAllSettings}
                         className="flex items-center justify-center gap-2 px-2 md:px-5 py-3 md:py-2.5 bg-gray-100 text-gray-600 border border-transparent rounded-xl font-bold transition-all active:scale-95 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                         title="Reset to Default"
                     >
-                        <RotateCcw size={18} className="w-5 h-5" /> <span className="hidden md:inline">Default</span>
+                        <RotateCcw size={18} className="w-5 h-5" /> <span className="hidden md:inline">{t("Default")}</span>
                     </button>
                     <button 
                         onClick={handleSave}
@@ -301,12 +303,12 @@ export const VoucherNumberingSettings: React.FC = () => {
                         {isSaved ? (
                             <>
                                 <CheckCircleIcon className="w-5 h-5 md:mr-2" />
-                                <span className="hidden md:inline">Saved!</span>
+                                <span className="hidden md:inline">{t("Saved!")}</span>
                             </>
                         ) : (
                             <>
                                 <Save className="w-5 h-5 md:mr-2" />
-                                <span className="hidden md:inline">Save</span>
+                                <span className="hidden md:inline">{t("Save")}</span>
                             </>
                         )}
                     </button>

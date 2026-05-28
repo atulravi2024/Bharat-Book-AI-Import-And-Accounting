@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { CodeIcon, CheckCircleIcon, ExpandMoreIcon, ChevronRightIcon, ContentCopyIcon, SortIcon, FilterListIcon } from '../icons/IconComponents';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface SubPageGroup {
     title: string;
@@ -13,6 +14,7 @@ interface KeyGroup {
 }
 
 export const DataExplorer: React.FC = () => {
+    const { t } = useLanguage();
     const [keys, setKeys] = useState<string[]>([]);
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
         'Dashboard': false,
@@ -426,16 +428,16 @@ export const DataExplorer: React.FC = () => {
                     <div className="flex flex-col gap-1 w-64">
                          <h3 className="font-bold text-gray-900 flex items-center text-xl dark:text-white">
                             <CodeIcon className="mr-2 text-blue-600 w-6 h-6" />
-                            System Browser
+                            {t("System Browser")}
                         </h3>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest px-1">Browse and analyze system data</p>
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest px-1">{t("Browse and analyze system data")}</p>
                     </div>
 
                     {/* Search */}
                     <div className="flex-1 relative">
                         <input
                             type="text"
-                            placeholder="Search database..."
+                            placeholder={t("Search database...")}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="form-input rounded-2xl px-5 text-sm placeholder:text-gray-400 font-medium"
@@ -454,17 +456,17 @@ export const DataExplorer: React.FC = () => {
                                 onChange={(e) => setFilterType(e.target.value as any)}
                                 className="form-input rounded-2xl text-[11px] font-black text-gray-600 appearance-none cursor-pointer uppercase tracking-wider pr-8 dark:text-gray-300"
                             >
-                                <option value="all">All Items</option>
-                                <option value="file">Server Files</option>
-                                <option value="storage">Browser Storage</option>
-                                <option value="json">JSON Data</option>
-                                <option value="typescript">Typescript</option>
-                                <option value="styles">Styles & HTML</option>
-                                <option value="reports">Reports</option>
-                                <option value="masters">Masters</option>
-                                <option value="config">Config</option>
-                                <option value="audits">Audits</option>
-                                <option value="database">Database</option>
+                                <option value="all">{t("All Items")}</option>
+                                <option value="file">{t("Server Files")}</option>
+                                <option value="storage">{t("Browser Storage")}</option>
+                                <option value="json">{t("JSON Data")}</option>
+                                <option value="typescript">{t("Typescript")}</option>
+                                <option value="styles">{t("Styles & HTML")}</option>
+                                <option value="reports">{t("Reports")}</option>
+                                <option value="masters">{t("Masters")}</option>
+                                <option value="config">{t("Config")}</option>
+                                <option value="audits">{t("Audits")}</option>
+                                <option value="database">{t("Database")}</option>
                             </select>
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                                 <ExpandMoreIcon className="w-4 h-4" />
@@ -480,19 +482,19 @@ export const DataExplorer: React.FC = () => {
                                 onChange={(e) => setFileTypeFilter(e.target.value)}
                                 className="form-input rounded-2xl text-[11px] font-black text-gray-600 appearance-none cursor-pointer uppercase tracking-wider pr-8 dark:text-gray-300"
                             >
-                                <option value="All">All Types</option>
-                                <option value="JSON">JSON</option>
-                                <option value="Memory">Memory</option>
-                                <option value="CSV">CSV</option>
-                                <option value="Excel">Excel</option>
-                                <option value="TypeScript">TypeScript</option>
-                                <option value="CSS">CSS</option>
-                                <option value="HTML">HTML</option>
-                                <option value="JavaScript">JavaScript</option>
-                                <option value="Markdown">Markdown</option>
-                                <option value="Images">Images</option>
-                                <option value="Text">Text</option>
-                                <option value="Other">Other</option>
+                                <option value="All">{t("All Types")}</option>
+                                <option value="JSON">{t("JSON")}</option>
+                                <option value="Memory">{t("Memory")}</option>
+                                <option value="CSV">{t("CSV")}</option>
+                                <option value="Excel">{t("Excel")}</option>
+                                <option value="TypeScript">{t("TypeScript")}</option>
+                                <option value="CSS">{t("CSS")}</option>
+                                <option value="HTML">{t("HTML")}</option>
+                                <option value="JavaScript">{t("JavaScript")}</option>
+                                <option value="Markdown">{t("Markdown")}</option>
+                                <option value="Images">{t("Images")}</option>
+                                <option value="Text">{t("Text")}</option>
+                                <option value="Other">{t("Other")}</option>
                             </select>
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                                 <ExpandMoreIcon className="w-4 h-4" />
@@ -510,11 +512,11 @@ export const DataExplorer: React.FC = () => {
                             >
                                 <option value="name-asc">Alphabetical (A-Z)</option>
                                 <option value="name-desc">Alphabetical (Z-A)</option>
-                                <option value="type-asc">Group by Ext</option>
-                                <option value="tier-asc">Group by Logic</option>
-                                <option value="source-asc">Group by Source</option>
-                                <option value="depth-asc">Path Complexity</option>
-                                <option value="group-asc">Functional Group</option>
+                                <option value="type-asc">{t("Group by Ext")}</option>
+                                <option value="tier-asc">{t("Group by Logic")}</option>
+                                <option value="source-asc">{t("Group by Source")}</option>
+                                <option value="depth-asc">{t("Path Complexity")}</option>
+                                <option value="group-asc">{t("Functional Group")}</option>
                             </select>
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                                 <ExpandMoreIcon className="w-4 h-4" />
@@ -528,7 +530,7 @@ export const DataExplorer: React.FC = () => {
                         className="p-1.5 px-6 rounded-2xl bg-blue-50 text-blue-600 hover:bg-blue-100 transition-all text-[11px] font-black uppercase tracking-wider border border-blue-100 flex items-center gap-2 h-[46px]"
                     >
                         <div className={`w-1.5 h-1.5 rounded-full ${isLoadingData ? 'bg-blue-400 animate-pulse' : 'bg-blue-600'}`}></div>
-                        Refresh
+                        {t("Refresh")}
                     </button>
                 </div>
             </div>
@@ -574,7 +576,7 @@ export const DataExplorer: React.FC = () => {
                         
                         {keys.length === 0 && (
                             <div className="p-8 text-center bg-white rounded-3xl border border-dashed border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                                <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">No application data found.</p>
+                                <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">{t("No application data found.")}</p>
                             </div>
                         )}
                     </div>
@@ -613,7 +615,7 @@ export const DataExplorer: React.FC = () => {
                                         </div>
                                     </>
                                 )}
-                                {!selectedKey && <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Select an item from the browser to inspect its content</p>}
+                                {!selectedKey && <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Select an item from the browser to inspect its content")}</p>}
                             </div>
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">

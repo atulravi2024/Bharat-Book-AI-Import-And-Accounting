@@ -156,7 +156,7 @@ export const FormSettingsProvider: React.FC<{ children: React.ReactNode }> = ({ 
     return "w-full";
   };
 
-  const layoutType = formSettings[`${deviceType}LayoutType` as keyof typeof formSettings] || "standard";
+  const layoutType = String(formSettings[`${deviceType}LayoutType` as keyof typeof formSettings] || "standard");
 
   return (
     <FormSettingsContext.Provider value={{

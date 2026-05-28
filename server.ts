@@ -91,7 +91,7 @@ Please structure your response strictly into four clearly labeled sections, usin
 
 User asks: `;
       
-      let targetModel = req.body.model || 'gemini-1.5-flash';
+      let targetModel = req.body.model || 'gemini-2.5-flash';
 
       let response;
       try {
@@ -103,7 +103,7 @@ User asks: `;
         if (err.message?.includes('not found') || err.message?.includes('not supported')) {
            // Fallback to a guaranteed supported model if the selected one fails
            response = await ai.models.generateContent({
-             model: 'gemini-1.5-flash',
+             model: 'gemini-2.5-flash',
              contents: systemInstruction + message,
            });
         } else {

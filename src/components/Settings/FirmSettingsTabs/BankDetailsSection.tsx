@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, CreditCard } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 8: Bank Details */}
@@ -28,7 +30,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                       <CreditCard className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Bank Details
+                      {t("Bank Details")}
                     </h3>
                   </div>
                   {activeAccordion === "bank" ? (
@@ -48,7 +50,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2 relative">
                           <label className="form-label">
-                            Bank Name
+                            {t("Bank Name")}
                           </label>
                           <SearchableDropdown
                             options={bankOptions}
@@ -77,7 +79,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Account Number
+                            {t("Account Number")}
                           </label>
                           <input
                             type="text"
@@ -94,7 +96,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            IFSC Code
+                            {t("IFSC Code")}
                           </label>
                           <input
                             type="text"
@@ -108,7 +110,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            SWIFT Code
+                            {t("SWIFT Code")}
                           </label>
                           <input
                             type="text"
@@ -122,7 +124,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            MICR Code
+                            {t("MICR Code")}
                           </label>
                           <input
                             type="text"
@@ -136,7 +138,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Account Type
+                            {t("Account Type")}
                           </label>
                           <select
                             value={firmData.accountType}
@@ -145,15 +147,15 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="Savings">Savings</option>
-                            <option value="Current">Current</option>
-                            <option value="Overdraft">Overdraft</option>
-                            <option value="Cash Credit">Cash Credit</option>
+                            <option value="Savings">{t("Savings")}</option>
+                            <option value="Current">{t("Current")}</option>
+                            <option value="Overdraft">{t("Overdraft")}</option>
+                            <option value="Cash Credit">{t("Cash Credit")}</option>
                           </select>
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Branch Name
+                            {t("Branch Name")}
                           </label>
                           <input
                             type="text"
@@ -167,7 +169,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            UPI / VPA ID
+                            {t("UPI / VPA ID")}
                           </label>
                           <input
                             type="text"

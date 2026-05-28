@@ -1,0 +1,27 @@
+BHARAT BOOK AI - PRIVACY POLICY
+Last Updated: May 2026
+
+At Bharat Book AI, we believe in radical transparency and strict data sovereignty. This privacy policy describes how we collect, store, and safeguard your corporate financial and operational records.
+
+1. NO COOKIE HARVESTING & RADICAL PRIVACY
+------------------------------------------------------
+Bharat Book AI is structurally designed around local storage and client-first execution. 
+* We do not sell, rent, or lease your transaction histories to any third party.
+* Your accounting books, tax records, ledgers, and raw document scans remain strictly in your device's storage unless you explicit instruct the app to sync with a secure customer-provisioned hosting instance.
+
+2. SPECIFIC DATA WE PROCESS
+------------------------------------------------------
+* Company Directory & Profiles: Provided by your administrator to provision authorization flags (Auditor, Accountant, Viewer).
+* System Diagnostics & Tickets: Explicitly initiated by you. When exporting a telemetry log or submitting a support ticket, only the required fields you verify are sent to our Indian security team.
+* AI Analysis Insights: Local processing ensures no sensitive PII keys are sent out of context. Our AI summary algorithms comply strictly with enterprise-grade isolation standards.
+
+3. SECURITY IMPLEMENTATION
+------------------------------------------------------
+We maintain standard electronic controls, local encryption pathways, and role-based interface locks to defend against illegal intrusion. All communication to third-party endpoints is encrypted using high-grade TLS pathways.
+
+4. USER ACTIONS & CONSENTS
+------------------------------------------------------
+You have complete, absolute control over your operational datasets. At any time, you can:
+* Wipe your local databases instantly.
+* Export your entire books directory via Excel or JSON formats.
+* Update, edit, or remove staff members from the local directory logs.

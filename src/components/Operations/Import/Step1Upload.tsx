@@ -1,7 +1,9 @@
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import * as XLSX from 'xlsx';
 import { VoucherType, ParsingSettings } from '../../../types';
+import { INTERNAL_GEMINI_MODELS } from '../../../services/AIConfig';
+import { sanitizeModelId } from '../../../services/geminiService';
 
 import { 
     UploadFileIcon, 
@@ -55,6 +57,33 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
     customInstructions: '',
     customAiInstructions: '',
   });
+
+  const lastVoucherTypeRef = useRef<VoucherType | null>(null);
+
+  useEffect(() => {
+    if (lastVoucherTypeRef.current !== voucherType) {
+      lastVoucherTypeRef.current = voucherType;
+      try {
+        const saved = localStorage.getItem('bharat_book_app_settings');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.aiSettings) {
+            const isBank = voucherType === VoucherType.BankStatement;
+            const targetModelId = isBank 
+              ? sanitizeModelId(parsed.aiSettings.bankingModel || 'gemini-2.5-flash')
+              : sanitizeModelId(parsed.aiSettings.voucherModel || 'gemini-2.5-flash');
+            
+            setParsingSettings(prev => ({
+              ...prev,
+              aiModel: targetModelId
+            }));
+          }
+        }
+      } catch (e) {
+        console.error("Error setting default model for voucher status:", e);
+      }
+    }
+  }, [voucherType]);
   const [fileHeaders, setFileHeaders] = useState<string[]>([]);
   const [mappings, setMappings] = useState<Record<string, string>>({});
   const [synonymsData, setSynonymsData] = useState<Record<string, string[]>>({});
@@ -488,7 +517,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
             <div className="mt-8 p-6 bg-premium-slate-50 rounded-[2rem] border border-premium-slate-100 animate-in fade-in slide-in-from-top-4 duration-500 dark:bg-gray-800 dark:border-gray-700">
                 <div className="flex items-start">
                     <div className="shrink-0 w-16 h-16 bg-white rounded-2xl border border-premium-slate-200 flex items-center justify-center shadow-sm dark:bg-gray-800 dark:border-gray-600">
-                        {React.cloneElement(getFileIcon(file.name) as React.ReactElement, { className: 'text-3xl ' + (getFileIcon(file.name) as React.ReactElement).props.className })}
+                        {React.cloneElement(getFileIcon(file.name) as any, { className: 'text-3xl ' + ((getFileIcon(file.name) as any).props?.className || '') })}
                     </div>
                     <div className="ml-5 flex-1 min-w-0">
                         <div className="flex items-center space-x-2">
@@ -614,6 +643,15 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
               <li>Our AI will attempt to automatically recognize all fields.</li>
               {file && <li className="font-semibold text-green-700 mt-4">AI analysis ready. Proceed to the next step to review extracted data.</li>}
             </ul>
+            <div className="mt-4 p-3.5 bg-amber-50 rounded-xl border border-amber-200/60 dark:bg-amber-950/20 dark:border-amber-900/40">
+              <span className="text-[10px] font-black uppercase text-amber-800 dark:text-amber-400 tracking-wider flex items-center gap-1.5 mb-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                Simulated Sandbox Parser Mode
+              </span>
+              <p className="text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed font-medium">
+                Excel/CSV formats are parsed directly to standard ledger models. Other source formats (Images, PDFs) run under a <strong>simulated OCR Sandbox sequence</strong> with mock values to demonstrate enterprise AI mapping pipelines.
+              </p>
+            </div>
           </div>
 
           <div className="pt-6 border-t border-blue-200">
@@ -673,11 +711,12 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                   </div>
                   <select 
                     value={parsingSettings.aiModel}
-                    onChange={(e) => setParsingSettings(prev => ({ ...prev, aiModel: e.target.value as any }))}
+                    onChange={(e) => setParsingSettings(prev => ({ ...prev, aiModel: e.target.value }))}
                     className="form-input text-sm font-bold border-blue-200 shadow-sm"
                   >
-                    <option value="Gemini 1.5 Flash">Gemini 1.5 Flash (Default - Balanced)</option>
-                    <option value="Gemini 1.5 Pro">Gemini 1.5 Pro (Deep Reasoning & Multi-page)</option>
+                    {INTERNAL_GEMINI_MODELS.map(model => (
+                      <option key={model.id} value={model.id}>{model.name}</option>
+                    ))}
                     <option value="Vision Transformer-L">Vision Transformer-L (Best for Complex Tables)</option>
                   </select>
                   <p className="text-[10px] text-blue-600/70 mt-3 italic leading-relaxed">

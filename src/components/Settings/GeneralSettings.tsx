@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { InfoIcon, CheckCircleIcon, UploadIcon, UndoIcon, ClearAllIcon } from '../icons/IconComponents';
 
 
@@ -56,202 +57,202 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
     displayId, setDisplayId,
     appMode, setAppMode,
     handleSave, handleLoad, handleDeleteAll, handleReset, handleClear, isSaved
-}) => {  return (
+}) => {  const { t } = useLanguage();
+return (
         <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-premium-slate-100 relative dark:bg-gray-800 dark:border-gray-700">
             {isSaved && (
                 <div className="absolute top-4 right-4 bg-green-100 text-green-700 px-4 py-2 rounded-lg text-xs font-bold flex items-center animate-in fade-in slide-in-from-top-2 z-10">
-                    <CheckCircleIcon className="mr-2" /> Settings Saved!
+                    <CheckCircleIcon className="mr-2" /> {t("Settings Saved!")}
                 </div>
             )}
             <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-6 flex items-center dark:text-white">
-                <InfoIcon className="mr-3 text-blue-600" /> General Application Preferences
+                <InfoIcon className="mr-3 text-blue-600" /> {t("General Application Preferences")}
             </h3>
             
             <div className="form-grid gap-6 mb-6">
                 <div className="form-field-wrapper">
-<label className="form-label">Display ID (Workspace Prefix)</label>
+<label className="form-label">{t("Display ID (Workspace Prefix)")}</label>
                     <input 
                         type="text" 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200" 
                         value={displayId}
                         onChange={(e) => setDisplayId(e.target.value)}
                     />
-                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">A unique prefix assigned to generated vouchers (e.g., BBE-JV-001).</p>
+                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">{t("A unique prefix assigned to generated vouchers (e.g., BBE-JV-001).")}</p>
                 </div>
 
                 <div className="form-field-wrapper">
-                    <label className="form-label">Where should this provide the detail?</label>
+                    <label className="form-label">{t("Where should this provide the detail?")}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={showSystemInfo}
                         onChange={(e) => setShowSystemInfo(e.target.value)}
                     >
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="yes">{t("Yes")}</option>
+                        <option value="no">{t("No")}</option>
                     </select>
                     <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">
-                        To view this section detail or info voucher: Display on user interface or not (Dynamically updated).
+                        {t("To view this section detail or info voucher: Display on user interface or not (Dynamically updated).")}
                     </p>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Application Mode</label>
+<label className="form-label">{t("Application Mode")}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={appMode}
                         onChange={(e) => setAppMode(e.target.value)}
                     >
-                        <option value="demo">DEMO (Pre-populated)</option>
-                        <option value="working">Production / Live Mode (Clean)</option>
+                        <option value="demo">{t("DEMO (Pre-populated)")}</option>
+                        <option value="working">{t("Production / Live Mode (Clean)")}</option>
                     </select>
-                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">Production syncs directly to standard ERP outputs. Demo is sandboxed.</p>
+                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">{t("Production syncs directly to standard ERP outputs. Demo is sandboxed.")}</p>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Theme Mode</label>
+<label className="form-label">{t("Theme Mode")}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={theme}
                         onChange={(e) => setTheme(e.target.value)}
                     >
-                        <option value="system">System Default</option>
-                        <option value="light">Light Mode</option>
-                        <option value="dark">Dark Mode</option>
+                        <option value="system">{t("System Default")}</option>
+                        <option value="light">{t("Light Mode")}</option>
+                        <option value="dark">{t("Dark Mode")}</option>
                     </select>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Display Language</label>
+<label className="form-label">{t('Display Language')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={language}
                         onChange={(e) => setLanguage(e.target.value)}
                     >
-                        <option value="en-IN">English (India)</option>
-                        <option value="en-US">English (United States)</option>
-                        <option value="en-UK">English (United Kingdom)</option>
-                        <option value="hi-IN">Hindi / हिन्दी (India)</option>
+                        <option value="en">{t("English")}</option>
+                        <option value="hi">{t("Hindi")}</option>
+                        <option value="hinglish">{t("Hinglish")}</option>
                     </select>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Date Format</label>
+<label className="form-label">{t('Date Format')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={dateFormat}
                         onChange={(e) => setDateFormat(e.target.value)}
                     >
-                        <option value="DD/MM/YYYY">DD/MM/YYYY (Indian Standard)</option>
-                        <option value="MM/DD/YYYY">MM/DD/YYYY (US Standard)</option>
-                        <option value="YYYY-MM-DD">YYYY-MM-DD (ISO Format)</option>
+                        <option value="DD/MM/YYYY">{t("DD/MM/YYYY (Indian Standard)")}</option>
+                        <option value="MM/DD/YYYY">{t("MM/DD/YYYY (US Standard)")}</option>
+                        <option value="YYYY-MM-DD">{t("YYYY-MM-DD (ISO Format)")}</option>
                     </select>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Default Timezone</label>
+<label className="form-label">{t('Default Timezone')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={timezone}
                         onChange={(e) => setTimezone(e.target.value)}
                     >
-                        <option value="Asia/Kolkata">Asia/Kolkata (IST)</option>
-                        <option value="UTC">UTC / GMT</option>
-                        <option value="America/New_York">America/New_York (EST/EDT)</option>
-                        <option value="Europe/London">Europe/London (GMT/BST)</option>
+                        <option value="Asia/Kolkata">{t("Asia/Kolkata (IST)")}</option>
+                        <option value="UTC">{t("UTC / GMT")}</option>
+                        <option value="America/New_York">{t("America/New_York (EST/EDT)")}</option>
+                        <option value="Europe/London">{t("Europe/London (GMT/BST)")}</option>
                     </select>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Auto-Lock Timeout</label>
+<label className="form-label">{t('Auto-Lock Timeout')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={autoLock}
                         onChange={(e) => setAutoLock(e.target.value)}
                     >
-                        <option value="5">5 Minutes</option>
-                        <option value="15">15 Minutes</option>
-                        <option value="30">30 Minutes</option>
-                        <option value="60">1 Hour</option>
-                        <option value="never">Never</option>
+                        <option value="5">{t("5 Minutes")}</option>
+                        <option value="15">{t("15 Minutes")}</option>
+                        <option value="30">{t("30 Minutes")}</option>
+                        <option value="60">{t("1 Hour")}</option>
+                        <option value="never">{t("Never")}</option>
                     </select>
-                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">Lock the application after inactivity.</p>
+                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">{t("Lock the application after inactivity.")}</p>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Display Density</label>
+<label className="form-label">{t('Display Density')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={density}
                         onChange={(e) => setDensity(e.target.value)}
                     >
-                        <option value="compact">Compact (More Data)</option>
-                        <option value="standard">Standard (Default)</option>
-                        <option value="comfortable">Comfortable (Spacious)</option>
+                        <option value="compact">{t("Compact (More Data)")}</option>
+                        <option value="standard">{t("Standard (Default)")}</option>
+                        <option value="comfortable">{t("Comfortable (Spacious)")}</option>
                     </select>
-                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">Controls spacing across tables and lists.</p>
+                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">{t("Controls spacing across tables and lists.")}</p>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">UI Animations</label>
+<label className="form-label">{t('UI Animations')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={animations}
                         onChange={(e) => setAnimations(e.target.value)}
                     >
-                        <option value="enabled">Enabled (Smooth transitions)</option>
-                        <option value="disabled">Disabled (Reduce motion)</option>
+                        <option value="enabled">{t("Enabled (Smooth transitions)")}</option>
+                        <option value="disabled">{t("Disabled (Reduce motion)")}</option>
                     </select>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Sound Effects</label>
+<label className="form-label">{t('Sound Effects')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={soundEffects}
                         onChange={(e) => setSoundEffects(e.target.value)}
                     >
-                        <option value="enabled">Enabled (Success/Error sounds)</option>
-                        <option value="disabled">Disabled (Muted)</option>
+                        <option value="enabled">{t("Enabled (Success/Error sounds)")}</option>
+                        <option value="disabled">{t("Disabled (Muted)")}</option>
                     </select>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Keyboard Shortcuts</label>
+<label className="form-label">{t('Keyboard Shortcuts')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={keyboardShortcuts}
                         onChange={(e) => setKeyboardShortcuts(e.target.value)}
                     >
-                        <option value="enabled">Enabled (Allow hotkeys)</option>
-                        <option value="disabled">Disabled</option>
+                        <option value="enabled">{t("Enabled (Allow hotkeys)")}</option>
+                        <option value="disabled">{t("Disabled")}</option>
                     </select>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Start Week On</label>
+<label className="form-label">{t('Start Week On')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={weekStartsOn}
                         onChange={(e) => setWeekStartsOn(e.target.value)}
                     >
-                        <option value="sunday">Sunday</option>
-                        <option value="monday">Monday</option>
+                        <option value="sunday">{t("Sunday")}</option>
+                        <option value="monday">{t("Monday")}</option>
                     </select>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label">Default Pagination Size</label>
+<label className="form-label">{t('Default Pagination Size')}</label>
                     <select 
                         className="w-full p-4 bg-premium-slate-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-800 dark:text-gray-200"
                         value={paginationSize}
                         onChange={(e) => setPaginationSize(e.target.value)}
                     >
-                        <option value="10">10 items per page</option>
-                        <option value="25">25 items per page</option>
-                        <option value="50">50 items per page</option>
-                        <option value="100">100 items per page</option>
+                        <option value="10">{t("10 items per page")}</option>
+                        <option value="25">{t("25 items per page")}</option>
+                        <option value="50">{t("50 items per page")}</option>
+                        <option value="100">{t("100 items per page")}</option>
                     </select>
-                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">Applies to all data tables and reports.</p>
+                    <p className="text-[10px] text-gray-500 font-medium mt-2 px-2 dark:text-gray-400">{t("Applies to all data tables and reports.")}</p>
                 </div>
             </div>
 
@@ -259,30 +260,30 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                     <button 
                         onClick={handleLoad}
                         className="p-3.5 sm:px-6 sm:py-3.5 bg-blue-50 text-blue-600 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-blue-100 transition-all flex items-center justify-center gap-2 dark:bg-gray-800 dark:text-gray-300 shadow-sm"
-                        title="Load"
+                        title={t("Load")}
                     >
-                        <UploadIcon className="h-5 w-5 shrink-0" /> <span className="hidden sm:inline">Load</span>
+                        <UploadIcon className="h-5 w-5 shrink-0" /> <span className="hidden sm:inline">{t("Load")}</span>
                     </button>
                     <button 
                         onClick={handleReset}
                         className="p-3.5 sm:px-6 sm:py-3.5 bg-amber-50 text-amber-600 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-amber-100 transition-all flex items-center justify-center gap-2 dark:bg-amber-900/20 dark:text-amber-400 shadow-sm"
-                        title="Reset"
+                        title={t("Reset")}
                     >
-                        <UndoIcon className="h-5 w-5 shrink-0" /> <span className="hidden sm:inline">Reset</span>
+                        <UndoIcon className="h-5 w-5 shrink-0" /> <span className="hidden sm:inline">{t("Reset")}</span>
                     </button>
                     <button 
                         onClick={handleClear}
                         className="p-3.5 sm:px-6 sm:py-3.5 bg-gray-50 text-gray-600 rounded-2xl font-bold uppercase tracking-widest text-xs border border-gray-200 hover:bg-gray-100 transition-all flex items-center justify-center gap-2 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 shadow-sm"
-                        title="Clear"
+                        title={t("Clear")}
                     >
-                        <ClearAllIcon className="h-5 w-5 shrink-0" /> <span className="hidden sm:inline">Clear</span>
+                        <ClearAllIcon className="h-5 w-5 shrink-0" /> <span className="hidden sm:inline">{t("Clear")}</span>
                     </button>
                     <button 
                         onClick={handleSave}
                         className="p-3.5 sm:px-8 sm:py-3.5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-blue-700 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30"
-                        title="Save"
+                        title={t("Save")}
                     >
-                        <CheckCircleIcon className="h-5 w-5 shrink-0" /> <span className="hidden sm:inline">Save</span>
+                        <CheckCircleIcon className="h-5 w-5 shrink-0" /> <span className="hidden sm:inline">{t("Save")}</span>
                     </button>
                 </div>
         </div>

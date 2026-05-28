@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Database } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -22,6 +23,7 @@ export const SystemDataSection: React.FC<Props> = ({
   firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters,
   handleExportBackup, handleRestoreBackup, handleFactoryReset, fileInputRef
 }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 15: System Data & Compliance */}
@@ -35,7 +37,7 @@ export const SystemDataSection: React.FC<Props> = ({
                       <Database className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      System Backup
+                      {t("System Backup")}
                     </h3>
                   </div>
                   {activeAccordion === "systemCompliance" ? (
@@ -72,7 +74,7 @@ export const SystemDataSection: React.FC<Props> = ({
                             htmlFor="enableAuditLog"
                             className="ml-3 block text-sm font-bold text-gray-700 dark:text-gray-300"
                           >
-                            Enable Action Logic Audit
+                            {t("Enable Action Logic Audit")}
                           </label>
                         </div>
       
@@ -94,7 +96,7 @@ export const SystemDataSection: React.FC<Props> = ({
                             htmlFor="enforceFormatValidation"
                             className="ml-3 block text-sm font-bold text-gray-700 dark:text-gray-300"
                           >
-                            Enforce Strict Format Validation
+                            {t("Enforce Strict Format Validation")}
                           </label>
                         </div>
       
@@ -108,7 +110,7 @@ export const SystemDataSection: React.FC<Props> = ({
                                onClick={handleExportBackup}
                                className="px-6 py-3 bg-blue-50 text-blue-600 font-bold rounded-xl hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors"
                              >
-                               Export 3D Backup
+                               {t("Export 3D Backup")}
                              </button>
                              <button
                                onClick={() => {
@@ -120,20 +122,20 @@ export const SystemDataSection: React.FC<Props> = ({
                                }}
                                className="px-6 py-3 bg-gray-50 text-gray-700 font-bold rounded-xl hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors"
                              >
-                               Restore Backup
+                               {t("Restore Backup")}
                              </button>
                              <button
                                onClick={handleFactoryReset}
                                className="px-6 py-3 bg-red-50 text-red-600 font-bold rounded-xl hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors"
                              >
-                               Factory Reset Tooling
+                               {t("Factory Reset Tooling")}
                              </button>
                            </div>
                         </div>
       
                         <div className="space-y-2">
                           <label className="form-label">
-                            Data Retention Period
+                            {t("Data Retention Period")}
                           </label>
                           <select
                             value={firmData.dataRetentionPeriod}
@@ -145,9 +147,9 @@ export const SystemDataSection: React.FC<Props> = ({
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="1_year">1 Year</option>
-                            <option value="3_years">3 Years</option>
-                            <option value="7_years">7 Years</option>
+                            <option value="1_year">{t("1 Year")}</option>
+                            <option value="3_years">{t("3 Years")}</option>
+                            <option value="7_years">{t("7 Years")}</option>
                             <option value="indefinite">Indefinite (Keep forever)</option>
                           </select>
                         </div>
@@ -169,14 +171,14 @@ export const SystemDataSection: React.FC<Props> = ({
                             htmlFor="autoBackup"
                             className="ml-3 block text-sm font-bold text-gray-700 dark:text-gray-300"
                           >
-                            Enable Auto Scheduled Backup
+                            {t("Enable Auto Scheduled Backup")}
                           </label>
                         </div>
       
                         {firmData.autoBackup && (
                           <div className="space-y-2">
                             <label className="form-label">
-                              Auto Backup Frequency
+                              {t("Auto Backup Frequency")}
                             </label>
                             <select
                               value={firmData.backupFrequency}
@@ -188,9 +190,9 @@ export const SystemDataSection: React.FC<Props> = ({
                               }
                               className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                             >
-                              <option value="daily">Daily</option>
-                              <option value="weekly">Weekly</option>
-                              <option value="monthly">Monthly</option>
+                              <option value="daily">{t("Daily")}</option>
+                              <option value="weekly">{t("Weekly")}</option>
+                              <option value="monthly">{t("Monthly")}</option>
                             </select>
                           </div>
                         )}

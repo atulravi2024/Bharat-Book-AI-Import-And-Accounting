@@ -14,6 +14,9 @@ interface ItemTableSectionProps {
   setScanningRowIndex: (idx: number) => void;
   setShowScanner: (val: boolean) => void;
   setShowNewItemModal: (val: boolean) => void;
+  warehouseMasters?: any[];
+  setExpandedRowSection?: any;
+  showRequirements?: any;
 }
 
 export const ItemTableSection: React.FC<ItemTableSectionProps> = ({

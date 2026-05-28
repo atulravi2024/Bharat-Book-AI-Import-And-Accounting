@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Scale } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const LegalRemarksSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 14: Legal & Remarks */}
@@ -28,7 +30,7 @@ export const LegalRemarksSection: React.FC<Props> = ({ firmData, setFirmData, ac
                       <Scale className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Legal Remarks
+                      {t("Legal Remarks")}
                     </h3>
                   </div>
                   {activeAccordion === "legal Remarks" ? (
@@ -65,7 +67,7 @@ export const LegalRemarksSection: React.FC<Props> = ({ firmData, setFirmData, ac
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Notes / Description
+                            {t("Notes / Description")}
                           </label>
                           <textarea
                             placeholder="Additional company notes or description"

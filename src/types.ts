@@ -24,6 +24,8 @@ export interface AuditLog {
 
 export interface ParsedVoucher {
   id: string;
+  isSample?: boolean;
+  sampleSetId?: string;
   type?: VoucherType;
   partyName?: VoucherField; // Optional, as some types don't need it
   date: VoucherField;
@@ -101,7 +103,7 @@ export interface CustomMappingRule {
 
 export interface ParsingSettings {
   ocrSensitivity: number; // 0 to 100
-  aiModel: 'Gemini 1.5 Flash' | 'Gemini 1.5 Pro' | 'Vision Transformer-L';
+  aiModel: string;
   experimentalFeatures: boolean;
   customInstructions: string;
   customAiInstructions?: string;
@@ -265,6 +267,7 @@ export interface BomMaster {
   validFrom?: string;
   validTo?: string;
   isDefault?: boolean;
+  isActive?: boolean;
   byProducts?: {
     itemId: string;
     quantity: number;

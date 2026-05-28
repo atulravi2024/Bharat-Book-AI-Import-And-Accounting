@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Sliders } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 10: Operational Settings */}
@@ -28,7 +30,7 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                       <Sliders className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Operational Settings
+                      {t("Operational Settings")}
                     </h3>
                   </div>
                   {activeAccordion === "operational" ? (
@@ -48,7 +50,7 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            Timezone
+                            {t("Timezone")}
                           </label>
                           <select
                             value={firmData.timezone}
@@ -58,7 +60,7 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           >
                             <option value="Asia/Kolkata">IST (Asia/Kolkata)</option>
-                            <option value="UTC">UTC</option>
+                            <option value="UTC">{t("UTC")}</option>
                             <option value="America/New_York">EST (America/New_York)</option>
                             <option value="Europe/London">GMT (Europe/London)</option>
                             <option value="Australia/Sydney">AEST (Australia/Sydney)</option>
@@ -66,7 +68,7 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Working Days
+                            {t("Working Days")}
                           </label>
                           <select
                             value={firmData.workingDays}
@@ -79,17 +81,17 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="Monday-Friday">Monday - Friday</option>
-                            <option value="Monday-Saturday">Monday - Saturday</option>
+                            <option value="Monday-Friday">{t("Monday - Friday")}</option>
+                            <option value="Monday-Saturday">{t("Monday - Saturday")}</option>
                             <option value="Monday-Sunday">Monday - Sunday (All Days)</option>
-                            <option value="Custom">Custom</option>
+                            <option value="Custom">{t("Custom")}</option>
                           </select>
                         </div>
       
                         {firmData.workingDays === "Custom" && (
                           <div className="form-field-wrapper space-y-2 md:col-span-2">
                             <label className="form-label">
-                              Custom Working Days
+                              {t("Custom Working Days")}
                             </label>
                             <input
                               type="text"
@@ -108,11 +110,11 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
       
                         <div className="form-field-wrapper space-y-2 md:col-span-2">
                           <label className="form-label">
-                            Working Hours
+                            {t("Working Hours")}
                           </label>
                           <div className="form-grid gap-4">
                             <div className="relative">
-                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 uppercase">From</span>
+                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 uppercase">{t("From")}</span>
                               <input
                                 type="time"
                                 value={firmData.workingHoursStart || "09:00"}
@@ -128,7 +130,7 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                               />
                             </div>
                             <div className="relative">
-                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 uppercase">To</span>
+                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 uppercase">{t("To")}</span>
                               <input
                                 type="time"
                                 value={firmData.workingHoursEnd || "18:00"}
@@ -147,7 +149,7 @@ export const OperationalSection: React.FC<Props> = ({ firmData, setFirmData, act
                         </div>
                         <div className="form-field-wrapper space-y-2 md:col-span-2">
                           <label className="form-label">
-                            Holidays
+                            {t("Holidays")}
                           </label>
                           <textarea
                             placeholder="e.g. Holi, Diwali, Christmas..."

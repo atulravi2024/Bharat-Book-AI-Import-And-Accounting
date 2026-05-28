@@ -37,6 +37,7 @@ interface VoucherEntryViewProps {
   onUpdateItemMaster?: (item: any) => void;
   onAddItemMaster?: (item: any) => void;
   onSaveEntry?: (entry: any, isNew: boolean) => void;
+  onDeleteEntry?: (id: string) => void;
   onOpenPrintSettings?: () => void;
 }
 
@@ -210,7 +211,7 @@ export const DebitNoteVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType,
     { id: 'credit_note', label: 'Credit Note', type: VoucherType.CreditNote },
   ];
 
-  const [headerDetails, setHeaderDetails] = useState({
+  const [headerDetails, setHeaderDetails] = useState<any>({
     voucherDate: new Date().toISOString().substring(0, 10),
     voucherNumber: getNextVoucherNumber(defaultType || 'sales') || '',
     referenceNo: '',

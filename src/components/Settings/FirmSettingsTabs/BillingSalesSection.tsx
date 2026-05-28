@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Receipt } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+  const { t } = useLanguage();
   return (
     <>
       {/* Accordion 11: Billing & Sales Preferences */}
@@ -28,7 +30,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                       <Receipt className="w-4 h-4" />
                     </span>
                     <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">
-                      Billing Sales
+                      {t("Billing Sales")}
                     </h3>
                   </div>
                   {activeAccordion === "billing" ? (
@@ -48,7 +50,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            Invoice Prefix
+                            {t("Invoice Prefix")}
                           </label>
                           <input
                             type="text"
@@ -65,7 +67,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Quotation Prefix
+                            {t("Quotation Prefix")}
                           </label>
                           <input
                             type="text"
@@ -82,7 +84,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Default Payment Terms
+                            {t("Default Payment Terms")}
                           </label>
                           <select
                             value={firmData.paymentTerms}
@@ -94,17 +96,17 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             }
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           >
-                            <option value="Due on Receipt">Due on Receipt</option>
-                            <option value="Net 15">Net 15</option>
-                            <option value="Net 30">Net 30</option>
-                            <option value="Net 45">Net 45</option>
-                            <option value="Net 60">Net 60</option>
-                            <option value="Net 90">Net 90</option>
+                            <option value="Due on Receipt">{t("Due on Receipt")}</option>
+                            <option value="Net 15">{t("Net 15")}</option>
+                            <option value="Net 30">{t("Net 30")}</option>
+                            <option value="Net 45">{t("Net 45")}</option>
+                            <option value="Net 60">{t("Net 60")}</option>
+                            <option value="Net 90">{t("Net 90")}</option>
                           </select>
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Late Payment Penalty Rate
+                            {t("Late Payment Penalty Rate")}
                           </label>
                           <input
                             type="text"
@@ -136,12 +138,12 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             htmlFor="taxInclusivePricing"
                             className="ml-3 block text-sm font-bold text-gray-700 dark:text-gray-300"
                           >
-                            Prices are Tax Inclusive by default
+                            {t("Prices are Tax Inclusive by default")}
                           </label>
                         </div>
                         <div className="form-field-wrapper space-y-2 md:col-span-2">
                           <label className="form-label">
-                            Default Terms and Conditions
+                            {t("Default Terms and Conditions")}
                           </label>
                           <textarea
                             placeholder="1. Goods once sold will not be taken back."

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FileText } from 'lucide-react';
 import { ResponsiveContainer } from 'recharts';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6B7280', '#14B8A6'];
 
@@ -63,7 +64,9 @@ export const SafeResponsiveContainer = ({ children, minHeight = 200, minWidth = 
   );
 };
 
-export const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }: any) => (
+export const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }: any) => {
+  const { t } = useLanguage();
+  return (
   <div className="bg-white p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-premium-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] group hover:shadow-2xl hover:shadow-blue-100/30 transition-all duration-500 relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
     <div className={`absolute -top-4 -right-4 w-20 h-20 sm:w-24 sm:h-24 ${bg} rounded-full opacity-10 group-hover:scale-150 transition-transform duration-700`}></div>
     <div className="flex items-center justify-between mb-4 sm:mb-6 relative z-10">
@@ -77,14 +80,15 @@ export const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }:
       )}
     </div>
     <div className="relative z-10">
-      <p className="text-[9px] sm:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 sm:mb-2">{label}</p>
+      <p className="text-[9px] sm:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 sm:mb-2">{t(label)}</p>
       <h3 className="text-2xl sm:text-3xl font-black text-gray-900 font-display tracking-tight leading-none truncate max-w-[200px] sm:max-w-none dark:text-white">{val}</h3>
       <p className="text-[9px] sm:text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2 sm:mt-4 sm:opacity-60 group-hover:opacity-100 transition-opacity dark:text-gray-400">
-        {sub}
+        {t(sub)}
       </p>
     </div>
   </div>
 );
+};
 
 export const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {

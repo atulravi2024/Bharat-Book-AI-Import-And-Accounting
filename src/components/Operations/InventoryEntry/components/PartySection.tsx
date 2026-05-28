@@ -9,6 +9,7 @@ interface PartySectionProps {
   headerDetails: any;
   handleHeaderChange: (field: string, value: any) => void;
   partyMasters: any[];
+  activeTab?: string;
 }
 
 export const PartySection: React.FC<PartySectionProps> = ({

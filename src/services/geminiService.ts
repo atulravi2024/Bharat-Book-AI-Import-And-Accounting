@@ -9,12 +9,36 @@ export interface ExtractedEntity {
     confidence: Confidence;
 }
 
+export const sanitizeModelId = (modelId?: string): string => {
+    if (!modelId) return 'gemini-2.5-flash';
+    const m = modelId.toLowerCase().trim();
+    if (m === 'gemini-1.5-flash' || m === 'gemini-2.0-flash' || m === 'gemini 1.5 flash') {
+        return 'gemini-2.5-flash';
+    }
+    if (m === 'gemini-1.5-pro' || m === 'gemini-1.5-pro-preview' || m === 'gemini 1.5 pro') {
+        return 'gemini-2.5-pro';
+    }
+    if (m === 'gemini-2.0-flash-thinking-exp' || m === 'gemini-2.0-flash-thinking') {
+         return 'gemini-2.5-flash';
+    }
+    return modelId;
+};
+
 const getAiSettings = () => {
     try {
         const saved = localStorage.getItem('bharat_book_app_settings');
         if (saved) {
             const parsed = JSON.parse(saved);
-            if (parsed.aiSettings) return parsed.aiSettings;
+            if (parsed.aiSettings) {
+                const s = parsed.aiSettings;
+                return {
+                    ...s,
+                    internalModel: sanitizeModelId(s.internalModel),
+                    bankingModel: sanitizeModelId(s.bankingModel),
+                    voucherModel: sanitizeModelId(s.voucherModel),
+                    chatModel: s.chatModel === 'gemini-1.5-flash' || s.chatModel === 'gemini-2.0-flash' ? 'gemini-2.5-flash' : s.chatModel
+                };
+            }
         }
     } catch (e) {
         console.error("Error reading AI settings", e);
@@ -22,8 +46,9 @@ const getAiSettings = () => {
     return { provider: 'internal' };
 };
 
-const callExternalAi = async (prompt: string, settings: any) => {
-    const { externalProvider, apiKey, model, baseUrl } = settings;
+const callExternalAi = async (prompt: string, settings: any, overrideModel?: string) => {
+    const { externalProvider, apiKey, model: configModel, baseUrl } = settings;
+    const targetModel = overrideModel || configModel;
     let url = baseUrl || '';
     
     if (!url) {
@@ -57,7 +82,7 @@ const callExternalAi = async (prompt: string, settings: any) => {
             ...(externalProvider === 'openrouter' ? { 'HTTP-Referer': window.location.origin, 'X-Title': 'Bharat Book AI' } : {})
         },
         body: {
-            model: model || 'default',
+            model: targetModel || 'default',
             messages: [{ role: 'user', content: prompt }],
             stream: false,
             ...(externalProvider !== '9router' ? { response_format: { type: 'json_object' } } : {})
@@ -117,24 +142,119 @@ const callExternalAi = async (prompt: string, settings: any) => {
     throw new Error(`Unexpected AI response format: ${JSON.stringify(data)}`);
 };
 
-export const testAiConnection = async (settings: any): Promise<{ success: boolean; message: string }> => {
+export const testAiConnection = async (settings: any): Promise<{ success: boolean; message: string; details?: { name: string; success: boolean; modelId: string; error?: string }[] }> => {
     try {
         const testPrompt = "Respond with only the word 'OK' in a JSON object like {\"status\": \"OK\"}";
-        let result: string | null = null;
         
         if (settings.provider === 'external') {
-            result = await callExternalAi(testPrompt, settings);
+            const configurations = [
+                { name: "System Tasks (Internal Model)", modelId: settings.internalModel || settings.model || "gpt-4o" },
+                { name: "Chatbot Model", modelId: settings.chatModel || settings.model || "gpt-4o" },
+                { name: "Banking Import Model", modelId: settings.bankingModel || settings.model || "gpt-4o" },
+                { name: "Audit Import Model", modelId: settings.voucherModel || settings.model || "gpt-4o" }
+            ];
+
+            const details: { name: string; success: boolean; modelId: string; error?: string }[] = [];
+
+            for (const config of configurations) {
+                try {
+                    const text = await callExternalAi(testPrompt, settings, config.modelId);
+                    
+                    if (text && text.toUpperCase().includes('OK')) {
+                        details.push({
+                            name: config.name,
+                            success: true,
+                            modelId: config.modelId
+                        });
+                    } else {
+                        details.push({
+                            name: config.name,
+                            success: false,
+                            modelId: config.modelId,
+                            error: `Returned invalid response: ${text?.substring(0, 30)}`
+                        });
+                    }
+                } catch (err: any) {
+                    details.push({
+                        name: config.name,
+                        success: false,
+                        modelId: config.modelId,
+                        error: err.message || 'Unknown error'
+                    });
+                }
+            }
+
+            const hasFailure = details.some(d => !d.success);
+            if (hasFailure) {
+                return {
+                    success: false,
+                    message: "AI Connection test failed.",
+                    details
+                };
+            }
+
+            return {
+                success: true,
+                message: "Connection successful! All models configured and available.",
+                details
+            };
         } else {
-            const modelId = settings.internalModel || "gemini-2.0-flash";
-            const model = genAI.getGenerativeModel({ model: modelId });
-            const completion = await model.generateContent(testPrompt);
-            result = completion.response.text();
+            // Get all configured model fields in the dropdowns
+            const configurations = [
+                { name: "System Tasks (Internal Model)", modelId: settings.internalModel || "gemini-2.5-flash" },
+                { name: "Chatbot Model", modelId: settings.chatModel || "gemini-2.5-flash" },
+                { name: "Banking Import Model", modelId: settings.bankingModel || "gemini-2.5-flash" },
+                { name: "Audit Import Model", modelId: settings.voucherModel || "gemini-2.5-flash" }
+            ];
+
+            const details: { name: string; success: boolean; modelId: string; error?: string }[] = [];
+
+            for (const config of configurations) {
+                const sanitizedId = sanitizeModelId(config.modelId);
+                try {
+                    const model = genAI.getGenerativeModel({ model: sanitizedId });
+                    const completion = await model.generateContent(testPrompt);
+                    const text = completion.response.text();
+                    
+                    if (text && text.toUpperCase().includes('OK')) {
+                        details.push({
+                            name: config.name,
+                            success: true,
+                            modelId: sanitizedId
+                        });
+                    } else {
+                        details.push({
+                            name: config.name,
+                            success: false,
+                            modelId: sanitizedId,
+                            error: `Returned invalid response: ${text?.substring(0, 30)}`
+                        });
+                    }
+                } catch (err: any) {
+                    details.push({
+                        name: config.name,
+                        success: false,
+                        modelId: sanitizedId,
+                        error: err.message || 'Unknown error'
+                    });
+                }
+            }
+
+            const hasFailure = details.some(d => !d.success);
+            if (hasFailure) {
+                return {
+                    success: false,
+                    message: "AI Connection test failed.",
+                    details
+                };
+            }
+
+            return {
+                success: true,
+                message: "Connection successful! All models configured and available.",
+                details
+            };
         }
-        
-        if (result && result.toUpperCase().includes('OK')) {
-            return { success: true, message: "Connection successful! AI responded correctly." };
-        }
-        return { success: false, message: `Unexpected response: ${result?.substring(0, 50)}` };
     } catch (error: any) {
         console.error("AI Connection Test Failed:", error);
         let errorMsg = error.message || "Unknown error occurred";
@@ -166,9 +286,9 @@ Return JSON format:
         let textResult: string;
 
         if (settings.provider === 'external') {
-            textResult = await callExternalAi(prompt, settings);
+            textResult = await callExternalAi(prompt, settings, settings.bankingModel || settings.model);
         } else {
-            const internalModelId = settings.internalModel || "gemini-2.0-flash";
+            const internalModelId = sanitizeModelId(settings.bankingModel || settings.internalModel || "gemini-2.5-flash");
             const extractionSchema = {
                 type: SchemaType.OBJECT,
                 properties: {
@@ -244,9 +364,9 @@ Return JSON format:
         let textResult: string;
 
         if (settings.provider === 'external') {
-            textResult = await callExternalAi(prompt, settings);
+            textResult = await callExternalAi(prompt, settings, settings.bankingModel || settings.model);
         } else {
-            const internalModelId = settings.internalModel || "gemini-2.0-flash";
+            const internalModelId = sanitizeModelId(settings.bankingModel || settings.internalModel || "gemini-2.5-flash");
             const matchSchema = {
                 type: SchemaType.OBJECT,
                 properties: {

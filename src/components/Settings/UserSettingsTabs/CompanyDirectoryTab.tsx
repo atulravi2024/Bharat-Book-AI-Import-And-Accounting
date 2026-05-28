@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLanguage } from "../../../context/LanguageContext";
 import { 
   User, Plus, Search, Check, Trash2, Edit2, Mail, Phone, Briefcase, Lock, Unlock, 
   Shield, Activity, Settings, UserCheck, UserX, CheckSquare, Square, Info, Key, AlertTriangle, Compass, Download, Send, Upload, ChevronDown 
@@ -7,6 +8,7 @@ import { useNotifications } from '../../../context/NotificationContext';
 import { ManagedUser, INITIAL_USERS, UserPermissions, ActivityLog } from '../UserSettings';
 
 export const CompanyDirectoryTab = () => {
+  const { t } = useLanguage();
   const { addNotification } = useNotifications();
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string>('usr-1');
@@ -131,7 +133,7 @@ export const CompanyDirectoryTab = () => {
   const selectedUser = users.find(u => u.id === selectedUserId) || users[0];
 
   const currentLoggedInUserId = localStorage.getItem('bharat_book_current_logged_in_user_id');
-  const loggedInUser = users.find(u => u.id === currentLoggedInUserId) || users[0] || { role: 'Viewer' };
+  const loggedInUser = users.find(u => u.id === currentLoggedInUserId) || users[0] || ({ id: 'fallback', name: 'Unknown', email: '', phone: '', status: 'Active', role: 'Viewer', activityLogs: [] } as unknown as ManagedUser);
 
   const getRoleLevel = (role: string) => {
     switch (role) {
@@ -211,7 +213,7 @@ export const CompanyDirectoryTab = () => {
       return;
     }
 
-    const newStatus = target.status === 'Active' ? 'Suspended' : 'Active';
+    const newStatus: "Active" | "Suspended" = target.status === 'Active' ? 'Suspended' : 'Active';
     const updated = users.map(u => {
       if (u.id === userId) {
         const log: ActivityLog = {
@@ -635,7 +637,7 @@ export const CompanyDirectoryTab = () => {
         addNotification({
           title: 'Import Failed',
           message: 'There was an error parsing the file. Please check the format.',
-          type: 'Warning'
+          type: 'Alert'
         });
       }
     };
@@ -674,11 +676,11 @@ export const CompanyDirectoryTab = () => {
         
         {/* User Directory Subpanel (Left 5 cols) */}
         <div className="xl:col-span-5 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center">
-              <User className="mr-2 text-blue-600 w-4 h-4" /> Team Directory
+              <User className="mr-2 text-blue-600 w-4 h-4" /> {t("Team Directory")}
             </h3>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-start sm:justify-end w-full sm:w-auto">
               <input 
                 type="file" 
                 ref={fileInputRef} 
@@ -689,30 +691,34 @@ export const CompanyDirectoryTab = () => {
               <div className="relative" ref={importDropdownRef}>
                 <button 
                   onClick={() => setShowImportMenu(!showImportMenu)}
-                  className="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
+                  className="py-1.5 px-2.5 sm:px-3 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
                   title="Import directory data"
                 >
-                  <Upload className="w-3.5 h-3.5 mr-1" strokeWidth={3} /> Import <ChevronDown className="w-3 h-3 ml-1" />
+                  <Upload className="w-3.5 h-3.5 sm:mr-1" strokeWidth={3} />
+                  <span className="hidden sm:inline">{t("Import")}</span>
+                  <ChevronDown className="w-3 h-3 ml-1" />
                 </button>
                 {showImportMenu && (
                   <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-10 animate-in slide-in-from-top-2">
-                     <button onClick={() => { handleImportClick('csv'); setShowImportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Import CSV</button>
-                     <button onClick={() => { handleImportClick('json'); setShowImportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Import JSON</button>
+                     <button onClick={() => { handleImportClick('csv'); setShowImportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">{t("Import CSV")}</button>
+                     <button onClick={() => { handleImportClick('json'); setShowImportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">{t("Import JSON")}</button>
                   </div>
                 )}
               </div>
               <div className="relative" ref={exportDropdownRef}>
                 <button 
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
+                  className="py-1.5 px-2.5 sm:px-3 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
                   title="Export directory data"
                 >
-                  <Download className="w-3.5 h-3.5 mr-1" strokeWidth={3} /> Export <ChevronDown className="w-3 h-3 ml-1" />
+                  <Download className="w-3.5 h-3.5 sm:mr-1" strokeWidth={3} />
+                  <span className="hidden sm:inline">{t("Export")}</span>
+                  <ChevronDown className="w-3 h-3 ml-1" />
                 </button>
                 {showExportMenu && (
                   <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-10 animate-in slide-in-from-top-2">
-                     <button onClick={() => { handleExport('csv'); setShowExportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Export CSV</button>
-                     <button onClick={() => { handleExport('json'); setShowExportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">Export JSON</button>
+                     <button onClick={() => { handleExport('csv'); setShowExportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">{t("Export CSV")}</button>
+                     <button onClick={() => { handleExport('json'); setShowExportMenu(false); }} className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">{t("Export JSON")}</button>
                   </div>
                 )}
               </div>
@@ -720,7 +726,7 @@ export const CompanyDirectoryTab = () => {
                 onClick={() => handleOpenForm()}
                 className="py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"
               >
-                <Plus className="w-3.5 h-3.5 mr-1" strokeWidth={3} /> Invite
+                <Plus className="w-3.5 h-3.5 mr-1" strokeWidth={3} /> {t("Invite")}
               </button>
             </div>
           </div>
@@ -740,47 +746,48 @@ export const CompanyDirectoryTab = () => {
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1 pl-1">Role Filter</label>
+                <label className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1 pl-1">{t("Role Filter")}</label>
                 <select
                   value={roleFilter}
                   onChange={(e) => setRoleFilter(e.target.value)}
                   className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl p-2.5 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none"
                 >
-                  <option value="all">All Roles</option>
-                  <option value="super admin">Super Admin</option>
-                  <option value="owner">Owner</option>
-                  <option value="admin">Admin</option>
-                  <option value="manager">Manager</option>
-                  <option value="editor">Editor</option>
-                  <option value="viewer">Viewer</option>
+                  <option value="all">{t("All Roles")}</option>
+                  <option value="super admin">{t("Super Admin")}</option>
+                  <option value="owner">{t("Owner")}</option>
+                  <option value="admin">{t("Admin")}</option>
+                  <option value="manager">{t("Manager")}</option>
+                  <option value="editor">{t("Editor")}</option>
+                  <option value="viewer">{t("Viewer")}</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1 mb-1 pl-1">Status Filter</label>
+                <label className="block text-[9px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1 mb-1 pl-1">{t("Status Filter")}</label>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl p-2.5 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none"
                 >
-                  <option value="all">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="invited">Invited</option>
-                  <option value="suspended">Suspended</option>
-                  <option value="permanently disabled">Permanently Disabled</option>
-                  <option value="archived">Archived</option>
-                  <option value="terminated">Terminated</option>
-                  <option value="deactivated">Deactivated</option>
+                  <option value="all">{t("All Status")}</option>
+                  <option value="active">{t("Active")}</option>
+                  <option value="invited">{t("Invited")}</option>
+                  <option value="suspended">{t("Suspended")}</option>
+                  <option value="permanently disabled">{t("Permanently Disabled")}</option>
+                  <option value="archived">{t("Archived")}</option>
+                  <option value="terminated">{t("Terminated")}</option>
+                  <option value="deactivated">{t("Deactivated")}</option>
                 </select>
               </div>
             </div>
           </div>
 
           {/* User Cards Grid */}
-          <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
+          <div className="max-h-[500px] overflow-auto pr-1 pb-2 custom-scrollbar">
+            <div className="space-y-3 min-w-max md:min-w-0">
             {filteredUsers.length === 0 ? (
               <div className="text-center py-10">
-                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">No matching users</p>
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">{t("No matching users")}</p>
               </div>
             ) : (
               filteredUsers.map(user => {
@@ -833,7 +840,7 @@ export const CompanyDirectoryTab = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center space-x-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center space-x-1 shrink-0 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
                       {user.status === 'Invited' && (
                         <button
                           onClick={(e) => { e.stopPropagation(); handleResendInvite(user); }}
@@ -886,6 +893,7 @@ export const CompanyDirectoryTab = () => {
                 );
               })
             )}
+            </div>
           </div>
         </div>
 
@@ -909,7 +917,7 @@ export const CompanyDirectoryTab = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest">Active Pulse</p>
+                  <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest">{t("Active Pulse")}</p>
                   <p className="text-[10px] font-bold text-gray-600 dark:text-gray-300 mt-0.5 flex items-center justify-end">
                     <span className={`w-1.5 h-1.5 rounded-full mr-1.5 inline-block ${selectedUser.status === 'Active' ? 'bg-green-500 animate-pulse' : 'bg-red-400'}`}></span>
                     {selectedUser.lastActive}
@@ -932,16 +940,16 @@ export const CompanyDirectoryTab = () => {
                 </div>
                 <div className="flex items-center bg-gray-50/50 dark:bg-gray-900/30 p-3 rounded-xl border border-gray-100/50 dark:border-gray-700/50">
                   <Shield className="w-4 h-4 mr-2.5 text-amber-600" />
-                  <span>Workspace Admin Managed: Yes</span>
+                  <span>{t("Workspace Admin Managed: Yes")}</span>
                 </div>
               </div>
 
               {/* Organizational Binding Block */}
               <div className="bg-slate-50/30 dark:bg-gray-900/10 p-4 rounded-2xl border border-dashed border-gray-200/50 dark:border-gray-700 mb-6 space-y-3">
-                <h5 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Organizational Binding Security</h5>
+                <h5 className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t("Organizational Binding Security")}</h5>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-[11px] font-bold">
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[9px] text-gray-400 font-extrabold uppercase tracking-wider">Inactivity Timeout</span>
+                    <span className="text-[9px] text-gray-400 font-extrabold uppercase tracking-wider">{t("Inactivity Timeout")}</span>
                     <span className="text-gray-700 dark:text-gray-300">
                       {(() => {
                         if (selectedUser.inactivityTimeoutMinutes !== undefined && selectedUser.inactivityTimeoutMinutes !== null && selectedUser.inactivityTimeoutMinutes !== 0) {
@@ -961,7 +969,7 @@ export const CompanyDirectoryTab = () => {
                     </span>
                   </div>
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[9px] text-gray-400 font-extrabold uppercase tracking-wider">Max Login Attempts</span>
+                    <span className="text-[9px] text-gray-400 font-extrabold uppercase tracking-wider">{t("Max Login Attempts")}</span>
                     <span className="text-gray-700 dark:text-gray-300">
                       {(() => {
                         if (selectedUser.maxLoginAttempts !== undefined && selectedUser.maxLoginAttempts !== null && selectedUser.maxLoginAttempts !== 0) {
@@ -988,7 +996,7 @@ export const CompanyDirectoryTab = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
                   <h4 className="text-xs font-black text-slate-800 dark:text-gray-200 uppercase tracking-widest flex items-center">
-                    <Shield className="w-4 h-4 mr-1.5 text-blue-600" /> Custom System Permissions Matrix
+                    <Shield className="w-4 h-4 mr-1.5 text-blue-600" /> {t("Custom System Permissions Matrix")}
                   </h4>
                   {selectedUser.role === 'Super Admin' && (
                     <span className="text-[10px] font-black text-rose-600 uppercase tracking-widest">
@@ -1001,7 +1009,7 @@ export const CompanyDirectoryTab = () => {
                   <div className="p-4 bg-slate-50 dark:bg-gray-900 rounded-2xl flex items-start gap-3">
                     <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                     <p className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-relaxed">
-                      To guarantee uninterrupted enterprise governance, Super Admin privileges are non-configurable. This root administrator maintains absolute read, write, execution, and deleting permissions across all ERP modules.
+                      {t("To guarantee uninterrupted enterprise governance, Super Admin privileges are non-configurable. This root administrator maintains absolute read, write, execution, and deleting permissions across all ERP modules.")}
                     </p>
                   </div>
                 ) : (
@@ -1009,11 +1017,11 @@ export const CompanyDirectoryTab = () => {
                     <table className="w-full min-w-[500px] border-collapse">
                       <thead>
                         <tr className="border-b border-gray-100 dark:border-gray-700 text-[10px] uppercase font-black text-gray-400 dark:text-gray-500 text-left">
-                          <th className="py-2.5 pl-1">Module Area</th>
-                          <th className="py-2.5 text-center">Read/View</th>
-                          <th className="py-2.5 text-center">Create</th>
-                          <th className="py-2.5 text-center">Edit/Update</th>
-                          <th className="py-2.5 text-center">Delete</th>
+                          <th className="py-2.5 pl-1">{t("Module Area")}</th>
+                          <th className="py-2.5 text-center">{t("Read/View")}</th>
+                          <th className="py-2.5 text-center">{t("Create")}</th>
+                          <th className="py-2.5 text-center">{t("Edit/Update")}</th>
+                          <th className="py-2.5 text-center">{t("Delete")}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-50 dark:divide-gray-700/50 text-xs font-bold text-gray-700 dark:text-gray-300">
@@ -1054,12 +1062,12 @@ export const CompanyDirectoryTab = () => {
           {selectedUser && (
             <div className="bg-white dark:bg-gray-800 rounded-[2rem] p-6 shadow-sm border border-gray-100 dark:border-gray-700">
               <h4 className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center mb-4 border-b border-gray-100 dark:border-gray-700 pb-3">
-                <Activity className="w-4 h-4 mr-2 text-blue-600 font-sans" /> Account Security Access Logs
+                <Activity className="w-4 h-4 mr-2 text-blue-600 font-sans" /> {t("Account Security Access Logs")}
               </h4>
 
               <div className="space-y-4 max-h-[250px] overflow-y-auto pr-1 font-mono custom-scrollbar">
                 {selectedUser.activityLogs.length === 0 ? (
-                  <p className="text-[11px] text-gray-400 font-bold uppercase tracking-wider text-center py-4">No security logs compiled</p>
+                  <p className="text-[11px] text-gray-400 font-bold uppercase tracking-wider text-center py-4">{t("No security logs compiled")}</p>
                 ) : (
                   selectedUser.activityLogs.map((log, index) => (
                     <div key={index} className="text-[11px] border-b border-gray-50 dark:border-gray-700/50 pb-3 last:border-none font-mono">
@@ -1121,7 +1129,7 @@ export const CompanyDirectoryTab = () => {
                     </option>
                   ))}
                 </select>
-                <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-2 pl-1 font-medium bg-transparent">Connecting a staff master will auto-fill profile details</p>
+                <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-2 pl-1 font-medium bg-transparent">{t("Connecting a staff master will auto-fill profile details")}</p>
               </div>
               
               {/* Photo Upload & Main details */}
@@ -1152,12 +1160,12 @@ export const CompanyDirectoryTab = () => {
                       }
                     }} 
                   />
-                  <span className="text-[10px] uppercase font-bold text-gray-500">Profile Photo</span>
+                  <span className="text-[10px] uppercase font-bold text-gray-500">{t("Profile Photo")}</span>
                 </div>
                 
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Full Identity Name</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Full Identity Name")}</label>
                     <input
                       type="text"
                       value={formName}
@@ -1169,7 +1177,7 @@ export const CompanyDirectoryTab = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Email address</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Email address")}</label>
                     <input
                       type="email"
                       value={formEmail}
@@ -1181,7 +1189,7 @@ export const CompanyDirectoryTab = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Contact Phone</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Contact Phone")}</label>
                     <input
                       type="text"
                       value={formPhone}
@@ -1193,20 +1201,20 @@ export const CompanyDirectoryTab = () => {
                   
                   <div className="grid grid-cols-2 gap-3">
                      <div>
-                      <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Gender</label>
+                      <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Gender")}</label>
                       <select
                         value={formGender}
                         onChange={(e) => setFormGender(e.target.value)}
                         className="w-full p-3.5 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none text-xs"
                       >
-                        <option value="">Select</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        <option value="">{t("Select")}</option>
+                        <option value="Male">{t("Male")}</option>
+                        <option value="Female">{t("Female")}</option>
+                        <option value="Other">{t("Other")}</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Date of Birth</label>
+                      <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Date of Birth")}</label>
                       <input
                         type="date"
                         value={formDob}
@@ -1220,9 +1228,9 @@ export const CompanyDirectoryTab = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl space-y-4">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Government IDs</h4>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">{t("Government IDs")}</h4>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Aadhaar Card Number</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Aadhaar Card Number")}</label>
                     <input
                       type="text"
                       value={formAadhaar}
@@ -1232,7 +1240,7 @@ export const CompanyDirectoryTab = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Voter ID Card Number</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Voter ID Card Number")}</label>
                     <input
                       type="text"
                       value={formVoterId}
@@ -1242,7 +1250,7 @@ export const CompanyDirectoryTab = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">PAN Card Number</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("PAN Card Number")}</label>
                     <input
                       type="text"
                       value={formPan}
@@ -1252,7 +1260,7 @@ export const CompanyDirectoryTab = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Driving License Number</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Driving License Number")}</label>
                     <input
                       type="text"
                       value={formDl}
@@ -1264,61 +1272,61 @@ export const CompanyDirectoryTab = () => {
                 </div>
 
                 <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl space-y-4">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-rose-600 dark:text-rose-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Organizational Binding</h4>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-rose-600 dark:text-rose-400 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">{t("Organizational Binding")}</h4>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Security Role</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Security Role")}</label>
                     <select
                         value={formRole}
                         onChange={(e) => setFormRole(e.target.value as any)}
                         className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer"
                       >
-                        <option value="Super Admin">Super Admin</option>
-                        <option value="Owner">Owner</option>
-                        <option value="Admin">Admin</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Editor">Editor</option>
-                        <option value="Viewer">Viewer</option>
+                        <option value="Super Admin">{t("Super Admin")}</option>
+                        <option value="Owner">{t("Owner")}</option>
+                        <option value="Admin">{t("Admin")}</option>
+                        <option value="Manager">{t("Manager")}</option>
+                        <option value="Editor">{t("Editor")}</option>
+                        <option value="Viewer">{t("Viewer")}</option>
                       </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Department</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Department")}</label>
                     <select
                         value={formDept}
                         onChange={(e) => setFormDept(e.target.value)}
                         className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer"
                       >
-                        <option value="Super Admin">Super Admin</option>
-                        <option value="Developer">Developer</option>
-                        <option value="Finance">Finance</option>
-                        <option value="Sales">Sales</option>
-                        <option value="IT Operations">IT Operations</option>
-                        <option value="Audit">Audit</option>
-                        <option value="Management">Management</option>
+                        <option value="Super Admin">{t("Super Admin")}</option>
+                        <option value="Developer">{t("Developer")}</option>
+                        <option value="Finance">{t("Finance")}</option>
+                        <option value="Sales">{t("Sales")}</option>
+                        <option value="IT Operations">{t("IT Operations")}</option>
+                        <option value="Audit">{t("Audit")}</option>
+                        <option value="Management">{t("Management")}</option>
                       </select>
                   </div>
                   
                   {editingUser && (
                     <div>
-                      <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Access Status</label>
+                      <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Access Status")}</label>
                       <select
                         value={formStatus}
                         onChange={(e) => setFormStatus(e.target.value as any)}
                         className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer"
                       >
-                        <option value="Active">Active</option>
-                        <option value="Invited">Invited</option>
-                        <option value="Suspended">Suspended</option>
-                        <option value="Permanently Disabled">Permanently Disabled</option>
-                        <option value="Archived">Archived</option>
-                        <option value="Terminated">Terminated</option>
-                        <option value="Deactivated">Deactivated</option>
+                        <option value="Active">{t("Active")}</option>
+                        <option value="Invited">{t("Invited")}</option>
+                        <option value="Suspended">{t("Suspended")}</option>
+                        <option value="Permanently Disabled">{t("Permanently Disabled")}</option>
+                        <option value="Archived">{t("Archived")}</option>
+                        <option value="Terminated">{t("Terminated")}</option>
+                        <option value="Deactivated">{t("Deactivated")}</option>
                       </select>
                     </div>
                   )}
 
                   {/* Individual Inactivity Session Timeout */}
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Inactivity Session Timeout</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Inactivity Session Timeout")}</label>
                     <select
                       disabled={editingUser ? !(loggedInUser.role === 'Super Admin' || (loggedInUser.role === 'Owner' && editingUser.role !== 'Super Admin') || (loggedInUser.role === 'Admin' && editingUser.role !== 'Super Admin' && editingUser.role !== 'Owner' && editingUser.role !== 'Admin')) : false}
                       value={formInactivityTimeoutMinutes}
@@ -1326,10 +1334,10 @@ export const CompanyDirectoryTab = () => {
                       className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer disabled:opacity-50"
                     >
                       <option value="0">Default (Inherit Group/Global)</option>
-                      <option value="10">10 Minutes</option>
-                      <option value="15">15 Minutes</option>
-                      <option value="30">30 Minutes</option>
-                      <option value="45">45 Minutes</option>
+                      <option value="10">{t("10 Minutes")}</option>
+                      <option value="15">{t("15 Minutes")}</option>
+                      <option value="30">{t("30 Minutes")}</option>
+                      <option value="45">{t("45 Minutes")}</option>
                       <option value="60">1 Hour (60 Minutes)</option>
                       <option value="120">2 Hours (120 Minutes)</option>
                       <option value="360">6 Hours (360 Minutes)</option>
@@ -1338,7 +1346,7 @@ export const CompanyDirectoryTab = () => {
 
                   {/* Individual Max Login Attempts Override */}
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Max Login Attempts Override</label>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Max Login Attempts Override")}</label>
                     <select
                       disabled={editingUser ? !(loggedInUser.role === 'Super Admin' || (loggedInUser.role === 'Owner' && editingUser.role !== 'Super Admin') || (loggedInUser.role === 'Admin' && editingUser.role !== 'Super Admin' && editingUser.role !== 'Owner' && editingUser.role !== 'Admin')) : false}
                       value={formMaxLoginAttempts}
@@ -1346,15 +1354,15 @@ export const CompanyDirectoryTab = () => {
                       className="w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-3 text-[10px] font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm cursor-pointer disabled:opacity-50"
                     >
                       <option value="0">Default (Inherit Role Default)</option>
-                      <option value="3">3 Attempts before Lockout</option>
-                      <option value="5">5 Attempts before Lockout</option>
-                      <option value="10">10 Attempts before Lockout</option>
-                      <option value="15">15 Attempts before Lockout</option>
-                      <option value="999">Unlimited Attempts Allowed</option>
+                      <option value="3">{t("3 Attempts before Lockout")}</option>
+                      <option value="5">{t("5 Attempts before Lockout")}</option>
+                      <option value="10">{t("10 Attempts before Lockout")}</option>
+                      <option value="15">{t("15 Attempts before Lockout")}</option>
+                      <option value="999">{t("Unlimited Attempts Allowed")}</option>
                     </select>
                     {editingUser && !(loggedInUser.role === 'Super Admin' || (loggedInUser.role === 'Owner' && editingUser.role !== 'Super Admin') || (loggedInUser.role === 'Admin' && editingUser.role !== 'Super Admin' && editingUser.role !== 'Owner' && editingUser.role !== 'Admin')) && (
                       <p className="text-[9px] text-red-500 dark:text-red-400 font-semibold mt-1">
-                        Only higher roles are authorized to decide security restrictions.
+                        {t("Only higher roles are authorized to decide security restrictions.")}
                       </p>
                     )}
                   </div>
@@ -1367,7 +1375,7 @@ export const CompanyDirectoryTab = () => {
                   onClick={() => setIsFormOpen(false)}
                   className="py-3 px-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
                 >
-                  Cancel
+                  {t("Cancel")}
                 </button>
                 <button
                   type="submit"
@@ -1385,27 +1393,27 @@ export const CompanyDirectoryTab = () => {
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
           <div className="bg-white dark:bg-gray-800 rounded-[2rem] p-8 max-w-2xl w-full border border-gray-100 dark:border-gray-700 shadow-2xl relative">
             <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest mb-6 border-b border-gray-100 dark:border-gray-700 pb-3 flex items-center">
-              <Key className="mr-2 text-indigo-600 w-4 h-4" /> Reset Identity Details
+              <Key className="mr-2 text-indigo-600 w-4 h-4" /> {t("Reset Identity Details")}
             </h3>
             
             <div className="space-y-4">
               <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl flex items-start gap-3 border border-amber-100 dark:border-amber-900/30">
                 <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <p className="text-[10px] font-medium text-amber-800 dark:text-amber-400 leading-relaxed">
-                  Resetting the password or modifying these settings will instantly terminate all active sessions for <span className="font-bold">{resetTargetUser.name}</span>. They will be required to log in with the new credentials.
+                  {t("Resetting the password or modifying these settings will instantly terminate all active sessions for")} <span className="font-bold">{resetTargetUser.name}</span>. They will be required to log in with the new credentials.
                 </p>
               </div>
 
               <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Reset Method</label>
+                <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Reset Method")}</label>
                 <div className="relative">
                   <select
                     value={resetMethod}
                     onChange={(e) => setResetMethod(e.target.value as 'email' | 'manual')}
                     className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl py-3 pl-4 pr-10 text-xs font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-indigo-200 outline-none appearance-none cursor-pointer"
                   >
-                    <option value="email">Send Email Link</option>
-                    <option value="manual">Set Manually</option>
+                    <option value="email">{t("Send Email Link")}</option>
+                    <option value="manual">{t("Set Manually")}</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                 </div>
@@ -1416,33 +1424,33 @@ export const CompanyDirectoryTab = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Department</label>
+                        <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Department")}</label>
                         <select
                           value={resetDept}
                           onChange={(e) => setResetDept(e.target.value)}
                           className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl py-3 px-4 text-xs font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-indigo-200 outline-none cursor-pointer"
                         >
-                          <option value="Developer">Developer</option>
-                          <option value="Finance">Finance</option>
-                          <option value="Sales">Sales</option>
-                          <option value="IT Operations">IT Operations</option>
-                          <option value="Audit">Audit</option>
-                          <option value="Management">Management</option>
+                          <option value="Developer">{t("Developer")}</option>
+                          <option value="Finance">{t("Finance")}</option>
+                          <option value="Sales">{t("Sales")}</option>
+                          <option value="IT Operations">{t("IT Operations")}</option>
+                          <option value="Audit">{t("Audit")}</option>
+                          <option value="Management">{t("Management")}</option>
                         </select>
                       </div>
 
                       <div>
-                        <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Job Role</label>
+                        <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Job Role")}</label>
                         <select
                           value={resetRole}
                           onChange={(e) => setResetRole(e.target.value as any)}
                           className="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl py-3 px-4 text-xs font-bold text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-indigo-200 outline-none cursor-pointer"
                         >
-                          <option value="Owner">Owner</option>
-                          <option value="Admin">Admin</option>
-                          <option value="Manager">Manager</option>
-                          <option value="Editor">Editor</option>
-                          <option value="Viewer">Viewer</option>
+                          <option value="Owner">{t("Owner")}</option>
+                          <option value="Admin">{t("Admin")}</option>
+                          <option value="Manager">{t("Manager")}</option>
+                          <option value="Editor">{t("Editor")}</option>
+                          <option value="Viewer">{t("Viewer")}</option>
                         </select>
                       </div>
                     </div>
@@ -1450,12 +1458,12 @@ export const CompanyDirectoryTab = () => {
                     <div className="space-y-4 bg-gray-50/50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
                       <div>
                         <div className="flex items-center justify-between mb-1.5 pl-1">
-                          <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500">New Password</label>
+                          <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500">{t("New Password")}</label>
                           <button 
                             onClick={generateSecurePassword} 
                             className="text-[10px] font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors uppercase tracking-wider"
                           >
-                            Auto-Generate
+                            {t("Auto-Generate")}
                           </button>
                         </div>
                         <div className="relative">
@@ -1471,7 +1479,7 @@ export const CompanyDirectoryTab = () => {
                       </div>
 
                       <div>
-                        <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">Confirm New Password</label>
+                        <label className="block text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 mb-1.5 pl-1">{t("Confirm New Password")}</label>
                         <div className="relative">
                           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                           <input
@@ -1497,7 +1505,7 @@ export const CompanyDirectoryTab = () => {
                            onChange={(e) => setRequirePasswordChange(e.target.checked)}
                            className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 disabled:opacity-50 mt-0.5"
                         />
-                        <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors tracking-wider">Require password change on login</span>
+                        <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors tracking-wider">{t("Require password change on login")}</span>
                       </label>
                     </div>
                   </div>
@@ -1505,7 +1513,7 @@ export const CompanyDirectoryTab = () => {
               ) : (
                 <div className="p-4 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/20 rounded-xl">
                   <p className="text-xs text-gray-600 dark:text-gray-400 font-medium text-center leading-relaxed">
-                    A secure password reset link valid for 24 hours will be sent to<br/>
+                    {t("A secure password reset link valid for 24 hours will be sent to")}<br/>
                     <strong className="text-gray-900 dark:text-white mt-1 block">{resetTargetUser.email}</strong>
                   </p>
                 </div>
@@ -1516,13 +1524,13 @@ export const CompanyDirectoryTab = () => {
                   onClick={() => setIsResetPasswordOpen(false)}
                   className="py-3 px-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
                 >
-                  Cancel
+                  {t("Cancel")}
                 </button>
                 <button
                   onClick={executePasswordReset}
                   className="py-3 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all shadow-md shadow-indigo-200 dark:shadow-none cursor-pointer"
                 >
-                  Update Password
+                  {t("Update Password")}
                 </button>
               </div>
             </div>

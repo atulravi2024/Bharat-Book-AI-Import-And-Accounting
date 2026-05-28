@@ -128,8 +128,8 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
             >
               <LifeBuoy className="w-4 h-4 text-violet-500" />
               <div>
-                 <p className="text-xs font-bold text-violet-600 dark:text-violet-400">Support & Tickets</p>
-                 <p className="text-[9px] text-violet-450 dark:text-violet-500">AI Support chat & submit tickets</p>
+                 <p className="text-xs font-bold text-violet-600 dark:text-violet-400">Support</p>
+                 <p className="text-[9px] text-violet-450 dark:text-violet-500">AI Support chat</p>
               </div>
             </button>
             <button
