@@ -31,8 +31,6 @@ export const ContactFormModal = ({
   handleFileUpload,
   setExpandedSection,
   expandedSection,
-  copiedScript,
-  setCopiedScript,
   formSettings,
   data,
   partyMasters,
@@ -53,29 +51,6 @@ export const ContactFormModal = ({
                     Contact
                   </h2>
                   <div className="flex items-center space-x-2">
-                    <button
-                  onClick={() => {
-                    fetch("/sample_js_injection.js")
-                      .then((r) => r.text())
-                      .then((codeText) => {
-                        navigator.clipboard.writeText(codeText);
-                        setCopiedScript(true);
-                        setTimeout(() => setCopiedScript(false), 2000);
-                      })
-                      .catch(() => {
-                        alert(
-                          "Failed to load script. Copying fallback directly...",
-                        );
-                      });
-                  }}
-                  className="px-3 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 dark:hover:bg-indigo-950/60 text-[10px] font-bold rounded-lg border border-indigo-150 dark:border-indigo-900 transition-all active:scale-95 flex items-center gap-1 shadow-sm"
-                  title="Copies a JavaScript injection code to auto-select department, designation, gender, and generate code automatically."
-                >
-                  ⚡{" "}
-                  {copiedScript
-                    ? "Injection Script Copied!"
-                    : "Copy JS Injection File Script"}
-                </button>
                 <button
                   onClick={() => onClose(false)}
                   className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full dark:hover:bg-gray-600"

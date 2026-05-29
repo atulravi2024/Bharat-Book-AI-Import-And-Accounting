@@ -1,0 +1,25 @@
+⚖️ Software License Agreement
+
+Product: Bharat Book AI Voucher Import & Accounting System
+Effective Date: 2026
+
+1. 🤝 Acknowledgment (Swikriti)
+Is software ko use karke, aap (User ya Administrator) is End-User License Agreement ki conditions aur terms ko maanne ke liye agree karte hain.
+
+2. 🛡️ Grant of License
+Hum aapko is software ko apne financial aur ledger management ke liye use karne ka personal, non-exclusive aur strictly local license dete hain.
+  • Administrators: System ke rules, user groups configure karne aur AI API keys set karne ka right rakhte hain.
+  • Users: Apni limits ke andar vouchers process karne, ledger reports run karne aur AI tools use karne ka right rakhte hain.
+
+3. 🧠 Artificial Intelligence Integration
+Ye software advanced AI models (jaise Gemini) ke saath connect hota hai.
+  • Developer Notice: System administrators ko proper aur valid API keys setup karni hongi.
+  • Fair Use: AI modules ka use API keys ya data extract aur reverse-engineer karne ke liye bilkul na karein.
+
+4. 🔒 Data Ownership
+Aapke lagaye gaye transactions, ledger data aur inventory masters 100% aapki hi property hain. Ye software sirf ek processing engine ki tarah kaam karta hai.
+
+5. ⚠️ Limitation of Liability
+Ye software "AS IS" format mein provide kiya gaya hai. Developers kisi bhi physical, local ya financial loss (jaise data corrupt hona) ke liye responsible nahi honge. Ledger aur multi-line journals check karna aur backup lena strictly Administrator ki responsibility hai.
+
+Enterprise license aur developer related queries ke liye apne system vendor se baat karein.

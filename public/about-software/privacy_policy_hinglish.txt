@@ -1,0 +1,27 @@
+🔐 Privacy Policy (Gopniyata Niti)
+
+Aapka trust hamari sabse badi priority hai. Hum maante hain ki aapka financial data strictly aapke control me rehna chahiye.
+
+🏠 Local First Architecture
+Ye application ek offline-first / local-first architecture par bani hai.
+  • Mera data kahan jata hai? Aapki ledger entries, GST reports, vouchers aur contact masters strictly aapke device ya server par locally store hote hain.
+  • Hum aapka koyi bhi financial data external analytics servers par chupke se send nahi karte.
+
+🤖 AI Features & External Connections
+Kuch smart automation features ko internet ki zaroorat hoti hai:
+  • AI Voucher Parsing: Jab aap "AI Extraction" ya "Smart Match" tool use karte hain, toh specific text securely AI service (Gemini provider) ko bheja jata hai.
+  • Kya bheja jata hai? Sirf wahi line ya narration jo aap parsing ke liye select karte hain. Hum aapka pura ledger cloud par nahi bhejte.
+
+👨‍💻 Administrator Controls
+System Administrators ke paas powers hoti hain taaki wo:
+  • Active users monitor karein aur Group Rules restrictions set kar sakein.
+  • Ledger aur Inventory masters par kiye gaye changes ki tracking (audit) rakhein.
+  • Sandbox data ko wipe out kar sakein.
+
+📜 Aapke Rights
+Ek user ki tarah, aapko pura right hai ki:
+  • Apna saara data kabhi bhi (CSV, JSON, PDF mein) export kar sakein.
+  • Local browser storage ya cache thoroughly delete karein.
+  • Settings panel se system ki Security aur API calls audit karein.
+
+Agar aapko data handling ke related koyi bhi issue ho, toh Security Settings tab se 'Architectural Integrity' check karein.

@@ -1,10 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-// @ts-ignore
-import releaseNotesText from "./documents/release_notes.txt?raw";
-// @ts-ignore
-import licenseAgreementText from "./documents/license_agreement.txt?raw";
-// @ts-ignore
-import privacyPolicyText from "./documents/privacy_policy.txt?raw";
 import {
   initialMappingRules,
   runMappingSimulation,
@@ -88,6 +82,27 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 }) => {
   const { addNotification } = useNotifications();
   const [activeModalDoc, setActiveModalDoc] = useState<{ title: string; content: string } | null>(null);
+  
+  const handleOpenDoc = async (title: string, path: string) => {
+    try {
+      const extIndex = path.lastIndexOf(".");
+      const langPath = path.substring(0, extIndex) + `_${language}` + path.substring(extIndex);
+      let resp = await fetch(langPath);
+      
+      if (!resp.ok) {
+        resp = await fetch(path);
+      }
+
+      if (resp.ok) {
+        const text = await resp.text();
+        setActiveModalDoc({ title, content: text });
+      } else {
+        setActiveModalDoc({ title, content: "Document not found." });
+      }
+    } catch (e) {
+      setActiveModalDoc({ title, content: "Error loading document." });
+    }
+  };
   
   // States for dynamic about-tab features
   const [updateStatus, setUpdateStatus] = useState<"idle" | "checking" | "latest">("idle");
@@ -1115,21 +1130,21 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   
                   <div className="flex justify-center gap-4">
                     <button 
-                      onClick={() => setActiveModalDoc({ title: "Release Notes", content: releaseNotesText })}
+                      onClick={() => handleOpenDoc("Release Notes", "/about-software/release_notes.txt")}
                       className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                     >
                       {t("Release Notes")}
                     </button>
                     <span className="text-gray-300 dark:text-gray-600">•</span>
                     <button 
-                      onClick={() => setActiveModalDoc({ title: "License Agreement", content: licenseAgreementText })}
+                      onClick={() => handleOpenDoc("License Agreement", "/about-software/license_agreement.txt")}
                       className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                     >
                       {t("License Agreement")}
                     </button>
                     <span className="text-gray-300 dark:text-gray-600">•</span>
                     <button 
-                      onClick={() => setActiveModalDoc({ title: "Privacy Policy", content: privacyPolicyText })}
+                      onClick={() => handleOpenDoc("Privacy Policy", "/about-software/privacy_policy.txt")}
                       className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                     >
                       {t("Privacy Policy")}
@@ -1457,7 +1472,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 
                 {/* Modal Body */}
                 <div className="p-6 overflow-y-auto flex-1 font-mono text-xs text-gray-700 dark:text-gray-300 leading-relaxed bg-white dark:bg-gray-900">
-                  <pre className="whitespace-pre-wrap font-sans text-sm md:text-xs">
+                  <pre className="whitespace-pre-wrap font-sans text-sm md:text-xs font-medium">
                     {activeModalDoc.content}
                   </pre>
                 </div>

@@ -1,0 +1,19 @@
+🚀 Release Notes: Bharat Book AI Voucher Import & Accounting System
+
+🌟 Version 1.0.0 (Latest Release)
+
+Welcome to the initial stable release of Bharat Book AI! This update focuses on robust ledger management, advanced data integrity, and intelligent voucher parsing.
+
+✨ What's New
+  • 🤖 AI-Powered Voucher Parsing: Introduced AI services to intuitively parse and map bank statements and transaction files into structured vouchers.
+  • 🏦 Comprehensive Ledger Masters: Complete architecture for Contacts, Parties, Vendors, Bank Masters, and Cost Centers.
+  • 📦 Inventory Integration: Detailed item master implementations with advanced stock groups, sizes, variants, and BOM (Bill of Materials) setups.
+  • 📊 Dual-Currency Reporting: Real-time multi-line journal entries with exact balance matching to prevent out-of-balance entries.
+  • 💡 Smart Mapping Engine: Automated trial-balance checks and customizable mapping rules with a built-in simulation sandbox.
+
+🛠️ Improvements & Fixes
+  • Data Integrity: Stabilized sample-dataset injection flow under isolated system tests.
+  • UI/UX: Enhanced dark mode support and responsive fluid dashboards.
+  • Security: Improved local storage protocols keeping data isolated and secure.
+
+Thank you for trusting us with your financial administration. For support, please visit the Help section in Settings.

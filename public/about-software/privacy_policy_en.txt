@@ -1,0 +1,27 @@
+🔐 Privacy Policy
+
+Your trust is our top priority. We believe your financial data should remain strictly under your control.
+
+🏠 Local First Architecture
+This application is designed as an offline-first / local-first platform.
+  • Where does my data go? Your ledger entries, GST reports, vouchers, and contact masters are stored locally on your device or designated server.
+  • We do not surreptitiously upload your financial data to external analytics servers.
+
+🤖 AI Features & External Connections
+Certain intelligent features require internet connectivity:
+  • AI Voucher Parsing: When you use the "AI Extraction" or "Smart Match" tools, the specific transaction strings are sent securely to the AI provider.
+  • What is sent? Only the data you explicitly choose to parse. We do not send your entire ledger to the cloud.
+
+👨‍💻 Administrator Controls
+System Administrators have the ability to:
+  • Monitor active users and manage group role restrictions.
+  • Audit changes to the Ledger and Inventory masters.
+  • Wipe or anonymize sandbox data.
+
+📜 Your Rights
+As a user, you retain full rights to:
+  • Export your data (CSV, JSON, PDF) at any time.
+  • Completely delete local browser storage caches.
+  • Audit the API calls made through the settings dashboard.
+
+If you have concerns about data handling, please perform an Architectural Integrity check from the Security Settings panel.
