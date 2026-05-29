@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { 
@@ -27,6 +28,8 @@ type ItemReportTab =
   | 'reconciliation' | 'procurement' | 'price_list' | 'lead_time';
 
 export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaultTab, onTabChange }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const [activeTab, setActiveTab] = useState<ItemReportTab>((defaultTab as any) || 'analysis');
   const [dateRange, setDateRange] = useState(() => {
     let fmt = 'April to March (Indian Standard)';
@@ -209,7 +212,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
               }`}
             >
               <tab.icon size={14} className="mr-2" />
-              {tab.label}
+              {t(tab.label)}
             </button>
           ))}
         </div>
@@ -231,8 +234,8 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
 
           {activeTab !== 'analysis' && activeTab !== 'summary' && (
             <StockSubPage 
-              title={activeTab.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
-              description={`Detailed inventory analysis and tracking for ${activeTab.replace('_', ' ')}.`}
+              title={t(activeTab.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '))}
+              description={`${t("Detailed inventory analysis and tracking for")} ${t(activeTab.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '))}.`}
               onExport={handleExport}
               vouchers={filteredVouchers}
               reportType={activeTab}
@@ -240,7 +243,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
           )}
 
           <div className="mt-4 p-4 bg-gray-50 rounded-lg text-[10px] text-gray-500 italic dark:bg-gray-900 dark:text-gray-400">
-            * All data is processed in real-time from your vouchers. Report updates automatically as new data is imported.
+            {t("All data is processed in real-time from your vouchers. Report updates automatically as new data is imported.")}
           </div>
         </div>
       </div>

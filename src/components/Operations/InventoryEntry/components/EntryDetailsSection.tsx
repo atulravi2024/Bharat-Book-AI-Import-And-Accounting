@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React from 'react';
 import { Settings2, X, Info, Paperclip, Trash2, ChevronUp, HelpCircle } from 'lucide-react';
 
@@ -31,6 +32,8 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
   setAttachedFile,
   activeTab
 }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const WebBillRequirements = () => (
     <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mb-6 animate-in fade-in slide-in-from-top-4 duration-500">
       <div className="flex items-start space-x-3">
@@ -38,7 +41,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
           <HelpCircle size={18} className="text-emerald-600" />
         </div>
         <div>
-          <h4 className="text-sm font-black text-emerald-900 uppercase tracking-wider mb-2">Inventory Bill Requirements</h4>
+          <h4 className="text-sm font-black text-emerald-900 uppercase tracking-wider mb-2">{t("Inventory Bill Requirements")}</h4>
           <ul className="form-grid gap-x-6 gap-y-2">
             {[
               'Unique sequential Entry Number',
@@ -53,7 +56,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
             ].map((req, i) => (
               <li key={i} className="flex items-center text-xs font-bold text-emerald-700/70">
                 <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2 shrink-0" />
-                {req}
+                {t(req)}
               </li>
             ))}
           </ul>
@@ -76,7 +79,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
                     <X size={16} className="text-red-600" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm">Transaction Failed</h4>
+                  <h4 className="font-bold text-sm">{t("Transaction Failed")}</h4>
                   <p className="text-sm">{formError}</p>
                 </div>
             </div>
@@ -90,7 +93,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
         <div className={`flex items-center justify-between cursor-pointer ${collapsedSections.header ? '' : 'mb-5'}`} onClick={() => toggleSection('header')}>
            <div className="flex items-center space-x-3">
              <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
-               <Settings2 size={16} className="mr-2 text-emerald-500"/> Entry <span className="hidden sm:inline">&nbsp;Details</span>
+               <Settings2 size={16} className="mr-2 text-emerald-500"/> {t("Entry Details")}
              </h3>
              <button 
                onClick={(e) => { e.stopPropagation(); setShowRequirements(!showRequirements); }}
@@ -98,12 +101,12 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
                title="Entry Requirements"
              >
                <Info size={14} />
-               <span className="text-[10px] font-black uppercase tracking-tighter hidden sm:inline">Requirements</span>
+               <span className="text-[10px] font-black uppercase tracking-tighter hidden sm:inline">{t("Requirements")}</span>
              </button>
            </div>
            <div className="flex items-center space-x-4">
              <div className="flex items-center space-x-2 text-xs font-bold text-gray-400 bg-gray-50 px-3 py-1 rounded-full uppercase tracking-wider dark:bg-gray-900">
-               Status: <span className="text-amber-500 ml-1">Draft</span>
+               {t("Status")}: <span className="text-amber-500 ml-1">{t("Draft")}</span>
              </div>
              <button className="text-gray-400 hover:text-gray-600 transition-colors">
                <ChevronUp size={20} className={`transform transition-transform duration-300 ${collapsedSections.header ? 'rotate-180' : ''}`} />
@@ -114,7 +117,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
         <div className="form-grid gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="form-field-wrapper">
 <label className="form-label flex justify-between items-center">
-              <span>Entry Date & Weekday</span>
+              <span>{t("Entry Date & Weekday")}</span>
             </label>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <div className="relative flex-1">
@@ -123,26 +126,26 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
               <div className="sm:w-32 flex items-center justify-center px-4 py-3 bg-emerald-50 border border-emerald-100/50 rounded-xl text-sm font-black text-emerald-700 shadow-sm shrink-0 whitespace-nowrap uppercase tracking-widest ring-1 ring-emerald-200/50">
                   {(() => {
                     const d = new Date(headerDetails.entryDate);
-                    return isNaN(d.getTime()) ? 'Invalid' : d.toLocaleDateString('en-US', { weekday: 'long' });
+                    return isNaN(d.getTime()) ? t('Invalid') : t(d.toLocaleDateString('en-US', { weekday: 'long' }));
                   })()}
               </div>
             </div>
           </div>
           <div className="form-field-wrapper">
-<label className="form-label">Entry Number</label>
-            <input type="text" value={headerDetails.entryNumber || ''} onChange={(e) => handleHeaderChange('entryNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+<label className="form-label">{t("Entry Number")}</label>
+            <input type="text" value={headerDetails.entryNumber || ''} onChange={(e) => handleHeaderChange('entryNumber', e.target.value)} placeholder={t("Auto-generated")} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div className="form-field-wrapper">
-<label className="form-label">REF / Invoice Number</label>
-            <input type="text" value={headerDetails.referenceNo || ''} onChange={(e) => handleHeaderChange('referenceNo', e.target.value)} placeholder="Optional reference..." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+<label className="form-label">{t("REF / Invoice Number")}</label>
+            <input type="text" value={headerDetails.referenceNo || ''} onChange={(e) => handleHeaderChange('referenceNo', e.target.value)} placeholder={t("Optional reference...")} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           <div className="form-field-wrapper">
-<label className="form-label">Creation Stamp (System)</label>
+<label className="form-label">{t("Creation Stamp (System)")}</label>
             <input type="text" value={systemStamp || ''} disabled className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" />
           </div>
           <div className="form-field-wrapper col-span-full hover:bg-gray-50 flex items-center p-2 rounded-xl border border-transparent transition-all dark:hover:bg-gray-700">
             <label htmlFor="inventory-file-upload" className="flex items-center px-4 py-2 border border-dashed border-gray-300 rounded-lg text-xs font-bold text-gray-500 hover:bg-white hover:text-emerald-600 hover:border-emerald-300 transition-all cursor-pointer shadow-sm dark:border-gray-600 dark:text-gray-400">
-              <Paperclip size={14} className="mr-2" /> Attach Document
+              <Paperclip size={14} className="mr-2" /> {t("Attach Document")}
             </label>
             <div className="ml-4 flex items-center">
               {attachedFile ? (
@@ -153,7 +156,7 @@ export const EntryDetailsSection: React.FC<EntryDetailsSectionProps> = ({
                    </button>
                 </div>
               ) : (
-                 <span className="text-xs text-gray-400 font-medium italic">No file attached</span>
+                 <span className="text-xs text-gray-400 font-medium italic">{t("No file attached")}</span>
               )}
             </div>
           </div>

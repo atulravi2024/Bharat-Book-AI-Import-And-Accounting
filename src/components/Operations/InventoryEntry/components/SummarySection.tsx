@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React from 'react';
 import { ChevronUp } from 'lucide-react';
 
@@ -26,10 +27,12 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
   headerDetails,
   rows
 }) => {
+  const { t, formatNumber  } = useLanguage();
+
   return (
     <div className={`bg-white border border-gray-200/60 shadow-sm flex flex-col relative transition-all duration-300 z-[10] ${collapsedSections.summary ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-3xl'} dark:bg-gray-800`}>
       <div className={`flex justify-between items-center cursor-pointer ${collapsedSections.summary ? '' : 'mb-6'}`} onClick={() => toggleSection('summary')}>
-        <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Summary Log</h3>
+        <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{t("Summary Log")}</h3>
         <button className="text-gray-400 hover:text-gray-600 transition-colors">
           <ChevronUp size={20} className={`transform transition-transform duration-300 ${collapsedSections.summary ? 'rotate-180' : ''}`} />
         </button>
@@ -50,6 +53,8 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
         }
         
         const MetricBox = ({ label, value, type = 'default', subtitle, tooltip }: any) => {
+  const { t, formatNumber  } = useLanguage();
+
           const getColors = () => {
              switch(type) {
                case 'positive': return 'bg-gradient-to-b from-white to-emerald-50/30 border-emerald-200/70 shadow-[0_2px_8px_-4px_rgba(16,185,129,0.2)] hover:shadow-[0_4px_12px_-4px_rgba(16,185,129,0.3)] hover:border-emerald-300';
@@ -90,10 +95,10 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
           <div className="animate-in fade-in slide-in-from-top-2 duration-300 flex flex-col flex-grow">
             <div className="form-grid gap-3 mb-6">
               
-              <MetricBox label="Total Items" value={totals.totalItems || ''} />
+              <MetricBox label={t("Total Items")} value={totals.totalItems || ''} />
               
               <MetricBox 
-                label="Total Net Qty" 
+                label={t("Total Net Qty")} 
                 value={
                   Object.keys(qtyByUnit).length > 0 ? (
                     <div className="flex flex-col gap-0.5">
@@ -112,13 +117,13 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
               {activeTab !== 'physical_stock' && (
                 <>
                   <MetricBox 
-                    label="Est. Value" 
-                    value={`₹ ${totals.estValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`} 
+                    label={t("Est. Value")} 
+                    value={`₹ ${formatNumber(Number(totals.estValue), { minimumFractionDigits: 2 })}`} 
                   />
 
                   {/* Voucher Discount */}
                   <MetricBox 
-                    label="Total Discount" 
+                    label={t("Total Discount")} 
                     type={totals.voucherDiscount > 0 ? "positive" : "default"}
                     value={`${totals.voucherDiscount > 0 ? '- ' : ''}₹ ${totals.voucherDiscount.toFixed(2)}`} 
                   />
@@ -141,7 +146,7 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
 
                   {/* Round Off */}
                   <MetricBox 
-                    label="Round Off"
+                    label={t("Round Off")}
                     type={totals.roundOff !== 0 ? 'default' : 'default'}
                     value={`${totals.roundOff > 0 ? '+' : ''}${totals.roundOff.toFixed(2)}`}
                   />
@@ -154,14 +159,13 @@ export const SummarySection: React.FC<SummarySectionProps & { rows?: any[] }> = 
                 <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-2xl border border-blue-500 shadow-xl shadow-blue-500/20 text-white flex justify-between items-center group cursor-default transition-all duration-300 hover:shadow-blue-500/30 hover:-translate-y-0.5">
                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-500/20 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4"></div>
-                   <span className="relative text-sm font-bold text-blue-100 uppercase tracking-[0.2em]">Total Net Value</span>
+                   <span className="relative text-sm font-bold text-blue-100 uppercase tracking-[0.2em]">{t("Total Net Value")}</span>
                    <span className={`relative flex items-center ${
-                    totals.finalValue.toLocaleString('en-IN', { minimumFractionDigits: 2 }).length > 15 ? 'text-2xl lg:text-3xl' : 
-                    totals.finalValue.toLocaleString('en-IN', { minimumFractionDigits: 2 }).length > 12 ? 'text-3xl lg:text-4xl' : 
+                    formatNumber(Number(totals.finalValue), { minimumFractionDigits: 2 }).length > 12 ? 'text-3xl lg:text-4xl' : 
                     'text-4xl lg:text-5xl'
                   } font-black tracking-tighter drop-shadow-sm`}>
                      <span className="opacity-70 mr-1.5 text-2xl lg:text-3xl font-bold">₹</span>
-                     {totals.finalValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                     {formatNumber(Number(totals.finalValue), { minimumFractionDigits: 2 })}
                    </span>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 
 import React, { useState, useEffect } from 'react';
 import { PlusCircle, Save, ClipboardList, Plus, Trash2, Edit2, X, FileText, Calculator, Settings2, Users, MapPin, ChevronDown, ChevronUp, Paperclip, ScanBarcode, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Import, Printer, Eye, Image, FilePlus, Bookmark, Package, Tags, Info, HelpCircle, Keyboard, Layout, Zap } from 'lucide-react';
@@ -47,6 +48,8 @@ interface VoucherEntryViewProps {
 }
 
 export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, initialVoucher, itemMasters = [], ledgerMasters = [], partyMasters = [], vouchers = [], onUpdateItemMaster, onAddItemMaster, onSaveEntry, onDeleteEntry, onOpenPrintSettings }) => {
+  const { t, formatNumber } = useLanguage();
+
   const activeTab = 'receipt' as string;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const setActiveTab = (tab: string) => {};
@@ -686,7 +689,7 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
       if (['sales', 'purchase', 'sales_order', 'purchase_order', 'debit_note', 'credit_note', 'delivery_note', 'receipt_note'].includes(activeTab)) {
           return {
               ...r,
-              amount: calculateRowNetAmount(r).toFixed(2)
+              amount: formatNumber(Number(calculateRowNetAmount(r).toFixed(2)))
           };
       }
       return {
@@ -1259,7 +1262,7 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
                     <X size={16} className="text-red-600" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm">Transaction Failed</h4>
+                  <h4 className="font-bold text-sm">{t("Transaction Failed")}</h4>
                   <p className="text-sm">{formError}</p>
                 </div>
             </div>
@@ -1272,7 +1275,7 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
         <div className="absolute top-0 left-0 w-1 h-full bg-amber-500 rounded-l-[inherit]"></div>
         <div className={`flex items-center justify-between cursor-pointer ${collapsedSections.header ? '' : 'mb-5'}`} onClick={() => toggleSection('header')}>
            <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
-             <Settings2 size={16} className="mr-2 text-amber-500"/> <span className="hidden sm:inline">Voucher&nbsp;</span>Header
+             <Settings2 size={16} className="mr-2 text-amber-500"/> <span className="hidden sm:inline">{t("Voucher&nbsp;")}</span>{t("Header")}
            </h3>
            <button className="text-gray-400 hover:text-gray-600 transition-colors">
              <ChevronUp size={20} className={`transform transition-transform duration-300 ${collapsedSections.header ? 'rotate-180' : ''}`} />
@@ -1282,7 +1285,7 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
         <div className="form-grid gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="form-field-wrapper">
 <label className="form-label flex justify-between items-center">
-              <span>Voucher Date</span>
+              <span>{t("Voucher Date")}</span>
             </label>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <input type="date" value={headerDetails.voucherDate || ''} onChange={(e) => handleHeaderChange('voucherDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
@@ -1295,14 +1298,14 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
             </div>
           </div>
           <div className="form-field-wrapper">
-<label className="form-label">Voucher Number</label>
-            <input type="text" value={headerDetails.voucherNumber || ''} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder="Auto-generated" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+<label className="form-label">{t("Voucher Number")}</label>
+            <input type="text" value={headerDetails.voucherNumber || ''} onChange={(e) => handleHeaderChange('voucherNumber', e.target.value)} placeholder={t("Auto-generated")} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
           </div>
           
           {activeTab !== 'journal' && (
             <>
               <div className="form-field-wrapper">
-<label className="form-label">Account (Cash/Bank)</label>
+<label className="form-label">{t("Account (Cash/Bank)")}</label>
                 <SearchableDropdown
                   options={ledgerMasters.filter(l => l.group?.toLowerCase().includes('cash') || l.group?.toLowerCase().includes('bank') || l.name?.toLowerCase().includes('cash') || l.name?.toLowerCase().includes('bank'))}
                   value={headerDetails.cashBankAccount || ''}
@@ -1314,16 +1317,16 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
                       setRows(r);
                     }
                   }}
-                  placeholder="Select Cash/Bank Account..."
+                  placeholder={t("Select Cash/Bank Account...")}
                   buttonClassName="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus-within:bg-white focus-within:outline-none focus-within:ring-2 focus-within:ring-amber-500/20 focus-within:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus-within:bg-gray-800 text-left flex justify-between items-center"
                 />
               </div>
               <div className="form-field-wrapper">
-<label className="form-label">Instrument No.</label>
-                <input type="text" value={headerDetails.instrumentNo || ''} onChange={(e) => handleHeaderChange('instrumentNo', e.target.value)} placeholder="Cheque/UTR/Ref No." className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+<label className="form-label">{t("Instrument No.")}</label>
+                <input type="text" value={headerDetails.instrumentNo || ''} onChange={(e) => handleHeaderChange('instrumentNo', e.target.value)} placeholder={t("Cheque/UTR/Ref No.")} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
               <div className="form-field-wrapper">
-<label className="form-label">Instrument Date</label>
+<label className="form-label">{t("Instrument Date")}</label>
                 <input type="date" value={headerDetails.instrumentDate || ''} onChange={(e) => handleHeaderChange('instrumentDate', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
               </div>
             </>
@@ -1336,11 +1339,11 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
         <div className="absolute top-0 left-0 w-1 h-full bg-rose-500 rounded-l-[inherit]"></div>
         <div className={`border-b border-gray-100 flex justify-between items-center bg-gray-50/50 cursor-pointer ${collapsedSections.lineItems ? 'px-4 py-3' : 'px-6 py-5'} dark:border-gray-800`} onClick={() => toggleSection('lineItems')}>
           <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
-             <Calculator size={16} className="mr-2 text-rose-500"/> <span className="sm:hidden">Items</span><span className="hidden sm:inline">Particulars</span>
+             <Calculator size={16} className="mr-2 text-rose-500"/> <span className="sm:hidden">{t("Items")}</span><span className="hidden sm:inline">{t("Particulars")}</span>
            </h3>
            <div className="flex items-center space-x-2 md:space-x-4">
-             <button onClick={(e) => { e.stopPropagation(); setRows([...rows, { id: Date.now() }]); }} className="flex items-center px-4 md:px-4 py-2 md:py-1.5 bg-rose-100 text-rose-700 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-rose-200 transition-colors" title="Add Item">
-               <Plus size={16} className="md:mr-1" /> <span className="hidden md:inline">Add Item</span>
+             <button onClick={(e) => { e.stopPropagation(); setRows([...rows, { id: Date.now() }]); }} className="flex items-center px-4 md:px-4 py-2 md:py-1.5 bg-rose-100 text-rose-700 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-rose-200 transition-colors" title={t("Add Item")}>
+               <Plus size={16} className="md:mr-1" /> <span className="hidden md:inline">{t("Add Item")}</span>
              </button>
              <button className="text-gray-400 hover:text-gray-600 transition-colors pl-2">
                <ChevronUp size={20} className={`transform transition-transform duration-300 ${collapsedSections.lineItems ? 'rotate-180' : ''}`} />
@@ -1353,10 +1356,10 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
           <table className="w-full text-sm text-left whitespace-nowrap">
             <thead className="bg-gray-50/80 border-b border-gray-100 uppercase text-[10px] tracking-[0.2em] font-black text-gray-400 dark:bg-gray-800/80 dark:border-gray-700 dark:text-gray-300">
               <tr>
-                <th className="px-6 py-4 w-20 text-center">Cr/Dr</th>
-                <th className="px-6 py-4">Particulars (Ledger)</th>
-                <th className="px-6 py-4 text-right w-48">Amount (₹)</th>
-                <th className="px-6 py-4 w-24 text-center">Actions</th>
+                <th className="px-6 py-4 w-20 text-center">{t("Cr/Dr")}</th>
+                <th className="px-6 py-4">{t("Particulars (Ledger)")}</th>
+                <th className="px-6 py-4 text-right w-48">{t("Amount (₹)")}</th>
+                <th className="px-6 py-4 w-24 text-center">{t("Actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -1369,8 +1372,8 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
                       disabled={(activeTab === 'payment' || activeTab === 'receipt') && index === 0}
                       className="w-full px-2 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-black uppercase focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all cursor-pointer text-center disabled:opacity-50 dark:focus:bg-gray-700"
                     >
-                      <option value="Dr">Dr</option>
-                      <option value="Cr">Cr</option>
+                      <option value="Dr">{t("Dr")}</option>
+                      <option value="Cr">{t("Cr")}</option>
                     </select>
                   </td>
                   <td className="px-6 py-3">
@@ -1383,19 +1386,19 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
                         if (index === 0) handleHeaderChange('cashBankAccount', value);
                         setRows(r); 
                       }}
-                      placeholder="Select ledger..."
+                      placeholder={t("Select ledger...")}
                       buttonClassName="w-full min-w-[300px] px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-medium focus-within:bg-white focus-within:outline-none focus-within:ring-2 focus-within:ring-amber-500/20 focus-within:border-amber-500 transition-all dark:focus-within:bg-gray-700"
                     />
                   </td>
                   <td className="px-6 py-3">
-                    <input type="number" placeholder="0.00" value={row.amount || ''} onChange={(e) => { const r = [...rows]; r[index].amount = e.target.value; setRows(r); }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-bold text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:focus:bg-gray-700" />
+                    <input type="number" placeholder={t("0.00")} value={row.amount || ''} onChange={(e) => { const r = [...rows]; r[index].amount = e.target.value; setRows(r); }} className="w-full px-3 py-2 bg-transparent border border-transparent group-hover:border-gray-200 rounded-lg text-sm font-bold text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:focus:bg-gray-700" />
                   </td>
                   <td className="px-6 py-4 text-center">
                      <div className="flex items-center justify-center gap-3">
-                      <button onClick={() => setEditingRowIndex(index)} className="text-amber-500 hover:text-amber-700 hover:bg-amber-50 p-1.5 rounded-lg transition-colors border border-amber-100" title="Edit">
+                      <button onClick={() => setEditingRowIndex(index)} className="text-amber-500 hover:text-amber-700 hover:bg-amber-50 p-1.5 rounded-lg transition-colors border border-amber-100" title={t("Edit")}>
                         <Edit2 size={16} />
                       </button>
-                      <button onClick={() => setRows(rows.filter(r => r.id !== row.id))} className="flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all border border-red-100" title="Delete">
+                      <button onClick={() => setRows(rows.filter(r => r.id !== row.id))} className="flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all border border-red-100" title={t("Delete")}>
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -1449,7 +1452,7 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
         <div className="flex gap-1 overflow-x-auto custom-scrollbar py-0.5 items-center">
            <button 
              onClick={() => setIsSection0Collapsed(!isSection0Collapsed)} 
-             title="Toggle Navigation & Save"
+             title={t("Toggle Navigation & Save")}
              className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
            >
              {isSection0Collapsed ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -1457,33 +1460,33 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
            <div className={`${isSection0Collapsed ? 'hidden md:flex' : 'flex'} gap-1 animate-in slide-in-from-right-2 duration-300`}>
              <button 
                onClick={() => handleNavigate('first')} 
-               title="First Record"
+               title={t("First Record")}
                className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
              >
                <ChevronsLeft size={18} />
              </button>
              <button 
                onClick={() => handleNavigate('up')} 
-               title="Previous Record"
+               title={t("Previous Record")}
                className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
              >
                <ChevronLeft size={18} />
              </button>
 
-             <button onClick={handleSave} title="Save" className="p-1 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-sm active:scale-95 shrink-0">
+             <button onClick={handleSave} title={t("Save")} className="p-1 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-sm active:scale-95 shrink-0">
                <Save size={18} />
              </button>
 
              <button 
                onClick={() => handleNavigate('down')} 
-               title="Next Record"
+               title={t("Next Record")}
                className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
              >
                <ChevronRight size={18} />
              </button>
              <button 
                onClick={() => handleNavigate('last')} 
-               title="Last Record"
+               title={t("Last Record")}
                className="block p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
              >
                <ChevronsRight size={18} />
@@ -1494,26 +1497,26 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
 
            <button 
              onClick={() => setIsSection1Collapsed(!isSection1Collapsed)} 
-             title="Toggle Tools"
+             title={t("Toggle Tools")}
              className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
            >
              {isSection1Collapsed ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
            </button>
            <div className={`${isSection1Collapsed ? 'hidden md:flex' : 'flex'} gap-1 animate-in slide-in-from-right-2 duration-300`}>
-             <button onClick={() => setShowHistory(true)} title="View History" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={() => setShowHistory(true)} title={t("View History")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <ClipboardList size={18} />
              </button>
-             <button onClick={(e) => { e.stopPropagation(); setScanningRowIndex(-1); setShowScanner(true); }} title="Scan Barcode" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={(e) => { e.stopPropagation(); setScanningRowIndex(-1); setShowScanner(true); }} title={t("Scan Barcode")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <ScanBarcode size={18} />
              </button>
-             <button onClick={() => fileInputRef.current?.click()} title="Attach Files" className="relative p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={() => fileInputRef.current?.click()} title={t("Attach Files")} className="relative p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                {attachedFile && <span className="absolute -top-1 -right-1 flex h-3 w-3"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span></span>}
                <Paperclip size={18} />
              </button>
-             <button onClick={() => setShowCalculator(true)} title="Calculator" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={() => setShowCalculator(true)} title={t("Calculator")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Calculator size={18} />
              </button>
-             <button onClick={handleDuplicateEntry} title="Duplicate Entry" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={handleDuplicateEntry} title={t("Duplicate Entry")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <PlusCircle size={18} />
              </button>
            </div>
@@ -1522,7 +1525,7 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
 
            <button 
              onClick={() => setIsSection2Collapsed(!isSection2Collapsed)} 
-             title="Toggle Export Options"
+             title={t("Toggle Export Options")}
              className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
            >
              {isSection2Collapsed ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -1530,27 +1533,27 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
            <div className={`${isSection2Collapsed ? 'hidden md:flex' : 'flex'} gap-1 animate-in slide-in-from-right-2 duration-300`}>
              <button 
                onClick={handleNewEntry} 
-               title="New Entry"
+               title={t("New Entry")}
                className="block p-1 bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm active:scale-95 shrink-0"
              >
                <Plus size={18} />
              </button>
-             <button onClick={handleSavePrint} title="Save & Print" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={handleSavePrint} title={t("Save & Print")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Printer size={18} />
              </button>
-             <button onClick={handleSaveNew} title="Save & New" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={handleSaveNew} title={t("Save & New")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <FilePlus size={18} />
              </button>
-             <button onClick={handleSaveDraft} title="Save as Draft" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={handleSaveDraft} title={t("Save as Draft")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Bookmark size={18} />
              </button>
-             <button onClick={handlePreview} title="Print Preview" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={handlePreview} title={t("Print Preview")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Eye size={18} />
              </button>
-             <button onClick={handleGeneratePDF} title="Generate PDF" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={handleGeneratePDF} title={t("Generate PDF")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <FileText size={18} />
              </button>
-             <button onClick={handleGenerateImage} title="Generate Image" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={handleGenerateImage} title={t("Generate Image")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Image size={18} />
              </button>
            </div>
@@ -1559,25 +1562,25 @@ export const ReceiptVoucher: React.FC<VoucherEntryViewProps> = ({ defaultType, i
 
            <button 
              onClick={() => setIsSection3Collapsed(!isSection3Collapsed)} 
-             title="Toggle Settings & Actions"
+             title={t("Toggle Settings & Actions")}
              className="md:hidden p-1 bg-gray-50 border border-gray-200 text-gray-500 rounded-xl hover:bg-gray-100 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
            >
              {isSection3Collapsed ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
            </button>
            <div className={`${isSection3Collapsed ? 'hidden md:flex' : 'flex'} gap-1 animate-in slide-in-from-right-2 duration-300`}>
-             <button onClick={handleClearEntryClick} title="Clear Entry" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200">
+             <button onClick={handleClearEntryClick} title={t("Clear Entry")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200">
                <X size={18} />
              </button>
-             <button onClick={handleDeleteEntryClick} title="Delete Entry" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-red-50 hover:text-red-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200">
+             <button onClick={handleDeleteEntryClick} title={t("Delete Entry")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-red-50 hover:text-red-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200">
                <Trash2 size={18} />
              </button>
-             <button onClick={() => setShowKeyboardShortcuts(true)} title="Keyboard Shortcuts" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={() => setShowKeyboardShortcuts(true)} title={t("Keyboard Shortcuts")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Keyboard size={18} />
              </button>
-             <button onClick={() => setShowHelp(true)} title="Help" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={() => setShowHelp(true)} title={t("Help")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <HelpCircle size={18} />
              </button>
-             <button onClick={() => onOpenPrintSettings && onOpenPrintSettings()} title="Print Settings" className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
+             <button onClick={() => onOpenPrintSettings && onOpenPrintSettings()} title={t("Print Settings")} className="p-1 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm active:scale-95 shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                <Settings2 size={18} />
              </button>
            </div>

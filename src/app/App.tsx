@@ -155,7 +155,13 @@ const App: React.FC = () => {
   }, [isLoggedIn]);
 
   if (!isLoggedIn) {
-    return <LoginScreen onLogin={handleLogin} />;
+    return (
+      <LanguageProvider>
+        <ThemeProvider>
+          <LoginScreen onLogin={handleLogin} />
+        </ThemeProvider>
+      </LanguageProvider>
+    );
   }
 
   return (

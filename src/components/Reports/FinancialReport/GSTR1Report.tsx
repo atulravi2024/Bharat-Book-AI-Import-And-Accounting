@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 import React from 'react';
 import { ParsedVoucher, VoucherType } from '../../../app/types';
 
@@ -20,6 +21,8 @@ interface GSTR1ReportProps {
 }
 
 export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
+  const { t, formatNumber  } = useLanguage();
+
   return (
     <div className="space-y-6 animate-in zoom-in-95 duration-300">
       <div className="form-grid gap-6">
@@ -46,14 +49,14 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                 <table className="w-full text-sm text-left">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Type</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Date/No.</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Party/Particulars</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Taxable Value</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">CGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">SGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">IGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Total Tax</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Type")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Date/No.")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Party/Particulars")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Taxable Value")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("CGST")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("SGST")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("IGST")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Total Tax")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -111,11 +114,11 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                               {String(v.narration?.value || '-')}
                             </div>
                           </td>
-                          <td className="px-4 py-3 text-right font-mono text-sm">₹{taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600 dark:text-gray-300">₹{cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600 dark:text-gray-300">₹{sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600 dark:text-gray-300">₹{igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                          <td className="px-4 py-3 text-right font-mono text-sm font-medium text-green-600">₹{tax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                          <td className="px-4 py-3 text-right font-mono text-sm">₹{formatNumber(Number(taxable), { minimumFractionDigits: 2 })}</td>
+                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600 dark:text-gray-300">₹{formatNumber(Number(cgst), { minimumFractionDigits: 2 })}</td>
+                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600 dark:text-gray-300">₹{formatNumber(Number(sgst), { minimumFractionDigits: 2 })}</td>
+                          <td className="px-4 py-3 text-right font-mono text-xs text-gray-600 dark:text-gray-300">₹{formatNumber(Number(igst), { minimumFractionDigits: 2 })}</td>
+                          <td className="px-4 py-3 text-right font-mono text-sm font-medium text-green-600">₹{formatNumber(Number(tax), { minimumFractionDigits: 2 })}</td>
                         </tr>
                       );
                     })}
@@ -177,27 +180,27 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                       
                       <div className="form-grid bg-gray-50 p-3 rounded-lg gap-3 text-sm dark:bg-gray-900">
                         <div className="flex flex-col">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">Taxable Value</span>
-                          <span className="font-medium">₹{taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">{t("Taxable Value")}</span>
+                          <span className="font-medium">₹{formatNumber(Number(taxable), { minimumFractionDigits: 2 })}</span>
                         </div>
                       </div>
 
                       <div className="form-grid border border-gray-100 p-3 rounded-lg gap-3 text-sm dark:border-gray-800">
                         <div className="flex flex-col">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">CGST</span>
-                          <span className="font-medium text-gray-700 dark:text-gray-200">₹{cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">{t("CGST")}</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-200">₹{formatNumber(Number(cgst), { minimumFractionDigits: 2 })}</span>
                         </div>
                         <div className="flex flex-col text-right">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">SGST</span>
-                          <span className="font-medium text-gray-700 dark:text-gray-200">₹{sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">{t("SGST")}</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-200">₹{formatNumber(Number(sgst), { minimumFractionDigits: 2 })}</span>
                         </div>
                         <div className="flex flex-col mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">IGST</span>
-                          <span className="font-medium text-gray-700 dark:text-gray-200">₹{igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">{t("IGST")}</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-200">₹{formatNumber(Number(igst), { minimumFractionDigits: 2 })}</span>
                         </div>
                         <div className="flex flex-col text-right mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
-                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">Total Tax</span>
-                          <span className="font-bold text-gray-900 dark:text-white">₹{tax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-[10px] text-gray-500 font-bold uppercase dark:text-gray-400">{t("Total Tax")}</span>
+                          <span className="font-bold text-gray-900 dark:text-white">₹{formatNumber(Number(tax), { minimumFractionDigits: 2 })}</span>
                         </div>
                       </div>
                     </div>
@@ -209,9 +212,7 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
         })}
         
         {Object.keys(summary.groupedInvoices).length === 0 && (
-          <div className="bg-white border rounded-xl shadow-sm p-12 text-center text-gray-400 dark:bg-gray-800">
-            No sales transactions recorded for this period.
-          </div>
+          <div className="bg-white border rounded-xl shadow-sm p-12 text-center text-gray-400 dark:bg-gray-800">{t("No sales transactions recorded for this period.")}</div>
         )}
         
         {Object.entries(summary.groupedHsnData).map(([groupType, groupHsnDataUntyped]) => {
@@ -231,15 +232,15 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                 <table className="w-full text-sm text-left">
                   <thead>
                     <tr className="bg-gray-50 border-b dark:bg-gray-900">
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">HSN/SAC</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Type</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Description</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Qty</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">UOM</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Taxable Value</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">CGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">SGST</th>
-                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">IGST</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("HSN/SAC")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Type")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Description")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Qty")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("UOM")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Taxable Value")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("CGST")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("SGST")}</th>
+                      <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("IGST")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
@@ -262,10 +263,10 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                         <td className="px-4 py-3 text-gray-500 truncate max-w-[150px] dark:text-gray-400" title={hsn.desc}>{hsn.desc || '-'}</td>
                         <td className="px-4 py-3 text-right font-medium">{hsn.qty}</td>
                         <td className="px-4 py-3 text-right text-gray-500 dark:text-gray-400">{hsn.uom}</td>
-                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{hsn.taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{hsn.cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{hsn.sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{hsn.igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{formatNumber(Number(hsn.taxable), { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{formatNumber(Number(hsn.cgst), { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{formatNumber(Number(hsn.sgst), { minimumFractionDigits: 2 })}</td>
+                        <td className="px-4 py-3 text-right font-medium text-gray-600 dark:text-gray-300">₹{formatNumber(Number(hsn.igst), { minimumFractionDigits: 2 })}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -297,23 +298,23 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
                     
                     <div className="form-grid bg-gray-50 p-3 rounded-lg gap-3 text-xs dark:bg-gray-900">
                       <div className="flex flex-col">
-                        <span className="text-gray-500 font-bold uppercase dark:text-gray-400">Taxable Value</span>
-                        <span className="font-medium text-gray-900 dark:text-white">₹{hsn.taxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <span className="text-gray-500 font-bold uppercase dark:text-gray-400">{t("Taxable Value")}</span>
+                        <span className="font-medium text-gray-900 dark:text-white">₹{formatNumber(Number(hsn.taxable), { minimumFractionDigits: 2 })}</span>
                       </div>
                     </div>
 
                     <div className="form-grid gap-2 px-1">
                       <div className="flex flex-col">
-                        <span className="text-[9px] text-gray-400 font-bold uppercase">CGST</span>
-                        <span className="text-[10px] font-medium">₹{hsn.cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <span className="text-[9px] text-gray-400 font-bold uppercase">{t("CGST")}</span>
+                        <span className="text-[10px] font-medium">₹{formatNumber(Number(hsn.cgst), { minimumFractionDigits: 2 })}</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-[9px] text-gray-400 font-bold uppercase">SGST</span>
-                        <span className="text-[10px] font-medium">₹{hsn.sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <span className="text-[9px] text-gray-400 font-bold uppercase">{t("SGST")}</span>
+                        <span className="text-[10px] font-medium">₹{formatNumber(Number(hsn.sgst), { minimumFractionDigits: 2 })}</span>
                       </div>
                       <div className="flex flex-col text-right">
-                        <span className="text-[9px] text-gray-400 font-bold uppercase">IGST</span>
-                        <span className="text-[10px] font-medium">₹{hsn.igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <span className="text-[9px] text-gray-400 font-bold uppercase">{t("IGST")}</span>
+                        <span className="text-[10px] font-medium">₹{formatNumber(Number(hsn.igst), { minimumFractionDigits: 2 })}</span>
                       </div>
                     </div>
                   </div>
@@ -324,9 +325,7 @@ export const GSTR1Report: React.FC<GSTR1ReportProps> = ({ summary }) => {
         })}
         
         {Object.keys(summary.groupedHsnData).length === 0 && (
-          <div className="bg-white border rounded-xl shadow-sm p-12 text-center text-gray-400 dark:bg-gray-800">
-            No HSN/SAC data available.
-          </div>
+          <div className="bg-white border rounded-xl shadow-sm p-12 text-center text-gray-400 dark:bg-gray-800">{t("No HSN/SAC data available.")}</div>
         )}
       </div>
     </div>

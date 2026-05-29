@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { 
@@ -26,6 +27,8 @@ interface GSTReportViewProps {
 }
 
 export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSamples, defaultTab, onTabChange }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const [activeTab, setActiveTab] = useState<'filing' | 'summary' | 'invoice_detail' | 'hsn_detail' | 'generate_gst' | 'gstr2b_report' | 'gstr3b_report' | 'gstr9_report' | 'gstr9c_report' | 'others_report'>((defaultTab as any) || 'generate_gst');
   
   useEffect(() => {
@@ -319,16 +322,16 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <h2 className="text-lg font-bold text-gray-800 flex items-center dark:text-gray-100">
                     <FileText className="mr-2 text-blue-600" size={20} />
-                    {activeTab === 'summary' && 'GSTR1 Summary'}
-                    {activeTab === 'filing' && 'GSTR-1 Filing'}
-                    {activeTab === 'invoice_detail' && 'GSTR1 Invoices'}
-                    {activeTab === 'hsn_detail' && 'GSTR1 HSN'}
-                    {activeTab === 'gstr2b_report' && 'GSTR-2B Report'}
-                    {activeTab === 'gstr3b_report' && 'GSTR-3B Report'}
-                    {activeTab === 'gstr9_report' && 'GSTR-9 Report'}
-                    {activeTab === 'gstr9c_report' && 'GSTR-9C Report'}
-                    {activeTab === 'others_report' && 'Other GST Reports'}
-                    {activeTab === 'generate_gst' && 'Generate GST Report'}
+                    {activeTab === 'summary' && t('GSTR1 Summary')}
+                    {activeTab === 'filing' && t('GSTR-1 Filing')}
+                    {activeTab === 'invoice_detail' && t('GSTR1 Invoices')}
+                    {activeTab === 'hsn_detail' && t('GSTR1 HSN')}
+                    {activeTab === 'gstr2b_report' && t('GSTR-2B Report')}
+                    {activeTab === 'gstr3b_report' && t('GSTR-3B Report')}
+                    {activeTab === 'gstr9_report' && t('GSTR-9 Report')}
+                    {activeTab === 'gstr9c_report' && t('GSTR-9C Report')}
+                    {activeTab === 'others_report' && t('Other GST Reports')}
+                    {activeTab === 'generate_gst' && t('Generate GST Report')}
                   </h2>
                   <div className="flex space-x-2 self-start md:self-center">
                     <button 
@@ -353,70 +356,70 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                     onClick={() => handleTabChange('generate_gst')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'generate_gst' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    Generate GST
+                    {t('Generate GST')}
                 </button>
                 <button 
                     id="gst-tab-summary"
                     onClick={() => handleTabChange('summary')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'summary' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    GSTR1 Summary
+                    {t('GSTR1 Summary')}
                 </button>
                 <button 
                     id="gst-tab-filing"
                     onClick={() => handleTabChange('filing')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'filing' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    GSTR1 Filing
+                    {t('GSTR1 Filing')}
                 </button>
                 <button 
                     id="gst-tab-invoice_detail"
                     onClick={() => handleTabChange('invoice_detail')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'invoice_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    GSTR1 Invoice
+                    {t('GSTR1 Invoice')}
                 </button>
                 <button 
                     id="gst-tab-hsn_detail"
                     onClick={() => handleTabChange('hsn_detail')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'hsn_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    GSTR1 HSN
+                    {t('GSTR1 HSN')}
                 </button>
                 <button 
                     id="gst-tab-gstr2b_report"
                     onClick={() => handleTabChange('gstr2b_report')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr2b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    GSTR-2B
+                    {t('GSTR-2B')}
                 </button>
                 <button 
                     id="gst-tab-gstr3b_report"
                     onClick={() => handleTabChange('gstr3b_report')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr3b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    GSTR-3B
+                    {t('GSTR-3B')}
                 </button>
                 <button 
                     id="gst-tab-gstr9_report"
                     onClick={() => handleTabChange('gstr9_report')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    GSTR-9
+                    {t('GSTR-9')}
                 </button>
                 <button 
                     id="gst-tab-gstr9c_report"
                     onClick={() => handleTabChange('gstr9c_report')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9c_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    GSTR-9C
+                    {t('GSTR-9C')}
                 </button>
                 <button 
                     id="gst-tab-others_report"
                     onClick={() => handleTabChange('others_report')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'others_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
-                    Others
+                    {t('Others')}
                 </button>
               </div>
             </div>
@@ -434,7 +437,7 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
         {activeTab === 'generate_gst' && (
           <div className="p-6 bg-gray-50 rounded-xl border border-dashed border-gray-300 dark:bg-gray-900 dark:border-gray-600">
             <div className="mb-4">
-                <h3 className="font-bold text-gray-800 dark:text-gray-100">Generate GST Report</h3>
+                <h3 className="font-bold text-gray-800 dark:text-gray-100">{t("Generate GST Report")}</h3>
             </div>
             <select
                 value={quickDateOption || ''}
@@ -447,23 +450,23 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                 }}
                 className="form-input text-xs font-bold mb-4 block"
             >
-                <option value="">Select Period</option>
-                <option value="currentMonth">Current Month</option>
-                <option value="lastMonth">Last Month</option>
-                <option value="currentYear">Current Year</option>
-                <option value="lastYear">Last Year</option>
+                <option value="">{t("Select Period")}</option>
+                <option value="currentMonth">{t("Current Month")}</option>
+                <option value="lastMonth">{t("Last Month")}</option>
+                <option value="currentYear">{t("Current Year")}</option>
+                <option value="lastYear">{t("Last Year")}</option>
             </select>
             <select
                 value={selectedReportType}
                 onChange={(e) => setSelectedReportType(e.target.value)}
                 className="form-input text-xs font-bold mb-6 block"
             >
-                <option value="GSTR-1">GSTR-1</option>
-                <option value="GSTR-2B">GSTR-2B</option>
-                <option value="GSTR-3B">GSTR-3B</option>
-                <option value="GSTR-9">GSTR-9</option>
-                <option value="GSTR-9C">GSTR-9C</option>
-                <option value="others">Others</option>
+                <option value="GSTR-1">{t("GSTR-1")}</option>
+                <option value="GSTR-2B">{t("GSTR-2B")}</option>
+                <option value="GSTR-3B">{t("GSTR-3B")}</option>
+                <option value="GSTR-9">{t("GSTR-9")}</option>
+                <option value="GSTR-9C">{t("GSTR-9C")}</option>
+                <option value="others">{t("Others")}</option>
             </select>
             <div className="form-grid gap-2 mb-6">
               <button 
@@ -477,17 +480,15 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                   }}
                   className="px-2 py-2 bg-blue-600 text-white rounded-lg font-bold text-xs hover:bg-blue-700 truncate"
               >
-                  View
+                  {t('View')}
               </button>
               <button 
                   onClick={handleExport}
                   className="px-2 py-2 bg-gray-800 text-white rounded-lg font-bold text-xs hover:bg-gray-900 truncate"
-              >
-                  Export
-              </button>
+              >{t("Export")}</button>
             </div>
 
-            <p className="text-sm text-gray-500 mt-4 dark:text-gray-400">Generate GST filing reports based on the selected period and company criteria.</p>
+            <p className="text-sm text-gray-500 mt-4 dark:text-gray-400">{t("Generate GST filing reports based on the selected period and company criteria.")}</p>
           </div>
         )}
       </div>

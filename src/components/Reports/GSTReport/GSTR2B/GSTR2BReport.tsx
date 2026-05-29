@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React, { useState, useEffect } from 'react';
 import { FileText, Loader2, Info } from 'lucide-react';
 
@@ -7,6 +8,8 @@ interface GSTR2BReportProps {
 }
 
 export const GSTR2BReport: React.FC<GSTR2BReportProps> = ({ useSampleData, onToggleSampleData }) => {
+  const { t, formatNumber  } = useLanguage();
+
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(false);
 
@@ -34,9 +37,9 @@ export const GSTR2BReport: React.FC<GSTR2BReportProps> = ({ useSampleData, onTog
                 <div>
                     <h2 className="text-lg font-bold text-gray-800 flex items-center dark:text-gray-100">
                         <FileText className="mr-2 text-blue-600" size={20} />
-                        GSTR-2B Report
+                        {t("GSTR-2B Report")}
                     </h2>
-                    <p className="text-gray-500 mt-1 text-sm dark:text-gray-400">Auto-drafted Input Tax Credit (ITC) Statement</p>
+                    <p className="text-gray-500 mt-1 text-sm dark:text-gray-400">{t("Auto-drafted Input Tax Credit (ITC) Statement")}</p>
                 </div>
             </div>
 
@@ -49,29 +52,29 @@ export const GSTR2BReport: React.FC<GSTR2BReportProps> = ({ useSampleData, onTog
                     <div className="form-grid gap-6">
                         {data.sections.map((sec: any, i: number) => (
                             <div key={i} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-800">
-                                <h3 className="font-bold text-gray-800 mb-4 dark:text-gray-100">{sec.title}</h3>
+                                <h3 className="font-bold text-gray-800 mb-4 dark:text-gray-100">{t(sec.title)}</h3>
                                 <div className="form-grid gap-4 mb-4">
                                     <div className="bg-gray-50 p-3 rounded-lg dark:bg-gray-900">
-                                        <p className="text-xs text-gray-500 font-medium dark:text-gray-400">Total Taxable</p>
-                                        <p className="font-bold text-gray-800 dark:text-gray-100">₹{sec.total_taxable?.toLocaleString('en-IN')}</p>
+                                        <p className="text-xs text-gray-500 font-medium dark:text-gray-400">{t("Total Taxable")}</p>
+                                        <p className="font-bold text-gray-800 dark:text-gray-100">₹{formatNumber(Number(sec.total_taxable))}</p>
                                     </div>
                                     <div className="bg-blue-50 p-3 rounded-lg">
-                                        <p className="text-xs text-blue-600 font-medium">Total ITC</p>
-                                        <p className="font-bold text-blue-700">₹{sec.total_itc?.toLocaleString('en-IN')}</p>
+                                        <p className="text-xs text-blue-600 font-medium">{t("Total ITC")}</p>
+                                        <p className="font-bold text-blue-700">₹{formatNumber(Number(sec.total_itc))}</p>
                                     </div>
                                 </div>
                                 <div className="form-grid gap-2">
                                     <div className="text-center p-2 rounded bg-gray-50 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
-                                        <p className="text-[10px] uppercase font-bold text-gray-400">CGST</p>
-                                        <p className="text-xs font-bold text-gray-700 dark:text-gray-200">₹{sec.cgst?.toLocaleString('en-IN')}</p>
+                                        <p className="text-[10px] uppercase font-bold text-gray-400">{t("CGST")}</p>
+                                        <p className="text-xs font-bold text-gray-700 dark:text-gray-200">₹{formatNumber(Number(sec.cgst))}</p>
                                     </div>
                                     <div className="text-center p-2 rounded bg-gray-50 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
-                                        <p className="text-[10px] uppercase font-bold text-gray-400">SGST</p>
-                                        <p className="text-xs font-bold text-gray-700 dark:text-gray-200">₹{sec.sgst?.toLocaleString('en-IN')}</p>
+                                        <p className="text-[10px] uppercase font-bold text-gray-400">{t("SGST")}</p>
+                                        <p className="text-xs font-bold text-gray-700 dark:text-gray-200">₹{formatNumber(Number(sec.sgst))}</p>
                                     </div>
                                     <div className="text-center p-2 rounded bg-gray-50 border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
-                                        <p className="text-[10px] uppercase font-bold text-gray-400">IGST</p>
-                                        <p className="text-xs font-bold text-gray-700 dark:text-gray-200">₹{sec.igst?.toLocaleString('en-IN')}</p>
+                                        <p className="text-[10px] uppercase font-bold text-gray-400">{t("IGST")}</p>
+                                        <p className="text-xs font-bold text-gray-700 dark:text-gray-200">₹{formatNumber(Number(sec.igst))}</p>
                                     </div>
                                 </div>
                             </div>
@@ -79,18 +82,16 @@ export const GSTR2BReport: React.FC<GSTR2BReportProps> = ({ useSampleData, onTog
                     </div>
 
                     <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-800">
-                        <div className="p-4 bg-gray-50 border-b border-gray-100 font-bold text-gray-700 text-sm dark:bg-gray-900 dark:border-gray-800 dark:text-gray-200">
-                            Supplier-wise Details
-                        </div>
+                        <div className="p-4 bg-gray-50 border-b border-gray-100 font-bold text-gray-700 text-sm dark:bg-gray-900 dark:border-gray-800 dark:text-gray-200">{t("Supplier-wise Details")}</div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
                                 <thead className="bg-gray-50 text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                     <tr>
-                                        <th className="px-4 py-3 font-semibold">GSTIN</th>
-                                        <th className="px-4 py-3 font-semibold">Name</th>
-                                        <th className="px-4 py-3 font-semibold text-right">Invoices</th>
-                                        <th className="px-4 py-3 font-semibold text-right">Taxable Value</th>
-                                        <th className="px-4 py-3 font-semibold text-right">Tax Amount</th>
+                                        <th className="px-4 py-3 font-semibold">{t("GSTIN")}</th>
+                                        <th className="px-4 py-3 font-semibold">{t("Name")}</th>
+                                        <th className="px-4 py-3 font-semibold text-right">{t("Invoices")}</th>
+                                        <th className="px-4 py-3 font-semibold text-right">{t("Taxable Value")}</th>
+                                        <th className="px-4 py-3 font-semibold text-right">{t("Tax Amount")}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -99,8 +100,8 @@ export const GSTR2BReport: React.FC<GSTR2BReportProps> = ({ useSampleData, onTog
                                             <td className="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{sup.gstin}</td>
                                             <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{sup.name}</td>
                                             <td className="px-4 py-3 text-right text-gray-600 dark:text-gray-300">{sup.invoices_count}</td>
-                                            <td className="px-4 py-3 text-right font-medium text-gray-800 dark:text-gray-100">₹{sup.taxable_value?.toLocaleString('en-IN')}</td>
-                                            <td className="px-4 py-3 text-right font-medium text-blue-600">₹{sup.tax?.toLocaleString('en-IN')}</td>
+                                            <td className="px-4 py-3 text-right font-medium text-gray-800 dark:text-gray-100">₹{formatNumber(Number(sup.taxable_value))}</td>
+                                            <td className="px-4 py-3 text-right font-medium text-blue-600">₹{formatNumber(Number(sup.tax))}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -111,7 +112,7 @@ export const GSTR2BReport: React.FC<GSTR2BReportProps> = ({ useSampleData, onTog
             ) : (
                 <div className="flex flex-col items-center justify-center p-12 bg-white rounded-xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-800">
                     <Info className="w-12 h-12 text-gray-300 mb-4" />
-                    <p className="text-gray-500 font-medium dark:text-gray-400">No data available. Enable sample data to view the report.</p>
+                    <p className="text-gray-500 font-medium dark:text-gray-400">{t("No data available. Enable sample data to view the report.")}</p>
                 </div>
             )}
         </div>

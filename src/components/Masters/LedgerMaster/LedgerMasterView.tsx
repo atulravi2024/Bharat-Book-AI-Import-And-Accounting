@@ -14,6 +14,8 @@ import { ContactsTab } from './Tabs/ContactsTab';
 import { GroupsTab } from './Tabs/GroupsTab';
 import { LocationsTab } from './Tabs/LocationsTab';
 import { CostCentersTab } from './Tabs/CostCentersTab';
+import { useLanguage } from '../../../context/LanguageContext';
+import { HorizontalScrollArea } from '../../shared/HorizontalScrollArea';
 
 interface LedgerMasterViewProps {
   initialTab?: 'parties' | 'vendors' | 'partners' | 'banks' | 'ledgers' | 'contacts' | 'locations' | 'costCenters' | 'accountGroups';
@@ -48,6 +50,7 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
   setAccountGroupMasters,
   initialTab
 }) => {
+    const { t, formatNumber } = useLanguage();
     const validTabs: MasterTab[] = [
         'ledgers', 'banks', 'contacts', 
         'locations', 'costCenters', 'accountGroups'
@@ -130,27 +133,29 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
     return (
         <div className="max-w-7xl mx-auto px-4 py-6 animate-in fade-in duration-500">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-x-auto custom-scrollbar justify-between items-center pr-4">
-                    <div className="flex">
-                        {[
-                            { id: 'contacts', label: 'Contacts' },
-                            { id: 'ledgers', label: 'General Ledgers' },
-                            { id: 'banks', label: 'Bank Masters' },
-                            { id: 'accountGroups', label: 'Groups' },
-                            { id: 'locations', label: 'Locations' },
-                            { id: 'costCenters', label: 'Cost Centers' },
-                        ].map(tab => (
-                            <button
-                                key={tab.id}
-                                id={`ledger-master-tab-${tab.id}`}
-                                onClick={() => setActiveTab(tab.id as MasterTab)}
-                                className={`px-6 py-4 text-sm font-bold transition-all relative whitespace-nowrap ${activeTab === tab.id ? 'text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-700' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
-                            >
-                                {tab.label}
-                                {activeTab === tab.id && <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600"></div>}
-                            </button>
-                        ))}
-                    </div>
+                <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex items-center pr-4 relative">
+                    <HorizontalScrollArea className="flex-1 min-w-0">
+                        <div className="flex">
+                            {[
+                                { id: 'contacts', label: 'Contacts' },
+                                { id: 'ledgers', label: 'General Ledgers' },
+                                { id: 'banks', label: 'Bank Masters' },
+                                { id: 'accountGroups', label: 'Groups' },
+                                { id: 'locations', label: 'Locations' },
+                                { id: 'costCenters', label: 'Cost Centers' },
+                            ].map(tab => (
+                                <button
+                                    key={tab.id}
+                                    id={`ledger-master-tab-${tab.id}`}
+                                    onClick={() => setActiveTab(tab.id as MasterTab)}
+                                    className={`px-6 py-4 text-sm font-bold transition-all relative whitespace-nowrap ${activeTab === tab.id ? 'text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-700' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
+                                >
+                                    {t(tab.label)}
+                                    {activeTab === tab.id && <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600"></div>}
+                                </button>
+                            ))}
+                        </div>
+                    </HorizontalScrollArea>
                 </div>
                 {renderActiveTab()}
             </div>

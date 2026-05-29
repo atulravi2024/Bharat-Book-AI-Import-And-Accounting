@@ -1,13 +1,17 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React from 'react';
 import { SearchIcon, AddIcon, DeleteIcon, EditIcon } from '../../../icons/IconComponents';
 import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { Edit2, Trash2 } from 'lucide-react';
+import { HorizontalScrollArea } from '../../../shared/HorizontalScrollArea';
 
 export const AllContactsTab = ({
   searchTerm, setSearchTerm, allContactsCombined, filteredAllContacts, 
   setIsModalOpen, setEditingId, setFormData, setDeleteConfirmation, 
   renderClassificationBadge, renderDetailsCell
 }: any) => {
+  const { t, formatNumber  } = useLanguage();
+
   return (
     <>
       {/* ALL Contacts Unified View */}
@@ -18,7 +22,7 @@ export const AllContactsTab = ({
               <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search all staff, customers, vendors, and partners..."
+                placeholder={t("Search all staff, customers, vendors, and partners...")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="form-input pl-10 pr-4 text-sm"
@@ -44,31 +48,22 @@ export const AllContactsTab = ({
                 className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all"
               >
                 <AddIcon className="lg:mr-2" />
-                <span className="hidden lg:inline-block">Add Contact</span>
+                <span className="hidden lg:inline-block">{t("Add Contact")}</span>
               </button>
             </div>
           </div>
 
           <div className="flex-1 overflow-auto custom-scrollbar min-h-0">
             {filteredAllContacts.length > 0 ? (
-              <table className="w-full text-left border-collapse">
+              <HorizontalScrollArea className="w-full">
+                <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                      Code
-                    </th>
-                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                      Name
-                    </th>
-                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                      Classification
-                    </th>
-                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                      Details / Description
-                    </th>
-                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">
-                      Actions
-                    </th>
+                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">{t("Code")}</th>
+                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">{t("Name")}</th>
+                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">{t("Classification")}</th>
+                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">{t("Details / Description")}</th>
+                    <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">{t("Actions")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-gray-800">
@@ -136,7 +131,7 @@ export const AllContactsTab = ({
                               setIsModalOpen(true);
                             }}
                             className="mx-auto flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95"
-                            title="Edit"
+                            title={t("Edit")}
                           >
                             <Edit2 size={16} className="m-auto" />
                           </button>
@@ -150,7 +145,7 @@ export const AllContactsTab = ({
                               })
                             }
                             className="mx-auto flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95"
-                            title="Delete"
+                            title={t("Delete")}
                           >
                             <Trash2 size={16} className="m-auto" />
                           </button>
@@ -160,14 +155,13 @@ export const AllContactsTab = ({
                   ))}
                 </tbody>
               </table>
+            </HorizontalScrollArea>
             ) : (
               <div className="p-12 text-center flex flex-col justify-center items-center">
                 <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 dark:bg-gray-900">
                   <SearchIcon className="text-gray-300 text-3xl" />
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">
-                  No contacts found
-                </p>
+                <p className="text-gray-500 dark:text-gray-400">{t("No contacts found")}</p>
               </div>
             )}
           </div>

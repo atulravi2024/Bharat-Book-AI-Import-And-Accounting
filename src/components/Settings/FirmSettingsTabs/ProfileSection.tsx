@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Briefcase } from 'l
 import { STATE_DATA } from "../../../lib/states";
 import { SearchableDropdown } from "../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../lib/firmSettingsConstants";
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   firmData: any;

@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React from 'react';
 import { Package, X, ScanBarcode, ChevronDown, Tags, ClipboardList, Calculator } from 'lucide-react';
 import { SearchableDropdown } from '../../../ui/SearchableDropdown';
@@ -31,12 +32,14 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
   setScanningRowIndex,
   setShowScanner,
   activeTab
-}) => {  return (
+}) => {
+  const { t, formatNumber  } = useLanguage();
+  return (
     <div className="fixed inset-0 z-[100] bg-gray-50 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300 dark:bg-gray-900">
       <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm z-10 relative dark:border-gray-700 dark:bg-gray-800">
         <div>
-          <h3 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight dark:text-gray-100">Edit Inventory Entry</h3>
-          <p className="text-xs md:text-sm font-medium text-gray-500 mt-1 dark:text-gray-400">Update transaction details for this specific entry.</p>
+          <h3 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight dark:text-gray-100">{t("Edit Inventory Entry")}</h3>
+          <p className="text-xs md:text-sm font-medium text-gray-500 mt-1 dark:text-gray-400">{t("Update transaction details for this specific entry.")}</p>
         </div>
         <button onClick={() => { setEditingRowIndex(null); setExpandedRowSection(null); }} className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:bg-gray-800 dark:border-gray-700">
           <X size={20} />
@@ -59,7 +62,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
               {expandedRowSection === 'item_selection' && (
               <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                 <div className="form-field-wrapper col-span-1 sm:col-span-1">
-                  <label className="form-label">Item Name / SKU</label>
+                  <label className="form-label">{t("Item Name / SKU")}</label>
                   <div className="flex items-center gap-2">
                     <button className="text-gray-400 hover:text-purple-500 transition-colors shrink-0 bg-gray-50 border border-gray-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:bg-gray-900 dark:border-gray-700" title="Scan Barcode" onClick={(e) => { e.stopPropagation(); setScanningRowIndex(editingRowIndex); setShowScanner(true); }}>
                       <ScanBarcode size={20} />
@@ -69,7 +72,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                         options={itemMasters}
                         value={rows[editingRowIndex]?.itemName || ''}
                         onChange={(val) => handleItemOrSkuChange(editingRowIndex, val, 'itemName')}
-                        placeholder="Search for an item..."
+                        placeholder={t("Search for an item...")}
                         buttonClassName="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-left dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                       />
                     </div>
@@ -77,7 +80,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                 </div>
 
                 <div className="form-field-wrapper col-span-1 sm:col-span-1">
-                  <label className="form-label">Godown / Location</label>
+                  <label className="form-label">{t("Godown / Location")}</label>
                   <SearchableDropdown
                     options={warehouseMasters}
                     value={rows[editingRowIndex]?.godown || ''}
@@ -86,13 +89,13 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       r[editingRowIndex].godown = val;
                       setRows(r);
                     }}
-                    placeholder="Select Godown..."
+                    placeholder={t("Select Godown...")}
                     buttonClassName="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-left dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                   />
                 </div>
 
                 <div className="form-field-wrapper col-span-1 sm:col-span-2">
-                   <label className="form-label">Remarks / Note</label>
+                   <label className="form-label">{t("Remarks / Note")}</label>
                    <textarea 
                      value={rows[editingRowIndex]?.remarks || ''} 
                      onChange={(e) => {
@@ -101,7 +104,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                        setRows(r);
                      }}
                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all resize-none h-20 dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                     placeholder="Enter remarks for this entry..."
+                     placeholder={t("Enter remarks for this entry...")}
                    />
                  </div>
               </div>
@@ -123,12 +126,12 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
               <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                 {/* SKU */}
                 <div className="form-field-wrapper">
-<label className="form-label">SKU / Barcode</label>
+<label className="form-label">{t("SKU / Barcode")}</label>
                   <SearchableDropdown
                     options={itemMasters.filter(i => i.sku)}
                     value={rows[editingRowIndex]?.sku || ''}
                     onChange={(value) => handleItemOrSkuChange(editingRowIndex, value, 'sku')}
-                    placeholder="e.g. TS-BLU-M"
+                    placeholder={t("e.g. TS-BLU-M")}
                     labelKey="sku"
                     buttonClassName="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                   />
@@ -136,7 +139,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                 
                 {/* Category */}
                 <div className="form-field-wrapper">
-<label className="form-label">Category</label>
+<label className="form-label">{t("Category")}</label>
                   <input 
                     type="text" 
                     value={rows[editingRowIndex]?.category || ''} 
@@ -146,13 +149,13 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       setRows(r);
                     }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="Category"
+                    placeholder={t("Category")}
                   />
                 </div>
 
                 {/* Subcategory */}
                 <div className="form-field-wrapper">
-<label className="form-label">Subcategory</label>
+<label className="form-label">{t("Subcategory")}</label>
                   <input 
                     type="text" 
                     value={rows[editingRowIndex]?.subcategory || ''} 
@@ -162,13 +165,13 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       setRows(r);
                     }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="Subcategory"
+                    placeholder={t("Subcategory")}
                   />
                 </div>
 
                 {/* Brand */}
                 <div className="form-field-wrapper">
-<label className="form-label">Brand</label>
+<label className="form-label">{t("Brand")}</label>
                   <input 
                     type="text" 
                     value={rows[editingRowIndex]?.brand || ''} 
@@ -178,13 +181,13 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       setRows(r);
                     }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="Brand Name"
+                    placeholder={t("Brand Name")}
                   />
                 </div>
 
                 {/* Color */}
                 <div className="form-field-wrapper">
-<label className="form-label">Color</label>
+<label className="form-label">{t("Color")}</label>
                   <input 
                     type="text" 
                     value={rows[editingRowIndex]?.color || ''} 
@@ -194,13 +197,13 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       setRows(r);
                     }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="e.g. Navy Blue"
+                    placeholder={t("e.g. Navy Blue")}
                   />
                 </div>
 
                 {/* Variant */}
                 <div className="form-field-wrapper">
-<label className="form-label">Variant</label>
+<label className="form-label">{t("Variant")}</label>
                   <input 
                     type="text" 
                     value={rows[editingRowIndex]?.variant || ''} 
@@ -210,13 +213,13 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       setRows(r);
                     }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="e.g. V2, Pro"
+                    placeholder={t("e.g. V2, Pro")}
                   />
                 </div>
 
                 {/* Size */}
                 <div className="form-field-wrapper">
-<label className="form-label">Size</label>
+<label className="form-label">{t("Size")}</label>
                   <input 
                     type="text" 
                     value={rows[editingRowIndex]?.size || ''} 
@@ -226,13 +229,13 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       setRows(r);
                     }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="e.g. XL, 42"
+                    placeholder={t("e.g. XL, 42")}
                   />
                 </div>
 
                 {/* Dimensions */}
                 <div className="form-field-wrapper">
-<label className="form-label">Dimensions</label>
+<label className="form-label">{t("Dimensions")}</label>
                   <input 
                     type="text" 
                     value={rows[editingRowIndex]?.dimension || ''} 
@@ -242,13 +245,13 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       setRows(r);
                     }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="L x W x H"
+                    placeholder={t("L x W x H")}
                   />
                 </div>
 
                 {/* Material */}
                 <div className="form-field-wrapper">
-<label className="form-label">Material</label>
+<label className="form-label">{t("Material")}</label>
                   <input 
                     type="text" 
                     value={rows[editingRowIndex]?.material || ''} 
@@ -258,7 +261,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       setRows(r);
                     }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="e.g. Cotton, Steel"
+                    placeholder={t("e.g. Cotton, Steel")}
                   />
                 </div>
               </div>
@@ -279,7 +282,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
               {expandedRowSection === 'tracking' && (
               <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                 <div className="form-field-wrapper">
-<label className="form-label">Batch / Lot Number</label>
+<label className="form-label">{t("Batch / Lot Number")}</label>
                   <input 
                     type="text" 
                     value={rows[editingRowIndex]?.batch || ''} 
@@ -289,12 +292,12 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       setRows(r);
                     }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="e.g. BATCH-001"
+                    placeholder={t("e.g. BATCH-001")}
                   />
                 </div>
                 
                 <div className="form-field-wrapper">
-<label className="form-label">Manufacturing Date</label>
+<label className="form-label">{t("Manufacturing Date")}</label>
                   <input 
                     type="date" 
                     value={rows[editingRowIndex]?.mfgDate || ''} 
@@ -308,7 +311,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                 </div>
                 
                 <div className="form-field-wrapper">
-<label className="form-label">Expiry Date</label>
+<label className="form-label">{t("Expiry Date")}</label>
                   <input 
                     type="date" 
                     value={rows[editingRowIndex]?.expiryDate || ''} 
@@ -339,7 +342,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
               <div className="p-6 space-y-6 border-t border-gray-100 dark:border-gray-800">
                 <div className="form-grid gap-6 items-end">
                   <div className="form-field-wrapper">
-<label className="form-label">Unit</label>
+<label className="form-label">{t("Unit")}</label>
                     <select 
                       value={rows[editingRowIndex]?.unit || 'PCS'} 
                       onChange={(e) => {
@@ -349,23 +352,23 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                       }}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                     >
-                      <option>PCS</option>
-                      <option>NOS</option>
-                      <option>KG</option>
-                      <option>BOX</option>
-                      <option>LTR</option>
-                      <option>MTR</option>
-                      <option>PKT</option>
-                      <option>DOZ</option>
-                      <option>ROLL</option>
-                      <option>SET</option>
+                      <option>{t("PCS")}</option>
+                      <option>{t("NOS")}</option>
+                      <option>{t("KG")}</option>
+                      <option>{t("BOX")}</option>
+                      <option>{t("LTR")}</option>
+                      <option>{t("MTR")}</option>
+                      <option>{t("PKT")}</option>
+                      <option>{t("DOZ")}</option>
+                      <option>{t("ROLL")}</option>
+                      <option>{t("SET")}</option>
                     </select>
                   </div>
 
                   {activeTab === 'physical_stock' ? (
                     <>
                       <div className="form-field-wrapper">
-<label className="form-label">Book Quantity</label>
+<label className="form-label">{t("Book Quantity")}</label>
                         <input 
                           type="number" 
                           value={rows[editingRowIndex]?.qty || ''} 
@@ -374,7 +377,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                         />
                       </div>
                       <div className="form-field-wrapper">
-<label className="form-label">Physical Quantity</label>
+<label className="form-label">{t("Physical Quantity")}</label>
                         <input 
                           type="number" 
                           value={rows[editingRowIndex]?.physicalQty || rows[editingRowIndex]?.qty || ''} 
@@ -389,7 +392,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                     </>
                   ) : (
                     <div className="form-field-wrapper">
-<label className="form-label">Quantity</label>
+<label className="form-label">{t("Quantity")}</label>
                       <input 
                         type="number" 
                         value={rows[editingRowIndex]?.qty || ''} 
@@ -422,7 +425,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
               <div className="p-6 space-y-6 border-t border-gray-100 dark:border-gray-800">
                 <div className="form-grid gap-6 items-end">
                   <div className="form-field-wrapper">
-<label className="form-label">MRP (₹)</label>
+<label className="form-label">{t("MRP (₹)")}</label>
                     <input 
                       type="number" 
                       step="0.01"
@@ -437,7 +440,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                   </div>
                   {activeTab !== 'physical_stock' && (
                     <div className="form-field-wrapper">
-<label className="form-label">Rate (₹)</label>
+<label className="form-label">{t("Rate (₹)")}</label>
                       <input 
                         type="number" 
                         step="0.01"
@@ -454,7 +457,7 @@ export const ItemEditModal: React.FC<ItemEditModalProps> = ({
                 </div>
                 {activeTab !== 'physical_stock' && (
                   <div className="bg-purple-50/50 rounded-xl p-4 border border-purple-100 flex items-center justify-between mt-4">
-                    <span className="text-sm font-bold text-purple-800 uppercase tracking-widest">Calculated Amount</span>
+                    <span className="text-sm font-bold text-purple-800 uppercase tracking-widest">{t("Calculated Amount")}</span>
                     <span className="text-xl font-black text-gray-900 dark:text-white">
                       ₹ {((parseFloat(rows[editingRowIndex]?.qty || '0') * parseFloat(rows[editingRowIndex]?.rate || '0')) || 0).toFixed(2)}
                     </span>

@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 import React, { useState, useCallback, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import { Printer } from 'lucide-react';
@@ -64,6 +65,8 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
     onTabChange,
     setVouchers
 }) => {
+  const { t, formatNumber  } = useLanguage();
+
     vouchers = vouchers || [];
     partyMasters = partyMasters || [];
     ledgerMasters = ledgerMasters || [];
@@ -305,7 +308,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
                                 }
                              dark:text-gray-400`}
                         >
-                            {tab === 'bank' ? 'Raw Bank' : tab === 'classify' ? 'To Classify' : tab === 'reconcile' ? 'Reconcile' : tab === 'auto-matched' ? 'Auto-Matched' : tab === 'missing-masters' ? 'Missing Masters' : 'Unidentify'}
+                            {tab === 'bank' ? t('Raw Bank') : tab === 'classify' ? t('To Classify') : tab === 'reconcile' ? t('Reconcile') : tab === 'auto-matched' ? t('Auto-Matched') : tab === 'missing-masters' ? t('Missing Masters') : t('Unidentify')}
                         </button>
                     ))}
                 </nav>
@@ -333,7 +336,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
                                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                                 <input 
                                     type="text"
-                                    placeholder="Search statements..."
+                                    placeholder={t("Search statements...")}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all text-sm dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
@@ -342,7 +345,7 @@ export const BankReportView: React.FC<BankReportViewProps> = ({
                             <ImportExportButtons data={bankVouchers} onSave={completeSave} entityName="BankStatements" />
                             <button onClick={(e) => { e.currentTarget.blur(); setTimeout(() => window.print(), 100); }} className="bg-white text-gray-700 border border-gray-200 px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-sm whitespace-nowrap hover:bg-gray-50 active:scale-95 transition-all dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 hover:dark:bg-gray-700">
                                 <Printer className="text-[18px] leading-none lg:mr-2" />
-                                <span className="hidden lg:inline-block">Print</span>
+                                <span className="hidden lg:inline-block">{t("Print")}</span>
                             </button>
                         </div>
                         <button 

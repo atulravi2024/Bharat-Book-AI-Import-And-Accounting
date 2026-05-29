@@ -1,1 +1,704 @@
-[]
+[
+  {
+    "id": "demo-1",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-01"
+    },
+    "narration": {
+      "value": "Auto demo 1"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 11100
+    }
+  },
+  {
+    "id": "demo-2",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-03"
+    },
+    "narration": {
+      "value": "Auto demo 2"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 13000
+    }
+  },
+  {
+    "id": "demo-3",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-05"
+    },
+    "narration": {
+      "value": "Auto demo 3"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "TechSolve"
+    },
+    "amount": {
+      "value": 7500
+    }
+  },
+  {
+    "id": "demo-4",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-07"
+    },
+    "narration": {
+      "value": "Auto demo 4"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Office Expenses"
+    },
+    "amount": {
+      "value": 2700
+    }
+  },
+  {
+    "id": "demo-5",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-09"
+    },
+    "narration": {
+      "value": "Auto demo 5"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 19000
+    }
+  },
+  {
+    "id": "demo-6",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-11"
+    },
+    "narration": {
+      "value": "Auto demo 6"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12100
+    }
+  },
+  {
+    "id": "demo-7",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-13"
+    },
+    "narration": {
+      "value": "Auto demo 7"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12300
+    }
+  },
+  {
+    "id": "demo-8",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-15"
+    },
+    "narration": {
+      "value": "Auto demo 8"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 25000
+    }
+  },
+  {
+    "id": "demo-9",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-17"
+    },
+    "narration": {
+      "value": "Auto demo 9"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12700
+    }
+  },
+  {
+    "id": "demo-10",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-19"
+    },
+    "narration": {
+      "value": "Auto demo 10"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12900
+    }
+  },
+  {
+    "id": "demo-11",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-21"
+    },
+    "narration": {
+      "value": "Auto demo 11"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 31000
+    }
+  },
+  {
+    "id": "demo-12",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-23"
+    },
+    "narration": {
+      "value": "Auto demo 12"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 13300
+    }
+  },
+  {
+    "id": "demo-13",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-01-25"
+    },
+    "narration": {
+      "value": "Auto demo 13"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "TechSolve"
+    },
+    "amount": {
+      "value": 17500
+    }
+  },
+  {
+    "id": "demo-14",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-01"
+    },
+    "narration": {
+      "value": "Auto demo 14"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 11100
+    }
+  },
+  {
+    "id": "demo-15",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-03"
+    },
+    "narration": {
+      "value": "Auto demo 15"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 13000
+    }
+  },
+  {
+    "id": "demo-16",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-05"
+    },
+    "narration": {
+      "value": "Auto demo 16"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "TechSolve"
+    },
+    "amount": {
+      "value": 7500
+    }
+  },
+  {
+    "id": "demo-17",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-07"
+    },
+    "narration": {
+      "value": "Auto demo 17"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Office Expenses"
+    },
+    "amount": {
+      "value": 2700
+    }
+  },
+  {
+    "id": "demo-18",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-09"
+    },
+    "narration": {
+      "value": "Auto demo 18"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 19000
+    }
+  },
+  {
+    "id": "demo-19",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-11"
+    },
+    "narration": {
+      "value": "Auto demo 19"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12100
+    }
+  },
+  {
+    "id": "demo-20",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-13"
+    },
+    "narration": {
+      "value": "Auto demo 20"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12300
+    }
+  },
+  {
+    "id": "demo-21",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-15"
+    },
+    "narration": {
+      "value": "Auto demo 21"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 25000
+    }
+  },
+  {
+    "id": "demo-22",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-17"
+    },
+    "narration": {
+      "value": "Auto demo 22"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12700
+    }
+  },
+  {
+    "id": "demo-23",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-19"
+    },
+    "narration": {
+      "value": "Auto demo 23"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12900
+    }
+  },
+  {
+    "id": "demo-24",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-21"
+    },
+    "narration": {
+      "value": "Auto demo 24"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 31000
+    }
+  },
+  {
+    "id": "demo-25",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-23"
+    },
+    "narration": {
+      "value": "Auto demo 25"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 13300
+    }
+  },
+  {
+    "id": "demo-26",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-02-25"
+    },
+    "narration": {
+      "value": "Auto demo 26"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "TechSolve"
+    },
+    "amount": {
+      "value": 17500
+    }
+  },
+  {
+    "id": "demo-27",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-01"
+    },
+    "narration": {
+      "value": "Auto demo 27"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 11100
+    }
+  },
+  {
+    "id": "demo-28",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-03"
+    },
+    "narration": {
+      "value": "Auto demo 28"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 13000
+    }
+  },
+  {
+    "id": "demo-29",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-05"
+    },
+    "narration": {
+      "value": "Auto demo 29"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "TechSolve"
+    },
+    "amount": {
+      "value": 7500
+    }
+  },
+  {
+    "id": "demo-30",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-07"
+    },
+    "narration": {
+      "value": "Auto demo 30"
+    },
+    "type": "Payment",
+    "partyName": {
+      "value": "Office Expenses"
+    },
+    "amount": {
+      "value": 2700
+    }
+  },
+  {
+    "id": "demo-31",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-09"
+    },
+    "narration": {
+      "value": "Auto demo 31"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 19000
+    }
+  },
+  {
+    "id": "demo-32",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-11"
+    },
+    "narration": {
+      "value": "Auto demo 32"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12100
+    }
+  },
+  {
+    "id": "demo-33",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-13"
+    },
+    "narration": {
+      "value": "Auto demo 33"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12300
+    }
+  },
+  {
+    "id": "demo-34",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-15"
+    },
+    "narration": {
+      "value": "Auto demo 34"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 25000
+    }
+  },
+  {
+    "id": "demo-35",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-17"
+    },
+    "narration": {
+      "value": "Auto demo 35"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12700
+    }
+  },
+  {
+    "id": "demo-36",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-19"
+    },
+    "narration": {
+      "value": "Auto demo 36"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 12900
+    }
+  },
+  {
+    "id": "demo-37",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-21"
+    },
+    "narration": {
+      "value": "Auto demo 37"
+    },
+    "type": "Sales",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 31000
+    }
+  },
+  {
+    "id": "demo-38",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-23"
+    },
+    "narration": {
+      "value": "Auto demo 38"
+    },
+    "type": "Receipt",
+    "partyName": {
+      "value": "Acme Corp"
+    },
+    "amount": {
+      "value": 13300
+    }
+  },
+  {
+    "id": "demo-39",
+    "sampleSetId": "demo_vouchers",
+    "isSample": true,
+    "date": {
+      "value": "2024-03-25"
+    },
+    "narration": {
+      "value": "Auto demo 39"
+    },
+    "type": "Purchase",
+    "partyName": {
+      "value": "TechSolve"
+    },
+    "amount": {
+      "value": 17500
+    }
+  }
+]

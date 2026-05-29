@@ -3,6 +3,7 @@ import { User, Settings, LogOut, Shield, Compass, HelpCircle, LifeBuoy } from 'l
 import { AccountIcon } from '../icons/IconComponents';
 import { MainView } from '../../app/types';
 import { ManagedUser, INITIAL_USERS } from '../Settings/UserSettings';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ProfileDropdownProps {
   onViewChange?: (view: MainView, settingsTab?: string, usersSubTab?: string) => void;
@@ -11,6 +12,7 @@ interface ProfileDropdownProps {
 export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
   
   const currentLoggedInUserId = localStorage.getItem('bharat_book_current_logged_in_user_id');
   
@@ -85,8 +87,8 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
             >
               <User className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <div>
-                 <p className="text-xs font-bold text-gray-700 dark:text-gray-200">My Profile</p>
-                 <p className="text-[10px] text-gray-400 font-medium">Account settings & details</p>
+                 <p className="text-xs font-bold text-gray-700 dark:text-gray-200">{t("Profile")}</p>
+                 <p className="text-[10px] text-gray-400 font-medium">{t("Account settings & details")}</p>
               </div>
             </button>
             <button
@@ -95,8 +97,8 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
             >
               <Compass className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <div>
-                 <p className="text-xs font-bold text-gray-700 dark:text-gray-200">Company Directory</p>
-                 <p className="text-[10px] text-gray-400 font-medium">Manage team & invites</p>
+                 <p className="text-xs font-bold text-gray-700 dark:text-gray-200">{t("Company Directory")}</p>
+                 <p className="text-[10px] text-gray-400 font-medium">{t("Manage team & invites")}</p>
               </div>
             </button>
             <button
@@ -105,8 +107,8 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
             >
               <Settings className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <div>
-                 <p className="text-xs font-bold text-gray-700 dark:text-gray-200">System Preferences</p>
-                 <p className="text-[10px] text-gray-400 font-medium">Billing, taxes & general</p>
+                 <p className="text-xs font-bold text-gray-700 dark:text-gray-200">{t("System Preferences")}</p>
+                 <p className="text-[10px] text-gray-400 font-medium">{t("Billing, taxes & general")}</p>
               </div>
             </button>
           </div>
@@ -118,8 +120,8 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
             >
               <HelpCircle className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <div>
-                 <p className="text-xs font-bold">Help Center</p>
-                 <p className="text-[9px] text-gray-400">Knowledgebase & documents</p>
+                 <p className="text-xs font-bold">{t("Help Center")}</p>
+                 <p className="text-[9px] text-gray-400">{t("Knowledgebase & documents")}</p>
               </div>
             </button>
             <button
@@ -128,8 +130,8 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
             >
               <LifeBuoy className="w-4 h-4 text-violet-500" />
               <div>
-                 <p className="text-xs font-bold text-violet-600 dark:text-violet-400">Support</p>
-                 <p className="text-[9px] text-violet-450 dark:text-violet-500">AI Support chat</p>
+                 <p className="text-xs font-bold text-violet-600 dark:text-violet-400">{t("Support")}</p>
+                 <p className="text-[9px] text-violet-450 dark:text-violet-500">{t("AI Support chat")}</p>
               </div>
             </button>
             <button
@@ -137,7 +139,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
               className="w-full px-4 py-2 text-left flex items-center space-x-3 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors mt-1"
             >
               <LogOut className="w-4 h-4" />
-              <span className="text-xs font-bold">Log out securely</span>
+              <span className="text-xs font-bold">{t("Logout")}</span>
             </button>
           </div>
         </div>

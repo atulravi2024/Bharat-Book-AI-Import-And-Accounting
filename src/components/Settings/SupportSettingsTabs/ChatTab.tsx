@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from '../../../context/LanguageContext';
 import { Send, Clock, Sparkles, Terminal, Trash2, Check, AlertCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 

@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React from 'react';
 import { ParsedVoucher, VoucherType } from '../../../../app/types';
 
@@ -20,10 +21,12 @@ interface GSTRR1SummaryProps {
 }
 
 export const GSTRR1Summary: React.FC<GSTRR1SummaryProps> = ({ summary }) => {
+  const { t, formatNumber  } = useLanguage();
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="form-grid gap-4">
-        <h3 className="text-sm font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 px-1 dark:text-gray-400">Section Summaries</h3>
+        <h3 className="text-sm font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 px-1 dark:text-gray-400">{t("Section Summaries")}</h3>
         {['B2B', 'B2C Small', 'B2C Large', 'Export', 'Credit Note', 'Debit Note', 'Exempt'].map((groupType) => {
           const groupInvoicesUntyped = summary.groupedInvoices[groupType];
           if (!groupInvoicesUntyped || groupInvoicesUntyped.length === 0) return null;
@@ -77,32 +80,32 @@ export const GSTRR1Summary: React.FC<GSTRR1SummaryProps> = ({ summary }) => {
                   className="px-4 py-3 border-b flex justify-between items-center" 
                   style={{ backgroundColor: groupType.includes('B2B') ? '#eef2ff' : groupType.includes('B2C Large') ? '#ffedd5' : groupType.includes('B2C Small') ? '#fef3c7' : groupType.includes('Export') ? '#d1fae5' : groupType.includes('Credit') ? '#fee2e2' : groupType.includes('Debit') ? '#e0e7ff' : '#f3f4f6' }}
               >
-                <h3 className="font-bold text-gray-800 text-xs uppercase tracking-widest dark:text-gray-100">{groupType} SUMMARY</h3>
+                <h3 className="font-bold text-gray-800 text-xs uppercase tracking-widest dark:text-gray-100">{t(groupType)} {t("SUMMARY")}</h3>
                 <span className="bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold border border-gray-100 shadow-sm dark:bg-gray-800/80 dark:border-gray-800">
-                    {groupInvoices.length} {groupInvoices.length === 1 ? 'Invoice' : 'Invoices'}
+                    {groupInvoices.length} {groupInvoices.length === 1 ? t('Invoice') : t('Invoices')}
                 </span>
               </div>
       
               <div className="form-grid p-5 gap-6">
                 <div className="flex flex-col">
-                  <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter mb-1">Taxable Value</p>
-                  <p className="text-base font-bold text-gray-900 font-mono dark:text-white">₹{gTaxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter mb-1">{t("Taxable Value")}</p>
+                  <p className="text-base font-bold text-gray-900 font-mono dark:text-white">₹{formatNumber(Number(gTaxable), { minimumFractionDigits: 2 })}</p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter mb-1">Total Tax</p>
-                  <p className="text-base font-bold text-green-600 font-mono">₹{gTax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter mb-1">{t("Total Tax")}</p>
+                  <p className="text-base font-bold text-green-600 font-mono">₹{formatNumber(Number(gTax), { minimumFractionDigits: 2 })}</p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">CGST</p>
-                  <p className="text-sm font-medium text-gray-700 font-mono dark:text-gray-200">₹{gCgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">{t("CGST")}</p>
+                  <p className="text-sm font-medium text-gray-700 font-mono dark:text-gray-200">₹{formatNumber(Number(gCgst), { minimumFractionDigits: 2 })}</p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">SGST</p>
-                  <p className="text-sm font-medium text-gray-700 font-mono dark:text-gray-200">₹{gSgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">{t("SGST")}</p>
+                  <p className="text-sm font-medium text-gray-700 font-mono dark:text-gray-200">₹{formatNumber(Number(gSgst), { minimumFractionDigits: 2 })}</p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">IGST</p>
-                  <p className="text-sm font-medium text-gray-700 font-mono dark:text-gray-200">₹{gIgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">{t("IGST")}</p>
+                  <p className="text-sm font-medium text-gray-700 font-mono dark:text-gray-200">₹{formatNumber(Number(gIgst), { minimumFractionDigits: 2 })}</p>
                 </div>
               </div>
             </div>

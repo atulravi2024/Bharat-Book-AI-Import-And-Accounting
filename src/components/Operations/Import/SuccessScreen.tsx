@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React from 'react';
 import { CheckCircleIcon, DownloadIcon, PrintIcon, UndoIcon, DashboardIcon, VouchersIcon, ArrowBackIcon } from '../../icons/IconComponents';
@@ -13,6 +14,8 @@ interface SuccessScreenProps {
 }
 
 export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, onGoToDashboard, onGoToVouchers, onUndo }) => {
+  const { t, formatNumber } = useLanguage();
+
   const voucherCount = vouchers.length;
   const isBankImport = vouchers.some(v => v.origin === 'bank');
 
@@ -152,11 +155,11 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, 
           <table className="w-full text-sm text-left print:text-[10pt]">
             <thead className="sticky top-0 bg-white z-10 shadow-sm print:static print:shadow-none dark:bg-gray-800">
               <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">ID</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Date</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Party/Description</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Amount</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Status</th>
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("ID")}</th>
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Date")}</th>
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Party/Description")}</th>
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Amount")}</th>
+                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Status")}</th>
               </tr>
             </thead>
             <tbody>
@@ -168,13 +171,9 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, 
                   <td className="px-4 py-3 text-right font-bold text-blue-600">₹{Number(v?.amount?.value || v?.withdrawalAmount?.value || v?.depositAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                   <td className="px-4 py-3">
                     {v.origin === 'bank' ? (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 uppercase">
-                        Bank Record
-                      </span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 uppercase">{t("Bank Record")}</span>
                     ) : (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700 uppercase">
-                        Posted
-                      </span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700 uppercase">{t("Posted")}</span>
                     )}
                   </td>
                 </tr>

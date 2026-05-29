@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useMemo } from 'react';
 import { Download, Printer, Search, Filter, AlertCircle, Info } from 'lucide-react';
@@ -12,6 +13,8 @@ interface StockSubPageProps {
 }
 
 export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, onExport, vouchers, reportType }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const [searchTerm, setSearchTerm] = React.useState('');
 
   const reportData = useMemo(() => {
@@ -99,7 +102,7 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" size={16} />
             <input 
               type="text" 
-              placeholder="Search items..." 
+              placeholder={t("Search items...")} 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="form-input pl-9 pr-4 text-sm focus:border-transparent min-w-[200px]"
@@ -127,13 +130,13 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
           <table className="w-full text-sm text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100 dark:bg-gray-900 dark:border-gray-800">
-                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest">Item Name</th>
-                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest">Category</th>
-                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest text-right">In</th>
-                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest text-right">Out</th>
-                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest text-right">Balance</th>
-                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest">HSN</th>
-                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest text-right">Tax (%)</th>
+                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest">{t("Item Name")}</th>
+                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest">{t("Category")}</th>
+                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest text-right">{t("In")}</th>
+                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest text-right">{t("Out")}</th>
+                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest text-right">{t("Balance")}</th>
+                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest">{t("HSN")}</th>
+                <th className="px-4 py-3 font-black text-gray-400 uppercase text-[9px] tracking-widest text-right">{t("Tax (%)")}</th>
               </tr>
             </thead>
             <tbody>
@@ -158,20 +161,16 @@ export const StockSubPage: React.FC<StockSubPageProps> = ({ title, description, 
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
              <Filter className="text-blue-600" size={32} />
           </div>
-          <h3 className="text-xl font-bold text-gray-800 mb-2 dark:text-gray-100">{title} Ready for Processing</h3>
-          <p className="text-gray-500 max-w-sm dark:text-gray-400">
-            No transaction data found for this report type. Connect your live ERP or upload more vouchers to populate this data.
-          </p>
-          <button className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">
-             Sync Live Data
-          </button>
+          <h3 className="text-xl font-bold text-gray-800 mb-2 dark:text-gray-100">{t(title) || title} {t("Ready for Processing")}</h3>
+          <p className="text-gray-500 max-w-sm dark:text-gray-400">{t("No transaction data found for this report type. Connect your live ERP or upload more vouchers to populate this data.")}</p>
+          <button className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">{t("Sync Live Data")}</button>
         </div>
       )}
       
       <div className="mt-6 p-4 bg-indigo-50/50 rounded-xl flex items-start">
         <Info className="text-indigo-500 mr-3 shrink-0" size={18} />
         <p className="text-[10px] text-indigo-700 font-medium leading-relaxed uppercase tracking-wider">
-          AI INSIGHT: This report is dynamically generated from parsed vouchers and may differ from your book balances if all transactions are not imported.
+          {t("AI INSIGHT: This report is dynamically generated from parsed vouchers and may differ from your book balances if all transactions are not imported.")}
         </p>
       </div>
     </div>

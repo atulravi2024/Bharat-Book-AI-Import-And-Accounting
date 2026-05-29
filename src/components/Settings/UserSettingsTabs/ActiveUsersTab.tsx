@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from '../../../context/LanguageContext';
 import { User, Mail, Phone, Briefcase, Lock, Shield, Info, CheckSquare, Square, Activity } from 'lucide-react';
 import { ManagedUser, INITIAL_USERS } from '../UserSettings';
 

@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React, { useState } from 'react';
 import { X, HelpCircle, ChevronUp, ChevronDown, Layout, Keyboard, Info, Bookmark, Calculator, FileText, Zap, MousePointer2, ScanBarcode } from 'lucide-react';
 
@@ -7,6 +8,8 @@ interface InventoryHelpModalProps {
 }
 
 export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, onClose }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const [expandedSections, setExpandedSections] = useState<{[key: string]: boolean}>({
     functionality: true
   });
@@ -24,9 +27,9 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
           <div>
              <h3 className="text-xl font-black text-gray-900 flex items-center gap-2 tracking-tight dark:text-white">
                <HelpCircle size={24} className="text-emerald-500" /> 
-               Help & User Guide
+               {t("Help & User Guide")}
              </h3>
-             <p className="form-label tracking-widest mt-1 dark:text-gray-400">Mastering Inventory Operations</p>
+             <p className="form-label tracking-widest mt-1 dark:text-gray-400">{t("Mastering Inventory Operations")}</p>
           </div>
           <button onClick={onClose} className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors border border-transparent hover:border-red-100 group">
             <X size={24} className="group-active:scale-95 transition-transform" />
@@ -42,7 +45,7 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
               className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors dark:bg-gray-900 dark:hover:bg-gray-600"
             >
               <span className="font-black text-gray-800 text-sm flex items-center uppercase tracking-wider dark:text-gray-100">
-                <Layout size={18} className="mr-3 text-emerald-500"/> Section-by-Section Guide
+                <Layout size={18} className="mr-3 text-emerald-500"/> {t("Section-by-Section Guide")}
               </span>
               {expandedSections.functionality ? <ChevronUp size={18} className="text-gray-400"/> : <ChevronDown size={18} className="text-gray-400"/>}
             </button>
@@ -50,61 +53,61 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
               <div className="p-5 bg-white space-y-8 dark:bg-gray-800">
                 <div>
                   <h4 className="font-black text-emerald-800 text-xs mb-3 pb-2 border-b-2 border-emerald-50 uppercase tracking-[0.2em] flex items-center">
-                    <Bookmark size={14} className="mr-2" /> Workflow Types (Tabs)
+                    <Bookmark size={14} className="mr-2" /> {t("Workflow Types (Tabs)")}
                   </h4>
                   <div className="form-grid gap-4">
                     <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
                        <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-200">
-                         <b>Stock Journal:</b> The "Swiss Army Knife" of inventory. Use for generic taxable adjustments, converting raw materials into finished goods (Manufacturing), or correcting bin errors.
+                         <b>{t("Stock Journal:")}</b> {t("The 'Swiss Army Knife' of inventory. Use for generic taxable adjustments, converting raw materials into finished goods (Manufacturing), or correcting bin errors.")}
                        </p>
                     </div>
                     <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
                        <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-200">
-                         <b>Physical Stock:</b> Your Audit tool. Enter what you *actually* see. The system compares it to the "Book" value and generates "Stock Journal" variance entries automatically to sync records.
+                         <b>{t("Physical Stock:")}</b> {t("Your Audit tool. Enter what you *actually* see. The system compares it to the 'Book' value and generates 'Stock Journal' variance entries automatically to sync records.")}
                        </p>
                     </div>
                     <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
                        <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-200">
-                         <b>Consumption & Scrap:</b> Reducer workflows. <i>Consumption</i> tracks items used in daily business (e.g. tape, fuel). <i>Scrap</i> handles damaged/unsellable goods that need to be removed from value.
+                         <b>{t("Consumption & Scrap:")}</b> {t("Reducer workflows. Consumption tracks items used in daily business (e.g. tape, fuel). Scrap handles damaged/unsellable goods that need to be removed from value.")}
                        </p>
                     </div>
                     <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
                        <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-200">
-                         <b>Inter-Location Transfer:</b> Moves inventory between bins or branches. Requires both Source and Destination identification. No financial loss/gain is recorded.
+                         <b>{t("Inter-Location Transfer:")}</b> {t("Moves inventory between bins or branches. Requires both Source and Destination identification. No financial loss/gain is recorded.")}
                        </p>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-black text-emerald-800 text-xs mb-3 pb-2 border-b-2 border-emerald-50 uppercase tracking-[0.2em]">1. Smart Header & Compliance</h4>
+                  <h4 className="font-black text-emerald-800 text-xs mb-3 pb-2 border-b-2 border-emerald-50 uppercase tracking-[0.2em]">{t("1. Smart Header & Compliance")}</h4>
                   <ul className="space-y-3 text-xs font-semibold text-gray-600 dark:text-gray-300">
                     <li className="flex gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
-                      <span><b>Entry Auto-Numbering:</b> Sequential numbers are locked to prevent gaps in audit logs. If "Draft" is saved, the number remains reserved.</span>
+                      <span><b>{t("Entry Auto-Numbering:")}</b> {t("Sequential numbers are locked to prevent gaps in audit logs. If 'Draft' is saved, the number remains reserved.")}</span>
                     </li>
                     <li className="flex gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
-                      <span><b>Document Attachments:</b> Drag & drop GRNs or signed delivery notes. High-security mode requires manual approval if attachments are missing.</span>
+                      <span><b>{t("Document Attachments:")}</b> {t("Drag & drop GRNs or signed delivery notes. High-security mode requires manual approval if attachments are missing.")}</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-black text-emerald-800 text-xs mb-3 pb-2 border-b-2 border-emerald-50 uppercase tracking-[0.2em]">2. Intelligent Item Selection</h4>
-                  <p className="text-xs text-gray-500 mb-3 italic dark:text-gray-400">Use one of three entry methods:</p>
+                  <h4 className="font-black text-emerald-800 text-xs mb-3 pb-2 border-b-2 border-emerald-50 uppercase tracking-[0.2em]">{t("2. Intelligent Item Selection")}</h4>
+                  <p className="text-xs text-gray-500 mb-3 italic dark:text-gray-400">{t("Use one of three entry methods:")}</p>
                   <div className="form-grid gap-3">
                     <div className="p-3 border border-gray-100 rounded-xl bg-gray-50 text-center dark:border-gray-800 dark:bg-gray-900">
                       <Zap size={16} className="mx-auto mb-2 text-yellow-500" />
-                      <span className="text-[10px] uppercase font-bold text-gray-600 dark:text-gray-300">Smart Search</span>
+                      <span className="text-[10px] uppercase font-bold text-gray-600 dark:text-gray-300">{t("Smart Search")}</span>
                     </div>
                     <div className="p-3 border border-gray-100 rounded-xl bg-gray-50 text-center dark:border-gray-800 dark:bg-gray-900">
                       <ScanBarcode size={16} className="mx-auto mb-2 text-purple-500" />
-                      <span className="text-[10px] uppercase font-bold text-gray-600 dark:text-gray-300">AI Barcode Scan</span>
+                      <span className="text-[10px] uppercase font-bold text-gray-600 dark:text-gray-300">{t("AI Barcode Scan")}</span>
                     </div>
                     <div className="p-3 border border-gray-100 rounded-xl bg-gray-50 text-center dark:border-gray-800 dark:bg-gray-900">
                       <Keyboard size={16} className="mx-auto mb-2 text-blue-500" />
-                      <span className="text-[10px] uppercase font-bold text-gray-600 dark:text-gray-300">F2 Master Key</span>
+                      <span className="text-[10px] uppercase font-bold text-gray-600 dark:text-gray-300">{t("F2 Master Key")}</span>
                     </div>
                   </div>
                 </div>
@@ -119,7 +122,7 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
               className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors dark:bg-gray-900 dark:hover:bg-gray-600"
             >
               <span className="font-black text-gray-800 text-sm flex items-center uppercase tracking-wider dark:text-gray-100">
-                <Keyboard size={18} className="mr-3 text-blue-500"/> Power-User Shortcuts
+                <Keyboard size={18} className="mr-3 text-blue-500"/> {t("Power-User Shortcuts")}
               </span>
               {expandedSections.keyboard ? <ChevronUp size={18} className="text-gray-400"/> : <ChevronDown size={18} className="text-gray-400"/>}
             </button>
@@ -127,19 +130,19 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
               <div className="p-5 bg-white dark:bg-gray-800">
                 <div className="form-grid gap-4">
                   <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-gray-700">
-                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">Save Current Entry</span>
+                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">{t("Save Current Entry")}</span>
                     <kbd className="px-2 py-1 bg-gray-100 border border-gray-200 rounded text-[10px] font-black text-gray-600 min-w-[50px] text-center shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">CTRL + S</kbd>
                   </div>
                    <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-gray-700">
-                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">Fast Scan (AI)</span>
+                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">{t("Fast Scan (AI)")}</span>
                     <kbd className="px-2 py-1 bg-gray-100 border border-gray-200 rounded text-[10px] font-black text-gray-600 min-w-[50px] text-center shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">ALT + S</kbd>
                   </div>
                    <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-gray-700">
-                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">Toggle "Edit" View</span>
+                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">{t("Toggle \"Edit\" View")}</span>
                     <kbd className="px-2 py-1 bg-gray-100 border border-gray-200 rounded text-[10px] font-black text-gray-600 min-w-[50px] text-center shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">ALT + E</kbd>
                   </div>
                    <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-gray-700">
-                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">Calculator Bridge</span>
+                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">{t("Calculator Bridge")}</span>
                     <kbd className="px-2 py-1 bg-gray-100 border border-gray-200 rounded text-[10px] font-black text-gray-600 min-w-[50px] text-center shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">ALT + C</kbd>
                   </div>
                 </div>
@@ -153,16 +156,16 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
                 <Zap size={120} />
              </div>
              <h4 className="text-lg font-black tracking-tight mb-4 flex items-center">
-               <Info size={20} className="mr-2" /> Expert Pro Tips
+               <Info size={20} className="mr-2" /> {t("Expert Pro Tips")}
              </h4>
              <div className="space-y-4">
                 <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20">
-                   <h5 className="text-xs font-black uppercase tracking-widest mb-1 text-emerald-200">Zero-Loss Transfers</h5>
-                   <p className="text-sm font-medium leading-relaxed">Always check the "Book Summary" before committing a <b>Physical Stock</b> update. Discrepancies larger than 2% should trigger a manual supervisor alert.</p>
+                   <h5 className="text-xs font-black uppercase tracking-widest mb-1 text-emerald-200">{t("Zero-Loss Transfers")}</h5>
+                   <p className="text-sm font-medium leading-relaxed">{t("Always check the \"Book Summary\" before committing a Physical Stock update. Discrepancies larger than 2% should trigger a manual supervisor alert.")}</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20">
-                   <h5 className="text-xs font-black uppercase tracking-widest mb-1 text-emerald-200">Batch Integrity</h5>
-                   <p className="text-sm font-medium leading-relaxed">Use the <b>Deep Edit Modal (Alt+E)</b> to record Expiry Dates. This data feeds into the <i>Near-Expiry Dashboard</i> for proactive scrap reduction.</p>
+                   <h5 className="text-xs font-black uppercase tracking-widest mb-1 text-emerald-200">{t("Batch Integrity")}</h5>
+                   <p className="text-sm font-medium leading-relaxed">{t("Use the Deep Edit Modal (Alt+E) to record Expiry Dates. This data feeds into the Near-Expiry Dashboard for proactive scrap reduction.")}</p>
                 </div>
              </div>
           </div>
@@ -173,8 +176,8 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
                    <MousePointer2 size={18} />
                 </div>
                 <div>
-                   <p className="text-xs font-black text-gray-900 uppercase tracking-wider dark:text-white">Need Advanced Support?</p>
-                   <p className="text-[10px] font-bold text-gray-500 dark:text-gray-400">Contact our inventory specialists for bulk import assistance.</p>
+                   <p className="text-xs font-black text-gray-900 uppercase tracking-wider dark:text-white">{t("Need Advanced Support?")}</p>
+                   <p className="text-[10px] font-bold text-gray-500 dark:text-gray-400">{t("Contact our inventory specialists for bulk import assistance.")}</p>
                 </div>
              </div>
           </div>
@@ -184,9 +187,7 @@ export const InventoryHelpModal: React.FC<InventoryHelpModalProps> = ({ isOpen, 
           <button 
             onClick={onClose}
             className="px-8 py-3 bg-gray-900 text-white font-black text-sm rounded-2xl hover:bg-black transition-all active:scale-95 shadow-lg shadow-black/10"
-          >
-            Got it, Let's Work
-          </button>
+          >{t("Got it, Let's Work")}</button>
         </div>
       </div>
     </div>

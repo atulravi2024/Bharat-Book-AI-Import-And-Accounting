@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ParsedVoucher, VoucherField, Confidence, VoucherType } from '../../../app/types';
@@ -55,6 +56,7 @@ const EditableField: React.FC<{
   autoFocus?: boolean;
   type?: 'text' | 'number' | 'textarea';
 }> = ({ field, onChange, suffix, hideConfidence, autoFocus, type }) => {
+  const { t, formatNumber } = useLanguage();
   const [isEditing, setIsEditing] = useState(autoFocus || false);
   const [currentValue, setCurrentValue] = useState(field.value);
 
@@ -153,6 +155,7 @@ const TransactionTypeSelect: React.FC<{
   narration: string;
   onChange: (newValue: string) => void;
 }> = ({ field, narration, onChange }) => {
+  const { t, formatNumber } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState(String(field.value) || '');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -243,7 +246,7 @@ const TransactionTypeSelect: React.FC<{
         }}
       >
         <div className="flex flex-col">
-          <span className="text-gray-900 font-medium truncate dark:text-white">{field.value || <span className="text-gray-400 italic">Select...</span>}</span>
+          <span className="text-gray-900 font-medium truncate dark:text-white">{field.value || <span className="text-gray-400 italic">{t("Select...")}</span>}</span>
           {isLowConfidence && suggestions.length > 0 && (
              <span className="text-[10px] text-amber-600 font-bold mt-0.5 max-w-[150px] truncate leading-tight">AI expects: {suggestions[0].val}</span>
           )}
@@ -269,9 +272,7 @@ const TransactionTypeSelect: React.FC<{
         <div className="absolute z-[100] top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto w-full custom-scrollbar dark:bg-gray-800 dark:border-gray-700">
           {suggestions.length > 0 && (
             <div className="bg-indigo-50/50 pb-1">
-              <div className="px-3 py-1.5 text-[10px] font-black text-indigo-800 uppercase tracking-widest bg-indigo-100/50 border-b border-indigo-100 mb-1 flex items-center">
-                ✨ AI Pattern Match
-              </div>
+              <div className="px-3 py-1.5 text-[10px] font-black text-indigo-800 uppercase tracking-widest bg-indigo-100/50 border-b border-indigo-100 mb-1 flex items-center">{t("✨ AI Pattern Match")}</div>
               {suggestions.map((s, idx) => (
                 <div 
                   key={`sugg-${idx}`}
@@ -286,7 +287,7 @@ const TransactionTypeSelect: React.FC<{
           )}
           {filteredRemaining.length > 0 && (
             <div className="pt-2 pb-2">
-              <div className="px-3 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Standard Types</div>
+              <div className="px-3 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t("Standard Types")}</div>
               {filteredRemaining.map((opt, idx) => (
                 <div 
                   key={`opt-${idx}`}
@@ -337,6 +338,7 @@ const MasterSelectField: React.FC<{
   label: string;
   narration?: string;
 }> = ({ field, masters, onChange, onCreate, label, narration }) => {
+  const { t, formatNumber } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -638,7 +640,7 @@ const MasterSelectField: React.FC<{
                 <AddIcon className="text-lg" />
               </div>
               <div>
-                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Confirm Creation</h4>
+                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{t("Confirm Creation")}</h4>
                 <p className="text-sm text-gray-800 font-bold leading-tight dark:text-gray-100">Create "{pendingCreateName}" in {label} Masters?</p>
               </div>
             </div>
@@ -652,9 +654,7 @@ const MasterSelectField: React.FC<{
               <button 
                 onClick={handleCreateConfirm}
                 className="flex-1 py-2 px-3 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-200"
-              >
-                Create & Link
-              </button>
+              >{t("Create & Link")}</button>
             </div>
           </div>
         )}
@@ -683,7 +683,7 @@ const MasterSelectField: React.FC<{
              </span>
           )}
           {!isMasterLinked && !field.isMismatch && (
-            <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-700 uppercase shrink-0">Not in Masters</span>
+            <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-700 uppercase shrink-0">{t("Not in Masters")}</span>
           )}
         </div>
         
@@ -720,6 +720,7 @@ const TaxRateCombobox: React.FC<{
   field: VoucherField; 
   onChange: (newValue: number) => void;
 }> = ({ field, onChange }) => {
+  const { t, formatNumber } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(String(field.value));
   const [error, setError] = useState<string | null>(null);
@@ -790,7 +791,7 @@ const TaxRateCombobox: React.FC<{
               autoFocus
               className={`w-full p-1 border ${error ? 'border-red-500' : 'border-blue-500 rounded-md'} text-sm pr-6 focus:outline-none`}
             />
-            <span className="absolute right-2 text-gray-500 text-xs pointer-events-none dark:text-gray-400">%</span>
+            <span className="absolute right-2 text-gray-500 text-xs pointer-events-none dark:text-gray-400">{t("%")}</span>
           </div>
           {error && <span className="absolute top-10 w-40 mt-1 text-[10px] text-red-500 bg-red-50 border border-red-200 px-1 py-0.5 rounded shadow-sm z-50">{error}</span>}
         </div>
@@ -946,6 +947,7 @@ const UomCombobox: React.FC<{
   onAdd?: (name: string) => void;
   uomMasters?: any[];
 }> = ({ field, onChange, onAdd, uomMasters = [] }) => {
+  const { t, formatNumber } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(String(field.value));
   const [showDropdown, setShowDropdown] = useState(false);
@@ -1044,7 +1046,7 @@ const UomCombobox: React.FC<{
         <div className="flex items-center space-x-1.5 overflow-hidden">
           {field.isMismatch && <ErrorIcon className="text-red-500 scale-75 shrink-0" />}
           <span className={`text-sm font-medium truncate ${field.isMismatch ? 'text-red-700' : 'text-gray-700'} dark:text-gray-200`}>
-            {field.value || <span className="text-gray-300 italic">Nil</span>}
+            {field.value || <span className="text-gray-300 italic">{t("Nil")}</span>}
           </span>
         </div>
         <EditIcon className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
@@ -1068,6 +1070,7 @@ const ItemNameCombobox: React.FC<{
   suggestions: string[];
   autoFocus?: boolean;
 }> = ({ field, onChange, suggestions, autoFocus }) => {
+  const { t, formatNumber } = useLanguage();
   const [isEditing, setIsEditing] = useState(autoFocus || false);
   const [currentValue, setCurrentValue] = useState(String(field.value));
   const [showDropdown, setShowDropdown] = useState(false);
@@ -1159,7 +1162,7 @@ const ItemNameCombobox: React.FC<{
         <div className="flex items-center space-x-2 overflow-hidden flex-1">
           {field.isMismatch && <ErrorIcon className="text-red-500 scale-75 shrink-0" />}
           <span className={`text-sm font-medium truncate ${field.isMismatch ? 'text-red-700' : 'text-gray-900'} dark:text-white`}>
-            {field.value || <span className="text-gray-300 italic">No name</span>}
+            {field.value || <span className="text-gray-300 italic">{t("No name")}</span>}
           </span>
         </div>
         <EditIcon className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
@@ -1195,6 +1198,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
     onAddParty, onAddLedger, onAddUom, onAddItem,
     voucherType, allVouchers = [], onNavigateToMasters
 }) => {
+  const { t, formatNumber } = useLanguage();
   const [activeVoucherIndex, setActiveVoucherIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'unmap' | 'missing' | 'automate'>('automate');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
@@ -1910,7 +1914,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                    </p>
                    {vouchers.length > 1 && (
                       <div className="hidden sm:flex items-center bg-gray-100 px-2 py-0.5 rounded-full border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase mr-2 tracking-wider">Progress</span>
+                        <span className="text-[10px] font-bold text-gray-400 uppercase mr-2 tracking-wider">{t("Progress")}</span>
                         <div className="flex items-center space-x-1">
                            {(vouchers || []).map((v, i) => (
                               <div key={v.id} className={`w-1.5 h-1.5 rounded-full ${i === activeVoucherIndex ? 'bg-blue-600 scale-125' : 'bg-gray-300'}`}></div>
@@ -2001,9 +2005,9 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-900">
                     <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Field</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Extracted Value</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">AI Confidence</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Field")}</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Extracted Value")}</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("AI Confidence")}</th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -2106,7 +2110,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                             onChange={(e) => handleFieldChange(activeVoucher.id, key, e.target.value)}
                                             className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-md text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-gray-800 dark:border-gray-700"
                                         >
-                                            <option value="">Select bank...</option>
+                                            <option value="">{t("Select bank...")}</option>
                                             {(ledgerMasters || []).filter(m => m.group === 'Bank Accounts').map(m => m.name).map(item => (
                                               <option key={item} value={item}>{item}</option>
                                             ))}
@@ -2119,8 +2123,8 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                             onChange={(e) => handleFieldChange(activeVoucher.id, key, e.target.value)}
                                             className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-md text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-gray-800 dark:border-gray-700"
                                         >
-                                            <option value="Intra-State">Intra-State (Local)</option>
-                                            <option value="Inter-State">Inter-State (Outside)</option>
+                                            <option value="Intra-State">{t("Intra-State (Local)")}</option>
+                                            <option value="Inter-State">{t("Inter-State (Outside)")}</option>
                                         </select>
                                       </div>
                                     ) : ['ledger', 'debitLedger', 'creditLedger'].includes(key) ? (
@@ -2193,11 +2197,11 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                           
                           <div className="flex items-center space-x-8">
                             <div className="text-right">
-                              <div className="text-[10px] text-gray-500 uppercase font-semibold dark:text-gray-400">Taxable Value</div>
+                              <div className="text-[10px] text-gray-500 uppercase font-semibold dark:text-gray-400">{t("Taxable Value")}</div>
                               <div className="text-sm font-medium text-gray-900 dark:text-white">₹{group.taxableValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
                             </div>
                             <div className="text-right bg-blue-50 px-3 py-1 rounded">
-                              <div className="text-[10px] text-blue-500 uppercase font-bold">Tax Amount</div>
+                              <div className="text-[10px] text-blue-500 uppercase font-bold">{t("Tax Amount")}</div>
                               <div className="text-sm font-bold text-blue-700">₹{group.taxAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
                             </div>
                           </div>
@@ -2208,9 +2212,9 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                             <table className="min-w-full text-xs">
                               <thead>
                                 <tr className="text-gray-400 uppercase font-bold border-b border-gray-200 dark:border-gray-700">
-                                  <th className="text-left pb-2 font-semibold">Item Description</th>
-                                  <th className="text-right pb-2 font-semibold font-mono">Taxable Amt</th>
-                                  <th className="text-right pb-2 font-semibold font-mono">Tax Amt</th>
+                                  <th className="text-left pb-2 font-semibold">{t("Item Description")}</th>
+                                  <th className="text-right pb-2 font-semibold font-mono">{t("Taxable Amt")}</th>
+                                  <th className="text-right pb-2 font-semibold font-mono">{t("Tax Amt")}</th>
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -2236,7 +2240,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
             {hasItemsAndTax && activeVoucher.items && activeVoucher.items.length > 0 && (
               <>
             <div className="flex items-center justify-between my-6">
-              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Items Details</h3>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">{t("Items Details")}</h3>
               {activeVoucher.items.filter(item => Object.values(item || {}).some(f => (f as any).isMismatch)).length > 0 && (
                 <span className="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold flex items-center animate-pulse">
                   <ErrorIcon className="mr-1 text-sm" />
@@ -2247,15 +2251,15 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                  <thead className="bg-gray-50 dark:bg-gray-900">
                     <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Item Name</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Qty</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Unit</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Rate</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Tax Type</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Tax %</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Tax Amt</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Total</th>
-                          <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Actions</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Item Name")}</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Qty")}</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Unit")}</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Rate")}</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Tax Type")}</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Tax %")}</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Tax Amt")}</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Total")}</th>
+                          <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Actions")}</th>
                     </tr>
                 </thead>
                  <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -2314,17 +2318,17 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                  {/* Detailed Tax Breakdown Popover */}
                                  <div className="absolute left-0 top-full mt-1 hidden group-hover:block z-30 bg-white border border-gray-200 shadow-2xl rounded-xl p-0 w-64 transform translate-y-1 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                                    <div className="bg-gray-50 px-3 py-2 border-b border-gray-100 flex justify-between items-center dark:bg-gray-900 dark:border-gray-800">
-                                     <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Detailed Tax Breakdown</div>
+                                     <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Detailed Tax Breakdown")}</div>
                                    </div>
                                                         <div className="p-3 space-y-3">
                                       <div className="flex justify-between text-xs">
-                                        <span className="text-gray-500 font-medium dark:text-gray-400">Taxable Value</span>
+                                        <span className="text-gray-500 font-medium dark:text-gray-400">{t("Taxable Value")}</span>
                                         <span className="font-mono text-gray-800 dark:text-gray-100">₹{safeRound(safeNum(item.quantity?.value) * safeNum(item.rate?.value)).toFixed(2)}</span>
                                       </div>
                                       
                                       {currentTaxType === 'CGST/SGST' ? (
                                         <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
-                                          <div className="text-[10px] font-semibold text-gray-400 uppercase mb-2">Intra-State Supply</div>
+                                          <div className="text-[10px] font-semibold text-gray-400 uppercase mb-2">{t("Intra-State Supply")}</div>
                                           <div className="space-y-1.5">
                                             <div className="flex justify-between text-xs items-center">
                                               <span className="text-gray-600 dark:text-gray-300">CGST ({(safeNum(item.taxRate?.value) / 2).toFixed(1)}%)</span>
@@ -2338,7 +2342,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                         </div>
                                       ) : (
                                         <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
-                                          <div className="text-[10px] font-semibold text-gray-400 uppercase mb-2">Inter-State Supply</div>
+                                          <div className="text-[10px] font-semibold text-gray-400 uppercase mb-2">{t("Inter-State Supply")}</div>
                                           <div className="flex justify-between text-xs items-center">
                                             <span className="text-gray-600 dark:text-gray-300">IGST ({safeNum(item.taxRate?.value).toFixed(1)}%)</span>
                                             <span className="font-mono text-gray-700 dark:text-gray-200">₹{safeNum(item.tax?.value).toFixed(2)}</span>
@@ -2348,7 +2352,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                                     </div>
                                     
                                     <div className="bg-blue-50 px-3 py-2 flex justify-between text-xs border-t border-blue-100">
-                                      <span className="font-bold text-blue-800">Total Tax Applicable</span>
+                                      <span className="font-bold text-blue-800">{t("Total Tax Applicable")}</span>
                                       <span className="font-mono font-bold text-blue-900">₹{safeNum(item.tax?.value).toFixed(2)}</span>
                                     </div>
                                   </div>
@@ -2434,28 +2438,28 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                  {hasItemsAndTax && (
                    <>
                      <div className="flex justify-between text-sm py-1.5">
-                       <span className="text-gray-600 font-medium tracking-wide dark:text-gray-300">Total Taxable Value</span>
+                       <span className="text-gray-600 font-medium tracking-wide dark:text-gray-300">{t("Total Taxable Value")}</span>
                        <span className="font-mono font-bold text-gray-900 dark:text-white">₹{totalTaxableAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                      </div>
                      <div className="flex flex-col border-b border-dashed border-gray-300 dark:border-gray-600">
                         <div className="flex justify-between text-sm py-1.5">
-                          <span className="text-gray-600 font-medium tracking-wide dark:text-gray-300">Total Tax Amount</span>
+                          <span className="text-gray-600 font-medium tracking-wide dark:text-gray-300">{t("Total Tax Amount")}</span>
                           <span className="font-mono font-bold text-gray-900 dark:text-white">₹{Number(activeVoucher.tax?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         </div>
                         <div className="flex flex-col pb-2 pl-4 gap-0.5">
                           {hasIgst ? (
                             <div className="flex justify-between text-[11px] text-blue-600 font-mono font-bold">
-                              <span>IGST</span>
+                              <span>{t("IGST")}</span>
                               <span>₹{totalIgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                             </div>
                           ) : (
                             <>
                               <div className="flex justify-between text-[11px] text-gray-500 font-mono dark:text-gray-400">
-                                <span>CGST</span>
+                                <span>{t("CGST")}</span>
                                 <span>₹{totalCgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                               </div>
                               <div className="flex justify-between text-[11px] text-gray-500 font-mono dark:text-gray-400">
-                                <span>SGST</span>
+                                <span>{t("SGST")}</span>
                                 <span>₹{totalSgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                               </div>
                             </>
@@ -2465,7 +2469,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                    </>
                  )}
                  <div className="flex justify-between text-sm sm:text-base py-2 mt-1">
-                   <span className="text-gray-900 font-bold tracking-wide dark:text-white">Total Voucher Amount</span>
+                   <span className="text-gray-900 font-bold tracking-wide dark:text-white">{t("Total Voucher Amount")}</span>
                    <span className={`${
                      String(activeVoucher.amount?.value || activeVoucher.withdrawalAmount?.value || activeVoucher.depositAmount?.value || 0).length > 8 ? 'text-sm' : 'text-base'
                    } font-mono font-bold text-blue-700 transition-all duration-300`}>₹{Number(activeVoucher.amount?.value || activeVoucher.withdrawalAmount?.value || activeVoucher.depositAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
@@ -2494,7 +2498,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                              <div key={idx} className="flex gap-2 items-center w-full">
                                <span className="font-bold text-gray-700 capitalize min-w-[100px] shrink-0 truncate dark:text-gray-200">{change.field.replace(/([A-Z])/g, ' $1')}:</span>
                                <span className="text-red-500 line-through max-w-[200px] truncate" title={String(change.oldValue || '(Empty)')}>{String(change.oldValue || '(Empty)')}</span>
-                               <span className="text-gray-400 font-bold">&rarr;</span>
+                               <span className="text-gray-400 font-bold">{t("&rarr;")}</span>
                                <span className="text-green-600 font-medium max-w-[200px] truncate" title={String(change.newValue || '(Empty)')}>{String(change.newValue || '(Empty)')}</span>
                              </div>
                           ))}
@@ -2502,7 +2506,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                       </div>
                     ))
                   ) : (
-                    <div className="text-sm text-gray-500 py-4 text-center italic dark:text-gray-400">No modifications have been recorded for this voucher yet.</div>
+                    <div className="text-sm text-gray-500 py-4 text-center italic dark:text-gray-400">{t("No modifications have been recorded for this voucher yet.")}</div>
                   )}
                 </div>
              </details>

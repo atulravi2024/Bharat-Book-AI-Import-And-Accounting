@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React from 'react';
 import { Download, Printer, Search, TrendingUp, TrendingDown, Package } from 'lucide-react';
@@ -8,16 +9,18 @@ interface SummaryReportProps {
 }
 
 export const SummaryReport: React.FC<SummaryReportProps> = ({ data, onExport }) => {
+  const { t, formatNumber  } = useLanguage();
+
   return (
     <div className="animate-in fade-in duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-        <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Current Stock Summary</h2>
+        <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{t("Current Stock Summary")}</h2>
         <div className="flex space-x-2">
           <div className="relative group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
             <input 
               type="text" 
-              placeholder="Filter items..." 
+              placeholder={t("Filter items...")} 
               className="form-input pl-9 pr-4 text-sm"
             />
           </div>
@@ -40,12 +43,12 @@ export const SummaryReport: React.FC<SummaryReportProps> = ({ data, onExport }) 
         <table className="w-full text-sm text-left">
           <thead>
             <tr className="bg-gray-50 border-b dark:bg-gray-900">
-              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">Item Name</th>
-              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Inward Qty</th>
-              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Outward Qty</th>
-              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right font-mono dark:text-gray-300">Clos. Stock</th>
-              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-center dark:text-gray-300">Unit</th>
-              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">Value (Basis)</th>
+              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Item Name")}</th>
+              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Inward Qty")}</th>
+              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Outward Qty")}</th>
+              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right font-mono dark:text-gray-300">{t("Clos. Stock")}</th>
+              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-center dark:text-gray-300">{t("Unit")}</th>
+              <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Value (Basis)")}</th>
             </tr>
           </thead>
           <tbody>
@@ -60,11 +63,11 @@ export const SummaryReport: React.FC<SummaryReportProps> = ({ data, onExport }) 
                     <Package className="mr-2 text-gray-300" size={14} />
                     {item.name}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono">{inwardQty.toLocaleString()}</td>
-                  <td className="px-4 py-3 text-right font-mono text-gray-500 dark:text-gray-400">{outwardQty.toLocaleString()}</td>
-                  <td className={`px-4 py-3 text-right font-bold font-mono ${color}`}>{closing.toLocaleString()}</td>
-                  <td className="px-4 py-3 text-center text-xs text-gray-400 italic">PCS</td>
-                  <td className="px-4 py-3 text-right text-gray-600 font-medium dark:text-gray-300">₹{(closing * (item.avgPurchaseRate || 0)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</td>
+                  <td className="px-4 py-3 text-right font-mono">{formatNumber(Number(inwardQty))}</td>
+                  <td className="px-4 py-3 text-right font-mono text-gray-500 dark:text-gray-400">{formatNumber(Number(outwardQty))}</td>
+                  <td className={`px-4 py-3 text-right font-bold font-mono ${color}`}>{formatNumber(Number(closing))}</td>
+                  <td className="px-4 py-3 text-center text-xs text-gray-400 italic">{t("PCS")}</td>
+                  <td className="px-4 py-3 text-right text-gray-600 font-medium dark:text-gray-300">₹{formatNumber(closing * (item.avgPurchaseRate || 0), { maximumFractionDigits: 0 })}</td>
                 </tr>
               );
             })}

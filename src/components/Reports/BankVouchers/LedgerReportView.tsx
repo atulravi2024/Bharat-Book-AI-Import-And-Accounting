@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
@@ -59,6 +60,8 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
     onTabChange,
     setVouchers
 }) => {
+  const { t, formatNumber  } = useLanguage();
+
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState<string>((defaultTab as string) || 'standard');
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
@@ -83,6 +86,8 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
     } | null>(null);
 
     const ConfidenceIndicator = ({ confidence }: { confidence?: Confidence }) => {
+  const { t, formatNumber  } = useLanguage();
+
         if (!confidence) return null;
         if (confidence === Confidence.High) return <div title="High Confidence" className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block ml-1 opacity-80" />;
         if (confidence === Confidence.Medium) return <div title="Medium Confidence" className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block ml-1 opacity-80" />;
@@ -264,7 +269,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
             }
         });
 
-        const summary = `System analyzed this document as a ${v.type} transaction valued at ₹${Number(v.amount?.value || 0).toLocaleString()}. Classification was derived via ${v.origin === 'bank' ? 'OCR semantic analysis of bank narratives' : 'structural template matching of fiscal documents'}.`;
+        const summary = `System analyzed this document as a ${v.type} transaction valued at ₹${formatNumber(Number(Number(v.amount?.value || 0)))}. Classification was derived via ${v.origin === 'bank' ? 'OCR semantic analysis of bank narratives' : 'structural template matching of fiscal documents'}.`;
 
         const keyExtraction = {
             gst: "Detected as B2B",
@@ -312,7 +317,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                 }
                             `}
                         >
-                            {tab.label}
+                            {t(tab.label)}
                         </button>
                     ))}
                 </nav>
@@ -339,7 +344,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input 
                                 type="text"
-                                placeholder="Search by Party or Import ID..."
+                                placeholder={t("Search by Party or Import ID...")}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="form-input pl-10 pr-4 text-sm dark:focus:bg-gray-700"
@@ -348,7 +353,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                         <ImportExportButtons data={filteredVouchers} onSave={completeSave} entityName="Vouchers" />
                         <button onClick={(e) => { e.currentTarget.blur(); setTimeout(() => window.print(), 100); }} className="bg-white text-gray-700 border border-gray-200 px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-sm whitespace-nowrap hover:bg-gray-50 active:scale-95 transition-all dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 hover:dark:bg-gray-700">
                             <Printer className="text-[18px] leading-none lg:mr-2" />
-                            <span className="hidden lg:inline-block">Print</span>
+                            <span className="hidden lg:inline-block">{t("Print")}</span>
                         </button>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -368,14 +373,14 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                         onChange={toggleSelectAll}
                                     />
                                 </th>
-                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">Import ID</th>
-                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">Date</th>
-                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">Time</th>
-                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">Mode</th>
-                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">Party Name</th>
-                                <th className="px-6 py-4 text-right text-[10px] font-bold uppercase tracking-widest">Amount</th>
-                                <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-widest">Status</th>
-                                <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-widest">Actions</th>
+                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">{t("Import ID")}</th>
+                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">{t("Date")}</th>
+                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">{t("Time")}</th>
+                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">{t("Mode")}</th>
+                                <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-widest">{t("Party Name")}</th>
+                                <th className="px-6 py-4 text-right text-[10px] font-bold uppercase tracking-widest">{t("Amount")}</th>
+                                <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-widest">{t("Status")}</th>
+                                <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-widest">{t("Actions")}</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-100 dark:bg-gray-800 dark:divide-gray-800">
@@ -442,20 +447,16 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                                         <ConfidenceIndicator confidence={voucher.ledger?.confidence || voucher.debitLedger?.confidence || voucher.toAccount?.confidence} />
                                                     </div>
                                                     {voucher.ledger && !ledgerMasters.find(m => String(m.name || '').toLowerCase() === String(voucher.ledger?.value).toLowerCase()) && (
-                                                        <button onClick={onNavigateToMasters} className="text-[9px] font-bold text-amber-600 hover:text-amber-800 transition-colors" title="Ledger not linked to a master record. Click to manage.">
-                                                            (Create in Masters)
-                                                        </button>
+                                                        <button onClick={onNavigateToMasters} className="text-[9px] font-bold text-amber-600 hover:text-amber-800 transition-colors" title="Ledger not linked to a master record. Click to manage.">{t("(Create in Masters)")}</button>
                                                     )}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-gray-900 font-mono flex justify-end items-center dark:text-white">
-                                                ₹{Number(voucher.amount?.value || voucher.withdrawalAmount?.value || voucher.depositAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                ₹{formatNumber(Number(Number(voucher.amount?.value || voucher.withdrawalAmount?.value || voucher.depositAmount?.value || 0)), { minimumFractionDigits: 2 })}
                                                 <ConfidenceIndicator confidence={voucher.amount?.confidence || voucher.withdrawalAmount?.confidence || voucher.depositAmount?.confidence} />
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-center">
-                                                <span className="px-2 py-1 bg-green-50 text-green-700 text-[10px] font-bold uppercase rounded-full border border-green-100">
-                                                    Posted
-                                                </span>
+                                                <span className="px-2 py-1 bg-green-50 text-green-700 text-[10px] font-bold uppercase rounded-full border border-green-100">{t("Posted")}</span>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                                 <div className="flex items-center justify-center space-x-1">
@@ -555,7 +556,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                 <tr>
                                     <td colSpan={6} className="px-6 py-20 text-center">
                                         <VouchersIcon className="text-6xl mx-auto text-gray-100 mb-4" />
-                                        <h3 className="text-lg font-bold text-gray-400">No entries found</h3>
+                                        <h3 className="text-lg font-bold text-gray-400">{t("No entries found")}</h3>
                                         <p className="text-gray-400 text-sm max-w-xs mx-auto">Either you haven't imported any data yet or your search filter returned no results.</p>
                                     </td>
                                 </tr>
@@ -572,7 +573,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                             <div className="flex items-center">
                                 <HistoryIcon className="text-blue-600 mr-3 text-2xl" />
                                 <div>
-                                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Audit Trail</h3>
+                                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">{t("Audit Trail")}</h3>
                                     <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">
                                         Entry #{selectedAuditVoucher.id.includes('copy') ? 'COPY' : (selectedAuditVoucher.id.split('-')[1] || '---')}
                                     </p>
@@ -616,7 +617,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                                     ) : (
                                         <div className="py-12 text-center">
                                             <HistoryIcon className="text-6xl text-gray-100 mx-auto mb-4" />
-                                            <p className="text-gray-400 font-medium">No audit activities recorded for this entry.</p>
+                                            <p className="text-gray-400 font-medium">{t("No audit activities recorded for this entry.")}</p>
                                         </div>
                                     )}
                                 </div>
@@ -642,7 +643,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                             <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <DeleteIcon className="text-3xl" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Confirm Deletion</h3>
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">{t("Confirm Deletion")}</h3>
                             <p className="text-gray-500 text-sm mt-2 dark:text-gray-400">{deleteConfirmation.message}</p>
                         </div>
                         <div className="flex border-t border-gray-100 dark:border-gray-800">
@@ -655,9 +656,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
                             <button 
                                 onClick={confirmDelete}
                                 className="flex-1 px-4 py-4 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors"
-                            >
-                                Confirm Delete
-                            </button>
+                            >{t("Confirm Delete")}</button>
                         </div>
                     </div>
                 </div>

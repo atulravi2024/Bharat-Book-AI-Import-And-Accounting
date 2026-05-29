@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from '../../../context/LanguageContext';
 import { 
   User, Plus, Search, Check, Trash2, Edit2, Mail, Phone, Briefcase, Lock, Unlock, 
   Shield, Activity, Settings, UserCheck, UserX, CheckSquare, Square, Info, Key, AlertTriangle, Compass, Download, Send, Upload, ChevronDown 
@@ -705,7 +705,7 @@ export const CompanyDirectoryTab = () => {
                   </div>
                 )}
               </div>
-              <div className="relative" ref={exportDropdownRef}>
+              <div className="relative hidden md:block" ref={exportDropdownRef}>
                 <button 
                   onClick={() => setShowExportMenu(!showExportMenu)}
                   className="py-1.5 px-2.5 sm:px-3 bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-bold uppercase tracking-widest text-[10px] flex items-center justify-center transition-all shadow-sm shrink-0"

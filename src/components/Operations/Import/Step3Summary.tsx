@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useState, useMemo } from 'react';
 import { ParsedVoucher, VoucherType } from '../../../app/types';
@@ -14,6 +15,7 @@ interface Step3SummaryProps {
 }
 
 export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherType, onBack, onSubmit, isLoading, onCancel }) => {
+  const { t, formatNumber } = useLanguage();
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   const summary = useMemo(() => {
@@ -56,7 +58,7 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
             <div>
                 <h2 className="text-xl font-bold text-gray-800 mb-1 dark:text-gray-100">Submit & Final Preview</h2>
-                <p className="text-gray-500 text-xs sm:mb-4 dark:text-gray-400">Please confirm the final summary before creating vouchers.</p>
+                <p className="text-gray-500 text-xs sm:mb-4 dark:text-gray-400">{t("Please confirm the final summary before creating vouchers.")}</p>
             </div>
             <div className="flex space-x-2">
                 <button className="flex items-center px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-100 flex-1 sm:flex-none justify-center dark:text-gray-300 dark:hover:bg-gray-600">
@@ -70,17 +72,17 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
 
         <div className="form-grid gap-4 sm:gap-6 mt-4 sm:mt-0">
           <div className="bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
-            <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">Voucher Details</h3>
+            <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">{t("Voucher Details")}</h3>
             <div className="space-y-3">
-              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Voucher Type</span><span className="font-medium text-gray-900 dark:text-white">{voucherType}</span></div>
-              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">No. of Vouchers</span><span className="font-medium text-gray-900 dark:text-white">{summary.numberOfVouchers}</span></div>
+              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Voucher Type")}</span><span className="font-medium text-gray-900 dark:text-white">{voucherType}</span></div>
+              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("No. of Vouchers")}</span><span className="font-medium text-gray-900 dark:text-white">{summary.numberOfVouchers}</span></div>
             </div>
           </div>
           <div className="bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
-            <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">Amount Summary</h3>
+            <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">{t("Amount Summary")}</h3>
             <div className="space-y-3">
-              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Total Debit</span><span className="font-medium text-gray-900 dark:text-white">{summary.totalDebit.toFixed(2)}</span></div>
-              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Total Credit</span><span className="font-medium text-gray-900 dark:text-white">{summary.totalCredit.toFixed(2)}</span></div>
+              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Total Debit")}</span><span className="font-medium text-gray-900 dark:text-white">{summary.totalDebit.toFixed(2)}</span></div>
+              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Total Credit")}</span><span className="font-medium text-gray-900 dark:text-white">{summary.totalCredit.toFixed(2)}</span></div>
               <div className={`flex justify-between font-bold border-t pt-3 mt-2 ${summary.isBalanced ? 'text-green-600' : 'text-amber-600'}`}>
                 <span>{voucherType === VoucherType.BankStatement ? 'Processed' : 'Balanced'}</span>
                 <span>{summary.isBalanced ? '✓' : '!'}</span>
@@ -88,12 +90,12 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
             </div>
           </div>
           {(voucherType === VoucherType.Purchase || voucherType === VoucherType.Sales) && (
-            <div className="form-field-wrapper md:col-span-2 bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
-              <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">Tax Summary</h3>
+            <div className="form-field-wrapper lg:col-span-2 bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
+              <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">{t("Tax Summary")}</h3>
               <div className="space-y-3">
-                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">Total GST</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.gst.toFixed(2)}</span></div>
-                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">CGST</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.cgst.toFixed(2)}</span></div>
-                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">SGST</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.sgst.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Total GST")}</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.gst.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("CGST")}</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.cgst.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("SGST")}</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.sgst.toFixed(2)}</span></div>
               </div>
             </div>
           )}
@@ -107,7 +109,7 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
               onChange={(e) => setIsConfirmed(e.target.checked)}
               className="form-input h-4 w-4 text-blue-600 border-gray-300 rounded dark:border-gray-600"
             />
-            <span className="ml-3 text-gray-700 dark:text-gray-200">I confirm the accuracy of these entries.</span>
+            <span className="ml-3 text-gray-700 dark:text-gray-200">{t("I confirm the accuracy of these entries.")}</span>
           </label>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React from 'react';
 import { Users, ChevronUp } from 'lucide-react';
 import { SearchableDropdown } from '../../../ui/SearchableDropdown';
@@ -18,12 +19,14 @@ export const PartySection: React.FC<PartySectionProps> = ({
   headerDetails,
   handleHeaderChange,
   partyMasters
-}) => {  return (
+}) => {
+  const { t, formatNumber  } = useLanguage();
+  return (
     <div className={`bg-white border border-gray-200/60 shadow-sm relative transition-all duration-300 z-[38] mb-6 ${collapsedSections.party ? 'px-6 py-3 rounded-xl' : 'p-6 rounded-2xl'} dark:bg-gray-800`}>
        <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500 rounded-l-[inherit]"></div>
        <div className={`flex items-center justify-between cursor-pointer ${collapsedSections.party ? '' : 'mb-5'}`} onClick={() => toggleSection('party')}>
          <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
-           <Users size={16} className="mr-2 text-indigo-500"/> Party <span className="hidden sm:inline">&nbsp;Details</span>
+           <Users size={16} className="mr-2 text-indigo-500"/> Party <span className="hidden sm:inline">{t("&nbsp;Details")}</span>
          </h3>
          <button className="text-gray-400 hover:text-gray-600 transition-colors">
            <ChevronUp size={20} className={`transform transition-transform duration-300 ${collapsedSections.party ? 'rotate-180' : ''}`} />
@@ -32,22 +35,22 @@ export const PartySection: React.FC<PartySectionProps> = ({
       {!collapsedSections.party && (
       <div className="form-grid gap-x-6 gap-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
         <div className="form-field-wrapper">
-<label className="form-label">Entity Category</label>
+<label className="form-label">{t("Entity Category")}</label>
           <select 
             value={headerDetails.entityCategory || ''} 
             onChange={(e) => handleHeaderChange('entityCategory', e.target.value)} 
             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
           >
-            <option value="Customer">Customer</option>
-            <option value="Vendor">Vendor</option>
-            <option value="Both">Both</option>
-            <option value="Internal">Internal</option>
-            <option value="Hybrid">Hybrid</option>
+            <option value="Customer">{t("Customer")}</option>
+            <option value="Vendor">{t("Vendor")}</option>
+            <option value="Both">{t("Both")}</option>
+            <option value="Internal">{t("Internal")}</option>
+            <option value="Hybrid">{t("Hybrid")}</option>
           </select>
         </div>
         <div className="form-field-wrapper">
           <SearchableDropdown
-            label="Party A/c Name"
+            label={t("Party A/c Name")}
             options={partyMasters.filter(p => {
               const cat = headerDetails.entityCategory;
               if (cat === 'Both') return true;
@@ -59,11 +62,11 @@ export const PartySection: React.FC<PartySectionProps> = ({
             })}
             value={headerDetails.partyName || ''}
             onChange={(value) => handleHeaderChange('partyName', value)}
-            placeholder={`Search ${headerDetails.entityCategory}...`}
+            placeholder={t("Search") + " " + t(headerDetails.entityCategory || "Party") + "..."}
           />
         </div>
         <div className="form-field-wrapper">
-<label className="form-label">Business Role</label>
+<label className="form-label">{t("Business Role")}</label>
           <select 
             value={headerDetails.businessRole || ''} 
             onChange={(e) => handleHeaderChange('businessRole', e.target.value)} 
@@ -71,61 +74,61 @@ export const PartySection: React.FC<PartySectionProps> = ({
           >
             {(headerDetails.entityCategory === 'Customer' || headerDetails.entityCategory === 'Both') && (
               <>
-                <option value="Trader">Trader</option>
-                <option value="Consumer">Consumer</option>
+                <option value="Trader">{t("Trader")}</option>
+                <option value="Consumer">{t("Consumer")}</option>
               </>
             )}
             {(headerDetails.entityCategory === 'Vendor' || headerDetails.entityCategory === 'Both') && (
               <>
-                <option value="Supplier">Supplier</option>
-                <option value="Manufacturer">Manufacturer</option>
+                <option value="Supplier">{t("Supplier")}</option>
+                <option value="Manufacturer">{t("Manufacturer")}</option>
               </>
             )}
             {(headerDetails.entityCategory === 'Internal' || headerDetails.entityCategory === 'Hybrid') && (
               <>
-                <option value="Operator">Operator</option>
-                <option value="Staff">Staff</option>
-                <option value="Supervisor">Supervisor</option>
-                <option value="Contractor">Contractor</option>
+                <option value="Operator">{t("Operator")}</option>
+                <option value="Staff">{t("Staff")}</option>
+                <option value="Supervisor">{t("Supervisor")}</option>
+                <option value="Contractor">{t("Contractor")}</option>
               </>
             )}
           </select>
         </div>
         <div className="form-field-wrapper">
-<label className="form-label">GST Number</label>
-          <input type="text" value={headerDetails.gstNumber || ''} onChange={(e) => handleHeaderChange('gstNumber', e.target.value)} placeholder="22AAAAA0000A1Z5" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+<label className="form-label">{t("GST Number")}</label>
+          <input type="text" value={headerDetails.gstNumber || ''} onChange={(e) => handleHeaderChange('gstNumber', e.target.value)} placeholder={t("22AAAAA0000A1Z5")} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
         </div>
 
         <div className="form-field-wrapper">
-<label className="form-label">Aadhaar Card No.</label>
-          <input type="text" value={headerDetails.aadhaarNo || ''} onChange={(e) => handleHeaderChange('aadhaarNo', e.target.value)} placeholder="12-digit number" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+<label className="form-label">{t("Aadhaar Card No.")}</label>
+          <input type="text" value={headerDetails.aadhaarNo || ''} onChange={(e) => handleHeaderChange('aadhaarNo', e.target.value)} placeholder={t("12-digit number")} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
         </div>
         <div className="form-field-wrapper">
-<label className="form-label">PAN Card No.</label>
-          <input type="text" value={headerDetails.panNo || ''} onChange={(e) => handleHeaderChange('panNo', e.target.value)} placeholder="ABCDE1234F" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
+<label className="form-label">{t("PAN Card No.")}</label>
+          <input type="text" value={headerDetails.panNo || ''} onChange={(e) => handleHeaderChange('panNo', e.target.value)} placeholder={t("ABCDE1234F")} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" />
         </div>
         <div className="form-field-wrapper">
-<label className="form-label">Party Type</label>
+<label className="form-label">{t("Party Type")}</label>
           <select value={headerDetails.partyType || ''} onChange={(e) => handleHeaderChange('partyType', e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none cursor-pointer dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700">
-            <option value="Regular">Regular</option>
-            <option value="Composition">Composition</option>
-            <option value="Unregistered">Unregistered</option>
-            <option value="Consumer">Consumer</option>
+            <option value="Regular">{t("Regular")}</option>
+            <option value="Composition">{t("Composition")}</option>
+            <option value="Unregistered">{t("Unregistered")}</option>
+            <option value="Consumer">{t("Consumer")}</option>
           </select>
         </div>
 
         <div className="form-field-wrapper">
-<label className="form-label">Place of Supply</label>
+<label className="form-label">{t("Place of Supply")}</label>
           <input 
             type="text" 
             value={headerDetails.placeOfSupply || ''} 
             onChange={(e) => handleHeaderChange('placeOfSupply', e.target.value)} 
-            placeholder="e.g. Maharashtra"
+            placeholder={t("e.g. Maharashtra")}
             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700" 
           />
         </div>
         <div className="form-field-wrapper">
-<label className="form-label">Supply Classification (System)</label>
+<label className="form-label">{t("Supply Classification (System)")}</label>
           <input 
             type="text" 
             value={headerDetails.supplyType || ''} 
@@ -135,24 +138,24 @@ export const PartySection: React.FC<PartySectionProps> = ({
         </div>
         <div className="form-field-wrapper form-grid col-span-full gap-4 p-4 bg-indigo-50/20 rounded-2xl border border-indigo-100/50 mt-2">
           <div className="form-field-wrapper">
-<label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">PO Number</label>
-            <input type="text" value={headerDetails.poNumber || ''} onChange={(e) => handleHeaderChange('poNumber', e.target.value)} placeholder="PO-001" className="w-full px-3 py-2 bg-white border border-indigo-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:bg-gray-800" />
+<label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">{t("PO Number")}</label>
+            <input type="text" value={headerDetails.poNumber || ''} onChange={(e) => handleHeaderChange('poNumber', e.target.value)} placeholder={t("PO-001")} className="w-full px-3 py-2 bg-white border border-indigo-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:bg-gray-800" />
           </div>
           <div className="form-field-wrapper">
-<label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">PO Date</label>
+<label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">{t("PO Date")}</label>
             <input type="date" value={headerDetails.poDate || ''} onChange={(e) => handleHeaderChange('poDate', e.target.value)} className="w-full px-3 py-2 bg-white border border-indigo-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:bg-gray-800" />
           </div>
           <div className="form-field-wrapper">
-<label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">Credit Period (Days)</label>
-            <input type="number" value={headerDetails.creditPeriod || ''} onChange={(e) => handleHeaderChange('creditPeriod', e.target.value)} placeholder="30" className="w-full px-3 py-2 bg-white border border-indigo-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:bg-gray-800" />
+<label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">{t("Credit Period (Days)")}</label>
+            <input type="number" value={headerDetails.creditPeriod || ''} onChange={(e) => handleHeaderChange('creditPeriod', e.target.value)} placeholder={t("30")} className="w-full px-3 py-2 bg-white border border-indigo-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:bg-gray-800" />
           </div>
           <div className="hidden sm:block">
-            <label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">Price Level</label>
+            <label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">{t("Price Level")}</label>
             <select value={headerDetails.priceLevel || ''} onChange={(e) => handleHeaderChange('priceLevel', e.target.value)} className="w-full px-3 py-2 bg-white border border-indigo-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:bg-gray-800">
-              <option value="Standard">Standard</option>
-              <option value="Wholesale">Wholesale</option>
-              <option value="Retail">Retail</option>
-              <option value="Consumer">Consumer</option>
+              <option value="Standard">{t("Standard")}</option>
+              <option value="Wholesale">{t("Wholesale")}</option>
+              <option value="Retail">{t("Retail")}</option>
+              <option value="Consumer">{t("Consumer")}</option>
             </select>
           </div>
         </div>

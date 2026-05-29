@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from '../../context/LanguageContext';
 import { numberToWords } from '../../lib/numberToWords';
 import { SettingsIcon, CheckCircleIcon } from '../icons/IconComponents';
 import { ToggleLeft, ToggleRight, Layout, Type, FileText, Image as ImageIcon, Signature, Hash, Calculator, Printer, Maximize, Focus, Palette, Columns, ZoomIn, ZoomOut, RotateCcw, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Upload, Download } from 'lucide-react';
@@ -34,7 +34,7 @@ const INVOICE_FONTS = [
 ];
 
 export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode = 'working' }) => {
-  const { t } = useLanguage();
+  const { t, formatNumber } = useLanguage();
     const [settings, setSettings] = useState({
         itemsPerFirstPage: 12,
         itemsPerSecondPage: 15,
@@ -2160,6 +2160,7 @@ const MarginInput: React.FC<{ label: string, value: number, onChange: (val: numb
 // Internal simplified version of VoucherPreview for settings preview only
 // We don't want to use the full modal version here to avoid recursion/portal issues in a small frame
 const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: any[], totals: any, type: string, config: any, isLastPage?: boolean, pageNum?: number, totalPages?: number, absoluteStartIndex?: number }> = ({ header = {} as any, rows = [], allRows = [], totals = {} as any, type = 'voucher', config, isLastPage = true, pageNum = 1, totalPages = 1, absoluteStartIndex = 0 }) => {
+    const { t, formatNumber } = useLanguage();
     const getSectionStyle = (key: string, baseClasses: string, styleOverrides?: React.CSSProperties) => {
         const style = (config.sectionStyles as any)?.[key];
         let classes = baseClasses;
@@ -2643,26 +2644,26 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
                                 {true ? (
                                     <>
                                         {config.showMrp && (
-                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.mrp ? parseFloat(row.mrp.toString()).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}</td>
+                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.mrp ? formatNumber(Number(parseFloat(row.mrp.toString())), { minimumFractionDigits: 2 }) : '-'}</td>
                                         )}
                                         {config.showQty && (
                                             <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.qty} {row.uom}</td>
                                         )}
                                         {config.showRate && (
-                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{parseFloat(row.rate).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(Number(parseFloat(row.rate)), { minimumFractionDigits: 2 })}</td>
                                         )}
                                         {config.showDiscountPercentage && (
                                             <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.discountPercent ? `${row.discountPercent}%` : '-'}</td>
                                         )}
                                         {config.showDiscountAmount && (
-                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.discountAmount ? parseFloat(row.discountAmount.toString()).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}</td>
+                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.discountAmount ? formatNumber(Number(parseFloat(row.discountAmount.toString())), { minimumFractionDigits: 2 }) : '-'}</td>
                                         )}
                                         <td className={`${config.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-bold text-gray-600 text-right tabular-nums dark:text-gray-300`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.tax}%</td>
                                     </>
                                 ) : (
                                     <td className={`${config.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-black ${primaryText} text-right tracking-widest uppercase`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.crDr || 'Dr'}</td>
                                 )}
-                                <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 1.2}px` }}>{parseFloat(row.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 1.2}px` }}>{formatNumber(Number(parseFloat(row.amount)), { minimumFractionDigits: 2 })}</td>
                             </tr>
                         ))}
                         {rows.length > 0 && (config.pageSubtotalDisplay === 'All Pages' || isLastPage) && (
@@ -2680,14 +2681,14 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
                                         {config.showRate && <td className={tStyles.tableCellRight}></td>}
                                         {config.showDiscountPercentage && <td className={tStyles.tableCellRight}></td>}
                                         {config.showDiscountAmount && (
-                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{rows.reduce((a, b) => a + (parseFloat(b.discountAmount?.toString()) || 0), 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(rows.reduce((a, b) => a + (parseFloat(b.discountAmount?.toString()) || 0), 0), { minimumFractionDigits: 2 })}</td>
                                         )}
                                         <td className={`${config.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-bold text-gray-600 text-right tabular-nums`}></td>
                                     </>
                                 ) : (
                                     <td className={`${config.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-black ${primaryText} text-right tracking-widest uppercase`}></td>
                                 )}
-                                <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 1.2}px` }}>{rows.reduce((a, b) => a + (parseFloat(b.amount?.toString()) || 0), 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 1.2}px` }}>{formatNumber(rows.reduce((a, b) => a + (parseFloat(b.amount?.toString()) || 0), 0), { minimumFractionDigits: 2 })}</td>
                             </tr>
                         )}
                     </tbody>
@@ -2739,17 +2740,17 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
                       }, []).map((hsn, idx) => (
                         <tr key={`hsn-${idx}`} className={tStyles.tableRow}>
                           <td className={tStyles.tableCellLeft} style={{ fontSize: `${baseSize * 0.9}px` }}>{hsn.hsn}</td>
-                          <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{hsn.taxable.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                          <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(Number(hsn.taxable), { minimumFractionDigits: 2 })}</td>
                           <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{hsn.taxRate}%</td>
                           {totals.igst > 0 ? (
-                              <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{hsn.taxAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                              <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(Number(hsn.taxAmount), { minimumFractionDigits: 2 })}</td>
                           ) : (
                               <>
-                                  <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{(hsn.taxAmount/2).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                                  <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{(hsn.taxAmount/2).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                  <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(hsn.taxAmount / 2, { minimumFractionDigits: 2 })}</td>
+                                  <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(hsn.taxAmount / 2, { minimumFractionDigits: 2 })}</td>
                               </>
                           )}
-                          <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 0.9}px` }}>{hsn.taxAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                          <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(Number(hsn.taxAmount), { minimumFractionDigits: 2 })}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -2783,25 +2784,25 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
                   <div className={tStyles.totalsBox}>
                     <div className={`${tStyles.totalsLabel} ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`} style={{ fontSize: `${baseSize * 0.9}px` }}>
                       <span>Taxable Amount</span>
-                      <span className="tabular-nums">₹{(totals.taxableValue || totals.estValue || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                      <span className="tabular-nums">₹{formatNumber(Number(totals.taxableValue || totals.estValue || 0), { minimumFractionDigits: 2 })}</span>
                     </div>
                     {config.showTaxDetails && (
                         <div className={tStyles.totalsDivider}>
                             {(totals.igst || 0) > 0 && (
                             <div {...getSectionStyle('taxDetails', `${tStyles.totalsLabel} ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * 0.9}px` })}>
                                 <span>IGST</span>
-                                <span className="tabular-nums">₹{totals.igst.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                <span className="tabular-nums">₹{formatNumber(Number(totals.igst), { minimumFractionDigits: 2 })}</span>
                             </div>
                             )}
                             {(totals.cgst || 0) > 0 && (
                             <>
                                 <div {...getSectionStyle('taxDetails', `${tStyles.totalsLabel} ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * 0.9}px` })}>
                                 <span>CGST</span>
-                                <span className="tabular-nums">₹{totals.cgst.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                <span className="tabular-nums">₹{formatNumber(Number(totals.cgst), { minimumFractionDigits: 2 })}</span>
                                 </div>
                                 <div {...getSectionStyle('taxDetails', `${tStyles.totalsLabel} ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * 0.9}px` })}>
                                 <span>SGST</span>
-                                <span className="tabular-nums">₹{totals.sgst.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                <span className="tabular-nums">₹{formatNumber(Number(totals.sgst), { minimumFractionDigits: 2 })}</span>
                                 </div>
                             </>
                             )}
@@ -2809,7 +2810,7 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
                     )}
                     <div className="flex flex-col gap-1 items-end pt-4">
                       <div className={tStyles.grandTotalLabel} style={{ fontSize: `${baseSize * 0.9}px` }}>{layout === 'Modern' ? 'Net invoice amount' : 'Payable'}</div>
-                      <div {...getSectionStyle('grandTotal', tStyles.titleText.replace('mb-1', ''), { fontSize: `${baseSize * headingScale * 2}px` })}>₹{(totals.grandTotal || totals.finalValue || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                      <div {...getSectionStyle('grandTotal', tStyles.titleText.replace('mb-1', ''), { fontSize: `${baseSize * headingScale * 2}px` })}>₹{formatNumber(Number(totals.grandTotal || totals.finalValue || 0), { minimumFractionDigits: 2 })}</div>
                     </div>
                   </div>
                 </div>

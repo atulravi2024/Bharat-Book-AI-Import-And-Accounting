@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { NotificationsIcon } from '../icons/IconComponents';
 import { useNotifications } from '../../context/NotificationContext';
 import { MainView } from '../../app/types';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface NotificationDropdownProps {
   onViewChange?: (view: MainView) => void;
@@ -11,6 +12,7 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onVi
   const [isOpen, setIsOpen] = React.useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification } = useNotifications();
+  const { t } = useLanguage();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -72,13 +74,13 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onVi
           <div className="fixed inset-0 z-40 sm:hidden" onClick={() => setIsOpen(false)} />
           <div className="fixed top-16 left-4 right-4 sm:absolute sm:top-full sm:left-auto sm:right-0 sm:mt-2 sm:w-96 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col font-sans">
             <div className="flex justify-between items-center px-4 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/80">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">Notifications</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">{t("Notifications")}</h3>
               {unreadCount > 0 && (
                 <button 
                   onClick={(e) => { e.stopPropagation(); markAllAsRead(); }}
                   className="text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer bg-transparent border-none p-0"
                 >
-                  Mark all as read
+                  {t("Mark all as read")}
                 </button>
               )}
             </div>
@@ -86,7 +88,7 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onVi
             <div className="flex-1 overflow-y-auto max-h-[calc(100vh-6rem)] sm:max-h-[60vh] custom-scrollbar">
             {notifications.length === 0 ? (
               <div className="py-10 text-center">
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">No notifications yet.</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t("No notifications yet.")}</p>
               </div>
             ) : (
               <div className="divide-y divide-gray-50 dark:divide-gray-700/50">

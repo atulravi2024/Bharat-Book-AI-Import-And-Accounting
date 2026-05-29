@@ -39,6 +39,7 @@ import { WeightsTab } from './Tabs/WeightsTab';
 import { VolumesTab } from './Tabs/VolumesTab';
 import { GradesTab } from './Tabs/GradesTab';
 import { BillOfMaterialsTab } from './Tabs/BillOfMaterialsTab';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface ItemMasterViewProps {
   initialTab?: string;
@@ -83,6 +84,7 @@ interface ItemMasterViewProps {
 }
 
 export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
+    const { t, formatNumber } = useLanguage();
     const { 
         itemMasters, uomMasters, gstMasters, brandMasters, categoryMasters, bomMasters, gradeMasters, 
         assertionCategoryMasters, assertionCodeMasters, skuMasters, priceListMasters, 
@@ -233,7 +235,7 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
                         ].map(tab => (
                             <button key={tab.id} id={`item-master-tab-${tab.id}`} onClick={() => setActiveTab(tab.id)} className={`px-6 py-4 text-sm font-bold relative transition-all whitespace-nowrap flex items-center ${activeTab === tab.id ? 'text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-700' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
                                 <tab.icon className="w-4 h-4 mr-2 opacity-70" />
-                                {tab.label}
+                                {t(tab.label)}
                                 {activeTab === tab.id && <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600"></div>}
                             </button>
                         ))}

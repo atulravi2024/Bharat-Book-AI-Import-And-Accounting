@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useState, useEffect } from 'react';
 import { Package, Trash2, Edit2, X, ArrowRightLeft, Move, Database, Warehouse, Zap, Plus, Save, MapPin, ClipboardList, Settings2, Users, ChevronDown, ChevronUp, ScanBarcode, Import, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Printer, Eye, Image, FileText, FilePlus, Bookmark, Calculator, Tags, Info, HelpCircle, Paperclip, PlusCircle, Keyboard, Layout } from 'lucide-react';
@@ -52,6 +53,8 @@ interface InventoryEntryViewProps {
 }
 
 export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultType, itemMasters = [], warehouseMasters = [], ledgerMasters = [], partyMasters = [], vouchers = [], onUpdateItemMaster, onAddItemMaster, onSaveEntry, onDeleteEntry, onOpenPrintSettings }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const [editingRowIndex, setEditingRowIndex] = useState<number | null>(null);
   const [expandedRowSection, setExpandedRowSection] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(defaultType || 'stock_journal');
@@ -439,7 +442,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
           <HelpCircle size={18} className="text-emerald-600" />
         </div>
         <div>
-          <h4 className="text-sm font-black text-emerald-900 uppercase tracking-wider mb-2">Inventory Bill Requirements</h4>
+          <h4 className="text-sm font-black text-emerald-900 uppercase tracking-wider mb-2">{t("Inventory Bill Requirements")}</h4>
           <ul className="form-grid gap-x-6 gap-y-2">
             {[
               'Unique sequential Entry Number',
@@ -454,7 +457,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
             ].map((req, i) => (
               <li key={i} className="flex items-center text-xs font-bold text-emerald-700/70">
                 <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2 shrink-0" />
-                {req}
+                {t(req)}
               </li>
             ))}
           </ul>
@@ -510,7 +513,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
 
   const handleSaveInfoResult = (entry: any) => {
     if (entry) {
-        showNotify('Entry saved successfully!');
+        showNotify(t('Entry saved successfully!'));
     }
   }
 
@@ -581,7 +584,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
       emailId: '',
     });
     setRows([{ id: Date.now() }, { id: Date.now() + 1 }]);
-    showNotify('Entry saved successfully! Starting a new one.');
+    showNotify(t('Entry saved successfully! Starting a new one.'));
   };
 
   const handleSavePrint = () => {
@@ -594,7 +597,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
 
   const handleSaveDraft = () => {
     saveInventoryEntry(true);
-    showNotify('Entry saved as draft!', 'info');
+    showNotify(t('Entry saved as draft!'), 'info');
   };
 
   const [showPreview, setShowPreview] = useState(false);
@@ -881,7 +884,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
         entryNumber: getNextVoucherNumber(activeTab) || '',
         systemStamp: undefined
     }));
-    showNotify('Entry duplicated! You can now save it as a new record.');
+    showNotify(t('Entry duplicated! You can now save it as a new record.'));
   };
 
   const [showSectionShortcuts, setShowSectionShortcuts] = useState(false);
@@ -906,7 +909,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
 
   const handleDeleteEntryClick = () => {
     if (!currentRecordId) {
-      showNotify('Record not saved yet, nothing to delete.', 'info');
+      showNotify(t('Record not saved yet, nothing to delete.'), 'info');
       handleNewEntry();
       return;
     }
@@ -917,7 +920,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
     if (onDeleteEntry && currentRecordId) {
       onDeleteEntry(currentRecordId);
     }
-    showNotify('Entry deleted!', 'error');
+    showNotify(t('Entry deleted!'), 'error');
     handleNewEntry();
   };
 
@@ -950,10 +953,10 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`${activeTab}_${headerDetails.entryNumber || 'inventory'}.pdf`);
-      showNotify('PDF generated successfully!');
+      showNotify(t('PDF generated successfully!'));
     } catch (error) {
       console.error('Error generating PDF:', error);
-      showNotify('Failed to generate PDF. Please try again.', 'error');
+      showNotify(t('Failed to generate PDF. Please try again.'), 'error');
     }
   };
 
@@ -972,10 +975,10 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
       link.download = `${activeTab}_${headerDetails.entryNumber || 'inventory'}.png`;
       link.href = dataUrl;
       link.click();
-      showNotify('Image generated successfully!');
+      showNotify(t('Image generated successfully!'));
     } catch (error) {
       console.error('Error generating image:', error);
-      showNotify('Failed to generate image. Please try again.', 'error');
+      showNotify(t('Failed to generate image. Please try again.'), 'error');
     }
   };
 
@@ -998,7 +1001,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
                  dark:text-gray-400 dark:hover:bg-gray-700`}
               >
                 <tab.icon size={14} className="mr-2" />
-                {tab.label}
+                {t(tab.label)}
               </button>
             ))}
           </nav>

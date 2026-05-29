@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { ParsedVoucher, VoucherType, PartyMaster, LedgerMaster, Confidence } from '../../../app/types';
@@ -26,6 +27,8 @@ interface MappingDialogProps {
 export const MappingDialog: React.FC<MappingDialogProps> = ({
     vouchers, isOpen, onClose, onMap, partyMasters, ledgerMasters, onCreatePartyMaster, onCreateLedgerMaster
 }) => {
+  const { t, formatNumber  } = useLanguage();
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [mappings, setMappings] = useState<Record<string, any>>({});
     
@@ -175,8 +178,8 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                     <div className="flex items-center">
                         <MapIcon className="mr-3 text-2xl" />
                         <div>
-                            <h3 className="text-lg font-bold">Classify Transaction</h3>
-                            <p className="text-xs opacity-80 font-bold uppercase tracking-widest mt-0.5">Party / Ledger Mapping</p>
+                            <h3 className="text-lg font-bold">{t("Classify Transaction")}</h3>
+                            <p className="text-xs opacity-80 font-bold uppercase tracking-widest mt-0.5">{t("Party / Ledger Mapping")}</p>
                         </div>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-all"><CancelIcon /></button>
@@ -193,7 +196,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                         </div>
                         <div className="text-sm font-bold text-gray-800 line-clamp-2 mb-2 dark:text-gray-100">{String(currentVoucher.narration?.value)}</div>
                         <div className="text-lg font-black text-indigo-700 font-mono">
-                            ₹{Number(currentVoucher.amount?.value || currentVoucher.depositAmount?.value || currentVoucher.withdrawalAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                            ₹{formatNumber(Number(Number(currentVoucher.amount?.value || currentVoucher.depositAmount?.value || currentVoucher.withdrawalAmount?.value || 0)), { minimumFractionDigits: 2 })}
                         </div>
                     </div>
 
@@ -235,9 +238,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                                <button 
                                    onClick={handleCreateNew}
                                    className="text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1 rounded-full font-bold transition-all"
-                               >
-                                   + Create New
-                               </button>
+                               >{t("+ Create New")}</button>
                             </div>
                         )}
                         
@@ -257,9 +258,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                     
                     <div className="flex items-start bg-amber-50 p-3 rounded-xl border border-amber-100 mt-2">
                         <InfoIcon className="text-amber-500 mr-2 shrink-0 mt-0.5" />
-                        <p className="text-[10px] text-amber-700 font-medium leading-relaxed uppercase tracking-tight">
-                            Mapping will move this entry to the "Classify" tab for further processing.
-                        </p>
+                        <p className="text-[10px] text-amber-700 font-medium leading-relaxed uppercase tracking-tight">{t("Mapping will move this entry to the \"Classify\" tab for further processing.")}</p>
                     </div>
                 </div>
 
@@ -267,29 +266,23 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                     <button 
                         onClick={onClose}
                         className="py-3 px-4 bg-white border border-gray-300 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
-                    >
-                        Discard
-                    </button>
+                    >{t("Discard")}</button>
                     <div className="flex-1 flex justify-end space-x-2">
                         {!isFirst && (
-                            <button onClick={handlePrev} className="px-4 py-3 bg-white border border-indigo-200 text-indigo-600 rounded-xl text-sm font-bold hover:bg-indigo-50 transition-all dark:bg-gray-800">Previous</button>
+                            <button onClick={handlePrev} className="px-4 py-3 bg-white border border-indigo-200 text-indigo-600 rounded-xl text-sm font-bold hover:bg-indigo-50 transition-all dark:bg-gray-800">{t("Previous")}</button>
                         )}
                         {!isLast ? (
                             <button 
                                 onClick={handleNext}
                                 disabled={!targetParty && !targetLedger}
                                 className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg active:scale-95 disabled:bg-gray-300"
-                            >
-                                Next
-                            </button>
+                            >{t("Next")}</button>
                         ) : (
                             <button 
                                 onClick={handleFinish}
                                 disabled={!targetParty && !targetLedger}
                                 className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg active:scale-95 disabled:bg-gray-300"
-                            >
-                                Finish & Apply
-                            </button>
+                            >{t("Finish & Apply")}</button>
                         )}
                     </div>
                 </div>
@@ -300,9 +293,9 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                 <div className="fixed inset-0 z-[210] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
                     <div className="bg-white rounded-xl shadow-xl w-full max-w-sm p-6 animate-in fade-in zoom-in-95 dark:bg-gray-800">
                         <h4 className="text-lg font-bold mb-1 text-gray-800 dark:text-gray-100">Create New {selectionType === 'ledger' ? 'Ledger' : 'Party'}</h4>
-                        <p className="text-xs text-gray-500 mb-4 tracking-tight dark:text-gray-400">This will permanently add the master to your records.</p>
+                        <p className="text-xs text-gray-500 mb-4 tracking-tight dark:text-gray-400">{t("This will permanently add the master to your records.")}</p>
                         
-                        <label className="form-label dark:text-gray-400">Master Name</label>
+                        <label className="form-label dark:text-gray-400">{t("Master Name")}</label>
                         <input 
                             className="w-full text-base font-bold text-indigo-700 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 mt-1 mb-4 focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-gray-900 dark:border-gray-700"
                             value={newMasterName}
@@ -322,9 +315,7 @@ export const MappingDialog: React.FC<MappingDialogProps> = ({
                                 onClick={confirmCreateMaster}
                                 className="px-6 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow disabled:opacity-50"
                                 disabled={!newMasterName.trim()}
-                            >
-                                Create & Apply
-                            </button>
+                            >{t("Create & Apply")}</button>
                         </div>
                     </div>
                 </div>

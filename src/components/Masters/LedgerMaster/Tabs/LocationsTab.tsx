@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useFormSettings } from "../../../../app/useFormSettings";
 
@@ -27,6 +28,8 @@ interface LocationsTabProps {
 }
 
 export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const formSettings = useFormSettings();
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -105,7 +108,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <input 
                         type="text" 
-                        placeholder="Search Locations..." 
+                        placeholder={t("Search Locations...")} 
                         value={searchTerm} 
                         onChange={e => setSearchTerm(e.target.value)} 
                         className="form-input pl-10 pr-4 text-sm font-medium" 
@@ -137,7 +140,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                     }} 
                     className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center justify-center text-xs shadow-lg shadow-blue-200 dark:shadow-none whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all"
                 >
-                    <Plus className="mr-2 w-4 h-4" /> Add Location
+                    <Plus className="mr-2 w-4 h-4" /> {t("Add Location")}
                 </button>
                 </div>
             </div>
@@ -148,10 +151,10 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-gray-50/50 dark:bg-gray-800/50">
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">Location Details</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">Type & Status</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">Contact Person</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">Actions</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">{t("Location Details")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">{t("Type & Status")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-gray-800">{t("Contact Person")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">{t("Actions")}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -164,18 +167,18 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             </div>
                                             <div>
                                                 <div className="font-bold text-gray-900 dark:text-white text-sm">{m.name}</div>
-                                                <div className="text-[10px] font-medium text-gray-400 uppercase tracking-tight">{m.code || 'NO CODE'}</div>
+                                                <div className="text-[10px] font-medium text-gray-400 uppercase tracking-tight">{m.code || t('NO CODE')}</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="p-4">
                                         <div className="space-y-1">
                                             <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-[10px] font-bold uppercase tracking-tight">
-                                                {m.type || 'Standard'}
+                                                {t(m.type || 'Standard')}
                                             </span>
                                             <div className="flex items-center space-x-1.5 pt-1">
                                                 <div className={`w-1.5 h-1.5 rounded-full ${m.isActive ? 'bg-green-500' : 'bg-gray-300'}`}></div>
-                                                <span className="text-[10px] font-bold text-gray-500">{m.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
+                                                <span className="text-[10px] font-bold text-gray-500">{m.isActive ? t('ACTIVE') : t('INACTIVE')}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -203,13 +206,13 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                     setIsModalOpen(true);
                                                     setActiveAccordion('identity');
                                                 }} 
-                                                className="mx-auto flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"
+                                                className="mx-auto flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title={t("Edit")}
                                             >
                                                 <Edit2 size={16} className="m-auto" />
                                             </button>
                                             <button 
                                                 onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name})} 
-                                                className="mx-auto flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title="Delete"
+                                                className="mx-auto flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title={t("Delete")}
                                             >
                                                 <Trash2 size={16} className="m-auto" />
                                             </button>
@@ -224,8 +227,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                         <div className="w-20 h-20 bg-gray-50 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
                             <Search className="text-gray-300 w-8 h-8" />
                         </div>
-                        <h3 className="text-gray-900 dark:text-white font-bold mb-2">No Locations Found</h3>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs mx-auto">Try adjusting your search or add a new location to your system.</p>
+                        <h3 className="text-gray-900 dark:text-white font-bold mb-2">{t("No Locations Found")}</h3>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs mx-auto">{t("Try adjusting your search or add a new location to your system.")}</p>
                     </div>
                 )}
             </div>
@@ -236,7 +239,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
               <div className={`bg-white w-full h-full overflow-hidden flex flex-col dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl animate-in zoom-in-95 ${formSettings.currentModalMode === 'fullscreen' ? 'rounded-none max-w-full max-h-full' : 'rounded-2xl max-w-5xl max-h-[90vh]'}`}>
                 <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800 shrink-0">
                   <h2 className="font-bold text-base text-gray-900 flex items-center dark:text-white">
-                    {editingId ? 'Edit' : 'Add'} Location / Warehouse
+                    {editingId ? t('Edit') : t('Add')} {t("Location / Warehouse")}
                   </h2>
                   <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all">
                                     <X className="w-6 h-6" />
@@ -255,8 +258,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <LocationIcon className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Identity & Status</h3>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Base configuration and access</p>
+                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">{t("Identity & Status")}</h3>
+                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Base configuration and access")}</p>
                                             </div>
                                         </div>
                                         {activeAccordion === 'identity' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -266,32 +269,32 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                                 <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Location Name *</label>
-                                                        <input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder="e.g. Master Distribution Center" />
+                                                        <label className="form-label ml-1">{t("Location Name *")}</label>
+                                                        <input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder={t("e.g. Master Distribution Center")} />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Location Code *</label>
-                                                        <input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input rounded-2xl bg-white dark:bg-gray-900 focus:ring-4 focus:ring-blue-500/10 text-sm font-mono font-bold shadow-sm" placeholder="e.g. LOC-001" />
+                                                        <label className="form-label ml-1">{t("Location Code *")}</label>
+                                                        <input type="text" value={formData.code || ''} onChange={e => setFormData({...formData, code: e.target.value})} className="form-input rounded-2xl bg-white dark:bg-gray-900 focus:ring-4 focus:ring-blue-500/10 text-sm font-mono font-bold shadow-sm" placeholder={t("e.g. LOC-001")} />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="form-label ml-1">Location Type</label>
+                                                        <label className="form-label ml-1">{t("Location Type")}</label>
                                                         <select value={formData.type || ''} onChange={e => setFormData({...formData, type: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
                                                             {locationTypes.map(t => <option key={t} value={t}>{t}</option>)}
                                                         </select>
                                                     </div>
                                                     <div className="flex flex-col space-y-4 pt-4">
                                                         <div className="space-y-1.5">
-                                                            <label className="form-label ml-1">Status</label>
+                                                            <label className="form-label ml-1">{t("Status")}</label>
                                                             <select value={formData.isActive === false ? 'false' : 'true'} onChange={e => setFormData({...formData, isActive: e.target.value === 'true'})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
-                                                                <option value="true">Active</option>
-                                                                <option value="false">Inactive</option>
+                                                                <option value="true">{t("Active")}</option>
+                                                                <option value="false">{t("Inactive")}</option>
                                                             </select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="form-label ml-1">Default</label>
+                                                            <label className="form-label ml-1">{t("Default")}</label>
                                                             <select value={formData.isDefault === true ? 'true' : 'false'} onChange={e => setFormData({...formData, isDefault: e.target.value === 'true'})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
-                                                                <option value="true">Yes (Default)</option>
-                                                                <option value="false">No / Disabled</option>
+                                                                <option value="true">{t("Yes (Default)")}</option>
+                                                                <option value="false">{t("No / Disabled")}</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -312,8 +315,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <User className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Contact Information</h3>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Management and address details</p>
+                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">{t("Contact Information")}</h3>
+                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Management and address details")}</p>
                                             </div>
                                         </div>
                                         {activeAccordion === 'contact' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -323,16 +326,16 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                                 <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Manager Name</label>
-                                                        <input type="text" value={formData.manager || ''} onChange={e => setFormData({...formData, manager: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder="Primary Supervisor" />
+                                                        <label className="form-label ml-1">{t("Manager Name")}</label>
+                                                        <input type="text" value={formData.manager || ''} onChange={e => setFormData({...formData, manager: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder={t("Primary Supervisor")} />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Contact Number</label>
-                                                        <input type="text" value={formData.contactNumber || ''} onChange={e => setFormData({...formData, contactNumber: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder="+1 (555) 000-0000" />
+                                                        <label className="form-label ml-1">{t("Contact Number")}</label>
+                                                        <input type="text" value={formData.contactNumber || ''} onChange={e => setFormData({...formData, contactNumber: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder={t("+1 (555) 000-0000")} />
                                                     </div>
                                                     <div className="form-field-wrapper space-y-1.5 md:col-span-2">
-                                                        <label className="form-label ml-1">Full Address</label>
-                                                        <textarea rows={2} value={formData.address || ''} onChange={e => setFormData({...formData, address: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-medium shadow-sm resize-none" placeholder="Street, City, State, ZIP, Country" />
+                                                        <label className="form-label ml-1">{t("Full Address")}</label>
+                                                        <textarea rows={2} value={formData.address || ''} onChange={e => setFormData({...formData, address: e.target.value})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-medium shadow-sm resize-none" placeholder={t("Street, City, State, ZIP, Country")} />
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -351,8 +354,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <Box className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Capacity & Dimensions</h3>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Physical constraints and storage limits</p>
+                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">{t("Capacity & Dimensions")}</h3>
+                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Physical constraints and storage limits")}</p>
                                             </div>
                                         </div>
                                         {activeAccordion === 'capacity' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -362,15 +365,15 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                                 <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Total Area (sq ft)</label>
+                                                        <label className="form-label ml-1">{t("Total Area (sq ft)")}</label>
                                                         <input type="number" value={formData.capacity?.totalArea || 0} onChange={e => setFormData({...formData, capacity: {...formData.capacity, totalArea: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Max Weight (kg)</label>
+                                                        <label className="form-label ml-1">{t("Max Weight (kg)")}</label>
                                                         <input type="number" value={formData.capacity?.maxWeight || 0} onChange={e => setFormData({...formData, capacity: {...formData.capacity, maxWeight: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Total Volume (cu ft)</label>
+                                                        <label className="form-label ml-1">{t("Total Volume (cu ft)")}</label>
                                                         <input type="number" value={formData.capacity?.totalVolume || 0} onChange={e => setFormData({...formData, capacity: {...formData.capacity, totalVolume: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
@@ -390,8 +393,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <Clock className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Operations & Scheduling</h3>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Workflow and efficiency parameters</p>
+                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">{t("Operations & Scheduling")}</h3>
+                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Workflow and efficiency parameters")}</p>
                                             </div>
                                         </div>
                                         {activeAccordion === 'ops' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -401,15 +404,15 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                                 <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Working Hours</label>
-                                                        <input type="text" value={formData.ops?.workingHours || ''} onChange={e => setFormData({...formData, ops: {...formData.ops, workingHours: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder="e.g. 08:00 - 20:00" />
+                                                        <label className="form-label ml-1">{t("Working Hours")}</label>
+                                                        <input type="text" value={formData.ops?.workingHours || ''} onChange={e => setFormData({...formData, ops: {...formData.ops, workingHours: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" placeholder={t("e.g. 08:00 - 20:00")} />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Picking Lead Time (min)</label>
+                                                        <label className="form-label ml-1">{t("Picking Lead Time (min)")}</label>
                                                         <input type="number" value={formData.ops?.pickingLeadTime || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, pickingLeadTime: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="form-label ml-1">Packing Lead Time (min)</label>
+                                                        <label className="form-label ml-1">{t("Packing Lead Time (min)")}</label>
                                                         <input type="number" value={formData.ops?.packingLeadTime || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, packingLeadTime: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
@@ -429,8 +432,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <MapPin className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Zoning & Docks</h3>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Internal organization and loading bays</p>
+                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">{t("Zoning & Docks")}</h3>
+                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Internal organization and loading bays")}</p>
                                             </div>
                                         </div>
                                         {activeAccordion === 'zoning' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -440,11 +443,11 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                                 <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Total Zones</label>
+                                                        <label className="form-label ml-1">{t("Total Zones")}</label>
                                                         <input type="number" value={formData.ops?.zones || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, zones: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Loading Docks</label>
+                                                        <label className="form-label ml-1">{t("Loading Docks")}</label>
                                                         <input type="number" value={formData.ops?.docks || 0} onChange={e => setFormData({...formData, ops: {...formData.ops, docks: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
@@ -464,8 +467,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <Settings className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Security & Safety</h3>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Asset protection and hazard controls</p>
+                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">{t("Security & Safety")}</h3>
+                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Asset protection and hazard controls")}</p>
                                             </div>
                                         </div>
                                         {activeAccordion === 'security' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -476,26 +479,26 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="flex flex-col space-y-4 pt-4">
                                                         <div className="space-y-1.5">
-                                                            <label className="form-label ml-1">CCTV</label>
+                                                            <label className="form-label ml-1">{t("CCTV")}</label>
                                                             <select value={formData.security?.hasCctv === true ? 'true' : 'false'} onChange={e => setFormData({...formData, security: {...formData.security, hasCctv: e.target.value === 'true'}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
-                                                                <option value="true">Enable / Installed</option>
-                                                                <option value="false">Disable / None</option>
+                                                                <option value="true">{t("Enable / Installed")}</option>
+                                                                <option value="false">{t("Disable / None")}</option>
                                                             </select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="form-label ml-1">Guards</label>
+                                                            <label className="form-label ml-1">{t("Guards")}</label>
                                                             <select value={formData.security?.hasGuard === true ? 'true' : 'false'} onChange={e => setFormData({...formData, security: {...formData.security, hasGuard: e.target.value === 'true'}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
-                                                                <option value="true">Enable / Assigned</option>
-                                                                <option value="false">Disable / None</option>
+                                                                <option value="true">{t("Enable / Assigned")}</option>
+                                                                <option value="false">{t("Disable / None")}</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Fire Rating</label>
+                                                        <label className="form-label ml-1">{t("Fire Rating")}</label>
                                                         <select value={formData.security?.fireRating || 'A'} onChange={e => setFormData({...formData, security: {...formData.security, fireRating: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
-                                                            <option value="A">A (Superior)</option>
-                                                            <option value="B">B (Standard)</option>
-                                                            <option value="C">C (Basic)</option>
+                                                            <option value="A">{t("A (Superior)")}</option>
+                                                            <option value="B">{t("B (Standard)")}</option>
+                                                            <option value="C">{t("C (Basic)")}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -515,8 +518,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <Settings className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Technology & Assets</h3>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Digital stack and material handling</p>
+                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">{t("Technology & Assets")}</h3>
+                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Digital stack and material handling")}</p>
                                             </div>
                                         </div>
                                         {activeAccordion === 'tech' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -526,18 +529,18 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                                 <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Scanning System</label>
+                                                        <label className="form-label ml-1">{t("Scanning System")}</label>
                                                         <select value={formData.tech?.scanSystem || 'BARCODE'} onChange={e => setFormData({...formData, tech: {...formData.tech, scanSystem: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
-                                                            <option value="BARCODE">Barcode</option>
-                                                            <option value="RFID">RFID</option>
-                                                            <option value="QR">QR Code</option>
+                                                            <option value="BARCODE">{t("Barcode")}</option>
+                                                            <option value="RFID">{t("RFID")}</option>
+                                                            <option value="QR">{t("QR Code")}</option>
                                                         </select>
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">E-commerce Integrated</label>
+                                                        <label className="form-label ml-1">{t("E-commerce Integrated")}</label>
                                                         <select value={formData.tech?.ecomIntegrated === true ? 'true' : 'false'} onChange={e => setFormData({...formData, tech: {...formData.tech, ecomIntegrated: e.target.value === 'true'}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
-                                                            <option value="true">Integrated (Yes)</option>
-                                                            <option value="false">Not Integrated (No)</option>
+                                                            <option value="true">{t("Integrated (Yes)")}</option>
+                                                            <option value="false">{t("Not Integrated (No)")}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -557,8 +560,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <Box className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Inventory & Auditing</h3>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Stock management and quality assurance</p>
+                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">{t("Inventory & Auditing")}</h3>
+                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Stock management and quality assurance")}</p>
                                             </div>
                                         </div>
                                         {activeAccordion === 'inventory' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -568,15 +571,15 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                                 <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Cycle Count Frequency</label>
+                                                        <label className="form-label ml-1">{t("Cycle Count Frequency")}</label>
                                                         <select value={formData.inventory?.cycleCountFreq || 'Monthly'} onChange={e => setFormData({...formData, inventory: {...formData.inventory, cycleCountFreq: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm">
-                                                            <option value="Daily">Daily</option>
-                                                            <option value="Weekly">Weekly</option>
-                                                            <option value="Monthly">Monthly</option>
+                                                            <option value="Daily">{t("Daily")}</option>
+                                                            <option value="Weekly">{t("Weekly")}</option>
+                                                            <option value="Monthly">{t("Monthly")}</option>
                                                         </select>
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">QA Sample Size (%)</label>
+                                                        <label className="form-label ml-1">{t("QA Sample Size (%)")}</label>
                                                         <input type="number" value={formData.inventory?.qaSampleSize || 10} onChange={e => setFormData({...formData, inventory: {...formData.inventory, qaSampleSize: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
@@ -596,8 +599,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                                 <CheckCircle2 className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Compliance & HR</h3>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Legal and labor requirements</p>
+                                                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">{t("Compliance & HR")}</h3>
+                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{t("Legal and labor requirements")}</p>
                                             </div>
                                         </div>
                                         {activeAccordion === 'compliance' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -607,11 +610,11 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden bg-gray-50/20 dark:bg-gray-800/20">
                                                 <div className="form-grid p-6 pt-2 gap-5 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Tax ID</label>
+                                                        <label className="form-label ml-1">{t("Tax ID")}</label>
                                                         <input type="text" value={formData.compliance?.taxId || ''} onChange={e => setFormData({...formData, compliance: {...formData.compliance, taxId: e.target.value}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                     <div className="space-y-1.5 mt-4">
-                                                        <label className="form-label ml-1">Headcount</label>
+                                                        <label className="form-label ml-1">{t("Headcount")}</label>
                                                         <input type="number" value={formData.compliance?.headcount || 0} onChange={e => setFormData({...formData, compliance: {...formData.compliance, headcount: Number(e.target.value)}})} className="form-input rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-sm font-bold shadow-sm" />
                                                     </div>
                                                 </div>
@@ -627,22 +630,20 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                                     <button 
                                         onClick={resetForm} 
                                         className="py-2.5 md:py-3 text-[10px] md:text-sm font-bold text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-900 rounded-2xl flex items-center justify-center"
-                                    >
-                                        Reset
-                                    </button>
+                                    >{t("Reset")}</button>
                                     <button 
                                         onClick={handleSave} 
                                         disabled={!formData.name?.trim()}
                                         className="py-2.5 md:py-3 text-[10px] md:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-xl shadow-blue-200 dark:shadow-none transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center space-x-1 md:space-x-2"
                                     >
                                         <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4" />
-                                        <span>Save</span>
+                                        <span>{t("Save")}</span>
                                     </button>
                                     <button 
                                         onClick={() => setIsModalOpen(false)} 
                                         className="py-2.5 md:py-3 text-[10px] md:text-sm font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-all bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center justify-center"
                                     >
-                                        Cancel
+                                        {t("Cancel")}
                                     </button>
                                 </div>
                             </div>
@@ -663,17 +664,15 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({ data, onSave }) => {
                             <div className="w-20 h-20 bg-red-50 dark:bg-red-900/20 rounded-3xl flex items-center justify-center mx-auto mb-6 text-red-500">
                                 <Trash2 className="w-10 h-10" />
                             </div>
-                            <h2 className="font-black text-2xl mb-2 text-gray-900 dark:text-white tracking-tight">Decommission?</h2>
+                            <h2 className="font-black text-2xl mb-2 text-gray-900 dark:text-white tracking-tight">{t("Decommission?")}</h2>
                             <p className="text-gray-500 dark:text-gray-400 mb-8 text-sm font-medium">
-                                Are you sure you want to delete <span className="text-gray-900 dark:text-white font-bold">"{deleteConfirmation.name}"</span>? This will remove all associated routing and storage records.
+                                {t("Are you sure you want to delete")} <span className="text-gray-900 dark:text-white font-bold">"{deleteConfirmation.name}"</span>? {t("This will remove all associated routing and storage records.")}
                             </p>
                             <div className="space-x-3 flex items-center">
                                 <button onClick={() => setDeleteConfirmation(null)} className="flex-1 px-6 py-4 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-2xl font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all uppercase tracking-widest text-[10px]">
-                                    Keep It
+                                    {t("Keep It")}
                                 </button>
-                                <button onClick={confirmDelete} className="flex-1 px-6 py-4 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200 dark:shadow-none uppercase tracking-widest text-[10px]">
-                                    Confirm Decommission
-                                </button>
+                                <button onClick={confirmDelete} className="flex-1 px-6 py-4 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200 dark:shadow-none uppercase tracking-widest text-[10px]">{t("Confirm Decommission")}</button>
                             </div>
                         </motion.div>
                     </div>

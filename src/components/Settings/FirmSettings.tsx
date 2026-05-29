@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from '../../context/LanguageContext';
 import { BasicSection } from './FirmSettingsTabs/BasicSection';
 import { ProfileSection } from './FirmSettingsTabs/ProfileSection';
 import { ContactsSection } from './FirmSettingsTabs/ContactsSection';

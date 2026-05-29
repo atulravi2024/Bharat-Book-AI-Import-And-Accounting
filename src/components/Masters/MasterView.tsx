@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 
 import React, { useState } from 'react';
 import { LedgerMasterView } from './LedgerMaster/LedgerMasterView';
@@ -61,6 +62,8 @@ interface MasterViewProps {
 }
 
 export const MasterView: React.FC<MasterViewProps> = (props) => {
+  const { t, formatNumber  } = useLanguage();
+
   const [activeSubTab, setActiveSubTab] = useState<'ledger' | 'item'>(props.initialSubTab || 'ledger');
 
   // Sync state if props change (since sidebar handles switching now)

@@ -1,8 +1,10 @@
 import React from 'react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { motion } from 'motion/react';
 import { ArrowUpRight, Zap, ShieldCheck, CheckCircle, Activity, Repeat } from 'lucide-react';
 
-export const TransactionFlow = () => {
+export const TransactionFlow = () => { 
+    const { t, formatNumber } = useLanguage();
     const steps = [
         { id: 'ingest', label: 'Ingestion', sub: 'OCR & Stream', icon: ArrowUpRight, color: 'text-blue-500', bg: 'bg-blue-50' },
         { id: 'ai', label: 'AI Synthesis', sub: 'Semantic Map', icon: Zap, color: 'text-amber-500', bg: 'bg-amber-50' },

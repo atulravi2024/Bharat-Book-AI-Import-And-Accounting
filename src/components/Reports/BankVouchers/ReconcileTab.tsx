@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 import React, { useState, useMemo } from 'react';
 import { ParsedVoucher, Confidence } from '../../../app/types';
 import { CheckCircleIcon, WarningIcon } from '../../icons/IconComponents';
@@ -8,6 +9,8 @@ interface ReconcileTabProps {
 }
 
 export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouchers }) => {
+  const { t, formatNumber  } = useLanguage();
+
     const bankEntries = useMemo(() => vouchers.filter(v => v.origin === 'bank' || v.type === 'Bank Statement' || !!v.withdrawalAmount || !!v.depositAmount), [vouchers]);
     const bookEntries = useMemo(() => vouchers.filter(v => v.origin !== 'bank' && v.type !== 'Bank Statement' && v.type !== 'Debit Note' && v.type !== 'Credit Note' && !v.withdrawalAmount && !v.depositAmount), [vouchers]);
 
@@ -87,7 +90,7 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
             >
                 <div className="flex justify-between items-start mb-2">
                     <span className="text-xs font-bold text-gray-500 dark:text-gray-400">{v.date?.value}</span>
-                    <span className="text-sm font-black text-gray-800 dark:text-gray-100">₹{Number(v.amount?.value || 0).toLocaleString('en-IN')}</span>
+                    <span className="text-sm font-black text-gray-800 dark:text-gray-100">₹{Number(v.amount?.value || formatNumber(Number(0)))}</span>
                 </div>
                 <div className="text-sm font-bold text-indigo-700">{v.partyName?.value || v.ledger?.value || 'Unknown Party'}</div>
                 <div className="text-xs text-gray-600 mt-1 line-clamp-1 dark:text-gray-300">{v.narration?.value}</div>
@@ -110,16 +113,14 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
         <div className="flex flex-col h-full h-full min-h-0 overflow-hidden bg-gray-50/50 p-2">
             <div className="mb-4 flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                 <div>
-                     <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Reconciliation Workspace</h2>
-                     <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">Match bank transactions with book entries or create direct taxable adjustment entries.</p>
+                     <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{t("Reconciliation Workspace")}</h2>
+                     <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">{t("Match bank transactions with book entries or create direct taxable adjustment entries.")}</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <button 
                         onClick={handleAutoMatchAll}
                         className="px-4 py-2 bg-white border border-gray-300 text-gray-700 font-bold text-xs rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
-                    >
-                        Auto-Match Exact Amounts
-                    </button>
+                    >{t("Auto-Match Exact Amounts")}</button>
                     <button 
                         disabled={!selectedBankId || !selectedBookId}
                         onClick={handleMatchSelected}
@@ -163,7 +164,7 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
                                     <div className="flex justify-between items-start mb-2">
                                         <span className="text-xs font-bold text-gray-500 dark:text-gray-400">{v.date?.value}</span>
                                         <span className={`text-sm font-black ${isDeposit ? 'text-green-600' : 'text-red-600'}`}>
-                                            {isDeposit ? '+' : '-'}₹{amount.toLocaleString('en-IN')}
+                                            {isDeposit ? '+' : '-'}₹{formatNumber(Number(amount))}
                                         </span>
                                     </div>
                                     <div className="text-xs text-gray-800 mb-2 dark:text-gray-100">{v.narration?.value || v.partyName?.value}</div>
@@ -180,7 +181,7 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
                                             </div>
                                         ) : (
                                             <div className="w-full flex items-center justify-between gap-2 flex-wrap">
-                                                {!isSelected ? <span className="text-xs text-gray-400 italic">Click to select to match</span> : <span className="text-xs text-blue-600 font-bold">Selected</span>}
+                                                {!isSelected ? <span className="text-xs text-gray-400 italic">{t("Click to select to match")}</span> : <span className="text-xs text-blue-600 font-bold">{t("Selected")}</span>}
                                                 <button 
                                                     className="text-[10px] whitespace-nowrap font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2 py-1 rounded transition-colors"
                                                     onClick={(e) => {
@@ -207,7 +208,7 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
                                 </div>
                             );
                         })}
-                        {bankEntries.length === 0 && <div className="text-sm text-gray-400 text-center py-8">No bank statement entries found.</div>}
+                        {bankEntries.length === 0 && <div className="text-sm text-gray-400 text-center py-8">{t("No bank statement entries found.")}</div>}
                     </div>
                 </div>
 
@@ -219,7 +220,7 @@ export const ReconcileTab: React.FC<ReconcileTabProps> = ({ vouchers, onMapVouch
                     </div>
                     <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
                         {bookEntries.map(v => renderBookEntry(v))}
-                        {bookEntries.length === 0 && <div className="text-sm text-gray-400 text-center py-8">No voucher entries found.</div>}
+                        {bookEntries.length === 0 && <div className="text-sm text-gray-400 text-center py-8">{t("No voucher entries found.")}</div>}
                     </div>
                 </div>
             </div>

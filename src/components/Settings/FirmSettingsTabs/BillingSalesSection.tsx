@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from '../../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Receipt } from 'lucide-react';
 import { STATE_DATA } from "../../../lib/states";

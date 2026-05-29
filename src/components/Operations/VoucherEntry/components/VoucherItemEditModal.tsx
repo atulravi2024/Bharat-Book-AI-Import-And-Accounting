@@ -1,6 +1,7 @@
 import React from 'react';
 import { Package, X, ChevronDown, ScanBarcode, Calculator, ClipboardList, Tags } from 'lucide-react';
 import { SearchableDropdown } from '../../../ui/SearchableDropdown';
+import { useLanguage } from '../../../../context/LanguageContext';
 
 
 interface VoucherItemEditModalProps {
@@ -30,6 +31,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
   activeTab = 'sales',
   ledgerMasters = []
 }) => {
+  const { t } = useLanguage();
   if (!isOpen || editingRowIndex === null) return null;
 
   const isInventory = ['sales', 'purchase', 'debit_note', 'credit_note'].includes(activeTab);
@@ -39,8 +41,8 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
         <div className="fixed inset-0 z-[100] bg-gray-50 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300 dark:bg-gray-900">
           <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm z-10 relative dark:border-gray-700 dark:bg-gray-800">
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight dark:text-gray-100">Edit Line Item</h3>
-              <p className="text-xs md:text-sm font-medium text-gray-500 mt-1 dark:text-gray-400">Update transaction details for this specific entry.</p>
+              <h3 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight dark:text-gray-100">{t("Edit Line Item")}</h3>
+              <p className="text-xs md:text-sm font-medium text-gray-500 mt-1 dark:text-gray-400">{t("Update transaction details for this specific entry.")}</p>
             </div>
             <button onClick={() => { setEditingRowIndex(null); setExpandedRowSection(null); }} className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:bg-gray-800 dark:border-gray-700">
               <X size={20} />
@@ -58,11 +60,11 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
                       {isInventory ? (
                         <>
-                          <Package size={16} className="mr-2 text-blue-500"/> Item Selection
+                          <Package size={16} className="mr-2 text-blue-500"/> {t("Item Selection")}
                         </>
                       ) : (
                         <>
-                          <ClipboardList size={16} className="mr-2 text-blue-500"/> Account Selection
+                          <ClipboardList size={16} className="mr-2 text-blue-500"/> {t("Account Selection")}
                         </>
                       )}
                     </h4>
@@ -71,10 +73,10 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                   {expandedRowSection === 'item_selection' && (
                   <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                     <div className="form-field-wrapper col-span-1 md:col-span-1">
-                      <label className="form-label">{isInventory ? 'Item Name' : 'Ledger Name'}</label>
+                      <label className="form-label">{isInventory ? t("Item Name") : t("Ledger Name")}</label>
                       <div className="flex items-center gap-2">
                         {isInventory && (
-                          <button className="form-input text-gray-400 hover:text-blue-500 transition-colors shrink-0" title="Scan Barcode" onClick={(e) => { e.stopPropagation(); setScanningRowIndex(editingRowIndex); setShowScanner(true); }}>
+                          <button className="form-input text-gray-400 hover:text-blue-500 transition-colors shrink-0" title={t("Scan Barcode")} onClick={(e) => { e.stopPropagation(); setScanningRowIndex(editingRowIndex); setShowScanner(true); }}>
                             <ScanBarcode size={20} />
                           </button>
                         )}
@@ -91,7 +93,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                                 setRows(r);
                               }
                             }}
-                            placeholder={isInventory ? "Search for an item..." : "Search for a ledger..."}
+                            placeholder={isInventory ? t("Search for an item...") : t("Search for a ledger...")}
                             buttonClassName="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-left dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                           />
                         </div>
@@ -100,7 +102,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
 
                     {isInventory && (
                       <div className="form-field-wrapper col-span-1 md:col-span-1">
-                        <label className="form-label">Godown / Location</label>
+                        <label className="form-label">{t("Godown / Location")}</label>
                         <input 
                           type="text" 
                           value={rows[editingRowIndex]?.godown || ''} 
@@ -110,13 +112,13 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                             setRows(r);
                           }}
                           className="form-input text-sm font-semibold dark:focus:bg-gray-700"
-                          placeholder="Main Location"
+                          placeholder={t("Main Location")}
                         />
                       </div>
                     )}
 
                     <div className="form-field-wrapper col-span-1 md:col-span-2">
-                       <label className="form-label">Remarks / Narration</label>
+                       <label className="form-label">{t("Remarks / Narration")}</label>
                        <textarea 
                          value={rows[editingRowIndex]?.additionalDescription || ''} 
                          onChange={(e) => {
@@ -125,7 +127,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                            setRows(r);
                          }}
                          className="form-input text-sm font-medium resize-none h-20 dark:focus:bg-gray-700"
-                         placeholder="Enter additional details about this item..."
+                         placeholder={t("Enter additional details about this item...")}
                        />
                      </div>
                   </div>
@@ -140,7 +142,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     onClick={() => setExpandedRowSection(expandedRowSection === 'attributes' ? null : 'attributes')}
                   >
                     <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                      <Tags size={16} className="mr-2 text-indigo-500"/> Attributes & Classification
+                      <Tags size={16} className="mr-2 text-indigo-500"/> {t("Attributes & Classification")}
                     </h4>
                     <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'attributes' ? 'rotate-180' : ''}`} />
                   </header>
@@ -148,12 +150,12 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                   <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                     {/* SKU */}
                     <div className="form-field-wrapper">
-<label className="form-label">SKU / Barcode</label>
+<label className="form-label">{t("SKU / Barcode")}</label>
                       <SearchableDropdown
                         options={itemMasters.filter(i => i.sku)}
                         value={rows[editingRowIndex]?.sku || ''}
                         onChange={(value) => handleItemOrSkuChange(editingRowIndex, value, 'sku')}
-                        placeholder="e.g. TS-BLU-M"
+                        placeholder={t("e.g. TS-BLU-M")}
                         labelKey="sku"
                         buttonClassName="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                       />
@@ -161,7 +163,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     
                     {/* Category */}
                     <div className="form-field-wrapper">
-<label className="form-label">Category</label>
+<label className="form-label">{t("Category")}</label>
                       <input 
                         type="text" 
                         value={rows[editingRowIndex]?.category || ''} 
@@ -171,13 +173,13 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           setRows(r);
                         }}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                        placeholder="Category"
+                        placeholder={t("Category")}
                       />
                     </div>
 
                     {/* Subcategory */}
                     <div className="form-field-wrapper">
-<label className="form-label">Subcategory</label>
+<label className="form-label">{t("Subcategory")}</label>
                       <input 
                         type="text" 
                         value={rows[editingRowIndex]?.subcategory || ''} 
@@ -187,13 +189,13 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           setRows(r);
                         }}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                        placeholder="Subcategory"
+                        placeholder={t("Subcategory")}
                       />
                     </div>
 
                     {/* Brand */}
                     <div className="form-field-wrapper">
-<label className="form-label">Brand</label>
+<label className="form-label">{t("Brand")}</label>
                       <input 
                         type="text" 
                         value={rows[editingRowIndex]?.brand || ''} 
@@ -203,13 +205,13 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           setRows(r);
                         }}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                        placeholder="Brand Name"
+                        placeholder={t("Brand Name")}
                       />
                     </div>
 
                     {/* Color */}
                     <div className="form-field-wrapper">
-<label className="form-label">Color</label>
+<label className="form-label">{t("Color")}</label>
                       <input 
                         type="text" 
                         value={rows[editingRowIndex]?.color || ''} 
@@ -219,13 +221,13 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           setRows(r);
                         }}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                        placeholder="e.g. Navy Blue"
+                        placeholder={t("e.g. Navy Blue")}
                       />
                     </div>
 
                     {/* Variant */}
                     <div className="form-field-wrapper">
-<label className="form-label">Variant</label>
+<label className="form-label">{t("Variant")}</label>
                       <input 
                         type="text" 
                         value={rows[editingRowIndex]?.variant || ''} 
@@ -235,13 +237,13 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           setRows(r);
                         }}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                        placeholder="e.g. V2, Pro"
+                        placeholder={t("e.g. V2, Pro")}
                       />
                     </div>
 
                     {/* Size */}
                     <div className="form-field-wrapper">
-<label className="form-label">Size</label>
+<label className="form-label">{t("Size")}</label>
                       <input 
                         type="text" 
                         value={rows[editingRowIndex]?.size || ''} 
@@ -251,13 +253,13 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           setRows(r);
                         }}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                        placeholder="e.g. XL, 42"
+                        placeholder={t("e.g. XL, 42")}
                       />
                     </div>
 
                     {/* Dimensions */}
                     <div className="form-field-wrapper">
-<label className="form-label">Dimensions</label>
+<label className="form-label">{t("Dimensions")}</label>
                       <input 
                         type="text" 
                         value={rows[editingRowIndex]?.dimension || ''} 
@@ -267,13 +269,13 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           setRows(r);
                         }}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                        placeholder="L x W x H"
+                        placeholder={t("L x W x H")}
                       />
                     </div>
 
                     {/* Material */}
                     <div className="form-field-wrapper">
-<label className="form-label">Material</label>
+<label className="form-label">{t("Material")}</label>
                       <input 
                         type="text" 
                         value={rows[editingRowIndex]?.material || ''} 
@@ -283,7 +285,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           setRows(r);
                         }}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                        placeholder="e.g. Cotton, Steel"
+                        placeholder={t("e.g. Cotton, Steel")}
                       />
                     </div>
                   </div>
@@ -298,7 +300,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     onClick={() => setExpandedRowSection(expandedRowSection === 'quantities' ? null : 'quantities')}
                   >
                     <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                      <Calculator size={16} className="mr-2 text-rose-500"/> {isInventory ? 'Quantity and Price' : 'Transaction Amount'}
+                      <Calculator size={16} className="mr-2 text-rose-500"/> {isInventory ? t("Quantity and Price") : t("Transaction Amount")}
                     </h4>
                     <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'quantities' ? 'rotate-180' : ''}`} />
                   </header>
@@ -307,7 +309,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     <div className="form-grid gap-6">
                       {!isInventory && (
                         <div className="form-field-wrapper col-span-1 md:col-span-2">
-                          <label className="form-label">Cr / Dr</label>
+                          <label className="form-label">{t("Cr / Dr")}</label>
                           <select 
                             value={rows[editingRowIndex]?.crDr || 'Dr'} 
                             onChange={(e) => {
@@ -317,14 +319,14 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                             }}
                             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-lg font-black text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:focus:bg-gray-700"
                           >
-                            <option value="Dr">Debit (Dr)</option>
-                            <option value="Cr">Credit (Cr)</option>
+                            <option value="Dr">{t("Debit (Dr)")}</option>
+                            <option value="Cr">{t("Credit (Cr)")}</option>
                           </select>
                         </div>
                       )}
 
                       <div className="form-field-wrapper">
-                        <label className="form-label">Amount (₹)</label>
+                        <label className="form-label">{t("Amount (₹)")}</label>
                         <input 
                           type="number" 
                           step="0.01"
@@ -340,7 +342,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                       
                       {isInventory && (
                         <div className="form-field-wrapper">
-                          <label className="form-label">Quantity</label>
+                          <label className="form-label">{t("Quantity")}</label>
                           <input 
                             type="number" 
                             value={rows[editingRowIndex]?.qty || ''} 
@@ -356,7 +358,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                       
                       {isInventory && (
                         <div className="form-field-wrapper">
-                          <label className="form-label">Unit</label>
+                          <label className="form-label">{t("Unit")}</label>
                           <select 
                             value={rows[editingRowIndex]?.unit || 'PCS'} 
                             onChange={(e) => {
@@ -384,7 +386,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     {isInventory && (
                       <div className="form-grid gap-6 p-4 bg-gray-50/50 rounded-xl border border-gray-100 dark:border-gray-800">
                         <div className="form-field-wrapper">
-  <label className="form-label">MRP (₹)</label>
+  <label className="form-label">{t("MRP (₹)")}</label>
                           <input 
                             type="number" 
                             step="0.01"
@@ -399,7 +401,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         </div>
 
                         <div className="form-field-wrapper">
-  <label className="form-label">Rate (₹) [Excl. Tax]</label>
+  <label className="form-label">{t("Rate (₹) [Excl. Tax]")}</label>
                           <input 
                             type="number" 
                             step="0.01"
@@ -417,7 +419,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         </div>
                         
                         <div className="form-field-wrapper">
-  <label className="form-label">Tax %</label>
+  <label className="form-label">{t("Tax %")}</label>
                           <select 
                             value={rows[editingRowIndex]?.tax || '18'} 
                             onChange={(e) => {
@@ -439,7 +441,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         </div>
 
                         <div className="form-field-wrapper">
-  <label className="form-label">HSN / SAC</label>
+  <label className="form-label">{t("HSN / SAC")}</label>
                           <input 
                             type="text" 
                             value={rows[editingRowIndex]?.hsn || ''} 
@@ -449,12 +451,12 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                               setRows(r);
                             }}
                             className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-black text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                            placeholder="HSN Code"
+                            placeholder={t("HSN Code")}
                           />
                         </div>
 
                         <div className="form-field-wrapper">
-  <label className="form-label">Rate w/ Tax (₹)</label>
+  <label className="form-label">{t("Rate w/ Tax (₹)")}</label>
                           <input 
                             type="number" 
                             step="0.01"
@@ -472,7 +474,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         </div>
 
                         <div className="form-field-wrapper">
-  <label className="form-label">Tax Amount (₹)</label>
+  <label className="form-label">{t("Tax Amount (₹)")}</label>
                           <input 
                             type="number" 
                             step="0.01"
@@ -485,7 +487,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     )}
 
                     <div className="form-field-wrapper bg-rose-50/50 rounded-xl p-4 border border-rose-100 flex items-center justify-between mt-4 md:col-span-2">
-                       <span className="text-sm font-bold text-rose-800 uppercase tracking-widest">{isInventory ? 'Net Row Amount' : 'Entry Amount'}</span>
+                       <span className="text-sm font-bold text-rose-800 uppercase tracking-widest">{isInventory ? t("Net Row Amount") : t("Entry Amount")}</span>
                        <span className="text-xl font-black text-gray-900 dark:text-white">
                          ₹ {isInventory ? calculateRowNetAmount(rows[editingRowIndex]).toFixed(2) : (parseFloat(rows[editingRowIndex]?.amount || '0').toFixed(2))}
                        </span>
@@ -503,7 +505,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     onClick={() => setExpandedRowSection(expandedRowSection === 'pricing_nontax' ? null : 'pricing_nontax')}
                   >
                     <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                      <Calculator size={16} className="mr-2 text-rose-500"/> Pre-Tax Details
+                      <Calculator size={16} className="mr-2 text-rose-500"/> {t("Pre-Tax Details")}
                     </h4>
                     <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'pricing_nontax' ? 'rotate-180' : ''}`} />
                   </header>
@@ -511,7 +513,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                   <div className="p-6 space-y-6 border-t border-gray-100 dark:border-gray-800">
                     <div className="form-grid gap-6">
                       <div className="form-field-wrapper">
-<label className="form-label">Pre-Tax Disc %</label>
+<label className="form-label">{t("Pre-Tax Disc %")}</label>
                         <input type="number" step="0.01" value={rows[editingRowIndex]?.discountPct || ''} onChange={(e) => {
                           const r = [...rows];
                           r[editingRowIndex].discountPct = e.target.value;
@@ -520,7 +522,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         }} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"/>
                       </div>
                       <div className="form-field-wrapper">
-<label className="form-label">Pre-Tax Disc (₹)</label>
+<label className="form-label">{t("Pre-Tax Disc (₹)")}</label>
                         <input type="number" step="0.01" value={rows[editingRowIndex]?.discountAmount || ''} onChange={(e) => {
                           const r = [...rows];
                           r[editingRowIndex].discountAmount = e.target.value;
@@ -532,7 +534,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     
                     <div className="form-grid gap-6">
                       <div className="form-field-wrapper">
-<label className="form-label">Pre-Tax Rounding</label>
+<label className="form-label">{t("Pre-Tax Rounding")}</label>
                         <select 
                           value={rows[editingRowIndex]?.preTaxRoundType || 'none'}
                           onChange={(e) => {
@@ -543,15 +545,15 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           }}
                           className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         >
-                          <option value="none">None</option>
-                          <option value="normal">Round Off</option>
-                          <option value="up">Round Up</option>
-                          <option value="down">Round Down</option>
-                          <option value="manual">Manual Rounding</option>
+                          <option value="none">{t("None")}</option>
+                          <option value="normal">{t("Round Off")}</option>
+                          <option value="up">{t("Round Up")}</option>
+                          <option value="down">{t("Round Down")}</option>
+                          <option value="manual">{t("Manual")}</option>
                         </select>
                       </div>
                       <div className="form-field-wrapper">
-<label className="form-label">Round Off Amount (±)</label>
+<label className="form-label">{t("Round Off Amount (±)")}</label>
                         <input 
                           type="number" 
                           step="0.01" 
@@ -570,11 +572,11 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     
                     <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-100 flex items-center justify-between">
                        <div>
-                         <span className="block text-xs font-bold text-blue-800/60 uppercase">Gross Amount</span>
+                         <span className="block text-xs font-bold text-blue-800/60 uppercase">{t("Gross Amount")}</span>
                          <span className="text-sm font-bold text-blue-900">₹ {((parseFloat(rows[editingRowIndex]?.qty || '0') * parseFloat(rows[editingRowIndex]?.rate || '0')) || 0).toFixed(2)}</span>
                        </div>
                        <div className="text-right">
-                          <span className="block text-xs font-black text-blue-800 uppercase tracking-widest">Net Taxable Amount</span>
+                          <span className="block text-xs font-black text-blue-800 uppercase tracking-widest">{t("Net Taxable Amount")}</span>
                           <span className="text-xl font-black text-blue-900">
                             ₹ {calculateRowAmount(rows[editingRowIndex]).toFixed(2)}
                           </span>
@@ -591,7 +593,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     onClick={() => setExpandedRowSection(expandedRowSection === 'pricing_tax' ? null : 'pricing_tax')}
                   >
                     <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                      <Calculator size={16} className="mr-2 text-rose-500"/> Post-Tax Details
+                      <Calculator size={16} className="mr-2 text-rose-500"/> {t("Post-Tax Details")}
                     </h4>
                     <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'pricing_tax' ? 'rotate-180' : ''}`} />
                   </header>
@@ -599,7 +601,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                   <div className="p-6 space-y-6 border-t border-gray-100 dark:border-gray-800">
                     <div className="form-grid gap-6">
                       <div className="form-field-wrapper">
-<label className="form-label">Post-Tax Disc %</label>
+<label className="form-label">{t("Post-Tax Disc %")}</label>
                         <input type="number" step="0.01" value={rows[editingRowIndex]?.postTaxDiscountPct || ''} onChange={(e) => {
                           const r = [...rows];
                           r[editingRowIndex].postTaxDiscountPct = e.target.value;
@@ -608,7 +610,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         }} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"/>
                       </div>
                       <div className="form-field-wrapper">
-<label className="form-label">Post-Tax Disc (₹)</label>
+<label className="form-label">{t("Post-Tax Disc (₹)")}</label>
                         <input type="number" step="0.01" value={rows[editingRowIndex]?.postTaxDiscountAmount || ''} onChange={(e) => {
                           const r = [...rows];
                           r[editingRowIndex].postTaxDiscountAmount = e.target.value;
@@ -617,10 +619,10 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         }} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"/>
                       </div>
                     </div>
-
+ 
                     <div className="form-grid gap-6">
                       <div className="form-field-wrapper">
-<label className="form-label">Rounding Type</label>
+<label className="form-label">{t("Rounding Type")}</label>
                         <select 
                           value={rows[editingRowIndex]?.roundType || 'none'}
                           onChange={(e) => {
@@ -631,15 +633,15 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                           }}
                           className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                         >
-                          <option value="none">None</option>
-                          <option value="normal">Round Off</option>
-                          <option value="up">Round Up</option>
-                          <option value="down">Round Down</option>
-                          <option value="manual">Manual Rounding</option>
+                          <option value="none">{t("None")}</option>
+                          <option value="normal">{t("Round Off")}</option>
+                          <option value="up">{t("Round Up")}</option>
+                          <option value="down">{t("Round Down")}</option>
+                          <option value="manual">{t("Manual")}</option>
                         </select>
                       </div>
                       <div className="form-field-wrapper">
-<label className="form-label">Round Off Amount (±)</label>
+<label className="form-label">{t("Round Off Amount (±)")}</label>
                         <input 
                           type="number" 
                           step="0.01" 
@@ -655,10 +657,10 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                         />
                       </div>
                     </div>
-
+ 
                     <div className="bg-slate-50/50 rounded-xl p-4 border border-slate-200 flex items-center justify-between">
                        <div>
-                         <span className="block text-xs font-bold text-slate-800/60 uppercase">Total with Tax</span>
+                         <span className="block text-xs font-bold text-slate-800/60 uppercase">{t("Total with Tax")}</span>
                          <span className="text-sm font-bold text-slate-900">
                            ₹ {(() => {
                              const taxableAmount = calculateRowAmount(rows[editingRowIndex]);
@@ -669,7 +671,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                          </span>
                        </div>
                        <div className="text-right">
-                          <span className="block text-xs font-black text-slate-800 uppercase tracking-widest">Net Amount</span>
+                          <span className="block text-xs font-black text-slate-800 uppercase tracking-widest">{t("Net Amount")}</span>
                           <span className="text-xl font-black text-slate-900">
                             ₹ {calculateRowNetAmount(rows[editingRowIndex]).toFixed(2)}
                           </span>
@@ -686,14 +688,14 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     onClick={() => setExpandedRowSection(expandedRowSection === 'tracking' ? null : 'tracking')}
                   >
                     <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                      <ClipboardList size={16} className="mr-2 text-purple-500"/> Tracking & Details
+                      <ClipboardList size={16} className="mr-2 text-purple-500"/> {t("Tracking & Details")}
                     </h4>
                     <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'tracking' ? 'rotate-180' : ''}`} />
                   </header>
                   {expandedRowSection === 'tracking' && (
                   <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                     <div className="form-field-wrapper">
-<label className="form-label">Batch / Lot Number</label>
+<label className="form-label">{t("Batch / Lot Number")}</label>
                       <input 
                         type="text" 
                         value={rows[editingRowIndex]?.batch || ''} 
@@ -708,7 +710,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     </div>
                     
                     <div className="form-field-wrapper">
-<label className="form-label">Manufacturing Date</label>
+<label className="form-label">{t("Manufacturing Date")}</label>
                       <input 
                         type="date" 
                         value={rows[editingRowIndex]?.mfgDate || ''} 
@@ -722,7 +724,7 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                     </div>
                     
                     <div className="form-field-wrapper">
-<label className="form-label">Expiry Date</label>
+<label className="form-label">{t("Expiry Date")}</label>
                       <input 
                         type="date" 
                         value={rows[editingRowIndex]?.expiryDate || ''} 
@@ -747,13 +749,13 @@ export const VoucherItemEditModal: React.FC<VoucherItemEditModalProps> = ({
                 onClick={() => setEditingRowIndex(null)}
                 className="px-6 py-2.5 bg-gray-100 text-gray-700 font-bold text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:text-gray-200"
               >
-                Cancel
+                {t("Cancel")}
               </button>
               <button 
                 onClick={() => setEditingRowIndex(null)}
                 className="px-8 py-2.5 bg-blue-600 text-white font-bold text-sm rounded-xl hover:bg-blue-700 transition-colors shadow-sm active:scale-95"
               >
-                Update Details
+                {t("Update Details")}
               </button>
             </div>
           </div>

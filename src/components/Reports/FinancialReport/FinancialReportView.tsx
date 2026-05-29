@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
@@ -34,6 +35,8 @@ interface ReportsViewProps {
 type ReportType = 'pl' | 'bs' | 'cash_flow' | 'bank_flow' | 'trial_balance' | 'sales' | 'purchase';
 
 export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, onTabChange, activeSamples }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const [activeTab, setActiveTab] = useState<ReportType>((defaultTab as ReportType) || 'pl');
   
   useEffect(() => {
@@ -308,7 +311,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
               } dark:bg-gray-800 dark:text-gray-400`}
             >
               {tab.icon && <span className="mr-2">{tab.icon}</span>}
-              {tab.label}
+              {t(tab.label)}
             </button>
           ))}
         </div>
@@ -316,13 +319,13 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ vouchers, defaultTab, 
         <div className="p-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-4">
               <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">
-                {activeTab === 'pl' && 'Income Statement (P&L)'}
-                {activeTab === 'bs' && 'Balance Sheet (Position Statement)'}
-                {activeTab === 'cash_flow' && 'Cash Flow Statement'}
-                {activeTab === 'bank_flow' && 'Bank Flow (Statement Analysis)'}
-                {activeTab === 'trial_balance' && 'Trial Balance'}
-                {activeTab === 'sales' && 'Sales Register'}
-                {activeTab === 'purchase' && 'Purchase Register'}
+                {activeTab === 'pl' && t('Income Statement (P&L)')}
+                {activeTab === 'bs' && t('Balance Sheet (Position Statement)')}
+                {activeTab === 'cash_flow' && t('Cash Flow Statement')}
+                {activeTab === 'bank_flow' && t('Bank Flow (Statement Analysis)')}
+                {activeTab === 'trial_balance' && t('Trial Balance')}
+                {activeTab === 'sales' && t('Sales Register')}
+                {activeTab === 'purchase' && t('Purchase Register')}
               </h2>
               <div className="flex space-x-2">
                 <button 

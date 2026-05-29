@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import * as XLSX from 'xlsx';
@@ -38,6 +39,7 @@ interface Step1UploadProps {
 }
 
 export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onCancel, error, clearError, initialSettings, initialVoucherType, ledgerMasters = [] }) => {
+  const { t, formatNumber } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
   const [voucherType, setVoucherType] = useState<VoucherType>(initialVoucherType || VoucherType.Purchase);
   const [selectedBank, setSelectedBank] = useState('');
@@ -387,7 +389,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
   return (
     <div className="h-full flex flex-col min-h-0">
-      <div className="md:hidden flex space-x-2 mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0">
+      <div className="lg:hidden flex space-x-2 mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0">
         <button
           onClick={() => setActiveMobileTab('upload')}
           className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeMobileTab === 'upload' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}
@@ -402,8 +404,8 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
         </button>
       </div>
 
-      <div className="form-grid flex-1 min-h-0 flex flex-col md:grid gap-4 sm:gap-6 overflow-hidden pb-4 md:pb-0">
-        <div className={`flex-1 md:col-span-2 bg-white dark:bg-gray-800 px-5 sm:px-10 py-6 sm:py-9 rounded-3xl sm:rounded-[2.5rem] border border-premium-slate-100 dark:border-gray-700 shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative group/main shrink-0 md:shrink ${activeMobileTab === 'upload' ? 'flex' : 'hidden md:flex'}`}>
+      <div className="form-grid flex-1 min-h-0 flex flex-col lg:grid gap-4 sm:gap-6 overflow-hidden pb-4 lg:pb-0">
+        <div className={`flex-1 lg:col-span-2 bg-white dark:bg-gray-800 px-5 sm:px-10 py-6 sm:py-9 rounded-3xl sm:rounded-[2.5rem] border border-premium-slate-100 dark:border-gray-700 shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative group/main shrink-0 lg:shrink ${activeMobileTab === 'upload' ? 'flex' : 'hidden lg:flex'}`}>
 
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
           
@@ -413,7 +415,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                 <InfoIcon className="text-red-600" />
               </div>
               <div className="flex-1 min-w-0 pr-8">
-                <p className="font-black uppercase tracking-widest text-[10px] mb-1">Critical Processing Error</p>
+                <p className="font-black uppercase tracking-widest text-[10px] mb-1">{t("Critical Processing Error")}</p>
                 <p className="text-sm font-medium leading-relaxed">{error}</p>
               </div>
               <button onClick={clearError} className="shrink-0 p-2 hover:bg-red-100 rounded-xl transition-colors">
@@ -429,16 +431,16 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     <div className="flex -space-x-1">
                         {[1,2,3].map(i => <div key={i} className={`w-2 h-2 rounded-full border border-white ${i === 1 ? 'bg-blue-400' : 'bg-gray-200'} dark:bg-gray-700`}></div>)}
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-blue-600/80 bg-blue-50/50 px-2 py-0.5 rounded-full border border-blue-100/50">Pipeline Alpha</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-blue-600/80 bg-blue-50/50 px-2 py-0.5 rounded-full border border-blue-100/50">{t("Pipeline Alpha")}</span>
                     <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Classify document & ingest record</p>
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">{t("Classify document & ingest record")}</p>
                 </div>
              </div>
           </div>
           
           <div className="mb-12">
             <div className="flex items-center justify-between mb-5 px-1">
-                <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40 dark:text-white">System Classification</label>
+                <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40 dark:text-white">{t("System Classification")}</label>
                 <div className="h-px flex-1 bg-gray-100 mx-6 dark:bg-gray-800"></div>
             </div>
             <div className="form-grid gap-4">
@@ -471,22 +473,19 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                 <div className="p-4 bg-indigo-50/50 rounded-xl border border-indigo-100 flex items-start">
                   <InfoIcon className="text-indigo-500 mr-3 mt-0.5" />
                   <div>
-                    <h4 className="text-sm font-bold text-indigo-900">Raw Bank Import</h4>
-                    <p className="text-xs text-indigo-700 mt-0.5">
-                      Importing a bank statement will automatically extract individual transaction lines. 
-                      These will be presented as individual vouchers for your review and ledger mapping.
-                    </p>
+                    <h4 className="text-sm font-bold text-indigo-900">{t("Raw Bank Import")}</h4>
+                    <p className="text-xs text-indigo-700 mt-0.5">t("Importing a bank statement will automatically extract individual transaction lines. These will be presented as individual vouchers for your review and ledger mapping.")</p>
                   </div>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label px-1">Select Bank Source (Mandatory)</label>
+<label className="form-label px-1">{t("Select Bank Source (Mandatory)")}</label>
                   <select 
                     value={selectedBank}
                     onChange={(e) => setSelectedBank(e.target.value)}
                     className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-700"
                   >
-                    <option value="">-- Choose Indian Major Bank --</option>
+                    <option value="">{t("-- Choose Indian Major Bank --")}</option>
                     {bankMasters.map(bank => (
                       <option key={bank.name} value={bank.name}>{bank.name}</option>
                     ))}
@@ -504,11 +503,9 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
           >
             <div className="flex flex-col items-center">
               <UploadFileIcon className="text-5xl text-gray-400 mb-4" />
-              <p className="mb-2 text-gray-600 dark:text-gray-300">Drag & drop files here</p>
-              <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">PDF, Excel, JPG, PNG</p>
-              <label htmlFor="file-upload" className="cursor-pointer bg-blue-100 text-blue-700 font-semibold px-4 py-2 rounded-lg hover:bg-blue-200 transition-colors">
-                Browse Files
-              </label>
+              <p className="mb-2 text-gray-600 dark:text-gray-300">{t("Drag & drop files here")}</p>
+              <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">{t("PDF, Excel, JPG, PNG")}</p>
+              <label htmlFor="file-upload" className="cursor-pointer bg-blue-100 text-blue-700 font-semibold px-4 py-2 rounded-lg hover:bg-blue-200 transition-colors">{t("Browse Files")}</label>
               <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.xls,.xlsx,.jpg,.jpeg,.png"/>
             </div>
           </div>
@@ -522,16 +519,16 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     <div className="ml-5 flex-1 min-w-0">
                         <div className="flex items-center space-x-2">
                             <h4 className="text-lg font-black text-gray-900 truncate tracking-tight dark:text-white">{file.name}</h4>
-                            <span className="shrink-0 px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-black uppercase rounded-md tracking-widest border border-blue-200">Live Asset</span>
+                            <span className="shrink-0 px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-black uppercase rounded-md tracking-widest border border-blue-200">{t("Live Asset")}</span>
                         </div>
                         <div className="flex items-center mt-2 space-x-4">
                             <div className="flex items-center text-gray-500 dark:text-gray-400">
-                                <span className="text-[10px] uppercase font-bold tracking-widest mr-1.5 opacity-50">Type</span>
+                                <span className="text-[10px] uppercase font-bold tracking-widest mr-1.5 opacity-50">{t("Type")}</span>
                                 <span className="text-xs font-bold text-gray-700 dark:text-gray-200">{file.name.split('.').pop()?.toUpperCase() || 'Unknown'}</span>
                             </div>
                             <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
                             <div className="flex items-center text-gray-500 dark:text-gray-400">
-                                <span className="text-[10px] uppercase font-bold tracking-widest mr-1.5 opacity-50">Volume</span>
+                                <span className="text-[10px] uppercase font-bold tracking-widest mr-1.5 opacity-50">{t("Volume")}</span>
                                 <span className="text-xs font-bold text-gray-700 dark:text-gray-200">{(file.size / 1024).toFixed(2)} KB</span>
                             </div>
                         </div>
@@ -549,7 +546,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
           {file && (
             <div className="mt-8 border-t pt-8">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Source Options</h3>
+                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">{t("Source Options")}</h3>
                 {isStructuredFile && (
                   <button 
                     onClick={() => setShowMapping(!showMapping)}
@@ -567,12 +564,12 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     <div className="flex items-start">
                       <SettingsIcon className="text-blue-500 mr-2 mt-0.5 scale-90" />
                       <div>
-                        <h4 className="text-sm font-bold text-gray-800 dark:text-gray-100">Identify Header Row</h4>
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400">Choose which row contains column names</p>
+                        <h4 className="text-sm font-bold text-gray-800 dark:text-gray-100">{t("Identify Header Row")}</h4>
+                        <p className="text-[10px] text-gray-500 dark:text-gray-400">{t("Choose which row contains column names")}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3 bg-white p-1 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                      <span className="text-xs font-medium text-gray-500 ml-2 dark:text-gray-400">Row Index:</span>
+                      <span className="text-xs font-medium text-gray-500 ml-2 dark:text-gray-400">{t("Row Index:")}</span>
                       <input 
                         type="number" 
                         min="0"
@@ -586,10 +583,8 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
                   <div className="flex items-start mb-4">
                     <InfoIcon className="text-blue-500 mr-2 mt-0.5" />
-                    <p className="text-xs text-gray-600 dark:text-gray-300">
-                      Map the columns from your Excel file to the corresponding fields in Bharat Book. 
-                      Our AI will use these hints to improve parsing accuracy.
-                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-300">{t(`Map the columns from your Excel file to the corresponding fields in Bharat Book. 
+                      Our AI will use these hints to improve parsing accuracy.`)}</p>
                   </div>
                   
                   <div className="form-grid gap-4">
@@ -603,7 +598,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                           onChange={(e) => setMappings(prev => ({ ...prev, [targetField]: e.target.value }))}
                           className="form-input text-sm border-gray-300 rounded focus:ring-1 dark:border-gray-600"
                         >
-                          <option value="">-- Auto-detect --</option>
+                          <option value="">{t("-- Auto-detect --")}</option>
                           {(fileHeaders.length > 0 ? fileHeaders : []).map(col => (
                             <option key={col} value={col}>{col}</option>
                           ))}
@@ -631,11 +626,11 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
           )}
         </div>
 
-        <div className={`flex-1 md:flex-none flex-col bg-blue-50 p-4 sm:p-6 rounded-xl space-y-4 overflow-y-auto scrollbar-thin shrink-0 md:shrink border border-blue-100 ${activeMobileTab === 'info' ? 'flex' : 'hidden md:flex'}`}>
+        <div className={`flex-1 lg:flex-none flex-col bg-blue-50 p-4 sm:p-6 rounded-xl space-y-4 overflow-y-auto scrollbar-thin shrink-0 lg:shrink border border-blue-100 dark:bg-blue-950/20 dark:border-blue-900/30 ${activeMobileTab === 'info' ? 'flex' : 'hidden lg:flex'}`}>
           <div>
             <div className="flex items-center text-blue-700 mb-4">
               <InfoIcon className="mr-3 text-2xl" />
-              <h3 className="text-lg font-bold">AI Suggestions</h3>
+              <h3 className="text-lg font-bold">{t("AI Suggestions")}</h3>
             </div>
             <ul className="space-y-3 text-sm text-gray-600 list-disc list-inside dark:text-gray-300">
               <li>For best results, upload clear, high-resolution images or machine-readable PDFs.</li>
@@ -649,7 +644,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                 Simulated Sandbox Parser Mode
               </span>
               <p className="text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed font-medium">
-                Excel/CSV formats are parsed directly to standard ledger models. Other source formats (Images, PDFs) run under a <strong>simulated OCR Sandbox sequence</strong> with mock values to demonstrate enterprise AI mapping pipelines.
+                Excel/CSV formats are parsed directly to standard ledger models. Other source formats (Images, PDFs) run under a <strong>{t("simulated OCR Sandbox sequence")}</strong> with mock values to demonstrate enterprise AI mapping pipelines.
               </p>
             </div>
           </div>
@@ -675,8 +670,8 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                       <div className="group relative">
                         <InfoIcon className="w-3.5 h-3.5 text-blue-400 cursor-help" />
                         <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 p-3 bg-gray-900/95 backdrop-blur shadow-2xl text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 border border-gray-700">
-                          <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">OCR Precision Engine</p>
-                          <p className="leading-relaxed opacity-90">Higher sensitivity (80%+) triggers deep multi-pass scanning for blurry text, handwritten notes, or low-contrast backgrounds. Use lower values for fast processing of clean digital PDFs.</p>
+                          <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">{t("OCR Precision Engine")}</p>
+                          <p className="leading-relaxed opacity-90">{t("Higher sensitivity (80%+) triggers deep multi-pass scanning for blurry text, handwritten notes, or low-contrast backgrounds. Use lower values for fast processing of clean digital PDFs.")}</p>
                         </div>
                       </div>
                     </div>
@@ -690,22 +685,22 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                   />
                   <div className="flex justify-between text-[10px] text-blue-500 font-bold mt-1">
-                    <span>Performance Focus</span>
-                    <span>Accuracy Focus</span>
+                    <span>{t("Performance Focus")}</span>
+                    <span>{t("Accuracy Focus")}</span>
                   </div>
                   <p className="text-[10px] text-blue-600/70 mt-3 italic leading-relaxed">
-                    <strong>Impact:</strong> Low sensitivity is faster for clean digital PDFs. High sensitivity (80%+) is required for handwritten notes or mobile snapshots.
+                    <strong>{t("Impact:")}</strong> Low sensitivity is faster for clean digital PDFs. High sensitivity (80%+) is required for handwritten notes or mobile snapshots.
                   </p>
                 </div>
 
                 <div className="bg-white/40 p-4 rounded-xl border border-blue-100/50">
                   <div className="flex items-center gap-2 mb-2">
-                    <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">AI Model Engine</label>
+                    <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">{t("AI Model Engine")}</label>
                     <div className="group relative">
                       <InfoIcon className="w-3.5 h-3.5 text-blue-400 cursor-help" />
                       <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 p-3 bg-gray-900/95 backdrop-blur shadow-2xl text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 border border-gray-700">
-                        <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">Model Intelligence</p>
-                        <p className="leading-relaxed opacity-90"><strong>Flash</strong> is optimized for speed (&lt;5s). <strong>Pro</strong> handles complex multi-page logic &amp; multi-column tables. Select based on document complexity and volume.</p>
+                        <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">{t("Model Intelligence")}</p>
+                        <p className="leading-relaxed opacity-90"><strong>{t("Flash")}</strong> is optimized for speed (&lt;5s). <strong>{t("Pro")}</strong> handles complex multi-page logic &amp; multi-column tables. Select based on document complexity and volume.</p>
                       </div>
                     </div>
                   </div>
@@ -717,17 +712,17 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     {INTERNAL_GEMINI_MODELS.map(model => (
                       <option key={model.id} value={model.id}>{model.name}</option>
                     ))}
-                    <option value="Vision Transformer-L">Vision Transformer-L (Best for Complex Tables)</option>
+                    <option value="Vision Transformer-L">{t("Vision Transformer-L (Best for Complex Tables)")}</option>
                   </select>
                   <p className="text-[10px] text-blue-600/70 mt-3 italic leading-relaxed">
-                    <strong>Impact:</strong> <strong>Flash</strong> provides sub-5s response times. <strong>Pro</strong> is recommended for legal documents or multi-page invoices with hundreds of line items.
+                    <strong>{t("Impact:")}</strong> <strong>{t("Flash")}</strong> provides sub-5s response times. <strong>{t("Pro")}</strong> is recommended for legal documents or multi-page invoices with hundreds of line items.
                   </p>
                 </div>
 
                 <div className="flex items-center justify-between p-4 bg-white/40 rounded-xl border border-blue-100/50">
                   <div className="text-xs pr-4">
-                    <p className="font-bold text-blue-800">Experimental Vision Engine</p>
-                    <p className="text-[10px] text-blue-600 font-medium">Enhanced layout recovery & tabular structure detection</p>
+                    <p className="font-bold text-blue-800">{t("Experimental Vision Engine")}</p>
+                    <p className="text-[10px] text-blue-600 font-medium">{t("Enhanced layout recovery & tabular structure detection")}</p>
                   </div>
                   <button 
                     onClick={() => setParsingSettings(prev => ({ ...prev, experimentalFeatures: !prev.experimentalFeatures }))}
@@ -739,12 +734,12 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
                 <div className="bg-white/40 p-4 rounded-xl border border-blue-100/50">
                   <div className="flex items-center gap-2 mb-2">
-                    <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">Custom Extraction Cues</label>
+                    <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">{t("Custom Extraction Cues")}</label>
                     <div className="group relative">
                       <InfoIcon className="w-3.5 h-3.5 text-blue-400 cursor-help" />
                       <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 p-3 bg-gray-900/95 backdrop-blur shadow-2xl text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 border border-gray-700">
-                        <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">Context Steering</p>
-                        <p className="leading-relaxed opacity-90">Directly guide the AI's logic. (e.g., "Look for party GSTIN in header", "Ignore totals if they include tax"). These cues significantly improve accuracy for non-standard formats.</p>
+                        <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">{t("Context Steering")}</p>
+                        <p className="leading-relaxed opacity-90">{t(`Directly guide the AI's logic. (e.g., "Look for party GSTIN in header", "Ignore totals if they include tax"). These cues significantly improve accuracy for non-standard formats.`)}</p>
                       </div>
                     </div>
                   </div>
@@ -755,18 +750,18 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     className="form-input h-24 text-sm font-medium p-4 border-blue-200 resize-none placeholder-blue-300 shadow-inner"
                   />
                   <p className="text-[10px] text-blue-600/70 mt-3 italic leading-relaxed">
-                    <strong>Impact:</strong> These instructions are injected into the AI prompt. Use them to clarify ambiguous fields or handle specific accounting quirks of certain vendors.
+                    <strong>{t("Impact:")}</strong> These instructions are injected into the AI prompt. Use them to clarify ambiguous fields or handle specific accounting quirks of certain vendors.
                   </p>
                 </div>
 
                 <div className="bg-white/40 p-4 rounded-xl border border-blue-100/50">
                   <div className="flex items-center gap-2 mb-2">
-                    <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">Custom AI Instructions</label>
+                    <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">{t("Custom AI Instructions")}</label>
                     <div className="group relative">
                       <InfoIcon className="w-3.5 h-3.5 text-blue-400 cursor-help" />
                       <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 p-3 bg-gray-900/95 backdrop-blur shadow-2xl text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 border border-gray-700">
-                        <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">AI Processing Rule</p>
-                        <p className="leading-relaxed opacity-90">Custom AI instructions specific to the parsing process. These are appended to the main prompt.</p>
+                        <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">{t("AI Processing Rule")}</p>
+                        <p className="leading-relaxed opacity-90">{t("Custom AI instructions specific to the parsing process. These are appended to the main prompt.")}</p>
                       </div>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from '../../context/LanguageContext';
 import { SettingsIcon } from '../icons/IconComponents';
 import { ChevronDown, FileUp, ShoppingCart, Tag, CreditCard, Download, BookOpen, Repeat, Landmark } from 'lucide-react';
 import { 

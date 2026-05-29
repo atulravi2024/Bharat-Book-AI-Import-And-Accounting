@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from '../../context/LanguageContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { 
   Sparkles, Activity, FileText, Send, Clock, AlertTriangle, HardDrive, 

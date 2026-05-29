@@ -8,6 +8,7 @@ import { ContraVoucher } from './vouchers/ContraVoucher';
 import { DebitNoteVoucher } from './vouchers/DebitNoteVoucher';
 import { CreditNoteVoucher } from './vouchers/CreditNoteVoucher';
 import { VoucherType } from '../../../app/types';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface VoucherEntryViewProps {
   defaultType?: string;
@@ -24,6 +25,7 @@ interface VoucherEntryViewProps {
 }
 
 export const VoucherEntryView: React.FC<VoucherEntryViewProps> = (props) => {
+  const { t, formatNumber } = useLanguage();
   const type = props.initialVoucher?.type || props.defaultType || 'sales';
   const normalizedType = typeof type === 'string' ? type.toLowerCase().replace(/ /g, '_') : type;
 
@@ -95,7 +97,7 @@ export const VoucherEntryView: React.FC<VoucherEntryViewProps> = (props) => {
                     }
                      dark:text-gray-400 dark:hover:bg-gray-700`}
                 >
-                    {tab.label}
+                    {t(tab.label)}
                 </button>
                 ))}
             </nav>
@@ -105,13 +107,13 @@ export const VoucherEntryView: React.FC<VoucherEntryViewProps> = (props) => {
                      onClick={() => setInvoiceMode('item')}
                      className={`whitespace-nowrap py-2.5 px-4 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] transition-all ${invoiceMode === 'item' ? 'bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-500/20' : 'bg-transparent text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-400'}`}
                   >
-                     Item Invoice
+                     {t("Item Invoice")}
                   </button>
                   <button
                      onClick={() => setInvoiceMode('accounting')}
                      className={`whitespace-nowrap py-2.5 px-4 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] transition-all ${invoiceMode === 'accounting' ? 'bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-500/20' : 'bg-transparent text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-400'}`}
                   >
-                     Accounting Invoice
+                     {t("Accounting Invoice")}
                   </button>
                </div>
             )}

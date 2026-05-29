@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 import React, { useState, useEffect, useRef } from 'react';
 import { VoucherType } from '../../../app/types';
 import { Printer, Download, Image as ImageIcon, X, ZoomIn, ZoomOut, Maximize, RotateCcw, FileText, GripVertical, ToggleLeft, ToggleRight, Settings, Layout, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
@@ -15,6 +16,7 @@ interface VoucherPreviewProps {
 }
 
 export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as any, rows = [], totals = {} as any, type = 'voucher', onClose, onDownloadPDF, onDownloadImage, autoPrint }) => {
+  const { t, formatNumber } = useLanguage();
   const isInventory = [
     'sales', 'purchase', 'sales_order', 'purchase_order', 
     'debit_note', 'credit_note', 'stock_journal', 'physical_stock', 
@@ -587,14 +589,14 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
             <div className="p-4 border-b border-gray-200 bg-white sticky top-0 z-10 flex items-center gap-2 dark:border-gray-700 dark:bg-gray-800">
               <Settings size={18} className="text-gray-500 dark:text-gray-400" />
               <h2 className="text-sm font-black uppercase tracking-wider text-gray-800 dark:text-gray-100">
-                Print Configuration
+                {t("Print Configuration")}
               </h2>
             </div>
             
             <div className="p-4 space-y-6">
                 {SETTING_SECTIONS.map((section, idx) => (
                     <div key={idx} className="space-y-3">
-                        <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{section.title}</h3>
+                        <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t(section.title)}</h3>
                         <div className="space-y-1">
                             {section.settings.map(setting => (
                                 <button
@@ -602,7 +604,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                                     onClick={() => handleToggleSetting(setting.key as keyof typeof printConfig)}
                                     className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 transition-colors group dark:hover:bg-gray-600"
                                 >
-                                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-200">{setting.label}</span>
+                                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-200">{t(setting.label)}</span>
                                     {printConfig[setting.key as keyof typeof printConfig] ? (
                                         <ToggleRight size={20} className="text-blue-500 transition-transform active:scale-90" />
                                     ) : (
@@ -629,7 +631,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
               <Printer size={20} />
             </button>
             <div className="hidden sm:block">
-              <h3 className="text-sm md:text-lg font-black text-gray-900 uppercase tracking-tight leading-none dark:text-white">{type.replace('_', ' ')} Preview</h3>
+              <h3 className="text-sm md:text-lg font-black text-gray-900 uppercase tracking-tight leading-none dark:text-white">{t(type.replace('_', ' '))} {t("Preview")}</h3>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1.5">{header?.voucherNumber || header?.entryNumber}</p>
             </div>
           </div>
@@ -641,7 +643,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                   onClick={onDownloadPDF}
                   className="flex items-center gap-2 px-3 py-2 md:px-5 md:py-2.5 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-md active:scale-95 shadow-blue-500/20"
                 >
-                  <Download size={14} /> <span className="hidden sm:inline">PDF</span>
+                  <Download size={14} /> <span className="hidden sm:inline">{t("PDF")}</span>
                 </button>
               )}
               {onDownloadImage && (
@@ -649,7 +651,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                   onClick={onDownloadImage}
                   className="flex items-center gap-2 px-3 py-2 md:px-5 md:py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm active:scale-95 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
                 >
-                  <ImageIcon size={14} /> <span className="hidden sm:inline">Image</span>
+                  <ImageIcon size={14} /> <span className="hidden sm:inline">{t("Image")}</span>
                 </button>
               )}
               <button 
@@ -810,7 +812,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                           Industrial Area, Phase 1<br/>
                           New Delhi, Delhi 110001, India<br/>
                           GSTIN: 07AAACB1234A1Z1<br/>
-                          <span className={isBold ? 'text-white' : primaryText}>contact@bharatbook.com</span>
+                          <span className={isBold ? 'text-white' : primaryText}>{t("contact@bharatbook.com")}</span>
                         </div>
                       </div>
                     </div>
@@ -819,7 +821,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                   {printConfig.showBilling && (
                     <div className={tStyles.billingWrap}>
                       <div className={tStyles.billingLeftBox}>
-                        <div className={tStyles.billingLabel} style={{ fontSize: `${baseSize * 0.7}px`, marginBottom: `${baseSize * 0.5}px` }}>Bill To / Recipient</div>
+                        <div className={tStyles.billingLabel} style={{ fontSize: `${baseSize * 0.7}px`, marginBottom: `${baseSize * 0.5}px` }}>{t("Bill To / Recipient")}</div>
                         <div {...getSectionStyle('partyName', tStyles.billingValue, { fontSize: `${baseSize * headingScale * 1.5}px` })}>{header.billingPartyName || header.partyName || 'Cash Sales'}</div>
                         <div {...getSectionStyle('partyAddress', `text-gray-500 font-bold leading-relaxed max-w-sm ${isTechnical ? 'font-mono uppercase tracking-tight' : ''}`, { fontSize: `${baseSize}px` })}>
                           {header.billingAddress || 'Local Customer'}<br/>
@@ -831,18 +833,18 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                       <div className={tStyles.billingRightBox}>
                         <div className="space-y-8">
                           <div className={isTechnical ? 'border-b border-black/10 pb-4 flex justify-between items-end text-left' : ''}>
-                            <div className={tStyles.billingLabel} style={{ fontSize: `${baseSize * 0.7}px` }}>Document Date</div>
+                            <div className={tStyles.billingLabel} style={{ fontSize: `${baseSize * 0.7}px` }}>{t("Document Date")}</div>
                             <div {...getSectionStyle('subheader', tStyles.billingValue, { fontSize: `${baseSize * headingScale}px` })}>{header.voucherDate || header.entryDate}</div>
                           </div>
                           {header.referenceNo && (
                             <div className={isTechnical ? 'border-b border-black/10 pb-4 flex justify-between items-end text-left' : ''}>
-                              <div className={tStyles.billingLabel} style={{ fontSize: `${baseSize * 0.7}px` }}>Ref / Invoice No</div>
+                              <div className={tStyles.billingLabel} style={{ fontSize: `${baseSize * 0.7}px` }}>{t("Ref / Invoice No")}</div>
                               <div {...getSectionStyle('subheader', tStyles.billingValue, { fontSize: `${baseSize * headingScale * 0.8}px` })}>{header.referenceNo}</div>
                             </div>
                           )}
                           {header.poNumber && (
                             <div className={isTechnical ? 'border-b border-black/10 pb-4 flex justify-between items-end text-left' : ''}>
-                              <div className={tStyles.billingLabel} style={{ fontSize: `${baseSize * 0.7}px` }}>Purchase Order</div>
+                              <div className={tStyles.billingLabel} style={{ fontSize: `${baseSize * 0.7}px` }}>{t("Purchase Order")}</div>
                               <div {...getSectionStyle('subheader', tStyles.billingValue, { fontSize: `${baseSize * headingScale * 0.8}px` })}>{header.poNumber}</div>
                             </div>
                           )}
@@ -858,31 +860,31 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                 <table className="w-full h-full border-collapse">
                     <thead>
                         <tr className={tStyles.tableHeadRow}>
-                            <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell, { fontSize: `${baseSize * 0.7}px` })}>SR.</th>
-                            <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' w-1/2', { fontSize: `${baseSize * 0.7}px` })}>Description of Goods/Services</th>
+                            <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell, { fontSize: `${baseSize * 0.7}px` })}>{t("SR.")}</th>
+                            <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' w-1/2', { fontSize: `${baseSize * 0.7}px` })}>{t("Description of Goods/Services")}</th>
                             {isInventory ? (
                                 <>
                                     {printConfig.showMrp && (
-                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>MRP</th>
+                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("MRP")}</th>
                                     )}
                                     {printConfig.showQty && (
-                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Quantity</th>
+                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Quantity")}</th>
                                     )}
                                     {printConfig.showRate && (
-                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Rate</th>
+                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Rate")}</th>
                                     )}
                                     {printConfig.showDiscountPercentage && (
-                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Disc (%)</th>
+                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Disc (%)")}</th>
                                     )}
                                     {printConfig.showDiscountAmount && (
-                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Disc (₹)</th>
+                                        <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Disc (₹)")}</th>
                                     )}
-                                    <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Tax (%)</th>
+                                    <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Tax (%)")}</th>
                                 </>
                             ) : (
-                                <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Type</th>
+                                <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Type")}</th>
                             )}
-                            <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Total (₹)</th>
+                            <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Total (₹)")}</th>
                         </tr>
                     </thead>
                     <tbody className={tStyles.tableBody}>
@@ -891,38 +893,38 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                                 <td className={tStyles.tableCellFirst} style={{ fontSize: `${baseSize * 0.9}px` }}>{String(absoluteStartIndex + index + 1).padStart(2, '0')}</td>
                                 <td className={tStyles.tableCellLeft}>
                                     <div {...getSectionStyle('lineItem', `font-black text-gray-900 uppercase tracking-tight ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * (printConfig.compactMode ? 1.0 : 1.33)}px` })}>{isInventory ? row.itemName : row.ledgerName}</div>
-                                    {printConfig.showHSN && row.hsn && <div className={`${primaryText} font-black uppercase tracking-widest opacity-60`} style={{ fontSize: `${baseSize * 0.66}px`, marginTop: `${baseSize * 0.15}px` }}>HSN Code: {row.hsn}</div>}
+                                    {printConfig.showHSN && row.hsn && <div className={`${primaryText} font-black uppercase tracking-widest opacity-60`} style={{ fontSize: `${baseSize * 0.66}px`, marginTop: `${baseSize * 0.15}px` }}>{t("HSN Code")}: {row.hsn}</div>}
                                 </td>
                                 {isInventory ? (
                                     <>
                                         {printConfig.showMrp && (
-                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.mrp ? parseSafe(row.mrp).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}</td>
+                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.mrp ? formatNumber(Number(parseSafe(row.mrp)), { minimumFractionDigits: 2 }) : '-'}</td>
                                         )}
                                         {printConfig.showQty && (
                                             <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.qty} {row.uom}</td>
                                         )}
                                         {printConfig.showRate && (
-                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{parseSafe(row.rate).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(Number(parseSafe(row.rate)), { minimumFractionDigits: 2 })}</td>
                                         )}
                                         {printConfig.showDiscountPercentage && (
                                             <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.discountPercent ? `${row.discountPercent}%` : '-'}</td>
                                         )}
                                         {printConfig.showDiscountAmount && (
-                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.discountAmount ? parseSafe(row.discountAmount).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}</td>
+                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.discountAmount ? formatNumber(Number(parseSafe(row.discountAmount)), { minimumFractionDigits: 2 }) : '-'}</td>
                                         )}
                                         <td className={`${printConfig.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-bold text-gray-600 text-right tabular-nums align-top dark:text-gray-300`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.tax}%</td>
                                     </>
                                 ) : (
                                     <td className={`${printConfig.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-black ${primaryText} text-right tracking-widest uppercase align-top`} style={{ fontSize: `${baseSize * 0.9}px` }}>{row.crDr || (type === 'payment' && index === 0 ? 'Cr' : type === 'payment' ? 'Dr' : type === 'receipt' && index === 0 ? 'Dr' : type === 'receipt' ? 'Cr' : type === 'journal' ? 'Dr' : 'Cr')}</td>
                                 )}
-                                <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 1.2}px` }}>{parseSafe(row.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 1.2}px` }}>{formatNumber(Number(parseSafe(row.amount)), { minimumFractionDigits: 2 })}</td>
                             </tr>
                         ))}
                         {((printConfig as any).pageSubtotalDisplay === 'All Pages' || isLastPage) && (
                             <tr className={`${tStyles.tableRow} bg-gray-50/50`}>
                                 <td className={tStyles.tableCellFirst}></td>
                                 <td className={tStyles.tableCellLeft}>
-                                    <div className={`${isSerif ? 'font-serif' : 'font-black'} text-gray-500 uppercase tracking-widest`} style={{ fontSize: `${baseSize * 0.9}px` }}>Page Subtotal ({pageRows.length} Item{pageRows.length !== 1 ? 's' : ''})</div>
+                                    <div className={`${isSerif ? 'font-serif' : 'font-black'} text-gray-500 uppercase tracking-widest`} style={{ fontSize: `${baseSize * 0.9}px` }}>{t("Page Subtotal ({{count}} Items)", { count: pageRows.length })}</div>
                                 </td>
                                 {isInventory ? (
                                     <>
@@ -933,14 +935,14 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                                         {printConfig.showRate && <td className={tStyles.tableCellRight}></td>}
                                         {printConfig.showDiscountPercentage && <td className={tStyles.tableCellRight}></td>}
                                         {printConfig.showDiscountAmount && (
-                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{pageRows.reduce((a, b) => a + parseSafe(b.discountAmount), 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                            <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{pageRows.reduce((a, b) => a + parseSafe(b.discountAmount), formatNumber(Number(0)), { minimumFractionDigits: 2 })}</td>
                                         )}
                                         <td className={`${printConfig.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-bold text-gray-600 text-right tabular-nums align-top`}></td>
                                     </>
                                 ) : (
                                     <td className={`${printConfig.compactMode ? 'py-4 px-3' : 'py-4 px-4'} font-black ${primaryText} text-right tracking-widest uppercase align-top`}></td>
                                 )}
-                                <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 1.2}px` }}>{pageRows.reduce((a, b) => a + parseSafe(b.amount), 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 1.2}px` }}>{pageRows.reduce((a, b) => a + parseSafe(b.amount), formatNumber(Number(0)), { minimumFractionDigits: 2 })}</td>
                             </tr>
                         )}
                     </tbody>
@@ -951,16 +953,16 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                 <>
                   {printConfig.showHsnSummary && (
                         <div className={`${isTechnical ? 'border-t md:border-t-2 border-black pt-2 md:pt-3' : 'border-t md:border-t-2 border-gray-200/50 pt-2 md:pt-3'} relative z-10 mt-2`}>
-                          <div className={`font-black text-gray-400 uppercase tracking-widest mb-1`} style={{ fontSize: `${baseSize * 0.75}px` }}>HSN-wise Summary</div>
+                          <div className={`font-black text-gray-400 uppercase tracking-widest mb-1`} style={{ fontSize: `${baseSize * 0.75}px` }}>{t("HSN-wise Summary")}</div>
                           <table className="w-full border-collapse">
                         <thead>
                           <tr className={tStyles.tableHeadRow}>
-                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell, { fontSize: `${baseSize * 0.7}px` })}>HSN / SAC</th>
-                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Taxable Value</th>
-                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Rate</th>
-                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>CGST Amount</th>
-                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>SGST Amount</th>
-                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>Total Tax</th>
+                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell, { fontSize: `${baseSize * 0.7}px` })}>{t("HSN / SAC")}</th>
+                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Taxable Value")}</th>
+                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Rate")}</th>
+                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("CGST Amount")}</th>
+                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("SGST Amount")}</th>
+                          <th {...getSectionStyle('tableHeader', tStyles.tableHeadCell + ' text-right', { fontSize: `${baseSize * 0.7}px` })}>{t("Total Tax")}</th>
                           </tr>
                         </thead>
                         <tbody className={tStyles.tableBody}>
@@ -983,11 +985,11 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                           }, []).map((hsn, idx) => (
                             <tr key={`hsn-${idx}`} className={tStyles.tableRow}>
                               <td className={tStyles.tableCellLeft} style={{ fontSize: `${baseSize * 0.9}px` }}>{hsn.hsn}</td>
-                              <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{hsn.taxable.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                              <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(Number(hsn.taxable), { minimumFractionDigits: 2 })}</td>
                               <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{hsn.taxRate}%</td>
-                              <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{(hsn.taxAmount/2).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                              <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{(hsn.taxAmount/2).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                              <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 0.9}px` }}>{hsn.taxAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                              <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(hsn.taxAmount / 2, { minimumFractionDigits: 2 })}</td>
+                              <td className={tStyles.tableCellRight} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(hsn.taxAmount / 2, { minimumFractionDigits: 2 })}</td>
+                              <td className={tStyles.tableCellTotal} style={{ fontSize: `${baseSize * 0.9}px` }}>{formatNumber(Number(hsn.taxAmount), { minimumFractionDigits: 2 })}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -1002,16 +1004,16 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                             <div className={tStyles.narrationBox}>
                               {printConfig.showAmountInWords && (
                                 <div>
-                                    <div className={`font-black text-gray-400 uppercase tracking-[0.2em] mb-1`} style={{ fontSize: `${baseSize * 0.7}px` }}>Total amount in words</div>
+                                    <div className={`font-black text-gray-400 uppercase tracking-[0.2em] mb-1`} style={{ fontSize: `${baseSize * 0.7}px` }}>{t("Total amount in words")}</div>
                                     <div {...getSectionStyle('amountInWords', `font-black text-gray-800 italic leading-snug uppercase tracking-tight ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * 0.9}px` })}>
-                                      Indian Rupees {numberToWords(Math.floor(totals.grandTotal || totals.finalValue))}
+                                      {t("Indian Rupees")} {numberToWords(Math.floor(totals.grandTotal || totals.finalValue))}
                                     </div>
                                 </div>
                               )}
                               
                               {header.narration && printConfig.showNarration && (
                                 <div className={`${printConfig.showAmountInWords ? 'pt-1 mt-1 border-t border-gray-200/40' : ''} ${isTechnical ? 'border-black' : ''}`}>
-                                  <div className={`font-black text-gray-400 uppercase tracking-[0.2em] mb-1`} style={{ fontSize: `${baseSize * 0.7}px` }}>Official Narration</div>
+                                  <div className={`font-black text-gray-400 uppercase tracking-[0.2em] mb-1`} style={{ fontSize: `${baseSize * 0.7}px` }}>{t("Official Narration")}</div>
                                   <div {...getSectionStyle('narration', `text-gray-600 leading-relaxed font-bold uppercase tracking-tight ${isTechnical ? 'font-mono' : ''}`, { fontSize: `${baseSize * 0.9}px` })}>{header.narration}</div>
                                 </div>
                               )}
@@ -1020,25 +1022,25 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                       </div>
                       <div className={tStyles.totalsBox}>
                         <div className={`${tStyles.totalsLabel} ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`} style={{ fontSize: `${baseSize * 0.9}px` }}>
-                          <span>Taxable Amount</span>
-                          <span className="tabular-nums">₹{parseSafe(totals.taxableValue || totals.estValue).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                          <span>{t("Taxable Amount")}</span>
+                          <span className="tabular-nums">₹{formatNumber(parseSafe(totals.taxableValue || totals.estValue), { minimumFractionDigits: 2 })}</span>
                         </div>
                         {printConfig.showTaxDetails && (
                             <div className={tStyles.totalsDivider}>
                                 {(totals.computedSupplyType === 'Inter-State') ? (
                                 <div {...getSectionStyle('taxDetails', `${tStyles.totalsLabel} ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * 0.9}px` })}>
-                                    <span>IGST</span>
-                                    <span className="tabular-nums">₹{parseSafe(totals.igst).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                    <span>{t("IGST")}</span>
+                                    <span className="tabular-nums">₹{formatNumber(Number(parseSafe(totals.igst)), { minimumFractionDigits: 2 })}</span>
                                 </div>
                                 ) : (
                                 <>
                                     <div {...getSectionStyle('taxDetails', `${tStyles.totalsLabel} ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * 0.9}px` })}>
-                                    <span>CGST</span>
-                                    <span className="tabular-nums">₹{parseSafe(totals.cgst).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                    <span>{t("CGST")}</span>
+                                    <span className="tabular-nums">₹{formatNumber(Number(parseSafe(totals.cgst)), { minimumFractionDigits: 2 })}</span>
                                     </div>
                                     <div {...getSectionStyle('taxDetails', `${tStyles.totalsLabel} ${isSerif ? 'font-serif normal-case tracking-normal' : ''}`, { fontSize: `${baseSize * 0.9}px` })}>
-                                    <span>SGST</span>
-                                    <span className="tabular-nums">₹{parseSafe(totals.sgst).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                    <span>{t("SGST")}</span>
+                                    <span className="tabular-nums">₹{formatNumber(Number(parseSafe(totals.sgst)), { minimumFractionDigits: 2 })}</span>
                                     </div>
                                 </>
                                 )}
@@ -1049,34 +1051,34 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                           {(totals.otherAdjustment || 0) !== 0 && (
                             <div {...getSectionStyle('adjustment', tStyles.totalsLabel, { fontSize: `${baseSize * 0.8}px` })}>
                               <span>{header.taxableAdjustmentRemarks || "Taxable Adjustments"}</span>
-                              <span className="tabular-nums">₹{parseSafe(totals.otherAdjustment).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                              <span className="tabular-nums">₹{formatNumber(Number(parseSafe(totals.otherAdjustment)), { minimumFractionDigits: 2 })}</span>
                             </div>
                           )}
                           {(totals.nonTaxableAdjustment || 0) !== 0 && (
                             <div {...getSectionStyle('adjustment', tStyles.totalsLabel, { fontSize: `${baseSize * 0.8}px` })}>
                               <span>{header.nonTaxableAdjustmentRemarks || "Non-Taxable Adjustments"}</span>
-                              <span className="tabular-nums">₹{parseSafe(totals.nonTaxableAdjustment).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                              <span className="tabular-nums">₹{formatNumber(Number(parseSafe(totals.nonTaxableAdjustment)), { minimumFractionDigits: 2 })}</span>
                             </div>
                           )}
                           {(totals.voucherDiscount || 0) !== 0 && (
                             <div {...getSectionStyle('discount', tStyles.totalsLabel, { fontSize: `${baseSize * 0.8}px` })}>
-                              <span>Voucher Discount</span>
-                              <span className="tabular-nums mb-1">- ₹{parseSafe(totals.voucherDiscount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                              <span>{t("Voucher Discount")}</span>
+                              <span className="tabular-nums mb-1">- ₹{formatNumber(Number(parseSafe(totals.voucherDiscount)), { minimumFractionDigits: 2 })}</span>
                             </div>
                           )}
                         </div>
 
                         <div className="flex flex-col gap-1 items-end pt-2">
-                          <div className={tStyles.grandTotalLabel} style={{ fontSize: `${baseSize * 0.9}px` }}>{layout === 'Modern' ? 'Net invoice amount' : 'Payable'}</div>
+                          <div className={tStyles.grandTotalLabel} style={{ fontSize: `${baseSize * 0.9}px` }}>{layout === 'Modern' ? t("Net invoice amount") : t("Payable")}</div>
                           <div {...getSectionStyle('grandTotal', tStyles.titleText.replace('mb-1', ''), { 
                             fontSize: `${baseSize * headingScale * 2 * (
-                              parseSafe(totals.grandTotal || totals.finalValue).toLocaleString(undefined, { minimumFractionDigits: 2 }).length > 15 ? 0.6 :
-                              parseSafe(totals.grandTotal || totals.finalValue).toLocaleString(undefined, { minimumFractionDigits: 2 }).length > 12 ? 0.75 : 
-                              parseSafe(totals.grandTotal || totals.finalValue).toLocaleString(undefined, { minimumFractionDigits: 2 }).length > 10 ? 0.85 : 
+                              formatNumber(parseSafe(totals.grandTotal || totals.finalValue), { minimumFractionDigits: 2 }).length > 15 ? 0.6 :
+                              formatNumber(parseSafe(totals.grandTotal || totals.finalValue), { minimumFractionDigits: 2 }).length > 12 ? 0.75 : 
+                              formatNumber(parseSafe(totals.grandTotal || totals.finalValue), { minimumFractionDigits: 2 }).length > 10 ? 0.85 : 
                               1.0
                             )}px`,
                             lineHeight: '1.1'
-                          })}>₹{parseSafe(totals.grandTotal || totals.finalValue).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                          })}>₹{formatNumber(parseSafe(totals.grandTotal || totals.finalValue), { minimumFractionDigits: 2 })}</div>
                         </div>
                       </div>
                     </div>
@@ -1087,21 +1089,21 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                       <div className="text-left w-1/3">
                         {printConfig.showCustomerSign && (
                           <div className={isTechnical ? 'border-2 border-black p-4 inline-block' : ''}>
-                            <div {...getSectionStyle('signatures', tStyles.signaturesAuth, { fontSize: `${baseSize * 0.7}px` })}>Customer Authorization</div>
+                            <div {...getSectionStyle('signatures', tStyles.signaturesAuth, { fontSize: `${baseSize * 0.7}px` })}>{t("Customer Authorization")}</div>
                             <div className={tStyles.signaturesDivider}></div>
                           </div>
                         )}
-                      </div>
-                      <div className="text-right w-1/2">
-                        {printConfig.showSignature && (
-                          <div className={tStyles.signaturesBox}>
-                            <div {...getSectionStyle('signatures', `font-black text-gray-900 uppercase tracking-widest`, { fontSize: `${baseSize * 0.8}px` })}>Authorized For BHARAT BOOK</div>
-                            <div className={tStyles.signaturesDivider}></div>
-                            <div {...getSectionStyle('signatures', `font-black ${primaryText} uppercase tracking-[0.4em] opacity-100 mt-2`, { fontSize: `${baseSize * 0.8}px` })}>
-                                {(printConfig as any).selectedUser ? (printConfig as any).selectedUser : 'Official Stamp & Sign'}
+                        </div>
+                        <div className="text-right w-1/2">
+                          {printConfig.showSignature && (
+                            <div className={tStyles.signaturesBox}>
+                              <div {...getSectionStyle('signatures', `font-black text-gray-900 uppercase tracking-widest`, { fontSize: `${baseSize * 0.8}px` })}>{t("Authorized For BHARAT BOOK")}</div>
+                              <div className={tStyles.signaturesDivider}></div>
+                              <div {...getSectionStyle('signatures', `font-black ${primaryText} uppercase tracking-[0.4em] opacity-100 mt-2`, { fontSize: `${baseSize * 0.8}px` })}>
+                                  {(printConfig as any).selectedUser ? (printConfig as any).selectedUser : t("Official Stamp & Sign")}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                     </div>
                   </div>
@@ -1109,13 +1111,13 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                   {printConfig.showFooterNotes && (
                     <div className="w-full pt-4 pb-2 mt-4 border-t border-gray-100/50">
                       <p className={`${printConfig.compactMode ? 'text-[8px]' : 'text-[10px]'} font-black text-gray-400 text-center uppercase tracking-[0.5em]`}>
-                        Computer Generated Official Document
+                        {t("Computer Generated Official Document")}
                       </p>
                     </div>
                   )}
                 </>
               ) : (
-                <div className="p-4 mt-auto text-center font-black uppercase text-gray-400 tracking-[0.2em] opacity-50" style={{ fontSize: `${baseSize * 0.8}px` }}>Continued to Page {pageNum + 1}...</div>
+                <div className="p-4 mt-auto text-center font-black uppercase text-gray-400 tracking-[0.2em] opacity-50" style={{ fontSize: `${baseSize * 0.8}px` }}>{t("Continued to Page {{nextPage}}...", { nextPage: pageNum + 1 })}</div>
               )}
 
               {/* Page Number Bottom */}
@@ -1194,7 +1196,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                 title="Fit to Screen"
               >
                 <RotateCcw size={16} />
-                <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">Fit</span>
+                <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">{t("Fit")}</span>
               </button>
               <button 
                 onClick={handleFullSize}
@@ -1202,7 +1204,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = ({ header = {} as a
                 title="Actual Size (100%)"
               >
                 <Maximize size={16} />
-                <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">100%</span>
+                <span className="text-xs uppercase tracking-widest font-black hidden sm:inline">{t("100%")}</span>
               </button>
           </div>
         </div>

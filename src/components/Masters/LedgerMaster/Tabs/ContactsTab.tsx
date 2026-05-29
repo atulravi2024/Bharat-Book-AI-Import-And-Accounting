@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React, { useState, useMemo, useEffect } from "react";
 import { AllContactsTab } from './AllContactsTab';
 import { StaffTab } from './StaffTab';
@@ -19,6 +20,7 @@ import { VendorsTab } from "./VendorsTab";
 import { PartnersTab } from "./PartnersTab";
 import { ChevronDown, ChevronUp, Fingerprint , Edit2, Trash2} from 'lucide-react';
 import { motion, AnimatePresence } from "motion/react";
+import { HorizontalScrollArea } from "../../../shared/HorizontalScrollArea";
 
 const DEPARTMENT_DESIGNATION_MAP: Record<string, string[]> = {
   Management: [
@@ -183,6 +185,8 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
   partyMasters = [],
   setPartyMasters,
 }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -491,29 +495,23 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
               : "bg-teal-50 text-teal-700 border-teal-100 dark:bg-teal-900/20 dark:text-teal-400 dark:border-teal-800"
           }`}
         >
-          {isContract ? "Contract Staff" : "Internal Staff"}
+          {isContract ? t("Contract Staff") : t("Internal Staff")}
         </span>
       );
     }
     if (item.classification === "Customer") {
       return (
-        <span className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800">
-          Customer
-        </span>
+        <span className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800">{t("Customer")}</span>
       );
     }
     if (item.classification === "Vendor") {
       return (
-        <span className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-rose-50 text-rose-700 border border-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:border-rose-800">
-          Vendor
-        </span>
+        <span className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-rose-50 text-rose-700 border border-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:border-rose-800">{t("Vendor")}</span>
       );
     }
     if (item.classification === "Partner") {
       return (
-        <span className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100 dark:bg-indigo-900/20 dark:text-indigo-400 dark:border-indigo-800">
-          Partner
-        </span>
+        <span className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100 dark:bg-indigo-900/20 dark:text-indigo-400 dark:border-indigo-800">{t("Partner")}</span>
       );
     }
     return null;
@@ -529,7 +527,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
             <div className="font-semibold text-blue-700 dark:text-blue-400 text-xs uppercase tracking-wide flex items-center gap-1.5 flex-wrap">
               <span>{item.designation}</span>
               <span className="text-gray-400 font-normal">
-                ({item.department || "No Dept"})
+                ({item.department || t("No Dept")})
               </span>
               {item.gender && (
                 <span
@@ -539,7 +537,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
                       : "bg-indigo-50 text-indigo-700 border-indigo-150 dark:bg-indigo-950/20 dark:text-indigo-400 dark:border-indigo-950/30"
                   }`}
                 >
-                  👤 {item.gender}
+                  👤 {t(item.gender)}
                 </span>
               )}
               {item.bloodGroup && (
@@ -554,7 +552,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
             {item.email && <span>• {item.email}</span>}
             {item.alternatePhone && (
               <span className="text-gray-500 dark:text-gray-400">
-                • Alt: {item.alternatePhone}
+                • {t("Alt:")} {item.alternatePhone}
                 {item.alternateRelation ? ` (${item.alternateRelation})` : ""}
               </span>
             )}
@@ -597,7 +595,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
           )}
           {isResigned && (
             <div className="text-[10px] text-rose-600 dark:text-rose-400 font-semibold font-mono mt-1">
-              Resigned / Left on: {item.resignationDate || "N/A"}
+              {t("Resigned / Left on:")} {item.resignationDate || t("N/A")}
             </div>
           )}
         </div>
@@ -611,7 +609,7 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
           </div>
         )}
         <div className="flex space-x-2 text-[11px] text-gray-500 font-mono mt-0.5 dark:text-gray-400">
-          <span>{item.phone || "No phone"}</span>
+          <span>{item.phone || t("No phone")}</span>
           {item.email && <span>• {item.email}</span>}
         </div>
       </div>
@@ -621,25 +619,29 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-300">
       {/* Sub-pages / Sub-tabs selector for Contacts (All, Staff, Customers, Vendors, Partners) */}
-      <div className="flex border-b border-gray-150 bg-gray-50/50 px-4 pt-2 dark:bg-gray-800/20 dark:border-gray-800">
-        {[
-          { id: "all", label: "All Contacts" },
-          { id: "staff", label: "Staff" },
-          { id: "customers", label: "Customers" },
-          { id: "vendors", label: "Vendors" },
-          { id: "partners", label: "Partners" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setSubTab(tab.id as any)}
-            className={`px-5 py-2.5 text-xs font-bold transition-all relative whitespace-nowrap mr-2 rounded-t-lg ${subTab === tab.id ? "text-blue-600 bg-white dark:text-blue-400 dark:bg-gray-700" : "text-gray-500 hover:text-gray-700 dark:text-gray-400"}`}
-          >
-            {tab.label}
-            {subTab === tab.id && (
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600"></div>
-            )}
-          </button>
-        ))}
+      <div className="border-b border-gray-150 bg-gray-50/50 dark:bg-gray-800/20 dark:border-gray-800 flex items-center pr-4 relative">
+        <HorizontalScrollArea className="flex-1 min-w-0 px-4 pt-2">
+          <div className="flex">
+            {[
+              { id: "all", label: "All Contacts" },
+              { id: "staff", label: "Staff" },
+              { id: "customers", label: "Customers" },
+              { id: "vendors", label: "Vendors" },
+              { id: "partners", label: "Partners" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setSubTab(tab.id as any)}
+                className={`px-5 py-2.5 text-xs font-bold transition-all relative whitespace-nowrap mr-2 rounded-t-lg ${subTab === tab.id ? "text-blue-600 bg-white dark:text-blue-400 dark:bg-gray-700" : "text-gray-500 hover:text-gray-700 dark:text-gray-400"}`}
+              >
+                {t(tab.label)}
+                {subTab === tab.id && (
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600"></div>
+                )}
+              </button>
+            ))}
+          </div>
+        </HorizontalScrollArea>
       </div>
 
       {/* Sub-tab Renders */}
@@ -694,26 +696,22 @@ export const ContactsTab: React.FC<ContactsTabProps> = ({
             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
               <DeleteIcon className="text-3xl" />
             </div>
-            <h2 className="font-bold text-xl mb-2 text-gray-900 dark:text-white">
-              Delete Contact?
-            </h2>
+            <h2 className="font-bold text-xl mb-2 text-gray-900 dark:text-white">{t("Delete Contact?")}</h2>
             <p className="text-gray-500 mb-6 text-sm dark:text-gray-400">
-              Are you sure you want to delete "{deleteConfirmation.name}" (
-              {deleteConfirmation.type})?
+              {t("Are you sure you want to delete")} "{deleteConfirmation.name}" (
+              {t(deleteConfirmation.type)})?
             </p>
             <div className="flex space-x-3">
               <button
                 onClick={() => setDeleteConfirmation(null)}
                 className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition"
               >
-                Cancel
+                {t("Cancel")}
               </button>
               <button
                 onClick={confirmDeleteUnified}
                 className="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-md shadow-red-200 transition"
-              >
-                Delete
-              </button>
+              >{t("Delete")}</button>
             </div>
           </div>
         </div>

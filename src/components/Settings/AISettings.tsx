@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from '../../context/LanguageContext';
 import { Activity } from 'lucide-react';
 import { AIToolsIcon, CheckCircleIcon } from '../icons/IconComponents';
 import { EXTERNAL_PROVIDERS, INTERNAL_GEMINI_MODELS } from '../../services/AIConfig';

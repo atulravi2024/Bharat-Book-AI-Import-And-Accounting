@@ -59,7 +59,7 @@ import { IFSC_PREFIXES } from "../../services/matching/ifscCodes";
 
 import { MainView, LedgerMaster } from "../../app/types";
 
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from '../../context/LanguageContext';
 
 export interface SettingsViewProps {
   setView: (view: MainView) => void;

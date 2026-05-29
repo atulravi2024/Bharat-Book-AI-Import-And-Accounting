@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../context/LanguageContext';
 import React from 'react';
 import { ParsedVoucher } from '../../../app/types';
 import { 
@@ -31,6 +32,8 @@ export const BankReportModals: React.FC<BankReportModalsProps> = ({
     runAutoMatch,
     isRunningAI
 }) => {
+  const { t, formatNumber  } = useLanguage();
+
     return (
         <>
             {selectedAuditVoucher && (
@@ -40,7 +43,7 @@ export const BankReportModals: React.FC<BankReportModalsProps> = ({
                             <div className="flex items-center">
                                 <HistoryIcon className="text-indigo-600 mr-3 text-2xl" />
                                 <div>
-                                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Audit Trail</h3>
+                                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">{t("Audit Trail")}</h3>
                                     <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">Statement #{selectedAuditVoucher.id}</p>
                                 </div>
                             </div>
@@ -79,12 +82,12 @@ export const BankReportModals: React.FC<BankReportModalsProps> = ({
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 dark:bg-gray-800">
                         <div className="p-6 text-center">
                             <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4"><DeleteIcon className="text-3xl" /></div>
-                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Confirm Deletion</h3>
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">{t("Confirm Deletion")}</h3>
                             <p className="text-gray-500 text-sm mt-2 dark:text-gray-400">{deleteConfirmation.message}</p>
                         </div>
                         <div className="flex border-t border-gray-100 dark:border-gray-800">
                             <button onClick={() => setDeleteConfirmation(null)} className="flex-1 px-4 py-4 text-sm font-bold text-gray-500 hover:bg-gray-50 transition-colors border-r border-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:border-gray-800">Cancel</button>
-                            <button onClick={confirmDelete} className="flex-1 px-4 py-4 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors">Confirm Delete</button>
+                            <button onClick={confirmDelete} className="flex-1 px-4 py-4 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors">{t("Confirm Delete")}</button>
                         </div>
                     </div>
                 </div>
@@ -97,11 +100,11 @@ export const BankReportModals: React.FC<BankReportModalsProps> = ({
                             <div className="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <div className="text-3xl">⚡</div>
                             </div>
-                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Run AI Auto-Match?</h3>
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">{t("Run AI Auto-Match?")}</h3>
                             <p className="text-gray-500 text-sm mt-3 dark:text-gray-400">
                                 This will analyze your bank narrations and suggest mappings for unknown transactions. 
                                 <br/><br/>
-                                <span className="font-bold text-gray-700 dark:text-gray-200">Would you like to re-match already identified statements as well?</span>
+                                <span className="font-bold text-gray-700 dark:text-gray-200">{t("Would you like to re-match already identified statements as well?")}</span>
                             </p>
                         </div>
                         <div className="flex flex-col border-t border-gray-100 dark:border-gray-800">

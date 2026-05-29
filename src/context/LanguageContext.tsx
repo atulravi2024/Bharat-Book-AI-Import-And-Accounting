@@ -4,7 +4,8 @@ import { translations, LanguageCode } from './translations';
 interface LanguageContextProps {
   language: LanguageCode;
   setLanguage: (lang: LanguageCode) => void;
-  t: (key: string) => string;
+  t: (key: string, variables?: Record<string, any>) => string;
+  formatNumber: (num: number, options?: Intl.NumberFormatOptions) => string;
 }
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
@@ -45,15 +46,30 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     } catch (e) {}
   };
 
-  const t = (key: string) => {
+  const t = (key: string, variables?: Record<string, any>) => {
+    let text = key;
     if (translations[key] && translations[key][language]) {
-      return translations[key][language];
+      text = translations[key][language];
     }
-    return key; // fallback to showing the key
+    
+    if (variables) {
+      Object.entries(variables).forEach(([k, v]) => {
+        text = text.replace(`{{${k}}}`, String(v));
+      });
+    }
+    
+    return text;
+  };
+
+  const formatNumber = (num: number, options?: Intl.NumberFormatOptions) => {
+    if (language === 'hi') {
+      return num.toLocaleString('hi-IN', { numberingSystem: 'deva', ...options });
+    }
+    return num.toLocaleString('en-IN', options);
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, formatNumber }}>
       {children}
     </LanguageContext.Provider>
   );

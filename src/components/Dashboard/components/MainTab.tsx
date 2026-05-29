@@ -8,14 +8,14 @@ import { useLanguage } from '../../../context/LanguageContext';
 
 export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
     const activeColors = colors || COLORS;
-    const { t } = useLanguage();
+    const { t, formatNumber } = useLanguage();
     return (
         <motion.div key="main" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <KPIComponent label="Total Volume" val={stats.totalVouchers} sub="Documents ingested" icon={FileText} color="text-blue-600" bg="bg-blue-50 dark:bg-blue-900/30" isDemo={isDemo} />
-                <KPIComponent label="Total Sales" val={`₹${stats.vol.sales.toLocaleString()}`} sub="Revenue generated" icon={TrendingUp} color="text-emerald-600" bg="bg-emerald-50 dark:bg-emerald-900/30" isDemo={isDemo} />
-                <KPIComponent label="Total Purchase" val={`₹${stats.vol.purchase.toLocaleString()}`} sub="Capital expenditure" icon={Package} color="text-amber-600" bg="bg-amber-50 dark:bg-amber-900/30" isDemo={isDemo} />
-                <KPIComponent label="Raw Bank Status" val={stats.counts.rawBank} sub="Records to classify" icon={ArrowDownRight} color="text-indigo-600" bg="bg-indigo-50 dark:bg-indigo-900/30" isDemo={isDemo} />
+                <KPIComponent label={t("Total Volume")} val={formatNumber(stats.totalVouchers)} sub={t("Documents ingested")} icon={FileText} color="text-blue-600" bg="bg-blue-50 dark:bg-blue-900/30" isDemo={isDemo} />
+                <KPIComponent label={t("Total Sales")} val={`₹${formatNumber(Number(stats.vol.sales))}`} sub={t("Revenue generated")} icon={TrendingUp} color="text-emerald-600" bg="bg-emerald-50 dark:bg-emerald-900/30" isDemo={isDemo} />
+                <KPIComponent label={t("Total Purchase")} val={`₹${formatNumber(Number(stats.vol.purchase))}`} sub={t("Capital expenditure")} icon={Package} color="text-amber-600" bg="bg-amber-50 dark:bg-amber-900/30" isDemo={isDemo} />
+                <KPIComponent label={t("Raw Bank Status")} val={formatNumber(stats.counts.rawBank)} sub={t("Records to classify")} icon={ArrowDownRight} color="text-indigo-600" bg="bg-indigo-50 dark:bg-indigo-900/30" isDemo={isDemo} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -55,7 +55,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                 <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700 relative overflow-hidden">
                     <div className="flex justify-between items-center mb-8 relative z-10">
                         <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">{t('Performance Trajectory')}</h3>
-                        {isDemo && <span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg dark:shadow-amber-900/50 border border-amber-600 animate-pulse">DEMO</span>}
+                        {isDemo && <span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg dark:shadow-amber-900/50 border border-amber-600 animate-pulse">{t("DEMO")}</span>}
                     </div>
                     <div className="h-[400px]">
                         <SafeResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
@@ -73,7 +73,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700 relative overflow-hidden">
                     <div className="flex justify-between items-center mb-8 relative z-10">
                         <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">{t('Distribution')}</h3>
-                        {isDemo && <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[8px] font-black uppercase tracking-widest rounded-lg border border-amber-200 dark:border-amber-700">DEMO</span>}
+                        {isDemo && <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[8px] font-black uppercase tracking-widest rounded-lg border border-amber-200 dark:border-amber-700">{t("DEMO")}</span>}
                     </div>
                     <div className="h-[300px]">
                         <SafeResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
@@ -100,7 +100,7 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-sm dark:shadow-none border border-premium-slate-100 dark:border-gray-700">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">{t('Operative Pulse')}</h3>
-                        {isDemo && <span className="text-[8px] font-black text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full border border-amber-100 dark:border-amber-700 uppercase tracking-tighter">DEMO</span>}
+                        {isDemo && <span className="text-[8px] font-black text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full border border-amber-100 dark:border-amber-700 uppercase tracking-tighter">{t("DEMO")}</span>}
                     </div>
                     <div className="space-y-4">
                         {stats.advanceMetrics.userActivity.map((act: any, i: number) => (
@@ -111,12 +111,12 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                                     </div>
                                     <div>
                                         <p className="text-xs font-black text-gray-900 dark:text-white">{act.user}</p>
-                                        <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tight">{act.action}</p>
+                                        <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tight">{t(act.action)}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-xs font-black text-gray-900 dark:text-white">{act.count} units</p>
-                                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{act.time}</p>
+                                    <p className="text-xs font-black text-gray-900 dark:text-white">{formatNumber(act.count)} {t("units")}</p>
+                                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{t(act.time)}</p>
                                 </div>
                             </div>
                         ))}
@@ -127,9 +127,9 @@ export const MainTab = ({ stats, isDemo, colors = COLORS }: any) => {
                         <ShieldCheck size={40} />
                     </div>
                     <h3 className="text-xl font-black text-gray-900 font-display dark:text-white">{t('System Integrity')}</h3>
-                    <p className="text-sm text-gray-500 font-medium max-w-xs mt-2 dark:text-gray-400">All extraction engines are operating within nominal parameters. Real-time auditing is active.</p>
+                    <p className="text-sm text-gray-500 font-medium max-w-xs mt-2 dark:text-gray-400">{t("All extraction engines are operating within nominal parameters. Real-time auditing is active.")}</p>
                     <div className="mt-6 flex gap-4">
-                        <div className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest">Healthy</div>
+                        <div className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest">{t("Healthy")}</div>
                         <div className="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-[10px] font-black uppercase tracking-widest dark:bg-gray-800 dark:text-gray-300">v4.2.0-stable</div>
                     </div>
                 </div>

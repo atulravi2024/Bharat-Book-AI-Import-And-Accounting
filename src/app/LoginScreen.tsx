@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Lock } from 'lucide-react';
 import { ManagedUser, INITIAL_USERS } from '../components/Settings/UserSettings';
+import { useLanguage } from '../context/LanguageContext';
 
 interface LoginScreenProps {
   onLogin: (userId: string) => void;
 }
 
 export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
+  const { t } = useLanguage();
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [email, setEmail] = useState('superadmin@bharatbook.com');
   const [password, setPassword] = useState('password123');
@@ -220,14 +222,14 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
           </div>
         </div>
         
-        <h2 className="text-xl font-black text-center text-gray-900 dark:text-white mb-2 uppercase tracking-tight">System Access</h2>
-        <p className="text-xs font-bold text-center text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-8">Please authenticate to continue (default password: password123)</p>
+        <h2 className="text-xl font-black text-center text-gray-900 dark:text-white mb-2 uppercase tracking-tight">{t("System Access")}</h2>
+        <p className="text-xs font-bold text-center text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-8">{t("Please authenticate to continue (default password: password123)")}</p>
 
         {inactivityNotice && (
           <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/25 border border-amber-100 dark:border-amber-900/50 rounded-2xl flex items-start gap-4 animate-in fade-in zoom-in-95">
             <Shield className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
             <div>
-              <p className="text-xs font-black text-amber-900 dark:text-amber-200 uppercase tracking-widest">Session Expired</p>
+              <p className="text-xs font-black text-amber-900 dark:text-amber-200 uppercase tracking-widest">{t("Session Expired")}</p>
               <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 mt-1">
                 You have been auto-logged out due to {timeoutMinutes} minutes of inactivity. Please authenticate again to access the portal.
               </p>
@@ -239,7 +241,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-2xl flex items-start gap-3 animate-in fade-in zoom-in-95">
             <Shield className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
             <div>
-              <p className="text-xs font-black text-red-900 dark:text-red-200 uppercase tracking-widest">Login Failed</p>
+              <p className="text-xs font-black text-red-900 dark:text-red-200 uppercase tracking-widest">{t("Login Failed")}</p>
               <p className="text-xs font-medium text-red-600 dark:text-red-300 mt-1">{error}</p>
             </div>
           </div>
@@ -247,7 +249,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-[10px] font-black tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Email Address</label>
+            <label className="block text-[10px] font-black tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Email Address")}</label>
             <input
               type="email"
               value={email}
@@ -258,7 +260,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
             />
           </div>
           <div>
-            <label className="block text-[10px] font-black tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">Password</label>
+            <label className="block text-[10px] font-black tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-2 pl-1">{t("Password")}</label>
             <input
               type="password"
               value={password}
@@ -274,7 +276,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
             disabled={!email || !password}
             className="w-full py-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all"
           >
-            Authenticate Portal
+            {t("Authenticate Portal")}
           </button>
         </form>
       </div>

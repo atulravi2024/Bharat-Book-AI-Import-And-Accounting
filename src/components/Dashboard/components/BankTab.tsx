@@ -1,22 +1,25 @@
 import React from 'react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { motion } from 'motion/react';
 import { KPIComponent, CustomTooltip, SafeResponsiveContainer } from './DashboardShared';
 import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, Legend, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
 
-export const BankTab = ({ stats, isDemo }: any) => {
+export const BankTab = ({ stats, isDemo }: any) => { 
+    const { t, formatNumber } = useLanguage();
     return (
         <motion.div key="bank" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <KPIComponent label="Total Deposits" val={`₹${stats.vol.deposits.toLocaleString()}`} sub="Direct inflows" icon={TrendingUp} color="text-emerald-600" bg="bg-emerald-50" isDemo={isDemo} />
-                <KPIComponent label="Total Withdrawals" val={`₹${stats.vol.withdrawals.toLocaleString()}`} sub="Operational outflows" icon={TrendingDown} color="text-rose-600" bg="bg-rose-50" isDemo={isDemo} />
-                <KPIComponent label="Bank Activity" val={stats.counts.bank} sub="Statement entries" icon={Activity} color="text-blue-600" bg="bg-blue-50" isDemo={isDemo} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <KPIComponent label={t("Total Deposits")} val={`₹${formatNumber(Number(stats.vol.deposits))}`} sub={t("Direct inflows")} icon={TrendingUp} color="text-emerald-600" bg="bg-emerald-50" isDemo={isDemo} />
+                <KPIComponent label={t("Total Withdrawals")} val={`₹${formatNumber(Number(stats.vol.withdrawals))}`} sub={t("Operational outflows")} icon={TrendingDown} color="text-rose-600" bg="bg-rose-50" isDemo={isDemo} />
+                <KPIComponent label={t("Bank Activity")} val={formatNumber(stats.counts.bank)} sub={t("Statement entries")} icon={Activity} color="text-blue-600" bg="bg-blue-50" isDemo={isDemo} />
+                <KPIComponent label={t("Net Position")} val={`₹${formatNumber(Number(stats.vol.deposits) - Number(stats.vol.withdrawals))}`} sub={t("Cash Delta")} icon={Activity} color="text-indigo-600" bg="bg-indigo-50" isDemo={isDemo} />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="md:col-span-2 bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 flex flex-col h-[450px] relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                     <div className="flex justify-between items-center mb-8 relative z-10">
-                        <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest dark:text-white">Cash Position Delta</h3>
-                        {isDemo && <span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 border border-amber-600 animate-pulse">DEMO</span>}
+                        <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest dark:text-white">{t("Cash Position Delta")}</h3>
+                        {isDemo && <span className="px-3 py-1 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 border border-amber-600 animate-pulse">{t("DEMO")}</span>}
                     </div>
                     <div className="flex-1">
                         <SafeResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
@@ -33,8 +36,8 @@ export const BankTab = ({ stats, isDemo }: any) => {
                 </div>
                 <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 flex flex-col relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                     <div className="flex justify-between items-center mb-8 relative z-10">
-                        <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest dark:text-white">Allocation</h3>
-                        {isDemo && <span className="px-2 py-1 bg-amber-100 text-amber-700 text-[8px] font-black uppercase tracking-widest rounded-lg border border-amber-200">DEMO</span>}
+                        <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest dark:text-white">{t("Allocation")}</h3>
+                        {isDemo && <span className="px-2 py-1 bg-amber-100 text-amber-700 text-[8px] font-black uppercase tracking-widest rounded-lg border border-amber-200">{t("DEMO")}</span>}
                     </div>
                     <div className="flex-1 min-h-[300px]">
                         <SafeResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
@@ -53,16 +56,16 @@ export const BankTab = ({ stats, isDemo }: any) => {
                                     <Cell fill="#EF4444" />
                                     <Cell fill="#10B981" />
                                 </Pie>
-                                <Tooltip />
+                                <Tooltip content={<CustomTooltip />} />
                             </RechartsPieChart>
                         </SafeResponsiveContainer>
                     </div>
                     <div className="flex justify-center gap-6 mt-4">
                         <div className="flex items-center text-[10px] font-black text-rose-600 uppercase tracking-widest">
-                            <div className="w-2 h-2 rounded-full bg-rose-500 mr-2"></div> Outflow
+                            <div className="w-2 h-2 rounded-full bg-rose-500 mr-2"></div> {t("Outflow")}
                         </div>
                         <div className="flex items-center text-[10px] font-black text-emerald-600 uppercase tracking-widest">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></div> Inflow
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></div> {t("Inflow")}
                         </div>
                     </div>
                 </div>

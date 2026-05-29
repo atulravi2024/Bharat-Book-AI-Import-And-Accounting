@@ -11,7 +11,7 @@ import {
 } from '../../icons/IconComponents';
 import { motion } from 'motion/react';
 import { ItemMaster } from '../../../app/types';
-
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface SystemDecideViewProps {
     itemMasters: ItemMaster[];
@@ -19,6 +19,7 @@ interface SystemDecideViewProps {
 }
 
 export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters, setItemMasters }) => {
+    const { t, formatNumber } = useLanguage();
     const [profitPercentage, setProfitPercentage] = useState(10);
     const [isProcessing, setIsProcessing] = useState(false);
     const [processedItems, setProcessedItems] = useState<ItemMaster[]>([]);
@@ -167,13 +168,13 @@ export const SystemDecideView: React.FC<SystemDecideViewProps> = ({ itemMasters,
                                                         <div className="text-[10px] font-medium text-gray-400">{item.sku || 'No SKU'}</div>
                                                     </td>
                                                     <td className="w-24 text-right text-xs font-bold text-gray-500 dark:text-gray-400">
-                                                        ₹{item.purchaseRate?.toLocaleString()}
+                                                        ₹{formatNumber(Number(item.purchaseRate))}
                                                     </td>
                                                     <td className="w-24 flex justify-center text-gray-300">
                                                         <ArrowForwardIcon className="text-sm" />
                                                     </td>
                                                     <td className="w-24 text-right text-xs font-black text-indigo-600">
-                                                        ₹{item.salesRate?.toLocaleString()}
+                                                        ₹{formatNumber(Number(item.salesRate))}
                                                     </td>
                                                 </tr>
                                             );

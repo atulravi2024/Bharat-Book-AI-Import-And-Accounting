@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import React from 'react';
 import { X, Package, ScanBarcode, Tags, ClipboardList, Calculator, ChevronDown } from 'lucide-react';
 import { SearchableDropdown } from '../../../ui/SearchableDropdown';
@@ -34,6 +35,8 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
   warehouseMasters,
   activeTab
 }) => {
+  const { t, formatNumber  } = useLanguage();
+
   if (!isOpen || editingRowIndex === null) return null;
 
   const currentRow = rows[editingRowIndex];
@@ -46,8 +49,8 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
     <div className="fixed inset-0 z-[100] bg-gray-50 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300 dark:bg-gray-900">
       <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm z-10 relative dark:border-gray-700 dark:bg-gray-800">
         <div>
-          <h3 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight dark:text-gray-100">Edit Inventory Entry</h3>
-          <p className="text-xs md:text-sm font-medium text-gray-500 mt-1 dark:text-gray-400">Update transaction details for this specific entry.</p>
+          <h3 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight dark:text-gray-100">{t("Edit Inventory Entry")}</h3>
+          <p className="text-xs md:text-sm font-medium text-gray-500 mt-1 dark:text-gray-400">{t("Update transaction details for this specific entry.")}</p>
         </div>
         <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:bg-gray-800 dark:border-gray-700">
           <X size={20} />
@@ -63,14 +66,14 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
               onClick={() => setExpandedRowSection(expandedRowSection === 'item_selection' ? null : 'item_selection')}
             >
               <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                <Package size={16} className="mr-2 text-purple-500"/> Item Selection
+                <Package size={16} className="mr-2 text-purple-500"/> {t("Item Selection")}
               </h4>
               <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'item_selection' ? 'rotate-180' : ''}`} />
             </header>
             {expandedRowSection === 'item_selection' && (
               <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                 <div className="form-field-wrapper col-span-1 sm:col-span-1">
-                  <label className="form-label">Item Name / SKU</label>
+                  <label className="form-label">{t("Item Name / SKU")}</label>
                   <div className="flex items-center gap-2">
                     <button className="text-gray-400 hover:text-purple-500 transition-colors shrink-0 bg-gray-50 border border-gray-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:bg-gray-900 dark:border-gray-700" title="Scan Barcode" onClick={(e) => { e.stopPropagation(); setScanningRowIndex(editingRowIndex); setShowScanner(true); }}>
                       <ScanBarcode size={20} />
@@ -80,7 +83,7 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
                         options={itemMasters}
                         value={currentRow?.itemName || ''}
                         onChange={(val) => handleItemOrSkuChange(editingRowIndex, val, 'itemName')}
-                        placeholder="Search for an item..."
+                        placeholder={t("Search for an item...")}
                         buttonClassName="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-left dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                       />
                     </div>
@@ -88,23 +91,23 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
                 </div>
 
                 <div className="form-field-wrapper col-span-1 sm:col-span-1">
-                  <label className="form-label">Godown / Location</label>
+                  <label className="form-label">{t("Godown / Location")}</label>
                   <SearchableDropdown
                     options={warehouseMasters}
                     value={currentRow?.godown || ''}
                     onChange={(val) => updateRow('godown', val)}
-                    placeholder="Select Godown..."
+                    placeholder={t("Select Godown...")}
                     buttonClassName="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-left dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                   />
                 </div>
 
                 <div className="form-field-wrapper col-span-1 sm:col-span-2">
-                   <label className="form-label">Remarks / Note</label>
+                   <label className="form-label">{t("Remarks / Note")}</label>
                    <textarea 
                      value={currentRow?.remarks || ''} 
                      onChange={(e) => updateRow('remarks', e.target.value)}
                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all resize-none h-20 dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                     placeholder="Enter remarks for this entry..."
+                     placeholder={t("Enter remarks for this entry...")}
                    />
                  </div>
               </div>
@@ -118,19 +121,19 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
               onClick={() => setExpandedRowSection(expandedRowSection === 'attributes' ? null : 'attributes')}
             >
               <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                <Tags size={16} className="mr-2 text-indigo-500"/> Attributes & Classification
+                <Tags size={16} className="mr-2 text-indigo-500"/> {t("Attributes & Classification")}
               </h4>
               <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'attributes' ? 'rotate-180' : ''}`} />
             </header>
             {expandedRowSection === 'attributes' && (
               <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                 <div className="form-field-wrapper">
-<label className="form-label">SKU / Barcode</label>
+<label className="form-label">{t("SKU / Barcode")}</label>
                   <SearchableDropdown
                     options={itemMasters.filter(i => i.sku)}
                     value={currentRow?.sku || ''}
                     onChange={(value) => handleItemOrSkuChange(editingRowIndex, value, 'sku')}
-                    placeholder="e.g. TS-BLU-M"
+                    placeholder={t("e.g. TS-BLU-M")}
                     labelKey="sku"
                     buttonClassName="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-left dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
                   />
@@ -159,25 +162,25 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
               onClick={() => setExpandedRowSection(expandedRowSection === 'tracking' ? null : 'tracking')}
             >
               <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                <ClipboardList size={16} className="mr-2 text-blue-500"/> Tracking & Details
+                <ClipboardList size={16} className="mr-2 text-blue-500"/> {t("Tracking & Details")}
               </h4>
               <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'tracking' ? 'rotate-180' : ''}`} />
             </header>
             {expandedRowSection === 'tracking' && (
               <div className="form-grid gap-6 p-6 border-t border-gray-100 dark:border-gray-800">
                 <div className="form-field-wrapper">
-<label className="form-label">Batch / Lot Number</label>
+<label className="form-label">{t("Batch / Lot Number")}</label>
                   <input 
                     type="text" 
                     value={currentRow?.batch || ''} 
                     onChange={(e) => updateRow('batch', e.target.value)}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all dark:bg-gray-900 dark:border-gray-700 dark:focus:bg-gray-700"
-                    placeholder="e.g. BATCH-001"
+                    placeholder={t("e.g. BATCH-001")}
                   />
                 </div>
                 
                 <div className="form-field-wrapper">
-<label className="form-label">Manufacturing Date</label>
+<label className="form-label">{t("Manufacturing Date")}</label>
                   <input 
                     type="date" 
                     value={currentRow?.mfgDate || ''} 
@@ -187,7 +190,7 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
                 </div>
                 
                 <div className="form-field-wrapper">
-<label className="form-label">Expiry Date</label>
+<label className="form-label">{t("Expiry Date")}</label>
                   <input 
                     type="date" 
                     value={currentRow?.expiryDate || ''} 
@@ -206,7 +209,7 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
               onClick={() => setExpandedRowSection(expandedRowSection === 'quantities' ? null : 'quantities')}
             >
               <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest flex items-center m-0 dark:text-gray-100">
-                <Calculator size={16} className="mr-2 text-rose-500"/> Quantity & Pricing
+                <Calculator size={16} className="mr-2 text-rose-500"/> {t("Quantity & Pricing")}
               </h4>
               <ChevronDown size={20} className={`text-gray-400 transition-transform ${expandedRowSection === 'quantities' ? 'rotate-180' : ''}`} />
             </header>
@@ -214,7 +217,7 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
               <div className="p-6 space-y-6 border-t border-gray-100 dark:border-gray-800">
                 <div className="form-grid gap-6 items-end">
                   <div className="form-field-wrapper">
-<label className="form-label">Unit</label>
+<label className="form-label">{t("Unit")}</label>
                     <select 
                       value={currentRow?.unit || 'PCS'} 
                       onChange={(e) => updateRow('unit', e.target.value)}
@@ -229,7 +232,7 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
                   {activeTab === 'physical_stock' ? (
                     <>
                       <div className="form-field-wrapper">
-<label className="form-label">Book Quantity</label>
+<label className="form-label">{t("Book Quantity")}</label>
                         <input 
                           type="number" 
                           value={currentRow?.qty || '0'} 
@@ -238,7 +241,7 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
                         />
                       </div>
                       <div className="form-field-wrapper">
-<label className="form-label">Physical Quantity</label>
+<label className="form-label">{t("Physical Quantity")}</label>
                         <input 
                           type="number" 
                           value={currentRow?.physicalQty || currentRow?.qty || ''} 
@@ -249,7 +252,7 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
                     </>
                   ) : (
                     <div className="form-field-wrapper">
-<label className="form-label">Quantity</label>
+<label className="form-label">{t("Quantity")}</label>
                       <input 
                         type="number" 
                         value={currentRow?.qty || ''} 
@@ -260,7 +263,7 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
                   )}
 
                   <div className="form-field-wrapper">
-<label className="form-label">Rate (₹)</label>
+<label className="form-label">{t("Rate (₹)")}</label>
                     <input 
                       type="number" 
                       step="0.01"
@@ -273,7 +276,7 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
 
                 {activeTab !== 'physical_stock' && (
                   <div className="bg-purple-50/50 rounded-xl p-4 border border-purple-100 flex items-center justify-between mt-4">
-                    <span className="text-sm font-bold text-purple-800 uppercase tracking-widest">Calculated Amount</span>
+                    <span className="text-sm font-bold text-purple-800 uppercase tracking-widest">{t("Calculated Amount")}</span>
                     <span className="text-xl font-black text-gray-900 dark:text-white">
                       ₹ {((parseFloat(currentRow?.qty || '0') * parseFloat(currentRow?.rate || '0')) || 0).toFixed(2)}
                     </span>
@@ -289,15 +292,11 @@ export const InventoryEditModal: React.FC<InventoryEditModalProps> = ({
         <button 
           onClick={onClose}
           className="px-6 py-2.5 bg-gray-100 text-gray-700 font-bold text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:text-gray-200"
-        >
-          Cancel
-        </button>
+        >{t("Cancel")}</button>
         <button 
           onClick={onClose}
           className="px-8 py-2.5 bg-purple-600 text-white font-bold text-sm rounded-xl hover:bg-purple-700 transition-colors shadow-sm active:scale-95 text-center"
-        >
-          Update Details
-        </button>
+        >{t("Update Details")}</button>
       </div>
     </div>
   );

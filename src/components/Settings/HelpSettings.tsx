@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from '../../context/LanguageContext';
 import { 
   HelpCircle, Search, BookOpen, Sparkles, ChevronRight, CheckCircle, ArrowRight, 
   ShieldCheck, Database, RefreshCw, Settings, Sliders, Activity, Lock, Layers, 

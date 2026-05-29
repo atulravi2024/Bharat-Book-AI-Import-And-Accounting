@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState } from 'react';
 import { MainTab } from './components/MainTab';
 import { SalesTab } from './components/SalesTab';
@@ -29,7 +28,7 @@ interface DashboardViewProps {
 type DashboardTab = 'overview' | 'sales' | 'purchase' | 'payment' | 'receipts' | 'journal' | 'contra' | 'bank' | 'inventory';
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNavigateToView, defaultTab, onTabChange }) => {
-  const { t } = useLanguage();
+  const { t, formatNumber } = useLanguage();
   const getInitialTab = (): DashboardTab => {
     let tab = defaultTab as string;
     if (tab === 'main') tab = 'overview';
@@ -114,11 +113,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
     })).filter(item => item.value > 0);
 
     // Advanced Metrics
+    const errorRateNum = vouchers.length > 0 ? (vouchers.filter((v: any) => v.confidence === "low").length / vouchers.length * 100) : 0;
     const advanceMetrics = {
-        processingSpeed: vouchers.length > 0 ? "1.2s" : "0.0s",
-        errorRate: vouchers.length > 0 ? (vouchers.filter((v: any) => v.confidence === "low").length / vouchers.length * 100).toFixed(1) + "%" : "0.0%",
-        activeUsers: 4,
-        avgCompletion: "98.2%",
+        processingSpeed: vouchers.length > 0 ? `${formatNumber(1.2)}s` : `${formatNumber(0.0)}s`,
+        errorRate: `${formatNumber(errorRateNum, { maximumFractionDigits: 1 })}%`,
+        activeUsers: formatNumber(4),
+        avgCompletion: `${formatNumber(98.2)}%`,
         userActivity: [
             { user: "Atul Ravi", action: "Bulk Import", count: 24, time: "2h ago" },
             { user: "System AI", action: "Auto-Mapping", count: 156, time: "Now" },
@@ -127,13 +127,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
     };
 
     // Masters Analysis
-    const getTopMasters = (collection: string) => {
+    const getTopMasters = (collection: string, typeFilter?: string) => {
       const counts: Record<string, number> = {};
-      vouchers.forEach(v => {
+      const filtered = typeFilter ? vouchers.filter(v => typeof v.type === 'string' && v.type.toLowerCase().replace(/[\s_]+/g, '') === typeFilter.toLowerCase()) : vouchers;
+      filtered.forEach(v => {
         const val = String((v as any)[collection]?.value || '');
-        if (val) counts[val] = (counts[val] || 0) + 1;
+        if (val) counts[val] = (counts[val] || 0) + Number((v as any).amount?.value || 1); // By volume if amount exists
       });
-      return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([name, count]) => ({ name, count }));
+      return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([name, value]) => ({ name, value }));
     };
 
     return {
@@ -144,7 +145,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
       typeDistribution,
       advanceMetrics,
       topParties: getTopMasters('partyName'),
-      topLedgers: getTopMasters('ledger')
+      topLedgers: getTopMasters('ledger'),
+      topPartiesSales: getTopMasters('partyName', 'sales'),
+      topPartiesPurchase: getTopMasters('partyName', 'purchase'),
+      topLedgersReceipt: getTopMasters('partyName', 'receipt'), 
+      topLedgersPayment: getTopMasters('partyName', 'payment'), 
+      topLedgersContra: getTopMasters('partyName', 'contra'), 
+      topLedgersJournal: getTopMasters('ledger', 'journal'),
     };
   }, [vouchers]);
 
@@ -177,14 +184,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
           
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
             <div className="flex bg-white dark:bg-gray-800 rounded-2xl p-1 shadow-sm border border-premium-slate-100 dark:border-gray-700 overflow-x-auto custom-scrollbar h-fit snap-x w-full sm:w-auto">
-              <div className="snap-start"><TabButton id="overview" label="Overview" icon={Layers} /></div>
-              <div className="snap-start"><TabButton id="sales" label="Sales" icon={TrendingUp} /></div>
-              <div className="snap-start"><TabButton id="purchase" label="Purchase" icon={Package} /></div>
-              <div className="snap-start"><TabButton id="payment" label="Payment" icon={CreditCard} /></div>
-              <div className="snap-start"><TabButton id="receipts" label="Receipt" icon={Receipt} /></div>
-              <div className="snap-start"><TabButton id="bank" label="Bank Report" icon={ArrowDownRight} /></div>
-              <div className="snap-start"><TabButton id="journal" label="Journal" icon={FileText} /></div>
-              <div className="snap-start"><TabButton id="contra" label="Contra" icon={Repeat} /></div>
+              <div className="snap-start"><TabButton id="overview" label={t("Overview")} icon={Layers} /></div>
+              <div className="snap-start"><TabButton id="sales" label={t("Sales")} icon={TrendingUp} /></div>
+              <div className="snap-start"><TabButton id="purchase" label={t("Purchase")} icon={Package} /></div>
+              <div className="snap-start"><TabButton id="payment" label={t("Payment")} icon={CreditCard} /></div>
+              <div className="snap-start"><TabButton id="receipts" label={t("Receipt")} icon={Receipt} /></div>
+              <div className="snap-start"><TabButton id="bank" label={t("Bank Report")} icon={ArrowDownRight} /></div>
+              <div className="snap-start"><TabButton id="journal" label={t("Journal")} icon={FileText} /></div>
+              <div className="snap-start"><TabButton id="contra" label={t("Contra")} icon={Repeat} /></div>
             </div>
           </div>
 
@@ -204,91 +211,4 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
       </div>
     </div>
   );
-};
-
-const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }: any) => (
-  <div className="bg-white p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-premium-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] group hover:shadow-2xl hover:shadow-blue-100/30 transition-all duration-500 relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-    <div className={`absolute -top-4 -right-4 w-20 h-20 sm:w-24 sm:h-24 ${bg} rounded-full opacity-10 group-hover:scale-150 transition-transform duration-700`}></div>
-    <div className="flex items-center justify-between mb-4 sm:mb-6 relative z-10">
-      <div className={`w-12 h-12 sm:w-14 sm:h-14 ${bg} ${color} rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6 group-hover:scale-110`}>
-        <Icon size={20} className="sm:w-6 sm:h-6" strokeWidth={2.5} />
-      </div>
-      {isDemo && (
-        <div className="flex flex-col items-end">
-          <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 animate-pulse border border-amber-600">DEMO</span>
-        </div>
-      )}
-    </div>
-    <div className="relative z-10">
-      <p className="text-[9px] sm:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 sm:mb-2">{label}</p>
-      <h3 className="text-2xl sm:text-3xl font-black text-gray-900 font-display tracking-tight leading-none truncate max-w-[200px] sm:max-w-none dark:text-white">{val}</h3>
-      <p className="text-[9px] sm:text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2 sm:mt-4 sm:opacity-60 group-hover:opacity-100 transition-opacity dark:text-gray-400">
-        {sub}
-      </p>
-    </div>
-  </div>
-);
-
-const MastersList = ({ title, data, icon: Icon, color, bg }: any) => (
-    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-premium-slate-100 dark:bg-gray-800 dark:border-gray-700">
-      <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-8 flex items-center dark:text-white">
-        <Icon size={18} className={`mr-3 ${color}`} /> {title}
-      </h3>
-      <div className="space-y-6">
-        {data.map((p: any, i: number) => (
-          <div key={i} className="flex items-center justify-between group">
-            <div className="flex items-center">
-              <div className={`w-10 h-10 ${bg} ${color} rounded-xl flex items-center justify-center text-xs font-black group-hover:scale-110 transition-transform`}>
-                {p.name.charAt(0)}
-              </div>
-              <div className="ml-4 flex flex-col">
-                  <span className="text-xs font-black text-gray-900 truncate max-w-[150px] uppercase tracking-wide leading-none mb-1 dark:text-white">{p.name}</span>
-                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Active Partner</span>
-              </div>
-            </div>
-            <div className="flex flex-col items-end">
-              <span className="text-[10px] font-black text-gray-900 mb-2 uppercase tracking-widest dark:text-white">{p.count} Vectors</span>
-              <div className="w-24 h-1.5 bg-gray-50 rounded-full overflow-hidden border border-premium-slate-50 dark:bg-gray-900">
-                <div className={`h-full ${color.replace('text-', 'bg-')}`} style={{ width: `${(p.count / (data[0]?.count || 1)) * 100}%` }}></div>
-              </div>
-            </div>
-          </div>
-        ))}
-        {data.length === 0 && <p className="text-center text-gray-400 py-8 text-[10px] font-black uppercase tracking-widest">Awaiting Transaction Cycles</p>}
-      </div>
-    </div>
-);
-
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white p-4 rounded-2xl shadow-2xl border border-premium-slate-100 dark:bg-gray-800 dark:border-gray-700">
-        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">{label}</p>
-        <div className="space-y-2">
-            {payload.map((entry: any, i: number) => (
-                <div key={i} className="flex items-center justify-between gap-4">
-                    <div className="flex items-center">
-                        <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: entry.color }}></div>
-                        <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wider dark:text-gray-300">{entry.name}</span>
-                    </div>
-                    <span className="text-xs font-black text-gray-900 font-display dark:text-white">₹{Number(entry.value).toLocaleString('en-IN')}</span>
-                </div>
-            ))}
-        </div>
-      </div>
-    );
-  }
-  return null;
-};
-
-const SimpleTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-gray-900 p-3 rounded-xl shadow-2xl">
-          <p className="text-[10px] font-black text-white uppercase tracking-widest">{payload[0].name}</p>
-          <p className="text-xs font-black text-blue-400 font-display mt-1">{payload[0].value} Units</p>
-        </div>
-      );
-    }
-    return null;
 };

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from '../../../context/LanguageContext';
 import { AddIcon, DeleteIcon } from '../../icons/IconComponents';
 
 

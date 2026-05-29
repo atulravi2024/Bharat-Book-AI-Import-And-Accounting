@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useLanguage } from "../../../context/LanguageContext";
+import { useLanguage } from '../../../context/LanguageContext';
 import { HelpCircle, Shield, Sliders, UserCheck, Compass, SlidersHorizontal, Lock, Users, ChevronRight, Activity, BookOpen, Database, RefreshCw, Sparkles } from 'lucide-react';
 
 export const UserHelpTab: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, formatNumber } = useLanguage();
   // Sub-pages state
   const [activeTab, setActiveTab] = useState<'guides' | 'sandbox' | 'reference'>('guides');
 
@@ -652,7 +652,7 @@ export const UserHelpTab: React.FC = () => {
                     <div className="flex justify-between items-center bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-800 px-3 py-2 rounded-md">
                       <span className="text-gray-500 uppercase tracking-wider text-[9px]">{t("Max transaction size")}</span>
                       <span className="text-gray-900 dark:text-white uppercase tracking-wider">
-                        {currentPolicy.maxTx === 0 ? 'Blocked / Unlimited' : `₹ ${currentPolicy.maxTx.toLocaleString('en-IN')}`}
+                        {currentPolicy.maxTx === 0 ? 'Blocked / Unlimited' : `₹ ${formatNumber(Number(currentPolicy.maxTx))}`}
                       </span>
                     </div>
 

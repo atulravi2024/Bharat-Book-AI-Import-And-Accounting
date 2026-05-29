@@ -65,7 +65,7 @@ export const SafeResponsiveContainer = ({ children, minHeight = 200, minWidth = 
 };
 
 export const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }: any) => {
-  const { t } = useLanguage();
+  const { t, formatNumber } = useLanguage();
   return (
   <div className="bg-white p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-premium-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] group hover:shadow-2xl hover:shadow-blue-100/30 transition-all duration-500 relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
     <div className={`absolute -top-4 -right-4 w-20 h-20 sm:w-24 sm:h-24 ${bg} rounded-full opacity-10 group-hover:scale-150 transition-transform duration-700`}></div>
@@ -75,7 +75,7 @@ export const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }:
       </div>
       {isDemo && (
         <div className="flex flex-col items-end">
-          <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 animate-pulse border border-amber-600">DEMO</span>
+          <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-200 animate-pulse border border-amber-600">{t("DEMO")}</span>
         </div>
       )}
     </div>
@@ -91,6 +91,7 @@ export const KPIComponent = ({ label, val, sub, icon: Icon, color, bg, isDemo }:
 };
 
 export const CustomTooltip = ({ active, payload, label }: any) => {
+  const { t, formatNumber } = useLanguage();
   if (active && payload && payload.length) {
     return (
       <div className="bg-white p-4 rounded-2xl shadow-2xl border border-premium-slate-100 dark:bg-gray-800 dark:border-gray-700">
@@ -100,9 +101,9 @@ export const CustomTooltip = ({ active, payload, label }: any) => {
                 <div key={i} className="flex items-center justify-between gap-4">
                     <div className="flex items-center">
                         <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: entry.color }}></div>
-                        <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wider dark:text-gray-300">{entry.name}</span>
+                        <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wider dark:text-gray-300">{t(entry.name)}</span>
                     </div>
-                    <span className="text-xs font-black text-gray-900 font-display dark:text-white">₹{Number(entry.value).toLocaleString('en-IN')}</span>
+                    <span className="text-xs font-black text-gray-900 font-display dark:text-white">₹{formatNumber(Number(entry.value))}</span>
                 </div>
             ))}
         </div>
@@ -113,11 +114,12 @@ export const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export const SimpleTooltip = ({ active, payload }: any) => {
+    const { t, formatNumber } = useLanguage();
     if (active && payload && payload.length) {
       return (
         <div className="bg-gray-900 p-3 rounded-xl shadow-2xl">
-          <p className="text-[10px] font-black text-white uppercase tracking-widest">{payload[0].name}</p>
-          <p className="text-xs font-black text-blue-400 font-display mt-1">{payload[0].value} Units</p>
+          <p className="text-[10px] font-black text-white uppercase tracking-widest">{t(payload[0].name)}</p>
+          <p className="text-xs font-black text-blue-400 font-display mt-1">{formatNumber(Number(payload[0].value))} {t("units")}</p>
         </div>
       );
     }

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { SettingsIcon, CheckCircleIcon, UploadIcon, DownloadIcon, UndoIcon } from "../icons/IconComponents";
 import { useFormSettings, defaultSettings } from "../../app/useFormSettings";
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from '../../context/LanguageContext';
 
 const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0">

@@ -289,29 +289,18 @@ Return JSON format:
             textResult = await callExternalAi(prompt, settings, settings.bankingModel || settings.model);
         } else {
             const internalModelId = sanitizeModelId(settings.bankingModel || settings.internalModel || "gemini-2.5-flash");
-            const extractionSchema = {
-                type: SchemaType.OBJECT,
-                properties: {
-                    name: { type: SchemaType.STRING },
-                    type: { type: SchemaType.STRING, enum: ['person', 'firm', 'other'] },
-                    confidence: { type: SchemaType.STRING, enum: ['High', 'Medium', 'Low'] }
-                },
-                required: ["name", "type", "confidence"]
-            };
-
             try {
                 const model = genAI.getGenerativeModel({
                     model: internalModelId,
                     generationConfig: {
                         responseMimeType: "application/json",
-                        responseSchema: extractionSchema as any,
                     }
                 });
 
-                const result = await model.generateContent(prompt);
+                const result = await model.generateContent(prompt + "\n\nIMPORTANT: Output ONLY valid JSON matching the specified structure.");
                 textResult = (await result.response).text();
             } catch (err: any) {
-                console.error("Internal AI Error Details:", err);
+                console.warn("Internal AI Error Details:", err);
                 const fallbackModel = genAI.getGenerativeModel({ model: internalModelId });
                 const result = await fallbackModel.generateContent(prompt + "\n\nIMPORTANT: Output ONLY valid JSON matching the specified structure.");
                 textResult = (await result.response).text();
@@ -367,26 +356,23 @@ Return JSON format:
             textResult = await callExternalAi(prompt, settings, settings.bankingModel || settings.model);
         } else {
             const internalModelId = sanitizeModelId(settings.bankingModel || settings.internalModel || "gemini-2.5-flash");
-            const matchSchema = {
-                type: SchemaType.OBJECT,
-                properties: {
-                    matchedName: { type: SchemaType.STRING, description: "The matched name, or empty string if no match." },
-                    confidenceScore: { type: SchemaType.INTEGER, description: "Confidence score from 0 to 100" },
-                    isMatch: { type: SchemaType.BOOLEAN }
-                },
-                required: ["matchedName", "confidenceScore", "isMatch"]
-            };
+            
+            try {
+                const model = genAI.getGenerativeModel({
+                    model: internalModelId,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                    }
+                });
 
-            const model = genAI.getGenerativeModel({
-                model: internalModelId,
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: matchSchema as any,
-                }
-            });
-
-            const result = await model.generateContent(prompt);
-            textResult = (await result.response).text();
+                const result = await model.generateContent(prompt + "\n\nIMPORTANT: Output ONLY valid JSON matching the specified structure.");
+                textResult = (await result.response).text();
+            } catch (err: any) {
+                console.warn("AI Generation with JSON mime-type failed, retrying without mime-type:", err);
+                const fallbackModel = genAI.getGenerativeModel({ model: internalModelId });
+                const result = await fallbackModel.generateContent(prompt + "\n\nIMPORTANT: Output ONLY valid JSON matching the specified structure.");
+                textResult = (await result.response).text();
+            }
         }
 
         const result = JSON.parse(textResult);

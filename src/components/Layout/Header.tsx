@@ -80,7 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, onViewCh
             <button
               onClick={handleToggle}
               className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-2xl text-gray-400 hover:bg-premium-slate-50 dark:hover:bg-gray-700 hover:text-amber-500 transition-all"
-              title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+              title={theme === 'light' ? t('Switch to dark mode') : t('Switch to light mode')}
             >
               <span className="text-lg sm:text-xl">{theme === 'light' ? '🌙' : '☀️'}</span>
             </button>

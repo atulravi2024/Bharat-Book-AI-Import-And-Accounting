@@ -1,3 +1,4 @@
+import { useLanguage } from '../../../../context/LanguageContext';
 import { Edit2, Trash2 } from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import { useFormSettings } from "../../../../app/useFormSettings";
@@ -13,6 +14,8 @@ interface PriceListTabProps {
 }
 
 export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
+  const { t, formatNumber  } = useLanguage();
+
   const formSettings = useFormSettings();
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -48,13 +51,12 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
             <div className="p-4 bg-gray-50/30 border-b border-gray-100 flex justify-between items-center dark:bg-gray-800/30 dark:border-gray-800">
                 <div className="relative max-w-md w-full mr-4">
                     <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="text" placeholder="Search Price List..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="form-input pl-10 pr-4 text-sm" />
+                    <input type="text" placeholder={t("Search Price List...")} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="form-input pl-10 pr-4 text-sm" />
                 </div>
                 <div className="flex items-center">
                     <ImportExportButtons data={data} onSave={onSave} entityName="PriceListTab" />
                     <button onClick={() => { setEditingId(null); setFormData({name:''}); setIsModalOpen(true); }} className="bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-md whitespace-nowrap hover:bg-blue-700 active:scale-95 transition-all">
-                    <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">Add Price List
-                </span></button>
+                    <AddIcon className="lg:mr-2" /> <span className="hidden lg:inline-block">{t("Add Price List")}</span></button>
                 </div>
             </div>
 
@@ -63,19 +65,19 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                     <table className="w-full text-left border-collapse whitespace-nowrap">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Name</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Code</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Status</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Description / Type</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Currency</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Default</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Industry</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Group</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Valid From</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Valid To</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Base List</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Adjustment</th>
-                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">Actions</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Name")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Code")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Status")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Description / Type")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Currency")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Default")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Industry")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Group")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Valid From")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Valid To")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Base List")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">{t("Adjustment")}</th>
+                                <th className="p-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">{t("Actions")}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-gray-800">
@@ -85,16 +87,16 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200 font-mono">{m.code}</td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
             {m.status === 'Active' ? (
-                <span className="px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-bold text-[10px] uppercase">Active</span>
+                <span className="px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-bold text-[10px] uppercase">{t("Active")}</span>
             ) : m.status === 'Draft' ? (
-                <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-bold text-[10px] uppercase">Draft</span>
+                <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-bold text-[10px] uppercase">{t("Draft")}</span>
             ) : m.status === 'Inactive' ? (
-                <span className="px-1.5 py-0.5 rounded bg-red-50 text-red-600 font-bold text-[10px] uppercase">Inactive</span>
+                <span className="px-1.5 py-0.5 rounded bg-red-50 text-red-600 font-bold text-[10px] uppercase">{t("Inactive")}</span>
             ) : null}
         </td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.description || m.type || 'Sales'}</td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.currency && <span className="font-mono text-[10px] uppercase font-bold bg-green-50 text-green-700 px-1.5 py-0.5 rounded border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800">{m.currency}</span>}</td>
-        <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.isDefault && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800">Yes</span>}</td>
+        <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.isDefault && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800">{t("Yes")}</span>}</td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.industry && <span className="text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded font-medium dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800">{m.industry}</span>}</td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{m.applicableGroup && <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded font-medium dark:bg-purple-900/30 dark:text-purple-400 border border-purple-200 dark:border-purple-800">{m.applicableGroup}</span>}</td>
         <td className="p-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200 font-mono">{m.validFrom || '-'}</td>
@@ -106,15 +108,15 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                     {m.adjustmentValue > 0 ? '+' : ''}{m.adjustmentValue}{m.adjustmentType === 'Percentage' ? '%' : ` ${m.currency || ''}`}
                 </span>
             ) : m.basePriceList ? (
-                <span className="text-gray-400 font-medium italic">Exact Match</span>
+                <span className="text-gray-400 font-medium italic">{t("Exact Match")}</span>
             ) : (
                 <span className="text-gray-400 font-medium italic">-</span>
             )}
         </td>
                                     <td className="p-4 align-middle">
                                         <div className="flex items-center justify-center space-x-2 w-full h-full m-auto">
-                                            <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="mx-auto flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title="Edit"><Edit2 size={16} className="m-auto" /></button>
-                                            <button onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name||m.code})} className="mx-auto flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title="Delete"><Trash2 size={16} className="m-auto" /></button>
+                                            <button onClick={() => {setEditingId(m.id); setFormData(m); setIsModalOpen(true);}} className="mx-auto flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-lg transition-all active:scale-95" title={t("Edit")}><Edit2 size={16} className="m-auto" /></button>
+                                            <button onClick={() => setDeleteConfirmation({isOpen:true, id:m.id, name:m.name||m.code})} className="mx-auto flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-lg transition-all active:scale-95" title={t("Delete")}><Trash2 size={16} className="m-auto" /></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -126,7 +128,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                         <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 dark:bg-gray-900">
                             <SearchIcon className="text-gray-300 text-3xl" />
                         </div>
-                        <p className="text-gray-500 dark:text-gray-400">No data found matching your search</p>
+                        <p className="text-gray-500 dark:text-gray-400">{t("No data found matching your search")}</p>
                     </div>
                 )}
             </div>
@@ -136,7 +138,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                     <div className={`bg-white w-full h-full overflow-hidden flex flex-col dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl animate-in zoom-in-95 ${formSettings.currentModalMode === 'fullscreen' ? 'rounded-none max-w-full max-h-full' : 'rounded-2xl max-w-5xl max-h-[90vh]'}`}>
                         <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100 bg-gray-50/50 dark:border-gray-800">
                             <h2 className="font-bold text-base text-gray-900 flex items-center dark:text-white">
-                                {editingId ? 'Edit' : 'Add'} Price List
+                                {editingId ? t('Edit') : t('Add')} {t('Price List')}
                             </h2>
                             <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full dark:hover:bg-gray-600">
                                 <CancelIcon className="w-5 h-5" />
@@ -146,43 +148,43 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                         <div className="overflow-y-auto flex-1 p-6 space-y-4">
                             <div className="form-grid gap-4">
                                 <div className="form-field-wrapper col-span-1 md:col-span-2">
-                                    <label className="form-label">Name / Code *</label>
-                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="form-input" placeholder="Enter Price List Name..." autoFocus />
+                                    <label className="form-label">{t("Name / Code *")}</label>
+                                    <input type="text" value={formData.name || formData.code || ''} onChange={e => setFormData({...formData, name: e.target.value, code: e.target.value})} className="form-input" placeholder={t("Enter Price List Name...")} autoFocus />
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Type</label>
+                                    <label className="form-label dark:text-gray-400">{t("Type")}</label>
                                     <select value={formData.type || 'Sales'} onChange={e => setFormData({...formData, type: e.target.value})} className="form-input">
-                                        <option value="Sales">Sales (Selling Price)</option>
-                                        <option value="Purchase">Purchase (Buying Price)</option>
+                                        <option value="Sales">{t("Sales (Selling Price)")}</option>
+                                        <option value="Purchase">{t("Purchase (Buying Price)")}</option>
                                     </select>
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Currency</label>
-                                    <input type="text" value={formData.currency || 'INR'} onChange={e => setFormData({...formData, currency: e.target.value})} className="form-input" placeholder="e.g. INR, USD..." />
+                                    <label className="form-label dark:text-gray-400">{t("Currency")}</label>
+                                    <input type="text" value={formData.currency || 'INR'} onChange={e => setFormData({...formData, currency: e.target.value})} className="form-input" placeholder={t("e.g. INR, USD...")} />
                                 </div>
                                 
                                 <div className="form-field-wrapper col-span-1 md:col-span-2">
-                                    <label className="form-label">Description / Notes</label>
-                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="form-input" placeholder="Add any extra details..." />
+                                    <label className="form-label">{t("Description / Notes")}</label>
+                                    <input type="text" value={formData.description || ''} onChange={e => setFormData({...formData, description: e.target.value})} className="form-input" placeholder={t("Add any extra details...")} />
                                 </div>
 
                                 {/* Applicability Section */}
                                 <div className="form-field-wrapper col-span-1 md:col-span-2 mt-4 mb-2">
-                                    <h4 className="font-bold text-gray-700 dark:text-gray-300 border-b pb-2 dark:border-gray-700 text-sm">Applicability & Validity</h4>
+                                    <h4 className="font-bold text-gray-700 dark:text-gray-300 border-b pb-2 dark:border-gray-700 text-sm">{t("Applicability & Validity")}</h4>
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Industry / Domain Focus</label>
+                                    <label className="form-label dark:text-gray-400">{t("Industry / Domain Focus")}</label>
                                     <select value={formData.industry || 'General'} onChange={e => setFormData({...formData, industry: e.target.value})} className="form-input">
-                                        <option value="General">General Business / Standard</option>
-                                        <option value="Healthcare">Healthcare (Doctors, Clinics, IPD/OPD)</option>
-                                        <option value="Retail">Retail (Clothes, Bartan, Walk-ins)</option>
-                                        <option value="Wholesale">Wholesale & Distribution (B2B)</option>
-                                        <option value="Ecommerce">E-Commerce & Online Stores</option>
+                                        <option value="General">{t("General Business / Standard")}</option>
+                                        <option value="Healthcare">{t("Healthcare (Doctors, Clinics, IPD/OPD)")}</option>
+                                        <option value="Retail">{t("Retail (Clothes, Bartan, Walk-ins)")}</option>
+                                        <option value="Wholesale">{t("Wholesale & Distribution (B2B)")}</option>
+                                        <option value="Ecommerce">{t("E-Commerce & Online Stores")}</option>
                                     </select>
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Customer/Supplier Group</label>
-                                    <input list="customerGroups" type="text" value={formData.applicableGroup || ''} onChange={e => setFormData({...formData, applicableGroup: e.target.value})} className="form-input" placeholder="e.g. Retail, B2B, OPD..." />
+                                    <label className="form-label dark:text-gray-400">{t("Customer/Supplier Group")}</label>
+                                    <input list="customerGroups" type="text" value={formData.applicableGroup || ''} onChange={e => setFormData({...formData, applicableGroup: e.target.value})} className="form-input" placeholder={t("e.g. Retail, B2B, OPD...")} />
                                     <datalist id="customerGroups">
                                         <option value="Retail Customers" />
                                         <option value="B2B / Wholesalers" />
@@ -196,53 +198,53 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                                     </datalist>
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Valid From</label>
+                                    <label className="form-label dark:text-gray-400">{t("Valid From")}</label>
                                     <input type="date" value={formData.validFrom || ''} onChange={e => setFormData({...formData, validFrom: e.target.value})} className="form-input" />
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Valid To</label>
+                                    <label className="form-label dark:text-gray-400">{t("Valid To")}</label>
                                     <input type="date" value={formData.validTo || ''} onChange={e => setFormData({...formData, validTo: e.target.value})} className="form-input" />
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Status</label>
+                                    <label className="form-label dark:text-gray-400">{t("Status")}</label>
                                     <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value})} className="form-input">
-                                        <option value="Active">Active</option>
-                                        <option value="Draft">Draft</option>
-                                        <option value="Inactive">Inactive</option>
+                                        <option value="Active">{t("Active")}</option>
+                                        <option value="Draft">{t("Draft")}</option>
+                                        <option value="Inactive">{t("Inactive")}</option>
                                     </select>
                                 </div>
 
                                 {/* Pricing Strategy Section */}
                                 <div className="form-field-wrapper col-span-1 md:col-span-2 mt-4 mb-2">
-                                    <h4 className="font-bold text-gray-700 dark:text-gray-300 border-b pb-2 dark:border-gray-700 text-sm">Pricing Calculation Rules</h4>
+                                    <h4 className="font-bold text-gray-700 dark:text-gray-300 border-b pb-2 dark:border-gray-700 text-sm">{t("Pricing Calculation Rules")}</h4>
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Base Price List</label>
+                                    <label className="form-label dark:text-gray-400">{t("Base Price List")}</label>
                                     <select value={formData.basePriceList || ''} onChange={e => setFormData({...formData, basePriceList: e.target.value})} className="form-input">
-                                        <option value="">None (Standalone)</option>
+                                        <option value="">{t("None (Standalone)")}</option>
                                         {data?.map((pl: any) => pl.id !== formData.id && (
                                             <option key={pl.id} value={pl.id}>{pl.name || pl.code}</option>
                                         ))}
                                     </select>
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Adjustment Type</label>
+                                    <label className="form-label dark:text-gray-400">{t("Adjustment Type")}</label>
                                     <select value={formData.adjustmentType || 'None'} onChange={e => setFormData({...formData, adjustmentType: e.target.value})} className="form-input" disabled={!formData.basePriceList}>
-                                        <option value="None">No Adjustment</option>
-                                        <option value="Percentage">Percentage (%)</option>
-                                        <option value="Amount">Fixed Amount</option>
+                                        <option value="None">{t("No Adjustment")}</option>
+                                        <option value="Percentage">{t("Percentage (%)")}</option>
+                                        <option value="Amount">{t("Fixed Amount")}</option>
                                     </select>
                                 </div>
                                 <div className="form-field-wrapper col-span-1">
-                                    <label className="form-label dark:text-gray-400">Adjustment Value (+/-)</label>
-                                    <input type="number" value={formData.adjustmentValue || ''} onChange={e => setFormData({...formData, adjustmentValue: parseFloat(e.target.value)})} className="form-input" placeholder="e.g. -10 for 10% discount" disabled={!formData.basePriceList || formData.adjustmentType === 'None'} />
+                                    <label className="form-label dark:text-gray-400">{t("Adjustment Value (+/-)")}</label>
+                                    <input type="number" value={formData.adjustmentValue || ''} onChange={e => setFormData({...formData, adjustmentValue: parseFloat(e.target.value)})} className="form-input" placeholder={t("e.g. -10 for 10% discount")} disabled={!formData.basePriceList || formData.adjustmentType === 'None'} />
                                 </div>
                                 
                                 <div className="form-field-wrapper col-span-1 flex flex-col justify-end pb-2">
-                                    <label className="form-label dark:text-gray-400">Default Price List</label>
+                                    <label className="form-label dark:text-gray-400">{t("Default Price List")}</label>
                                     <select value={formData.isDefault === true ? 'true' : 'false'} onChange={e => setFormData({...formData, isDefault: e.target.value === 'true'})} className="form-input">
-                                        <option value="true">Enable (Default)</option>
-                                        <option value="false">Disable / No</option>
+                                        <option value="true">{t("Enable (Default)")}</option>
+                                        <option value="false">{t("Disable / No")}</option>
                                     </select>
                                 </div>
                                 
@@ -250,8 +252,8 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                         </div>
 
                         <div className="flex space-x-3 p-6 border-t border-gray-100 bg-gray-50/50 dark:border-gray-800">
-                             <button onClick={() => setIsModalOpen(false)} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition">Cancel</button>
-                             <button onClick={handleSave} className="flex-1 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-md shadow-blue-200 transition">Save Changes</button>
+                             <button onClick={() => setIsModalOpen(false)} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition">{t("Cancel")}</button>
+                             <button onClick={handleSave} className="flex-1 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-md shadow-blue-200 transition">{t("Save Changes")}</button>
                         </div>
                     </div>
                 </div>
@@ -263,11 +265,11 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ data, onSave }) => {
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
                             <DeleteIcon className="text-3xl" />
                         </div>
-                        <h2 className="font-bold text-xl mb-2 text-gray-900 dark:text-white">Delete Price List?</h2>
-                        <p className="text-gray-500 mb-6 text-sm dark:text-gray-400">Are you sure you want to delete "{deleteConfirmation.name}"?</p>
+                        <h2 className="font-bold text-xl mb-2 text-gray-900 dark:text-white">{t("Delete Price List?")}</h2>
+                        <p className="text-gray-500 mb-6 text-sm dark:text-gray-400">{t("Are you sure you want to delete")} "{deleteConfirmation.name}"?</p>
                         <div className="flex space-x-3">
-                             <button onClick={() => setDeleteConfirmation(null)} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition">Cancel</button>
-                             <button onClick={confirmDelete} className="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-md shadow-red-200 transition">Delete</button>
+                             <button onClick={() => setDeleteConfirmation(null)} className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 hover:dark:bg-gray-700 transition">{t("Cancel")}</button>
+                             <button onClick={confirmDelete} className="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-md shadow-red-200 transition">{t("Delete")}</button>
                         </div>
                     </div>
                 </div>

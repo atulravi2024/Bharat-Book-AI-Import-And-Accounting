@@ -1,4 +1,5 @@
 import React from "react";
+import { useLanguage } from "../../../../context/LanguageContext";
 import {
   ChevronUp,
   Info,
@@ -57,6 +58,7 @@ const AddressGeocoder: React.FC<AddressGeocoderProps> = ({
   onAddressResolved,
   setGeocodingStatus,
 }) => {
+  const { t } = useLanguage();
   const geocodingLib = useMapsLibrary("geocoding");
   const map = useMap();
 
@@ -70,7 +72,7 @@ const AddressGeocoder: React.FC<AddressGeocoderProps> = ({
     )
       return;
 
-    setGeocodingStatus("Invoking Google Reverse-Geocoding Engine...");
+    setGeocodingStatus(t("Invoking Google Reverse-Geocoding Engine..."));
     const geocoder = new geocodingLib.Geocoder();
     const latlng = { lat: latitude, lng: longitude };
 
@@ -126,7 +128,7 @@ const AddressGeocoder: React.FC<AddressGeocoderProps> = ({
 
         onAddressResolved({ road, city, state, country, postal });
         setGeocodingStatus(
-          "Coordinates and street address verified via Google Maps API",
+          t("Coordinates and street address verified via Google Maps API"),
         );
 
         if (map) {
@@ -154,6 +156,7 @@ const OfflineGeocoder: React.FC<AddressGeocoderProps> = ({
   onAddressResolved,
   setGeocodingStatus,
 }) => {
+  const { t } = useLanguage();
   React.useEffect(() => {
     if (
       latitude === null ||
@@ -163,7 +166,7 @@ const OfflineGeocoder: React.FC<AddressGeocoderProps> = ({
     )
       return;
 
-    setGeocodingStatus("Invoking backup OSM Reverse-Geocoding Engine...");
+    setGeocodingStatus(t("Invoking backup OSM Reverse-Geocoding Engine..."));
 
     const controller = new AbortController();
 
@@ -212,7 +215,7 @@ const OfflineGeocoder: React.FC<AddressGeocoderProps> = ({
 
           onAddressResolved({ road, city, state, country, postal });
           setGeocodingStatus(
-            "Coordinates and street address verified via backup OpenStreetMap API",
+            t("Coordinates and street address verified via backup OpenStreetMap API"),
           );
         } else {
           setGeocodingStatus(
@@ -256,6 +259,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
   rowNumber,
   voucherType,
 }) => {
+  const { t } = useLanguage();
   const [shouldDisplay, setShouldDisplay] = React.useState<boolean>(() => {
     try {
       const savedSettings = localStorage.getItem("bharat_book_app_settings");
@@ -1877,7 +1881,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
         >
           <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center dark:text-gray-100">
             <Info size={16} className="mr-2 text-slate-500" />{" "}
-            <span className="hidden sm:inline">System&nbsp;</span>Info
+            <span className="hidden sm:inline">{t("System")}&nbsp;</span>{t("Info")}
           </h3>
           <button
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -1896,62 +1900,62 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
         {!collapsed && (
           <div className="form-grid gap-6 animate-in fade-in slide-in-from-top-2 duration-300 mt-5">
             <div className="form-field-wrapper">
-              <label className="form-label">Created Date</label>
+              <label className="form-label">{t("Created Date")}</label>
               <input
                 type="text"
                 readOnly
                 value={
-                  createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"
+                  createdAt ? new Date(createdAt).toLocaleDateString() : t("N/A")
                 }
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">Created Time</label>
+              <label className="form-label">{t("Created Time")}</label>
               <input
                 type="text"
                 readOnly
                 value={
-                  createdAt ? new Date(createdAt).toLocaleTimeString() : "N/A"
+                  createdAt ? new Date(createdAt).toLocaleTimeString() : t("N/A")
                 }
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">Last Modified Date</label>
+              <label className="form-label">{t("Last Modified Date")}</label>
               <input
                 type="text"
                 readOnly
                 value={
-                  updatedAt ? new Date(updatedAt).toLocaleDateString() : "N/A"
+                  updatedAt ? new Date(updatedAt).toLocaleDateString() : t("N/A")
                 }
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">Last Modified Time</label>
+              <label className="form-label">{t("Last Modified Time")}</label>
               <input
                 type="text"
                 readOnly
                 value={
-                  updatedAt ? new Date(updatedAt).toLocaleTimeString() : "N/A"
+                  updatedAt ? new Date(updatedAt).toLocaleTimeString() : t("N/A")
                 }
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">Row Number</label>
+              <label className="form-label">{t("Row Number")}</label>
               <input
                 type="text"
                 readOnly
                 value={
-                  rowNumber && rowNumber > 0 ? rowNumber.toString() : "N/A"
+                  rowNumber && rowNumber > 0 ? rowNumber.toString() : t("N/A")
                 }
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">GUID (UUID)</label>
+              <label className="form-label">{t("GUID (UUID)")}</label>
               <input
                 type="text"
                 readOnly
@@ -1960,68 +1964,66 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">Voucher Type</label>
+              <label className="form-label">{t("Voucher Type")}</label>
               <input
                 type="text"
                 readOnly
-                value={(voucherType || "N/A")
-                  .replace("_", " ")
-                  .replace(/\b\w/g, (c) => c.toUpperCase())}
+                value={voucherType ? t(voucherType.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())) : t("N/A")}
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
 
 
             <div className="form-field-wrapper">
-              <label className="form-label">Action Status</label>
+              <label className="form-label">{t("Action Status")}</label>
               <input
                 type="text"
                 readOnly
-                value={recordId ? "Updated" : "Created"}
+                value={recordId ? t("Updated") : t("Created")}
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold">
-                Persistent Storage Engine
+                {t("Persistent Storage Engine")}
               </label>
               <input
                 type="text"
                 readOnly
-                value="IndexedDB + React Storage Engine"
+                value={t("IndexedDB + React Storage Engine")}
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-xs font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold">
-                Operating Server Ingress Port
+                {t("Operating Server Ingress Port")}
               </label>
               <input
                 type="text"
                 readOnly
-                value="Cloud Run Container (Sandboxed Port 3000)"
+                value={t("Cloud Run Container (Sandboxed Port 3000)")}
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-xs font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold">
-                TLS Security Protocol
+                {t("TLS Security Protocol")}
               </label>
               <input
                 type="text"
                 readOnly
-                value="TLS 1.3 Secure / AES-256 Bit Encryption"
+                value={t("TLS 1.3 Secure / AES-256 Bit Encryption")}
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-xs font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold">
-                Local-Cloud Ingress Latency
+                {t("Local-Cloud Ingress Latency")}
               </label>
               <input
                 type="text"
                 readOnly
-                value={pingLatency}
+                value={t(pingLatency)}
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-bold text-emerald-600 dark:bg-gray-800 dark:border-gray-700 dark:text-emerald-400 cursor-not-allowed select-none"
               />
             </div>
@@ -2029,89 +2031,89 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             {/* Automatically Generated Audit Telemetry Fields */}
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold text-violet-700 dark:text-violet-400">
-                Creation Age (Days)
+                {t("Creation Age (Days)")}
               </label>
               <input
                 type="text"
                 readOnly
-                value={getDaysDifference(createdAt)}
+                value={t(getDaysDifference(createdAt))}
                 className="w-full px-4 py-3 bg-violet-50/85 border border-violet-200/50 rounded-xl text-sm font-bold text-violet-700 cursor-not-allowed select-none dark:bg-violet-950/20 dark:border-violet-900/40 dark:text-violet-300"
               />
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold text-indigo-700 dark:text-indigo-400">
-                Last Modified Age (Days)
+                {t("Last Modified Age (Days)")}
               </label>
               <input
                 type="text"
                 readOnly
-                value={getModifiedDaysDifference(updatedAt)}
+                value={t(getModifiedDaysDifference(updatedAt))}
                 className="w-full px-4 py-3 bg-indigo-50/85 border border-indigo-200/50 rounded-xl text-sm font-bold text-indigo-700 cursor-not-allowed select-none dark:bg-indigo-950/20 dark:border-indigo-900/40 dark:text-indigo-300"
               />
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold text-teal-700 dark:text-teal-400">
-                How many times modified
+                {t("How many times modified")}
               </label>
               <input
                 type="text"
                 readOnly
-                value={`${telemetry.modificationCount} time(s)`}
+                value={`${telemetry.modificationCount} ${t("time(s)")}`}
                 className="w-full px-4 py-3 bg-teal-50/85 border border-teal-200/50 rounded-xl text-sm font-bold text-teal-700 cursor-not-allowed select-none dark:bg-teal-950/20 dark:border-teal-900/40 dark:text-teal-300"
               />
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold text-emerald-700 dark:text-emerald-400">
-                How many times printed
+                {t("How many times printed")}
               </label>
               <input
                 type="text"
                 readOnly
-                value={`${telemetry.printCount} time(s)`}
+                value={`${telemetry.printCount} ${t("time(s)")}`}
                 className="w-full px-4 py-3 bg-emerald-50/85 border border-emerald-200/50 rounded-xl text-sm font-bold text-emerald-700 cursor-not-allowed select-none dark:bg-emerald-950/20 dark:border-emerald-900/40 dark:text-emerald-300"
               />
             </div>
             <div className="form-field-wrapper font-mono col-span-1 sm:col-span-2">
               <label className="form-label font-bold text-emerald-700 dark:text-emerald-400">
-                Last Printed Date & Timestamp
+                {t("Last Printed Date & Timestamp")}
               </label>
               <input
                 type="text"
                 readOnly
-                value={telemetry.lastPrintedTimestamp ? new Date(telemetry.lastPrintedTimestamp).toLocaleString() : "Never Printed"}
+                value={telemetry.lastPrintedTimestamp ? new Date(telemetry.lastPrintedTimestamp).toLocaleString() : t("Never Printed")}
                 className="w-full px-4 py-3 bg-emerald-50/85 border border-emerald-200/50 rounded-xl text-xs font-bold text-emerald-700 cursor-not-allowed select-none dark:bg-emerald-950/20 dark:border-emerald-900/40 dark:text-emerald-300"
               />
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold text-amber-700 dark:text-amber-400">
-                How many times exported
+                {t("How many times exported")}
               </label>
               <input
                 type="text"
                 readOnly
-                value={`${telemetry.exportCount} time(s)`}
+                value={`${telemetry.exportCount} ${t("time(s)")}`}
                 className="w-full px-4 py-3 bg-amber-50/85 border border-amber-200/50 rounded-xl text-sm font-bold text-amber-700 cursor-not-allowed select-none dark:bg-amber-950/20 dark:border-amber-900/40 dark:text-amber-300"
               />
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold text-amber-700 dark:text-amber-400">
-                Last Exported File Format
+                {t("Last Exported File Format")}
               </label>
               <input
                 type="text"
                 readOnly
-                value={telemetry.lastExportedFormat || "N/A"}
+                value={t(telemetry.lastExportedFormat || "N/A")}
                 className="w-full px-4 py-3 bg-amber-50/85 border border-amber-200/50 rounded-xl text-sm font-bold text-amber-700 cursor-not-allowed select-none dark:bg-amber-950/20 dark:border-amber-900/40 dark:text-amber-300"
               />
             </div>
             <div className="form-field-wrapper font-mono col-span-1 sm:col-span-2">
               <label className="form-label font-bold text-amber-700 dark:text-amber-400">
-                Last Exported Date & Timestamp
+                {t("Last Exported Date & Timestamp")}
               </label>
               <input
                 type="text"
                 readOnly
-                value={telemetry.lastExportedTimestamp ? new Date(telemetry.lastExportedTimestamp).toLocaleString() : "Never Exported"}
+                value={telemetry.lastExportedTimestamp ? new Date(telemetry.lastExportedTimestamp).toLocaleString() : t("Never Exported")}
                 className="w-full px-4 py-3 bg-amber-50/85 border border-amber-200/50 rounded-xl text-xs font-bold text-amber-700 cursor-not-allowed select-none dark:bg-amber-950/20 dark:border-amber-900/40 dark:text-amber-300"
               />
             </div>
@@ -2129,7 +2131,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
           onClick={() => setUserCollapsed(!userCollapsed)}
         >
           <h3 className="text-sm font-black text-sky-700 uppercase tracking-widest flex items-center dark:text-sky-400">
-            <User size={16} className="mr-2 text-sky-500" /> User info
+            <User size={16} className="mr-2 text-sky-500" /> {t("User info")}
           </h3>
           <div className="flex items-center gap-4">
             <button
@@ -2150,7 +2152,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
         {!userCollapsed && (
           <div className="form-grid gap-6 animate-in fade-in slide-in-from-top-2 duration-300 mt-5">
             <div className="form-field-wrapper">
-              <label className="form-label">Username</label>
+              <label className="form-label">{t("Username")}</label>
               <input
                 type="text"
                 readOnly
@@ -2159,14 +2161,14 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label font-bold text-gray-700 dark:text-gray-300">Auditor Profile & Role</label>
+              <label className="form-label font-bold text-gray-700 dark:text-gray-300">{t("Auditor Profile & Role")}</label>
               <select
                 value={auditorRole}
                 onChange={(e) => setAuditorRole(e.target.value)}
                 className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-xs font-bold focus:ring-2 focus:ring-sky-500/30 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 cursor-pointer"
               >
-                <option value="human">Standard Human Auditor (Requires Manual Sign-off)</option>
-                <option value="wizard">Wizard Agent (Automated continuous non-interacting audit)</option>
+                <option value="human">{t("Standard Human Auditor (Requires Manual Sign-off)")}</option>
+                <option value="wizard">{t("Wizard Agent (Automated continuous non-interacting audit)")}</option>
               </select>
             </div>
             {auditorRole === "wizard" && (
@@ -2181,7 +2183,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             )}
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold">
-                Operator Regional Timezone
+                {t("Operator Regional Timezone")}
               </label>
               <input
                 type="text"
@@ -2192,7 +2194,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             </div>
             <div className="form-field-wrapper">
               <label className="form-label font-bold">
-                Active Session Idle Timer
+                {t("Active Session Idle Timer")}
               </label>
               <input
                 type="text"
@@ -2202,7 +2204,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">Public IP Address</label>
+              <label className="form-label">{t("Public IP Address")}</label>
               <input
                 type="text"
                 readOnly
@@ -2211,7 +2213,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">Private (Local) IP Address</label>
+              <label className="form-label">{t("Private (Local) IP Address")}</label>
               <input
                 type="text"
                 readOnly
@@ -2221,7 +2223,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold">
-                Hardware MAC Address
+                {t("Hardware MAC Address")}
               </label>
               <input
                 type="text"
@@ -2231,7 +2233,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               />
             </div>
             <div className="form-field-wrapper font-sans">
-              <label className="form-label">Device Info (OS & Hardware)</label>
+              <label className="form-label">{t("Device Info (OS & Hardware)")}</label>
               <input
                 type="text"
                 readOnly
@@ -2240,7 +2242,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               />
             </div>
             <div className="form-field-wrapper font-sans">
-              <label className="form-label">Browser Detail</label>
+              <label className="form-label">{t("Browser Detail")}</label>
               <input
                 type="text"
                 readOnly
@@ -2249,7 +2251,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               />
             </div>
             <div className="form-field-wrapper font-sans">
-              <label className="form-label">Screen Size (Resolution)</label>
+              <label className="form-label">{t("Screen Size (Resolution)")}</label>
               <input
                 type="text"
                 readOnly
@@ -2271,7 +2273,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
           onClick={() => setLocationCollapsed(!locationCollapsed)}
         >
           <h3 className="text-sm font-black text-emerald-700 uppercase tracking-widest flex items-center dark:text-emerald-400">
-            <MapPin size={16} className="mr-2 text-emerald-500" /> Location info
+            <MapPin size={16} className="mr-2 text-emerald-500" /> {t("Location info")}
           </h3>
           <div className="flex items-center gap-4">
             <button
@@ -2299,12 +2301,12 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-gray-800 dark:text-gray-100">
-                    {isManualOverride ? "Manual Precision Mode" : "Sensing & Geolocation active"}
+                    {isManualOverride ? t("Manual Precision Mode") : t("Sensing & Geolocation active")}
                   </h4>
                   <p className="text-xs text-gray-500 dark:text-gray-400 max-w-xl leading-relaxed">
                     {isManualOverride 
-                      ? "Custom coordinate and address details override is active. You can edit any fields directly, search for an address, click on the map, or drag the green marker pin." 
-                      : "Automatic GPS and sequential secure IP sensors are managing your coordinates."}
+                      ? t("Custom coordinate and address details override is active. You can edit any fields directly, search for an address, click on the map, or drag the green marker pin.") 
+                      : t("Automatic GPS and sequential secure IP sensors are managing your coordinates.")}
                   </p>
                 </div>
               </div>
@@ -2404,7 +2406,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
 
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                Login Geolocation Latitude
+                {t("Login Geolocation Latitude")}
               </label>
               <input
                 type="text"
@@ -2412,7 +2414,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 value={latitude}
                 onChange={(e) => {
                   setLatitude(e.target.value);
-                  setGeolocationStatus("Manual latitude coordinates set");
+                  setGeolocationStatus(t("Manual latitude coordinates set"));
                 }}
                 className={`w-full px-4 py-3 border rounded-xl text-xs font-bold transition-all ${
                   isManualOverride
@@ -2423,7 +2425,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                Login Geolocation Longitude
+                {t("Login Geolocation Longitude")}
               </label>
               <input
                 type="text"
@@ -2431,7 +2433,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 value={longitude}
                 onChange={(e) => {
                   setLongitude(e.target.value);
-                  setGeolocationStatus("Manual longitude coordinates set");
+                  setGeolocationStatus(t("Manual longitude coordinates set"));
                 }}
                 className={`w-full px-4 py-3 border rounded-xl text-xs font-bold transition-all ${
                   isManualOverride
@@ -2442,19 +2444,19 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             </div>
             <div className="form-field-wrapper">
               <label className="form-label flex items-center justify-between text-gray-700 dark:text-gray-300 font-bold">
-                <span>Location Status & Sync</span>
+                <span>{t("Location Status & Sync")}</span>
                 <button
                   type="button"
                   onClick={requestGeolocation}
                   className="text-[10px] text-blue-600 hover:text-blue-800 font-bold underline cursor-pointer select-none font-sans"
                 >
-                  Refresh GPS
+                  {t("Refresh GPS")}
                 </button>
               </label>
               <input
                 type="text"
                 readOnly
-                value={geolocationStatus}
+                value={t(geolocationStatus)}
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-xs font-bold text-gray-500 cursor-not-allowed select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
               />
             </div>
@@ -2473,13 +2475,13 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 className="flex items-center justify-center w-full px-4 py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all duration-200 shadow-sm gap-2 animate-pulse hover:animate-none"
               >
                 <ExternalLink size={14} />
-                Open with Google Maps
+                {t("Open with Google Maps")}
               </a>
             </div>
 
             <div className="form-field-wrapper col-span-full font-sans border-t border-gray-100 dark:border-gray-700/50 pt-4 mt-2 animate-in fade-in duration-300">
               <span className="text-xs font-black text-gray-500 uppercase tracking-widest block mb-4 dark:text-gray-400">
-                Google Maps Reverse Geocoded Address
+                {t("Google Maps Reverse Geocoded Address")}
               </span>
 
               {/* Geocoding provider setup */}
@@ -2521,7 +2523,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                               const lngVal = e.detail.latLng.lng;
                               setLatitude(latVal.toFixed(6));
                               setLongitude(lngVal.toFixed(6));
-                              setGeolocationStatus("Location manually set via Map click");
+                              setGeolocationStatus(t("Location manually set via Map click"));
                               storeUserLocation(latVal.toFixed(6), lngVal.toFixed(6));
                             }
                           }}
@@ -2540,7 +2542,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                                 const lngVal = e.latLng.lng();
                                 setLatitude(latVal.toFixed(6));
                                 setLongitude(lngVal.toFixed(6));
-                                setGeolocationStatus("Location manually set via Marker drag");
+                                setGeolocationStatus(t("Location manually set via Marker drag"));
                                 storeUserLocation(latVal.toFixed(6), lngVal.toFixed(6));
                               }
                             }}
@@ -2549,7 +2551,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                           </AdvancedMarker>
                         </Map>
                         <div className="absolute bottom-2 left-2 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-medium text-white pointer-events-none">
-                          💡 Click anywhere on map or drag pin to re-locate
+                          💡 {t("Click anywhere on map or drag pin to re-locate")}
                         </div>
                       </div>
                     )}
@@ -2601,7 +2603,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                 <div className="form-field-wrapper col-span-full">
                   <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                    Street / Area Address
+                    {t("Street / Area Address")}
                   </label>
                   <input
                     type="text"
@@ -2617,7 +2619,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 </div>
                 <div className="form-field-wrapper">
                   <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                    City / Locality
+                    {t("City / Locality")}
                   </label>
                   <input
                     type="text"
@@ -2633,7 +2635,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 </div>
                 <div className="form-field-wrapper">
                   <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                    State / Province
+                    {t("State / Province")}
                   </label>
                   <input
                     type="text"
@@ -2649,7 +2651,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 </div>
                 <div className="form-field-wrapper">
                   <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                    Country
+                    {t("Country")}
                   </label>
                   <input
                     type="text"
@@ -2665,7 +2667,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 </div>
                 <div className="form-field-wrapper">
                   <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                    Postal / ZIP / PIN Code
+                    {t("Postal / ZIP / PIN Code")}
                   </label>
                   <input
                     type="text"
@@ -2696,7 +2698,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
         >
           <h3 className="text-sm font-black text-indigo-700 uppercase tracking-widest flex items-center dark:text-indigo-400">
             <ClipboardCheck size={16} className="mr-2 text-indigo-500" />{" "}
-            Audit Info
+            {t("Audit Info")}
           </h3>
           <button
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -2726,7 +2728,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               </div>
             ))}
             <div className="form-field-wrapper">
-              <label className="form-label">Record Integrity Signature</label>
+              <label className="form-label">{t("Record Integrity Signature")}</label>
               <input
                 type="text"
                 readOnly
@@ -2736,7 +2738,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             </div>
             <div className="form-field-wrapper">
               <label className="form-label font-bold">
-                Auditor Cryptographic Key
+                {t("Auditor Cryptographic Key")}
               </label>
               <input
                 type="text"
@@ -2746,52 +2748,52 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               />
             </div>
             <div className="form-field-wrapper">
-              <label className="form-label">Audit Log Status</label>
+              <label className="form-label">{t("Audit Log Status")}</label>
               <input
                 type="text"
                 readOnly
-                value="Ready for Audit Sync (Continuous Session Monitoring Active)"
+                value={t("Ready for Audit Sync (Continuous Session Monitoring Active)")}
                 className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-xs font-bold text-indigo-600 dark:bg-gray-800 dark:border-gray-700 dark:text-indigo-400 select-none cursor-not-allowed"
               />
             </div>
             {auditorRole === "wizard" && (
               <>
                 <div className="form-field-wrapper">
-                  <label className="form-label font-bold text-purple-700 dark:text-purple-400">
-                    Purchase Order Matching Trial
+                   <label className="form-label font-bold text-purple-700 dark:text-purple-400">
+                    {t("Purchase Order Matching Trial")}
                   </label>
                   <input
                     type="text"
                     readOnly
-                    value="PASSED - 3-Way Non-Interacting Automated Match Complete"
+                    value={t("PASSED - 3-Way Non-Interacting Automated Match Complete")}
                     className="w-full px-4 py-3 bg-purple-50 border border-purple-200 rounded-xl text-xs font-bold text-purple-700 dark:bg-purple-900/20 dark:border-purple-800/40 dark:text-purple-300 select-none cursor-not-allowed"
                   />
                 </div>
                 <div className="form-field-wrapper">
                   <label className="form-label font-bold text-purple-700 dark:text-purple-400">
-                    PO to Voucher Balance Variation
+                    {t("PO to Voucher Balance Variation")}
                   </label>
                   <input
                     type="text"
                     readOnly
-                    value="0.00% Variance (Fully Reconciled)"
+                    value={t("0.00% Variance (Fully Reconciled)")}
                     className="w-full px-4 py-3 bg-purple-50 border border-purple-200 rounded-xl text-xs font-bold text-purple-700 dark:bg-purple-900/20 dark:border-purple-800/40 dark:text-purple-300 select-none cursor-not-allowed"
                   />
                 </div>
                 <div className="form-field-wrapper">
                   <label className="form-label font-bold text-purple-700 dark:text-purple-400">
-                    Assigned PO Audit
+                    {t("Assigned PO Audit")}
                   </label>
                   <input
                     type="text"
                     readOnly
-                    value={recordId ? `PO-AUDIT-${recordId.slice(0, 8)}` : "Pending Save"}
+                    value={recordId ? `PO-AUDIT-${recordId.slice(0, 8)}` : t("Pending Save")}
                     className="w-full px-4 py-3 bg-purple-50 border border-purple-200 rounded-xl text-xs font-bold text-purple-700 dark:bg-purple-900/20 dark:border-purple-800/40 dark:text-purple-300 font-mono select-none cursor-not-allowed"
                   />
                 </div>
                 <div className="form-field-wrapper">
                   <label className="form-label font-bold text-purple-700 dark:text-purple-400">
-                    RF Code (Regulatory Framework)
+                    {t("RF Code (Regulatory Framework)")}
                   </label>
                   <input
                     type="text"
@@ -2804,7 +2806,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             )}
             <div className="form-field-wrapper">
               <label className="form-label">
-                Audit Verification Checkpoint
+                {t("Audit Verification Checkpoint")}
               </label>
               <input
                 type="text"
@@ -2815,7 +2817,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             </div>
             <div className="form-field-wrapper font-mono">
               <label className="form-label font-bold">
-                Accounting Standard Compliance
+                {t("Accounting Standard Compliance")}
               </label>
               <input
                 type="text"
@@ -2840,10 +2842,10 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
           <div className="flex items-center">
             <h3 className="text-sm font-black text-emerald-700 uppercase tracking-widest flex items-center dark:text-emerald-400">
               <Activity size={16} className="mr-2 text-emerald-500" />{" "}
-              History Info
+              {t("History Info")}
             </h3>
             <span className="ml-3 bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full dark:bg-emerald-900/40 dark:text-emerald-300">
-              {historyEntries.length} Versions
+              {historyEntries.length} {t("Versions")}
             </span>
           </div>
           <button
@@ -2869,7 +2871,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 className="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold transition-colors dark:bg-emerald-900/20 dark:border-emerald-800/40 dark:text-emerald-300 flex items-center justify-center"
               >
                 <ClipboardCheck size={14} className="mr-2" />
-                Commit Custom Audit Point
+                {t("Commit Custom Audit Point")}
               </button>
               {historyEntries.length > 0 && (
                 <button
@@ -2878,7 +2880,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                   className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg text-xs font-bold transition-colors dark:bg-red-900/20 dark:border-red-800/40 dark:text-red-300 flex items-center justify-center sm:ml-auto"
                 >
                   <X className="mr-1" size={14} />
-                  Clear All History
+                  {t("Clear All History")}
                 </button>
               )}
             </div>
@@ -2886,14 +2888,14 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             {historyEntries.length === 0 ? (
               <div className="text-center py-8 bg-gray-50 border border-gray-100 rounded-xl dark:bg-gray-800/50 dark:border-gray-700/50">
                 <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                  No historical edits captured yet. Field changes will be tracked here automatically.
+                  {t("No historical edits captured yet. Field changes will be tracked here automatically.")}
                 </p>
               </div>
             ) : (
               <div className="space-y-4">
                 <div className="form-field-wrapper mb-4">
                   <label className="form-label font-bold text-emerald-700 dark:text-emerald-400">
-                    Select History Version
+                    {t("Select History Version")}
                   </label>
                   <select
                     id="history-version-select"
@@ -2903,7 +2905,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                   >
                     {historyEntries.map((entry, idx) => (
                       <option key={entry.id} value={entry.id}>
-                        Version v{entry.versionLabel} {idx === 0 ? "(Latest) " : ""}- {entry.description} - By {entry.editor} ({entry.timestamp})
+                        {t("Version")} v{entry.versionLabel} {idx === 0 ? `(${t("Latest")}) ` : ""}- {entry.description} - {t("By")} {entry.editor} ({entry.timestamp})
                       </option>
                     ))}
                   </select>
@@ -2974,7 +2976,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                           {changeKeys.length > 0 ? (
                             <>
                               <h4 className="text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">
-                                Modifications in this version:
+                                {t("Modifications in this version:")}
                               </h4>
                               <div className="space-y-2 text-[11px] mb-4">
                                 {changeKeys.map((k) => (
@@ -3002,7 +3004,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                           {Object.keys(entry.data).length > 0 && (
                             <details className="mt-2 text-xs">
                               <summary className="font-bold text-emerald-600 dark:text-emerald-400 cursor-pointer select-none">
-                                View Full State Snapshot ({Object.keys(entry.data).length} fields)
+                                {t("View Full State Snapshot ({{count}} fields)", { count: Object.keys(entry.data).length })}
                               </summary>
                               <div className="mt-2 text-[11px] grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-1 bg-gray-50 p-2.5 rounded-lg border border-gray-100 dark:bg-gray-900/40 dark:border-gray-800">
                                 {Object.entries(entry.data).map(([k, v]) => (
@@ -3025,7 +3027,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                         className="mt-3 flex items-center justify-center w-full py-2 bg-white border border-gray-200 text-gray-700 text-xs font-bold rounded-lg hover:bg-gray-50 hover:text-emerald-600 hover:border-emerald-200 transition-colors dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-750 dark:hover:text-emerald-400 dark:hover:border-emerald-800/50"
                       >
                         <RotateCcw size={14} className="mr-2" />
-                        Restore This Version
+                        {t("Restore This Version")}
                       </button>
                     )}
                   </div>
@@ -3046,7 +3048,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
         >
           <h3 className="text-sm font-black text-violet-700 uppercase tracking-widest flex items-center dark:text-violet-400">
             <Activity size={16} className="mr-2 text-violet-500" />{" "}
-            Synchronization Info
+            {t("Synchronization Info")}
           </h3>
           <button
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -3068,7 +3070,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             {/* Sync Target Selection with dynamic statuses */}
             <div className="col-span-full bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800 p-4 rounded-xl">
               <h4 className="text-xs font-black text-slate-800 dark:text-slate-300 uppercase tracking-widest mb-3">
-                Active Synchronization Target
+                {t("Active Synchronization Target")}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Option 1: To local storage */}
@@ -3088,19 +3090,19 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                       className="text-violet-600 focus:ring-violet-500 cursor-pointer"
                     />
                     <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
-                      To Local Storage
+                      {t("To Local Storage")}
                     </span>
                     {syncTarget === "local_storage" && (
                       <span className="text-[10px] bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-300 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider ml-auto">
-                        Active
+                        {t("Active")}
                       </span>
                     )}
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Offline state synchronization writes immediately to client-side localStorage and cached state.
+                    {t("Offline state synchronization writes immediately to client-side localStorage and cached state.")}
                   </p>
                   <p className="text-xs font-mono font-bold mt-2 text-violet-600 dark:text-violet-400">
-                    Status: {syncStatusLocalStorage}
+                    {t("Status:")} {t(syncStatusLocalStorage)}
                   </p>
                 </div>
 
@@ -3121,19 +3123,19 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                       className="text-violet-600 focus:ring-violet-500 cursor-pointer"
                     />
                     <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
-                      To the Database
+                      {t("To the Database")}
                     </span>
                     {syncTarget === "database" && (
                       <span className="text-[10px] bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-300 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider ml-auto">
-                        Active
+                        {t("Active")}
                       </span>
                     )}
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Online state synchronization commits transaction headers securely to PostgreSQL & Cloud Storage tables.
+                    {t("Online state synchronization commits transaction headers securely to PostgreSQL & Cloud Storage tables.")}
                   </p>
                   <p className="text-xs font-mono font-bold mt-2 text-violet-600 dark:text-violet-400">
-                    Status: {syncStatusDatabase}
+                    {t("Status:")} {t(syncStatusDatabase)}
                   </p>
                 </div>
               </div>
@@ -3142,7 +3144,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             {/* Sync Conflict Resolution Strategy Selection with dynamic explainer */}
             <div className="form-field-wrapper font-sans col-span-full md:col-span-1">
               <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                Sync Conflict Strategy
+                {t("Sync Conflict Strategy")}
               </label>
               <div className="relative mt-1">
                 <select
@@ -3150,29 +3152,29 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                   onChange={(e) => setConflictStrategy(e.target.value as any)}
                   className="w-full px-4 py-2.5 border rounded-xl text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-violet-500/30 border-slate-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
                 >
-                  <option value="two_way_merge">🛡️ Bi-directional Reconciliation (Two-Way Merge)</option>
-                  <option value="client_wins">💻 Client Primacy (Override remote values with Local draft)</option>
-                  <option value="server_wins">☁️ Server Decides (Overwrite local changes if remote changes exist)</option>
+                  <option value="two_way_merge">🛡️ {t("Bi-directional Reconciliation (Two-Way Merge)")}</option>
+                  <option value="client_wins">💻 {t("Client Primacy (Override remote values with Local draft)")}</option>
+                  <option value="server_wins">☁️ {t("Server Decides (Overwrite local changes if remote changes exist)")}</option>
                 </select>
               </div>
               <p className="text-[10px] text-gray-400 mt-1">
-                Handles concurrency race conditions between active drafts and remote database transactions.
+                {t("Handles concurrency race conditions between active drafts and remote database transactions.")}
               </p>
             </div>
 
             {/* Live Connection Diagnostics Panel */}
             <div className="form-field-wrapper font-sans col-span-full md:col-span-1">
               <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                Connection Path Diagnostics
+                {t("Connection Path Diagnostics")}
               </label>
               <div className="mt-1">
                 {(() => {
                   const numericLatency = parseInt(pingLatency) || 14;
                   const quality = isForceOffline
-                    ? { label: "🔴 OFFLINE HOLD ACTIVE", color: "text-amber-700 bg-amber-500/10 border-amber-500/20 dark:text-amber-400", desc: "Local state holding changes." }
+                    ? { label: t("🔴 OFFLINE HOLD ACTIVE"), color: "text-amber-700 bg-amber-500/10 border-amber-500/20 dark:text-amber-400", desc: t("Local state holding changes.") }
                     : numericLatency < 35
-                    ? { label: "🟢 EXCELLENT (HIGH SPEED)", color: "text-emerald-700 bg-emerald-500/10 border-emerald-500/20 dark:text-emerald-400", desc: `${pingLatency} connection to PostgreSQL is stable.` }
-                    : { label: "🟡 SATISFACTORY (SATCOM/EDGE)", color: "text-blue-700 bg-blue-500/10 border-blue-500/20 dark:text-blue-400", desc: `${pingLatency} response rate handles long-polling writes.` };
+                    ? { label: t("🟢 EXCELLENT (HIGH SPEED)"), color: "text-emerald-700 bg-emerald-500/10 border-emerald-500/20 dark:text-emerald-400", desc: `${pingLatency} ${t("connection to PostgreSQL is stable.")}` }
+                    : { label: t("🟡 SATISFACTORY (SATCOM/EDGE)"), color: "text-blue-700 bg-blue-500/10 border-blue-500/20 dark:text-blue-400", desc: `${pingLatency} ${t("response rate handles long-polling writes.")}` };
 
                   return (
                     <div className={`p-2.5 rounded-xl border text-[11px] font-medium leading-normal ${quality.color}`}>
@@ -3189,30 +3191,30 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             {/* Strategy Policy Explainer Warning box */}
             <div className="col-span-full bg-slate-50 border border-slate-200/60 rounded-xl p-3.5 dark:bg-slate-900/20 dark:border-slate-800">
               <span className="text-[9px] uppercase font-black text-slate-400 tracking-wider font-sans">
-                Active Protocol Execution Policy Preview
+                {t("Active Protocol Execution Policy Preview")}
               </span>
               <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mt-1">
-                {conflictStrategy === "two_way_merge" && "🔍 Safe Bi-directional Merge: Combines remote database records with this browser's active session. Overlapping fields trigger local edit priority; other fields are merged."}
-                {conflictStrategy === "client_wins" && "💻 Absolute Client Priority: Overwrites target database elements unconditionally. Ignores database change tokens."}
-                {conflictStrategy === "server_wins" && "☁️ Strict Database Primacy: Pulls down newer rows if database versions differ, safeguarding concurrent bookkeeping records."}
+                {conflictStrategy === "two_way_merge" && t("🔍 Safe Bi-directional Merge: Combines remote database records with this browser's active session. Overlapping fields trigger local edit priority; other fields are merged.")}
+                {conflictStrategy === "client_wins" && t("💻 Absolute Client Priority: Overwrites target database elements unconditionally. Ignores database change tokens.")}
+                {conflictStrategy === "server_wins" && t("☁️ Strict Database Primacy: Pulls down newer rows if database versions differ, safeguarding concurrent bookkeeping records.")}
               </p>
             </div>
 
             {/* Sync Queue Monitor Pipeline */}
             <div className="form-field-wrapper col-span-full border-t border-slate-100 dark:border-slate-800 pt-4">
               <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                Local-Cloud Transit Queue
+                {t("Local-Cloud Transit Queue")}
               </label>
               <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 mt-1">
                 <div className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between dark:bg-gray-800 dark:border-gray-700">
                   <div className="flex items-center gap-2">
                     <span className={`w-2 h-2 rounded-full ${syncQueueCount > 0 ? "bg-amber-500 animate-ping" : "bg-emerald-500"}`}></span>
                     <span className="text-xs font-mono font-black text-slate-700 dark:text-slate-200">
-                      {syncQueueCount} Pending Transaction Commits
+                      {syncQueueCount} {t("Pending Transaction Commits")}
                     </span>
                   </div>
                   <span className="text-[10px] font-black text-slate-400 uppercase">
-                    Queue: {isForceOffline ? "PAUSED (HOLD)" : syncQueueCount > 0 ? "Draining" : "Synchronized"}
+                    {t("Queue:")} {isForceOffline ? t("PAUSED (HOLD)") : syncQueueCount > 0 ? t("Draining") : t("Synchronized")}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -3222,19 +3224,19 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                     onClick={() => setSyncQueueCount(prev => prev + 1)}
                     className="px-3 py-2 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700/60 dark:hover:bg-gray-600 rounded-lg text-[10px] items-center font-bold tracking-wider select-none shrink-0"
                   >
-                    ➕ Buffer Lock Add
+                    ➕ {t("Buffer Lock Add")}
                   </button>
                   {syncQueueCount > 0 && (
                     <button
                       type="button"
                       onClick={() => {
-                        setSnapshotAlert(`Successfully synchronized and committed ${syncQueueCount} pending transactions to the active database endpoint.`);
+                        setSnapshotAlert(t("Successfully synchronized and committed {{count}} pending transactions to the active database endpoint.", { count: syncQueueCount }));
                         setSyncQueueCount(0);
                         setLastSyncTime(new Date().toISOString());
                       }}
                       className="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[10px] items-center font-bold tracking-wider select-none shrink-0"
                     >
-                      🚀 Flush & Sync
+                      🚀 {t("Flush & Sync")}
                     </button>
                   )}
                 </div>
@@ -3245,10 +3247,10 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             <div className="col-span-full border-t border-slate-100 dark:border-slate-800 pt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                  Local Offline Hold Control
+                  {t("Local Offline Hold Control")}
                 </label>
                 <p className="text-[10px] text-gray-400 mt-1 leading-normal">
-                  Toggling offline hold suspends automated database transmissions, writing the checkout changes into client-side browser storage.
+                  {t("Toggling offline hold suspends automated database transmissions, writing the checkout changes into client-side browser storage.")}
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer select-none shrink-0">
@@ -3275,7 +3277,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 />
                 <div className="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600"></div>
                 <span className="ml-2.5 text-xs font-black text-slate-700 dark:text-gray-300">
-                  {isForceOffline ? "📴 Offline Hold Mode (Active)" : "🟢 Live Sync Mode (Active)"}
+                  {isForceOffline ? t("📴 Offline Hold Mode (Active)") : t("🟢 Live Sync Mode (Active)")}
                 </span>
               </label>
             </div>
@@ -3305,22 +3307,22 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 </div>
                 <div>
                   <h5 className="text-xs font-black text-violet-950 dark:text-violet-200 uppercase tracking-widest">
-                    Last Synchronization Handshake
+                    {t("Last Synchronization Handshake")}
                   </h5>
                   <p className="text-xs font-semibold text-violet-800/80 dark:text-violet-300 mt-0.5">
-                    Synced & calibrated on: <strong className="font-mono text-xs">{new Date(lastSyncTime).toLocaleString()}</strong>
+                    {t("Synced & calibrated on:")} <strong className="font-mono text-xs">{new Date(lastSyncTime).toLocaleString()}</strong>
                   </p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => {
-                  setSnapshotAlert("Synchronized live buffer schema with enterprise database master indices successfully.");
+                  setSnapshotAlert(t("Synchronized live buffer schema with enterprise database master indices successfully."));
                   setLastSyncTime(new Date().toISOString());
                 }}
                 className="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] select-none"
               >
-                <RefreshCw size={12} /> Sync Now
+                <RefreshCw size={12} /> {t("Sync Now")}
               </button>
             </div>
 
@@ -3339,7 +3341,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
         >
           <h3 className="text-sm font-black text-indigo-700 uppercase tracking-widest flex items-center dark:text-indigo-400">
             <HardDrive size={16} className="mr-2 text-indigo-500" />{" "}
-            Storage Info
+            {t("Storage Info")}
           </h3>
           <button
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -3362,10 +3364,10 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             <div className="col-span-full bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800 p-4 rounded-xl">
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-slate-700 dark:text-slate-300 font-sans">
-                  HTML Local Storage Limit Utilization (Current Voucher Telemetry)
+                  {t("HTML Local Storage Limit Utilization (Current Voucher Telemetry)")}
                 </span>
                 <span className="text-[11px] font-mono font-bold text-indigo-600">
-                  {((compressedPayloadMetrics.bytes / 5242880) * 100).toFixed(6)}% of 5MB
+                  {((compressedPayloadMetrics.bytes / 5242880) * 100).toFixed(6)}% {t("of 5MB")}
                 </span>
               </div>
               <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
@@ -3375,27 +3377,27 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 />
               </div>
               <p className="text-[9.5px] text-slate-400 mt-2 font-sans">
-                Simulated web-sandbox quota utilization map. Local storage permits up to 5,242,880 Bytes (5 Megabytes). Larger payloads require Active Database Target config.
+                {t("Simulated web-sandbox quota utilization map. Local storage permits up to 5,242,880 Bytes (5 Megabytes). Larger payloads require Active Database Target config.")}
               </p>
 
               {/* Segmented Payload breakdown */}
               <div className="mt-4 bg-white/40 border border-slate-200/40 dark:bg-slate-950/20 dark:border-slate-800 p-3 rounded-lg">
                 <span className="text-[9.5px] uppercase font-black text-slate-400 tracking-wider">
-                  Live Payload Resource Allocation Map ({compressedPayloadMetrics.bytes} Bytes)
+                  {t("Live Payload Resource Allocation Map ({{bytes}} Bytes)", { bytes: compressedPayloadMetrics.bytes })}
                 </span>
                 <div className="flex h-3 rounded-md overflow-hidden bg-slate-200 mt-2 dark:bg-slate-700">
                   <div 
-                    title="Form State Metadata (JSON Mapping)"
+                    title={t("Form State Metadata (JSON Mapping)")}
                     style={{ width: "45%" }}
                     className="bg-indigo-600 h-full transition-all duration-300" 
                   />
                   <div 
-                    title="Geotagging & Coordinates Signature"
+                    title={t("Geotagging & Coordinates Signature")}
                     style={{ width: "30%" }}
                     className="bg-emerald-500 h-full transition-all duration-300"
                   />
                   <div 
-                    title="System Audit Security Header"
+                    title={t("System Audit Security Header")}
                     style={{ width: "25%" }}
                     className="bg-pink-500 h-full transition-all duration-300"
                   />
@@ -3403,15 +3405,15 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 font-mono text-[9px] text-gray-400">
                   <div className="flex items-center gap-1.5">
                     <span className="inline-block w-2.5 h-2.5 rounded-sm bg-indigo-600"></span>
-                    <span>Form Metadata: {Math.round(compressedPayloadMetrics.bytes * 0.45)} B (45%)</span>
+                    <span>{t("Form Metadata:")} {Math.round(compressedPayloadMetrics.bytes * 0.45)} B (45%)</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="inline-block w-2.5 h-2.5 rounded-sm bg-emerald-500"></span>
-                    <span>Geotags & Coords: {Math.round(compressedPayloadMetrics.bytes * 0.30)} B (30%)</span>
+                    <span>{t("Geotags & Coords:")} {Math.round(compressedPayloadMetrics.bytes * 0.30)} B (30%)</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="inline-block w-2.5 h-2.5 rounded-sm bg-pink-500"></span>
-                    <span>Audit Security: {Math.max(24, Math.round(compressedPayloadMetrics.bytes * 0.25))} B (25%)</span>
+                    <span>{t("Audit Security:")} {Math.max(24, Math.round(compressedPayloadMetrics.bytes * 0.25))} B (25%)</span>
                   </div>
                 </div>
               </div>
@@ -3420,12 +3422,12 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             {/* Storage Payload Footprint size indicator */}
             <div className="col-span-full">
               <label className="form-label font-bold text-gray-700 dark:text-gray-300">
-                Raw JSON Schema Footprint & Integrity Header
+                 {t("Raw JSON Schema Footprint & Integrity Header")}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-2 font-sans">
                 <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl flex flex-col justify-center">
                   <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
-                    Payload in Bytes
+                    {t("Payload in Bytes")}
                   </span>
                   <input
                     type="text"
@@ -3436,7 +3438,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl flex flex-col justify-center">
                   <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
-                    Allocated Space (KB)
+                    {t("Allocated Space (KB)")}
                   </span>
                   <input
                     type="text"
@@ -3447,7 +3449,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl flex flex-col justify-center">
                   <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
-                    Allocated Space (MB)
+                    {t("Allocated Space (MB)")}
                   </span>
                   <input
                     type="text"
@@ -3458,7 +3460,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl flex flex-col justify-center">
                   <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
-                    Transaction Checksum
+                    {t("Transaction Checksum")}
                   </span>
                   <input
                     type="text"
@@ -3476,7 +3478,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 <div className="flex items-center gap-2">
                   <Cpu size={16} className="text-indigo-500" />
                   <h4 className="text-xs font-black text-slate-800 dark:text-slate-300 uppercase tracking-widest">
-                    Transit Compression & Ingress Optimization Engine
+                    {t("Transit Compression & Ingress Optimization Engine")}
                   </h4>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer select-none">
@@ -3495,10 +3497,10 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                 {[
-                  { id: "none", name: "None (Raw JSON)", desc: "No compression overhead. Fastest server parser response." },
-                  { id: "lzw", name: "LZW Run-Length", desc: "Lossless dictionary encoding. Optimized for sequential repeating values." },
-                  { id: "gzip", name: "Gzip DEFLATE", desc: "Standard RFC 1951 protocol. Stream-based Huffman compression." },
-                  { id: "brotli", name: "Brotli (v1.0.9)", desc: "Advanced Huffman + static dictionary lookup. Highest efficiency." }
+                  { id: "none", name: t("None (Raw JSON)"), desc: t("No compression overhead. Fastest server parser response.") },
+                  { id: "lzw", name: t("LZW Run-Length"), desc: t("Lossless dictionary encoding. Optimized for sequential repeating values.") },
+                   { id: "gzip", name: t("Gzip DEFLATE"), desc: t("Standard RFC 1951 protocol. Stream-based Huffman compression.") },
+                   { id: "brotli", name: t("Brotli (v1.0.9)"), desc: t("Advanced Huffman + static dictionary lookup. Highest efficiency.") }
                 ].map((algo) => {
                   const isSelected = compAlgorithm === algo.id;
                   const isOptionDisabled = !isCompEnabled;
@@ -3539,7 +3541,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider font-sans">
-                      Target Optimized Size
+                      {t("Target Optimized Size")}
                     </span>
                     <span className="text-sm font-mono font-black text-slate-800 dark:text-slate-200 mt-1">
                       {compressedPayloadMetrics.bytes} Bytes
@@ -3547,7 +3549,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider font-sans">
-                      Compression Saved
+                      {t("Compression Saved")}
                     </span>
                     <span className="text-sm font-mono font-black text-emerald-600 dark:text-emerald-400 mt-1">
                       {compressedPayloadMetrics.savedBytes} Bytes
@@ -3555,7 +3557,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider font-sans">
-                      Reduction Percentage
+                      {t("Reduction Percentage")}
                     </span>
                     <div className="flex items-center gap-1.5 mt-1">
                       <span className="text-sm font-mono font-black text-indigo-600 dark:text-indigo-400 font-extrabold">
@@ -3563,14 +3565,14 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                       </span>
                       {compressedPayloadMetrics.ratio > 0 && (
                         <span className="text-[9px] bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 font-bold px-1.5 py-0.5 rounded-full">
-                          SAVED
+                          {t("SAVED")}
                         </span>
                       )}
                     </div>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider font-sans">
-                      Sync Transit Time (Est.)
+                      {t("Sync Transit Time (Est.)")}
                     </span>
                     <span className="text-sm font-mono font-black text-indigo-600 dark:text-indigo-400 mt-1 flex items-center gap-1">
                       <Zap size={11} className="text-amber-500 fill-amber-500 shrink-0" />
@@ -3585,7 +3587,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                       <Zap size={14} className="animate-pulse" />
                     </div>
                     <p className="text-[10.5px] font-bold text-indigo-700 dark:text-indigo-300">
-                      Optimizer Tip: Using <strong className="font-mono text-[11px] underline font-black">{compressedPayloadMetrics.algorithmLabel}</strong> saves <strong className="font-mono font-black">{compressedPayloadMetrics.ratio}%</strong> bandwidth payload, reducing ingress database latency and improving sync priority.
+                      {t("Optimizer Tip: Using")} <strong className="font-mono text-[11px] underline font-black">{compressedPayloadMetrics.algorithmLabel}</strong> {t("saves")} <strong className="font-mono font-black">{compressedPayloadMetrics.ratio}%</strong> {t("bandwidth payload, reducing ingress database latency and improving sync priority.")}
                     </p>
                   </div>
                 )}
@@ -3597,10 +3599,10 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
               <div className="flex items-center justify-between mb-3">
                 <div>
                   <h4 className="text-xs font-black text-slate-850 dark:text-slate-200 uppercase tracking-widest">
-                    Voucher Draft Local Snapshot Manager
+                    {t("Voucher Draft Local Snapshot Manager")}
                   </h4>
                   <p className="text-[10px] text-slate-400 mt-0.5">
-                    Acquire instant rollback savepoints locally to prevent accounting work loss during concurrent sessions.
+                    {t("Acquire instant rollback savepoints locally to prevent accounting work loss during concurrent sessions.")}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -3610,7 +3612,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                       onClick={handleClearSnapshots}
                       className="px-3 py-1.5 border border-slate-200 hover:bg-slate-50 dark:border-gray-700 dark:hover:bg-gray-700 text-slate-600 dark:text-slate-300 rounded-lg text-[10px] font-bold tracking-wider select-none shrink-0 cursor-pointer"
                     >
-                      Clear Savepoints
+                      {t("Clear Savepoints")}
                     </button>
                   )}
                   <button
@@ -3618,14 +3620,14 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                     onClick={handleCreateSnapshot}
                     className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-[10px] font-bold tracking-wider select-none shrink-0 cursor-pointer flex items-center gap-1 font-sans shadow-sm"
                   >
-                    <span>📸 Snapshot Draft State</span>
+                    <span>📸 {t("Snapshot Draft State")}</span>
                   </button>
                 </div>
               </div>
 
               {snapshots.length === 0 ? (
                 <div className="bg-slate-50 border border-slate-100 dark:bg-slate-900/20 dark:border-slate-800 p-6 rounded-xl text-center">
-                  <p className="text-xs font-medium text-slate-400">No active recovery snapshots captured for this draft ID format.</p>
+                  <p className="text-xs font-medium text-slate-400">{t("No active recovery snapshots captured for this draft ID format.")}</p>
                 </div>
               ) : (
                 <div className="border border-slate-100 rounded-xl overflow-hidden divide-y divide-slate-100 dark:border-slate-800 dark:divide-slate-800">
@@ -3649,7 +3651,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                           onClick={() => handleRestoreSnapshot(snap.label)}
                           className="px-2.5 py-1.5 text-[10px] font-bold bg-white border border-slate-20/60 shadow-sm hover:bg-slate-50 rounded-lg text-indigo-600 dark:bg-gray-800 dark:border-gray-700 dark:text-indigo-400 hover:scale-[1.01] active:scale-[0.99] select-none cursor-pointer"
                         >
-                          🔄 Restore Draft
+                          🔄 {t("Restore Draft")}
                         </button>
                         <button
                           type="button"
@@ -3670,10 +3672,10 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
             <div className="col-span-full border-t border-slate-100 dark:border-slate-800 pt-5 flex items-center justify-between font-sans">
               <div>
                 <h5 className="text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-widest leading-none">
-                  Cache Maintenance Control
+                  {t("Cache Maintenance Control")}
                 </h5>
                 <p className="text-[9.5px] text-slate-400 mt-1">
-                  Resets local telemetry counters and calibrates index references for the current draft UUID session.
+                  {t("Resets local telemetry counters and calibrates index references for the current draft UUID session.")}
                 </p>
               </div>
               <button
@@ -3689,7 +3691,7 @@ export const SystemInfoSection: React.FC<SystemInfoSectionProps> = ({
                 }}
                 className="px-4 py-2 border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-300 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm active:scale-[0.98]"
               >
-                🗑️ Clear Telemetry Draft Cache & Recalibrate
+                🗑️ {t("Clear Telemetry Draft Cache & Recalibrate")}
               </button>
             </div>
 

@@ -217,7 +217,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 >
                     <NavItem 
                         icon={<BankIcon className="text-xl" />} 
-                        label="Bank Vouchers" 
+                        label={t("Bank Vouchers")} 
                         active={activeView === 'bank'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('bank')}
@@ -225,7 +225,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     />
                     <NavItem 
                         icon={<VouchersIcon className="text-xl" />} 
-                        label="Ledger Report" 
+                        label={t("Ledger Report")} 
                         active={activeView === 'vouchers'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('vouchers')}
@@ -233,7 +233,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     />
                     <NavItem 
                         icon={<TaxIcon className="text-xl" />} 
-                        label="GST report" 
+                        label={t("GST report")} 
                         active={activeView === 'gst-report'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('gst-report')}
@@ -241,7 +241,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     />
                     <NavItem 
                         icon={<InventoryIcon className="text-xl" />} 
-                        label="Item report" 
+                        label={t("Item report")} 
                         active={activeView === 'item-report'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('item-report')}
@@ -249,7 +249,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                     />
                     <NavItem 
                         icon={<ReportsIcon className="text-xl" />} 
-                        label="Financial Report" 
+                        label={t("Financial Report")} 
                         active={activeView === 'reports'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('reports')}
@@ -261,7 +261,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
         <div className="px-4 py-2 border-t border-slate-100 dark:border-gray-700 shrink-0 space-y-1">
             <NavItem 
                 icon={<SettingsIcon className="text-xl" />} 
-                label="Settings" 
+                label={t("Settings")} 
                 active={activeView === 'settings'} 
                 isCollapsed={!isSidebarOpen} 
                 onClick={() => onViewChange('settings')}

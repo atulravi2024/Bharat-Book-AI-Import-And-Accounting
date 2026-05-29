@@ -130,7 +130,7 @@ export const ImportExportButtons: React.FC<ImportExportButtonsProps> = ({ data, 
         </button>
         <button
           onClick={() => setModalType('export')}
-          className="bg-white text-gray-700 border border-gray-200 px-3 lg:px-4 py-2 rounded-lg font-bold flex items-center justify-center text-xs shadow-sm whitespace-nowrap hover:bg-gray-50 active:scale-95 transition-all dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 hover:dark:bg-gray-700"
+          className="hidden md:flex bg-white text-gray-700 border border-gray-200 px-3 lg:px-4 py-2 rounded-lg font-bold items-center justify-center text-xs shadow-sm whitespace-nowrap hover:bg-gray-50 active:scale-95 transition-all dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 hover:dark:bg-gray-700"
         >
           <DownloadIcon className="text-[18px] leading-none lg:mr-2" />
           <span className="hidden lg:inline-block">Export</span>

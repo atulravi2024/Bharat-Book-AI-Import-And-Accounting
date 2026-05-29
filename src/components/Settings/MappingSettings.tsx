@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useLanguage } from "../../context/LanguageContext";
+import { useLanguage } from '../../context/LanguageContext';
 import { SettingsIcon, DeleteIcon, AddIcon } from '../icons/IconComponents';
 import { BasicRuleSection } from './MappingRuleSettings/BasicRuleSection.tsx';
 import { ListRuleSection } from './MappingRuleSettings/ListRuleSection.tsx';
