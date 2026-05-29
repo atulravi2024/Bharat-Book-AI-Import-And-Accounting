@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { Printer } from 'lucide-react';
-import { ParsedVoucher, VoucherType, AuditLog, PartyMaster, LedgerMaster, Confidence } from '../../../types';
+import { ParsedVoucher, VoucherType, AuditLog, PartyMaster, LedgerMaster, Confidence } from '../../../app/types';
 import { 
     VouchersIcon, 
     SearchIcon, 

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ParsedVoucher, VoucherType } from '../../../../types';
+import { ParsedVoucher, VoucherType } from '../../../../app/types';
 import { Search } from 'lucide-react';
 
 interface InvoiceDetailReportProps {

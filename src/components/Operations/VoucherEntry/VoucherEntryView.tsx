@@ -7,7 +7,7 @@ import { JournalVoucher } from './vouchers/JournalVoucher';
 import { ContraVoucher } from './vouchers/ContraVoucher';
 import { DebitNoteVoucher } from './vouchers/DebitNoteVoucher';
 import { CreditNoteVoucher } from './vouchers/CreditNoteVoucher';
-import { VoucherType } from '../../../types';
+import { VoucherType } from '../../../app/types';
 
 interface VoucherEntryViewProps {
   defaultType?: string;

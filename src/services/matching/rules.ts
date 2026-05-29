@@ -1,5 +1,5 @@
 
-import { VoucherType, Confidence } from '../../types';
+import { VoucherType, Confidence } from '../../app/types';
 
 export const PAYMENT_MODE_PATTERNS: any[] = [];
 

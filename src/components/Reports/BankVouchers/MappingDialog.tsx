@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { ParsedVoucher, VoucherType, PartyMaster, LedgerMaster, Confidence } from '../../../types';
+import { ParsedVoucher, VoucherType, PartyMaster, LedgerMaster, Confidence } from '../../../app/types';
 
 import { 
     CancelIcon, 

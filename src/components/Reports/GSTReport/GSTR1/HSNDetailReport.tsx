@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ParsedVoucher } from '../../../../types';
+import { ParsedVoucher } from '../../../../app/types';
 import { Search } from 'lucide-react';
 
 interface HSNDetailReportProps {

@@ -17,7 +17,7 @@ import {
     CategoryMaster,
     WarehouseMaster,
     StockGroupMaster
-} from '../../../types';
+} from '../../../app/types';
 
 import { ItemsTab } from './Tabs/ItemsTab';
 import { BasicItemsTab } from './Tabs/BasicItemsTab';

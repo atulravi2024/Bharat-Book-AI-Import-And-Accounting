@@ -1,7 +1,7 @@
 
 import React, { useMemo } from 'react';
 import { Download, Printer, Search, Filter, AlertCircle, Info } from 'lucide-react';
-import { ParsedVoucher, VoucherType } from '../../../types';
+import { ParsedVoucher, VoucherType } from '../../../app/types';
 
 interface StockSubPageProps {
   title: string;

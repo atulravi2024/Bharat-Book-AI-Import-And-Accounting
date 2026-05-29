@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Package, Save } from 'lucide-react';
-import { ItemMaster } from '../../types';
+import { ItemMaster } from '../../app/types';
 
 
 interface NewItemModalProps {

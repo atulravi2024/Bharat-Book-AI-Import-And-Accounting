@@ -1,5 +1,5 @@
 import React from 'react';
-import { ParsedVoucher } from '../../../types';
+import { ParsedVoucher } from '../../../app/types';
 
 interface PurchaseRegisterProps {
   data: ParsedVoucher[];

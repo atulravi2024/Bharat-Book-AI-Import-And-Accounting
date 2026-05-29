@@ -16,7 +16,7 @@ import {
   AddBoxIcon,
   SwapHorizIcon,
 } from '../icons/IconComponents';
-import { MainView } from '../../types';
+import { MainView } from '../../app/types';
 
 interface SidebarProps {
   isSidebarOpen: boolean;

@@ -10,7 +10,7 @@ import {
     SaveIcon
 } from '../../icons/IconComponents';
 import { motion } from 'motion/react';
-import { ItemMaster } from '../../../types';
+import { ItemMaster } from '../../../app/types';
 
 
 interface SystemDecideViewProps {

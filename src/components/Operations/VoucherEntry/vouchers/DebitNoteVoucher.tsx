@@ -7,7 +7,7 @@ const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
   catch (e) { return defaultValue; }
 };
 import { PlusCircle, Save, ClipboardList, Plus, Trash2, Edit2, X, FileText, Calculator, Settings2, Users, MapPin, ChevronDown, ChevronUp, Paperclip, ScanBarcode, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Import, Printer, Eye, Image, FilePlus, Bookmark, Package, Tags, Info, HelpCircle, Keyboard, Layout, Zap } from 'lucide-react';
-import { VoucherType } from '../../../../types';
+import { VoucherType } from '../../../../app/types';
 import { SearchableDropdown } from '../../../ui/SearchableDropdown';
 import { NewItemModal } from '../../NewItemModal';
 import { BarcodeScannerModal } from '../../BarcodeScannerModal';

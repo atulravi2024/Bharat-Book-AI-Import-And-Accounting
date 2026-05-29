@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
-import { Confidence } from "../types";
+import { Confidence } from "../app/types";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 

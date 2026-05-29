@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { SettingsIcon, CheckCircleIcon, UploadIcon, DownloadIcon, UndoIcon } from "../icons/IconComponents";
-import { useFormSettings, defaultSettings } from "../../useFormSettings";
+import { useFormSettings, defaultSettings } from "../../app/useFormSettings";
 import { useLanguage } from "../../context/LanguageContext";
 
 const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => (

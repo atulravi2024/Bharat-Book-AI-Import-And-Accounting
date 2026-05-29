@@ -1,31 +1,31 @@
 
 import React, { useState, useEffect, Component } from 'react';
 import { RefreshCw, Lock, Shield } from 'lucide-react';
-import { Layout } from './components/Layout/Layout';
-import { ThemeProvider } from './components/Layout/ThemeContext';
-import { NotificationProvider, useNotifications } from './context/NotificationContext';
-import { LanguageProvider } from './context/LanguageContext';
-import { Step1Upload } from './components/Operations/Import/Step1Upload';
-import { Step2Correction } from './components/Operations/Import/Step2Correction';
-import { Step3Summary } from './components/Operations/Import/Step3Summary';
-import { SuccessScreen } from './components/Operations/Import/SuccessScreen';
-import { MasterView } from './components/Masters/MasterView';
-import { LedgerReportView } from './components/Reports/BankVouchers/LedgerReportView';
-import { BankReportView } from './components/Reports/BankVouchers/BankReportView';
-import { DashboardView } from './components/Dashboard/DashboardView';
-import { ReportsView } from './components/Reports/FinancialReport/FinancialReportView';
-import { ItemReportView } from './components/Reports/Items/ItemReportView';
-import { VoucherEntryView } from './components/Operations/VoucherEntry/VoucherEntryView';
-import { InventoryEntryView } from './components/Operations/InventoryEntry/InventoryEntryView';
-import { SystemDecideView } from './components/Operations/BulkOperation/SystemDecideView';
-import { SettingsView } from './components/Settings/SettingsView';
-import { HelpSettings } from './components/Settings/HelpSettings';
-import { SupportSettings } from './components/Settings/SupportSettings';
-import { GSTReportView } from './components/Reports/GSTReport/GSTReportView';
+import { Layout } from '../components/Layout/Layout';
+import { ThemeProvider } from '../components/Layout/ThemeContext';
+import { NotificationProvider, useNotifications } from '../context/NotificationContext';
+import { LanguageProvider } from '../context/LanguageContext';
+import { Step1Upload } from '../components/Operations/Import/Step1Upload';
+import { Step2Correction } from '../components/Operations/Import/Step2Correction';
+import { Step3Summary } from '../components/Operations/Import/Step3Summary';
+import { SuccessScreen } from '../components/Operations/Import/SuccessScreen';
+import { MasterView } from '../components/Masters/MasterView';
+import { LedgerReportView } from '../components/Reports/BankVouchers/LedgerReportView';
+import { BankReportView } from '../components/Reports/BankVouchers/BankReportView';
+import { DashboardView } from '../components/Dashboard/DashboardView';
+import { ReportsView } from '../components/Reports/FinancialReport/FinancialReportView';
+import { ItemReportView } from '../components/Reports/Items/ItemReportView';
+import { VoucherEntryView } from '../components/Operations/VoucherEntry/VoucherEntryView';
+import { InventoryEntryView } from '../components/Operations/InventoryEntry/InventoryEntryView';
+import { SystemDecideView } from '../components/Operations/BulkOperation/SystemDecideView';
+import { SettingsView } from '../components/Settings/SettingsView';
+import { HelpSettings } from '../components/Settings/HelpSettings';
+import { SupportSettings } from '../components/Settings/SupportSettings';
+import { GSTReportView } from '../components/Reports/GSTReport/GSTReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
-import { parseVoucherFile } from './services/aiService';
-import { InfoIcon, UndoIcon, ErrorIcon } from './components/icons/IconComponents';
-import { ManagedUser, INITIAL_USERS } from './components/Settings/UserSettings';
+import { parseVoucherFile } from '../services/aiService';
+import { InfoIcon, UndoIcon, ErrorIcon } from '../components/icons/IconComponents';
+import { ManagedUser, INITIAL_USERS } from '../components/Settings/UserSettings';
 
 const DRAFT_KEY = 'bharat_book_voucher_draft';
 const PARTY_MASTERS_KEY = 'bharat_book_party_masters';
@@ -78,7 +78,7 @@ function useStorageState<T>(key: string, defaultValue: T): [T, React.Dispatch<Re
 
 
 import { LoginScreen } from './LoginScreen';
-import { getEffectivePolicy, isWithinAllowedHours, getCurrentUser, getVouchersPostedTodayCount } from './utils/security';
+import { getEffectivePolicy, isWithinAllowedHours, getCurrentUser, getVouchersPostedTodayCount } from '../utils/security';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
@@ -957,8 +957,8 @@ const AppContent: React.FC = () => {
     // Initial fetch of system reference data
     const initSystemData = async () => {
       try {
-        const { loadDefaultMappingRules } = await import('./services/mappingService');
-        const { loadMatchingRules } = await import('./services/matching/rules');
+        const { loadDefaultMappingRules } = await import('../services/mappingService');
+        const { loadMatchingRules } = await import('../services/matching/rules');
         await loadDefaultMappingRules();
         await loadMatchingRules();
       } catch (e) {

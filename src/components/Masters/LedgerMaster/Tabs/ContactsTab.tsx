@@ -6,7 +6,7 @@ import { ContactFormModal } from './ContactFormModal';
 
 import { createPortal } from "react-dom";
 import { ImportExportButtons } from "../../../shared/ImportExportButtons";
-import { useFormSettings } from "../../../../useFormSettings";
+import { useFormSettings } from "../../../../app/useFormSettings";
 import {
   AddIcon,
   EditIcon,

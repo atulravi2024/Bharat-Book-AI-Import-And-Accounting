@@ -4,7 +4,7 @@ import {
   FileText, Download, Printer, Calendar, 
   ArrowRight
 } from 'lucide-react';
-import { ParsedVoucher, VoucherType } from '../../../types';
+import { ParsedVoucher, VoucherType } from '../../../app/types';
 import * as XLSX from 'xlsx';
 import { getFiscalYearDates } from '../../../services/aiService';
 import { GSTR1Report } from '../FinancialReport/GSTR1Report';

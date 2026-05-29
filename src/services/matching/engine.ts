@@ -1,5 +1,5 @@
 
-import { ParsedVoucher, VoucherType, PartyMaster, LedgerMaster, Confidence } from '../../types';
+import { ParsedVoucher, VoucherType, PartyMaster, LedgerMaster, Confidence } from '../../app/types';
 import { extractValidName, isValidIndianEntity } from '../NameExtractor';
 import { calculateMatchScore } from './fuzzy';
 import { 

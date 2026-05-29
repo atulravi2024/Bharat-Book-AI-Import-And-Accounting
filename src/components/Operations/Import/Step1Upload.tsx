@@ -1,7 +1,7 @@
 
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import * as XLSX from 'xlsx';
-import { VoucherType, ParsingSettings } from '../../../types';
+import { VoucherType, ParsingSettings } from '../../../app/types';
 import { INTERNAL_GEMINI_MODELS } from '../../../services/AIConfig';
 import { sanitizeModelId } from '../../../services/geminiService';
 

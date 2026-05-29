@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-import { MainView } from '../../types';
+import { MainView } from '../../app/types';
 
 interface LayoutProps {
   pageTitle: string;

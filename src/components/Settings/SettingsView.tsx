@@ -57,7 +57,7 @@ import {
 } from "../../services/matching/paymentModes";
 import { IFSC_PREFIXES } from "../../services/matching/ifscCodes";
 
-import { MainView, LedgerMaster } from "../../types";
+import { MainView, LedgerMaster } from "../../app/types";
 
 import { useLanguage } from "../../context/LanguageContext";
 

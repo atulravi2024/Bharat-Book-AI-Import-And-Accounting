@@ -1,8 +1,8 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { ParsedVoucher, VoucherField, Confidence, VoucherType } from '../../../types';
+import { ParsedVoucher, VoucherField, Confidence, VoucherType } from '../../../app/types';
 import { ArrowBackIcon, ArrowForwardIcon, InfoIcon, EditIcon, SearchIcon, CheckCircleIcon, ExpandMoreIcon, ExpandLessIcon, AddIcon, WarningIcon, ErrorIcon, CancelIcon, MoreHorizIcon, DeleteIcon, ContentCopyIcon, HistoryIcon } from '../../icons/IconComponents';
-import { PARTY_MASTERS, LEDGER_MASTERS } from '../../../constants';
+import { PARTY_MASTERS, LEDGER_MASTERS } from '../../../app/constants';
 import { parseNumericValue } from '../../../services/aiService';
 
 interface Step2CorrectionProps {

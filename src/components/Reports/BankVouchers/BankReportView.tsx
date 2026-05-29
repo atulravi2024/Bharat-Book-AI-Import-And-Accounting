@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import { Printer } from 'lucide-react';
-import { ParsedVoucher, VoucherType, PartyMaster, LedgerMaster, AuditLog, Confidence } from '../../../types';
+import { ParsedVoucher, VoucherType, PartyMaster, LedgerMaster, AuditLog, Confidence } from '../../../app/types';
 import { 
     BankIcon,
     SearchIcon,

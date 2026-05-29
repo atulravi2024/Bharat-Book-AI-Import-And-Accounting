@@ -7,7 +7,7 @@ import {
     LocationMaster,
     CostCenterMaster,
     AccountGroupMaster
-} from '../../../types';
+} from '../../../app/types';
 import { GeneralLedgersTab } from './Tabs/GeneralLedgersTab';
 import { BankMastersTab } from './Tabs/BankMastersTab';
 import { ContactsTab } from './Tabs/ContactsTab';

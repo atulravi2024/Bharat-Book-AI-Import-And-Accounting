@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { VoucherType } from '../../../types';
+import { VoucherType } from '../../../app/types';
 import { Printer, Download, Image as ImageIcon, X, ZoomIn, ZoomOut, Maximize, RotateCcw, FileText, GripVertical, ToggleLeft, ToggleRight, Settings, Layout, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { numberToWords } from '../../../lib/numberToWords';
 

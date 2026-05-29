@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { CheckCircleIcon, DownloadIcon, PrintIcon, UndoIcon, DashboardIcon, VouchersIcon, ArrowBackIcon } from '../../icons/IconComponents';
-import { ParsedVoucher } from '../../../types';
+import { ParsedVoucher } from '../../../app/types';
 import * as XLSX from 'xlsx';
 
 interface SuccessScreenProps {

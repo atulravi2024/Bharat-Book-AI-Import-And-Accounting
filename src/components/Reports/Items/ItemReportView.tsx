@@ -5,7 +5,7 @@ import {
   ArrowRight, BarChart3, List, TrendingUp, History, Clock, AlertTriangle, Layers,
   Tag, Database, MapPin, Box, AlertCircle, ShieldCheck
 } from 'lucide-react';
-import { ParsedVoucher, VoucherType } from '../../../types';
+import { ParsedVoucher, VoucherType } from '../../../app/types';
 import * as XLSX from 'xlsx';
 import { getFiscalYearDates } from '../../../services/aiService';
 import { RateAnalysis } from './RateAnalysis';

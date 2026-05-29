@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { NotificationsIcon } from '../icons/IconComponents';
 import { useNotifications } from '../../context/NotificationContext';
-import { MainView } from '../../types';
+import { MainView } from '../../app/types';
 
 interface NotificationDropdownProps {
   onViewChange?: (view: MainView) => void;

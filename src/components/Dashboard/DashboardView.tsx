@@ -10,7 +10,7 @@ import { JournalTab } from './components/JournalTab';
 import { ContraTab } from './components/ContraTab';
 import { TransactionFlow } from './components/TransactionFlow';
 import { motion, AnimatePresence } from 'motion/react';
-import { ParsedVoucher, VoucherType, Confidence } from '../../types';
+import { ParsedVoucher, VoucherType, Confidence } from '../../app/types';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   TrendingUp, TrendingDown, FileText, Users,

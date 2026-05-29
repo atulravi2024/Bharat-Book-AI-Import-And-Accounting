@@ -1,6 +1,6 @@
 
 import * as XLSX from 'xlsx';
-import { Confidence, ParsedVoucher, VoucherType, ParsingSettings } from '../types';
+import { Confidence, ParsedVoucher, VoucherType, ParsingSettings } from '../app/types';
 import { extractValidName } from './NameExtractor';
 
 // This is a service to process voucher files.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ParsedVoucher, VoucherType, Confidence } from '../../../types';
+import { ParsedVoucher, VoucherType, Confidence } from '../../../app/types';
 
 import { 
     MoreHorizIcon, 

@@ -1,4 +1,4 @@
-import { MainView } from '../../types';
+import { MainView } from '../../app/types';
 
 export interface SearchItem {
   id: string;

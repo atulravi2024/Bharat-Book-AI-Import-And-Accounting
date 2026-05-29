@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ParsedVoucher, Confidence } from '../../../types';
+import { ParsedVoucher, Confidence } from '../../../app/types';
 import { CheckCircleIcon, WarningIcon } from '../../icons/IconComponents';
 
 interface ReconcileTabProps {

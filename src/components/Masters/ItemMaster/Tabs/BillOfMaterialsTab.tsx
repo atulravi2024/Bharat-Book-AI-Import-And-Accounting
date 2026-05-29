@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useFormSettings } from "../../../../useFormSettings";
+import { useFormSettings } from "../../../../app/useFormSettings";
 
 import { createPortal } from 'react-dom';
 import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon, CancelIcon, InfoIcon, UndoIcon, SaveIcon } from '../../../icons/IconComponents';
 import { ChevronDown, ChevronUp, Edit2, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BomMaster, ItemMaster } from '../../../../types';
+import { BomMaster, ItemMaster } from '../../../../app/types';
 
 interface BillOfMaterialsTabProps {
     data: BomMaster[];

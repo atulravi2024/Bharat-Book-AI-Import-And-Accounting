@@ -1,7 +1,7 @@
 import { Edit2, Trash2 } from 'lucide-react';
 import { createPortal } from "react-dom";
 import React, { useState, useMemo } from "react";
-import { useFormSettings } from '../../../../useFormSettings';
+import { useFormSettings } from '../../../../app/useFormSettings';
 import { ImportExportButtons } from '../../../shared/ImportExportButtons';
 import {
   AddIcon,

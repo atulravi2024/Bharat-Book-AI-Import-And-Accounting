@@ -1,6 +1,6 @@
 import { Edit2, Trash2 } from 'lucide-react';
 import React, { useState, useMemo } from 'react';
-import { useFormSettings } from "../../../../useFormSettings";
+import { useFormSettings } from "../../../../app/useFormSettings";
 
 import { createPortal } from 'react-dom';
 import { ImportExportButtons } from '../../../shared/ImportExportButtons';

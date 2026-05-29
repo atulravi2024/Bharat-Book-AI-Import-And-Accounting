@@ -23,7 +23,7 @@ import { AlertChannels } from './FirmSettingsTabs/AlertChannels';
 
 import { STATE_DATA } from "../../lib/states";
 import { INDIAN_BANKS } from "../../lib/banks";
-import { LedgerMaster } from "../../types";
+import { LedgerMaster } from "../../app/types";
 import { SearchableDropdown } from "../ui/SearchableDropdown";
 import {
   SettingsIcon,

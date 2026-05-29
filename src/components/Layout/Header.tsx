@@ -9,7 +9,7 @@ import {
 } from '../icons/IconComponents';
 import { ThemeProvider, useTheme } from './ThemeContext';
 import { GlobalSearch } from '../Search/GlobalSearch';
-import { MainView } from '../../types';
+import { MainView } from '../../app/types';
 import { NotificationDropdown } from './NotificationDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
 import { useLanguage } from '../../context/LanguageContext';

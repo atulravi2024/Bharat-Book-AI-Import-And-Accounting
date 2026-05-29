@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { ParsedVoucher, VoucherType } from '../../../types';
+import { ParsedVoucher, VoucherType } from '../../../app/types';
 import { ArrowBackIcon, CheckCircleIcon, DownloadIcon, PrintIcon, CancelIcon } from '../../icons/IconComponents';
 import { parseNumericValue } from '../../../services/aiService';
 

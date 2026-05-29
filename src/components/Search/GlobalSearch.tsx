@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
 import { GLOBAL_SEARCH_DATA, SearchItem } from './searchData';
-import { MainView } from '../../types';
+import { MainView } from '../../app/types';
 
 interface GlobalSearchProps {
   onViewChange?: (view: MainView) => void;
