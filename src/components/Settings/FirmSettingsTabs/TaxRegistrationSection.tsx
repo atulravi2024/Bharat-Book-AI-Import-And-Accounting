@@ -125,7 +125,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            LUT Number (For Exports)
+                            {t("LUT Number (For Exports)")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input

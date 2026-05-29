@@ -50,7 +50,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
                         <div className="space-y-2">
                           <label className="form-label">
-                            CIN (Corporate Identity Number)
+                            {t("CIN (Corporate Identity Number)")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input
@@ -100,7 +100,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            IEC (Import Export Code)
+                            {t("IEC (Import Export Code)")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input
@@ -153,7 +153,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            FSSAI License Number (If Applicable)
+                            {t("FSSAI License Number (If Applicable)")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input
@@ -181,7 +181,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                         </div>
                         <div className="space-y-2">
                           <label className="form-label">
-                            Drug License No. (If applicable)
+                            {t("Drug License No. (If applicable)")}
                           </label>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                             <input

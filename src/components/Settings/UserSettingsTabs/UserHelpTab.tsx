@@ -222,9 +222,9 @@ export const UserHelpTab: React.FC = () => {
                         >
                           <div className="space-y-1 pr-2">
                             <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${item.type === 'Use Case' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300' : 'bg-slate-100 text-gray-600 dark:bg-gray-900 dark:text-gray-400'}`}>
-                              {item.type}
+                              {t(item.type)}
                             </span>
-                            <h3 className="text-[13px] font-bold text-gray-900 dark:text-white mt-1.5 leading-tight">{item.title}</h3>
+                            <h3 className="text-[13px] font-bold text-gray-900 dark:text-white mt-1.5 leading-tight">{t(item.title)}</h3>
                           </div>
                           <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform mt-1.5 shrink-0 ${isExpanded ? 'rotate-90 text-indigo-500' : ''}`} />
                         </button>
@@ -232,7 +232,7 @@ export const UserHelpTab: React.FC = () => {
                         {isExpanded && (
                           <div className="px-3.5 pb-3.5 pt-1 mb-1 border-t border-dashed border-gray-100 dark:border-gray-700 text-[12px] text-gray-600 dark:text-gray-300 leading-relaxed font-medium space-y-3 animate-in fade-in duration-200">
                             <div className="bg-white dark:bg-gray-900 p-3.5 border border-indigo-50 dark:border-indigo-900/20 rounded-md">
-                              <p>{item.content}</p>
+                              <p>{t(item.content)}</p>
                             </div>
                           </div>
                         )}

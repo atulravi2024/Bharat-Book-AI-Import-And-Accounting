@@ -1142,14 +1142,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   <div className="flex flex-row items-center justify-between gap-4 bg-gray-50 dark:bg-gray-900/40 p-4 rounded-xl border border-gray-100 dark:border-gray-800 w-full min-w-0">
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold text-gray-950 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                        {updateStatus === "checking" ? "Checking Server Protocols..." : "Updates Management"}
+                        {updateStatus === "checking" ? t("Checking Server Protocols...") : t("Updates Management")}
                       </p>
                       <p className="text-[10px] text-gray-500 dark:text-gray-450 whitespace-nowrap overflow-hidden text-ellipsis leading-tight">
                         {updateStatus === "checking" 
-                          ? "Connecting to Delhi distribution network..." 
+                          ? t("Connecting to Delhi distribution network...") 
                           : updateStatus === "latest" 
-                          ? "System Up-to-Date: All compliance patches are current." 
-                          : "Verify system compliance files on cloud servers."}
+                          ? t("System Up-to-Date: All compliance patches are current.") 
+                          : t("Verify system compliance files on cloud servers.")}
                       </p>
                     </div>
                     <button
@@ -1174,7 +1174,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                       }`}
                     >
                       <RefreshCw className={`w-3.5 h-3.5 shrink-0 ${updateStatus === "checking" ? "animate-spin" : ""}`} />
-                      {updateStatus === "checking" ? "Checking..." : updateStatus === "latest" ? "System Up-to-Date" : "Check for Update"}
+                      {updateStatus === "checking" ? t("Checking...") : updateStatus === "latest" ? t("System Up-to-Date") : t("Check for Update")}
                     </button>
                   </div>
                 </div>
@@ -1195,7 +1195,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     </h4>
                   </div>
                   <div className="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-tight">
-                    <span>{isLegacyPanelExpanded ? "Hide Panel" : "View Panel"}</span>
+                    <span>{isLegacyPanelExpanded ? t("Hide Panel") : t("View Panel")}</span>
                     {isLegacyPanelExpanded ? (
                       <ChevronUp className="w-4 h-4" />
                     ) : (
@@ -1326,7 +1326,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                                   </span>
                                 </div>
                                 <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-lg">
-                                  {rel.desc}
+                                  {t(rel.desc)}
                                 </p>
                               </div>
 
@@ -1337,7 +1337,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                                   onClick={() => setExpandedRelease(isExpanded ? null : rel.version)}
                                   className="p-1 px-2 hover:bg-gray-200 dark:hover:bg-gray-800 rounded text-[10px] font-bold text-gray-600 dark:text-gray-400 flex items-center gap-1 transition-colors"
                                 >
-                                  {isExpanded ? "Hide Logs" : "View Logs"}
+                                  {isExpanded ? t("Hide Logs") : t("View Logs")}
                                   {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                                 </button>
 
@@ -1413,11 +1413,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                             {isExpanded && (
                               <div className="p-4 bg-gray-100/50 dark:bg-gray-950/30 border-t border-gray-150 dark:border-gray-800/80 text-xs text-gray-600 dark:text-gray-350 space-y-2">
                                 <p className="font-bold text-[11px] text-gray-800 dark:text-gray-300">
-                                  Detailed Release Changelog:
+                                  {t("Detailed Release Changelog:")}
                                 </p>
                                 <ul className="list-disc pl-4 space-y-1 text-[11px]">
                                   {rel.notes.map((item, i) => (
-                                    <li key={i}>{item}</li>
+                                    <li key={i}>{t(item)}</li>
                                   ))}
                                 </ul>
                               </div>

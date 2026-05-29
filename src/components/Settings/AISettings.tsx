@@ -190,7 +190,7 @@ export const AISettings: React.FC<AISettingsProps> = ({
                 {aiSettings.provider === 'internal' ? (
                     <div className="form-grid !p-0 !border-0 animate-in slide-in-from-bottom-4 fade-in duration-300 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
                         <div className="form-field-wrapper space-y-2 md:col-span-1">
-                            <label className="form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">Select Model (System Tasks)</label>
+                            <label className="form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">{t("Select Model (System Tasks)")}</label>
                             <select 
                                 className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all shadow-sm"
                                 value={aiSettings.internalModel}
@@ -200,7 +200,7 @@ export const AISettings: React.FC<AISettingsProps> = ({
                                     <option key={m.id} value={m.id}>{m.name}</option>
                                 ))}
                             </select>
-                            <p className="text-[11px] text-gray-400 pt-1 font-medium italic">* Internal models are optimized for system parsing.</p>
+                            <p className="text-[11px] text-gray-400 pt-1 font-medium italic">{t("* Internal models are optimized for system parsing.")}</p>
                         </div>
                         <div className="form-field-wrapper space-y-2 md:col-span-1">
                             <label className="flex items-center justify-between form-label text-xs font-bold text-gray-500 uppercase tracking-wider dark:text-gray-400">

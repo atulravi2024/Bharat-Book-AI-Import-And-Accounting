@@ -224,7 +224,7 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleT
                                             {type.icon}
                                         </div>
                                         <div>
-                                            <span className={`text-[11px] font-black tracking-wide uppercase ${expandedSection === type.id ? 'text-indigo-700' : 'text-gray-800'} dark:text-gray-100`}>{type.title}</span>
+                                            <span className={`text-[11px] font-black tracking-wide uppercase ${expandedSection === type.id ? 'text-indigo-700' : 'text-gray-800'} dark:text-gray-100`}>{t(type.title)}</span>
                                         </div>
                                     </div>
                                     <div className={`p-1 rounded-full transition-transform duration-300 ${expandedSection === type.id ? 'rotate-180 bg-indigo-100 text-indigo-600' : 'bg-gray-50 text-gray-400'} dark:bg-gray-900`}>

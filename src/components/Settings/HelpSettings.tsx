@@ -575,7 +575,7 @@ export const HelpSettings: React.FC = () => {
                               <div className="flex items-center gap-3">
                                  <div className={`p-2.5 rounded-md transition-colors ${isExpanded ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-gray-800 text-blue-600 dark:text-blue-400'}`}><FeatureIcon className="w-5 h-5" /></div>
                                  <div className="text-left">
-                                    <h4 className="text-[12px] font-black text-gray-900 dark:text-white uppercase tracking-tight">{feat.name}</h4>
+                                    <h4 className="text-[12px] font-black text-gray-900 dark:text-white uppercase tracking-tight">{t(feat.name)}</h4>
                                  </div>
                               </div>
                               <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
@@ -583,8 +583,8 @@ export const HelpSettings: React.FC = () => {
                            {/* Item details */}
                            {isExpanded && (
                               <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200 space-y-3">
-                                 <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold">{feat.description}</p>
-                                 <div className="p-3 bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 text-[11px] text-gray-600 dark:text-gray-400 font-semibold"><span className="font-bold uppercase text-[9px] text-blue-600 block mb-1">Concept:</span>{feat.concept}</div>
+                                 <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold">{t(feat.description)}</p>
+                                 <div className="p-3 bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 text-[11px] text-gray-600 dark:text-gray-400 font-semibold"><span className="font-bold uppercase text-[9px] text-blue-600 block mb-1">Concept:</span>{t(feat.concept)}</div>
                               </div>
                            )}
                         </div>
@@ -623,7 +623,7 @@ export const HelpSettings: React.FC = () => {
                               <div className="flex items-center gap-3">
                                  <div className={`p-2.5 rounded-md transition-colors ${isExpanded ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400'}`}><FeatureIcon className="w-5 h-5" /></div>
                                  <div className="text-left">
-                                    <h4 className="text-[12px] font-black text-gray-900 dark:text-white uppercase tracking-tight">{feat.name}</h4>
+                                    <h4 className="text-[12px] font-black text-gray-900 dark:text-white uppercase tracking-tight">{t(feat.name)}</h4>
                                  </div>
                               </div>
                               <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${isExpanded ? 'rotate-90 text-indigo-500' : ''}`} />
@@ -631,8 +631,8 @@ export const HelpSettings: React.FC = () => {
                            {/* Item details */}
                            {isExpanded && (
                               <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200 space-y-3">
-                                 <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold">{feat.description}</p>
-                                 <div className="p-3 bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 text-[11px] text-gray-600 dark:text-gray-400 font-semibold"><span className="font-bold uppercase text-[9px] text-indigo-600 block mb-1">Concept:</span>{feat.concept}</div>
+                                 <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold">{t(feat.description)}</p>
+                                 <div className="p-3 bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 text-[11px] text-gray-600 dark:text-gray-400 font-semibold"><span className="font-bold uppercase text-[9px] text-indigo-600 block mb-1">Concept:</span>{t(feat.concept)}</div>
                               </div>
                            )}
                         </div>
@@ -671,7 +671,7 @@ export const HelpSettings: React.FC = () => {
                               <div className="flex items-center gap-3">
                                  <div className={`p-2.5 rounded-md transition-colors ${isExpanded ? 'bg-amber-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-gray-800 text-amber-600 dark:text-amber-400'}`}><FeatureIcon className="w-5 h-5" /></div>
                                  <div className="text-left">
-                                    <h4 className="text-[12px] font-black text-gray-900 dark:text-white uppercase tracking-tight">{feat.name}</h4>
+                                    <h4 className="text-[12px] font-black text-gray-900 dark:text-white uppercase tracking-tight">{t(feat.name)}</h4>
                                  </div>
                               </div>
                               <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform shrink-0 ${isExpanded ? 'rotate-90 text-amber-500' : ''}`} />
@@ -679,8 +679,8 @@ export const HelpSettings: React.FC = () => {
                            {/* Item details */}
                            {isExpanded && (
                               <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200 space-y-3">
-                                 <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold">{feat.description}</p>
-                                 <div className="p-3 bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 text-[11px] text-gray-600 dark:text-gray-400 font-semibold"><span className="font-bold uppercase text-[9px] text-amber-600 block mb-1">Concept:</span>{feat.concept}</div>
+                                 <p className="text-xs text-gray-700 dark:text-gray-300 font-semibold">{t(feat.description)}</p>
+                                 <div className="p-3 bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 text-[11px] text-gray-600 dark:text-gray-400 font-semibold"><span className="font-bold uppercase text-[9px] text-amber-600 block mb-1">Concept:</span>{t(feat.concept)}</div>
                               </div>
                            )}
                         </div>
@@ -701,7 +701,7 @@ export const HelpSettings: React.FC = () => {
               <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Query titles, tagging keywords, fallback filters..."
+                placeholder={t("Query titles, tagging keywords, fallback filters...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900/50 text-[12px] font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 dark:text-gray-200 shadow-sm"
@@ -718,7 +718,7 @@ export const HelpSettings: React.FC = () => {
                       : 'bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800'
                   }`}
                 >
-                  {cat.replace('-', ' ')}
+                  {t(cat)}
                 </button>
               ))}
             </div>
@@ -750,11 +750,11 @@ export const HelpSettings: React.FC = () => {
                       <div className="space-y-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-slate-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400">
-                            {art.category}
+                            {t(art.category)}
                           </span>
                         </div>
-                        <h3 className="text-[13px] font-bold text-gray-900 dark:text-white mt-1 leading-tight">{art.title}</h3>
-                        <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium leading-relaxed mt-0.5 max-w-[95%]">{art.summary}</p>
+                        <h3 className="text-[13px] font-bold text-gray-900 dark:text-white mt-1 leading-tight">{t(art.title)}</h3>
+                        <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium leading-relaxed mt-0.5 max-w-[95%]">{t(art.summary)}</p>
                       </div>
                       <ChevronRight className={`w-4 h-4 text-gray-400 transform transition-transform mt-1 shrink-0 ${isExpanded ? 'rotate-90 text-blue-500' : ''}`} />
                     </button>
@@ -762,7 +762,7 @@ export const HelpSettings: React.FC = () => {
                     {isExpanded && (
                       <div className="px-3.5 pb-4 pt-2 mb-2 border-t border-dashed border-gray-100 dark:border-gray-700 text-[12px] text-gray-600 dark:text-gray-300 leading-relaxed font-medium space-y-3 animate-in fade-in duration-200">
                         <div className="bg-white dark:bg-gray-900 p-4 border border-blue-50 dark:border-blue-900/20 rounded-md">
-                          <p>{art.content}</p>
+                          <p>{t(art.content)}</p>
                         </div>
                         <div className="flex gap-2 pt-1 flex-wrap">
                           {art.tags.map(t => (
@@ -807,13 +807,13 @@ export const HelpSettings: React.FC = () => {
               {selectedTrainerId === 'mapping' && (
               <div className="px-4 pb-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 animate-in fade-in duration-200 space-y-4">
                 <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed font-semibold">
-                  Before the system can extract ledger records from Excel/CSV files, it matches sheet column names to internal accounting fields. Click a statement column on the left block then pair it on the ERP target list below to simulate:
+                  {t("Before the system can extract ledger records from Excel/CSV files, it matches sheet column names to internal accounting fields. Click a statement column on the left block then pair it on the ERP target list below to simulate:")}
                 </p>
 
                 <div className="border border-indigo-150/40 dark:border-indigo-900/30 bg-slate-50/50 dark:bg-gray-900/40 rounded-xl p-4 space-y-4">
                   <div>
                     <label className="block text-[9px] font-bold uppercase tracking-widest text-indigo-500 mb-2 font-sans">
-                      1. Choose a Statement column:
+                      {t("Choose a Statement column:")}
                     </label>
                     <div className="flex flex-wrap gap-1.5">
                       {sampleColumns.map(col => {
@@ -841,7 +841,7 @@ export const HelpSettings: React.FC = () => {
 
                   <div>
                     <label className="block text-[9px] font-bold uppercase tracking-widest text-indigo-500 mb-2 font-sans">
-                      2. Select matching ERP target field:
+                      {t("Select matching ERP target field:")}
                     </label>
                     <div className="space-y-1.5">
                       {targetFields.map(field => {
@@ -876,7 +876,7 @@ export const HelpSettings: React.FC = () => {
 
                   <div className="pt-2 border-t border-indigo-100/50 dark:border-indigo-920 flex items-center justify-between">
                     <span className="text-[10px] font-bold text-gray-400 uppercase">
-                      Mapped {Object.keys(matchedFields).length} of {sampleColumns.length} fields
+                      {t("Mapped")} {Object.keys(matchedFields).length} {t("of")} {sampleColumns.length} {t("fields")}
                     </span>
                     {Object.keys(matchedFields).length > 0 && (
                       <button
@@ -930,7 +930,7 @@ export const HelpSettings: React.FC = () => {
                   
                   <div className="space-y-4">
                     <div className="bg-white dark:bg-gray-900 p-3 rounded border border-gray-200 dark:border-gray-700">
-                       <label className="text-[10px] font-black uppercase text-gray-500 block mb-1">Raw Narration Input:</label>
+                       <label className="text-[10px] font-black uppercase text-gray-500 block mb-1">{t("Raw Narration Input:")}</label>
                        <input 
                          type="text" 
                          value={rawNarration} 
@@ -941,17 +941,17 @@ export const HelpSettings: React.FC = () => {
                     </div>
                     
                     <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded border border-purple-100 dark:border-purple-900">
-                       <label className="text-[10px] font-black uppercase text-purple-700 dark:text-purple-400 block mb-2">Simulated Neural Match Result:</label>
+                       <label className="text-[10px] font-black uppercase text-purple-700 dark:text-purple-400 block mb-2">{t("Simulated Neural Match Result:")}</label>
                        {rawNarration.toUpperCase().includes('RENT') ? (
                           <div className="flex items-center gap-2">
                              <CheckCircle className="w-4 h-4 text-emerald-500" />
-                             <span className="text-[12px] font-bold text-gray-800 dark:text-gray-200">Office Rent Account (Indirect Expense)</span>
+                             <span className="text-[12px] font-bold text-gray-800 dark:text-gray-200">{t("Office Rent Account (Indirect Expense)")}</span>
                              <span className="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase shadow-sm">98% Match</span>
                           </div>
                        ) : rawNarration.toUpperCase().includes('UPI') ? (
                           <div className="flex items-center gap-2">
                              <CheckCircle className="w-4 h-4 text-blue-500" />
-                             <span className="text-[12px] font-bold text-gray-800 dark:text-gray-200">Suspense / Undefined UPI (Current Asset)</span>
+                             <span className="text-[12px] font-bold text-gray-800 dark:text-gray-200">{t("Suspense / Undefined UPI (Current Asset)")}</span>
                              <span className="px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 text-[10px] font-black uppercase shadow-sm">65% Match</span>
                           </div>
                        ) : (
@@ -991,7 +991,7 @@ export const HelpSettings: React.FC = () => {
                   </p>
                   
                   <div className="mb-4">
-                     <label className="text-[10px] font-black uppercase text-gray-500 block mb-2">Simulate Active Role:</label>
+                     <label className="text-[10px] font-black uppercase text-gray-500 block mb-2">{t("Simulate Active Role:")}</label>
                      <div className="flex gap-2">
                         {['Accountant', 'Manager', 'Administrator'].map(role => (
                            <button 
@@ -999,7 +999,7 @@ export const HelpSettings: React.FC = () => {
                              onClick={() => setTestUserRole(role)}
                              className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${testUserRole === role ? 'bg-amber-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'}`}
                            >
-                             {role}
+                             {t(role)}
                            </button>
                         ))}
                      </div>

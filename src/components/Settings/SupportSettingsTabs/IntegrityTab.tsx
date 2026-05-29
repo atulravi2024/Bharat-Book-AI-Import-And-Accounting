@@ -7,6 +7,34 @@ export const IntegrityTab = () => {
   const { t } = useLanguage();
   const { addNotification } = useNotifications();
 
+  const getTranslatedResult = (result: string) => {
+    if (!result) return t('Awaiting dispatch');
+    const direct = t(result);
+    if (direct !== result) return direct;
+    
+    if (result.includes('possibly corrupted schemas detected.')) {
+       const count = result.split(' ')[0];
+       return `${count} ${t('possibly corrupted schemas detected.')}`;
+    }
+    if (result.includes('ms roundtrip to Gateway.')) {
+       const ms = result.split('ms')[0];
+       return `${ms}ms ${t('roundtrip to Gateway.')}`;
+    }
+    if (result.includes('UI Thread healthy (~')) {
+       const fps = result.match(/\d+/)?.[0] || '';
+       return `${t('UI Thread healthy')} (~${fps} FPS)`;
+    }
+    if (result.includes('UI Thread degraded (~')) {
+       const fps = result.match(/\d+/)?.[0] || '';
+       return `${t('UI Thread degraded')} (~${fps} FPS)`;
+    }
+    if (result.includes('items in pending queue.')) {
+       const count = result.split(' ')[0];
+       return `${count} ${t('items in pending queue.')}`;
+    }
+    return t(result);
+  };
+
   const [dbStats, setDbStats] = useState({ 
       localSize: 'Calculating...', 
       localCount: 0,
@@ -291,13 +319,13 @@ export const IntegrityTab = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 cursor-default">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 flex items-center gap-1.5"><Database className="w-3.5 h-3.5" /> {t("Local Size")}</div>
-                  <div className="text-xl font-black text-gray-900 dark:text-white">{dbStats.localSize}</div>
-                  <div className="text-[9px] text-gray-400 font-medium mt-1 uppercase">{dbStats.localCount} key(s) in local scope</div>
+                  <div className="text-xl font-black text-gray-900 dark:text-white">{dbStats.localSize === 'Calculating...' ? t('Calculating...') : dbStats.localSize}</div>
+                  <div className="text-[9px] text-gray-400 font-medium mt-1 uppercase">{dbStats.localCount} {t("key(s) in local scope")}</div>
               </div>
               <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 cursor-default">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 flex items-center gap-1.5"><LayoutDashboard className="w-3.5 h-3.5" /> {t("Session Size")}</div>
-                  <div className="text-xl font-black text-gray-900 dark:text-white">{dbStats.sessionSize}</div>
-                  <div className="text-[9px] text-gray-400 font-medium mt-1 uppercase">{dbStats.sessionCount} key(s) in temporary scope</div>
+                  <div className="text-xl font-black text-gray-900 dark:text-white">{dbStats.sessionSize === 'Calculating...' ? t('Calculating...') : dbStats.sessionSize}</div>
+                  <div className="text-[9px] text-gray-400 font-medium mt-1 uppercase">{dbStats.sessionCount} {t("key(s) in temporary scope")}</div>
               </div>
               <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 cursor-default">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 flex items-center gap-1.5"><ActivityIcon className="w-3.5 h-3.5" /> {t("Cache API")}</div>
@@ -308,7 +336,7 @@ export const IntegrityTab = () => {
                   <div className="absolute top-0 right-0 w-16 h-16 bg-blue-100 dark:bg-blue-500/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
                   <div className="relative">
                       <div className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 flex items-center gap-1.5">{t("Free Quota Estimate")}</div>
-                      <div className="text-xl font-black text-gray-900 dark:text-white text-indigo-600 dark:text-indigo-400">{dbStats.quotaFree}</div>
+                      <div className="text-xl font-black text-gray-900 dark:text-white text-indigo-600 dark:text-indigo-400">{dbStats.quotaFree === 'Calculating...' ? t('Calculating...') : (dbStats.quotaFree === 'Restricted' ? t('Restricted') : dbStats.quotaFree)}</div>
                       <div className="text-[9px] text-gray-400 font-medium mt-1 uppercase">{t("Available allocated space")}</div>
                   </div>
               </div>
@@ -327,7 +355,7 @@ export const IntegrityTab = () => {
             className="px-4 py-2 bg-gray-900 hover:bg-black dark:bg-indigo-600 dark:hover:bg-indigo-700 disabled:opacity-50 text-white rounded-lg text-[11px] font-bold flex items-center gap-2 transition-all w-full sm:w-auto justify-center"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${diagnosticSuiteStatus === 'running' ? 'animate-spin' : ''}`} />
-            {diagnosticSuiteStatus === 'running' ? 'Active Diagnostic...' : 'Run Diagnostics'}
+            {diagnosticSuiteStatus === 'running' ? t('Active Diagnostic...') : t('Run Diagnostics')}
           </button>
         </div>
 
@@ -353,12 +381,12 @@ export const IntegrityTab = () => {
                 </div>
                 <div className="min-w-0">
                   <p className="text-[12px] font-bold text-gray-900 dark:text-gray-100 truncate flex items-center gap-2">
-                    {step.name}
+                    {t(step.name)}
                     {step.status === 'success' && <span className="px-1.5 py-0.5 rounded-sm bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300 text-[9px] uppercase tracking-wider">{t("Pass")}</span>}
                     {step.status === 'warning' && <span className="px-1.5 py-0.5 rounded-sm bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300 text-[9px] uppercase tracking-wider">{t("Warn")}</span>}
                     {step.isDemo && <span className="px-1.5 py-0.5 rounded-sm bg-indigo-50 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300 text-[9px] uppercase tracking-wider border border-indigo-100 dark:border-indigo-500/30">{t("Demo")}</span>}
                   </p>
-                  <p className={`text-[11px] font-medium mt-0.5 truncate tracking-wide ${step.result ? 'text-gray-600 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}`}>{step.result || 'Awaiting dispatch'}</p>
+                  <p className={`text-[11px] font-medium mt-0.5 truncate tracking-wide ${step.result ? 'text-gray-600 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}`}>{getTranslatedResult(step.result)}</p>
                 </div>
               </div>
               <div className="shrink-0 pl-2">

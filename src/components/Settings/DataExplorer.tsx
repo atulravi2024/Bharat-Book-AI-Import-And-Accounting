@@ -510,8 +510,8 @@ export const DataExplorer: React.FC = () => {
                                 onChange={(e) => setSortOrder(e.target.value as any)}
                                 className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-[11px] font-black text-gray-600 appearance-none cursor-pointer focus:ring-2 focus:ring-indigo-500 outline-none transition-all uppercase tracking-wider pr-8 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                             >
-                                <option value="name-asc">Alphabetical (A-Z)</option>
-                                <option value="name-desc">Alphabetical (Z-A)</option>
+                                <option value="name-asc">{t("Alphabetical (A-Z)")}</option>
+                                <option value="name-desc">{t("Alphabetical (Z-A)")}</option>
                                 <option value="type-asc">{t("Group by Ext")}</option>
                                 <option value="tier-asc">{t("Group by Logic")}</option>
                                 <option value="source-asc">{t("Group by Source")}</option>
@@ -546,14 +546,14 @@ export const DataExplorer: React.FC = () => {
                                     onClick={() => toggleGroup(group.title)}
                                     className="w-full flex items-center justify-between p-2 px-3 rounded-xl text-xs font-black text-gray-400 uppercase tracking-widest hover:bg-white hover:text-gray-600 transition-all border border-transparent shadow-none hover:shadow-sm"
                                 >
-                                    <span>{group.title} ({group.subPages.reduce((acc, sub) => acc + sub.keys.length, 0)})</span>
+                                    <span>{t(group.title)} ({group.subPages.reduce((acc, sub) => acc + sub.keys.length, 0)})</span>
                                 </button>
                                 
                                 {expandedGroups[group.title] && (
                                     <div className="space-y-2 animate-in fade-in slide-in-from-top-1 duration-200 px-1 py-1">
                                         {group.subPages.map(subPage => (
                                             <div key={subPage.title} className="space-y-1 ml-2">
-                                                <div className="text-[10px] font-bold text-gray-300 uppercase tracking-wider px-3">{subPage.title}</div>
+                                                <div className="text-[10px] font-bold text-gray-300 uppercase tracking-wider px-3">{t(subPage.title)}</div>
                                                 {subPage.keys.map(key => (
                                                     <button
                                                         key={key}
@@ -605,13 +605,13 @@ export const DataExplorer: React.FC = () => {
                                 {selectedKey && (
                                     <>
                                         <div className="flex items-center gap-1.5 grayscale opacity-70">
-                                            <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Source:</span>
-                                            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400">{storageSource}</span>
+                                            <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">{t("Source:")}</span>
+                                            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400">{t(storageSource)}</span>
                                         </div>
                                         <div className="h-2 w-2 rounded-full bg-gray-200 dark:bg-gray-700"></div>
                                         <div className="flex items-center gap-1.5 grayscale opacity-70">
-                                            <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Tier:</span>
-                                            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400">{logicTier}</span>
+                                            <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">{t("Tier:")}</span>
+                                            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400">{t(logicTier)}</span>
                                         </div>
                                     </>
                                 )}
@@ -643,7 +643,7 @@ export const DataExplorer: React.FC = () => {
                                 </div>
                             ) : (
                                 <pre className="text-emerald-400/90 font-mono text-[13px] leading-relaxed whitespace-pre-wrap break-words min-h-full selection:bg-emerald-500/20 selection:text-emerald-300">
-                                    {jsonContent || '// No data selected or file is empty\n// Choose an entry from the system browser to the left'}
+                                    {jsonContent || `// ${t("No data selected or file is empty")}\n// ${t("Choose an entry from the system browser to the left")}`}
                                 </pre>
                             )}
                         </div>

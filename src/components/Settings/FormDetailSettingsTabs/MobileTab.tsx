@@ -1,28 +1,31 @@
 import React from "react";
 import { useLanguage } from "../../../context/LanguageContext";
 
-const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => (
-  <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
-    <div className="flex flex-col mr-4">
-      <span className="text-sm font-bold text-gray-700 dark:text-gray-300">{label}</span>
-      {description && <span className="text-xs text-gray-500 mt-0.5">{description}</span>}
-    </div>
-    <button
-      type="button"
-      onClick={() => onChange(!enabled)}
-      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-        enabled ? "bg-blue-600" : "bg-gray-200 dark:bg-gray-600"
-      }`}
-    >
-      <span
-        aria-hidden="true"
-        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-          enabled ? "translate-x-5" : "translate-x-0"
+const Toggle = ({ enabled, onChange, label, description }: { enabled: boolean; onChange: (v: boolean) => void; label: string; description?: string }) => {
+  const { t } = useLanguage();
+  return (
+    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
+      <div className="flex flex-col mr-4">
+        <span className="text-sm font-bold text-gray-700 dark:text-gray-300">{t(label)}</span>
+        {description && <span className="text-xs text-gray-500 mt-0.5">{t(description)}</span>}
+      </div>
+      <button
+        type="button"
+        onClick={() => onChange(!enabled)}
+        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
+          enabled ? "bg-blue-600" : "bg-gray-200 dark:bg-gray-600"
         }`}
-      />
-    </button>
-  </div>
-);
+      >
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+            enabled ? "translate-x-5" : "translate-x-0"
+          }`}
+        />
+      </button>
+    </div>
+  );
+};
 
 interface MobileTabProps {
   settings: any;

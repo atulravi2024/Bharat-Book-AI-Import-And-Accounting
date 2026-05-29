@@ -411,14 +411,14 @@ export const TicketsTab = () => {
                           <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <span className="text-xs font-mono font-medium text-gray-500 dark:text-gray-400">{ticket.id}</span>
                             <span className={`text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded ${ticket.status === 'Resolved' || ticket.status === 'Closed' ? 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'}`}>
-                              {ticket.status}
+                              {t(ticket.status)}
                             </span>
                             <span className={`text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded flex items-center gap-1 ${ticket.priority === 'High' || ticket.priority === 'Critical' ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400' : ticket.priority === 'Medium' ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'}`}>
                               {ticket.priority === 'High' || ticket.priority === 'Critical' ? <AlertTriangle className="w-2.5 h-2.5" /> : null}
-                              {ticket.priority}
+                              {t(ticket.priority)}
                             </span>
                             <span className="text-[10px] font-medium text-gray-400 dark:text-gray-500 hidden sm:inline-block ml-1">
-                                {ticket.module}
+                                {t(ticket.module)}
                             </span>
                           </div>
                           <h4 className={`text-sm font-semibold truncate ${isOpen ? 'text-blue-700 dark:text-blue-400' : 'text-gray-900 dark:text-gray-100'}`}>
