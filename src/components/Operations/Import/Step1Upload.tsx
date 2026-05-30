@@ -61,7 +61,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
   });
 
   // Collapsible accordion active section state
-  const [activeSection, setActiveSection] = useState<'ai' | 'custom' | 'production' | null>('ai');
+  const [activeSection, setActiveSection] = useState<'info' | 'ai' | 'custom' | 'production' | null>(null);
 
   // Production Service State variables
   const [productionEnv, setProductionEnv] = useState('tally');
@@ -415,7 +415,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
     }
   };
 
-  const [activeTab, setActiveTab] = useState<'type' | 'choose' | 'settings' | 'upload'>('type');
+  const [activeTab, setActiveTab] = useState<'type' | 'choose' | 'preview' | 'upload' | 'settings'>('type');
   const [importCategory, setImportCategory] = useState<'voucher' | 'master' | 'bank' | 'other'>('voucher');
 
   const [masterType, setMasterType] = useState<'ledgers' | 'items' | 'costCenters' | 'priceList'>('ledgers');
@@ -428,32 +428,197 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
     }
   }, [importCategory]);
 
+  // Define templates for Preview tab
+  const templateConfig = useMemo(() => {
+    let title = '';
+    let description = '';
+    let headers: string[] = [];
+    let sampleRows: Record<string, string>[] = [];
+    let instructions: string[] = [];
+
+    if (importCategory === 'voucher') {
+      title = `${voucherType} Ingestion Template`;
+      description = `Visual layout and standard structure for ${voucherType} document upload. Use these columns in your Excel/CSV for automated schema mapping.`;
+      
+      switch (voucherType) {
+        case VoucherType.Purchase:
+        case VoucherType.Sales:
+          headers = ['Date', 'InvoiceNumber', 'Amount', 'ItemName', 'ItemQuantity', 'ItemRate', 'ItemTaxRate', 'ItemTotalAmount'];
+          sampleRows = [
+            { Date: '2026-05-01', InvoiceNumber: 'INV-2026-001', Amount: '12500.00', ItemName: 'Tally Course Premium', ItemQuantity: '1', ItemRate: '12500.00', ItemTaxRate: '18%', ItemTotalAmount: '14750.00' },
+            { Date: '2026-05-03', InvoiceNumber: 'INV-2026-002', Amount: '450.00', ItemName: 'Accounting Practice Book', ItemQuantity: '2', ItemRate: '225.00', ItemTaxRate: '5%', ItemTotalAmount: '472.50' }
+          ];
+          instructions = [
+            'Dates should preferably be in YYYY-MM-DD or DD-MM-YYYY format.',
+            'Ensure the Total Invoice value dynamically includes your Item Total + Taxes.',
+            'Taxes can be written either as percentage (e.g. 18%) or raw integers.'
+          ];
+          break;
+        case VoucherType.Payment:
+        case VoucherType.Receipt:
+          headers = ['Date', 'Amount', 'PaymentMode', 'ReferenceNo', 'BankDetails', 'Narration'];
+          sampleRows = [
+            { Date: '2026-05-10', Amount: '8500.00', PaymentMode: 'NEFT', ReferenceNo: 'N2026543210', BankDetails: 'SBI A/C 9876', Narration: 'Paid office monthly internet expense' },
+            { Date: '2026-05-12', Amount: '15000.00', PaymentMode: 'UPI', ReferenceNo: 'UPI9831049281', BankDetails: 'HDFC Current A/C', Narration: 'Received advance subscription fee' }
+          ];
+          instructions = [
+            'PaymentMode values standardizes into: UPI, NEFT, RTGS, Cash, Cheque, Card.',
+            'ReferenceNo maps directly into UTR / Instrument number for quick bank reconciliations.',
+            'Keep your Narrations professional for robust downstream search matching.'
+          ];
+          break;
+        case VoucherType.Journal:
+          headers = ['Date', 'Amount', 'DebitLedger', 'CreditLedger', 'Narration'];
+          sampleRows = [
+            { Date: '2026-05-15', Amount: '2500.00', DebitLedger: 'Office Depreciation A/C', CreditLedger: 'Furniture Asset A/C', Narration: 'Monthly asset depreciation calculation' },
+            { Date: '2026-05-18', Amount: '4200.00', DebitLedger: 'Salary Outstanding A/C', CreditLedger: 'Employee Benefit Expense', Narration: 'Accrued unpaid staff incentives' }
+          ];
+          instructions = [
+            'Ensure that both Credit and Debit ledgers already exist in your chart of accounts to prevent import blocks.',
+            'Use standard nomenclature for Ledgers matching Tally/ERP structure.'
+          ];
+          break;
+        case VoucherType.Contra:
+          headers = ['Date', 'Amount', 'FromAccount', 'ToAccount', 'ReferenceNo', 'Narration'];
+          sampleRows = [
+            { Date: '2026-05-20', Amount: '50000.00', FromAccount: 'SBI Bank A/C', ToAccount: 'Petty Cash Account', ReferenceNo: 'CHQ-981024', Narration: 'Withdrawn physical cash for office maintenance' }
+          ];
+          instructions = [
+            'Contra transactions are strictly internal transfers between Bank and Cash accounts.',
+            'Both From and To accounts must be tagged under Bank Accounts or Cash-in-hand groups.'
+          ];
+          break;
+        case VoucherType.BankStatement:
+          headers = ['Date', 'Narration', 'ReferenceNo', 'PaymentMode', 'WithdrawalAmount', 'DepositAmount', 'ClosingBalance'];
+          sampleRows = [
+            { Date: '2026-05-22', Narration: 'UPI-M-PAY-RAMESH-SBI7654', ReferenceNo: 'SB83192410', PaymentMode: 'UPI', WithdrawalAmount: '120.00', DepositAmount: '', ClosingBalance: '4840.00' },
+            { Date: '2026-05-24', Narration: 'INTEREST CREDIT RECEIVED', ReferenceNo: 'INT839123049', PaymentMode: 'DIRECT', WithdrawalAmount: '', DepositAmount: '780.00', ClosingBalance: '5620.00' }
+          ];
+          instructions = [
+            'Specify separate columns for Withdrawals (Debit) and Deposits (Credit) as issued by standard bank statements.',
+            'Provide chronological transactions sequentially for continuous closing balance updates.'
+          ];
+          break;
+        default:
+          headers = ['Date', 'Amount', 'Narration'];
+          sampleRows = [
+            { Date: '2026-05-01', Amount: '1000.00', Narration: 'Sample Ingestion Transaction record' }
+          ];
+          instructions = [
+            'Enter date, currency amount and short remark summaries.'
+          ];
+      }
+    } else if (importCategory === 'master') {
+      title = `${masterType.charAt(0).toUpperCase() + masterType.slice(1)} Ingestion Model`;
+      description = `Visual field structure for uploading physical ${masterType} master files.`;
+      
+      switch (masterType) {
+        case 'ledgers':
+          headers = ['Name', 'Group', 'OpeningBalance', 'Address', 'Phone', 'Email', 'GSTIN'];
+          sampleRows = [
+            { Name: 'Acme General Traders Pvt Ltd', Group: 'Sundry Debtors', OpeningBalance: '45000.00 Dr', Address: '72, MG Road, Mumbai', Phone: '9876543210', Email: 'sales@acme-traders.com', GSTIN: '27AAAAA1111A1Z1' },
+            { Name: 'HDFC Bank Accounts', Group: 'Bank Accounts', OpeningBalance: '820491.50 Dr', Address: 'Khar Branch, Mumbai', Phone: '', Email: '', GSTIN: '' }
+          ];
+          instructions = [
+            'Ensure the Ledger Name is unique and does not collide with existing entries.',
+            'The Group name must correspond directly to standard accounting groups (e.g., Sundry Debtors, Sundry Creditors, Indirect Expenses, Direct Expenses).'
+          ];
+          break;
+        case 'items':
+          headers = ['ItemName', 'SKU', 'Category', 'BaseUnit', 'OpeningQuantity', 'OpeningRate', 'GstRate', 'HsnCode'];
+          sampleRows = [
+            { ItemName: 'Optima Laser Pointer Pro', SKU: 'LP-OPT-01', Category: 'Office Stationery', BaseUnit: 'PCS', OpeningQuantity: '250', OpeningRate: '120.00', GstRate: '18%', HsnCode: '90132000' }
+          ];
+          instructions = [
+            'Specify the BaseUnit (e.g. PCS, KGS, BOX, NOS) standard definitions.',
+            'Include a HSN Code for accurate automated tax mapping on invoices.'
+          ];
+          break;
+        default: // costCenters, priceList
+          headers = ['Name', 'Code', 'Category', 'Description'];
+          sampleRows = [
+            { Name: 'South Sales Division', Code: 'CC-SOUTH', Category: 'Marketing Department', Description: 'Sales and marketing operations in south regions' }
+          ];
+          instructions = [
+            'Map cost allocation items and internal categories precisely.'
+          ];
+      }
+    } else if (importCategory === 'bank') {
+      title = `Bank Statement Standard Structure`;
+      description = `Standard columns format for ingesting general raw bank state records directly.`;
+      headers = ['Date', 'Narration', 'ReferenceNo', 'WithdrawalAmount', 'DepositAmount', 'ClosingBalance'];
+      sampleRows = [
+        { Date: '2026-05-15', Narration: 'RTGS-NQR-8491-DELHI-MFRS', ReferenceNo: 'RTGS8291049281', WithdrawalAmount: '0.00', DepositAmount: '125000.00', ClosingBalance: '135600.00' }
+      ];
+      instructions = [
+        'Select SBI, HDFC, ICICI, etc. sources to run specific custom matching templates.',
+        'Withdrawal reflects amount debited, Deposit reflects amount credited.'
+      ];
+    } else {
+      title = `Miscellaneous Import Ingest Map`;
+      description = `Standard table matrix configuration layout for custom other files.`;
+      headers = ['ColumnA', 'ColumnB', 'ColumnC'];
+      sampleRows = [
+        { ColumnA: 'Row Value Alpha 1', ColumnB: 'Row Value Alpha 2', ColumnC: 'Row Value Alpha 3' }
+      ];
+      instructions = [
+        'Organize columns cleanly with unique headers.'
+      ];
+    }
+
+    return { title, description, headers, sampleRows, instructions };
+  }, [importCategory, voucherType, masterType, t]);
+
+  const handleDownloadTemplate = () => {
+    const { headers, sampleRows } = templateConfig;
+    const headerRow = headers.join(',');
+    const dataRows = sampleRows.map(row => 
+      headers.map(h => `"${(row[h] || '').replace(/"/g, '""')}"`).join(',')
+    );
+    const csvContent = [headerRow, ...dataRows].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `BharatBook_${templateConfig.title.replace(/\s+/g, '_')}_Template.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="h-full flex flex-col min-h-0">
-      <div className="flex space-x-2 mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0 border border-gray-200 dark:border-gray-700">
+      <div className="flex space-x-1 md:space-x-2 mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0 border border-gray-200 dark:border-gray-700">
         <button
           onClick={() => setActiveTab('type')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'type' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'type' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
         >
           {t("1. Import")}
         </button>
         <button
           onClick={() => setActiveTab('choose')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'choose' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'choose' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
         >
           {importCategory === 'voucher' ? t("2. Voucher") : importCategory === 'master' ? t("2. Master") : importCategory === 'bank' ? t("2. Bank") : t("2. Choose")}
         </button>
         <button
-          onClick={() => setActiveTab('upload')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'upload' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+          onClick={() => setActiveTab('preview')}
+          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'preview' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
         >
-          {t("3. Upload")}
+          {t("3. Preview")}
+        </button>
+        <button
+          onClick={() => setActiveTab('upload')}
+          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'upload' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
+        >
+          {t("4. Upload")}
         </button>
         <button
           onClick={() => setActiveTab('settings')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'settings' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'settings' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
         >
-          {t("4. Settings")}
+          {t("5. Settings")}
         </button>
       </div>
 
@@ -670,303 +835,327 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
         {/* TAB: SETTINGS */}
         <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar shrink-0 ${activeTab === 'settings' ? 'flex' : 'hidden'}`}>
-          <div className="mb-6">
-            <div className="flex items-center text-blue-700 mb-4">
-              <InfoIcon className="mr-3 text-2xl" />
-              <h3 className="text-xl font-black">{t("AI Suggestions & Process Info")}</h3>
-            </div>
-            <ul className="space-y-3 text-sm text-gray-600 list-disc list-inside dark:text-gray-300 ml-2">
-              <li>{t("For best results, upload clear, high-resolution images or machine-readable PDFs.")}</li>
-              <li>{t("Ensure the voucher type matches the uploaded document.")}</li>
-              <li>{t("Our AI will attempt to automatically recognize all fields.")}</li>
-              {file && <li className="font-semibold text-green-700 mt-4">{t("AI analysis ready. Proceed to the next step to review extracted data.")}</li>}
-            </ul>
-            <div className="mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200/60 dark:bg-amber-950/20 dark:border-amber-900/40">
-              <span className="text-[10px] font-black uppercase text-amber-800 dark:text-amber-400 tracking-wider flex items-center gap-1.5 mb-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                {t("Simulated Sandbox Parser Mode")}
-              </span>
-              <p className="text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed font-medium">
-                {t("Excel/CSV formats are parsed directly to standard ledger models. Other source formats (Images, PDFs) run under a")} <strong>{t("simulated OCR Sandbox sequence")}</strong> {t("with mock values to demonstrate enterprise AI mapping pipelines.")}
-              </p>
-            </div>
+          <div className="flex items-center mb-6 text-gray-800 dark:text-gray-100">
+            <SettingsIcon className="mr-3 text-2xl text-blue-500" />
+            <h3 className="text-xl font-black">{t("Advanced Ingestion Settings")}</h3>
           </div>
 
-          <div className="border-t border-gray-100 pt-8 dark:border-gray-700">
-            <div className="flex items-center mb-6 text-gray-800 dark:text-gray-100">
-              <SettingsIcon className="mr-3 text-xl text-blue-500" />
-              <h3 className="text-xl font-black">{t("Advanced Parsing Settings")}</h3>
+          <div className="space-y-4">
+            {/* ACCORDION 1: AI Suggestions & Process Info */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
+              <button
+                type="button"
+                onClick={() => setActiveSection(activeSection === 'info' ? null : 'info')}
+                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
+                    <InfoIcon className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("AI Suggestions & Process Info")}</h4>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Helpful guidelines, limits, and sandbox information")}</p>
+                  </div>
+                </div>
+                {activeSection === 'info' ? (
+                  <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                )}
+              </button>
+
+              {activeSection === 'info' && (
+                <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-4 animate-in fade-in duration-200 text-left">
+                  <ul className="space-y-3 text-sm text-gray-600 list-disc list-inside dark:text-gray-300 ml-1">
+                    <li>{t("For best results, upload clear, high-resolution images or machine-readable PDFs.")}</li>
+                    <li>{t("Ensure the voucher type matches the uploaded document.")}</li>
+                    <li>{t("Our AI will attempt to automatically recognize all fields.")}</li>
+                    {file && <li className="font-semibold text-green-700 mt-4">{t("AI analysis ready. Proceed to the next step to review extracted data.")}</li>}
+                  </ul>
+                  <div className="mt-3 p-4 bg-amber-50 rounded-xl border border-amber-200/60 dark:bg-amber-950/20 dark:border-amber-900/40">
+                    <span className="text-[10px] font-black uppercase text-amber-800 dark:text-amber-400 tracking-wider flex items-center gap-1.5 mb-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                      {t("Simulated Sandbox Parser Mode")}
+                    </span>
+                    <p className="text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed font-medium">
+                      {t("Excel/CSV formats are parsed directly to standard ledger models. Other source formats (Images, PDFs) run under a")} <strong>{t("simulated OCR Sandbox sequence")}</strong> {t("with mock values to demonstrate enterprise AI mapping pipelines.")}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="space-y-4">
-              {/* ACCORDION 1: AI Model Engine */}
-              <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
-                <button
-                  type="button"
-                  onClick={() => setActiveSection(activeSection === 'ai' ? null : 'ai')}
-                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-                      </svg>
+            {/* ACCORDION 2: AI Model Engine */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
+              <button
+                type="button"
+                onClick={() => setActiveSection(activeSection === 'ai' ? null : 'ai')}
+                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("AI Engine Settings")}</h4>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Model selection, vision features and sensitivity thresholds")}</p>
+                  </div>
+                </div>
+                {activeSection === 'ai' ? (
+                  <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                )}
+              </button>
+
+              {activeSection === 'ai' && (
+                <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-4 animate-in fade-in duration-200">
+                  <div className="space-y-2 text-left bg-transparent">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-xs font-black text-gray-700 uppercase tracking-wider dark:text-gray-300">{t("OCR Sensitivity")} ({parsingSettings.ocrSensitivity}%)</label>
+                      <InfoIcon className="w-3.5 h-3.5 text-blue-400" />
                     </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("AI Engine Settings")}</h4>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Model selection, vision features and sensitivity thresholds")}</p>
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="100" 
+                      value={parsingSettings.ocrSensitivity}
+                      onChange={(e) => setParsingSettings(prev => ({ ...prev, ocrSensitivity: parseInt(e.target.value) }))}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:bg-gray-700"
+                    />
+                    <div className="flex justify-between text-[10px] text-gray-500 font-bold mt-2 uppercase tracking-wide">
+                      <span>{t("Performance Focus")}</span>
+                      <span>{t("Accuracy Focus")}</span>
                     </div>
                   </div>
-                  {activeSection === 'ai' ? (
-                    <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  ) : (
-                    <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  )}
-                </button>
 
-                {activeSection === 'ai' && (
-                  <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-4 animate-in fade-in duration-200">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className="block text-xs font-black text-gray-700 uppercase tracking-wider dark:text-gray-300">{t("OCR Sensitivity")} ({parsingSettings.ocrSensitivity}%)</label>
-                        <InfoIcon className="w-3.5 h-3.5 text-blue-400" />
-                      </div>
-                      <input 
-                        type="range" 
-                        min="0" 
-                        max="100" 
-                        value={parsingSettings.ocrSensitivity}
-                        onChange={(e) => setParsingSettings(prev => ({ ...prev, ocrSensitivity: parseInt(e.target.value) }))}
-                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:bg-gray-700"
-                      />
-                      <div className="flex justify-between text-[10px] text-gray-500 font-bold mt-2 uppercase tracking-wide">
-                        <span>{t("Performance Focus")}</span>
-                        <span>{t("Accuracy Focus")}</span>
-                      </div>
+                  <div className="space-y-2 text-left bg-transparent">
+                    <label className="block text-xs font-black text-gray-700 uppercase tracking-wider dark:text-gray-300">{t("AI Model Engine")}</label>
+                    <select 
+                      value={parsingSettings.aiModel}
+                      onChange={(e) => setParsingSettings(prev => ({ ...prev, aiModel: e.target.value }))}
+                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-600"
+                    >
+                      {INTERNAL_GEMINI_MODELS.map(model => (
+                        <option key={model.id} value={model.id}>{model.name}</option>
+                      ))}
+                      <option value="Vision Transformer-L">{t("Vision Transformer-L (Best for Complex Tables)")}</option>
+                    </select>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                    <div className="text-xs pr-4 text-left">
+                      <p className="font-bold text-gray-800 dark:text-gray-200 text-sm mb-1">{t("Experimental Vision Engine")}</p>
+                      <p className="text-gray-500 font-medium">{t("Enhanced layout recovery & tabular structure detection")}</p>
                     </div>
+                    <button 
+                      type="button"
+                      onClick={() => setParsingSettings(prev => ({ ...prev, experimentalFeatures: !prev.experimentalFeatures }))}
+                      className={`w-14 h-7 rounded-full transition-all relative shrink-0 ${parsingSettings.experimentalFeatures ? 'bg-blue-600 shadow-inner' : 'bg-gray-300 dark:bg-gray-700'}`}
+                    >
+                      <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-300 ${parsingSettings.experimentalFeatures ? 'translate-x-8' : 'translate-x-1'}`} />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
-                    <div className="space-y-2">
-                      <label className="block text-xs font-black text-gray-700 uppercase tracking-wider dark:text-gray-300">{t("AI Model Engine")}</label>
+            {/* ACCORDION 3: Custom Extraction Cues */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
+              <button
+                type="button"
+                onClick={() => setActiveSection(activeSection === 'custom' ? null : 'custom')}
+                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("Custom Ingestion Cues")}</h4>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Custom instructions, prompts or extraction triggers for AI")}</p>
+                  </div>
+                </div>
+                {activeSection === 'custom' ? (
+                  <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                )}
+              </button>
+
+              {activeSection === 'custom' && (
+                <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-3 animate-in fade-in duration-200 text-left">
+                  <label className="block text-xs font-black text-gray-700 uppercase tracking-wider dark:text-gray-300">{t("Custom Extraction Cues")}</label>
+                  <textarea 
+                    value={parsingSettings.customInstructions}
+                    onChange={(e) => setParsingSettings(prev => ({ ...prev, customInstructions: e.target.value }))}
+                    placeholder={t("e.g. 'Always look for GSTIN in the footer', 'Ignore previous balance in total'...")}
+                    className="w-full h-24 text-sm font-medium p-4 bg-white border border-gray-300 rounded-xl resize-none outline-none focus:ring-2 focus:ring-blue-500 shadow-sm dark:bg-gray-800 dark:border-gray-600"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* ACCORDION 4: Production Service Section */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
+              <button
+                type="button"
+                onClick={() => setActiveSection(activeSection === 'production' ? null : 'production')}
+                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("Production Service Integration")}</h4>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Synchronize parsed voucher objects back to production ERPs")}</p>
+                  </div>
+                </div>
+                {activeSection === 'production' ? (
+                  <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                )}
+              </button>
+
+              {activeSection === 'production' && (
+                <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-4 animate-in fade-in duration-200 text-left">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Target Accounting API ERP")}</label>
                       <select 
-                        value={parsingSettings.aiModel}
-                        onChange={(e) => setParsingSettings(prev => ({ ...prev, aiModel: e.target.value }))}
-                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-600"
+                        value={productionEnv}
+                        onChange={(e) => {
+                          setProductionEnv(e.target.value);
+                          if (e.target.value === 'tally') setProductionApiUrl('https://api.tallyprime.internal/v1/import');
+                          else if (e.target.value === 'sap') setProductionApiUrl('https://sap-gateway.enterprise.corp/api/v2/vouchers');
+                          else if (e.target.value === 'zoho') setProductionApiUrl('https://books.zoho.in/api/v3/documents');
+                          else setProductionApiUrl('');
+                        }}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-800 dark:border-gray-700"
                       >
-                        {INTERNAL_GEMINI_MODELS.map(model => (
-                          <option key={model.id} value={model.id}>{model.name}</option>
-                        ))}
-                        <option value="Vision Transformer-L">{t("Vision Transformer-L (Best for Complex Tables)")}</option>
+                        <option value="tally">{t("Tally Prime Server")}</option>
+                        <option value="sap">{t("SAP Business One ERP")}</option>
+                        <option value="zoho">{t("Zoho Books Endpoint")}</option>
+                        <option value="custom">{t("-- Custom Webhook URL --")}</option>
                       </select>
                     </div>
 
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-                      <div className="text-xs pr-4 text-left">
-                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm mb-1">{t("Experimental Vision Engine")}</p>
-                        <p className="text-gray-500 font-medium">{t("Enhanced layout recovery & tabular structure detection")}</p>
-                      </div>
-                      <button 
-                        type="button"
-                        onClick={() => setParsingSettings(prev => ({ ...prev, experimentalFeatures: !prev.experimentalFeatures }))}
-                        className={`w-14 h-7 rounded-full transition-all relative shrink-0 ${parsingSettings.experimentalFeatures ? 'bg-blue-600 shadow-inner' : 'bg-gray-300 dark:bg-gray-700'}`}
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Synchronization Strategy")}</label>
+                      <select 
+                        value={syncMode}
+                        onChange={(e) => setSyncMode(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-800 dark:border-gray-700"
                       >
-                        <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-300 ${parsingSettings.experimentalFeatures ? 'translate-x-8' : 'translate-x-1'}`} />
-                      </button>
+                        <option value="realtime">{t("Real-time Direct Push")}</option>
+                        <option value="batch">{t("EOD Nightly Batch Queue")}</option>
+                        <option value="manual">{t("Manual Human-in-The-Loop Signoff")}</option>
+                      </select>
                     </div>
                   </div>
-                )}
-              </div>
 
-              {/* ACCORDION 2: Custom Extraction Cues */}
-              <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
-                <button
-                  type="button"
-                  onClick={() => setActiveSection(activeSection === 'custom' ? null : 'custom')}
-                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                      </svg>
+                  <div className="space-y-3">
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Production Integration Endpoint URL")}</label>
+                      <input 
+                        type="text"
+                        value={productionApiUrl}
+                        onChange={(e) => setProductionApiUrl(e.target.value)}
+                        placeholder="https://sync.yourdomain.com/api/v1/ledger"
+                        className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg font-mono focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-850 dark:border-gray-700"
+                      />
                     </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("Custom Ingestion Cues")}</h4>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Custom instructions, prompts or extraction triggers for AI")}</p>
-                    </div>
-                  </div>
-                  {activeSection === 'custom' ? (
-                    <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  ) : (
-                    <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  )}
-                </button>
 
-                {activeSection === 'custom' && (
-                  <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-3 animate-in fade-in duration-200">
-                    <label className="block text-xs font-black text-gray-700 uppercase tracking-wider dark:text-gray-300">{t("Custom Extraction Cues")}</label>
-                    <textarea 
-                      value={parsingSettings.customInstructions}
-                      onChange={(e) => setParsingSettings(prev => ({ ...prev, customInstructions: e.target.value }))}
-                      placeholder={t("e.g. 'Always look for GSTIN in the footer', 'Ignore previous balance in total'...")}
-                      className="w-full h-24 text-sm font-medium p-4 bg-white border border-gray-300 rounded-xl resize-none outline-none focus:ring-2 focus:ring-blue-500 shadow-sm dark:bg-gray-800 dark:border-gray-600"
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* ACCORDION 3: Production Service Section */}
-              <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
-                <button
-                  type="button"
-                  onClick={() => setActiveSection(activeSection === 'production' ? null : 'production')}
-                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("Production Service Integration")}</h4>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Synchronize parsed voucher objects back to production ERPs")}</p>
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Bearer Access Key / API Token")}</label>
+                      <input 
+                        type="password"
+                        value={productionApiKey}
+                        onChange={(e) => setProductionApiKey(e.target.value)}
+                        placeholder="••••••••••••••••••••••••••••••••"
+                        className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg font-mono focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-850 dark:border-gray-750"
+                      />
                     </div>
                   </div>
-                  {activeSection === 'production' ? (
-                    <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  ) : (
-                    <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  )}
-                </button>
 
-                {activeSection === 'production' && (
-                  <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-4 animate-in fade-in duration-200 text-left">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Target Accounting API ERP")}</label>
-                        <select 
-                          value={productionEnv}
-                          onChange={(e) => {
-                            setProductionEnv(e.target.value);
-                            if (e.target.value === 'tally') setProductionApiUrl('https://api.tallyprime.internal/v1/import');
-                            else if (e.target.value === 'sap') setProductionApiUrl('https://sap-gateway.enterprise.corp/api/v2/vouchers');
-                            else if (e.target.value === 'zoho') setProductionApiUrl('https://books.zoho.in/api/v3/documents');
-                            else setProductionApiUrl('');
-                          }}
-                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-800 dark:border-gray-700"
-                        >
-                          <option value="tally">{t("Tally Prime Server")}</option>
-                          <option value="sap">{t("SAP Business One ERP")}</option>
-                          <option value="zoho">{t("Zoho Books Endpoint")}</option>
-                          <option value="custom">{t("-- Custom Webhook URL --")}</option>
-                        </select>
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Synchronization Strategy")}</label>
-                        <select 
-                          value={syncMode}
-                          onChange={(e) => setSyncMode(e.target.value)}
-                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-800 dark:border-gray-700"
-                        >
-                          <option value="realtime">{t("Real-time Direct Push")}</option>
-                          <option value="batch">{t("EOD Nightly Batch Queue")}</option>
-                          <option value="manual">{t("Manual Human-in-The-Loop Signoff")}</option>
-                        </select>
-                      </div>
+                  <div className="flex items-center justify-between p-3.5 bg-gray-50 dark:bg-gray-905 rounded-xl border border-gray-200 dark:border-gray-750 mt-2">
+                    <div className="text-[11px] pr-2 text-left">
+                      <p className="font-bold text-gray-800 dark:text-gray-200 mb-0.5">{t("Sync Unmapped Ledgers Automatically")}</p>
+                      <p className="text-gray-400">{t("Create non-existent party & bank accounts in secondary ERP in real-time")}</p>
                     </div>
+                    <button 
+                      type="button"
+                      onClick={() => setIsSyncingLedger(!isSyncingLedger)}
+                      className={`w-10 h-5.5 rounded-full transition-all relative shrink-0 ${isSyncingLedger ? 'bg-green-600' : 'bg-gray-300 dark:bg-gray-750'}`}
+                    >
+                      <div className={`absolute top-0.5 w-4.5 h-4.5 bg-white rounded-full shadow-sm transition-transform duration-300 ${isSyncingLedger ? 'translate-x-5' : 'translate-x-0.5'}`} />
+                    </button>
+                  </div>
 
-                    <div className="space-y-3">
-                      <div className="space-y-1.5">
-                        <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Production Integration Endpoint URL")}</label>
-                        <input 
-                          type="text"
-                          value={productionApiUrl}
-                          onChange={(e) => setProductionApiUrl(e.target.value)}
-                          placeholder="https://sync.yourdomain.com/api/v1/ledger"
-                          className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg font-mono focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-850 dark:border-gray-700"
-                        />
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Bearer Access Key / API Token")}</label>
-                        <input 
-                          type="password"
-                          value={productionApiKey}
-                          onChange={(e) => setProductionApiKey(e.target.value)}
-                          placeholder="••••••••••••••••••••••••••••••••"
-                          className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg font-mono focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-850 dark:border-gray-750"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between p-3.5 bg-gray-50 dark:bg-gray-905 rounded-xl border border-gray-200 dark:border-gray-750 mt-2">
-                      <div className="text-[11px] pr-2 text-left">
-                        <p className="font-bold text-gray-800 dark:text-gray-200 mb-0.5">{t("Sync Unmapped Ledgers Automatically")}</p>
-                        <p className="text-gray-400">{t("Create non-existent party & bank accounts in secondary ERP in real-time")}</p>
-                      </div>
-                      <button 
-                        type="button"
-                        onClick={() => setIsSyncingLedger(!isSyncingLedger)}
-                        className={`w-10 h-5.5 rounded-full transition-all relative shrink-0 ${isSyncingLedger ? 'bg-green-600' : 'bg-gray-300 dark:bg-gray-750'}`}
-                      >
-                        <div className={`absolute top-0.5 w-4.5 h-4.5 bg-white rounded-full shadow-sm transition-transform duration-300 ${isSyncingLedger ? 'translate-x-5' : 'translate-x-0.5'}`} />
-                      </button>
-                    </div>
-
-                    <div className="pt-3 border-t border-gray-200 dark:border-gray-700 flex flex-col gap-2">
-                      <button
-                        type="button"
-                        onClick={handleTestConnection}
-                        disabled={testConnectionStatus === 'testing'}
-                        className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-850 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2"
-                      >
-                        {testConnectionStatus === 'testing' ? (
-                          <>
-                            <svg className="animate-spin h-3.5 w-3.5 text-gray-600 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            {t("Connecting...")}
-                          </>
-                        ) : (
-                          <>
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                            {t("Test Service connectivity")}
-                          </>
-                        )}
-                      </button>
-
-                      {testConnectionStatus !== 'idle' && (
-                        <div className={`p-2.5 rounded-lg border text-[11px] font-medium text-left ${
-                          testConnectionStatus === 'success' 
-                            ? 'bg-green-50 border-green-200 text-green-800 dark:bg-green-950/20 dark:border-green-900/40 dark:text-green-300' 
-                            : testConnectionStatus === 'error'
-                            ? 'bg-red-50 border-red-200 text-red-800 dark:bg-red-950/20 dark:border-red-900/40 dark:text-red-300'
-                            : 'bg-blue-50 border-blue-100 text-blue-800'
-                        }`}>
-                          {testConnectionMessage}
-                        </div>
+                  <div className="pt-3 border-t border-gray-200 dark:border-gray-700 flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={handleTestConnection}
+                      disabled={testConnectionStatus === 'testing'}
+                      className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-850 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+                    >
+                      {testConnectionStatus === 'testing' ? (
+                        <>
+                          <svg className="animate-spin h-3.5 w-3.5 text-gray-600 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          {t("Connecting...")}
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                          {t("Test Service connectivity")}
+                        </>
                       )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+                    </button>
 
+                    {testConnectionStatus !== 'idle' && (
+                      <div className={`p-2.5 rounded-lg border text-[11px] font-medium text-left ${
+                        testConnectionStatus === 'success' 
+                          ? 'bg-green-50 border-green-200 text-green-800 dark:bg-green-950/20 dark:border-green-900/40 dark:text-green-300' 
+                          : testConnectionStatus === 'error'
+                          ? 'bg-red-50 border-red-200 text-red-800 dark:bg-red-950/20 dark:border-red-900/40 dark:text-red-300'
+                          : 'bg-blue-50 border-blue-100 text-blue-800'
+                      }`}>
+                        {testConnectionMessage}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
         </div>
         
         {/* TAB: UPLOAD */}
@@ -1095,75 +1284,182 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
         </div>
 
+        {/* TAB: PREVIEW */}
+        {activeTab === 'preview' && (
+          <div className="flex-1 bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative flex animate-in fade-in duration-300">
+             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+             
+             <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 pb-4 border-b border-gray-100 dark:border-gray-700 gap-4">
+                <div>
+                   <h2 className="text-2xl font-black text-gray-900 tracking-tight leading-none font-display dark:text-white">
+                      {t(templateConfig.title)}
+                   </h2>
+                   <p className="text-xs text-gray-400 mt-2 font-medium">
+                      {t(templateConfig.description)}
+                   </p>
+                </div>
+                <button
+                  onClick={handleDownloadTemplate}
+                  className="shrink-0 flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 hover:from-blue-100 hover:to-indigo-100 dark:from-blue-950/20 dark:to-indigo-950/20 dark:border-blue-900/40 text-blue-700 dark:text-blue-300 font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition-all hover:scale-102 hover:-translate-y-0.5"
+                >
+                  <ExcelIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                  <span>{t("Download CSV Template")}</span>
+                </button>
+             </div>
+
+             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div className="lg:col-span-2 space-y-4 text-left">
+                   <h3 className="text-xs font-black uppercase tracking-widest text-[11px] text-gray-500 opacity-60 dark:text-gray-300">{t("Live Interactive Data Schema Matrix")}</h3>
+                   <div className="border border-premium-slate-150 rounded-2xl overflow-hidden bg-white dark:bg-gray-900 dark:border-gray-700 shadow-sm max-w-full overflow-x-auto">
+                      <table className="min-w-full border-collapse text-left text-xs font-medium text-gray-600 dark:text-gray-300">
+                         <thead>
+                            <tr className="bg-gray-100 dark:bg-gray-850 text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 text-[10px] font-black uppercase tracking-wider">
+                               {templateConfig.headers.map((hdr) => (
+                                  <th key={hdr} className="px-4 py-3 whitespace-nowrap">{hdr.replace(/([A-Z])/g, ' $1')}</th>
+                               ))}
+                            </tr>
+                         </thead>
+                         <tbody className="divide-y divide-gray-100 dark:divide-gray-800 font-mono text-[11px]">
+                            {templateConfig.sampleRows.map((row, idx) => (
+                               <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
+                                  {templateConfig.headers.map((hdr) => (
+                                     <td key={hdr} className="px-4 py-3 text-gray-800 dark:text-gray-200 max-w-xs truncate">{row[hdr] || <span className="text-gray-300 dark:text-gray-600">—</span>}</td>
+                                  ))}
+                               </tr>
+                            ))}
+                         </tbody>
+                      </table>
+                   </div>
+                </div>
+
+                <div className="space-y-4 text-left">
+                   <h3 className="text-xs font-black uppercase tracking-widest text-[11px] text-gray-500 opacity-60 dark:text-gray-300">{t("Preparation Guidelines")}</h3>
+                   <div className="bg-blue-50/10 border border-blue-105 dark:bg-blue-950/10 dark:border-blue-900/20 p-5 rounded-2xl space-y-3.5 shadow-sm">
+                      <p className="text-[12px] text-blue-900 dark:text-blue-300 font-bold leading-none">{t("Standard Ingestion Rule Checklists")}</p>
+                      <ul className="space-y-3">
+                         {templateConfig.instructions.map((inst, i) => (
+                            <li key={i} className="flex items-start text-[11px] font-medium text-gray-600 dark:text-gray-300 leading-normal">
+                               <span className="shrink-0 flex items-center justify-center w-5 h-5 bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 text-[10px] font-bold rounded-full mr-3 border border-blue-200 dark:border-blue-900/40">{i + 1}</span>
+                               <span className="pt-0.5 leading-normal">{t(inst)}</span>
+                            </li>
+                         ))}
+                      </ul>
+                   </div>
+                </div>
+             </div>
+
+             <div className="w-full bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-850 dark:to-gray-900 border border-gray-150 dark:border-gray-700/60 p-5 rounded-2xl text-left flex items-start gap-4 mt-auto">
+                <div className="p-2.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 shadow-sm shrink-0">
+                   <InfoIcon className="text-blue-500 text-lg" />
+                </div>
+                <div>
+                   <h4 className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-widest text-[10px] mb-1.5">{t("Dynamic Column Matching Support")}</h4>
+                   <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-semibold">
+                      {t("Don't worry if your columns do not perfectly match our titles! In the next step, our Intelligent Field Parser will automatically analyze column headers, auto-map matching terms, and list unmatched fields for custom mapping.")}
+                   </p>
+                </div>
+             </div>
+          </div>
+        )}
+
       </div>
-      
-      <div className="shrink-0 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between px-1">
-        <div className="flex-1 flex justify-start items-center">
-          {activeTab !== 'type' && (
-            <button 
-              onClick={() => {
-                if (activeTab === 'choose') setActiveTab('type');
-                else if (activeTab === 'upload') setActiveTab('choose');
-                else if (activeTab === 'settings') setActiveTab('upload');
-              }} 
-              className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-            >
-              <ArrowForwardIcon className="mr-1 text-base rotate-180" />
-              {activeTab === 'choose' ? t("Back to Import Type") : activeTab === 'upload' ? t("Back to Choose") : t("Back to Upload")}
-            </button>
-          )}
-        </div>
 
-        <div className="flex-1 flex justify-center items-center">
-          {activeTab !== 'type' && (
-            <button 
-              onClick={() => {
-                setFile(null);
-                setActiveTab('type');
-                setImportCategory('voucher');
-              }} 
-              className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-            >
-              <CancelIcon className="mr-1 text-base" />
-              {t("Start Over")}
-            </button>
-          )}
-        </div>
-
-        <div className="flex-1 flex justify-end items-center">
-          {activeTab === 'settings' ? (
-            <button
-              onClick={handleSubmit}
-              disabled={!file || isLoading}
-              className="flex items-center justify-center px-5 py-2 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm disabled:bg-blue-300 disabled:cursor-not-allowed transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0"
-            >
-              {isLoading ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  {t("Processing...")}
-                </>
-              ) : (
-                <>
-                  {t("Process & Continue")}
-                  <ArrowForwardIcon className="ml-1.5 text-base" />
-                </>
-              )}
-            </button>
+      <div className="shrink-0 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex sm:flex-row items-center justify-between w-full">
+          {activeTab === 'type' ? (
+            <div className="w-full flex justify-end">
+              <button
+                onClick={() => setActiveTab('choose')}
+                className="w-full sm:w-auto h-10 px-6 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center"
+              >
+                <span className="block sm:hidden">{t("Next")}</span>
+                <span className="hidden sm:inline-flex items-center">
+                  {t("Next: Choose")}
+                </span>
+                <ArrowForwardIcon className="ml-1.5 text-base" />
+              </button>
+            </div>
           ) : (
-            <button
-              onClick={() => {
-                  if (activeTab === 'type') setActiveTab('choose');
-                  else if (activeTab === 'choose') setActiveTab('upload');
-                  else if (activeTab === 'upload') setActiveTab('settings');
-              }}
-              className="flex items-center justify-center px-5 py-2 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0"
-            >
-              {activeTab === 'type' ? t("Next: Choose") : activeTab === 'choose' ? t("Next: Upload") : t("Next: Settings")}
-              <ArrowForwardIcon className="ml-1.5 text-base" />
-            </button>
+            <div className="grid grid-cols-3 gap-2 w-full sm:flex sm:items-center sm:justify-between">
+              {/* Back button */}
+              <div className="sm:flex-1 sm:flex sm:justify-start">
+                <button 
+                  onClick={() => {
+                    if (activeTab === 'choose') setActiveTab('type');
+                    else if (activeTab === 'preview') setActiveTab('choose');
+                    else if (activeTab === 'upload') setActiveTab('preview');
+                    else if (activeTab === 'settings') setActiveTab('upload');
+                  }} 
+                  className="w-full sm:w-auto h-10 px-4 border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 flex items-center justify-center"
+                >
+                  <ArrowForwardIcon className="mr-1 text-base rotate-180 shrink-0" />
+                  <span className="block sm:hidden">{t("Back")}</span>
+                  <span className="hidden sm:inline">
+                    {activeTab === 'choose' ? t("Back to Import") : activeTab === 'preview' ? t("Back to Choose") : activeTab === 'upload' ? t("Back to Preview") : t("Back to Upload")}
+                  </span>
+                </button>
+              </div>
+
+              {/* Start Over button */}
+              <div className="sm:flex-1 sm:flex sm:justify-center">
+                <button 
+                  onClick={() => {
+                    setFile(null);
+                    setActiveTab('type');
+                    setImportCategory('voucher');
+                  }} 
+                  className="w-full sm:w-auto h-10 px-4 border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 flex items-center justify-center"
+                >
+                  <CancelIcon className="mr-1 text-base shrink-0" />
+                  <span className="block sm:hidden">{t("Reset")}</span>
+                  <span className="hidden sm:inline">{t("Start Over")}</span>
+                </button>
+              </div>
+
+              {/* Next/Process button */}
+              <div className="sm:flex-1 sm:flex sm:justify-end">
+                {activeTab === 'settings' ? (
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!file || isLoading}
+                    className="w-full sm:w-auto h-10 px-5 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm disabled:bg-blue-300 disabled:cursor-not-allowed transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center"
+                  >
+                    {isLoading ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span className="truncate">{t("Wait")}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="block sm:hidden">{t("Next")}</span>
+                        <span className="hidden sm:inline-flex items-center">
+                          {t("Process & Continue")}
+                        </span>
+                        <ArrowForwardIcon className="ml-1.5 text-base shrink-0" />
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                        if (activeTab === 'choose') setActiveTab('preview');
+                        else if (activeTab === 'preview') setActiveTab('upload');
+                        else if (activeTab === 'upload') setActiveTab('settings');
+                    }}
+                    className="w-full sm:w-auto h-10 px-5 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center"
+                  >
+                    <span className="block sm:hidden">{t("Next")}</span>
+                    <span className="hidden sm:inline-flex items-center">
+                      {activeTab === 'choose' ? t("Next: Preview") : activeTab === 'preview' ? t("Next: Upload") : t("Next: Settings")}
+                    </span>
+                    <ArrowForwardIcon className="ml-1.5 text-base shrink-0" />
+                  </button>
+                )}
+              </div>
+            </div>
           )}
         </div>
       </div>
