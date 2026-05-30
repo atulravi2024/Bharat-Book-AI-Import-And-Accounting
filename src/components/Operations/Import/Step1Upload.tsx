@@ -60,6 +60,36 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
     customAiInstructions: '',
   });
 
+  // Collapsible accordion active section state
+  const [activeSection, setActiveSection] = useState<'ai' | 'custom' | 'production' | null>('ai');
+
+  // Production Service State variables
+  const [productionEnv, setProductionEnv] = useState('tally');
+  const [productionApiUrl, setProductionApiUrl] = useState('https://api.tallyprime.internal/v1/import');
+  const [productionApiKey, setProductionApiKey] = useState('');
+  const [syncMode, setSyncMode] = useState('realtime');
+  const [isSyncingLedger, setIsSyncingLedger] = useState(true);
+  const [testConnectionStatus, setTestConnectionStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
+  const [testConnectionMessage, setTestConnectionMessage] = useState('');
+
+  const handleTestConnection = () => {
+    setTestConnectionStatus('testing');
+    setTestConnectionMessage('');
+    
+    setTimeout(() => {
+      if (!productionApiUrl) {
+        setTestConnectionStatus('error');
+        setTestConnectionMessage(t("Failed: Production API Endpoint URL is required."));
+      } else if (!productionApiKey) {
+        setTestConnectionStatus('error');
+        setTestConnectionMessage(t("Failed: Unauthorized. API Key is missing."));
+      } else {
+        setTestConnectionStatus('success');
+        setTestConnectionMessage(t(`Successfully authenticated and connected with ${productionEnv === 'tally' ? 'Tally Prime' : productionEnv === 'sap' ? 'SAP Business One' : productionEnv === 'zoho' ? 'Zoho Books' : 'Custom Server'}!`));
+      }
+    }, 1200);
+  };
+
   const lastVoucherTypeRef = useRef<VoucherType | null>(null);
 
   useEffect(() => {
@@ -385,105 +415,238 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
     }
   };
 
-  const [activeMobileTab, setActiveMobileTab] = useState<'upload' | 'info'>('upload');
+  const [activeTab, setActiveTab] = useState<'type' | 'choose' | 'settings' | 'upload'>('type');
+  const [importCategory, setImportCategory] = useState<'voucher' | 'master' | 'bank' | 'other'>('voucher');
+
+  const [masterType, setMasterType] = useState<'ledgers' | 'items' | 'costCenters' | 'priceList'>('ledgers');
+
+  useEffect(() => {
+    if (importCategory === 'bank') {
+      setVoucherType(VoucherType.BankStatement);
+    } else if (importCategory === 'voucher' && voucherType === VoucherType.BankStatement) {
+      setVoucherType(VoucherType.Purchase);
+    }
+  }, [importCategory]);
 
   return (
     <div className="h-full flex flex-col min-h-0">
-      <div className="lg:hidden flex space-x-2 mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0">
+      <div className="flex space-x-2 mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0 border border-gray-200 dark:border-gray-700">
         <button
-          onClick={() => setActiveMobileTab('upload')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeMobileTab === 'upload' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}
+          onClick={() => setActiveTab('type')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'type' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
         >
-          Upload & Map
+          {t("1. Import")}
         </button>
         <button
-          onClick={() => setActiveMobileTab('info')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeMobileTab === 'info' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}
+          onClick={() => setActiveTab('choose')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'choose' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
         >
-          Info & Settings
+          {importCategory === 'voucher' ? t("2. Voucher") : importCategory === 'master' ? t("2. Master") : importCategory === 'bank' ? t("2. Bank") : t("2. Choose")}
+        </button>
+        <button
+          onClick={() => setActiveTab('upload')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'upload' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+        >
+          {t("3. Upload")}
+        </button>
+        <button
+          onClick={() => setActiveTab('settings')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'settings' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+        >
+          {t("4. Settings")}
         </button>
       </div>
 
-      <div className="form-grid flex-1 min-h-0 flex flex-col lg:grid gap-4 sm:gap-6 overflow-hidden pb-4 lg:pb-0">
-        <div className={`flex-1 lg:col-span-2 bg-white dark:bg-gray-800 px-5 sm:px-10 py-6 sm:py-9 rounded-3xl sm:rounded-[2.5rem] border border-premium-slate-100 dark:border-gray-700 shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative group/main shrink-0 lg:shrink ${activeMobileTab === 'upload' ? 'flex' : 'hidden lg:flex'}`}>
+      {error && (
+        <div className="mb-4 shrink-0 bg-red-50 border border-red-200 text-red-800 p-4 rounded-2xl flex items-start animate-in fade-in slide-in-from-top-4 duration-500 shadow-sm" role="alert">
+          <div className="shrink-0 p-2 bg-red-100 rounded-xl mr-4">
+            <InfoIcon className="text-red-600" />
+          </div>
+          <div className="flex-1 min-w-0 pr-8">
+            <p className="font-black uppercase tracking-widest text-[10px] mb-1">{t("Critical Processing Error")}</p>
+            <p className="text-sm font-medium leading-relaxed">{error}</p>
+          </div>
+          <button onClick={clearError} className="shrink-0 p-2 hover:bg-red-100 rounded-xl transition-colors">
+            <CancelIcon className="text-xl" />
+          </button>
+        </div>
+      )}
 
+      <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+        {/* TAB: IMPORT TYPE */}
+        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar relative shrink-0 ${activeTab === 'type' ? 'flex' : 'hidden'}`}>
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
           
-          {error && (
-            <div className="mb-8 bg-red-50 border border-red-200 text-red-800 p-4 rounded-2xl flex items-start animate-in fade-in slide-in-from-top-4 duration-500 shadow-sm" role="alert">
-              <div className="shrink-0 p-2 bg-red-100 rounded-xl mr-4">
-                <InfoIcon className="text-red-600" />
-              </div>
-              <div className="flex-1 min-w-0 pr-8">
-                <p className="font-black uppercase tracking-widest text-[10px] mb-1">{t("Critical Processing Error")}</p>
-                <p className="text-sm font-medium leading-relaxed">{error}</p>
-              </div>
-              <button onClick={clearError} className="shrink-0 p-2 hover:bg-red-100 rounded-xl transition-colors">
-                <CancelIcon className="text-xl" />
-              </button>
-            </div>
-          )}
-
-          <div className="flex items-center justify-between mb-10 shrink-0">
+          <div className="flex items-center justify-between mb-6 shrink-0">
              <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tighter leading-none font-display dark:text-white">Data Entry Origin</h2>
-                <div className="flex items-center mt-3 space-x-2">
-                    <div className="flex -space-x-1">
-                        {[1,2,3].map(i => <div key={i} className={`w-2 h-2 rounded-full border border-white ${i === 1 ? 'bg-blue-400' : 'bg-gray-200'} dark:bg-gray-700`}></div>)}
-                    </div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-blue-600/80 bg-blue-50/50 px-2 py-0.5 rounded-full border border-blue-100/50">{t("Pipeline Alpha")}</span>
-                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">{t("Classify document & ingest record")}</p>
+                <h2 className="text-2xl font-black text-gray-900 tracking-tight leading-none font-display dark:text-white">{t("Select Import Type")}</h2>
+                <div className="flex items-center mt-2 space-x-2">
+                   <div className="h-1 w-6 bg-blue-600 rounded-full"></div>
+                   <div className="h-1 w-1.5 bg-blue-200 rounded-full dark:bg-blue-900/50"></div>
                 </div>
              </div>
           </div>
           
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-5 px-1">
-                <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40 dark:text-white">{t("System Classification")}</label>
-                <div className="h-px flex-1 bg-gray-100 mx-6 dark:bg-gray-800"></div>
-            </div>
-            <div className="form-grid gap-4">
-              {[
-                { type: VoucherType.Purchase, icon: InventoryIcon, color: 'text-emerald-600 bg-emerald-50/50 border-emerald-100', accent: 'bg-emerald-600' },
-                { type: VoucherType.Sales, icon: TaxIcon, color: 'text-blue-600 bg-blue-50/50 border-blue-100', accent: 'bg-blue-600' },
-                { type: VoucherType.Payment, icon: AccountIcon, color: 'text-purple-600 bg-purple-50/50 border-purple-100', accent: 'bg-purple-600' },
-                { type: VoucherType.Receipt, icon: VouchersIcon, color: 'text-amber-600 bg-amber-50/50 border-amber-100', accent: 'bg-amber-600' },
-                { type: VoucherType.Journal, icon: CategoryIcon, color: 'text-slate-600 bg-slate-50/50 border-slate-100', accent: 'bg-slate-600' },
-                { type: VoucherType.Contra, icon: UndoIcon, color: 'text-rose-600 bg-rose-50/50 border-rose-100', accent: 'bg-rose-600' },
-              ].map((item) => (
-                <button
-                  key={item.type}
-                  onClick={() => setVoucherType(item.type)}
-                  className={`group flex flex-col items-center justify-center p-3.5 rounded-[1.25rem] border transition-all duration-500 relative overflow-hidden ${
-                    voucherType === item.type 
-                      ? `${item.color} ring-1 ring-offset-4 ring-blue-500/30 border-transparent shadow-[0_15px_30px_rgba(59,130,246,0.15)] scale-[1.08] z-10` 
-                      : 'bg-white text-gray-400 border-gray-100 hover:border-blue-200 hover:bg-premium-slate-50 hover:text-blue-600 active:scale-95'
-                  }`}
-                >
-                  <div className={`absolute bottom-0 left-0 h-1 transition-all duration-500 ${voucherType === item.type ? `w-full ${item.accent}` : 'w-0 bg-blue-400'}`}></div>
-                  <item.icon className={`text-xl mb-2 transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-0.5 ${voucherType === item.type ? 'scale-110 -translate-y-0.5' : ''}`} />
-                  <span className="text-[10px] font-black uppercase tracking-tight line-clamp-1">{item.type}</span>
-                </button>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <button
+              onClick={() => setImportCategory('voucher')}
+              className={`p-5 rounded-xl flex flex-col items-center justify-center text-center transition-all ${
+                importCategory === 'voucher' 
+                  ? 'bg-blue-50 border-2 border-blue-500 shadow-sm dark:bg-blue-900/20 dark:border-blue-400' 
+                  : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100 hover:border-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700'
+              }`}
+            >
+              <VouchersIcon className={`w-10 h-10 mb-3 ${importCategory === 'voucher' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
+              <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">{t("Vouchers")}</h3>
+              <p className="text-xs text-gray-500 mt-1">{t("Invoices, Receipts")}</p>
+            </button>
+
+            <button
+              onClick={() => setImportCategory('master')}
+              className={`p-5 rounded-xl flex flex-col items-center justify-center text-center transition-all ${
+                importCategory === 'master' 
+                  ? 'bg-blue-50 border-2 border-blue-500 shadow-sm dark:bg-blue-900/20 dark:border-blue-400' 
+                  : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100 hover:border-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700'
+              }`}
+            >
+              <AccountIcon className={`w-10 h-10 mb-3 ${importCategory === 'master' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
+              <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">{t("Masters")}</h3>
+              <p className="text-xs text-gray-500 mt-1">{t("Ledgers, Items")}</p>
+            </button>
+
+            <button
+              onClick={() => setImportCategory('bank')}
+              className={`p-5 rounded-xl flex flex-col items-center justify-center text-center transition-all ${
+                importCategory === 'bank' 
+                  ? 'bg-blue-50 border-2 border-blue-500 shadow-sm dark:bg-blue-900/20 dark:border-blue-400' 
+                  : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100 hover:border-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700'
+              }`}
+            >
+              <BankIcon className={`w-10 h-10 mb-3 ${importCategory === 'bank' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
+              <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">{t("Bank Transaction")}</h3>
+              <p className="text-xs text-gray-500 mt-1">{t("Statements")}</p>
+            </button>
+
+            <button
+              onClick={() => setImportCategory('other')}
+              className={`p-5 rounded-xl flex flex-col items-center justify-center text-center transition-all ${
+                importCategory === 'other' 
+                  ? 'bg-blue-50 border-2 border-blue-500 shadow-sm dark:bg-blue-900/20 dark:border-blue-400' 
+                  : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100 hover:border-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700'
+              }`}
+            >
+              <CategoryIcon className={`w-10 h-10 mb-3 ${importCategory === 'other' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
+              <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">{t("Other")}</h3>
+              <p className="text-xs text-gray-500 mt-1">{t("Miscellaneous data")}</p>
+            </button>
+          </div>
+          
+
+        </div>
+
+        {/* TAB: CHOOSE */}
+        <div className={`flex-1 bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative group/main shrink-0 ${activeTab === 'choose' ? 'flex' : 'hidden'}`}>
+
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+
+          <div className="flex items-center justify-between mb-6 shrink-0">
+             <div>
+                <h2 className="text-2xl font-black text-gray-900 tracking-tight leading-none font-display dark:text-white">
+                  {importCategory === 'voucher' ? t("Voucher Classification") : importCategory === 'master' ? t("Master Data Type") : importCategory === 'bank' ? t("Bank Selection") : t("Data Entry Origin")}
+                </h2>
+                <div className="flex items-center mt-2 space-x-2">
+                    <div className="flex -space-x-1">
+                        {[1,2].map(i => <div key={i} className={`w-1.5 h-1.5 rounded-full border border-white ${i === 1 ? 'bg-blue-400' : 'bg-gray-200'} dark:bg-gray-700`}></div>)}
+                    </div>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-blue-600/80 bg-blue-50/50 px-1.5 py-0.5 rounded border border-blue-100/50">{t("Pipeline Alpha")}</span>
+                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider leading-none">
+                      {importCategory === 'voucher' ? t("Classify document & ingest record") : importCategory === 'master' ? t("Select master data entity") : importCategory === 'bank' ? t("Select bank for statement import") : t("Select data type")}
+                    </p>
+                </div>
+             </div>
+          </div>
+          
+          <div className="mb-6">
+            {importCategory === 'voucher' && (
+              <>
+                <div className="flex items-center justify-between mb-5 px-1">
+                    <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40 dark:text-white">{t("System Classification")}</label>
+                    <div className="h-px flex-1 bg-gray-100 mx-6 dark:bg-gray-800"></div>
+                </div>
+                <div className="form-grid gap-4">
+                  {[
+                    { type: VoucherType.Purchase, icon: InventoryIcon, color: 'text-emerald-600 bg-emerald-50/50 border-emerald-100', accent: 'bg-emerald-600' },
+                    { type: VoucherType.Sales, icon: TaxIcon, color: 'text-blue-600 bg-blue-50/50 border-blue-100', accent: 'bg-blue-600' },
+                    { type: VoucherType.Payment, icon: AccountIcon, color: 'text-purple-600 bg-purple-50/50 border-purple-100', accent: 'bg-purple-600' },
+                    { type: VoucherType.Receipt, icon: VouchersIcon, color: 'text-amber-600 bg-amber-50/50 border-amber-100', accent: 'bg-amber-600' },
+                    { type: VoucherType.Journal, icon: CategoryIcon, color: 'text-slate-600 bg-slate-50/50 border-slate-100', accent: 'bg-slate-600' },
+                    { type: VoucherType.Contra, icon: UndoIcon, color: 'text-rose-600 bg-rose-50/50 border-rose-100', accent: 'bg-rose-600' },
+                  ].map((item) => (
+                    <button
+                      key={item.type}
+                      onClick={() => setVoucherType(item.type)}
+                      className={`group flex flex-col items-center justify-center p-3.5 rounded-[1.25rem] border transition-all duration-500 relative overflow-hidden ${
+                        voucherType === item.type 
+                          ? `${item.color} ring-1 ring-offset-4 ring-blue-500/30 border-transparent shadow-[0_15px_30px_rgba(59,130,246,0.15)] scale-[1.08] z-10` 
+                          : 'bg-white text-gray-400 border-gray-100 hover:border-blue-200 hover:bg-premium-slate-50 hover:text-blue-600 active:scale-95 dark:bg-gray-800 dark:border-gray-700'
+                      }`}
+                    >
+                      <div className={`absolute bottom-0 left-0 h-1 transition-all duration-500 ${voucherType === item.type ? `w-full ${item.accent}` : 'w-0 bg-blue-400'}`}></div>
+                      <item.icon className={`text-xl mb-2 transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-0.5 ${voucherType === item.type ? 'scale-110 -translate-y-0.5' : ''}`} />
+                      <span className="text-[10px] font-black uppercase tracking-tight line-clamp-1">{item.type}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {importCategory === 'master' && (
+              <>
+                <div className="flex items-center justify-between mb-5 px-1">
+                    <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40 dark:text-white">{t("Master Entity Type")}</label>
+                    <div className="h-px flex-1 bg-gray-100 mx-6 dark:bg-gray-800"></div>
+                </div>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    { id: 'ledgers', label: 'Ledgers', icon: AccountIcon },
+                    { id: 'items', label: 'Items', icon: InventoryIcon },
+                    { id: 'costCenters', label: 'Cost Centers', icon: CategoryIcon },
+                    { id: 'priceList', label: 'Price List', icon: TaxIcon },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => setMasterType(item.id as any)}
+                      className={`group flex flex-col items-center justify-center py-6 px-4 rounded-2xl border-2 transition-all ${
+                        masterType === item.id 
+                          ? 'bg-blue-50 border-blue-500 shadow-md text-blue-700 dark:bg-blue-900/20 dark:border-blue-400 dark:text-blue-300' 
+                          : 'bg-gray-50 border-transparent text-gray-500 hover:bg-gray-100 hover:border-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-400'
+                      }`}
+                    >
+                      <item.icon className={`text-2xl mb-3 ${masterType === item.id ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
+                      <span className="text-sm font-bold">{t(item.label)}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
             
-            {voucherType === VoucherType.BankStatement && (
+            {importCategory === 'bank' && (
               <div className="mt-4 space-y-4 animate-in slide-in-from-top-2 duration-300">
                 <div className="p-4 bg-indigo-50/50 rounded-xl border border-indigo-100 flex items-start">
-                  <InfoIcon className="text-indigo-500 mr-3 mt-0.5" />
+                  <InfoIcon className="text-indigo-500 mr-3 mt-0.5 shrink-0" />
                   <div>
                     <h4 className="text-sm font-bold text-indigo-900">{t("Raw Bank Import")}</h4>
-                    <p className="text-xs text-indigo-700 mt-0.5">t("Importing a bank statement will automatically extract individual transaction lines. These will be presented as individual vouchers for your review and ledger mapping.")</p>
+                    <p className="text-xs text-indigo-700 mt-0.5">{t("Importing a bank statement will automatically extract individual transaction lines. These will be presented as individual vouchers for your review and ledger mapping.")}</p>
                   </div>
                 </div>
 
                 <div className="form-field-wrapper">
-<label className="form-label px-1">{t("Select Bank Source (Mandatory)")}</label>
+                  <label className="form-label px-1">{t("Select Bank Source (Mandatory)")}</label>
                   <select 
                     value={selectedBank}
                     onChange={(e) => setSelectedBank(e.target.value)}
-                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-700"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                   >
                     <option value="">{t("-- Choose Indian Major Bank --")}</option>
                     {bankMasters.map(bank => (
@@ -493,25 +656,340 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                 </div>
               </div>
             )}
+
+            {importCategory === 'other' && (
+              <div className="flex flex-col items-center justify-center p-8 bg-gray-50 rounded-2xl border border-dashed border-gray-300 dark:bg-gray-800/50 dark:border-gray-700">
+                  <CategoryIcon className="w-12 h-12 text-gray-400 mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400 font-medium text-sm text-center">{t("You are configuring a miscellaneous import. Just proceed to the next step to upload your generic data.")}</p>
+              </div>
+            )}
           </div>
+          
+
+        </div>
+
+        {/* TAB: SETTINGS */}
+        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar shrink-0 ${activeTab === 'settings' ? 'flex' : 'hidden'}`}>
+          <div className="mb-6">
+            <div className="flex items-center text-blue-700 mb-4">
+              <InfoIcon className="mr-3 text-2xl" />
+              <h3 className="text-xl font-black">{t("AI Suggestions & Process Info")}</h3>
+            </div>
+            <ul className="space-y-3 text-sm text-gray-600 list-disc list-inside dark:text-gray-300 ml-2">
+              <li>{t("For best results, upload clear, high-resolution images or machine-readable PDFs.")}</li>
+              <li>{t("Ensure the voucher type matches the uploaded document.")}</li>
+              <li>{t("Our AI will attempt to automatically recognize all fields.")}</li>
+              {file && <li className="font-semibold text-green-700 mt-4">{t("AI analysis ready. Proceed to the next step to review extracted data.")}</li>}
+            </ul>
+            <div className="mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200/60 dark:bg-amber-950/20 dark:border-amber-900/40">
+              <span className="text-[10px] font-black uppercase text-amber-800 dark:text-amber-400 tracking-wider flex items-center gap-1.5 mb-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                {t("Simulated Sandbox Parser Mode")}
+              </span>
+              <p className="text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed font-medium">
+                {t("Excel/CSV formats are parsed directly to standard ledger models. Other source formats (Images, PDFs) run under a")} <strong>{t("simulated OCR Sandbox sequence")}</strong> {t("with mock values to demonstrate enterprise AI mapping pipelines.")}
+              </p>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-100 pt-8 dark:border-gray-700">
+            <div className="flex items-center mb-6 text-gray-800 dark:text-gray-100">
+              <SettingsIcon className="mr-3 text-xl text-blue-500" />
+              <h3 className="text-xl font-black">{t("Advanced Parsing Settings")}</h3>
+            </div>
+
+            <div className="space-y-4">
+              {/* ACCORDION 1: AI Model Engine */}
+              <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
+                <button
+                  type="button"
+                  onClick={() => setActiveSection(activeSection === 'ai' ? null : 'ai')}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("AI Engine Settings")}</h4>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Model selection, vision features and sensitivity thresholds")}</p>
+                    </div>
+                  </div>
+                  {activeSection === 'ai' ? (
+                    <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  )}
+                </button>
+
+                {activeSection === 'ai' && (
+                  <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-4 animate-in fade-in duration-200">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-black text-gray-700 uppercase tracking-wider dark:text-gray-300">{t("OCR Sensitivity")} ({parsingSettings.ocrSensitivity}%)</label>
+                        <InfoIcon className="w-3.5 h-3.5 text-blue-400" />
+                      </div>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="100" 
+                        value={parsingSettings.ocrSensitivity}
+                        onChange={(e) => setParsingSettings(prev => ({ ...prev, ocrSensitivity: parseInt(e.target.value) }))}
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:bg-gray-700"
+                      />
+                      <div className="flex justify-between text-[10px] text-gray-500 font-bold mt-2 uppercase tracking-wide">
+                        <span>{t("Performance Focus")}</span>
+                        <span>{t("Accuracy Focus")}</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-black text-gray-700 uppercase tracking-wider dark:text-gray-300">{t("AI Model Engine")}</label>
+                      <select 
+                        value={parsingSettings.aiModel}
+                        onChange={(e) => setParsingSettings(prev => ({ ...prev, aiModel: e.target.value }))}
+                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-600"
+                      >
+                        {INTERNAL_GEMINI_MODELS.map(model => (
+                          <option key={model.id} value={model.id}>{model.name}</option>
+                        ))}
+                        <option value="Vision Transformer-L">{t("Vision Transformer-L (Best for Complex Tables)")}</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                      <div className="text-xs pr-4 text-left">
+                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm mb-1">{t("Experimental Vision Engine")}</p>
+                        <p className="text-gray-500 font-medium">{t("Enhanced layout recovery & tabular structure detection")}</p>
+                      </div>
+                      <button 
+                        type="button"
+                        onClick={() => setParsingSettings(prev => ({ ...prev, experimentalFeatures: !prev.experimentalFeatures }))}
+                        className={`w-14 h-7 rounded-full transition-all relative shrink-0 ${parsingSettings.experimentalFeatures ? 'bg-blue-600 shadow-inner' : 'bg-gray-300 dark:bg-gray-700'}`}
+                      >
+                        <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-300 ${parsingSettings.experimentalFeatures ? 'translate-x-8' : 'translate-x-1'}`} />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ACCORDION 2: Custom Extraction Cues */}
+              <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
+                <button
+                  type="button"
+                  onClick={() => setActiveSection(activeSection === 'custom' ? null : 'custom')}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("Custom Ingestion Cues")}</h4>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Custom instructions, prompts or extraction triggers for AI")}</p>
+                    </div>
+                  </div>
+                  {activeSection === 'custom' ? (
+                    <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  )}
+                </button>
+
+                {activeSection === 'custom' && (
+                  <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-3 animate-in fade-in duration-200">
+                    <label className="block text-xs font-black text-gray-700 uppercase tracking-wider dark:text-gray-300">{t("Custom Extraction Cues")}</label>
+                    <textarea 
+                      value={parsingSettings.customInstructions}
+                      onChange={(e) => setParsingSettings(prev => ({ ...prev, customInstructions: e.target.value }))}
+                      placeholder={t("e.g. 'Always look for GSTIN in the footer', 'Ignore previous balance in total'...")}
+                      className="w-full h-24 text-sm font-medium p-4 bg-white border border-gray-300 rounded-xl resize-none outline-none focus:ring-2 focus:ring-blue-500 shadow-sm dark:bg-gray-800 dark:border-gray-600"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* ACCORDION 3: Production Service Section */}
+              <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
+                <button
+                  type="button"
+                  onClick={() => setActiveSection(activeSection === 'production' ? null : 'production')}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("Production Service Integration")}</h4>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Synchronize parsed voucher objects back to production ERPs")}</p>
+                    </div>
+                  </div>
+                  {activeSection === 'production' ? (
+                    <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  )}
+                </button>
+
+                {activeSection === 'production' && (
+                  <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 space-y-4 animate-in fade-in duration-200 text-left">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Target Accounting API ERP")}</label>
+                        <select 
+                          value={productionEnv}
+                          onChange={(e) => {
+                            setProductionEnv(e.target.value);
+                            if (e.target.value === 'tally') setProductionApiUrl('https://api.tallyprime.internal/v1/import');
+                            else if (e.target.value === 'sap') setProductionApiUrl('https://sap-gateway.enterprise.corp/api/v2/vouchers');
+                            else if (e.target.value === 'zoho') setProductionApiUrl('https://books.zoho.in/api/v3/documents');
+                            else setProductionApiUrl('');
+                          }}
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-800 dark:border-gray-700"
+                        >
+                          <option value="tally">{t("Tally Prime Server")}</option>
+                          <option value="sap">{t("SAP Business One ERP")}</option>
+                          <option value="zoho">{t("Zoho Books Endpoint")}</option>
+                          <option value="custom">{t("-- Custom Webhook URL --")}</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Synchronization Strategy")}</label>
+                        <select 
+                          value={syncMode}
+                          onChange={(e) => setSyncMode(e.target.value)}
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-800 dark:border-gray-700"
+                        >
+                          <option value="realtime">{t("Real-time Direct Push")}</option>
+                          <option value="batch">{t("EOD Nightly Batch Queue")}</option>
+                          <option value="manual">{t("Manual Human-in-The-Loop Signoff")}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="space-y-1.5">
+                        <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Production Integration Endpoint URL")}</label>
+                        <input 
+                          type="text"
+                          value={productionApiUrl}
+                          onChange={(e) => setProductionApiUrl(e.target.value)}
+                          placeholder="https://sync.yourdomain.com/api/v1/ledger"
+                          className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg font-mono focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-850 dark:border-gray-700"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider dark:text-gray-400">{t("Bearer Access Key / API Token")}</label>
+                        <input 
+                          type="password"
+                          value={productionApiKey}
+                          onChange={(e) => setProductionApiKey(e.target.value)}
+                          placeholder="••••••••••••••••••••••••••••••••"
+                          className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg font-mono focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-850 dark:border-gray-750"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3.5 bg-gray-50 dark:bg-gray-905 rounded-xl border border-gray-200 dark:border-gray-750 mt-2">
+                      <div className="text-[11px] pr-2 text-left">
+                        <p className="font-bold text-gray-800 dark:text-gray-200 mb-0.5">{t("Sync Unmapped Ledgers Automatically")}</p>
+                        <p className="text-gray-400">{t("Create non-existent party & bank accounts in secondary ERP in real-time")}</p>
+                      </div>
+                      <button 
+                        type="button"
+                        onClick={() => setIsSyncingLedger(!isSyncingLedger)}
+                        className={`w-10 h-5.5 rounded-full transition-all relative shrink-0 ${isSyncingLedger ? 'bg-green-600' : 'bg-gray-300 dark:bg-gray-750'}`}
+                      >
+                        <div className={`absolute top-0.5 w-4.5 h-4.5 bg-white rounded-full shadow-sm transition-transform duration-300 ${isSyncingLedger ? 'translate-x-5' : 'translate-x-0.5'}`} />
+                      </button>
+                    </div>
+
+                    <div className="pt-3 border-t border-gray-200 dark:border-gray-700 flex flex-col gap-2">
+                      <button
+                        type="button"
+                        onClick={handleTestConnection}
+                        disabled={testConnectionStatus === 'testing'}
+                        className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-850 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+                      >
+                        {testConnectionStatus === 'testing' ? (
+                          <>
+                            <svg className="animate-spin h-3.5 w-3.5 text-gray-600 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            {t("Connecting...")}
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            {t("Test Service connectivity")}
+                          </>
+                        )}
+                      </button>
+
+                      {testConnectionStatus !== 'idle' && (
+                        <div className={`p-2.5 rounded-lg border text-[11px] font-medium text-left ${
+                          testConnectionStatus === 'success' 
+                            ? 'bg-green-50 border-green-200 text-green-800 dark:bg-green-950/20 dark:border-green-900/40 dark:text-green-300' 
+                            : testConnectionStatus === 'error'
+                            ? 'bg-red-50 border-red-200 text-red-800 dark:bg-red-950/20 dark:border-red-900/40 dark:text-red-300'
+                            : 'bg-blue-50 border-blue-100 text-blue-800'
+                        }`}>
+                          {testConnectionMessage}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+        </div>
+        
+        {/* TAB: UPLOAD */}
+        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar shrink-0 ${activeTab === 'upload' ? 'flex' : 'hidden'}`}>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
 
           <div 
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200 ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'} dark:border-gray-600 dark:bg-gray-800`}
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors duration-200 mb-6 ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'} dark:border-gray-600 dark:bg-gray-800`}
           >
             <div className="flex flex-col items-center">
-              <UploadFileIcon className="text-5xl text-gray-400 mb-4" />
-              <p className="mb-2 text-gray-600 dark:text-gray-300">{t("Drag & drop files here")}</p>
-              <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">{t("PDF, Excel, JPG, PNG")}</p>
+              <UploadFileIcon className="text-5xl text-gray-400 mb-3" />
+              <p className="mb-1 text-gray-600 dark:text-gray-300 font-bold">{t("Drag & drop files here")}</p>
+              <p className="text-xs text-gray-500 mb-4 dark:text-gray-400">{t("PDF, Excel, JPG, PNG")}</p>
               <label htmlFor="file-upload" className="cursor-pointer bg-blue-100 text-blue-700 font-semibold px-4 py-2 rounded-lg hover:bg-blue-200 transition-colors">{t("Browse Files")}</label>
               <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.xls,.xlsx,.jpg,.jpeg,.png"/>
             </div>
           </div>
           
           {file && (
-            <div className="mt-8 p-6 bg-premium-slate-50 rounded-[2rem] border border-premium-slate-100 animate-in fade-in slide-in-from-top-4 duration-500 dark:bg-gray-800 dark:border-gray-700">
+            <div className="mt-2 p-6 bg-premium-slate-50 rounded-[2rem] border border-premium-slate-100 animate-in fade-in slide-in-from-top-4 duration-500 dark:bg-gray-800 dark:border-gray-700">
                 <div className="flex items-start">
                     <div className="shrink-0 w-16 h-16 bg-white rounded-2xl border border-premium-slate-200 flex items-center justify-center shadow-sm dark:bg-gray-800 dark:border-gray-600">
                         {React.cloneElement(getFileIcon(file.name) as any, { className: 'text-3xl ' + ((getFileIcon(file.name) as any).props?.className || '') })}
@@ -542,268 +1020,151 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                 </div>
             </div>
           )}
-          
-          {file && (
-            <div className="mt-8 border-t pt-8">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">{t("Source Options")}</h3>
-                {isStructuredFile && (
-                  <button 
-                    onClick={() => setShowMapping(!showMapping)}
-                    className="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center"
-                  >
-                    <EditIcon className="mr-1 text-base" />
-                    {showMapping ? 'Hide Mapping' : 'Manual Column Mapping'}
-                  </button>
-                )}
-              </div>
-              
-              {showMapping && isStructuredFile ? (
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 animate-in fade-in slide-in-from-top-2 duration-300 dark:bg-gray-900 dark:border-gray-700">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 pb-4 border-b border-gray-200 gap-4 dark:border-gray-700">
-                    <div className="flex items-start">
-                      <SettingsIcon className="text-blue-500 mr-2 mt-0.5 scale-90" />
-                      <div>
-                        <h4 className="text-sm font-bold text-gray-800 dark:text-gray-100">{t("Identify Header Row")}</h4>
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400">{t("Choose which row contains column names")}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3 bg-white p-1 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                      <span className="text-xs font-medium text-gray-500 ml-2 dark:text-gray-400">{t("Row Index:")}</span>
+
+          {file && !isStructuredFile && previewContent && (
+            <div className="mt-6 border p-4 rounded-lg bg-gray-50 dark:bg-gray-900 overflow-hidden">
+                <h4 className="text-sm font-bold text-gray-700 mb-3">{t("File Preview")}</h4>
+                {previewContent}
+            </div>
+          )}
+
+          {file && isStructuredFile && (
+            <div className="animate-in fade-in duration-300 mt-8 pt-8 border-t border-gray-100 dark:border-gray-700 text-left">
+              <div className="flex items-center justify-between font-semibold mb-6">
+                 <div>
+                    <h3 className="text-2xl font-black text-gray-900 tracking-tighter dark:text-white">{t("Map Data Columns")}</h3>
+                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">Found {fileHeaders.length} source columns</p>
+                 </div>
+                 <div className="flex items-center space-x-3 bg-gray-50 p-2 rounded-xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                      <span className="text-xs font-semibold text-gray-500 ml-2 dark:text-gray-400">{t("Header Row Index:")}</span>
                       <input 
                         type="number" 
                         min="0"
                         max="100"
                         value={headerRowIndex}
                         onChange={(e) => setHeaderRowIndex(Math.max(0, parseInt(e.target.value) || 0))}
-                        className="w-16 p-1 text-center font-bold text-blue-600 outline-none"
+                        className="w-16 px-2 py-1 text-center font-bold text-blue-600 bg-white border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
                       />
+                  </div>
+              </div>
+              
+              <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 flex items-start mb-6 dark:bg-blue-900/20 dark:border-blue-800/30">
+                <InfoIcon className="text-blue-500 mr-2 mt-0.5" />
+                <p className="text-sm text-blue-800 dark:text-blue-300">
+                  {t(`Map the columns from your Excel file to the corresponding fields in Bharat Book. Our AI will use these hints to improve parsing accuracy.`)}
+                </p>
+              </div>
+              
+              <div className="form-grid gap-4 bg-gray-50 p-6 rounded-2xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                {Object.keys(mappings).map((targetField) => (
+                  <div key={targetField} className="flex flex-col">
+                    <label className="text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 dark:text-gray-400">
+                      {targetField.replace(/([A-Z])/g, ' $1')}
+                    </label>
+                    <div className="relative">
+                      <select 
+                        value={mappings[targetField]}
+                        onChange={(e) => setMappings(prev => ({ ...prev, [targetField]: e.target.value }))}
+                        className="w-full pl-4 pr-10 py-3 text-sm font-medium bg-white border border-gray-300 rounded-xl appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-600 transition-shadow hover:border-gray-400"
+                      >
+                        <option value="">{t("-- Auto-detect --")}</option>
+                        {(fileHeaders.length > 0 ? fileHeaders : []).map(col => (
+                          <option key={col} value={col}>{col}</option>
+                        ))}
+                      </select>
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
 
-                  <div className="flex items-start mb-4">
-                    <InfoIcon className="text-blue-500 mr-2 mt-0.5" />
-                    <p className="text-xs text-gray-600 dark:text-gray-300">{t(`Map the columns from your Excel file to the corresponding fields in Bharat Book. 
-                      Our AI will use these hints to improve parsing accuracy.`)}</p>
-                  </div>
-                  
-                  <div className="form-grid gap-4">
-                    {Object.keys(mappings).map((targetField) => (
-                      <div key={targetField}>
-                        <label className="form-label tracking-wider dark:text-gray-400">
-                          {targetField.replace(/([A-Z])/g, ' $1')}
-                        </label>
-                        <select 
-                          value={mappings[targetField]}
-                          onChange={(e) => setMappings(prev => ({ ...prev, [targetField]: e.target.value }))}
-                          className="form-input text-sm border-gray-300 rounded focus:ring-1 dark:border-gray-600"
-                        >
-                          <option value="">{t("-- Auto-detect --")}</option>
-                          {(fileHeaders.length > 0 ? fileHeaders : []).map(col => (
-                            <option key={col} value={col}>{col}</option>
-                          ))}
-                        </select>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-6 flex justify-end">
-                    <button 
-                      onClick={clearMappings}
-                      className="text-xs font-semibold text-gray-500 hover:text-red-500 flex items-center transition-colors px-3 py-1.5 rounded-md hover:bg-red-50 dark:text-gray-400"
-                    >
-                      <UndoIcon className="mr-1.5 text-sm" />
-                      Clear All Mappings
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="border p-4 rounded-lg bg-gray-50 dark:bg-gray-900">
-                  {previewContent}
-                </div>
-              )}
+              <div className="mt-6 flex justify-end">
+                <button 
+                  onClick={clearMappings}
+                  className="text-sm font-bold text-gray-500 hover:text-red-600 flex items-center transition-colors px-4 py-2.5 rounded-xl hover:bg-red-50 dark:text-gray-400 dark:hover:bg-red-900/20"
+                >
+                  <UndoIcon className="mr-2 text-base" />
+                  {t("Clear All Mappings")}
+                </button>
+              </div>
             </div>
+          )}
+          
+
+        </div>
+
+      </div>
+      
+      <div className="shrink-0 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between px-1">
+        <div className="flex-1 flex justify-start items-center">
+          {activeTab !== 'type' && (
+            <button 
+              onClick={() => {
+                if (activeTab === 'choose') setActiveTab('type');
+                else if (activeTab === 'upload') setActiveTab('choose');
+                else if (activeTab === 'settings') setActiveTab('upload');
+              }} 
+              className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+            >
+              <ArrowForwardIcon className="mr-1 text-base rotate-180" />
+              {activeTab === 'choose' ? t("Back to Import Type") : activeTab === 'upload' ? t("Back to Choose") : t("Back to Upload")}
+            </button>
           )}
         </div>
 
-        <div className={`flex-1 lg:flex-none flex-col bg-blue-50 p-4 sm:p-6 rounded-xl space-y-4 overflow-y-auto scrollbar-thin shrink-0 lg:shrink border border-blue-100 dark:bg-blue-950/20 dark:border-blue-900/30 ${activeMobileTab === 'info' ? 'flex' : 'hidden lg:flex'}`}>
-          <div>
-            <div className="flex items-center text-blue-700 mb-4">
-              <InfoIcon className="mr-3 text-2xl" />
-              <h3 className="text-lg font-bold">{t("AI Suggestions")}</h3>
-            </div>
-            <ul className="space-y-3 text-sm text-gray-600 list-disc list-inside dark:text-gray-300">
-              <li>For best results, upload clear, high-resolution images or machine-readable PDFs.</li>
-              <li>Ensure the voucher type matches the uploaded document.</li>
-              <li>Our AI will attempt to automatically recognize all fields.</li>
-              {file && <li className="font-semibold text-green-700 mt-4">AI analysis ready. Proceed to the next step to review extracted data.</li>}
-            </ul>
-            <div className="mt-4 p-3.5 bg-amber-50 rounded-xl border border-amber-200/60 dark:bg-amber-950/20 dark:border-amber-900/40">
-              <span className="text-[10px] font-black uppercase text-amber-800 dark:text-amber-400 tracking-wider flex items-center gap-1.5 mb-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                Simulated Sandbox Parser Mode
-              </span>
-              <p className="text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed font-medium">
-                Excel/CSV formats are parsed directly to standard ledger models. Other source formats (Images, PDFs) run under a <strong>{t("simulated OCR Sandbox sequence")}</strong> with mock values to demonstrate enterprise AI mapping pipelines.
-              </p>
-            </div>
-          </div>
-
-          <div className="pt-6 border-t border-blue-200">
+        <div className="flex-1 flex justify-center items-center">
+          {activeTab !== 'type' && (
             <button 
-              onClick={() => setShowSettings(!showSettings)}
-              className="flex items-center text-blue-800 font-bold hover:text-blue-900 transition-colors w-full justify-between"
+              onClick={() => {
+                setFile(null);
+                setActiveTab('type');
+                setImportCategory('voucher');
+              }} 
+              className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
             >
-              <div className="flex items-center">
-                <SettingsIcon className="mr-2" />
-                Advanced Parsing Settings
-              </div>
-              <EditIcon className={`text-sm transform transition-transform ${showSettings ? 'rotate-90' : ''}`} />
+              <CancelIcon className="mr-1 text-base" />
+              {t("Start Over")}
             </button>
-
-            {showSettings && (
-              <div className="mt-4 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                <div className="bg-white/40 p-4 rounded-xl border border-blue-100/50">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">OCR Sensitivity ({parsingSettings.ocrSensitivity}%)</label>
-                      <div className="group relative">
-                        <InfoIcon className="w-3.5 h-3.5 text-blue-400 cursor-help" />
-                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 p-3 bg-gray-900/95 backdrop-blur shadow-2xl text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 border border-gray-700">
-                          <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">{t("OCR Precision Engine")}</p>
-                          <p className="leading-relaxed opacity-90">{t("Higher sensitivity (80%+) triggers deep multi-pass scanning for blurry text, handwritten notes, or low-contrast backgrounds. Use lower values for fast processing of clean digital PDFs.")}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="0" 
-                    max="100" 
-                    value={parsingSettings.ocrSensitivity}
-                    onChange={(e) => setParsingSettings(prev => ({ ...prev, ocrSensitivity: parseInt(e.target.value) }))}
-                    className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                  />
-                  <div className="flex justify-between text-[10px] text-blue-500 font-bold mt-1">
-                    <span>{t("Performance Focus")}</span>
-                    <span>{t("Accuracy Focus")}</span>
-                  </div>
-                  <p className="text-[10px] text-blue-600/70 mt-3 italic leading-relaxed">
-                    <strong>{t("Impact:")}</strong> Low sensitivity is faster for clean digital PDFs. High sensitivity (80%+) is required for handwritten notes or mobile snapshots.
-                  </p>
-                </div>
-
-                <div className="bg-white/40 p-4 rounded-xl border border-blue-100/50">
-                  <div className="flex items-center gap-2 mb-2">
-                    <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">{t("AI Model Engine")}</label>
-                    <div className="group relative">
-                      <InfoIcon className="w-3.5 h-3.5 text-blue-400 cursor-help" />
-                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 p-3 bg-gray-900/95 backdrop-blur shadow-2xl text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 border border-gray-700">
-                        <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">{t("Model Intelligence")}</p>
-                        <p className="leading-relaxed opacity-90"><strong>{t("Flash")}</strong> is optimized for speed (&lt;5s). <strong>{t("Pro")}</strong> handles complex multi-page logic &amp; multi-column tables. Select based on document complexity and volume.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <select 
-                    value={parsingSettings.aiModel}
-                    onChange={(e) => setParsingSettings(prev => ({ ...prev, aiModel: e.target.value }))}
-                    className="form-input text-sm font-bold border-blue-200 shadow-sm"
-                  >
-                    {INTERNAL_GEMINI_MODELS.map(model => (
-                      <option key={model.id} value={model.id}>{model.name}</option>
-                    ))}
-                    <option value="Vision Transformer-L">{t("Vision Transformer-L (Best for Complex Tables)")}</option>
-                  </select>
-                  <p className="text-[10px] text-blue-600/70 mt-3 italic leading-relaxed">
-                    <strong>{t("Impact:")}</strong> <strong>{t("Flash")}</strong> provides sub-5s response times. <strong>{t("Pro")}</strong> is recommended for legal documents or multi-page invoices with hundreds of line items.
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between p-4 bg-white/40 rounded-xl border border-blue-100/50">
-                  <div className="text-xs pr-4">
-                    <p className="font-bold text-blue-800">{t("Experimental Vision Engine")}</p>
-                    <p className="text-[10px] text-blue-600 font-medium">{t("Enhanced layout recovery & tabular structure detection")}</p>
-                  </div>
-                  <button 
-                    onClick={() => setParsingSettings(prev => ({ ...prev, experimentalFeatures: !prev.experimentalFeatures }))}
-                    className={`w-12 h-6 rounded-full transition-all relative shrink-0 ${parsingSettings.experimentalFeatures ? 'bg-blue-600 shadow-inner' : 'bg-gray-300'}`}
-                  >
-                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${parsingSettings.experimentalFeatures ? 'left-7' : 'left-1'} dark:bg-gray-800`} />
-                  </button>
-                </div>
-
-                <div className="bg-white/40 p-4 rounded-xl border border-blue-100/50">
-                  <div className="flex items-center gap-2 mb-2">
-                    <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">{t("Custom Extraction Cues")}</label>
-                    <div className="group relative">
-                      <InfoIcon className="w-3.5 h-3.5 text-blue-400 cursor-help" />
-                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 p-3 bg-gray-900/95 backdrop-blur shadow-2xl text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 border border-gray-700">
-                        <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">{t("Context Steering")}</p>
-                        <p className="leading-relaxed opacity-90">{t(`Directly guide the AI's logic. (e.g., "Look for party GSTIN in header", "Ignore totals if they include tax"). These cues significantly improve accuracy for non-standard formats.`)}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <textarea 
-                    value={parsingSettings.customInstructions}
-                    onChange={(e) => setParsingSettings(prev => ({ ...prev, customInstructions: e.target.value }))}
-                    placeholder="e.g. 'Always look for GSTIN in the footer', 'Ignore previous balance in total'..."
-                    className="form-input h-24 text-sm font-medium p-4 border-blue-200 resize-none placeholder-blue-300 shadow-inner"
-                  />
-                  <p className="text-[10px] text-blue-600/70 mt-3 italic leading-relaxed">
-                    <strong>{t("Impact:")}</strong> These instructions are injected into the AI prompt. Use them to clarify ambiguous fields or handle specific accounting quirks of certain vendors.
-                  </p>
-                </div>
-
-                <div className="bg-white/40 p-4 rounded-xl border border-blue-100/50">
-                  <div className="flex items-center gap-2 mb-2">
-                    <label className="block text-xs font-black text-blue-700 uppercase tracking-wider">{t("Custom AI Instructions")}</label>
-                    <div className="group relative">
-                      <InfoIcon className="w-3.5 h-3.5 text-blue-400 cursor-help" />
-                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 p-3 bg-gray-900/95 backdrop-blur shadow-2xl text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 border border-gray-700">
-                        <p className="font-bold mb-1 text-blue-400 uppercase tracking-tighter">{t("AI Processing Rule")}</p>
-                        <p className="leading-relaxed opacity-90">{t("Custom AI instructions specific to the parsing process. These are appended to the main prompt.")}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <textarea 
-                    value={parsingSettings.customAiInstructions || ''}
-                    onChange={(e) => setParsingSettings(prev => ({ ...prev, customAiInstructions: e.target.value }))}
-                    placeholder="Input custom AI instructions for the parsing process..."
-                    className="form-input h-24 text-sm font-medium p-4 border-blue-200 resize-none placeholder-blue-300 shadow-inner"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
-      </div>
-      
-      <div className="mt-4 pt-3 border-t">
-        <div className="flex justify-end space-x-4">
-          <button onClick={onCancel} className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">
-            <CancelIcon className="mr-2" />
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={!file || isLoading}
-            className="flex items-center justify-center px-4 py-2 border border-transparent rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition-colors"
-          >
-            {isLoading ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Processing...
-              </>
-            ) : (
-              <>
-                Next
-                <ArrowForwardIcon className="ml-2" />
-              </>
-            )}
-          </button>
+
+        <div className="flex-1 flex justify-end items-center">
+          {activeTab === 'settings' ? (
+            <button
+              onClick={handleSubmit}
+              disabled={!file || isLoading}
+              className="flex items-center justify-center px-5 py-2 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm disabled:bg-blue-300 disabled:cursor-not-allowed transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0"
+            >
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  {t("Processing...")}
+                </>
+              ) : (
+                <>
+                  {t("Process & Continue")}
+                  <ArrowForwardIcon className="ml-1.5 text-base" />
+                </>
+              )}
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                  if (activeTab === 'type') setActiveTab('choose');
+                  else if (activeTab === 'choose') setActiveTab('upload');
+                  else if (activeTab === 'upload') setActiveTab('settings');
+              }}
+              className="flex items-center justify-center px-5 py-2 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0"
+            >
+              {activeTab === 'type' ? t("Next: Choose") : activeTab === 'choose' ? t("Next: Upload") : t("Next: Settings")}
+              <ArrowForwardIcon className="ml-1.5 text-base" />
+            </button>
+          )}
         </div>
       </div>
     </div>

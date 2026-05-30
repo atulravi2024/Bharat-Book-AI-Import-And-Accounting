@@ -114,8 +114,8 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
         </div>
       </div>
       
-      <div className="mt-4 pt-3 border-t">
-        <div className="flex justify-between">
+      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between px-1">
           {!isLoading ? (
             <button
               onClick={onBack}

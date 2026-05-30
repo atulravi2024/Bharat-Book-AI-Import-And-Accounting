@@ -2515,8 +2515,8 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
         )}
       </div>
 
-      <div className="mt-4 pt-3 border-t flex-shrink-0">
-        <div className="flex justify-between">
+      <div className="mt-3 pt-3 border-t flex-shrink-0 border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between px-1">
           <button
             onClick={onBack}
             className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
