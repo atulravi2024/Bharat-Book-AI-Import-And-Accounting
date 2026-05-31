@@ -24,7 +24,7 @@ import { ReconcileTab } from './ReconcileTab';
 import { MappingDialog } from './MappingDialog';
 import { BankStatementTable } from './BankStatementTable';
 import { BankReportModals } from './BankReportModals';
-import { matchVoucher, matchVoucherAsync } from '../../../services/matching';
+import { matchVoucher, matchVoucherAsync } from '../../../services/import-engine/phase4-enhancers/matching';
 
 import { ImportExportButtons } from '../../shared/ImportExportButtons';
 

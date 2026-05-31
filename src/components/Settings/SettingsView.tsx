@@ -50,12 +50,12 @@ import { SupportSettings } from "./SupportSettings";
 import {
   BANK_SHORT_CODES,
   BANK_IGNORE_WORDS,
-} from "../../services/matching/bankCodes";
+} from "../../services/import-engine/phase4-enhancers/matching/bankCodes";
 import {
   PAYMENT_MODES,
   PAYMENT_CHANNELS,
-} from "../../services/matching/paymentModes";
-import { IFSC_PREFIXES } from "../../services/matching/ifscCodes";
+} from "../../services/import-engine/phase4-enhancers/matching/paymentModes";
+import { IFSC_PREFIXES } from "../../services/import-engine/phase4-enhancers/matching/ifscCodes";
 
 import { MainView, LedgerMaster } from "../../app/types";
 

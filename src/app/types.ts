@@ -90,7 +90,7 @@ export enum VoucherType {
   DebitNote = 'Debit Note'
 }
 
-export type AppStep = 'upload' | 'correction' | 'summary' | 'success';
+export type AppStep = 'upload' | 'processing' | 'correction' | 'summary' | 'success';
 
 export interface CustomMappingRule {
   id: string;

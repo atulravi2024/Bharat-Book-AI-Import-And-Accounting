@@ -2,6 +2,14 @@
 import * as XLSX from 'xlsx';
 import { Confidence, ParsedVoucher, VoucherType, ParsingSettings } from '../app/types';
 import { extractValidName } from './NameExtractor';
+import { parseExcelFile } from './import-engine/phase1-parsers/excelParser';
+import { parseCsvFile } from './import-engine/phase1-parsers/csvParser';
+import { parsePdfFile } from './import-engine/phase1-parsers/pdfParser';
+import { parseImageFile } from './import-engine/phase1-parsers/imageParser';
+import { parseJsonFile } from './import-engine/phase1-parsers/jsonParser';
+import { parseXmlFile } from './import-engine/phase1-parsers/xmlParser';
+
+import { runImportPipeline } from './import-engine';
 
 // This is a service to process voucher files.
 // For Bank Statements and Excel files, it uses direct parsing.
@@ -69,68 +77,121 @@ export const parseVoucherFile = async (
   ledgerMasters: any[] = []
 ): Promise<ParsedVoucher[]> => {
   const fileName = file.name.toLowerCase();
-  const isExcel = fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.csv');
 
-  if (isExcel) {
+  // Route processing dynamically based on exact file extension
+  if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.xlsm')) {
     try {
-      // Small delay to show loading state as users expect some "processing" time for data verification
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      const data = await file.arrayBuffer();
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      
-      // Find the actual header row (many bank statements have pre-headers or metadata)
-      const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' }) as any[][];
-      let headerRowIndex = 0;
-      let maxScore = 0;
-      
-      const commonHeaders = [
-        'date', 'particulars', 'description', 'narration', 'amount', 'withdrawal', 'deposit', 
-        'balance', 'closing balance', 'credit', 'debit', 'chq', 'ref', 'reference'
-      ];
-
-      for (let i = 0; i < Math.min(rawRows.length, 30); i++) {
-        const row = rawRows[i];
-        if (!Array.isArray(row)) continue;
-        
-        let score = 0;
-        for (const cell of row) {
-          if (typeof cell === 'string') {
-            const lowerCell = cell.trim().toLowerCase();
-            if (commonHeaders.some(h => lowerCell.includes(h))) {
-              score++;
-            }
-          }
-        }
-        
-        if (score > maxScore) {
-          maxScore = score;
-          headerRowIndex = i;
-        }
-      }
-      
-      const rangeStart = maxScore > 1 ? headerRowIndex : 0;
-      const rows = XLSX.utils.sheet_to_json(worksheet, { range: rangeStart, defval: '' }) as any[];
-
-      // Filter out truly empty rows that might be picked up
-      const dataRows = rows.filter(row => 
-        Object.values(row).some(val => val !== null && val !== undefined && val !== '')
+      return await parseExcelFile(
+        file,
+        voucherType,
+        createVoucherFromRow,
+        mapping,
+        settings,
+        sourceBank,
+        partyMasters,
+        ledgerMasters
       );
-
-      if (dataRows.length > 0) {
-        return dataRows.map((row, index) => {
-          return createVoucherFromRow(row, index, voucherType, mapping, settings, sourceBank, partyMasters, ledgerMasters);
-        });
-      }
     } catch (error) {
-      console.error("Error parsing Excel file:", error);
-      // Fall through to mock logic
+      console.error("Error in Excel Parser pipeline:", error);
+      throw error;
     }
   }
 
-  // Fallback / Default Mock Logic for non-excel or failed parsing
+  if (fileName.endsWith('.csv') || fileName.endsWith('.txt')) {
+    try {
+      return await parseCsvFile(
+        file,
+        voucherType,
+        createVoucherFromRow,
+        mapping,
+        settings,
+        sourceBank,
+        partyMasters,
+        ledgerMasters
+      );
+    } catch (error) {
+      console.error("Error in CSV Parser pipeline:", error);
+      throw error;
+    }
+  }
+
+  if (fileName.endsWith('.pdf')) {
+    try {
+      return await parsePdfFile(
+        file,
+        voucherType,
+        createMockVoucher,
+        mapping,
+        settings,
+        sourceBank
+      );
+    } catch (error) {
+      console.error("Error in PDF Parser pipeline:", error);
+      throw error;
+    }
+  }
+
+  if (
+    fileName.endsWith('.png') || 
+    fileName.endsWith('.jpg') || 
+    fileName.endsWith('.jpeg') || 
+    fileName.endsWith('.webp') ||
+    fileName.endsWith('.tiff') ||
+    fileName.endsWith('.bmp') ||
+    fileName.endsWith('.img')
+  ) {
+    try {
+      return await parseImageFile(
+        file,
+        voucherType,
+        createMockVoucher,
+        mapping,
+        settings,
+        sourceBank
+      );
+    } catch (error) {
+      console.error("Error in Image Parser pipeline:", error);
+      throw error;
+    }
+  }
+
+  if (fileName.endsWith('.json')) {
+    try {
+      return await parseJsonFile(
+        file,
+        voucherType,
+        createVoucherFromRow,
+        mapping,
+        settings,
+        sourceBank,
+        partyMasters,
+        ledgerMasters
+      );
+    } catch (error) {
+      console.error("Error in JSON Parser pipeline:", error);
+      throw error;
+    }
+  }
+
+  if (fileName.endsWith('.xml')) {
+    try {
+      return await parseXmlFile(
+        file,
+        voucherType,
+        createVoucherFromRow,
+        mapping,
+        settings,
+        sourceBank,
+        partyMasters,
+        ledgerMasters
+      );
+    } catch (error) {
+      console.error("Error in XML Parser pipeline:", error);
+      throw error;
+    }
+  }
+
+  // Fallback / Default Mock Logic for non-excel or unsupported file versions
   return new Promise((resolve) => {
     setTimeout(() => {
       // Simulate different outcomes based on voucher type for variety
@@ -158,7 +219,7 @@ export const parseNumericValue = (val: any): number => {
 };
 
 
-const createVoucherFromRow = (
+function createVoucherFromRow(
   row: any,
   index: number,
   voucherType: VoucherType,
@@ -167,9 +228,33 @@ const createVoucherFromRow = (
   sourceBank?: string,
   partyMasters: any[] = [],
   ledgerMasters: any[] = []
-): ParsedVoucher => {
+): ParsedVoucher {
+  const isBankStatement = voucherType === VoucherType.BankStatement;
+  const dataType = isBankStatement ? 'bank_transaction' : 'voucher';
+  const specificType = isBankStatement ? sourceBank : voucherType;
+
+  // Run Phase 2 (Mapping), Phase 3 (Cleaning), Phase 4 (Enhancement)
+  const pipelineResult = runImportPipeline(row, dataType, specificType, mapping);
+
   // Helper to map keys based on user-provided mapping or common patterns
   const getValue = (field: string) => {
+    // 1. Pipeline has highest priority
+    if (pipelineResult[field] !== undefined && pipelineResult[field] !== null && pipelineResult[field] !== '') {
+      return pipelineResult[field];
+    }
+    
+    // Pipeline uses 'description' for bank narration and 'particulars' for vouchers, unify it
+    if (field === 'narration' && pipelineResult.description) return pipelineResult.description;
+    if (field === 'narration' && pipelineResult.particulars) return pipelineResult.particulars;
+    if (field === 'partyName' && pipelineResult.particulars) return pipelineResult.particulars;
+    if (field === 'invoiceNumber' && pipelineResult.voucherNumber) return pipelineResult.voucherNumber;
+    if (field === 'amount' && pipelineResult.amount !== undefined) return pipelineResult.amount;
+    if (field === 'withdrawalAmount' && pipelineResult.withdrawal !== undefined) return pipelineResult.withdrawal;
+    if (field === 'depositAmount' && pipelineResult.deposit !== undefined) return pipelineResult.deposit;
+    if (field === 'closingBalance' && pipelineResult.balance !== undefined) return pipelineResult.balance;
+    if (field === 'referenceNo' && pipelineResult.reference) return pipelineResult.reference;
+
+    // 2. Original legacy mapping logic 
     const mappedKey = mapping?.[field];
     if (mappedKey && row[mappedKey] !== undefined) return row[mappedKey];
     
@@ -213,8 +298,6 @@ const createVoucherFromRow = (
     };
   };
 
-  const isBankStatement = voucherType === VoucherType.BankStatement;
-  
   const rawDate = getValue('date');
   const rawTimeColumnValue = getValue('time');
   
@@ -451,13 +534,13 @@ const createVoucherFromRow = (
   return voucher;
 };
 
-const createMockVoucher = (
+function createMockVoucher(
   index: number, 
   voucherType: VoucherType, 
   mapping?: Record<string, string>,
   settings?: ParsingSettings,
   sourceBank?: string
-): ParsedVoucher => {
+): ParsedVoucher {
   const isPurchase = voucherType === VoucherType.Purchase;
   
   // Custom logic to reflect if a mapping was used for a field

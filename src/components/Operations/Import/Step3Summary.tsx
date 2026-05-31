@@ -53,7 +53,7 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
   }, [vouchers, voucherType]);
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex-1 flex flex-col min-h-0">
       <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md flex-1 overflow-y-auto scrollbar-thin dark:bg-gray-800">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
             <div>
@@ -114,7 +114,7 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
         </div>
       </div>
       
-      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-4 shadow-[0_-10px_25px_-8px_rgba(0,0,0,0.15)] dark:shadow-[0_-10px_25px_-12px_rgba(0,0,0,0.8)] mt-auto">
         <div className="flex justify-between px-1">
           {!isLoading ? (
             <button

@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect, Component } from 'react';
-import { RefreshCw, Lock, Shield } from 'lucide-react';
+import { RefreshCw, Lock, Shield, Check, Layers, ListTodo, FileSpreadsheet, Upload, Sliders, Settings, Cpu, Database, ShieldAlert, ClipboardCheck } from 'lucide-react';
 import { Layout } from '../components/Layout/Layout';
 import { ThemeProvider } from '../components/Layout/ThemeContext';
 import { NotificationProvider, useNotifications } from '../context/NotificationContext';
-import { LanguageProvider } from '../context/LanguageContext';
+import { LanguageProvider, useLanguage } from '../context/LanguageContext';
 import { Step1Upload } from '../components/Operations/Import/Step1Upload';
+import { Step1Processing } from '../components/Operations/Import/Step1Processing';
 import { Step2Correction } from '../components/Operations/Import/Step2Correction';
 import { Step3Summary } from '../components/Operations/Import/Step3Summary';
 import { SuccessScreen } from '../components/Operations/Import/SuccessScreen';
@@ -241,6 +242,11 @@ const AppContent: React.FC = () => {
       setActiveMasterTab(null);
     }
   }, [view]);
+  const { language } = useLanguage();
+  const [uploadSubStep, setUploadSubStep] = useState<'type' | 'choose' | 'preview' | 'upload' | 'mapping' | 'settings'>('type');
+  const [correctionSubStep, setCorrectionSubStep] = useState<'unmap' | 'missing' | 'automate'>('automate');
+  const [importCategory, setImportCategory] = useState<'voucher' | 'master' | 'bank' | 'other'>('voucher');
+
   const [step, setStep] = useState<AppStep>('upload');
   const [entryStep, setEntryStep] = useState<AppStep>('upload');
   const [vouchers, setVouchers] = useState<ParsedVoucher[]>([]);
@@ -252,6 +258,9 @@ const AppContent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [hasDraft, setHasDraft] = useState(false);
   const [syncProgress, setSyncProgress] = useState<{current: number, total: number, label: string} | null>(null);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [pendingMapping, setPendingMapping] = useState<Record<string, string> | undefined>(undefined);
+  const [pendingSourceBank, setPendingSourceBank] = useState<string | undefined>(undefined);
   
   const [partyMasters, setPartyMasters] = useStorageState<any[]>(PARTY_MASTERS_KEY, []);
   const [ledgerMasters, setLedgerMasters] = useStorageState<any[]>(LEDGER_MASTERS_KEY, []);
@@ -358,10 +367,15 @@ const AppContent: React.FC = () => {
 
   const resetFlow = () => {
     setStep('upload');
+    setUploadSubStep('type');
+    setCorrectionSubStep('automate');
     setEntryStep('upload');
     setVouchers([]);
     setIsLoading(false);
     setError(null);
+    setPendingFile(null);
+    setPendingMapping(undefined);
+    setPendingSourceBank(undefined);
     if (originView && originView !== 'import') {
       setView(originView);
       setOriginView(null);
@@ -395,65 +409,13 @@ const AppContent: React.FC = () => {
     setHasDraft(false);
   };
 
-  const handleStep1Next = async (file: File, selectedVoucherType: VoucherType, mapping?: Record<string, string>, settings?: ParsingSettings, sourceBank?: string) => {
-    setIsLoading(true);
-    setError(null);
+  const handleStep1Next = (file: File, selectedVoucherType: VoucherType, mapping?: Record<string, string>, settings?: ParsingSettings, sourceBank?: string) => {
+    setPendingFile(file);
+    setPendingMapping(mapping);
     setVoucherType(selectedVoucherType);
     if (settings) setParsingSettings(settings);
-    try {
-      if (file.name.toLowerCase().includes('error')) {
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        throw new Error('This file appears to be corrupted and cannot be processed.');
-      }
-
-      const appSettingsStr = localStorage.getItem('bharat_book_app_settings');
-      let finalSettings = settings || { ocrSensitivity: 75, aiModel: 'Gemini 1.5 Flash', experimentalFeatures: false, customInstructions: '' };
-      
-      if (appSettingsStr) {
-        try {
-          const appSettings = JSON.parse(appSettingsStr);
-          finalSettings = {
-            ...finalSettings,
-            customMappingRules: appSettings.customMappingRules || [],
-            bankShortCodes: appSettings.bankShortCodes,
-            bankIgnoreWords: appSettings.bankIgnoreWords,
-            paymentModes: appSettings.paymentModes,
-            paymentChannels: appSettings.paymentChannels,
-            ifscPrefixes: appSettings.ifscPrefixes
-          };
-        } catch (e) {
-          console.error("Error merging app settings", e);
-        }
-      }
-
-      let parsedData = await parseVoucherFile(file, selectedVoucherType, mapping, finalSettings, sourceBank, partyMasters, ledgerMasters);
-      
-      if (parsedData.length === 0) {
-        throw new Error('AI could not detect any valid vouchers in the uploaded file.');
-      }
-
-      let prefix = 'VCH';
-      if (selectedVoucherType === VoucherType.BankStatement) prefix = 'BANK';
-      else if (selectedVoucherType === VoucherType.Purchase) prefix = 'PUR';
-      else if (selectedVoucherType === VoucherType.Sales) prefix = 'SALE';
-      else if (selectedVoucherType === VoucherType.Payment) prefix = 'PAY';
-      else if (selectedVoucherType === VoucherType.Receipt) prefix = 'RCT';
-      else if (selectedVoucherType === VoucherType.Journal) prefix = 'JRNL';
-      else if (selectedVoucherType === VoucherType.Contra) prefix = 'CON';
-
-      parsedData = parsedData.map((v, index) => ({
-          ...v,
-          tempImportId: `${prefix}-${(index + 1).toString().padStart(3, '0')}`
-      }));
-      
-      setVouchers(parsedData);
-      setStep('correction');
-    } catch (error) {
-      console.error("Error parsing file:", error);
-      setError(error instanceof Error ? error.message : 'An unknown error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    setPendingSourceBank(sourceBank);
+    setStep('processing');
   };
 
   const handleStep2Next = (updatedVouchers: ParsedVoucher[]) => {
@@ -964,7 +926,7 @@ const AppContent: React.FC = () => {
     const initSystemData = async () => {
       try {
         const { loadDefaultMappingRules } = await import('../services/mappingService');
-        const { loadMatchingRules } = await import('../services/matching/rules');
+        const { loadMatchingRules } = await import('../services/import-engine/phase4-enhancers/matching/rules');
         await loadDefaultMappingRules();
         await loadMatchingRules();
       } catch (e) {
@@ -1469,7 +1431,174 @@ const AppContent: React.FC = () => {
         );
     }
 
-    return renderStep();
+    return (
+      <div className="max-w-7xl mx-auto w-full min-h-full flex-1 flex flex-col space-y-6 p-4 md:p-6 pb-0">
+        {renderImportStepper()}
+        <div className="flex-1 flex flex-col min-h-0">
+          {renderStep()}
+        </div>
+      </div>
+    );
+  };
+
+  const getActiveImportStepId = (): string => {
+    if (step === 'upload') {
+      return uploadSubStep;
+    }
+    if (step === 'processing') {
+      return 'processing';
+    }
+    if (step === 'correction') {
+      return correctionSubStep === 'missing' ? 'matching' : 'correction';
+    }
+    if (step === 'summary') {
+      return 'summary';
+    }
+    if (step === 'success') {
+      return 'success';
+    }
+    return 'type';
+  };
+
+  const getStepIndex = (id: string): number => {
+    const list = ['type', 'choose', 'preview', 'upload', 'mapping', 'settings', 'processing', 'matching', 'correction', 'summary', 'success'];
+    return list.indexOf(id);
+  };
+
+  const handleStepClick = (targetId: string) => {
+    const currentActiveId = getActiveImportStepId();
+    const currentIndex = getStepIndex(currentActiveId);
+    const targetIndex = getStepIndex(targetId);
+
+    // If the step is ahead of current progress, restrict direct skipping to avoid empty state crashes
+    if (targetIndex > currentIndex) {
+      if (step === 'upload' && targetIndex < 6) {
+        setUploadSubStep(targetId as any);
+      }
+      return;
+    }
+
+    if (targetIndex === currentIndex) return;
+
+    if (targetIndex < 6) {
+      setStep('upload');
+      setUploadSubStep(targetId as any);
+    } else if (targetId === 'processing') {
+      if (pendingFile) {
+        setStep('processing');
+      }
+    } else if (targetId === 'matching') {
+      if (vouchers && vouchers.length > 0) {
+        setStep('correction');
+        setCorrectionSubStep('missing');
+      }
+    } else if (targetId === 'correction') {
+      if (vouchers && vouchers.length > 0) {
+        setStep('correction');
+        setCorrectionSubStep('unmap');
+      }
+    } else if (targetId === 'summary') {
+      if (vouchers && vouchers.length > 0) {
+        setStep('summary');
+      }
+    }
+  };
+
+  const renderImportStepper = () => {
+    const currentActiveId = getActiveImportStepId();
+    const currentIndex = getStepIndex(currentActiveId);
+    const isHindi = language === 'hi';
+
+    const steps = [
+      { id: 'type', title: isHindi ? 'इम्पोर्ट' : 'Import', icon: Layers },
+      { id: 'choose', title: isHindi ? 'श्रेणी' : 'Category', icon: ListTodo },
+      { id: 'preview', title: isHindi ? 'टेम्पलेट' : 'Template', icon: FileSpreadsheet },
+      { id: 'upload', title: isHindi ? 'अपलोड' : 'Upload', icon: Upload },
+      { id: 'mapping', title: isHindi ? 'मिलान' : 'Mapping', icon: Sliders },
+      { id: 'settings', title: isHindi ? 'सेटिंग्स' : 'Settings', icon: Settings },
+      { id: 'processing', title: isHindi ? 'प्रोसेसिंग' : 'AI Process', icon: Cpu },
+      { id: 'matching', title: isHindi ? 'मास्टर मिलान' : 'Master Match', icon: Database },
+      { id: 'correction', title: isHindi ? 'त्रुटि सुधार' : 'Verify', icon: ShieldAlert },
+      { id: 'summary', title: isHindi ? 'सारांश' : 'Summary', icon: ClipboardCheck },
+      { id: 'success', title: isHindi ? 'सफल' : 'Success', icon: Check }
+    ];
+
+    return (
+      <div className="bg-white dark:bg-gray-800 border border-premium-slate-100 dark:border-gray-700 p-4 rounded-2xl shadow-sm">
+        {/* Mobile View: Compact step details indicator */}
+        <div className="flex md:hidden items-center justify-between">
+          <div className="space-y-1">
+            <p className="text-[10px] font-black tracking-widest text-[#23d160] uppercase leading-none">
+              {isHindi ? 'चरण' : 'Step'} {currentIndex + 1} / {steps.length}
+            </p>
+            <h3 className="text-sm font-black text-gray-800 dark:text-white flex items-center">
+              {React.createElement(steps[currentIndex].icon, { className: "w-4 h-4 mr-1.5 text-blue-600 dark:text-blue-400" })}
+              {steps[currentIndex].title}
+            </h3>
+          </div>
+          <div className="w-24 bg-gray-100 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+            <div 
+              className="bg-blue-600 h-full transition-all duration-500 rounded-full"
+              style={{ width: `${((currentIndex + 1) / steps.length) * 100}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Desktop View: Wide process timeline */}
+        <div className="hidden md:flex items-center justify-between relative px-2 py-1 select-none overflow-x-auto whitespace-nowrap scrollbar-none">
+          {/* Track Line */}
+          <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-[2px] bg-gray-200 dark:bg-gray-700 z-0 rounded-full"></div>
+          {/* Active Fill Track */}
+          <div 
+            className="absolute left-6 top-1/2 -translate-y-1/2 h-[2.5px] bg-blue-600 dark:bg-blue-500 z-0 transition-all duration-500 ease-in-out rounded-full"
+            style={{ 
+              width: `calc(${currentIndex === 0 ? '0px' : `(${currentIndex} / ${steps.length - 1}) * 100%`})`,
+            }}
+          ></div>
+
+          {steps.map((s, index) => {
+            const isCompleted = index < currentIndex;
+            const isCurrent = index === currentIndex;
+            const isUpcoming = index > currentIndex;
+            const StepIcon = s.icon;
+
+            return (
+              <div 
+                key={s.id} 
+                className="relative z-10 flex flex-col items-center flex-1 cursor-pointer group"
+                onClick={() => handleStepClick(s.id)}
+              >
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 relative ${
+                    isCurrent
+                      ? 'border-blue-600 text-blue-600 bg-white dark:bg-gray-800 ring-4 ring-blue-50 dark:ring-blue-900/30'
+                      : isCompleted
+                      ? 'bg-blue-600 border-blue-600 text-white hover:bg-blue-700 hover:border-blue-700 dark:bg-blue-600 dark:border-blue-600'
+                      : 'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 bg-white dark:bg-gray-800 group-hover:border-gray-300'
+                  }`}
+                >
+                  {isCompleted ? (
+                    <Check className="w-4 h-4 text-white font-bold" strokeWidth={3} />
+                  ) : (
+                    <StepIcon className={`w-3.5 h-3.5 ${isCurrent ? 'text-blue-600 dark:text-blue-400 font-bold' : 'text-current'}`} />
+                  )}
+                  
+                  {/* Step progression counter pill */}
+                  <span className="absolute -top-1.5 -right-1.5 text-[8px] bg-gray-500 text-white min-w-[12px] h-[12px] flex items-center justify-center rounded-full leading-none font-medium px-0.5 shadow-sm">
+                    {index + 1}
+                  </span>
+                </div>
+                <div className={`mt-2 text-[10px] md:text-[11px] font-bold text-center transition-colors duration-300 ${
+                  isCurrent ? 'text-blue-600 dark:text-blue-400 font-extrabold' : isCompleted ? 'text-gray-700 dark:text-gray-300 font-semibold' : 'text-gray-400 dark:text-gray-500'
+                }`}>
+                  {s.title}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   };
 
   const renderStep = () => {
@@ -1500,8 +1629,30 @@ const AppContent: React.FC = () => {
               initialSettings={parsingSettings}
               initialVoucherType={voucherType}
               ledgerMasters={ledgerMasters}
+              activeTab={uploadSubStep}
+              onTabChange={setUploadSubStep}
+              onImportCategoryChange={setImportCategory}
+              hideStepper={true}
             />
           </>
+        );
+      case 'processing':
+        return (
+          <Step1Processing 
+            file={pendingFile}
+            voucherType={voucherType}
+            mapping={pendingMapping}
+            settings={parsingSettings}
+            sourceBank={pendingSourceBank}
+            partyMasters={partyMasters}
+            ledgerMasters={ledgerMasters}
+            onComplete={(parsedVouchers) => {
+              setVouchers(parsedVouchers);
+              setStep('correction');
+              setCorrectionSubStep('missing'); // start correction view on master matching tab
+            }}
+            onCancel={resetFlow}
+          />
         );
       case 'correction':
         return (
@@ -1535,6 +1686,8 @@ const AppContent: React.FC = () => {
                 voucherType={voucherType}
                 allVouchers={allVouchers}
                 onNavigateToMasters={() => setView('ledger-master')}
+                activeTab={correctionSubStep}
+                onTabChange={setCorrectionSubStep}
             />
         );
       case 'summary':
