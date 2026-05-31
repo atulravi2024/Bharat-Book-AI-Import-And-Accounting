@@ -26,6 +26,7 @@ import {
     ImageIcon,
     FileIcon
 } from '../../icons/IconComponents';
+import { Check } from 'lucide-react';
 
 interface Step1UploadProps {
   onNext: (file: File, voucherType: VoucherType, mapping?: Record<string, string>, settings?: ParsingSettings, sourceBank?: string) => void;
@@ -47,6 +48,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
   const [showMapping, setShowMapping] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [headerRowIndex, setHeaderRowIndex] = useState(0);
+  const [isMappingExpanded, setIsMappingExpanded] = useState(false);
 
   const bankMasters = useMemo(() => {
     return ledgerMasters.filter(m => m.group === 'Bank Accounts');
@@ -415,7 +417,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
     }
   };
 
-  const [activeTab, setActiveTab] = useState<'type' | 'choose' | 'preview' | 'upload' | 'settings'>('type');
+  const [activeTab, setActiveTab] = useState<'type' | 'choose' | 'preview' | 'upload' | 'mapping' | 'settings'>('type');
   const [importCategory, setImportCategory] = useState<'voucher' | 'master' | 'bank' | 'other'>('voucher');
 
   const [masterType, setMasterType] = useState<'ledgers' | 'items' | 'costCenters' | 'priceList'>('ledgers');
@@ -587,39 +589,70 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
     document.body.removeChild(link);
   };
 
+  const steps = useMemo(() => [
+    { id: 'type', title: t("Import") },
+    { id: 'choose', title: importCategory === 'voucher' ? t("Voucher") : importCategory === 'master' ? t("Master") : importCategory === 'bank' ? t("Bank") : t("Choose") },
+    { id: 'preview', title: t("Preview") },
+    { id: 'upload', title: t("Upload") },
+    { id: 'mapping', title: t("Map Data") },
+    { id: 'settings', title: t("Settings") }
+  ], [t, importCategory]);
+
+  const currentStepIndex = steps.findIndex(s => s.id === activeTab);
+
   return (
     <div className="h-full flex flex-col min-h-0">
-      <div className="flex space-x-1 md:space-x-2 mb-4 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl shrink-0 border border-gray-200 dark:border-gray-700">
-        <button
-          onClick={() => setActiveTab('type')}
-          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'type' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
-        >
-          {t("1. Import")}
-        </button>
-        <button
-          onClick={() => setActiveTab('choose')}
-          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'choose' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
-        >
-          {importCategory === 'voucher' ? t("2. Voucher") : importCategory === 'master' ? t("2. Master") : importCategory === 'bank' ? t("2. Bank") : t("2. Choose")}
-        </button>
-        <button
-          onClick={() => setActiveTab('preview')}
-          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'preview' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
-        >
-          {t("3. Preview")}
-        </button>
-        <button
-          onClick={() => setActiveTab('upload')}
-          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'upload' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
-        >
-          {t("4. Upload")}
-        </button>
-        <button
-          onClick={() => setActiveTab('settings')}
-          className={`flex-1 py-1.5 px-0.5 sm:px-1 md:py-2 text-[9px] sm:text-[10px] md:text-xs font-bold rounded-lg transition-all ${activeTab === 'settings' ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-650'}`}
-        >
-          {t("5. Settings")}
-        </button>
+      <div className="mb-4 md:mb-8 mt-2 shrink-0 px-2 md:px-8">
+        {/* Mobile Compact Stepper */}
+        <div className="md:hidden flex flex-col justify-center space-y-1 mb-2 px-1">
+            <div className="flex justify-between items-center w-full">
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-none">{t("Step")} {currentStepIndex + 1} {t("of")} {steps.length}</span>
+              <span className="text-[11px] font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md leading-none">{steps[currentStepIndex].title}</span>
+            </div>
+            <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mt-1.5">
+                <div 
+                  className="h-full bg-blue-600 transition-all duration-300 rounded-full"
+                   style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+                ></div>
+            </div>
+        </div>
+
+        {/* Desktop Detailed Stepper */}
+        <div className="hidden md:flex items-center justify-between w-full relative">
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[2px] bg-gray-200 dark:bg-gray-700 z-0 rounded-full"></div>
+          <div 
+            className="absolute left-0 top-1/2 -translate-y-1/2 h-[3px] bg-blue-600 dark:bg-blue-500 z-0 transition-all duration-500 ease-in-out rounded-full"
+            style={{ width: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
+          ></div>
+          
+          {steps.map((step, index) => {
+            const isCompleted = index < currentStepIndex;
+            const isCurrent = index === currentStepIndex;
+            const isUpcoming = index > currentStepIndex;
+
+            return (
+              <div key={step.id} className="relative z-10 flex flex-col items-center group">
+                <button
+                  onClick={() => setActiveTab(step.id as any)}
+                  className={`w-6 h-6 md:w-8 md:h-8 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[10px] md:text-xs lg:text-sm font-bold border-2 transition-all duration-300 cursor-pointer ${
+                    isCurrent
+                      ? 'border-blue-600 text-blue-600 bg-white dark:bg-gray-800 ring-4 ring-blue-50 dark:ring-blue-900/30'
+                      : isCompleted
+                      ? 'bg-blue-600 border-blue-600 text-white hover:bg-blue-700 hover:border-blue-700 dark:bg-blue-600 dark:border-blue-600'
+                      : 'border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 bg-white dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-500'
+                  }`}
+                >
+                  {isCompleted ? <Check className="w-3 h-3 md:w-3.5 md:h-3.5 lg:w-4 lg:h-4 text-white" strokeWidth={3} /> : (index + 1)}
+                </button>
+                <div className={`absolute -bottom-6 w-max text-[8.5px] min-[375px]:text-[10px] md:text-xs font-semibold whitespace-nowrap transition-colors duration-300 ${
+                  isCurrent ? 'text-blue-600 dark:text-blue-400 font-bold' : isCompleted ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'
+                }`}>
+                  {step.title}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {error && (
@@ -639,12 +672,12 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
         {/* TAB: IMPORT TYPE */}
-        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar relative shrink-0 ${activeTab === 'type' ? 'flex' : 'hidden'}`}>
+        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-3 md:p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar relative shrink-0 ${activeTab === 'type' ? 'flex' : 'hidden'}`}>
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
           
           <div className="flex items-center justify-between mb-6 shrink-0">
              <div>
-                <h2 className="text-2xl font-black text-gray-900 tracking-tight leading-none font-display dark:text-white">{t("Select Import Type")}</h2>
+                <h2 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight leading-none font-display dark:text-white">{t("Select Import Type")}</h2>
                 <div className="flex items-center mt-2 space-x-2">
                    <div className="h-1 w-6 bg-blue-600 rounded-full"></div>
                    <div className="h-1 w-1.5 bg-blue-200 rounded-full dark:bg-blue-900/50"></div>
@@ -710,13 +743,13 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
         </div>
 
         {/* TAB: CHOOSE */}
-        <div className={`flex-1 bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative group/main shrink-0 ${activeTab === 'choose' ? 'flex' : 'hidden'}`}>
+        <div className={`flex-1 bg-white dark:bg-gray-800 p-3 md:p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative group/main shrink-0 ${activeTab === 'choose' ? 'flex' : 'hidden'}`}>
 
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
 
           <div className="flex items-center justify-between mb-6 shrink-0">
              <div>
-                <h2 className="text-2xl font-black text-gray-900 tracking-tight leading-none font-display dark:text-white">
+                <h2 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight leading-none font-display dark:text-white">
                   {importCategory === 'voucher' ? t("Voucher Classification") : importCategory === 'master' ? t("Master Data Type") : importCategory === 'bank' ? t("Bank Selection") : t("Data Entry Origin")}
                 </h2>
                 <div className="flex items-center mt-2 space-x-2">
@@ -834,10 +867,10 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
         </div>
 
         {/* TAB: SETTINGS */}
-        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar shrink-0 ${activeTab === 'settings' ? 'flex' : 'hidden'}`}>
+        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-3 md:p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar shrink-0 ${activeTab === 'settings' ? 'flex' : 'hidden'}`}>
           <div className="flex items-center mb-6 text-gray-800 dark:text-gray-100">
             <SettingsIcon className="mr-3 text-2xl text-blue-500" />
-            <h3 className="text-xl font-black">{t("Advanced Ingestion Settings")}</h3>
+            <h3 className="text-lg md:text-xl font-black">{t("Advanced Ingestion Settings")}</h3>
           </div>
 
           <div className="space-y-4">
@@ -1159,26 +1192,37 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
         </div>
         
         {/* TAB: UPLOAD */}
-        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar shrink-0 ${activeTab === 'upload' ? 'flex' : 'hidden'}`}>
+        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-3 md:p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar shrink-0 ${activeTab === 'upload' ? 'flex' : 'hidden'}`}>
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
 
           <div 
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors duration-200 mb-6 ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'} dark:border-gray-600 dark:bg-gray-800`}
+            className={`relative border-2 border-dashed rounded-xl transition-colors duration-200 mb-6 ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'} dark:border-gray-600 dark:bg-gray-800`}
           >
-            <div className="flex flex-col items-center">
-              <UploadFileIcon className="text-5xl text-gray-400 mb-3" />
-              <p className="mb-1 text-gray-600 dark:text-gray-300 font-bold">{t("Drag & drop files here")}</p>
-              <p className="text-xs text-gray-500 mb-4 dark:text-gray-400">{t("PDF, Excel, JPG, PNG")}</p>
-              <label htmlFor="file-upload" className="cursor-pointer bg-blue-100 text-blue-700 font-semibold px-4 py-2 rounded-lg hover:bg-blue-200 transition-colors">{t("Browse Files")}</label>
+            <label htmlFor="file-upload" className="flex flex-col items-center justify-center cursor-pointer p-8 md:p-12 w-full h-full min-h-[160px] md:min-h-[200px]">
+              <UploadFileIcon className="text-4xl md:text-5xl text-gray-400 mb-3 md:mb-4 group-hover:text-blue-500 transition-colors" />
+              
+              {/* Desktop text */}
+              <div className="hidden min-[600px]:flex flex-col items-center">
+                 <p className="mb-1 text-base text-gray-600 dark:text-gray-300 font-bold">{t("Drag & drop files here")}</p>
+                 <p className="text-xs text-gray-500 mb-4 dark:text-gray-400">{t("or click to browse PDF, Excel, JPG, PNG")}</p>
+                 <span className="bg-blue-100 text-blue-700 text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-200 transition-colors">{t("Browse Files")}</span>
+              </div>
+
+              {/* Mobile text */}
+              <div className="flex min-[600px]:hidden flex-col items-center text-center">
+                 <p className="mb-1.5 text-[15px] text-blue-600 dark:text-blue-400 font-black tracking-tight">{t("Tap to upload or select file")}</p>
+                 <p className="text-[11px] text-gray-400 font-medium">{t("Supports PDF, Excel, JPG, PNG")}</p>
+              </div>
+              
               <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.xls,.xlsx,.jpg,.jpeg,.png"/>
-            </div>
+            </label>
           </div>
           
           {file && (
-            <div className="mt-2 p-6 bg-premium-slate-50 rounded-[2rem] border border-premium-slate-100 animate-in fade-in slide-in-from-top-4 duration-500 dark:bg-gray-800 dark:border-gray-700">
+            <div className="mt-2 p-4 md:p-6 bg-premium-slate-50 rounded-[2rem] border border-premium-slate-100 animate-in fade-in slide-in-from-top-4 duration-500 dark:bg-gray-800 dark:border-gray-700">
                 <div className="flex items-start">
                     <div className="shrink-0 w-16 h-16 bg-white rounded-2xl border border-premium-slate-200 flex items-center justify-center shadow-sm dark:bg-gray-800 dark:border-gray-600">
                         {React.cloneElement(getFileIcon(file.name) as any, { className: 'text-3xl ' + ((getFileIcon(file.name) as any).props?.className || '') })}
@@ -1216,16 +1260,21 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                 {previewContent}
             </div>
           )}
+        </div>
 
-          {file && isStructuredFile && (
-            <div className="animate-in fade-in duration-300 mt-8 pt-8 border-t border-gray-100 dark:border-gray-700 text-left">
-              <div className="flex items-center justify-between font-semibold mb-6">
+        {/* TAB: MAPPING */}
+        <div className={`flex-1 flex-col bg-white dark:bg-gray-800 p-3 md:p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none min-h-0 overflow-y-auto custom-scrollbar shrink-0 ${activeTab === 'mapping' ? 'flex' : 'hidden'}`}>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+          
+          {file && isStructuredFile ? (
+            <div className="animate-in fade-in duration-300 text-left">
+              <div className="flex flex-col min-[600px]:flex-row min-[600px]:items-center justify-between font-semibold mb-6 gap-4">
                  <div>
-                    <h3 className="text-2xl font-black text-gray-900 tracking-tighter dark:text-white">{t("Map Data Columns")}</h3>
+                    <h3 className="text-xl min-[600px]:text-2xl font-black text-gray-900 tracking-tighter dark:text-white">{t("Map Data Columns")}</h3>
                     <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">Found {fileHeaders.length} source columns</p>
                  </div>
-                 <div className="flex items-center space-x-3 bg-gray-50 p-2 rounded-xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-                      <span className="text-xs font-semibold text-gray-500 ml-2 dark:text-gray-400">{t("Header Row Index:")}</span>
+                 <div className="flex flex-wrap items-center gap-3 bg-gray-50 p-2 rounded-xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                      <span className="text-xs font-semibold text-gray-500 ml-1 dark:text-gray-400">{t("Header Row Index:")}</span>
                       <input 
                         type="number" 
                         min="0"
@@ -1237,56 +1286,96 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                   </div>
               </div>
               
-              <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 flex items-start mb-6 dark:bg-blue-900/20 dark:border-blue-800/30">
-                <InfoIcon className="text-blue-500 mr-2 mt-0.5" />
-                <p className="text-sm text-blue-800 dark:text-blue-300">
+              <div className="bg-blue-50/50 p-3 min-[600px]:p-4 rounded-xl border border-blue-100 flex items-start mb-6 dark:bg-blue-900/20 dark:border-blue-800/30">
+                <InfoIcon className="text-blue-500 mr-2 mt-0.5 shrink-0" />
+                <p className="text-xs min-[600px]:text-sm text-blue-800 dark:text-blue-300">
                   {t(`Map the columns from your Excel file to the corresponding fields in Bharat Book. Our AI will use these hints to improve parsing accuracy.`)}
                 </p>
               </div>
-              
-              <div className="form-grid gap-4 bg-gray-50 p-6 rounded-2xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-                {Object.keys(mappings).map((targetField) => (
-                  <div key={targetField} className="flex flex-col">
-                    <label className="text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 dark:text-gray-400">
-                      {targetField.replace(/([A-Z])/g, ' $1')}
-                    </label>
-                    <div className="relative">
-                      <select 
-                        value={mappings[targetField]}
-                        onChange={(e) => setMappings(prev => ({ ...prev, [targetField]: e.target.value }))}
-                        className="w-full pl-4 pr-10 py-3 text-sm font-medium bg-white border border-gray-300 rounded-xl appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-600 transition-shadow hover:border-gray-400"
-                      >
-                        <option value="">{t("-- Auto-detect --")}</option>
-                        {(fileHeaders.length > 0 ? fileHeaders : []).map(col => (
-                          <option key={col} value={col}>{col}</option>
-                        ))}
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
-                      </div>
+
+              {/* Field Mappings Accordion */}
+              <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50/10 dark:bg-gray-900/20">
+                <button
+                  type="button"
+                  onClick={() => setIsMappingExpanded(!isMappingExpanded)}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
+                      <SettingsIcon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("Field Configuration")}</h4>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">{t("Configure explicit mappings. You can leave most on Auto-detect.")}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              <div className="mt-6 flex justify-end">
-                <button 
-                  onClick={clearMappings}
-                  className="text-sm font-bold text-gray-500 hover:text-red-600 flex items-center transition-colors px-4 py-2.5 rounded-xl hover:bg-red-50 dark:text-gray-400 dark:hover:bg-red-900/20"
-                >
-                  <UndoIcon className="mr-2 text-base" />
-                  {t("Clear All Mappings")}
+                  {isMappingExpanded ? (
+                    <svg className="w-4 h-4 text-gray-500 transform rotate-180 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 text-gray-500 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  )}
                 </button>
+
+                {isMappingExpanded && (
+                  <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 animate-in fade-in duration-200">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+                      {Object.keys(mappings).map((targetField) => (
+                        <div key={targetField} className="flex flex-col">
+                          <label className="text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5 dark:text-gray-400">
+                            {targetField.replace(/([A-Z])/g, ' $1')}
+                          </label>
+                          <div className="relative">
+                            <select 
+                              value={mappings[targetField]}
+                              onChange={(e) => setMappings(prev => ({ ...prev, [targetField]: e.target.value }))}
+                              className="w-full pl-4 pr-10 py-2.5 min-[600px]:py-3 text-sm font-medium bg-white border border-gray-300 rounded-xl appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-600 transition-shadow hover:border-gray-400"
+                            >
+                              <option value="">{t("-- Auto-detect --")}</option>
+                              {(fileHeaders.length > 0 ? fileHeaders : []).map(col => (
+                                <option key={col} value={col}>{col}</option>
+                              ))}
+                            </select>
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-5 flex justify-end">
+                      <button 
+                        onClick={clearMappings}
+                        className="text-[11px] min-[600px]:text-sm font-bold text-gray-500 hover:text-red-600 flex items-center transition-colors px-3 py-2 min-[600px]:px-4 min-[600px]:py-2.5 rounded-xl hover:bg-red-50 dark:text-gray-400 dark:hover:bg-red-900/20"
+                      >
+                        <UndoIcon className="mr-1.5 min-[600px]:mr-2 text-base" />
+                        {t("Clear All Mappings")}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
+          ) : (
+             <div className="flex-1 flex flex-col items-center justify-center pt-8 md:pt-16 px-4">
+              <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-4">
+                <InfoIcon className="text-blue-500 text-3xl" />
+              </div>
+              <h3 className="text-lg md:text-xl font-black text-gray-900 dark:text-white mb-2">{t("No Mapping Required")}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center max-w-md">
+                {t("You haven't uploaded an Excel/CSV file, or the file doesn't require column mapping. You can proceed to Next.")}
+              </p>
+            </div>
           )}
-          
-
         </div>
 
         {/* TAB: PREVIEW */}
         {activeTab === 'preview' && (
-          <div className="flex-1 bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative flex animate-in fade-in duration-300">
+          <div className="flex-1 bg-white dark:bg-gray-800 p-3 md:p-6 lg:p-8 rounded-2xl border border-premium-slate-100 dark:border-gray-700 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-none flex-col min-h-0 overflow-y-auto custom-scrollbar relative flex animate-in fade-in duration-300">
              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
              
              <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 pb-4 border-b border-gray-100 dark:border-gray-700 gap-4">
@@ -1310,25 +1399,45 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <div className="lg:col-span-2 space-y-4 text-left">
                    <h3 className="text-xs font-black uppercase tracking-widest text-[11px] text-gray-500 opacity-60 dark:text-gray-300">{t("Live Interactive Data Schema Matrix")}</h3>
-                   <div className="border border-premium-slate-150 rounded-2xl overflow-hidden bg-white dark:bg-gray-900 dark:border-gray-700 shadow-sm max-w-full overflow-x-auto">
-                      <table className="min-w-full border-collapse text-left text-xs font-medium text-gray-600 dark:text-gray-300">
-                         <thead>
-                            <tr className="bg-gray-100 dark:bg-gray-850 text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 text-[10px] font-black uppercase tracking-wider">
-                               {templateConfig.headers.map((hdr) => (
-                                  <th key={hdr} className="px-4 py-3 whitespace-nowrap">{hdr.replace(/([A-Z])/g, ' $1')}</th>
-                               ))}
-                            </tr>
-                         </thead>
-                         <tbody className="divide-y divide-gray-100 dark:divide-gray-800 font-mono text-[11px]">
-                            {templateConfig.sampleRows.map((row, idx) => (
-                               <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
+                   <div className="border border-premium-slate-150 rounded-2xl overflow-hidden bg-white dark:bg-gray-900 dark:border-gray-700 shadow-sm max-w-full">
+                      {/* Desktop view (Table) */}
+                      <div className="hidden border-collapse text-left text-xs font-medium text-gray-600 dark:text-gray-300 w-full overflow-x-auto min-[600px]:block">
+                          <table className="min-w-full">
+                             <thead>
+                                <tr className="bg-gray-100 dark:bg-gray-850 text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 text-[9px] md:text-[10px] font-black uppercase tracking-wider">
+                                   {templateConfig.headers.map((hdr) => (
+                                      <th key={hdr} className="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap">{hdr.replace(/([A-Z])/g, ' $1')}</th>
+                                   ))}
+                                </tr>
+                             </thead>
+                             <tbody className="divide-y divide-gray-100 dark:divide-gray-800 font-mono text-[10px] md:text-[11px]">
+                                {templateConfig.sampleRows.map((row, idx) => (
+                                   <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
+                                      {templateConfig.headers.map((hdr) => (
+                                         <td key={hdr} className="px-2 py-2 md:px-4 md:py-3 text-gray-800 dark:text-gray-200 max-w-[120px] md:max-w-xs truncate">{row[hdr] || <span className="text-gray-300 dark:text-gray-600">—</span>}</td>
+                                      ))}
+                                   </tr>
+                                ))}
+                             </tbody>
+                          </table>
+                      </div>
+                      
+                      {/* Mobile view (Cards) */}
+                      <div className="block min-[600px]:hidden divide-y divide-gray-100 dark:divide-gray-800 bg-gray-50/30 dark:bg-gray-900/50">
+                         {templateConfig.sampleRows.map((row, idx) => (
+                            <div key={idx} className="p-3 space-y-2.5">
+                               <div className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Row {idx + 1}</div>
+                               <div className="flex flex-col space-y-1.5 font-mono text-[10px]">
                                   {templateConfig.headers.map((hdr) => (
-                                     <td key={hdr} className="px-4 py-3 text-gray-800 dark:text-gray-200 max-w-xs truncate">{row[hdr] || <span className="text-gray-300 dark:text-gray-600">—</span>}</td>
+                                     <div key={hdr} className="flex flex-col min-[360px]:flex-row min-[360px]:items-center justify-between pb-1.5 border-b border-gray-100/80 dark:border-gray-800/80 last:border-0 last:pb-0 gap-1 min-[360px]:gap-2">
+                                        <span className="self-start min-[360px]:self-auto text-[9px] text-gray-500 dark:text-gray-400 uppercase font-sans font-black bg-gray-200/60 dark:bg-gray-800 px-1.5 py-0.5 rounded shrink-0 border border-gray-200/80 dark:border-gray-700">{hdr.replace(/([A-Z])/g, ' $1')}</span>
+                                        <span className="text-gray-900 dark:text-gray-100 font-semibold min-[360px]:text-right flex-1 truncate pl-1 min-[360px]:pl-0">{row[hdr] || <span className="text-gray-400 dark:text-gray-600">—</span>}</span>
+                                     </div>
                                   ))}
-                               </tr>
-                            ))}
-                         </tbody>
-                      </table>
+                               </div>
+                            </div>
+                         ))}
+                      </div>
                    </div>
                 </div>
 
@@ -1364,7 +1473,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
 
       </div>
 
-      <div className="shrink-0 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="shrink-0 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 min-[600px]:bg-transparent max-[600px]:sticky max-[600px]:bottom-0 max-[600px]:z-40 max-[600px]:bg-white max-[600px]:dark:bg-gray-800 max-[600px]:px-2 max-[600px]:py-3 max-[600px]:shadow-[0_-8px_20px_-8px_rgba(0,0,0,0.15)] max-[600px]:dark:shadow-[0_-8px_20px_-8px_rgba(0,0,0,0.8)] max-[600px]:-mx-4 max-[600px]:mb-[-12px]">
         <div className="flex sm:flex-row items-center justify-between w-full">
           {activeTab === 'type' ? (
             <div className="w-full flex justify-end">
@@ -1382,51 +1491,51 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
           ) : (
             <div className="grid grid-cols-3 gap-2 w-full sm:flex sm:items-center sm:justify-between">
               {/* Back button */}
-              <div className="sm:flex-1 sm:flex sm:justify-start">
+              <div className="col-span-1 sm:flex-1 sm:flex sm:justify-start">
                 <button 
                   onClick={() => {
                     if (activeTab === 'choose') setActiveTab('type');
                     else if (activeTab === 'preview') setActiveTab('choose');
                     else if (activeTab === 'upload') setActiveTab('preview');
-                    else if (activeTab === 'settings') setActiveTab('upload');
+                    else if (activeTab === 'mapping') setActiveTab('upload');
+                    else if (activeTab === 'settings') {
+                       if (file && isStructuredFile) setActiveTab('mapping');
+                       else setActiveTab('upload');
+                    }
                   }} 
-                  className="w-full sm:w-auto h-10 px-4 border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 flex items-center justify-center"
+                  className="w-full sm:w-auto h-10 px-0.5 sm:px-4 border border-gray-300 rounded-lg text-[10px] sm:text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 flex items-center justify-center overflow-hidden"
                 >
-                  <ArrowForwardIcon className="mr-1 text-base rotate-180 shrink-0" />
-                  <span className="block sm:hidden">{t("Back")}</span>
-                  <span className="hidden sm:inline">
-                    {activeTab === 'choose' ? t("Back to Import") : activeTab === 'preview' ? t("Back to Choose") : activeTab === 'upload' ? t("Back to Preview") : t("Back to Upload")}
-                  </span>
+                  <ArrowForwardIcon className="mr-0.5 sm:mr-1 text-sm sm:text-base rotate-180 shrink-0" />
+                  <span className="truncate">{t("Back")}</span>
                 </button>
               </div>
 
               {/* Start Over button */}
-              <div className="sm:flex-1 sm:flex sm:justify-center">
+              <div className="col-span-1 sm:flex-1 sm:flex sm:justify-center">
                 <button 
                   onClick={() => {
                     setFile(null);
                     setActiveTab('type');
                     setImportCategory('voucher');
                   }} 
-                  className="w-full sm:w-auto h-10 px-4 border border-gray-300 rounded-lg text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 flex items-center justify-center"
+                  className="w-full sm:w-auto h-10 px-0.5 sm:px-4 border border-gray-300 rounded-lg text-[10px] sm:text-xs font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 flex items-center justify-center overflow-hidden"
                 >
-                  <CancelIcon className="mr-1 text-base shrink-0" />
-                  <span className="block sm:hidden">{t("Reset")}</span>
-                  <span className="hidden sm:inline">{t("Start Over")}</span>
+                  <CancelIcon className="mr-0.5 sm:mr-1 text-sm sm:text-base shrink-0" />
+                  <span className="truncate">{t("Start Over")}</span>
                 </button>
               </div>
 
               {/* Next/Process button */}
-              <div className="sm:flex-1 sm:flex sm:justify-end">
+              <div className="col-span-1 sm:flex-1 sm:flex sm:justify-end mt-0">
                 {activeTab === 'settings' ? (
                   <button
                     onClick={handleSubmit}
                     disabled={!file || isLoading}
-                    className="w-full sm:w-auto h-10 px-5 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm disabled:bg-blue-300 disabled:cursor-not-allowed transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center"
+                    className="w-full sm:w-auto h-10 px-0.5 sm:px-5 border border-transparent rounded-lg text-[10px] sm:text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm disabled:bg-blue-300 disabled:cursor-not-allowed transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center overflow-hidden"
                   >
                     {isLoading ? (
                       <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin -ml-1 mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-white shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -1434,11 +1543,11 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                       </>
                     ) : (
                       <>
-                        <span className="block sm:hidden">{t("Next")}</span>
+                        <span className="truncate sm:hidden">{t("Process")}</span>
                         <span className="hidden sm:inline-flex items-center">
                           {t("Process & Continue")}
                         </span>
-                        <ArrowForwardIcon className="ml-1.5 text-base shrink-0" />
+                        <ArrowForwardIcon className="ml-1 sm:ml-1.5 text-sm sm:text-base shrink-0" />
                       </>
                     )}
                   </button>
@@ -1447,15 +1556,19 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({ onNext, isLoading, onC
                     onClick={() => {
                         if (activeTab === 'choose') setActiveTab('preview');
                         else if (activeTab === 'preview') setActiveTab('upload');
-                        else if (activeTab === 'upload') setActiveTab('settings');
+                        else if (activeTab === 'upload') {
+                           if (file && isStructuredFile) setActiveTab('mapping');
+                           else setActiveTab('settings');
+                        }
+                        else if (activeTab === 'mapping') setActiveTab('settings');
                     }}
-                    className="w-full sm:w-auto h-10 px-5 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center"
+                    className="w-full sm:w-auto h-10 px-0.5 sm:px-5 border border-transparent rounded-lg text-[10px] sm:text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all hover:shadow hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center overflow-hidden"
                   >
-                    <span className="block sm:hidden">{t("Next")}</span>
+                    <span className="truncate sm:hidden">{t("Next")}</span>
                     <span className="hidden sm:inline-flex items-center">
-                      {activeTab === 'choose' ? t("Next: Preview") : activeTab === 'preview' ? t("Next: Upload") : t("Next: Settings")}
+                      {activeTab === 'choose' ? t("Next: Preview") : activeTab === 'preview' ? t("Next: Upload") : activeTab === 'upload' ? (file && isStructuredFile ? t("Next: Map Data") : t("Next: Settings")) : t("Next: Settings")}
                     </span>
-                    <ArrowForwardIcon className="ml-1.5 text-base shrink-0" />
+                    <ArrowForwardIcon className="ml-1 sm:ml-1.5 text-sm sm:text-base shrink-0" />
                   </button>
                 )}
               </div>

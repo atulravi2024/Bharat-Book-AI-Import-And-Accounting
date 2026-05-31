@@ -34,6 +34,7 @@ export const loadMatchingRules = async () => {
             NOISE_PREFIXES = data.bankIgnoreWords || [];
         }
     } catch (e) {
-        console.error("Failed to load matching rules", e);
+        // Log it as debug or warn instead of error to avoid console pollution when file is missing
+        console.warn("Matching rules data not found, skipping.");
     }
 };
