@@ -39,6 +39,9 @@ export const useStep1UploadLogic = ({
   const [selectedBank, setSelectedBank] = useState('');
   const [importCategory, setImportCategory] = useState<ImportCategory>('voucher');
   const [masterType, setMasterType] = useState<MasterType>('ledgers');
+  const [selectedOtherCategory, setSelectedOtherCategory] = useState<string>(initialSettings?.selectedOtherCategory || 'ledgers');
+  const [customCategoryName, setCustomCategoryName] = useState<string>(initialSettings?.customCategoryName || '');
+  const [selectedSettingsSubpage, setSelectedSettingsSubpage] = useState<string>('pref_general');
   const [showMapping, setShowMapping] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
@@ -138,7 +141,11 @@ export const useStep1UploadLogic = ({
         alert('Please select a bank name before proceeding.');
         return;
       }
-      onNext(file, voucherType, mappings, parsingSettings, selectedBank);
+      onNext(file, voucherType, mappings, {
+        ...parsingSettings,
+        selectedOtherCategory: (importCategory === 'ledger_master' || importCategory === 'item_master') ? masterType : selectedOtherCategory,
+        customCategoryName
+      }, selectedBank);
     }
   };
 
@@ -162,6 +169,55 @@ export const useStep1UploadLogic = ({
       setVoucherType(VoucherType.BankStatement);
     } else if (importCategory === 'voucher' && voucherType === VoucherType.BankStatement) {
       setVoucherType(VoucherType.Purchase);
+    } else if (importCategory === 'transaction_voucher') {
+      const validTransactionVouchers = [
+        VoucherType.Purchase,
+        VoucherType.Sales,
+        VoucherType.Payment,
+        VoucherType.Receipt,
+        VoucherType.Journal,
+        VoucherType.Contra,
+        VoucherType.CreditNote,
+        VoucherType.DebitNote
+      ];
+      if (!validTransactionVouchers.includes(voucherType)) {
+        setVoucherType(VoucherType.Sales);
+      }
+    } else if (importCategory === 'item_voucher') {
+      const validItemVouchers = [
+        VoucherType.StockJournal,
+        VoucherType.PhysicalStock,
+        VoucherType.ItemConsumption,
+        VoucherType.ItemScrap,
+        VoucherType.Interlocation,
+        VoucherType.RejectionIn,
+        VoucherType.RejectionOut
+      ];
+      if (!validItemVouchers.includes(voucherType)) {
+        setVoucherType(VoucherType.StockJournal);
+      }
+    } else if (importCategory === 'ledger_master') {
+      setMasterType('ledgers');
+    } else if (importCategory === 'item_master') {
+      setMasterType('items');
+    } else if (importCategory === 'tax_related') {
+      const validTaxVouchers = [
+        VoucherType.GSTR1,
+        VoucherType.GSTR3B,
+        VoucherType.GSTR2A,
+        VoucherType.GSTR2B,
+        VoucherType.GSTR9,
+        VoucherType.GSTR9A,
+        VoucherType.GSTR9B,
+        VoucherType.GSTR9C,
+        VoucherType.GSTR4,
+        VoucherType.GSTR4A,
+        VoucherType.GSTR4B,
+        VoucherType.CMP08
+      ];
+      if (!validTaxVouchers.includes(voucherType)) {
+        setVoucherType(VoucherType.GSTR1);
+      }
     }
   }, [importCategory, voucherType]);
 
@@ -173,7 +229,7 @@ export const useStep1UploadLogic = ({
     let sampleRows: Record<string, string>[] = [];
     let instructions: string[] = [];
 
-    if (importCategory === 'voucher') {
+    if (importCategory === 'voucher' || importCategory === 'transaction_voucher' || importCategory === 'item_voucher') {
       title = `${voucherType} Ingestion Template`;
       description = `Visual layout and standard structure for ${voucherType} document upload. Use these columns in your Excel/CSV for automated schema mapping.`;
       
@@ -236,6 +292,68 @@ export const useStep1UploadLogic = ({
             'Provide chronological transactions sequentially for continuous closing balance updates.'
           ];
           break;
+        case VoucherType.StockJournal:
+          headers = ['Date', 'ReferenceNo', 'ItemName', 'SourceGodown', 'QuantityIn', 'DestGodown', 'QuantityOut', 'Rate', 'Narration'];
+          sampleRows = [
+            { Date: '2026-05-01', ReferenceNo: 'STKJK-001', ItemName: 'Premium Steel Sheet', SourceGodown: 'Raw Material Store', QuantityIn: '100', DestGodown: 'Assembly Godown', QuantityOut: '100', Rate: '450.00', Narration: 'Transfer material for fabrication production' }
+          ];
+          instructions = [
+            'Dates should preferably be in YYYY-MM-DD or DD-MM-YYYY format.',
+            'Specify the exact matching source and destination warehouse locations or godowns.',
+            'Ensure item name exactly matches the item master definitions.'
+          ];
+          break;
+        case VoucherType.PhysicalStock:
+          headers = ['Date', 'GodownCode', 'ItemName', 'ActualStockCount', 'RecordedStock', 'Variance', 'AuditorName'];
+          sampleRows = [
+            { Date: '2026-05-15', GodownCode: 'WH-OUPU', ItemName: 'Copper Wire Reel', ActualStockCount: '45', RecordedStock: '42', Variance: '3', AuditorName: 'Aman Kumar' }
+          ];
+          instructions = [
+            'Enter physical stock audits conducted at standard milestones.',
+            'Include the Variance column representing the deviation between system stock and physical count.'
+          ];
+          break;
+        case VoucherType.ItemConsumption:
+          headers = ['Date', 'ReferenceNo', 'ProjectOrCostCenter', 'ItemCode', 'ItemName', 'QuantityConsumed', 'UnitCost', 'TotalValue'];
+          sampleRows = [
+            { Date: '2026-05-12', ReferenceNo: 'CONS-901', ProjectOrCostCenter: 'Project Neo Fabrication', ItemCode: 'M-ST-18', ItemName: 'Grade-A Steel Rods', QuantityConsumed: '500', UnitCost: '180.00', TotalValue: '90000.00' }
+          ];
+          instructions = [
+            'Stock consumption transactions record materials deducted directly from assets without sales.',
+            'Linked Cost Centers or project references help track expense allocations.'
+          ];
+          break;
+        case VoucherType.ItemScrap:
+          headers = ['Date', 'ScrapReference', 'ItemName', 'QuantityScrapped', 'Reason', 'ScrapValueCollected'];
+          sampleRows = [
+            { Date: '2026-05-20', ScrapReference: 'SCRAP-04', ItemName: 'Damaged ABS Enclosure', QuantityScrapped: '120', Reason: 'Molding defect / QA Reject', ScrapValueCollected: '1200.00' }
+          ];
+          instructions = [
+            'Use to log physical stock write-offs and scrap metal/plastic recovery transactions.',
+            'Define clear defect or rejection reasons to build quality audit reports.'
+          ];
+          break;
+        case VoucherType.Interlocation:
+          headers = ['Date', 'TransferID', 'ItemName', 'FromLocation', 'ToLocation', 'QuantityTransferred', 'TransitCarrier'];
+          sampleRows = [
+            { Date: '2026-05-24', TransferID: 'XFER-8201', ItemName: 'High-Tensile Bolts Pack', FromLocation: 'Central Hub - Sector 4', ToLocation: 'Retail Store Room', QuantityTransferred: '50', TransitCarrier: 'Swift Logistics' }
+          ];
+          instructions = [
+            'Specify moving stock across internal locations on specific transfer IDs.',
+            'Carrier names help track materials in-transit during continuous delivery audits.'
+          ];
+          break;
+        case VoucherType.RejectionIn:
+        case VoucherType.RejectionOut:
+          headers = ['Date', 'RejectionID', 'PartyName', 'ItemName', 'QuantityRejected', 'ReasonForRejection', 'OriginalInvoiceNo'];
+          sampleRows = [
+            { Date: '2026-05-26', RejectionID: 'REJIN-442', PartyName: 'Nippon Electronics Ltd', ItemName: 'Power Cord 1.5m', QuantityRejected: '15', ReasonForRejection: 'Wrong connector model shipped', OriginalInvoiceNo: 'INV-4921' }
+          ];
+          instructions = [
+            'Logs physical stock returned by customer (Rejection In) or sent back to suppliers (Rejection Out) prior to billing adjustments.',
+            'Provide original invoice numbers for seamless automated correlation.'
+          ];
+          break;
         default:
           headers = ['Date', 'Amount', 'Narration'];
           sampleRows = [
@@ -245,7 +363,7 @@ export const useStep1UploadLogic = ({
             'Enter date, currency amount and short remark summaries.'
           ];
       }
-    } else if (importCategory === 'master') {
+    } else if (importCategory === 'ledger_master' || importCategory === 'item_master') {
       title = `${masterType.charAt(0).toUpperCase() + masterType.slice(1)} Ingestion Model`;
       description = `Visual field structure for uploading physical ${masterType} master files.`;
       
@@ -291,6 +409,71 @@ export const useStep1UploadLogic = ({
         'Select SBI, HDFC, ICICI, etc. sources to run specific custom matching templates.',
         'Withdrawal reflects amount debited, Deposit reflects amount credited.'
       ];
+    } else if (importCategory === 'tax_related') {
+      title = `GST compliance: ${voucherType} format`;
+      description = `Visual outline structure for uploading official GSTR GST sheets for compliance ingestion pipelines.`;
+      
+      switch (voucherType) {
+        case VoucherType.GSTR1:
+          headers = ['GSTIN of Supplier', 'Trade/Legal Name', 'Invoice Number', 'Invoice Date', 'Invoice Value', 'Place Of Supply', 'Tax Rate', 'Taxable Value', 'IGST Amount', 'CGST Amount', 'SGST Amount'];
+          sampleRows = [
+            { 'GSTIN of Supplier': '27AAAAA1111A1Z1', 'Trade/Legal Name': 'Acme General Traders Pvt Ltd', 'Invoice Number': 'INV-2026-10492', 'Invoice Date': '2026-05-01', 'Invoice Value': '118000.00', 'Place Of Supply': '27-Maharashtra', 'Tax Rate': '18%', 'Taxable Value': '100000.00', 'IGST Amount': '0.00', 'CGST Amount': '9000.00', 'SGST Amount': '9000.00' }
+          ];
+          break;
+        case VoucherType.GSTR2A:
+        case VoucherType.GSTR2B:
+          headers = ['GSTIN of Supplier', 'Trade/Legal Name', 'Invoice Type', 'Invoice Number', 'Invoice Date', 'Invoice Value', 'Place Of Supply', 'Tax Rate', 'Taxable Value', 'Integrated Tax', 'Central Tax', 'State/UT Tax', 'ITC Availability'];
+          sampleRows = [
+            { 'GSTIN of Supplier': '27AAAAA1111A1Z1', 'Trade/Legal Name': 'Acme General Traders Pvt Ltd', 'Invoice Type': 'Regular', 'Invoice Number': 'INV-2026-10492', 'Invoice Date': '2026-05-01', 'Invoice Value': '118000.00', 'Place Of Supply': '27-Maharashtra', 'Tax Rate': '18%', 'Taxable Value': '100000.00', 'Integrated Tax': '0.00', 'Central Tax': '9000.00', 'State/UT Tax': '9000.00', 'ITC Availability': 'Available' }
+          ];
+          break;
+        case VoucherType.GSTR4:
+          headers = ['GSTIN of Taxpayer', 'Trade Name', 'Financial Year', 'Aggregate Turnover', 'Tax Rate (%)', 'Taxable Value', 'Integrated Tax', 'Central Tax', 'State/UT Tax', 'Cess'];
+          sampleRows = [
+            { 'GSTIN of Taxpayer': '27BBBBB2222B2Z2', 'Trade Name': 'Krishna Grocers & Retailers', 'Financial Year': '2025-26', 'Aggregate Turnover': '750000.00', 'Tax Rate (%)': '1%', 'Taxable Value': '750000.00', 'Integrated Tax': '0.00', 'Central Tax': '3750.00', 'State/UT Tax': '3750.00', 'Cess': '0.00' }
+          ];
+          break;
+        case VoucherType.GSTR4A:
+          headers = ['GSTIN of Supplier', 'Supplier Name', 'Invoice Number', 'Invoice Date', 'Invoice Value', 'Tax Rate', 'Taxable Value', 'Integrated Tax', 'Central Tax', 'State/UT Tax'];
+          sampleRows = [
+            { 'GSTIN of Supplier': '27AAAAA1111A1Z1', 'Supplier Name': 'Acme Distributors Ltd', 'Invoice Number': 'INV-902-SUP', 'Invoice Date': '2026-04-12', 'Invoice Value': '52500.00', 'Tax Rate': '5%', 'Taxable Value': '50000.00', 'Integrated Tax': '0.00', 'Central Tax': '1250.00', 'State/UT Tax': '1250.00' }
+          ];
+          break;
+        case VoucherType.GSTR4B:
+          headers = ['GSTIN of Supplier', 'Invoice Number', 'Invoice Date', 'Invoice Value', 'Taxable Value', 'Integrated Tax Amount', 'Central Tax Amount', 'State Tax Amount'];
+          sampleRows = [
+            { 'GSTIN of Supplier': '27CCCCC3333C3Z3', 'Invoice Number': 'TX-401', 'Invoice Date': '2026-05-05', 'Invoice Value': '12000.00', 'Taxable Value': '10000.00', 'Integrated Tax Amount': '0.00', 'Central Tax Amount': '1000.00', 'State Tax Amount': '1000.00' }
+          ];
+          break;
+        case VoucherType.CMP08:
+          headers = ['GSTIN', 'Tax Period Quarter', 'Outward Taxable Supplies', 'Tax Rate (%)', 'Integrated Tax Payable', 'Central Tax Payable', 'State/UT Tax Payable', 'Interest Paid'];
+          sampleRows = [
+            { 'GSTIN': '27BBBBB2222B2Z2', 'Tax Period Quarter': 'Q1-2026', 'Outward Taxable Supplies': '180000.00', 'Tax Rate (%)': '1.0%', 'Integrated Tax Payable': '0.00', 'Central Tax Payable': '900.00', 'State/UT Tax Payable': '900.00', 'Interest Paid': '0.00' }
+          ];
+          break;
+        default:
+          headers = ['GSTIN', 'Tax Period', 'Filing Date', 'Total Taxable Value', 'Total Tax Liability', 'Total ITC Availed', 'Interest/Late Fee Paid'];
+          sampleRows = [
+            { 'GSTIN': '27AAAAA1111A1Z1', 'Tax Period': '05-2026', 'Filing Date': '2026-05-20', 'Total Taxable Value': '500000.00', 'Total Tax Liability': '90000.00', 'Total ITC Availed': '85000.00', 'Interest/Late Fee Paid': '0.00' }
+          ];
+      }
+      instructions = [
+        'Select the GSTR compliance sheet format matching your GST official portal exports.',
+        'Ensure separate allocations of CGST, SGST, and IGST match Indian state routing codes.'
+      ];
+    } else if (importCategory === 'settings') {
+      const displayLabel = (selectedSettingsSubpage || '').replace(/_/g, ' ').toUpperCase();
+      title = `${displayLabel} Profile Config`;
+      description = `Visual outline mapping to ingest custom configurations, behavior flags, and parameter rules for the ${displayLabel} subpage.`;
+      headers = ['GroupSection', 'ParamKeyName', 'TargetValue', 'ValidationPattern', 'DescriptionMark'];
+      sampleRows = [
+        { GroupSection: 'General_Default', ParamKeyName: 'POSTING_AUTO_COMMIT', TargetValue: 'TRUE', ValidationPattern: '^(TRUE|FALSE)$', DescriptionMark: 'Commit transactions automatically upon validation completion.' },
+        { GroupSection: 'Alert_Config', ParamKeyName: 'ERROR_THRESHOLD_PERCENT', TargetValue: '10.0', ValidationPattern: '^[0-9]+(\\.[0-9]+)?$', DescriptionMark: 'Warning threshold for exception count in single file uploads.' }
+      ];
+      instructions = [
+        'Make sure rule keys precisely match internal parameters of the target subpage configuration.',
+        'Values must strictly comply with the regular expression rules.'
+      ];
     } else {
       title = `Miscellaneous Import Ingest Map`;
       description = `Standard table matrix configuration layout for custom other files.`;
@@ -304,7 +487,7 @@ export const useStep1UploadLogic = ({
     }
 
     return { title, description, headers, sampleRows, instructions };
-  }, [importCategory, voucherType, masterType]);
+  }, [importCategory, voucherType, masterType, selectedSettingsSubpage]);
 
   const handleDownloadTemplate = () => {
     const { headers, sampleRows } = templateConfig;
@@ -326,7 +509,7 @@ export const useStep1UploadLogic = ({
 
   const steps = useMemo(() => [
     { id: 'type', title: t("Import") },
-    { id: 'choose', title: importCategory === 'voucher' ? t("Voucher") : importCategory === 'master' ? t("Master") : importCategory === 'bank' ? t("Bank") : t("Choose") },
+    { id: 'choose', title: (importCategory === 'voucher' || importCategory === 'transaction_voucher' || importCategory === 'item_voucher') ? t("Voucher") : (importCategory === 'ledger_master' || importCategory === 'item_master') ? t("Master") : importCategory === 'bank' ? t("Bank") : importCategory === 'tax_related' ? t("GST Tax") : importCategory === 'settings' ? t("Settings") : t("Choose") },
     { id: 'preview', title: t("Template") },
     { id: 'upload', title: t("Upload") },
     { id: 'mapping', title: t("Map Data") },
@@ -387,6 +570,12 @@ export const useStep1UploadLogic = ({
     setImportCategory,
     masterType,
     setMasterType,
+    selectedOtherCategory,
+    setSelectedOtherCategory,
+    customCategoryName,
+    setCustomCategoryName,
+    selectedSettingsSubpage,
+    setSelectedSettingsSubpage,
     templateConfig,
     handleDownloadTemplate,
     steps,

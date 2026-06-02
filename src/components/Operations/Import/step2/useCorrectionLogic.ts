@@ -120,6 +120,13 @@ export const useCorrectionLogic = (
           case VoucherType.Journal: return ['date', 'amount', 'debitLedger', 'creditLedger'];
           case VoucherType.Contra: return ['date', 'amount', 'fromAccount', 'toAccount'];
           case VoucherType.BankStatement: return ['date', 'narration', 'amount', 'partyName'];
+          case VoucherType.StockJournal:
+          case VoucherType.PhysicalStock:
+          case VoucherType.ItemConsumption:
+          case VoucherType.ItemScrap:
+          case VoucherType.Interlocation:
+          case VoucherType.RejectionIn:
+          case VoucherType.RejectionOut: return ['date'];
           default: return ['date', 'amount'];
         }
       })();
@@ -661,10 +668,41 @@ export const useCorrectionLogic = (
     }, 800);
   };
 
-  const hasItemsAndTax = !!activeVoucher && (activeVoucher.type === VoucherType.Purchase || activeVoucher.type === VoucherType.Sales);
+  const hasItemsAndTax = !!activeVoucher && [
+    VoucherType.Purchase,
+    VoucherType.Sales,
+    VoucherType.CreditNote,
+    VoucherType.DebitNote
+  ].includes(activeVoucher.type);
+
+  const hasItems = !!activeVoucher && [
+    VoucherType.Purchase,
+    VoucherType.Sales,
+    VoucherType.CreditNote,
+    VoucherType.DebitNote,
+    VoucherType.StockJournal,
+    VoucherType.PhysicalStock,
+    VoucherType.ItemConsumption,
+    VoucherType.ItemScrap,
+    VoucherType.Interlocation,
+    VoucherType.RejectionIn,
+    VoucherType.RejectionOut
+  ].includes(activeVoucher.type);
   
   const hasErrors = (vouchers || []).some(v => {
-    const vHasItems = (v.type === VoucherType.Purchase || v.type === VoucherType.Sales);
+    const vHasItems = [
+      VoucherType.Purchase,
+      VoucherType.Sales,
+      VoucherType.CreditNote,
+      VoucherType.DebitNote,
+      VoucherType.StockJournal,
+      VoucherType.PhysicalStock,
+      VoucherType.ItemConsumption,
+      VoucherType.ItemScrap,
+      VoucherType.Interlocation,
+      VoucherType.RejectionIn,
+      VoucherType.RejectionOut
+    ].includes(v.type);
     let schema = [...(allowedFieldsSchema[v.type] || allowedFieldsSchema[VoucherType.Purchase])];
     if (v.origin === 'bank') {
       if (!schema.includes('withdrawalAmount')) schema.push('withdrawalAmount');
@@ -747,6 +785,7 @@ export const useCorrectionLogic = (
     handleFieldChange,
     handleSaveDraft,
     hasItemsAndTax,
+    hasItems,
     hasErrors,
     taxAnalysis,
     totalTaxableAmount,

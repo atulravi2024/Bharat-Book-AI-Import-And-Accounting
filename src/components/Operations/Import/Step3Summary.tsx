@@ -114,7 +114,7 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
         </div>
       </div>
       
-      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-4 shadow-[0_-10px_25px_-8px_rgba(0,0,0,0.15)] dark:shadow-[0_-10px_25px_-12px_rgba(0,0,0,0.8)] mt-auto">
+      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-2 md:py-3 shadow-[0_-10px_25px_-8px_rgba(0,0,0,0.15)] dark:shadow-[0_-10px_25px_-12px_rgba(0,0,0,0.8)] mt-auto flex-shrink-0 w-full mb-0 rounded-b-none">
         <div className="flex justify-between px-1">
           {!isLoading ? (
             <button

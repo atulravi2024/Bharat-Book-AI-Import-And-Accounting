@@ -27,7 +27,7 @@ interface Step1UploadProps {
   ledgerMasters?: any[];
   activeTab?: 'type' | 'choose' | 'preview' | 'upload' | 'mapping' | 'settings';
   onTabChange?: (tab: 'type' | 'choose' | 'preview' | 'upload' | 'mapping' | 'settings') => void;
-  onImportCategoryChange?: (category: 'voucher' | 'master' | 'bank' | 'other') => void;
+  onImportCategoryChange?: (category: 'voucher' | 'transaction_voucher' | 'item_voucher' | 'ledger_master' | 'item_master' | 'bank' | 'tax_related' | 'settings' | 'other') => void;
   hideStepper?: boolean;
 }
 
@@ -94,6 +94,12 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({
     setImportCategory,
     masterType,
     setMasterType,
+    selectedOtherCategory,
+    setSelectedOtherCategory,
+    customCategoryName,
+    setCustomCategoryName,
+    selectedSettingsSubpage,
+    setSelectedSettingsSubpage,
     templateConfig,
     handleDownloadTemplate,
     steps,
@@ -198,6 +204,13 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({
             selectedBank={selectedBank}
             setSelectedBank={setSelectedBank}
             bankMasters={bankMasters}
+            selectedOtherCategory={selectedOtherCategory}
+            setSelectedOtherCategory={setSelectedOtherCategory}
+            customCategoryName={customCategoryName}
+            setCustomCategoryName={setCustomCategoryName}
+            selectedSettingsSubpage={selectedSettingsSubpage}
+            setSelectedSettingsSubpage={setSelectedSettingsSubpage}
+            setActiveTab={setActiveTab}
           />
         )}
 
@@ -262,7 +275,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({
         )}
       </div>
 
-      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 md:px-8 py-4 shadow-[0_-10px_25px_-8px_rgba(0,0,0,0.15)] dark:shadow-[0_-10px_25px_-12px_rgba(0,0,0,0.8)] mt-auto shrink-0">
+      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 md:px-8 py-2 md:py-3 shadow-[0_-10px_25px_-8px_rgba(0,0,0,0.15)] dark:shadow-[0_-10px_25px_-12px_rgba(0,0,0,0.8)] mt-auto shrink-0 w-full mb-0 rounded-b-none">
         <div className="flex sm:flex-row items-center justify-between w-full">
           {activeTab === 'type' ? (
             <div className="w-full flex justify-end">

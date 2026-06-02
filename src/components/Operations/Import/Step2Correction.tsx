@@ -25,6 +25,7 @@ import { TransactionTypeSelect } from './step2/TransactionTypeSelect';
 import { MasterSelectField } from './step2/MasterSelectField';
 import { TaxRateCombobox, TaxTypeCombobox, UomCombobox, ItemNameCombobox } from './step2/TaxUomSelectors';
 import { useCorrectionLogic } from './step2/useCorrectionLogic';
+import { Step2CorrectionOther } from './step2/Step2CorrectionOther';
 
 export const Step2Correction: React.FC<Step2CorrectionProps> = ({ 
   vouchers, 
@@ -44,9 +45,95 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
   allVouchers = [], 
   onNavigateToMasters,
   activeTab: propActiveTab, 
-  onTabChange
+  onTabChange,
+  importCategory,
+  locationMasters = [],
+  bomMasters = [],
+  stockGroupMasters = [],
+  costCenterMasters = [],
+  accountGroupMasters = [],
+  categoryMasters = [],
+  brandMasters = [],
+  gradeMasters = [],
+  gstMasters = [],
+  skuMasters = [],
+  priceListMasters = [],
+  variantMasters = [],
+  sizeMasters = [],
+  colorMasters = [],
+  customMasters = {},
+  setCustomMasters = () => {},
+  setLedgerMasters = () => {},
+  setItemMasters = () => {},
+  setUomMasters = () => {},
+  setPartyMasters = () => {},
+  setLocationMasters = () => {},
+  setBomMasters = () => {},
+  setStockGroupMasters = () => {},
+  setCostCenterMasters = () => {},
+  setAccountGroupMasters = () => {},
+  setCategoryMasters = () => {},
+  setBrandMasters = () => {},
+  setGradeMasters = () => {},
+  setGstMasters = () => {},
+  setSkuMasters = () => {},
+  setPriceListMasters = () => {},
+  setVariantMasters = () => {},
+  setSizeMasters = () => {},
+  setColorMasters = () => {},
+  onOtherImportSuccess = () => {},
+  initialSettings
 }) => {
   const { t } = useLanguage();
+
+  if (importCategory === 'other' || importCategory === 'ledger_master' || importCategory === 'item_master' || importCategory === 'master' || importCategory === 'settings') {
+    return (
+      <Step2CorrectionOther
+        vouchers={vouchers}
+        onBack={onBack}
+        onSuccess={onOtherImportSuccess}
+        ledgerMasters={ledgerMasters}
+        setLedgerMasters={setLedgerMasters}
+        itemMasters={itemMasters}
+        setItemMasters={setItemMasters}
+        uomMasters={uomMasters}
+        setUomMasters={setUomMasters}
+        partyMasters={partyMasters}
+        setPartyMasters={setPartyMasters}
+        locationMasters={locationMasters}
+        setLocationMasters={setLocationMasters}
+        bomMasters={bomMasters}
+        setBomMasters={setBomMasters}
+        stockGroupMasters={stockGroupMasters}
+        setStockGroupMasters={setStockGroupMasters}
+        costCenterMasters={costCenterMasters}
+        setCostCenterMasters={setCostCenterMasters}
+        accountGroupMasters={accountGroupMasters}
+        setAccountGroupMasters={setAccountGroupMasters}
+        categoryMasters={categoryMasters}
+        setCategoryMasters={setCategoryMasters}
+        brandMasters={brandMasters}
+        setBrandMasters={setBrandMasters}
+        gradeMasters={gradeMasters}
+        setGradeMasters={setGradeMasters}
+        gstMasters={gstMasters}
+        setGstMasters={setGstMasters}
+        skuMasters={skuMasters}
+        setSkuMasters={setSkuMasters}
+        priceListMasters={priceListMasters}
+        setPriceListMasters={setPriceListMasters}
+        variantMasters={variantMasters}
+        setVariantMasters={setVariantMasters}
+        sizeMasters={sizeMasters}
+        setSizeMasters={setSizeMasters}
+        colorMasters={colorMasters}
+        setColorMasters={setColorMasters}
+        customMasters={customMasters}
+        setCustomMasters={setCustomMasters}
+        initialSettings={initialSettings}
+      />
+    );
+  }
 
   // Instantiate all core workflows via the unified correction hook
   const {
@@ -73,6 +160,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
     handleFieldChange,
     handleSaveDraft,
     hasItemsAndTax,
+    hasItems,
     hasErrors,
     taxAnalysis,
     totalTaxableAmount,
@@ -103,7 +191,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
           <div className="flex items-center">
              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 text-white rounded-xl flex flex-col items-center justify-center mr-3 sm:mr-4 shadow-lg shadow-blue-100 shrink-0">
                 <span className="text-[7px] sm:text-[8px] font-bold uppercase tracking-tighter opacity-80">
-                  {voucherType === VoucherType.BankStatement ? 'Statement' : 'Voucher'}
+                  {importCategory === 'bank' ? 'Statement' : 'Voucher'}
                 </span>
                 <span className="text-base sm:text-lg font-black" style={{ fontSize: activeVoucher?.tempImportId ? '0.75rem' : '1.125rem' }}>
                   {activeVoucher?.tempImportId || `#${activeVoucherIndex + 1}`}
@@ -111,7 +199,11 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
              </div>
              <div>
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 leading-tight dark:text-gray-100">
-                  Banking Verification
+                  {importCategory === 'transaction_voucher' 
+                    ? t("Transaction Ingestion & Correction") 
+                    : importCategory === 'item_voucher' 
+                    ? t("Inventory Ingestion & Correction") 
+                    : t("Banking Ingestion & Correction")}
                 </h2>
                 <div className="flex items-center mt-0.5 space-x-2 sm:space-x-3">
                    <p className="text-gray-500 text-[10px] sm:text-xs dark:text-gray-400">
@@ -189,7 +281,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                 <nav className="flex space-x-2" aria-label="Tabs">
                     {tabVouchers.map((voucher, index) => {
                         const hasError = Object.values(voucher || {}).some(field => typeof field === 'object' && field !== null && !Array.isArray(field) && (field as any).isMismatch) ||
-                                        (hasItemsAndTax && (voucher.items || []).some(item => Object.values(item || {}).some(field => typeof field === 'object' && field !== null && (field as any).isMismatch)));
+                                        (hasItems && (voucher.items || []).some(item => Object.values(item || {}).some(field => typeof field === 'object' && field !== null && (field as any).isMismatch)));
                         const isActive = activeVoucherIndex === index;
                         return (
                           <button
@@ -234,13 +326,33 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 capitalize dark:text-white">Voucher Type</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <div className="flex flex-wrap gap-2">
-                                {[VoucherType.Receipt, VoucherType.Payment, VoucherType.Contra].map(tType => (
+                                {(importCategory === 'item_voucher' 
+                                    ? [
+                                        VoucherType.StockJournal,
+                                        VoucherType.PhysicalStock,
+                                        VoucherType.ItemConsumption,
+                                        VoucherType.ItemScrap,
+                                        VoucherType.Interlocation,
+                                        VoucherType.RejectionIn,
+                                        VoucherType.RejectionOut
+                                      ]
+                                    : [
+                                        VoucherType.Sales,
+                                        VoucherType.Purchase,
+                                        VoucherType.Payment,
+                                        VoucherType.Receipt,
+                                        VoucherType.Journal,
+                                        VoucherType.Contra,
+                                        VoucherType.CreditNote,
+                                        VoucherType.DebitNote
+                                      ]
+                                ).map(tType => (
                                     <button 
                                         key={tType}
                                         onClick={() => handleFieldChange(activeVoucher.id, 'type', tType)}
                                         className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border shadow-sm ${
                                             activeVoucher.type === tType 
-                                            ? 'bg-indigo-600 border-indigo-600 text-white' 
+                                            ? 'bg-blue-600 border-blue-600 text-white' 
                                             : 'bg-white border-gray-200 text-gray-500 hover:border-indigo-300 hover:text-indigo-600'
                                         } dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400`}
                                     >
@@ -441,7 +553,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
               </div>
             )}
             
-            {hasItemsAndTax && activeVoucher.items && activeVoucher.items.length > 0 && (
+            {hasItems && activeVoucher.items && activeVoucher.items.length > 0 && (
               <div className="px-4">
                 <div className="flex items-center justify-between my-6">
                   <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">{t("Items Details")}</h3>
@@ -623,7 +735,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
             )}
             
             <div className="mt-3 flex flex-col md:flex-row justify-between items-start md:items-end px-4 gap-3 flex-shrink-0">
-               {hasItemsAndTax ? (
+               {hasItems ? (
                  <button
                    onClick={handleAddItem}
                    className="flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg transition-all border border-blue-200 dark:bg-blue-900/40 dark:text-blue-300"
@@ -717,7 +829,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
         )}
       </div>
 
-      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-4 shadow-[0_-10px_25px_-8px_rgba(0,0,0,0.15)] dark:shadow-[0_-10px_25px_-12px_rgba(0,0,0,0.8)] mt-auto flex-shrink-0">
+      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-2 md:py-3 shadow-[0_-10px_25px_-8px_rgba(0,0,0,0.15)] dark:shadow-[0_-10px_25px_-12px_rgba(0,0,0,0.8)] mt-auto flex-shrink-0 w-full mb-0 rounded-b-none">
         <div className="flex justify-between px-1">
           <button
             onClick={onBack}

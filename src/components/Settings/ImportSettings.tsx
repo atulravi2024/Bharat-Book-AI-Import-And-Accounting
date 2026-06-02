@@ -20,9 +20,16 @@ interface ImportSettingsProps {
         autoMatchLedgerGstin: boolean;
     };
     handleToggle: (key: any) => void;
+    setView?: (view: any) => void;
+    onImportCategoryChange?: (category: 'voucher' | 'transaction_voucher' | 'item_voucher' | 'ledger_master' | 'item_master' | 'bank' | 'tax_related' | 'settings' | 'other') => void;
 }
 
-export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleToggle }) => {
+export const ImportSettings: React.FC<ImportSettingsProps> = ({ 
+  toggles, 
+  handleToggle,
+  setView,
+  onImportCategoryChange
+}) => {
   const { t } = useLanguage();
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
@@ -144,6 +151,32 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ toggles, handleT
             <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest my-6 flex items-center px-4 dark:text-white">
                 <SettingsIcon className="mr-3 text-blue-600" /> {t("Voucher Import Configuration")}
             </h3>
+            
+            {setView && onImportCategoryChange && (
+              <div className="mx-4 mb-6 p-5 bg-gradient-to-r from-blue-50/50 via-blue-50/10 to-transparent dark:from-blue-950/20 dark:to-transparent rounded-2xl border border-blue-100/50 dark:border-blue-900/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="flex gap-4">
+                  <div className="p-3 bg-white dark:bg-gray-800 rounded-xl border border-blue-100 dark:border-blue-900/20 shadow-sm text-blue-600 self-start">
+                    <FileUp className="w-5 h-5 animate-pulse" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-blue-950 dark:text-blue-300">{t("Configuration Import Portal")}</h4>
+                    <p className="text-xs text-blue-700/85 dark:text-blue-400 mt-1 leading-relaxed max-w-xl">
+                      {t("Want to load custom environment backups, sensitivity ratings, Auto-Numbering preferences, or firm policies? Navigate directly to the Import wizard.")}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    onImportCategoryChange('settings');
+                    setView('import');
+                  }}
+                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 transition-all hover:-translate-y-0.5 active:translate-y-0 shrink-0 cursor-pointer flex items-center"
+                >
+                  <FileUp className="mr-2 w-4 h-4" />
+                  {t("Import Settings Profile")}
+                </button>
+              </div>
+            )}
             
             <div className="space-y-0">
                 {/* Global Rules Section - Collapsible */}

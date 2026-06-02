@@ -69,6 +69,7 @@ export interface SettingsViewProps {
   onTabChange?: (tab: string | null) => void;
   ledgerMasters?: LedgerMaster[];
   onAppModeChange?: (mode: string) => void;
+  onImportCategoryChange?: (category: 'voucher' | 'transaction_voucher' | 'item_voucher' | 'ledger_master' | 'item_master' | 'bank' | 'tax_related' | 'settings' | 'other') => void;
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({
@@ -79,6 +80,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onTabChange,
   ledgerMasters = [],
   onAppModeChange,
+  onImportCategoryChange,
 }) => {
   const { addNotification } = useNotifications();
   const [activeModalDoc, setActiveModalDoc] = useState<{ title: string; content: string } | null>(null);
@@ -1005,7 +1007,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           )}
 
           {activeTab === "imports" && (
-            <ImportSettings toggles={toggles} handleToggle={handleToggle} />
+            <ImportSettings 
+              toggles={toggles} 
+              handleToggle={handleToggle} 
+              setView={setView}
+              onImportCategoryChange={onImportCategoryChange}
+            />
           )}
 
           {activeTab === "admin" && <AdminSettings />}

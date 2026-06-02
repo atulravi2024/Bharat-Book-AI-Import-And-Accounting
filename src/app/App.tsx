@@ -245,7 +245,7 @@ const AppContent: React.FC = () => {
   const { language } = useLanguage();
   const [uploadSubStep, setUploadSubStep] = useState<'type' | 'choose' | 'preview' | 'upload' | 'mapping' | 'settings'>('type');
   const [correctionSubStep, setCorrectionSubStep] = useState<'unmap' | 'missing' | 'automate'>('automate');
-  const [importCategory, setImportCategory] = useState<'voucher' | 'master' | 'bank' | 'other'>('voucher');
+  const [importCategory, setImportCategory] = useState<'voucher' | 'transaction_voucher' | 'item_voucher' | 'ledger_master' | 'item_master' | 'bank' | 'tax_related' | 'settings' | 'other'>('voucher');
 
   const [step, setStep] = useState<AppStep>('upload');
   const [entryStep, setEntryStep] = useState<AppStep>('upload');
@@ -355,6 +355,7 @@ const AppContent: React.FC = () => {
   const [stockGroupMasters, setStockGroupMasters] = useStorageState<any[]>(STOCK_GROUP_MASTERS_KEY, []);
   const [costCenterMasters, setCostCenterMasters] = useStorageState<any[]>(COST_CENTER_MASTERS_KEY, []);
   const [accountGroupMasters, setAccountGroupMasters] = useStorageState<any[]>(ACCOUNT_GROUP_MASTERS_KEY, []);
+  const [customMasters, setCustomMasters] = useStorageState<Record<string, any[]>>('bharat_book_custom_masters', {});
 
 
 
@@ -1390,6 +1391,7 @@ const AppContent: React.FC = () => {
                 onTabChange={setSettingsActiveTab}
                 ledgerMasters={ledgerMasters}
                 onAppModeChange={handleAppModeChange}
+                onImportCategoryChange={setImportCategory}
             />
         );
     }
@@ -1432,7 +1434,7 @@ const AppContent: React.FC = () => {
     }
 
     return (
-      <div className="max-w-7xl mx-auto w-full min-h-full flex-1 flex flex-col space-y-6 p-4 md:p-6 pb-0">
+      <div className="max-w-7xl mx-auto w-full min-h-full flex-1 flex flex-col space-y-6 pt-4 px-4 md:px-6 md:pt-6 pb-0">
         {renderImportStepper()}
         <div className="flex-1 flex flex-col min-h-0">
           {renderStep()}
@@ -1688,6 +1690,50 @@ const AppContent: React.FC = () => {
                 onNavigateToMasters={() => setView('ledger-master')}
                 activeTab={correctionSubStep}
                 onTabChange={setCorrectionSubStep}
+                importCategory={importCategory}
+                locationMasters={locationMasters}
+                bomMasters={bomMasters}
+                stockGroupMasters={stockGroupMasters}
+                costCenterMasters={costCenterMasters}
+                accountGroupMasters={accountGroupMasters}
+                categoryMasters={categoryMasters}
+                brandMasters={brandMasters}
+                gradeMasters={gradeMasters}
+                gstMasters={gstMasters}
+                skuMasters={skuMasters}
+                priceListMasters={priceListMasters}
+                variantMasters={variantMasters}
+                sizeMasters={sizeMasters}
+                colorMasters={colorMasters}
+                customMasters={customMasters}
+                setCustomMasters={setCustomMasters}
+                setLedgerMasters={setLedgerMasters}
+                setItemMasters={setItemMasters}
+                setUomMasters={setUomMasters}
+                setPartyMasters={setPartyMasters}
+                setLocationMasters={setLocationMasters}
+                setBomMasters={setBomMasters}
+                setStockGroupMasters={setStockGroupMasters}
+                setCostCenterMasters={setCostCenterMasters}
+                setAccountGroupMasters={setAccountGroupMasters}
+                setCategoryMasters={setCategoryMasters}
+                setBrandMasters={setBrandMasters}
+                setGradeMasters={setGradeMasters}
+                setGstMasters={setGstMasters}
+                setSkuMasters={setSkuMasters}
+                setPriceListMasters={setPriceListMasters}
+                setVariantMasters={setVariantMasters}
+                setSizeMasters={setSizeMasters}
+                setColorMasters={setColorMasters}
+                onOtherImportSuccess={(message) => {
+                    addNotification({
+                      title: 'Import Composed',
+                      message,
+                      type: 'Alert'
+                    });
+                    setStep('success');
+                }}
+                initialSettings={parsingSettings}
             />
         );
       case 'summary':

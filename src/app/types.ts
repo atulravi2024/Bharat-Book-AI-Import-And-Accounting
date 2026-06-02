@@ -87,7 +87,26 @@ export enum VoucherType {
   Contra = 'Contra',
   BankStatement = 'Bank Statement',
   CreditNote = 'Credit Note',
-  DebitNote = 'Debit Note'
+  DebitNote = 'Debit Note',
+  StockJournal = 'Stock Journal',
+  PhysicalStock = 'Physical Stock',
+  ItemConsumption = 'Item Consumption',
+  ItemScrap = 'Item Scrap',
+  Interlocation = 'Interlocation',
+  RejectionIn = 'Rejection In',
+  RejectionOut = 'Rejection Out',
+  GSTR1 = 'GSTR-1',
+  GSTR3B = 'GSTR-3B',
+  GSTR2A = 'GSTR-2A',
+  GSTR2B = 'GSTR-2B',
+  GSTR9 = 'GSTR-9',
+  GSTR9A = 'GSTR-9A',
+  GSTR9B = 'GSTR-9B',
+  GSTR9C = 'GSTR-9C',
+  GSTR4 = 'GSTR-4',
+  GSTR4A = 'GSTR-4A',
+  GSTR4B = 'GSTR-4B',
+  CMP08 = 'CMP-08'
 }
 
 export type AppStep = 'upload' | 'processing' | 'correction' | 'summary' | 'success';
@@ -115,6 +134,8 @@ export interface ParsingSettings {
   paymentModes?: string;
   paymentChannels?: string;
   ifscPrefixes?: string;
+  selectedOtherCategory?: string;
+  customCategoryName?: string;
 }
 
 export type MainView = 'dashboard' | 'ledger-master' | 'item-master' | 'vouchers' | 'bank' | 'import' | 'reports' | 'gst-report' | 'settings' | 'item-report' | 'bulk-operation' | 'voucher-entry' | 'inventory-entry' | 'help' | 'support';

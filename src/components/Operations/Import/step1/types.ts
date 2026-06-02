@@ -14,11 +14,27 @@ export interface UseStep1UploadLogicProps {
   ledgerMasters?: any[];
   activeTab?: 'type' | 'choose' | 'preview' | 'upload' | 'mapping' | 'settings';
   onTabChange?: (tab: 'type' | 'choose' | 'preview' | 'upload' | 'mapping' | 'settings') => void;
-  onImportCategoryChange?: (category: 'voucher' | 'master' | 'bank' | 'other') => void;
+  onImportCategoryChange?: (category: 'voucher' | 'transaction_voucher' | 'item_voucher' | 'ledger_master' | 'item_master' | 'bank' | 'tax_related' | 'settings' | 'other') => void;
 }
 
-export type ImportCategory = 'voucher' | 'master' | 'bank' | 'other';
-export type MasterType = 'ledgers' | 'items' | 'costCenters' | 'priceList';
+export type ImportCategory = 'voucher' | 'transaction_voucher' | 'item_voucher' | 'ledger_master' | 'item_master' | 'bank' | 'tax_related' | 'settings' | 'other';
+export type MasterType = 
+  | 'ledgers' 
+  | 'parties' 
+  | 'costCenters' 
+  | 'accountGroups' 
+  | 'items' 
+  | 'uom' 
+  | 'godowns' 
+  | 'gst' 
+  | 'stockGroups' 
+  | 'brands' 
+  | 'grades' 
+  | 'variants' 
+  | 'sizes' 
+  | 'colors' 
+  | 'priceLists' 
+  | 'skus';
 
 export interface TemplateConfig {
   title: string;
