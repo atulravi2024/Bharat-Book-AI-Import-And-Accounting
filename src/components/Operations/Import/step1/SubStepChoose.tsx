@@ -60,15 +60,40 @@ interface SubStepChooseProps {
 const ledgerItemProps: Record<string, { color: string; border: string; bg: string; text: string; darkBg: string; darkBorder: string; darkText: string; iconColor: string }> = {
   ledgers: { color: 'text-blue-600', border: 'border-blue-500', bg: 'bg-blue-50', text: 'text-blue-750', darkBg: 'dark:bg-blue-900/20', darkBorder: 'dark:border-blue-400', darkText: 'dark:text-blue-300', iconColor: 'text-blue-500' },
   parties: { color: 'text-indigo-600', border: 'border-indigo-500', bg: 'bg-indigo-50', text: 'text-indigo-750', darkBg: 'dark:bg-indigo-900/20', darkBorder: 'dark:border-indigo-400', darkText: 'dark:text-indigo-300', iconColor: 'text-indigo-500' },
+  vendors: { color: 'text-sky-600', border: 'border-sky-500', bg: 'bg-sky-50', text: 'text-sky-750', darkBg: 'dark:bg-sky-900/20', darkBorder: 'dark:border-sky-400', darkText: 'dark:text-sky-300', iconColor: 'text-sky-500' },
+  partners: { color: 'text-teal-600', border: 'border-teal-500', bg: 'bg-teal-50', text: 'text-teal-750', darkBg: 'dark:bg-teal-900/20', darkBorder: 'dark:border-teal-400', darkText: 'dark:text-teal-300', iconColor: 'text-teal-500' },
+  banks: { color: 'text-amber-600', border: 'border-amber-500', bg: 'bg-amber-50', text: 'text-amber-750', darkBg: 'dark:bg-amber-900/20', darkBorder: 'dark:border-amber-400', darkText: 'dark:text-amber-300', iconColor: 'text-amber-500' },
+  contacts: { color: 'text-violet-600', border: 'border-violet-500', bg: 'bg-violet-50', text: 'text-violet-750', darkBg: 'dark:bg-violet-900/20', darkBorder: 'dark:border-violet-400', darkText: 'dark:text-violet-300', iconColor: 'text-violet-500' },
+  contacts_staff: { color: 'text-violet-650', border: 'border-violet-500', bg: 'bg-violet-50/50', text: 'text-violet-800', darkBg: 'dark:bg-violet-955/20', darkBorder: 'dark:border-violet-500', darkText: 'dark:text-violet-300', iconColor: 'text-violet-550' },
+  contacts_customers: { color: 'text-indigo-600', border: 'border-indigo-500', bg: 'bg-indigo-50/50', text: 'text-indigo-800', darkBg: 'dark:bg-indigo-950/20', darkBorder: 'dark:border-indigo-500', darkText: 'dark:text-indigo-300', iconColor: 'text-indigo-500' },
+  contacts_vendors: { color: 'text-sky-600', border: 'border-sky-500', bg: 'bg-sky-50/50', text: 'text-sky-800', darkBg: 'dark:bg-sky-950/20', darkBorder: 'dark:border-sky-500', darkText: 'dark:text-sky-300', iconColor: 'text-sky-500' },
+  contacts_partners: { color: 'text-teal-600', border: 'border-teal-500', bg: 'bg-teal-50/50', text: 'text-teal-850', darkBg: 'dark:bg-teal-955/20', darkBorder: 'dark:border-teal-500', darkText: 'dark:text-teal-300', iconColor: 'text-teal-500' },
+  locations: { color: 'text-emerald-500', border: 'border-emerald-550', bg: 'bg-emerald-50', text: 'text-emerald-750', darkBg: 'dark:bg-emerald-900/20', darkBorder: 'dark:border-emerald-400', darkText: 'dark:text-emerald-300', iconColor: 'text-emerald-500' },
   costCenters: { color: 'text-purple-600', border: 'border-purple-500', bg: 'bg-purple-50', text: 'text-purple-750', darkBg: 'dark:bg-purple-900/20', darkBorder: 'dark:border-purple-400', darkText: 'dark:text-purple-300', iconColor: 'text-purple-500' },
   accountGroups: { color: 'text-cyan-600', border: 'border-cyan-500', bg: 'bg-cyan-50', text: 'text-cyan-750', darkBg: 'dark:bg-cyan-900/20', darkBorder: 'dark:border-cyan-400', darkText: 'dark:text-cyan-300', iconColor: 'text-cyan-500' },
 
   items: { color: 'text-emerald-600', border: 'border-emerald-500', bg: 'bg-emerald-50', text: 'text-emerald-750', darkBg: 'dark:bg-emerald-900/20', darkBorder: 'dark:border-emerald-400', darkText: 'dark:text-emerald-300', iconColor: 'text-emerald-500' },
+  basic_items: { color: 'text-green-600', border: 'border-green-500', bg: 'bg-green-50', text: 'text-green-750', darkBg: 'dark:bg-green-950/20', darkBorder: 'dark:border-green-400', darkText: 'dark:text-green-300', iconColor: 'text-green-500' },
+  bom: { color: 'text-orange-600', border: 'border-orange-500', bg: 'bg-orange-50', text: 'text-orange-750', darkBg: 'dark:bg-orange-900/20', darkBorder: 'dark:border-orange-400', darkText: 'dark:text-orange-300', iconColor: 'text-orange-500' },
+  warehouses: { color: 'text-blue-600', border: 'border-blue-500', bg: 'bg-blue-50', text: 'text-blue-750', darkBg: 'dark:bg-blue-900/20', darkBorder: 'dark:border-blue-400', darkText: 'dark:text-blue-300', iconColor: 'text-blue-500' },
+  uoms: { color: 'text-amber-600', border: 'border-amber-500', bg: 'bg-amber-50', text: 'text-amber-750', darkBg: 'dark:bg-amber-900/20', darkBorder: 'dark:border-amber-400', darkText: 'dark:text-amber-300', iconColor: 'text-amber-500' },
   uom: { color: 'text-amber-600', border: 'border-amber-500', bg: 'bg-amber-50', text: 'text-amber-750', darkBg: 'dark:bg-amber-900/20', darkBorder: 'dark:border-amber-400', darkText: 'dark:text-amber-300', iconColor: 'text-amber-500' },
   godowns: { color: 'text-sky-600', border: 'border-sky-500', bg: 'bg-sky-50', text: 'text-sky-750', darkBg: 'dark:bg-sky-900/20', darkBorder: 'dark:border-sky-400', darkText: 'dark:text-sky-300', iconColor: 'text-sky-500' },
   gst: { color: 'text-rose-600', border: 'border-rose-500', bg: 'bg-rose-50', text: 'text-rose-750', darkBg: 'dark:bg-rose-900/20', darkBorder: 'dark:border-rose-400', darkText: 'dark:text-rose-300', iconColor: 'text-rose-500' },
   stockGroups: { color: 'text-pink-600', border: 'border-pink-500', bg: 'bg-pink-50', text: 'text-pink-750', darkBg: 'dark:bg-pink-900/20', darkBorder: 'dark:border-pink-400', darkText: 'dark:text-pink-300', iconColor: 'text-pink-500' },
   brands: { color: 'text-violet-600', border: 'border-violet-500', bg: 'bg-violet-50', text: 'text-violet-750', darkBg: 'dark:bg-violet-900/20', darkBorder: 'dark:border-violet-400', darkText: 'dark:text-violet-300', iconColor: 'text-violet-500' },
+  categories: { color: 'text-fuchsia-600', border: 'border-fuchsia-500', bg: 'bg-fuchsia-50', text: 'text-fuchsia-750', darkBg: 'dark:bg-fuchsia-900/20', darkBorder: 'dark:border-fuchsia-400', darkText: 'dark:text-fuchsia-300', iconColor: 'text-fuchsia-500' },
+  assertionCategories: { color: 'text-lime-600', border: 'border-lime-500', bg: 'bg-lime-50', text: 'text-lime-750', darkBg: 'dark:bg-lime-900/20', darkBorder: 'dark:border-lime-400', darkText: 'dark:text-lime-300', iconColor: 'text-lime-500' },
+  assertionCodes: { color: 'text-emerald-700', border: 'border-emerald-600', bg: 'bg-emerald-50/50', text: 'text-emerald-800', darkBg: 'dark:bg-emerald-950/20', darkBorder: 'dark:border-emerald-500', darkText: 'dark:text-emerald-400', iconColor: 'text-emerald-600' },
+  colors: { color: 'text-purple-605', border: 'border-purple-500', bg: 'bg-purple-50', text: 'text-purple-750', darkBg: 'dark:bg-purple-900/20', darkBorder: 'dark:border-purple-400', darkText: 'dark:text-purple-300', iconColor: 'text-purple-500' },
+  sizes: { color: 'text-blue-500', border: 'border-blue-400', bg: 'bg-blue-50/30', text: 'text-blue-700', darkBg: 'dark:bg-blue-900/10', darkBorder: 'dark:border-blue-505', darkText: 'dark:text-blue-400', iconColor: 'text-blue-500' },
+  variants: { color: 'text-neutral-600', border: 'border-neutral-500', bg: 'bg-neutral-50', text: 'text-neutral-750', darkBg: 'dark:bg-neutral-900/20', darkBorder: 'dark:border-neutral-400', darkText: 'dark:text-neutral-300', iconColor: 'text-neutral-550' },
+  dimensions: { color: 'text-indigo-600', border: 'border-indigo-500', bg: 'bg-indigo-50/30', text: 'text-indigo-750', darkBg: 'dark:bg-indigo-900/20', darkBorder: 'dark:border-indigo-400', darkText: 'dark:text-indigo-300', iconColor: 'text-indigo-500' },
+  skus: { color: 'text-zinc-600', border: 'border-zinc-500', bg: 'bg-zinc-50', text: 'text-zinc-750', darkBg: 'dark:bg-zinc-900/20', darkBorder: 'dark:border-zinc-400', darkText: 'dark:text-zinc-300', iconColor: 'text-zinc-500' },
+  priceList: { color: 'text-rose-600', border: 'border-rose-500', bg: 'bg-rose-50', text: 'text-rose-750', darkBg: 'dark:bg-rose-900/20', darkBorder: 'dark:border-rose-400', darkText: 'dark:text-rose-300', iconColor: 'text-rose-500' },
+  priceLists: { color: 'text-rose-600', border: 'border-rose-500', bg: 'bg-rose-50', text: 'text-rose-750', darkBg: 'dark:bg-rose-900/20', darkBorder: 'dark:border-rose-400', darkText: 'dark:text-rose-300', iconColor: 'text-rose-500' },
+  weights: { color: 'text-teal-600', border: 'border-teal-500', bg: 'bg-teal-50', text: 'text-teal-750', darkBg: 'dark:bg-teal-900/20', darkBorder: 'dark:border-teal-400', darkText: 'dark:text-teal-300', iconColor: 'text-teal-500' },
+  volumes: { color: 'text-cyan-600', border: 'border-cyan-500', bg: 'bg-cyan-50/50', text: 'text-cyan-750', darkBg: 'dark:bg-cyan-900/20', darkBorder: 'dark:border-cyan-400', darkText: 'dark:text-cyan-400', iconColor: 'text-cyan-500' },
   grades: { color: 'text-teal-600', border: 'border-teal-500', bg: 'bg-teal-50', text: 'text-teal-750', darkBg: 'dark:bg-teal-900/20', darkBorder: 'dark:border-teal-400', darkText: 'dark:text-teal-300', iconColor: 'text-teal-500' },
 };
 
@@ -170,6 +195,31 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
         case 'parties':
           colorKey = 'indigo';
           break;
+        case 'vendors':
+          colorKey = 'sky';
+          break;
+        case 'partners':
+          colorKey = 'teal';
+          break;
+        case 'banks':
+          colorKey = 'amber';
+          break;
+        case 'contacts':
+        case 'contacts_staff':
+          colorKey = 'violet';
+          break;
+        case 'contacts_customers':
+          colorKey = 'indigo';
+          break;
+        case 'contacts_vendors':
+          colorKey = 'sky';
+          break;
+        case 'contacts_partners':
+          colorKey = 'teal';
+          break;
+        case 'locations':
+          colorKey = 'emerald';
+          break;
         case 'costCenters':
           colorKey = 'purple';
           break;
@@ -184,6 +234,16 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
         case 'items':
           colorKey = 'emerald';
           break;
+        case 'basic_items':
+          colorKey = 'green';
+          break;
+        case 'bom':
+          colorKey = 'orange';
+          break;
+        case 'warehouses':
+          colorKey = 'blue';
+          break;
+        case 'uoms':
         case 'uom':
           colorKey = 'amber';
           break;
@@ -198,6 +258,40 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
           break;
         case 'brands':
           colorKey = 'violet';
+          break;
+        case 'categories':
+          colorKey = 'fuchsia';
+          break;
+        case 'assertionCategories':
+          colorKey = 'lime';
+          break;
+        case 'assertionCodes':
+          colorKey = 'emerald';
+          break;
+        case 'colors':
+          colorKey = 'purple';
+          break;
+        case 'sizes':
+          colorKey = 'blue';
+          break;
+        case 'variants':
+          colorKey = 'zinc';
+          break;
+        case 'dimensions':
+          colorKey = 'indigo';
+          break;
+        case 'skus':
+          colorKey = 'neutral';
+          break;
+        case 'priceList':
+        case 'priceLists':
+          colorKey = 'rose';
+          break;
+        case 'weights':
+          colorKey = 'teal';
+          break;
+        case 'volumes':
+          colorKey = 'cyan';
           break;
         case 'grades':
           colorKey = 'teal';
@@ -678,19 +772,37 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in-50 duration-300">
               {(importCategory === 'ledger_master' 
                 ? [
-                    { id: 'ledgers', label: 'Ledger', icon: AccountIcon },
-                    { id: 'parties', label: 'Customer/Vendor Party', icon: AccountIcon },
-                    { id: 'costCenters', label: 'Cost Center', icon: CategoryIcon },
-                    { id: 'accountGroups', label: 'Account Group', icon: MapIcon },
+                    { id: 'contacts_staff', label: 'Staff Contacts', icon: Users },
+                    { id: 'contacts_customers', label: 'Customer Contacts', icon: Users },
+                    { id: 'contacts_vendors', label: 'Vendor Contacts', icon: Users },
+                    { id: 'contacts_partners', label: 'Partner Contacts', icon: Users },
+                    { id: 'ledgers', label: 'General Ledgers', icon: AccountIcon },
+                    { id: 'banks', label: 'Bank Masters', icon: Building },
+                    { id: 'accountGroups', label: 'Groups', icon: MapIcon },
+                    { id: 'locations', label: 'Locations', icon: MapIcon },
+                    { id: 'costCenters', label: 'Cost Centers', icon: CategoryIcon },
                   ]
                 : [
-                    { id: 'items', label: 'Stock Item', icon: InventoryIcon },
-                    { id: 'uom', label: 'Unit of Measurement', icon: UomIcon },
-                    { id: 'godowns', label: 'Location', icon: MapIcon },
-                    { id: 'gst', label: 'Gst Tax Rate', icon: TaxIcon },
-                    { id: 'stockGroups', label: 'Stock Group', icon: CategoryIcon },
-                    { id: 'brands', label: 'Brand', icon: BrandIcon },
-                    { id: 'grades', label: 'Grade', icon: SortIcon },
+                    { id: 'items', label: 'Item Hub', icon: InventoryIcon },
+                    { id: 'basic_items', label: 'Basic Item', icon: InventoryIcon },
+                    { id: 'bom', label: 'Bill of Materials', icon: CategoryIcon },
+                    { id: 'warehouses', label: 'Warehouses', icon: MapIcon },
+                    { id: 'uoms', label: 'UOMs', icon: UomIcon },
+                    { id: 'stockGroups', label: 'Stock Groups', icon: CategoryIcon },
+                    { id: 'gst', label: 'HSN', icon: TaxIcon },
+                    { id: 'brands', label: 'Brands', icon: BrandIcon },
+                    { id: 'categories', label: 'Categories', icon: CategoryIcon },
+                    { id: 'assertionCategories', label: 'Assertion Categories', icon: CategoryIcon },
+                    { id: 'assertionCodes', label: 'Assertion Codes', icon: CategoryIcon },
+                    { id: 'colors', label: 'Colors', icon: Palette },
+                    { id: 'sizes', label: 'Sizes', icon: SortIcon },
+                    { id: 'variants', label: 'Variants', icon: SortIcon },
+                    { id: 'dimensions', label: 'Dimensions', icon: MapIcon },
+                    { id: 'skus', label: 'SKUs', icon: Hash },
+                    { id: 'priceList', label: 'Price List', icon: Percent },
+                    { id: 'weights', label: 'Weights', icon: SortIcon },
+                    { id: 'volumes', label: 'Volumes', icon: CategoryIcon },
+                    { id: 'grades', label: 'Grades', icon: SortIcon },
                   ]
               ).map((item) => {
                 const props = ledgerItemProps[item.id] || { color: 'text-blue-600', border: 'border-blue-500', bg: 'bg-blue-50', text: 'text-blue-700', darkBg: 'dark:bg-blue-900/20', darkBorder: 'dark:border-blue-400', darkText: 'dark:text-blue-300', iconColor: 'text-blue-500' };
@@ -941,18 +1053,36 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
                   className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 >
                   <optgroup label={t("Ledger Masters")}>
-                    <option value="ledgers">{t("Ledger")}</option>
-                    <option value="parties">{t("Sundry Debtors/Creditors Parties")}</option>
+                    <option value="contacts_staff">{t("Staff Contacts")}</option>
+                    <option value="contacts_customers">{t("Customer Contacts")}</option>
+                    <option value="contacts_vendors">{t("Vendor Contacts")}</option>
+                    <option value="contacts_partners">{t("Partner Contacts")}</option>
+                    <option value="ledgers">{t("General Ledgers")}</option>
+                    <option value="banks">{t("Bank Masters")}</option>
+                    <option value="accountGroups">{t("Groups")}</option>
+                    <option value="locations">{t("Locations")}</option>
                     <option value="costCenters">{t("Cost Centers")}</option>
-                    <option value="accountGroups">{t("Account Groups")}</option>
                   </optgroup>
                   <optgroup label={t("Item Masters")}>
-                    <option value="items">{t("Stock Item")}</option>
-                    <option value="uom">{t("Unit of Measurement")}</option>
-                    <option value="godowns">{t("Location")}</option>
-                    <option value="gst">{t("Gst Tax Rate")}</option>
+                    <option value="items">{t("Item Hub")}</option>
+                    <option value="basic_items">{t("Basic Item")}</option>
+                    <option value="bom">{t("Bill of Materials")}</option>
+                    <option value="warehouses">{t("Warehouses")}</option>
+                    <option value="uoms">{t("UOMs")}</option>
                     <option value="stockGroups">{t("Stock Groups")}</option>
+                    <option value="gst">{t("HSN")}</option>
                     <option value="brands">{t("Brands")}</option>
+                    <option value="categories">{t("Categories")}</option>
+                    <option value="assertionCategories">{t("Assertion Categories")}</option>
+                    <option value="assertionCodes">{t("Assertion Codes")}</option>
+                    <option value="colors">{t("Colors")}</option>
+                    <option value="sizes">{t("Sizes")}</option>
+                    <option value="variants">{t("Variants")}</option>
+                    <option value="dimensions">{t("Dimensions")}</option>
+                    <option value="skus">{t("SKUs")}</option>
+                    <option value="priceList">{t("Price List")}</option>
+                    <option value="weights">{t("Weights")}</option>
+                    <option value="volumes">{t("Volumes")}</option>
                     <option value="grades">{t("Grades")}</option>
                   </optgroup>
                 </select>
@@ -962,11 +1092,11 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
             {/* Quick Informational Guide Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {[
-                { id: 'ledgers', label: 'Ledger', grp: 'Accounting', d: 'General Ledger accounts', col: 'from-blue-500/10 to-transparent' },
-                { id: 'items', label: 'Stock Item', grp: 'Inventory', d: 'Products and items indexes', col: 'from-emerald-500/10 to-transparent' },
-                { id: 'uom', label: 'Unit of Measurement', grp: 'Inventory', d: 'Units like PCS, KGS, BOX', col: 'from-amber-500/10 to-transparent' },
-                { id: 'godowns', label: 'Location', grp: 'Inventory', d: 'Warehouses and godowns', col: 'from-sky-500/10 to-transparent' },
-                { id: 'gst', label: 'Gst Tax Rate', grp: 'Compliance', d: 'In-app tax rates and percentages', col: 'from-rose-500/10 to-transparent' },
+                { id: 'contacts_customers', label: 'Contacts', grp: 'Accounting', d: 'Customer, Vendor, Partner & Staff contacts', col: 'from-purple-500/10 to-transparent' },
+                { id: 'ledgers', label: 'General Ledgers', grp: 'Accounting', d: 'General Ledger accounts', col: 'from-blue-500/10 to-transparent' },
+                { id: 'items', label: 'Item Hub', grp: 'Inventory', d: 'Products and items indexes', col: 'from-emerald-500/10 to-transparent' },
+                { id: 'uoms', label: 'UOMs', grp: 'Inventory', d: 'Units like PCS, KGS, BOX', col: 'from-amber-500/10 to-transparent' },
+                { id: 'warehouses', label: 'Warehouses', grp: 'Inventory', d: 'Warehouses and godowns', col: 'from-sky-500/10 to-transparent' },
               ].map((card) => {
                 const isSelected = selectedOtherCategory === card.id;
                 return (

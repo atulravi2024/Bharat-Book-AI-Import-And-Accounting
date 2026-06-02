@@ -116,7 +116,7 @@ export const SubStepType: React.FC<SubStepTypeProps> = ({
          </div>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4 mb-6 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4 mb-6 w-full">
         <button
           onClick={() => setImportCategory('transaction_voucher')}
           className={`p-5 rounded-2xl flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 ${

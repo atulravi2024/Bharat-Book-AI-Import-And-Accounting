@@ -112,16 +112,37 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
   
   // Available categories list
   const categoriesList = useMemo(() => [
-    { key: 'ledgers', labelKey: 'Ledgers', description: 'Chart of General Ledger accounts' },
-    { key: 'parties', labelKey: 'Customer/Vendor Party', description: 'Customer & Vendor profiles and ledgers' },
+    // Ledger Master Subpages
+    { key: 'contacts_staff', labelKey: 'Staff Contacts', description: 'Internal and staff contact profiles' },
+    { key: 'contacts_customers', labelKey: 'Customer Contacts', description: 'Business customers contact registry' },
+    { key: 'contacts_vendors', labelKey: 'Vendor Contacts', description: 'Suppliers and vendor contact details' },
+    { key: 'contacts_partners', labelKey: 'Partner Contacts', description: 'Shareholders and partners profile indexes' },
+    { key: 'ledgers', labelKey: 'General Ledgers', description: 'Chart of General Ledger accounts' },
+    { key: 'banks', labelKey: 'Bank Masters', description: 'Company bank accounts and details' },
+    { key: 'accountGroups', labelKey: 'Groups', description: 'Sub-divisions of Ledger groupings' },
+    { key: 'locations', labelKey: 'Locations', description: 'Operating and business physical locations' },
     { key: 'costCenters', labelKey: 'Cost Centers', description: 'Expense departments and operating cost units' },
-    { key: 'accountGroups', labelKey: 'Account Groups', description: 'Sub-divisions of Ledger groupings' },
-    { key: 'items', labelKey: 'Stock Items', description: 'Physical products & inventory indexes' },
-    { key: 'uom', labelKey: 'Units of Measurement (UOM)', description: 'PCS, KGS, BOX, DOZ etc.' },
-    { key: 'godowns', labelKey: 'Godowns / Locations', description: 'Warehouses and storage locations' },
-    { key: 'gst', labelKey: 'GST Tax Rates', description: 'In-app tax rates and classifications' },
+
+    // Item Master Subpages
+    { key: 'items', labelKey: 'Item Hub', description: 'Physical products & inventory indexes' },
+    { key: 'basic_items', labelKey: 'Basic Item', description: 'Basic item metadata and attributes' },
+    { key: 'bom', labelKey: 'Bill of Materials', description: 'Manufacture components recipe list' },
+    { key: 'warehouses', labelKey: 'Warehouses', description: 'Storage warehouses indices' },
+    { key: 'uoms', labelKey: 'UOMs', description: 'Product units like PCS, KGS, BOX etc.' },
     { key: 'stockGroups', labelKey: 'Stock Groups', description: 'Category subdivisions for catalog items' },
+    { key: 'gst', labelKey: 'HSN', description: 'In-app tax rates and classifications' },
     { key: 'brands', labelKey: 'Brands', description: 'Manufacturers and trademark classifications' },
+    { key: 'categories', labelKey: 'Categories', description: 'Stock classification categories' },
+    { key: 'assertionCategories', labelKey: 'Assertion Categories', description: 'Inventory assertion metadata directories' },
+    { key: 'assertionCodes', labelKey: 'Assertion Codes', description: 'Regulatory/Standard assertion codes' },
+    { key: 'colors', labelKey: 'Colors', description: 'Product colors directory' },
+    { key: 'sizes', labelKey: 'Sizes', description: 'Sizing indexes and profiles' },
+    { key: 'variants', labelKey: 'Variants', description: 'Style, SKU and make variations' },
+    { key: 'dimensions', labelKey: 'Dimensions', description: 'Scale, sizing dimensional parameters' },
+    { key: 'skus', labelKey: 'SKUs', description: 'Unique Stock Keeping Unit mappings' },
+    { key: 'priceList', labelKey: 'Price List', description: 'Items standard/discount pricing lists' },
+    { key: 'weights', labelKey: 'Weights', description: 'Material density/weights registry' },
+    { key: 'volumes', labelKey: 'Volumes', description: 'Physical volume specifications list' },
     { key: 'grades', labelKey: 'Grades', description: 'Product and quality structural grades' }
   ], []);
 
@@ -267,17 +288,31 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
         });
         break;
       case 'parties':
+      case 'vendors':
+      case 'partners':
+      case 'banks':
+      case 'contacts':
+      case 'contacts_staff':
+      case 'contacts_customers':
+      case 'contacts_vendors':
+      case 'contacts_partners':
         setPartyMasters(prev => {
           const merged = [...prev];
           itemsToImport.forEach(item => {
             if (!merged.some(m => m.name.toLowerCase() === item.name.toLowerCase())) {
-              merged.push({ id: `p-${Date.now()}-${Math.random()}`, name: item.name, type: item.group || 'Customer' });
+              const defaultType = 
+                targetCategory === 'vendors' || targetCategory === 'contacts_vendors' ? 'Vendor' : 
+                targetCategory === 'partners' || targetCategory === 'contacts_partners' ? 'Partner' : 
+                targetCategory === 'banks' ? 'Bank' : 
+                targetCategory === 'contacts_staff' ? 'Staff' : 'Customer';
+              merged.push({ id: `p-${Date.now()}-${Math.random()}`, name: item.name, type: item.group || defaultType });
             }
           });
           return merged;
         });
         break;
       case 'items':
+      case 'basic_items':
         setItemMasters(prev => {
           const merged = [...prev];
           itemsToImport.forEach(item => {
@@ -288,7 +323,19 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
           return merged;
         });
         break;
+      case 'bom':
+        setBomMasters(prev => {
+          const merged = [...prev];
+          itemsToImport.forEach(item => {
+            if (!merged.some(m => m.name.toLowerCase() === item.name.toLowerCase())) {
+              merged.push({ id: `bom-${Date.now()}-${Math.random()}`, name: item.name });
+            }
+          });
+          return merged;
+        });
+        break;
       case 'uom':
+      case 'uoms':
         setUomMasters(prev => {
           const merged = [...prev];
           itemsToImport.forEach(item => {
@@ -322,6 +369,7 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
         });
         break;
       case 'stockCategories':
+      case 'categories':
         setCategoryMasters(prev => {
           const merged = [...prev];
           itemsToImport.forEach(item => {
@@ -333,6 +381,8 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
         });
         break;
       case 'godowns':
+      case 'locations':
+      case 'warehouses':
         setLocationMasters(prev => {
           const merged = [...prev];
           itemsToImport.forEach(item => {
@@ -498,13 +548,26 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
               <div className="p-2 bg-blue-600 rounded-lg text-white">
                 <Database className="w-4 h-4" />
               </div>
-              <div>
-                <label className="block text-[8px] font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider">
+              <div className="flex-1">
+                <label className="block text-[8px] font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider mb-0.5">
                   {t("Active Database Table")}
                 </label>
-                <div className="text-xs font-black text-gray-900 dark:text-white capitalize">
-                  {t(categoriesList.find(c => c.key === targetCategory)?.labelKey || targetCategory)}
-                </div>
+                <select
+                  value={targetCategory}
+                  onChange={(e) => setTargetCategory(e.target.value)}
+                  className="w-full bg-transparent border-0 p-0 text-xs font-black text-gray-900 dark:text-white focus:ring-0 outline-none cursor-pointer"
+                >
+                  <optgroup label={t("Ledger Masters")}>
+                    {categoriesList.filter(c => ['ledgers', 'banks', 'contacts_staff', 'contacts_customers', 'contacts_vendors', 'contacts_partners', 'locations', 'costCenters', 'accountGroups'].includes(c.key)).map(c => (
+                      <option key={c.key} value={c.key} className="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">{t(c.labelKey)}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label={t("Item Masters")}>
+                    {categoriesList.filter(c => !['ledgers', 'banks', 'contacts_staff', 'contacts_customers', 'contacts_vendors', 'contacts_partners', 'locations', 'costCenters', 'accountGroups'].includes(c.key)).map(c => (
+                      <option key={c.key} value={c.key} className="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">{t(c.labelKey)}</option>
+                    ))}
+                  </optgroup>
+                </select>
               </div>
             </div>
 
