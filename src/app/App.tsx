@@ -1679,6 +1679,8 @@ const AppContent: React.FC = () => {
                 onSaveDraft={handleSaveDraft}
                 partyMasters={partyMasters}
                 ledgerMasters={ledgerMasters}
+                contactMasters={contactMasters}
+                setContactMasters={setContactMasters}
                 onAddParty={handleAddPartyMaster}
                 onAddLedger={handleAddLedgerMaster}
                 uomMasters={uomMasters}

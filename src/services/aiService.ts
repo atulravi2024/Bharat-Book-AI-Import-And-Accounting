@@ -229,9 +229,16 @@ function createVoucherFromRow(
   partyMasters: any[] = [],
   ledgerMasters: any[] = []
 ): ParsedVoucher {
+  const isMasterImport = settings?.selectedOtherCategory && [
+    'ledgers', 'banks', 'contacts', 'contacts_staff', 'contacts_customers', 'contacts_vendors', 'contacts_partners', 'accountGroups', 'locations', 'costCenters',
+    'items', 'basic_items', 'bom', 'uom', 'uoms', 'stockGroups', 'categories', 'stockCategories', 'godowns', 'warehouses',
+    'brands', 'variants', 'sizes', 'colors', 'gst', 'skus', 'grades', 'priceLists',
+    'employees_payroll', 'fixed_assets', 'currency_rates', 'projects_wbs', 'barcodes_units', 'discount_rules', 'custom_dirs', 'custom'
+  ].includes(settings.selectedOtherCategory);
+
   const isBankStatement = voucherType === VoucherType.BankStatement;
-  const dataType = isBankStatement ? 'bank_transaction' : 'voucher';
-  const specificType = isBankStatement ? sourceBank : voucherType;
+  const dataType = isMasterImport ? 'master' : (isBankStatement ? 'bank_transaction' : 'voucher');
+  const specificType = isMasterImport ? settings.selectedOtherCategory : (isBankStatement ? sourceBank : voucherType);
 
   // Run Phase 2 (Mapping), Phase 3 (Cleaning), Phase 4 (Enhancement)
   const pipelineResult = runImportPipeline(row, dataType, specificType, mapping);
@@ -367,6 +374,14 @@ function createVoucherFromRow(
     origin: isBankStatement ? 'bank' : 'direct',
   };
 
+  if (isMasterImport) {
+    voucher.partyName = getFieldInfo('partyName', pipelineResult.name || getValue('name') || getValue('ledgerName') || getValue('ContactName') || getValue('ItemName') || '');
+    voucher.referenceNo = getFieldInfo('referenceNo', pipelineResult.code || getValue('code') || getValue('sku') || getValue('ContactID') || getValue('ItemID') || '');
+    voucher.supplyType = getFieldInfo('supplyType', pipelineResult.group || getValue('group') || getValue('under') || getValue('parent') || getValue('category') || '');
+    voucher.amount = getFieldInfo('amount', parseNumericValue(pipelineResult.openingBalance || pipelineResult.value || getValue('openingBalance') || getValue('balance') || getValue('value') || getValue('Opening Balance') || 0));
+    voucher.narration = getFieldInfo('narration', getValue('description') || getValue('notes') || '');
+  }
+
   // Generate AI Summary for real parsing
   const discrepancies: string[] = [];
   if (voucher.amount?.confidence === Confidence.Low) discrepancies.push('Transaction amount could not be confidently identified.');
@@ -399,9 +414,64 @@ function createVoucherFromRow(
         voucher.debitLedger = getFieldInfo('debitLedger', getValue('debitLedger'));
         voucher.creditLedger = getFieldInfo('creditLedger', getValue('creditLedger'));
       }
-    } else if (voucherType === VoucherType.Purchase || voucherType === VoucherType.Sales) {
-      voucher.invoiceNumber = getFieldInfo('invoiceNumber', getValue('invoiceNumber'));
+
+      if (voucherType === VoucherType.Payment || voucherType === VoucherType.Receipt) {
+        const pName = getValue('partyName') || getValue('particulars');
+        if (pName) voucher.partyName = getFieldInfo('partyName', pName);
+        
+        const led = getValue('ledger') || getValue('particulars');
+        if (led) voucher.ledger = getFieldInfo('ledger', led);
+      }
+
+      if (voucherType === VoucherType.Contra) {
+        voucher.fromAccount = getFieldInfo('fromAccount', getValue('fromAccount'));
+        voucher.toAccount = getFieldInfo('toAccount', getValue('toAccount'));
+      }
+    } else if (
+      voucherType === VoucherType.Purchase || 
+      voucherType === VoucherType.Sales || 
+      voucherType === VoucherType.CreditNote || 
+      voucherType === VoucherType.DebitNote
+    ) {
+      voucher.invoiceNumber = getFieldInfo('invoiceNumber', getValue('invoiceNumber') || getValue('creditNoteNumber') || getValue('debitNoteNumber') || getValue('creditNoteNo') || getValue('debitNoteNo'));
       voucher.narration = getFieldInfo('narration', getValue('narration'));
+      voucher.partyName = getFieldInfo('partyName', getValue('partyName') || getValue('supplierName') || getValue('customerName') || getValue('particulars'));
+      voucher.ledger = getFieldInfo('ledger', getValue('ledger'));
+      voucher.tax = getFieldInfo('tax', getValue('tax') || getValue('taxAmount'));
+      voucher.supplyType = getFieldInfo('supplyType', getValue('supplyType'));
+      voucher.placeOfSupply = getFieldInfo('placeOfSupply', getValue('placeOfSupply'));
+    } else if (
+      voucherType === VoucherType.StockJournal ||
+      voucherType === VoucherType.PhysicalStock ||
+      voucherType === VoucherType.ItemConsumption ||
+      voucherType === VoucherType.ItemScrap ||
+      voucherType === VoucherType.Interlocation ||
+      voucherType === VoucherType.RejectionIn ||
+      voucherType === VoucherType.RejectionOut
+    ) {
+      voucher.referenceNo = getFieldInfo('referenceNo', getValue('ReferenceNo') || getValue('referenceNo') || getValue('ScrapReference') || getValue('TransferID') || getValue('RejectionID') || getValue('rejectionId'));
+      voucher.narration = getFieldInfo('narration', getValue('Narration') || getValue('narration') || getValue('Reason') || getValue('ReasonForRejection') || getValue('remarks'));
+      voucher.partyName = getFieldInfo('partyName', getValue('PartyName') || getValue('partyName') || getValue('AuditorName') || getValue('TransitCarrier'));
+      
+      const itemName = getValue('ItemName') || getValue('itemName');
+      let itemQty = parseNumericValue(getValue('QuantityIn') || getValue('QuantityOut') || getValue('ActualStockCount') || getValue('QuantityConsumed') || getValue('QuantityScrapped') || getValue('QuantityTransferred') || getValue('QuantityRejected') || getValue('quantity') || getValue('qty') || 0);
+      let itemRate = parseNumericValue(getValue('Rate') || getValue('rate') || getValue('UnitCost') || getValue('unitCost') || getValue('ScrapValueCollected') || getValue('scrapValueCollected') || 0);
+      
+      if (itemName || itemQty !== 0) {
+        voucher.items = [
+          {
+            name: { value: itemName || 'Default Item', confidence: Confidence.High },
+            quantity: { value: itemQty, confidence: Confidence.High },
+            rate: { value: itemRate, confidence: Confidence.High },
+            uom: { value: getValue('UOM') || getValue('uom') || 'PCS', confidence: Confidence.Medium },
+            taxRate: { value: parseNumericValue(getValue('taxRate') || getValue('tax_rate') || 0), confidence: Confidence.High },
+            tax: { value: 0, confidence: Confidence.High },
+            total: { value: itemQty * itemRate, confidence: Confidence.High }
+          }
+        ];
+        voucher.amount.value = itemQty * itemRate;
+        voucher.amount.confidence = Confidence.High;
+      }
     }
   }
 
@@ -652,6 +722,204 @@ function createMockVoucher(
       toAccount: getFieldInfo('toAccount', 'HDFC Bank A/c'),
       referenceNo: getFieldInfo('referenceNo', `DEP-${Math.floor(Math.random() * 10000)}`),
       narration: getFieldInfo('narration', 'Cash deposit into bank'),
+    };
+  }
+
+  if (voucherType === VoucherType.CreditNote) {
+    return {
+      ...baseVoucher,
+      invoiceNumber: getFieldInfo('invoiceNumber', `CN-${Math.floor(Math.random() * 10000)}`),
+      partyName: getFieldInfo('partyName', 'Suresh Automation Pvt Ltd'),
+      ledger: getFieldInfo('ledger', 'Sales Return A/c'),
+      narration: getFieldInfo('narration', 'Goods returned by customer due to model mismatch'),
+      tax: {
+        value: 450,
+        confidence: Confidence.High,
+        isMismatch: false,
+        suggestion: 'Standard 18% CGST/SGST return computed.'
+      },
+      supplyType: getFieldInfo('supplyType', 'Intrastate B2B'),
+      placeOfSupply: getFieldInfo('placeOfSupply', 'Delhi (07)'),
+      items: [
+        {
+          name: { value: 'Product B', confidence: Confidence.High },
+          quantity: { value: 5, confidence: Confidence.High },
+          rate: { value: 500, confidence: Confidence.Medium },
+          taxRate: { value: 18, confidence: Confidence.High },
+          taxType: { value: 'CGST/SGST', confidence: Confidence.High },
+          tax: { value: 450, confidence: Confidence.Medium },
+          total: { value: 2950, confidence: Confidence.High }
+        }
+      ]
+    };
+  }
+
+  if (voucherType === VoucherType.DebitNote) {
+    return {
+      ...baseVoucher,
+      invoiceNumber: getFieldInfo('invoiceNumber', `DN-${Math.floor(Math.random() * 10000)}`),
+      partyName: getFieldInfo('partyName', 'Bharat Book Agency'),
+      ledger: getFieldInfo('ledger', 'Purchase Return A/c'),
+      narration: getFieldInfo('narration', 'Purchase return to supplier for damaged binding/covers'),
+      tax: {
+        value: 210,
+        confidence: Confidence.High,
+        isMismatch: false,
+        suggestion: 'Standard 5% IGST return computed.'
+      },
+      supplyType: getFieldInfo('supplyType', 'Interstate B2B'),
+      placeOfSupply: getFieldInfo('placeOfSupply', 'Maharashtra (27)'),
+      items: [
+        {
+          name: { value: 'Premium Accounting Books', confidence: Confidence.High },
+          quantity: { value: 10, confidence: Confidence.High },
+          rate: { value: 420, confidence: Confidence.Medium },
+          taxRate: { value: 5, confidence: Confidence.High },
+          taxType: { value: 'IGST', confidence: Confidence.High },
+          tax: { value: 210, confidence: Confidence.Medium },
+          total: { value: 4410, confidence: Confidence.High }
+        }
+      ]
+    };
+  }
+
+  if (voucherType === VoucherType.StockJournal) {
+    return {
+      ...baseVoucher,
+      referenceNo: getFieldInfo('referenceNo', `STK-XFER-${Math.floor(Math.random() * 10000)}`),
+      narration: getFieldInfo('narration', 'Core factory raw material transfer to assembly lines'),
+      amount: getFieldInfo('amount', 11000),
+      items: [
+        {
+          name: { value: 'Structural Steel Sheets (Grade B)', confidence: Confidence.High },
+          quantity: { value: 50, confidence: Confidence.High },
+          rate: { value: 220, confidence: Confidence.High },
+          uom: { value: 'PCS', confidence: Confidence.Medium },
+          taxRate: { value: 0, confidence: Confidence.High },
+          tax: { value: 0, confidence: Confidence.High },
+          total: { value: 11000, confidence: Confidence.High }
+        }
+      ]
+    };
+  }
+
+  if (voucherType === VoucherType.PhysicalStock) {
+    return {
+      ...baseVoucher,
+      referenceNo: getFieldInfo('referenceNo', `AUDIT-${Math.floor(Math.random() * 10000)}`),
+      narration: getFieldInfo('narration', 'Bi-weekly warehousing physical count & balance validation audit'),
+      amount: getFieldInfo('amount', 67500),
+      items: [
+        {
+          name: { value: 'ABS Plastic Granules Compound', confidence: Confidence.High },
+          quantity: { value: 450, confidence: Confidence.High },
+          rate: { value: 150, confidence: Confidence.High },
+          uom: { value: 'KGS', confidence: Confidence.Medium },
+          taxRate: { value: 0, confidence: Confidence.High },
+          tax: { value: 0, confidence: Confidence.High },
+          total: { value: 67500, confidence: Confidence.High }
+        }
+      ]
+    };
+  }
+
+  if (voucherType === VoucherType.ItemConsumption) {
+    return {
+      ...baseVoucher,
+      referenceNo: getFieldInfo('referenceNo', `CONS-${Math.floor(Math.random() * 10000)}`),
+      narration: getFieldInfo('narration', 'Raw materials consumption logged for Project Orion construction phase'),
+      amount: getFieldInfo('amount', 102000),
+      items: [
+        {
+          name: { value: 'Aluminium Profiles Extruded T-Slot', confidence: Confidence.High },
+          quantity: { value: 1200, confidence: Confidence.High },
+          rate: { value: 85, confidence: Confidence.High },
+          uom: { value: 'MTRS', confidence: Confidence.Medium },
+          taxRate: { value: 0, confidence: Confidence.High },
+          tax: { value: 0, confidence: Confidence.High },
+          total: { value: 102000, confidence: Confidence.High }
+        }
+      ]
+    };
+  }
+
+  if (voucherType === VoucherType.ItemScrap) {
+    return {
+      ...baseVoucher,
+      referenceNo: getFieldInfo('referenceNo', `SCRP-${Math.floor(Math.random() * 10000)}`),
+      narration: getFieldInfo('narration', 'Defective molding line reject write-off and scrap disposal logging'),
+      amount: getFieldInfo('amount', 15300),
+      items: [
+        {
+          name: { value: 'Polyamide Granules Reclaimed', confidence: Confidence.High },
+          quantity: { value: 340, confidence: Confidence.High },
+          rate: { value: 45, confidence: Confidence.High },
+          uom: { value: 'KGS', confidence: Confidence.Medium },
+          taxRate: { value: 0, confidence: Confidence.High },
+          tax: { value: 0, confidence: Confidence.High },
+          total: { value: 15300, confidence: Confidence.High }
+        }
+      ]
+    };
+  }
+
+  if (voucherType === VoucherType.Interlocation) {
+    return {
+      ...baseVoucher,
+      referenceNo: getFieldInfo('referenceNo', `LOC-XFER-${Math.floor(Math.random() * 10000)}`),
+      narration: getFieldInfo('narration', 'Inter-warehouse standard relocation: Sector-4 Hub to Retail distribution store room'),
+      amount: getFieldInfo('amount', 36250),
+      items: [
+        {
+          name: { value: 'Pneumatic Actuator Cylinders 100mm', confidence: Confidence.High },
+          quantity: { value: 25, confidence: Confidence.High },
+          rate: { value: 1450, confidence: Confidence.High },
+          uom: { value: 'PCS', confidence: Confidence.Medium },
+          taxRate: { value: 0, confidence: Confidence.High },
+          tax: { value: 0, confidence: Confidence.High },
+          total: { value: 36250, confidence: Confidence.High }
+        }
+      ]
+    };
+  }
+
+  if (voucherType === VoucherType.RejectionIn) {
+    return {
+      ...baseVoucher,
+      referenceNo: getFieldInfo('referenceNo', `REJIN-${Math.floor(Math.random() * 10000)}`),
+      narration: getFieldInfo('narration', 'Defective specifications size return from customer - Nippon Electronics Ltd'),
+      amount: getFieldInfo('amount', 21000),
+      items: [
+        {
+          name: { value: 'High-Tensile Threaded Bolts', confidence: Confidence.High },
+          quantity: { value: 1500, confidence: Confidence.High },
+          rate: { value: 14, confidence: Confidence.High },
+          uom: { value: 'PCS', confidence: Confidence.Medium },
+          taxRate: { value: 0, confidence: Confidence.High },
+          tax: { value: 0, confidence: Confidence.High },
+          total: { value: 21000, confidence: Confidence.High }
+        }
+      ]
+    };
+  }
+
+  if (voucherType === VoucherType.RejectionOut) {
+    return {
+      ...baseVoucher,
+      referenceNo: getFieldInfo('referenceNo', `REJOUT-${Math.floor(Math.random() * 10000)}`),
+      narration: getFieldInfo('narration', 'Supplier reject return containing bad raw material cast slabs to vendor'),
+      amount: getFieldInfo('amount', 49600),
+      items: [
+        {
+          name: { value: 'Defective Raw Steel Slab Castings', confidence: Confidence.High },
+          quantity: { value: 80, confidence: Confidence.High },
+          rate: { value: 620, confidence: Confidence.High },
+          uom: { value: 'PCS', confidence: Confidence.Medium },
+          taxRate: { value: 0, confidence: Confidence.High },
+          tax: { value: 0, confidence: Confidence.High },
+          total: { value: 49600, confidence: Confidence.High }
+        }
+      ]
     };
   }
 

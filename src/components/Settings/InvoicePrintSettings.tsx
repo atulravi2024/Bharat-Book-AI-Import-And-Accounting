@@ -111,8 +111,8 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
     const calculatePageStats = (pageType: 'First' | 'Middle' | 'Last') => {
         const s = settings as any;
         const pageHeightInches = s.pageOrientation === 'Landscape' ? 
-            ({ 'A4': 8.27, 'A5': 5.83, 'Letter': 8.5, 'Legal': 8.5 }[s.pageSize as string] || 8.27) : 
-            ({ 'A4': 11.69, 'A5': 8.27, 'Letter': 11.0, 'Legal': 14.0 }[s.pageSize as string] || 11.69);
+            ({ 'A4': 8.27, 'A5': 5.83, 'Letter': 8.5, 'Legal': 8.5, 'Thermal': 3.15 }[s.pageSize as string] || 8.27) : 
+            ({ 'A4': 11.69, 'A5': 8.27, 'Letter': 11.0, 'Legal': 14.0, 'Thermal': 11.0 }[s.pageSize as string] || 11.69);
         
         const marginTop = s.marginTop || 0.5;
         const marginBottom = s.marginBottom || 0.5;
@@ -520,6 +520,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                 let docWidth = 794;
                 let docHeight = 1123;
                 switch (settings.pageSize) {
+                    case 'Thermal': docWidth = 300; docHeight = 1056; break;
                     case 'A5': docWidth = 559; docHeight = 794; break;
                     case 'Letter': docWidth = 816; docHeight = 1056; break;
                     case 'Legal': docWidth = 816; docHeight = 1344; break;
@@ -1554,7 +1555,8 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                             { id: 'A4', label: 'A4', sub: 'Standard' },
                                             { id: 'A5', label: 'A5', sub: 'Small' },
                                             { id: 'Letter', label: 'Letter', sub: 'US' },
-                                            { id: 'Legal', label: 'Legal', sub: 'Long' }
+                                            { id: 'Legal', label: 'Legal', sub: 'Long' },
+                                            { id: 'Thermal', label: 'Thermal', sub: 'Heat POS' }
                                         ]}
                                         value={settings.pageSize}
                                         onChange={(val) => setSettings(prev => ({ ...prev, pageSize: val }))}
@@ -1931,7 +1933,7 @@ export const InvoicePrintSettings: React.FC<{ appMode?: string }> = ({ appMode =
                                     />
                                 </div>
                             ) : (
-                                <div className="transition-all duration-300 relative flex-shrink-0" style={{ width: `${(settings.pageSize === 'A5' ? 559 : settings.pageSize === 'Letter' ? 816 : 794) * previewScale}px`, height: `${(settings.pageSize === 'A5' ? 794 : settings.pageSize === 'Letter' ? 1056 : 1123) * previewScale}px`, margin: '0 auto' }}>
+                                <div className="transition-all duration-300 relative flex-shrink-0" style={{ width: `${(settings.pageSize === 'Thermal' ? 300 : settings.pageSize === 'A5' ? 559 : settings.pageSize === 'Letter' ? 816 : 794) * previewScale}px`, height: `${(settings.pageSize === 'Thermal' ? 1056 : settings.pageSize === 'A5' ? 794 : settings.pageSize === 'Letter' ? 1056 : 1123) * previewScale}px`, margin: '0 auto' }}>
                                     <div 
                                         className="transition-transform duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15),0_18px_36px_-18px_rgba(0,0,0,0.2)] bg-white absolute top-0 left-0 origin-top-left dark:bg-gray-800"
                                         style={{ transform: `scale(${previewScale})` }}
@@ -2194,6 +2196,7 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
         let width = 794;
         let height = 1123;
         switch (config.pageSize) {
+            case 'Thermal': width = 300; height = 1056; break;
             case 'A5': width = 559; height = 794; break;
             case 'Letter': width = 816; height = 1056; break;
             case 'Legal': width = 816; height = 1344; break;
@@ -2206,6 +2209,7 @@ const VoucherPreviewComponent: React.FC<{ header: any, rows: any[], allRows?: an
         let physicalHeight = '297mm';
         
         switch (config.pageSize) {
+            case 'Thermal': physicalWidth = '80mm'; physicalHeight = '279mm'; break;
             case 'A5': physicalWidth = '148mm'; physicalHeight = '210mm'; break;
             case 'Letter': physicalWidth = '8.5in'; physicalHeight = '11in'; break;
             case 'Legal': physicalWidth = '8.5in'; physicalHeight = '14in'; break;

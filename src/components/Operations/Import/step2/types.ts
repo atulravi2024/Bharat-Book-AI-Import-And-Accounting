@@ -35,6 +35,8 @@ export interface Step2CorrectionProps {
   sizeMasters?: any[];
   colorMasters?: any[];
   customMasters?: Record<string, any[]>;
+  contactMasters?: any[];
+  setContactMasters?: React.Dispatch<React.SetStateAction<any[]>>;
   setCustomMasters?: React.Dispatch<React.SetStateAction<Record<string, any[]>>>;
   setLedgerMasters?: React.Dispatch<React.SetStateAction<any[]>>;
   setItemMasters?: React.Dispatch<React.SetStateAction<any[]>>;
@@ -59,12 +61,12 @@ export interface Step2CorrectionProps {
 }
 
 export const allowedFieldsSchema: Record<string, string[]> = {
-  [VoucherType.Purchase]: ['invoiceNumber', 'date', 'time', 'amount', 'tax', 'supplyType', 'placeOfSupply'],
-  [VoucherType.Sales]: ['invoiceNumber', 'date', 'time', 'amount', 'tax', 'supplyType', 'placeOfSupply'],
-  [VoucherType.DebitNote]: ['invoiceNumber', 'date', 'time', 'amount', 'tax', 'supplyType', 'placeOfSupply'],
-  [VoucherType.CreditNote]: ['invoiceNumber', 'date', 'time', 'amount', 'tax', 'supplyType', 'placeOfSupply'],
-  [VoucherType.Payment]: ['date', 'time', 'amount', 'referenceNo', 'bankDetails', 'narration'],
-  [VoucherType.Receipt]: ['date', 'time', 'amount', 'referenceNo', 'bankDetails', 'narration'],
+  [VoucherType.Purchase]: ['invoiceNumber', 'date', 'time', 'partyName', 'ledger', 'amount', 'tax', 'supplyType', 'placeOfSupply'],
+  [VoucherType.Sales]: ['invoiceNumber', 'date', 'time', 'partyName', 'ledger', 'amount', 'tax', 'supplyType', 'placeOfSupply'],
+  [VoucherType.DebitNote]: ['invoiceNumber', 'date', 'time', 'partyName', 'ledger', 'amount', 'tax', 'supplyType', 'placeOfSupply'],
+  [VoucherType.CreditNote]: ['invoiceNumber', 'date', 'time', 'partyName', 'ledger', 'amount', 'tax', 'supplyType', 'placeOfSupply'],
+  [VoucherType.Payment]: ['date', 'time', 'partyName', 'ledger', 'amount', 'referenceNo', 'bankDetails', 'narration'],
+  [VoucherType.Receipt]: ['date', 'time', 'partyName', 'ledger', 'amount', 'referenceNo', 'bankDetails', 'narration'],
   [VoucherType.Journal]: ['date', 'time', 'debitLedger', 'creditLedger', 'amount', 'narration'],
   [VoucherType.Contra]: ['date', 'time', 'fromAccount', 'toAccount', 'amount', 'referenceNo', 'narration'],
   [VoucherType.BankStatement]: ['date', 'time', 'narration', 'referenceNo', 'amount', 'withdrawalAmount', 'depositAmount', 'closingBalance'],

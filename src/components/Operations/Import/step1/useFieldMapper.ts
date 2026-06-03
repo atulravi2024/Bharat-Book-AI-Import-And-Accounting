@@ -53,6 +53,8 @@ export const useFieldMapper = ({ file, isStructuredFile, voucherType }: UseField
         return {
           date: '',
           amount: '',
+          partyName: '',
+          ledger: '',
           paymentMode: '',
           referenceNo: '',
           bankDetails: '',
@@ -73,6 +75,32 @@ export const useFieldMapper = ({ file, isStructuredFile, voucherType }: UseField
           fromAccount: '',
           toAccount: '',
           referenceNo: '',
+          narration: ''
+        };
+      case VoucherType.CreditNote:
+        return {
+          date: '',
+          creditNoteNumber: '',
+          originalInvoiceNumber: '',
+          amount: '',
+          partyName: '',
+          itemName: '',
+          itemQuantity: '',
+          itemRate: '',
+          taxRate: '',
+          narration: ''
+        };
+      case VoucherType.DebitNote:
+        return {
+          date: '',
+          debitNoteNumber: '',
+          originalInvoiceNumber: '',
+          amount: '',
+          supplierName: '',
+          itemName: '',
+          itemQuantity: '',
+          itemRate: '',
+          taxRate: '',
           narration: ''
         };
       case VoucherType.BankStatement:
@@ -120,7 +148,13 @@ export const useFieldMapper = ({ file, isStructuredFile, voucherType }: UseField
       toAccount: ['to', 'destination', 'deposit', 'payee'],
       withdrawalAmount: ['withdrawal', 'withdrawals', 'debit', 'dr', 'payment', 'payments'],
       depositAmount: ['deposit', 'deposits', 'deposited', 'credit', 'cr', 'receipt', 'receipts'],
-      closingBalance: ['balance', 'bal', 'closing']
+      closingBalance: ['balance', 'bal', 'closing'],
+      creditNoteNumber: ['credit note number', 'credit note no', 'cn number', 'creditnote', 'cn no', 'cr note', 'cr note no'],
+      debitNoteNumber: ['debit note number', 'debit note no', 'dn number', 'debitnote', 'dn no', 'dr note', 'dr note no', 'purchase note'],
+      originalInvoiceNumber: ['original invoice', 'original invoice number', 'original invoice no', 'invoice', 'ref invoice', 'invoice number', 'inv no'],
+      partyName: ['party', 'party name', 'customer', 'customer name', 'client'],
+      supplierName: ['supplier', 'supplier name', 'vendor', 'vendor name', 'party', 'party name'],
+      taxRate: ['tax rate', 'tax', 'tax %', 'gst rate', 'gst %']
     };
 
     const autoMapped = { ...mappingKeys };

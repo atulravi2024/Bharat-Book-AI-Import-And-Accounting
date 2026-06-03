@@ -21,6 +21,12 @@ interface SubStepUploadProps {
   handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
   handleDragLeave: (e: React.DragEvent<HTMLDivElement>) => void;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  gstSyncStatus?: {
+    status: 'idle' | 'syncing' | 'success' | 'error';
+    message?: string;
+    blankPath?: string;
+    filledPath?: string;
+  };
 }
 
 export const SubStepUpload: React.FC<SubStepUploadProps> = ({
@@ -34,6 +40,7 @@ export const SubStepUpload: React.FC<SubStepUploadProps> = ({
   handleDragOver,
   handleDragLeave,
   handleFileChange,
+  gstSyncStatus,
 }) => {
   const { t } = useLanguage();
 
@@ -89,33 +96,49 @@ export const SubStepUpload: React.FC<SubStepUploadProps> = ({
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`relative border-2 border-dashed rounded-3xl sm:rounded-[2rem] transition-all duration-300 mb-6 ${isDragOver ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50'} dark:border-gray-700 dark:bg-gray-800/50 overflow-hidden shadow-sm`}
+        className={`relative border-2 border-dashed rounded-2xl sm:rounded-[1.5rem] transition-all duration-300 ${file ? 'mb-3' : 'mb-6'} shrink-0 ${isDragOver ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50'} dark:border-gray-700 dark:bg-gray-800/50 overflow-hidden shadow-sm`}
       >
-        <label htmlFor="file-upload" className="flex flex-col items-center justify-center cursor-pointer p-8 sm:p-14 lg:p-20 w-full h-full min-h-[220px] group">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-blue-50 dark:bg-blue-900/30 rounded-[1.5rem] flex items-center justify-center mb-6 shadow-sm border border-blue-100/50 dark:border-blue-800/30 group-hover:scale-105 transition-transform duration-300">
-              <UploadFileIcon className="text-4xl sm:text-5xl text-blue-500" />
-          </div>
-          
-          {/* Desktop text */}
-          <div className="hidden min-[600px]:flex flex-col items-center">
-             <p className="mb-2 text-xl text-gray-900 dark:text-white font-black tracking-tight">{t("Drag & drop to upload")}</p>
-             <p className="text-sm text-gray-500 mb-6 font-medium dark:text-gray-400">{t("or click to browse your system (PDF, Excel, JPG)")}</p>
-             <span className="bg-blue-600 text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-sm hover:shadow hover:bg-blue-700 transition-all active:scale-95">{t("Browse Files")}</span>
-          </div>
+        {file ? (
+          <label htmlFor="file-upload" className="flex items-center justify-between cursor-pointer p-3 sm:px-6 py-3 w-full min-h-[64px] sm:min-h-[70px] group text-left">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center shrink-0 border border-blue-100/50 dark:border-blue-800/30 group-hover:scale-105 transition-transform duration-300">
+                <UploadFileIcon className="text-2xl text-blue-500" />
+              </div>
+              <div className="text-left">
+                <p className="text-sm text-gray-900 dark:text-white font-black tracking-tight leading-tight">{t("Want to upload a different file?")}</p>
+                <p className="text-[10px] sm:text-[11px] text-gray-500 font-semibold dark:text-gray-400 leading-normal">{t("Drag new file here or click to browse")}</p>
+              </div>
+            </div>
+            <span className="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-650 dark:bg-blue-900/40 dark:text-blue-300 text-[11px] font-black px-3.5 py-1.5 rounded-lg shadow-sm transition-all shrink-0">{t("Change File")}</span>
+            <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.xls,.xlsx,.xlsm,.csv,.txt,.json,.xml,.jpg,.jpeg,.png,.webp,.bmp,.tiff,.img"/>
+          </label>
+        ) : (
+          <label htmlFor="file-upload" className="flex flex-col items-center justify-center cursor-pointer p-4 sm:p-6 lg:p-8 w-full h-full min-h-[140px] sm:min-h-[160px] group">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-50 dark:bg-blue-900/30 rounded-[1.2rem] flex items-center justify-center mb-3 shadow-sm border border-blue-100/50 dark:border-blue-800/30 group-hover:scale-105 transition-transform duration-300">
+                <UploadFileIcon className="text-3xl sm:text-4xl text-blue-500" />
+            </div>
+            
+            {/* Desktop text */}
+            <div className="hidden min-[600px]:flex flex-col items-center">
+               <p className="mb-0.5 text-base text-gray-900 dark:text-white font-black tracking-tight">{t("Drag & drop to upload")}</p>
+               <p className="text-xs text-gray-500 mb-4 font-medium dark:text-gray-400">{t("or click to browse your system (PDF, Excel, JPG)")}</p>
+               <span className="bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm hover:shadow hover:bg-blue-700 transition-all active:scale-95">{t("Browse Files")}</span>
+            </div>
 
-          {/* Mobile text */}
-          <div className="flex min-[600px]:hidden flex-col items-center text-center">
-             <span className="bg-blue-600 text-white text-[13px] font-bold px-5 py-2.5 rounded-xl shadow-sm mb-4 transition-transform active:scale-95">{t("Choose a File")}</span>
-             <p className="mb-1 text-[13px] text-gray-800 dark:text-gray-200 font-bold">{t("Tap here to upload")}</p>
-             <p className="text-[11px] text-gray-500 font-medium">{t("Supports PDF, Excel, JPG, PNG")}</p>
-          </div>
-          
-          <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.xls,.xlsx,.xlsm,.csv,.txt,.json,.xml,.jpg,.jpeg,.png,.webp,.bmp,.tiff,.img"/>
-        </label>
+            {/* Mobile text */}
+            <div className="flex min-[600px]:hidden flex-col items-center text-center">
+               <span className="bg-blue-600 text-white text-[11px] font-bold px-4 py-2 rounded-xl shadow-sm mb-3 transition-transform active:scale-95">{t("Choose a File")}</span>
+               <p className="mb-0.5 text-[11px] text-gray-800 dark:text-gray-200 font-bold">{t("Tap here to upload")}</p>
+               <p className="text-[10px] text-gray-500 font-medium">{t("Supports PDF, Excel, JPG, PNG")}</p>
+            </div>
+            
+            <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.xls,.xlsx,.xlsm,.csv,.txt,.json,.xml,.jpg,.jpeg,.png,.webp,.bmp,.tiff,.img"/>
+          </label>
+        )}
       </div>
       
       {file && (
-        <div className="mt-3 p-3 sm:p-5 lg:p-6 bg-white sm:bg-premium-slate-50 rounded-2xl sm:rounded-[2rem] border border-gray-200 sm:border-premium-slate-100 shadow-sm sm:shadow-none animate-in fade-in slide-in-from-top-4 duration-500 dark:bg-gray-800/80 dark:border-gray-700 overflow-hidden relative group">
+        <div className="mt-3 p-3 sm:p-5 lg:p-6 bg-white sm:bg-premium-slate-50 rounded-2xl sm:rounded-[2rem] border border-gray-200 sm:border-premium-slate-100 shadow-sm sm:shadow-none animate-in fade-in slide-in-from-top-4 duration-500 dark:bg-gray-800/80 dark:border-gray-700 overflow-hidden relative group shrink-0">
             <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 hidden sm:block"></div>
             <div className="flex items-center sm:items-start gap-3 sm:gap-5 relative z-10 w-full">
                 <div className="shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-blue-50/70 sm:bg-white rounded-xl sm:rounded-2xl border border-blue-100/50 sm:border-premium-slate-200 flex items-center justify-center shadow-sm dark:bg-gray-900/50 dark:border-gray-700 transition-transform group-hover:scale-105">
@@ -156,8 +179,58 @@ export const SubStepUpload: React.FC<SubStepUploadProps> = ({
         </div>
       )}
 
+      {file && gstSyncStatus && gstSyncStatus.status !== 'idle' && (
+        <div className={`mt-3 p-4 rounded-xl border flex items-start gap-3.5 transition-all text-sm leading-relaxed ${
+          gstSyncStatus.status === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-900 dark:bg-emerald-950/20 dark:border-emerald-900/30 dark:text-emerald-300' :
+          gstSyncStatus.status === 'syncing' ? 'bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-950/20 dark:border-blue-900/30 dark:text-blue-300 animate-pulse' :
+          'bg-rose-50 border-rose-200 text-rose-900 dark:bg-rose-950/20 dark:border-rose-900/30 dark:text-rose-300'
+        }`}>
+          <div className={`p-2 rounded-lg ${
+            gstSyncStatus.status === 'success' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400' :
+            gstSyncStatus.status === 'syncing' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400' :
+            'bg-rose-100 text-rose-600 dark:bg-rose-900/40 dark:text-rose-400'
+          }`}>
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2zm0 4h18" />
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0 text-left">
+            <h5 className="font-extrabold uppercase tracking-wider text-[11px] mb-1">
+              {gstSyncStatus.status === 'success' ? t("GST Active Ingest Archive Successful") :
+               gstSyncStatus.status === 'syncing' ? t("GST Archiving Session...") :
+               t("GST Sync Failure alert")}
+            </h5>
+            <p className="text-xs font-semibold leading-relaxed mb-2.5">
+              {gstSyncStatus.message}
+            </p>
+            {gstSyncStatus.status === 'success' && (
+              <div className="flex flex-wrap gap-2 mt-1">
+                {gstSyncStatus.blankPath && (
+                  <a
+                    href={gstSyncStatus.blankPath}
+                    download
+                    className="inline-flex items-center px-2.5 py-1 text-[10px] font-black uppercase bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm transition-all cursor-pointer"
+                  >
+                    <span>Download Blank Template</span>
+                  </a>
+                )}
+                {gstSyncStatus.filledPath && (
+                  <a
+                    href={gstSyncStatus.filledPath}
+                    download
+                    className="inline-flex items-center px-2.5 py-1 text-[10px] font-black uppercase bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm transition-all cursor-pointer"
+                  >
+                    <span>Download Refilled Dataset</span>
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {file && isStructuredFile && (fileHeaders.length > 0 || previewData.length > 0) && (
-        <div className="mt-6 border border-gray-200 p-4 min-[600px]:p-5 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-gray-900/60 dark:border-gray-700 overflow-hidden animate-in fade-in duration-300">
+        <div className="mt-6 border border-gray-200 p-4 min-[600px]:p-5 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-gray-900/60 dark:border-gray-700 overflow-hidden animate-in fade-in duration-300 shrink-0">
             <h4 className="text-[13px] sm:text-sm font-black text-gray-800 dark:text-gray-200 mb-3 sm:mb-4">{t("Data Preview")}</h4>
             <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
               <table className="w-full text-left text-sm whitespace-nowrap">
@@ -191,7 +264,7 @@ export const SubStepUpload: React.FC<SubStepUploadProps> = ({
       )}
 
       {file && !isStructuredFile && previewContent && (
-        <div className="mt-6 border border-gray-200 p-4 min-[600px]:p-5 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-gray-900/60 dark:border-gray-700 overflow-hidden animate-in fade-in duration-300 flex flex-col items-center">
+        <div className="mt-6 border border-gray-200 p-4 min-[600px]:p-5 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-gray-900/60 dark:border-gray-700 overflow-hidden animate-in fade-in duration-300 flex flex-col items-center shrink-0">
             <h4 className="text-[13px] sm:text-sm font-black text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 self-start">{t("File Preview")}</h4>
             {previewContent}
         </div>

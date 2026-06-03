@@ -114,9 +114,11 @@ export const useCorrectionLogic = (
       const essentialFields = (() => {
         switch(v.type) {
           case VoucherType.Purchase:
-          case VoucherType.Sales: return ['date', 'amount', 'ledger', 'invoiceNumber', 'partyName'];
+          case VoucherType.Sales:
+          case VoucherType.CreditNote:
+          case VoucherType.DebitNote: return ['date', 'amount', 'ledger', 'invoiceNumber', 'partyName'];
           case VoucherType.Payment:
-          case VoucherType.Receipt: return ['date', 'amount'];
+          case VoucherType.Receipt: return ['date', 'amount', 'ledger', 'partyName'];
           case VoucherType.Journal: return ['date', 'amount', 'debitLedger', 'creditLedger'];
           case VoucherType.Contra: return ['date', 'amount', 'fromAccount', 'toAccount'];
           case VoucherType.BankStatement: return ['date', 'narration', 'amount', 'partyName'];
@@ -475,9 +477,11 @@ export const useCorrectionLogic = (
           const essentialFields = (() => {
             switch(updatedVoucher.type) {
               case VoucherType.Purchase:
-              case VoucherType.Sales: return ['date', 'amount', 'ledger', 'invoiceNumber', 'partyName'];
+              case VoucherType.Sales:
+              case VoucherType.CreditNote:
+              case VoucherType.DebitNote: return ['date', 'amount', 'ledger', 'invoiceNumber', 'partyName'];
               case VoucherType.Payment:
-              case VoucherType.Receipt: return ['date', 'amount'];
+              case VoucherType.Receipt: return ['date', 'amount', 'ledger', 'partyName'];
               case VoucherType.Journal: return ['date', 'amount', 'debitLedger', 'creditLedger'];
               case VoucherType.Contra: return ['date', 'amount', 'fromAccount', 'toAccount'];
               case VoucherType.BankStatement: return ['date', 'narration'];

@@ -55,6 +55,8 @@ interface SubStepChooseProps {
   selectedSettingsSubpage?: string;
   setSelectedSettingsSubpage?: (subpage: string) => void;
   setActiveTab?: (tab: 'type' | 'choose' | 'preview' | 'upload' | 'mapping' | 'settings') => void;
+  taxSampleType?: 'with_data' | 'without_data';
+  setTaxSampleType?: (type: 'with_data' | 'without_data') => void;
 }
 
 const ledgerItemProps: Record<string, { color: string; border: string; bg: string; text: string; darkBg: string; darkBorder: string; darkText: string; iconColor: string }> = {
@@ -138,6 +140,8 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
   selectedSettingsSubpage = 'pref_general',
   setSelectedSettingsSubpage,
   setActiveTab,
+  taxSampleType = 'with_data',
+  setTaxSampleType,
 }) => {
   const { t } = useLanguage();
 
@@ -365,20 +369,29 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
       else if (pageId.includes('help')) colorKey = 'teal';
     } else if (importCategory === 'other') {
       switch (selectedOtherCategory) {
-        case 'ledgers':
-          colorKey = 'blue';
+        case 'employees_payroll':
+          colorKey = 'violet';
           break;
-        case 'items':
-          colorKey = 'emerald';
+        case 'fixed_assets':
+          colorKey = 'indigo';
           break;
-        case 'uom':
+        case 'currency_rates':
+          colorKey = 'teal';
+          break;
+        case 'projects_wbs':
           colorKey = 'amber';
           break;
-        case 'godowns':
+        case 'discount_rules':
+          colorKey = 'rose';
+          break;
+        case 'barcodes_units':
           colorKey = 'sky';
           break;
-        case 'gst':
-          colorKey = 'rose';
+        case 'custom_dirs':
+          colorKey = 'emerald';
+          break;
+        case 'custom':
+          colorKey = 'neutral';
           break;
         default:
           colorKey = 'blue';
@@ -754,7 +767,7 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
                 >
                   <div className={`absolute bottom-0 left-0 h-1 transition-all duration-500 ${voucherType === item.type ? `w-full ${item.accent}` : 'w-0 bg-blue-400'}`}></div>
                   <item.icon className={`text-xl mb-2 transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-0.5 ${voucherType === item.type ? 'scale-110 -translate-y-0.5' : ''}`} />
-                  <span className="text-[10px] uppercase tracking-tight line-clamp-1">{item.type}</span>
+                  <span className="text-[10px] uppercase tracking-tight line-clamp-1">{t(item.type)}</span>
                 </button>
               ))}
             </div>
@@ -854,11 +867,23 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
 
         {importCategory === 'tax_related' && (
           <div className="space-y-6 animate-in slide-in-from-top-2 duration-300">
-            <div className="flex items-center justify-between px-1">
-                <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40 dark:text-white">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between px-1 gap-3">
+                <label className="block text-[11px] font-black text-gray-900 uppercase tracking-[0.25em] opacity-40 dark:text-white shrink-0">
                   {t("GST Return & Compliance Formats")}
                 </label>
-                <div className="h-px flex-1 bg-gray-100 mx-6 dark:bg-gray-800"></div>
+                <div className="hidden sm:block h-px flex-1 bg-gray-100 mx-6 dark:bg-gray-800"></div>
+                <div className="flex items-center space-x-2 shrink-0">
+                  <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">{t("Data Mode")}:</span>
+                  <select
+                    id="tax-sample-type-select-header"
+                    value={taxSampleType}
+                    onChange={(e) => setTaxSampleType && setTaxSampleType(e.target.value as any)}
+                    className="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-[11px] font-extrabold focus:ring-1 focus:ring-blue-500 outline-none shadow-sm dark:bg-gray-800 dark:border-gray-750 dark:text-white cursor-pointer transition-all"
+                  >
+                    <option value="without_data">{t("Blank (Default)")}</option>
+                    <option value="with_data">{t("Preferred (Sample with Mock Data)")}</option>
+                  </select>
+                </div>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {[
@@ -1050,40 +1075,17 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
                 <select
                   value={selectedOtherCategory}
                   onChange={(e) => setSelectedOtherCategory(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white cursor-pointer"
                 >
-                  <optgroup label={t("Ledger Masters")}>
-                    <option value="contacts_staff">{t("Staff Contacts")}</option>
-                    <option value="contacts_customers">{t("Customer Contacts")}</option>
-                    <option value="contacts_vendors">{t("Vendor Contacts")}</option>
-                    <option value="contacts_partners">{t("Partner Contacts")}</option>
-                    <option value="ledgers">{t("General Ledgers")}</option>
-                    <option value="banks">{t("Bank Masters")}</option>
-                    <option value="accountGroups">{t("Groups")}</option>
-                    <option value="locations">{t("Locations")}</option>
-                    <option value="costCenters">{t("Cost Centers")}</option>
-                  </optgroup>
-                  <optgroup label={t("Item Masters")}>
-                    <option value="items">{t("Item Hub")}</option>
-                    <option value="basic_items">{t("Basic Item")}</option>
-                    <option value="bom">{t("Bill of Materials")}</option>
-                    <option value="warehouses">{t("Warehouses")}</option>
-                    <option value="uoms">{t("UOMs")}</option>
-                    <option value="stockGroups">{t("Stock Groups")}</option>
-                    <option value="gst">{t("HSN")}</option>
-                    <option value="brands">{t("Brands")}</option>
-                    <option value="categories">{t("Categories")}</option>
-                    <option value="assertionCategories">{t("Assertion Categories")}</option>
-                    <option value="assertionCodes">{t("Assertion Codes")}</option>
-                    <option value="colors">{t("Colors")}</option>
-                    <option value="sizes">{t("Sizes")}</option>
-                    <option value="variants">{t("Variants")}</option>
-                    <option value="dimensions">{t("Dimensions")}</option>
-                    <option value="skus">{t("SKUs")}</option>
-                    <option value="priceList">{t("Price List")}</option>
-                    <option value="weights">{t("Weights")}</option>
-                    <option value="volumes">{t("Volumes")}</option>
-                    <option value="grades">{t("Grades")}</option>
+                  <optgroup label={t("Miscellaneous Databases")}>
+                    <option value="employees_payroll">{t("Employees & Payroll")}</option>
+                    <option value="fixed_assets">{t("Fixed Asset Registry")}</option>
+                    <option value="currency_rates">{t("Forex Rate Matrices")}</option>
+                    <option value="projects_wbs">{t("Projects & Contract WBS")}</option>
+                    <option value="barcodes_units">{t("Barcodes & Packaging Mappings")}</option>
+                    <option value="discount_rules">{t("Discount & Promo Schemes")}</option>
+                    <option value="custom_dirs">{t("Custom Directory Master")}</option>
+                    <option value="custom">{t("Custom Category")}</option>
                   </optgroup>
                 </select>
               </div>
@@ -1092,11 +1094,11 @@ export const SubStepChoose: React.FC<SubStepChooseProps> = ({
             {/* Quick Informational Guide Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {[
-                { id: 'contacts_customers', label: 'Contacts', grp: 'Accounting', d: 'Customer, Vendor, Partner & Staff contacts', col: 'from-purple-500/10 to-transparent' },
-                { id: 'ledgers', label: 'General Ledgers', grp: 'Accounting', d: 'General Ledger accounts', col: 'from-blue-500/10 to-transparent' },
-                { id: 'items', label: 'Item Hub', grp: 'Inventory', d: 'Products and items indexes', col: 'from-emerald-500/10 to-transparent' },
-                { id: 'uoms', label: 'UOMs', grp: 'Inventory', d: 'Units like PCS, KGS, BOX', col: 'from-amber-500/10 to-transparent' },
-                { id: 'warehouses', label: 'Warehouses', grp: 'Inventory', d: 'Warehouses and godowns', col: 'from-sky-500/10 to-transparent' },
+                { id: 'employees_payroll', label: 'Payroll & HR', grp: 'Enterprise', d: 'HR personal profiles & salary structures', col: 'from-violet-500/10 to-transparent' },
+                { id: 'fixed_assets', label: 'Fixed Assets', grp: 'Asset Mgmt', d: 'Fixtures, equipment & depreciation', col: 'from-indigo-500/10 to-transparent' },
+                { id: 'currency_rates', label: 'Forex Matrices', grp: 'Compliance', d: 'Multi-currency conversion tables', col: 'from-teal-500/10 to-transparent' },
+                { id: 'projects_wbs', label: 'Projects WBS', grp: 'Operations', d: 'Client contract work breakdowns', col: 'from-amber-500/10 to-transparent' },
+                { id: 'discount_rules', label: 'Discount Schemes', grp: 'Sales Slabs', d: 'Pricing markdowns & promo matrices', col: 'from-rose-500/10 to-transparent' },
               ].map((card) => {
                 const isSelected = selectedOtherCategory === card.id;
                 return (

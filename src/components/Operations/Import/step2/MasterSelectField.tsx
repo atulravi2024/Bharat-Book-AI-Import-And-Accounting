@@ -114,24 +114,58 @@ export const MasterSelectField: React.FC<MasterSelectFieldProps> = ({
           />
           
           {showDropdown && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-52 overflow-y-auto z-50 dark:bg-gray-800 dark:border-gray-700 w-full">
-              {filteredMasters.length > 0 && (
-                <div className="pt-2 pb-1">
-                  <div className="px-3 pb-1 text-[10px] font-black text-gray-400 uppercase tracking-widest">{t("Matches in Masters")}</div>
-                  {filteredMasters.map(m => (
-                    <div 
-                      key={m.name} 
-                      onMouseDown={(e) => {
-                        e.preventDefault(); 
-                        handleSelectOption(m.name);
-                      }}
-                      className="px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm flex justify-between items-center text-gray-700 font-medium transition-colors mx-1 rounded-lg dark:hover:bg-gray-600 dark:text-gray-200"
-                    >
-                      <span className="truncate">{m.name}</span>
-                    </div>
-                  ))}
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-64 overflow-y-auto z-50 dark:bg-gray-800 dark:border-gray-700 w-full">
+              <div className="pt-2 pb-1 divide-y divide-gray-100 dark:divide-gray-700">
+                {/* 1. Blank Option (Selected by default if currentValue is empty) */}
+                <div className="pb-1.5 px-1">
+                  <div className="px-3 py-1 text-[10px] font-black text-gray-400 uppercase tracking-widest">{t("Unmapped Option")}</div>
+                  <div 
+                    onMouseDown={(e) => {
+                      e.preventDefault(); 
+                      handleSelectOption('');
+                    }}
+                    className={`px-3 py-2 cursor-pointer text-sm flex justify-between items-center transition-colors rounded-lg mx-1 font-bold ${
+                      !currentValue 
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' 
+                        : 'hover:bg-gray-50 text-gray-500 dark:hover:bg-gray-750'
+                    }`}
+                  >
+                    <span className="italic">{t("[Blank Option] - Leave Unmapped / Empty")}</span>
+                    {!currentValue && <span className="text-xs bg-blue-100 text-blue-700 font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider scale-90">Selected Default</span>}
+                  </div>
                 </div>
-              )}
+
+                {/* 2. Preferred Master Recommendations */}
+                <div className="pt-2 pb-1 px-1">
+                  <div className="px-3 pb-1 text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">{t("Preferred Master Matches")}</div>
+                  
+                  {/* If filter shows nothing but we have masters, show first 5 masters as preferred fallback */}
+                  {(filteredMasters.length > 0 ? filteredMasters : (masters || []).slice(0, 5)).map(m => {
+                    const isSelected = currentValue.toLowerCase() === m.name.toLowerCase();
+                    return (
+                      <div 
+                        key={m.name} 
+                        onMouseDown={(e) => {
+                          e.preventDefault(); 
+                          handleSelectOption(m.name);
+                        }}
+                        className={`px-3 py-2 cursor-pointer text-sm flex justify-between items-center font-semibold transition-colors rounded-lg mx-1 ${
+                          isSelected 
+                            ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30' 
+                            : 'hover:bg-blue-50/50 text-gray-700 dark:text-gray-200 dark:hover:bg-gray-650'
+                        }`}
+                      >
+                        <span className="truncate">{m.name}</span>
+                        {isSelected && <span className="text-[9px] bg-emerald-100 text-emerald-700 font-black px-1.5 py-0.5 rounded uppercase">Active Match</span>}
+                      </div>
+                    );
+                  })}
+                  
+                  {(filteredMasters.length === 0 && (masters || []).length === 0) && (
+                    <div className="px-3 py-2 text-xs italic text-gray-400">{t("No active masters found.")}</div>
+                  )}
+                </div>
+              </div>
               
               {!exactMatch && currentValue.trim().length > 0 && (
                 <div className="p-2 border-t border-gray-100 bg-gray-50/80 sticky bottom-0 dark:border-gray-800">

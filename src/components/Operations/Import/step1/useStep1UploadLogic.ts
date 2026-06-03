@@ -39,11 +39,31 @@ export const useStep1UploadLogic = ({
   const [selectedBank, setSelectedBank] = useState('');
   const [importCategory, setImportCategory] = useState<ImportCategory>('voucher');
   const [masterType, setMasterType] = useState<MasterType>('ledgers');
-  const [selectedOtherCategory, setSelectedOtherCategory] = useState<string>(initialSettings?.selectedOtherCategory || 'ledgers');
+  const [selectedOtherCategory, setSelectedOtherCategory] = useState<string>(
+    initialSettings?.selectedOtherCategory && [
+      'employees_payroll', 
+      'fixed_assets', 
+      'currency_rates', 
+      'projects_wbs', 
+      'barcodes_units', 
+      'discount_rules', 
+      'custom_dirs', 
+      'custom'
+    ].includes(initialSettings.selectedOtherCategory)
+      ? initialSettings.selectedOtherCategory
+      : 'employees_payroll'
+  );
   const [customCategoryName, setCustomCategoryName] = useState<string>(initialSettings?.customCategoryName || '');
   const [selectedSettingsSubpage, setSelectedSettingsSubpage] = useState<string>('pref_general');
   const [showMapping, setShowMapping] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [taxSampleType, setTaxSampleType] = useState<'with_data' | 'without_data'>('without_data');
+  const [gstSyncStatus, setGstSyncStatus] = useState<{
+    status: 'idle' | 'syncing' | 'success' | 'error';
+    message?: string;
+    blankPath?: string;
+    filledPath?: string;
+  }>({ status: 'idle' });
 
   const bankMasters = useMemo(() => {
     return ledgerMasters.filter(m => m.group === 'Bank Accounts');
@@ -118,6 +138,52 @@ export const useStep1UploadLogic = ({
       }
     }
   }, [voucherType]);
+
+  // Synchronize GST uploaded files to the backend /public/Tax_Sample_Data folder
+  useEffect(() => {
+    if (file && importCategory === 'tax_related') {
+      setGstSyncStatus({ status: 'syncing', message: 'Syncing uploaded compliance schema...' });
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const content = e.target?.result as string;
+          const response = await fetch("/api/gst/upload", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              fileName: file.name,
+              content: content,
+              voucherType: voucherType
+            })
+          });
+          const result = await response.json();
+          if (result.status === 'success') {
+            setGstSyncStatus({
+              status: 'success',
+              message: result.message,
+              blankPath: result.blankPath,
+              filledPath: result.filledPath
+            });
+          } else {
+            setGstSyncStatus({
+              status: 'error',
+              message: result.error || 'Failed to sync schema files'
+            });
+          }
+        } catch (err: any) {
+          setGstSyncStatus({
+            status: 'error',
+            message: err.message || 'Network sync error'
+          });
+        }
+      };
+      reader.readAsText(file);
+    } else {
+      setGstSyncStatus({ status: 'idle' });
+    }
+  }, [file, importCategory, voucherType]);
 
   // Auto-detect voucher type based on headers and filename
   useEffect(() => {
@@ -354,6 +420,28 @@ export const useStep1UploadLogic = ({
             'Provide original invoice numbers for seamless automated correlation.'
           ];
           break;
+        case VoucherType.CreditNote:
+          headers = ['Date', 'CreditNoteNumber', 'OriginalInvoiceNumber', 'Amount', 'PartyName', 'ItemName', 'ItemQuantity', 'ItemRate', 'TaxRate', 'Narration'];
+          sampleRows = [
+            { Date: '2026-05-18', CreditNoteNumber: 'CN-2026-001', OriginalInvoiceNumber: 'INV-2026-001', Amount: '2500.00', PartyName: 'Ramesh Automation', ItemName: 'Tally Course Premium', ItemQuantity: '1', ItemRate: '2500.00', TaxRate: '18%', Narration: 'Sales return due to duplicate purchase' }
+          ];
+          instructions = [
+            'Dates should preferably be in YYYY-MM-DD or DD-MM-YYYY format.',
+            'Maintain Credit Note Number along with the original Invoice Number for automated correlation.',
+            'Ensure the target Party is already existing or mapped in the ledger master.'
+          ];
+          break;
+        case VoucherType.DebitNote:
+          headers = ['Date', 'DebitNoteNumber', 'OriginalInvoiceNumber', 'Amount', 'SupplierName', 'ItemName', 'ItemQuantity', 'ItemRate', 'TaxRate', 'Narration'];
+          sampleRows = [
+            { Date: '2026-05-19', DebitNoteNumber: 'DN-2026-002', OriginalInvoiceNumber: 'PINV-2026-441', Amount: '4200.00', SupplierName: 'Bharat Book Agency', ItemName: 'Premium Accounting Books', ItemQuantity: '10', ItemRate: '420.00', TaxRate: '5%', Narration: 'Purchase return for defective material or item damage' }
+          ];
+          instructions = [
+            'Dates should preferably be in YYYY-MM-DD or DD-MM-YYYY format.',
+            'Specify the Debit Note Number (sometimes called Purchase Note Number) to reflect standard returns.',
+            'Provide the Supplier or Party Name carefully to ensure accurate automatic supplier ledger posting.'
+          ];
+          break;
         default:
           headers = ['Date', 'Amount', 'Narration'];
           sampleRows = [
@@ -486,8 +574,12 @@ export const useStep1UploadLogic = ({
       ];
     }
 
+    if (importCategory === 'tax_related' && taxSampleType === 'without_data') {
+      sampleRows = [];
+    }
+
     return { title, description, headers, sampleRows, instructions };
-  }, [importCategory, voucherType, masterType, selectedSettingsSubpage]);
+  }, [importCategory, voucherType, masterType, selectedSettingsSubpage, taxSampleType]);
 
   const handleDownloadTemplate = () => {
     const { headers, sampleRows } = templateConfig;
@@ -579,6 +671,9 @@ export const useStep1UploadLogic = ({
     templateConfig,
     handleDownloadTemplate,
     steps,
-    currentStepIndex
+    currentStepIndex,
+    taxSampleType,
+    setTaxSampleType,
+    gstSyncStatus
   };
 };

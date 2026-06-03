@@ -103,7 +103,10 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({
     templateConfig,
     handleDownloadTemplate,
     steps,
-    currentStepIndex
+    currentStepIndex,
+    taxSampleType,
+    setTaxSampleType,
+    gstSyncStatus
   } = useStep1UploadLogic({
     onNext,
     isLoading,
@@ -211,6 +214,8 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({
             selectedSettingsSubpage={selectedSettingsSubpage}
             setSelectedSettingsSubpage={setSelectedSettingsSubpage}
             setActiveTab={setActiveTab}
+            taxSampleType={taxSampleType}
+            setTaxSampleType={setTaxSampleType}
           />
         )}
 
@@ -218,6 +223,9 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({
           <SubStepPreview
             templateConfig={templateConfig}
             handleDownloadTemplate={handleDownloadTemplate}
+            importCategory={importCategory}
+            taxSampleType={taxSampleType}
+            setTaxSampleType={setTaxSampleType}
           />
         )}
 
@@ -233,6 +241,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({
             handleDragOver={handleDragOver}
             handleDragLeave={handleDragLeave}
             handleFileChange={handleFileChange}
+            gstSyncStatus={gstSyncStatus}
           />
         )}
 

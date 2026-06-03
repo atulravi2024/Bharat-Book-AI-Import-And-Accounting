@@ -14,11 +14,17 @@ interface SubStepPreviewProps {
     instructions: string[];
   };
   handleDownloadTemplate: () => void;
+  importCategory?: string;
+  taxSampleType?: 'with_data' | 'without_data';
+  setTaxSampleType?: (type: 'with_data' | 'without_data') => void;
 }
 
 export const SubStepPreview: React.FC<SubStepPreviewProps> = ({
   templateConfig,
   handleDownloadTemplate,
+  importCategory,
+  taxSampleType,
+  setTaxSampleType,
 }) => {
   const { t } = useLanguage();
 
@@ -34,6 +40,22 @@ export const SubStepPreview: React.FC<SubStepPreviewProps> = ({
              <p className="text-xs text-gray-400 mt-2 font-medium">
                 {t(templateConfig.description)}
              </p>
+             {importCategory === 'tax_related' && taxSampleType && setTaxSampleType && (
+                <div className="mt-3 flex items-center space-x-2 bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-1 rounded-xl w-max">
+                   <button
+                     onClick={() => setTaxSampleType('without_data')}
+                     className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${taxSampleType === 'without_data' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                   >
+                     {t("Blank (Default)")}
+                   </button>
+                   <button
+                     onClick={() => setTaxSampleType('with_data')}
+                     className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${taxSampleType === 'with_data' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                   >
+                     {t("Preferred (Sample with Mock Data)")}
+                   </button>
+                </div>
+             )}
           </div>
           <button
             onClick={handleDownloadTemplate}

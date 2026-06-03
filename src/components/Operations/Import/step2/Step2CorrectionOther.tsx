@@ -13,6 +13,7 @@ import {
   Info,
   Database
 } from 'lucide-react';
+import { CorrectionGuideVideo } from './CorrectionGuideVideo';
 
 interface Step2CorrectionOtherProps {
   vouchers: ParsedVoucher[];
@@ -58,6 +59,9 @@ interface Step2CorrectionOtherProps {
   customMasters: Record<string, any[]>;
   setCustomMasters: React.Dispatch<React.SetStateAction<Record<string, any[]>>>;
   initialSettings?: any;
+  importCategory?: string;
+  contactMasters?: any[];
+  setContactMasters?: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
@@ -72,6 +76,8 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
   setUomMasters,
   partyMasters,
   setPartyMasters,
+  contactMasters = [],
+  setContactMasters = () => {},
   locationMasters,
   setLocationMasters,
   bomMasters,
@@ -103,47 +109,67 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
   customMasters,
   setCustomMasters,
   initialSettings,
+  importCategory,
 }) => {
   const { t } = useLanguage();
 
   // Selected Target Category
-  const [targetCategory, setTargetCategory] = useState<string>(initialSettings?.selectedOtherCategory || 'ledgers');
+  const [targetCategory, setTargetCategory] = useState<string>(() => {
+    if (initialSettings?.selectedOtherCategory) {
+      return initialSettings.selectedOtherCategory;
+    }
+    if (importCategory === 'ledger_master') {
+      return 'ledgers';
+    }
+    if (importCategory === 'item_master') {
+      return 'items';
+    }
+    return 'employees_payroll';
+  });
   const [customCategoryName, setCustomCategoryName] = useState<string>(initialSettings?.customCategoryName || '');
   
   // Available categories list
   const categoriesList = useMemo(() => [
-    // Ledger Master Subpages
-    { key: 'contacts_staff', labelKey: 'Staff Contacts', description: 'Internal and staff contact profiles' },
-    { key: 'contacts_customers', labelKey: 'Customer Contacts', description: 'Business customers contact registry' },
-    { key: 'contacts_vendors', labelKey: 'Vendor Contacts', description: 'Suppliers and vendor contact details' },
-    { key: 'contacts_partners', labelKey: 'Partner Contacts', description: 'Shareholders and partners profile indexes' },
-    { key: 'ledgers', labelKey: 'General Ledgers', description: 'Chart of General Ledger accounts' },
-    { key: 'banks', labelKey: 'Bank Masters', description: 'Company bank accounts and details' },
-    { key: 'accountGroups', labelKey: 'Groups', description: 'Sub-divisions of Ledger groupings' },
-    { key: 'locations', labelKey: 'Locations', description: 'Operating and business physical locations' },
-    { key: 'costCenters', labelKey: 'Cost Centers', description: 'Expense departments and operating cost units' },
+    // Ledger Masters
+    { key: 'ledgers', labelKey: 'General Ledgers', description: 'Create and align standard ledger entries under expense/asset groups', group: 'ledger_master' },
+    { key: 'banks', labelKey: 'Bank Masters', description: 'Configure banking and treasury accounts with IFS codes and branch details', group: 'ledger_master' },
+    { key: 'contacts', labelKey: 'Contacts & Parties', description: 'Address book profiles, customers, vendors, suppliers, staff, and directors', group: 'ledger_master' },
+    { key: 'contacts_staff', labelKey: 'Staff Contacts', description: 'Address book profiles for staff, members, employees, and operations team', group: 'ledger_master' },
+    { key: 'contacts_customers', labelKey: 'Customer Contacts', description: 'Address book profiles for buyers, retail/wholesale consumers and recurring debtors', group: 'ledger_master' },
+    { key: 'contacts_vendors', labelKey: 'Vendor Contacts', description: 'Address book profiles for active suppliers, direct distributors and trade creditors', group: 'ledger_master' },
+    { key: 'contacts_partners', labelKey: 'Partner Contacts', description: 'Address book profiles for enterprise shareholders, advisory board directors and partners', group: 'ledger_master' },
+    { key: 'accountGroups', labelKey: 'Account Groups', description: 'Define primary or sub-hierarchies of accounts in ledgers classification', group: 'ledger_master' },
+    { key: 'locations', labelKey: 'Locations & Godowns', description: 'Storage warehouses, godowns, locations and inventory bins registers', group: 'ledger_master' },
+    { key: 'godowns', labelKey: 'Godowns', description: 'Identify active warehouse units, distribution godowns, and storage terminals', group: 'ledger_master' },
+    { key: 'warehouses', labelKey: 'Warehouses', description: 'In-house storage depots, inventory containment areas, and processing fulfillment facilities', group: 'ledger_master' },
+    { key: 'costCenters', labelKey: 'Cost Centers', description: 'Corporate departments, project segments, or regional revenue allocation centers', group: 'ledger_master' },
 
-    // Item Master Subpages
-    { key: 'items', labelKey: 'Item Hub', description: 'Physical products & inventory indexes' },
-    { key: 'basic_items', labelKey: 'Basic Item', description: 'Basic item metadata and attributes' },
-    { key: 'bom', labelKey: 'Bill of Materials', description: 'Manufacture components recipe list' },
-    { key: 'warehouses', labelKey: 'Warehouses', description: 'Storage warehouses indices' },
-    { key: 'uoms', labelKey: 'UOMs', description: 'Product units like PCS, KGS, BOX etc.' },
-    { key: 'stockGroups', labelKey: 'Stock Groups', description: 'Category subdivisions for catalog items' },
-    { key: 'gst', labelKey: 'HSN', description: 'In-app tax rates and classifications' },
-    { key: 'brands', labelKey: 'Brands', description: 'Manufacturers and trademark classifications' },
-    { key: 'categories', labelKey: 'Categories', description: 'Stock classification categories' },
-    { key: 'assertionCategories', labelKey: 'Assertion Categories', description: 'Inventory assertion metadata directories' },
-    { key: 'assertionCodes', labelKey: 'Assertion Codes', description: 'Regulatory/Standard assertion codes' },
-    { key: 'colors', labelKey: 'Colors', description: 'Product colors directory' },
-    { key: 'sizes', labelKey: 'Sizes', description: 'Sizing indexes and profiles' },
-    { key: 'variants', labelKey: 'Variants', description: 'Style, SKU and make variations' },
-    { key: 'dimensions', labelKey: 'Dimensions', description: 'Scale, sizing dimensional parameters' },
-    { key: 'skus', labelKey: 'SKUs', description: 'Unique Stock Keeping Unit mappings' },
-    { key: 'priceList', labelKey: 'Price List', description: 'Items standard/discount pricing lists' },
-    { key: 'weights', labelKey: 'Weights', description: 'Material density/weights registry' },
-    { key: 'volumes', labelKey: 'Volumes', description: 'Physical volume specifications list' },
-    { key: 'grades', labelKey: 'Grades', description: 'Product and quality structural grades' }
+    // Inventory Masters
+    { key: 'items', labelKey: 'Stock Items', description: 'Store-keeping unit records of raw materials, assemblies or finished products', group: 'item_master' },
+    { key: 'basic_items', labelKey: 'Basic Item', description: 'Direct standard stock variables with custom pricing parameters and standard taxes', group: 'item_master' },
+    { key: 'uom', labelKey: 'Units of Measure', description: 'Configure unit variables (PCS, BOX, BAG, NOS) for inventory counts', group: 'item_master' },
+    { key: 'uoms', labelKey: 'UOMs', description: 'Alternative alias counts for secondary and tertiary units of packaging measures', group: 'item_master' },
+    { key: 'stockGroups', labelKey: 'Stock Groups', description: 'Classify inventory SKU profiles under unified parent categories', group: 'item_master' },
+    { key: 'categories', labelKey: 'Stock Categories', description: 'Map inventory items by grade, physical properties, or product families', group: 'item_master' },
+    { key: 'bom', labelKey: 'Bill of Materials', description: 'Verify assembly blueprints and raw material recipe registers', group: 'item_master' },
+    { key: 'brands', labelKey: 'Brands', description: 'Product brands, manufacturers, label directories, and commercial product names', group: 'item_master' },
+    { key: 'variants', labelKey: 'Variants', description: 'Specific SKU color/size combinations, item matrices, or custom configurations', group: 'item_master' },
+    { key: 'sizes', labelKey: 'Sizes', description: 'Product size scales, measurements, and physical size specifications', group: 'item_master' },
+    { key: 'colors', labelKey: 'Colors', description: 'Product colors, visual style references, and fabric/plastic tint masters', group: 'item_master' },
+    { key: 'gst', labelKey: 'HSN & Tax Codes', description: 'HSN/SAC codes, standard Goods and Services Tax rates registry', group: 'item_master' },
+    { key: 'skus', labelKey: 'SKU Masters', description: 'Store-keeping unit identification codes and unique identifier databases', group: 'item_master' },
+    { key: 'grades', labelKey: 'Grades', description: 'Material grades, purity ratings, crop qualities, and manufacturing strength scales', group: 'item_master' },
+    { key: 'priceLists', labelKey: 'Price Lists', description: 'Multi-tier pricing structures, retail cost books, dealer margins, and distributor discount tables', group: 'item_master' },
+
+    // Miscellaneous Masters
+    { key: 'employees_payroll', labelKey: 'Employees & Payroll', description: 'HR Personnel, Employee directory profiles, designations and salary codes', group: 'other' },
+    { key: 'fixed_assets', labelKey: 'Fixed Asset Registry', description: 'Capital machinery, devices, assets, fixtures, properties and depreciation registers', group: 'other' },
+    { key: 'currency_rates', labelKey: 'Forex Rate Matrices', description: 'Foreign exchange currency conversion codes and exchange rate parameter tables', group: 'other' },
+    { key: 'projects_wbs', labelKey: 'Projects & Contract WBS', description: 'Contract projects registry, operational work breakdown tasks, and client milestones', group: 'other' },
+    { key: 'barcodes_units', labelKey: 'Barcodes & Packaging Mappings', description: 'EAN/UPC barcode numbers, packaging units, carton multipliers and box weights', group: 'other' },
+    { key: 'discount_rules', labelKey: 'Discount & Promo Schemes', description: 'Promotional schemes, pricing loyalty slabs, seasonal markdown or markup matrices', group: 'other' },
+    { key: 'custom_dirs', labelKey: 'Custom Directory Master', description: 'Unstructured miscellaneous custom key-value indexing and tag registries', group: 'other' },
+    { key: 'custom', labelKey: 'Custom Category', description: 'Define your own database table prefix and configure dynamic layouts', group: 'other' }
   ], []);
 
   // Columns found inside parsed vouchers
@@ -310,6 +336,42 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
           });
           return merged;
         });
+
+        if (targetCategory === 'banks') {
+          // Dual save banks in ledgerMasters under Bank Accounts so they show up under Bank Masters
+          setLedgerMasters(prev => {
+            const merged = [...prev];
+            itemsToImport.forEach(item => {
+              if (!merged.some(m => m.name.toLowerCase() === item.name.toLowerCase())) {
+                merged.push({ 
+                  id: `l-${Date.now()}-${Math.random()}`, 
+                  name: item.name, 
+                  group: 'Bank Accounts', 
+                  openingBalance: item.value || '0.00'
+                });
+              }
+            });
+            return merged;
+          });
+        } else {
+          // Dual save contacts in contactMasters so they show up under Contacts Tab
+          setContactMasters(prev => {
+            const merged = [...prev];
+            itemsToImport.forEach(item => {
+              if (!merged.some(m => m.name.toLowerCase() === item.name.toLowerCase())) {
+                merged.push({
+                  id: `c-${Date.now()}-${Math.random()}`,
+                  name: item.name,
+                  code: item.code || '',
+                  status: 'Active',
+                  contactType: 'External',
+                  role: item.group || (targetCategory === 'contacts_staff' ? 'Staff' : 'Customer')
+                });
+              }
+            });
+            return merged;
+          });
+        }
         break;
       case 'items':
       case 'basic_items':
@@ -536,6 +598,9 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
         </button>
       </div>
 
+      {/* Dynamic Walkthrough Tutorial Video just after Header Area (on top) */}
+      <CorrectionGuideVideo />
+
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden min-h-0">
         {/* Left Settings Sidebar Panel */}
         <div className="lg:col-span-1 bg-gray-50/50 p-4 border border-gray-100 rounded-xl flex flex-col gap-5 dark:bg-gray-900/30 dark:border-gray-700 overflow-y-auto">
@@ -555,15 +620,20 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
                 <select
                   value={targetCategory}
                   onChange={(e) => setTargetCategory(e.target.value)}
-                  className="w-full bg-transparent border-0 p-0 text-xs font-black text-gray-900 dark:text-white focus:ring-0 outline-none cursor-pointer"
+                  className="w-full bg-transparent border-0 p-0 text-xs font-black text-gray-900 dark:text-white focus:ring-0 outline-none cursor-pointer text-ellipsis overflow-hidden"
                 >
-                  <optgroup label={t("Ledger Masters")}>
-                    {categoriesList.filter(c => ['ledgers', 'banks', 'contacts_staff', 'contacts_customers', 'contacts_vendors', 'contacts_partners', 'locations', 'costCenters', 'accountGroups'].includes(c.key)).map(c => (
+                  <optgroup label={t("Ledger Master Directories")}>
+                    {categoriesList.filter(c => c.group === 'ledger_master').map(c => (
                       <option key={c.key} value={c.key} className="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">{t(c.labelKey)}</option>
                     ))}
                   </optgroup>
-                  <optgroup label={t("Item Masters")}>
-                    {categoriesList.filter(c => !['ledgers', 'banks', 'contacts_staff', 'contacts_customers', 'contacts_vendors', 'contacts_partners', 'locations', 'costCenters', 'accountGroups'].includes(c.key)).map(c => (
+                  <optgroup label={t("Inventory Master Directories")}>
+                    {categoriesList.filter(c => c.group === 'item_master').map(c => (
+                      <option key={c.key} value={c.key} className="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">{t(c.labelKey)}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label={t("Miscellaneous Registers")}>
+                    {categoriesList.filter(c => c.group === 'other').map(c => (
                       <option key={c.key} value={c.key} className="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">{t(c.labelKey)}</option>
                     ))}
                   </optgroup>

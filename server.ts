@@ -138,6 +138,102 @@ User asks: `;
     res.json({ ip: clientIp || "127.0.0.1" });
   });
 
+
+  // API to handle GST Upload Ingestion & Auto-refilling logic
+  app.post("/api/gst/upload", (req, res) => {
+    try {
+      const { fileName, content, voucherType } = req.body;
+      if (!content || !voucherType) {
+        return res.status(400).json({ error: "Missing content or voucherType" });
+      }
+
+      // Safe clean name for Tax_Sample_Data
+      const safeVoucherType = String(voucherType || "GSTR1");
+      const normalizedType = safeVoucherType.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      let typeFolder = "GSTR1";
+      if (normalizedType.includes("GSTR2A")) typeFolder = "GSTR2A";
+      else if (normalizedType.includes("GSTR2B")) typeFolder = "GSTR2B";
+      else if (normalizedType.includes("GSTR3B")) typeFolder = "GSTR3B";
+      else if (normalizedType.includes("GSTR4")) typeFolder = "GSTR4";
+      else if (normalizedType.includes("GSTR9")) typeFolder = "GSTR9";
+      else if (normalizedType.includes("CMP08")) typeFolder = "CMP08";
+      else if (normalizedType.includes("GSTR1")) typeFolder = "GSTR1";
+
+      const basePaths = [
+        path.join(process.cwd(), "public", "Tax_Sample_Data", typeFolder)
+      ];
+
+      // Ensure paths exist
+      basePaths.forEach(p => {
+        if (!fs.existsSync(p)) {
+          fs.mkdirSync(p, { recursive: true });
+        }
+      });
+
+      const lines = content.split("\n").map((l: string) => l.trim()).filter(Boolean);
+      const hasDataRows = lines.length > 1;
+
+      const safeName = String(voucherType || "GSTR-1").replace(/\s+/g, "_");
+
+      if (!hasDataRows) {
+        // Save blank template
+        basePaths.forEach(p => {
+          fs.writeFileSync(path.join(p, "blank.csv"), content, "utf-8");
+          fs.writeFileSync(path.join(p, `${typeFolder}_blank.csv`), content, "utf-8");
+        });
+        
+        // Compute simulated refilled content
+        let filledContent = content;
+        if (typeFolder === "GSTR1") {
+          filledContent += "\n27AAAAA1111A1Z1,Acme General Traders Pvt Ltd,INV-2026-10492,2026-05-01,118000.00,27-Maharashtra,18%,100000.00,0.00,9000.00,9000.00";
+          filledContent += "\n27BBBBB2222B2Z2,Hind Co-ops Agencies,INV-2026-11840,2026-05-03,52500.00,27-Maharashtra,5%,50000.00,0.00,1250.00,1250.00";
+        } else if (typeFolder.includes("GSTR2")) {
+          filledContent += "\n27AAAAA1111A1Z1,Acme General Traders Pvt Ltd,Regular,INV-2026-10492,2026-05-01,118000.00,27-Maharashtra,18%,100000.00,0.00,9000.00,9000.00,Available";
+          filledContent += "\n27BBBBB2222B2Z2,Hind Co-ops Agencies,Regular,INV-2026-11840,2026-05-03,52500.00,27-Maharashtra,5%,50000.00,0.00,1250.00,1250.00,Available";
+        } else if (typeFolder === "GSTR4" || typeFolder === "GSTR9") {
+          filledContent += "\n27BBBBB2222B2Z2,Krishna Grocers & Retailers,2025-26,750000.00,1%,750000.00,0.00,3750.00,3750.00,0.00";
+          filledContent += "\n33DDDDD4444D4Z4,Vasan Grocery Store,2025-26,450000.00,1%,450000.00,0.00,2250.00,2250.00,0.00";
+        } else if (typeFolder === "CMP08") {
+          filledContent += "\n27BBBBB2222B2Z2,Q1-2026,180000.00,1.0%,0.00,900.00,900.00,0.00";
+          filledContent += "\n33DDDDD4444D4Z4,Q1-2026,120000.00,1.0%,0.00,600.00,600.00,0.00";
+        } else {
+          filledContent += "\n27AAAAA1111A1Z1,Acme India Ltd,INV-101,2026-05-20,500000.00,27-Maharashtra,18%,423728.81,38135.59,38135.59,0.00";
+        }
+
+        basePaths.forEach(p => {
+          fs.writeFileSync(path.join(p, "filled.csv"), filledContent, "utf-8");
+          fs.writeFileSync(path.join(p, `${typeFolder}_filled.csv`), filledContent, "utf-8");
+        });
+
+        return res.json({
+          status: "success",
+          type: "empty_refilled",
+          message: `Blank template uploaded. Re-routed & stored filled details inside Tax Sample Data subfolder structure: /Tax_Sample_Data/${typeFolder}/`,
+          blankPath: `/Tax_Sample_Data/${typeFolder}/${typeFolder}_blank.csv`,
+          filledPath: `/Tax_Sample_Data/${typeFolder}/${typeFolder}_filled.csv`,
+          refilledData: filledContent
+        });
+      } else {
+        // Content has rows (filled CSV uploaded)
+        basePaths.forEach(p => {
+          fs.writeFileSync(path.join(p, "filled.csv"), content, "utf-8");
+          fs.writeFileSync(path.join(p, `${typeFolder}_filled.csv`), content, "utf-8");
+        });
+
+        return res.json({
+          status: "success",
+          type: "actual_data",
+          message: `Active compliance rows saved inside: /Tax_Sample_Data/${typeFolder}/${typeFolder}_filled.csv`,
+          blankPath: `/Tax_Sample_Data/${typeFolder}/${typeFolder}_blank.csv`,
+          filledPath: `/Tax_Sample_Data/${typeFolder}/${typeFolder}_filled.csv`
+        });
+      }
+    } catch (e: any) {
+      console.error("Error in GST Upload Ingestion Helper:", e);
+      res.status(500).json({ error: e.message || "Failed to process GST sample storage" });
+    }
+  });
+
   // Serve sample data explicitly if needed (Vite handles this in dev via public, but just in case)
   app.use("/sample-data", express.static(path.join(process.cwd(), "public/sample-data")));
 

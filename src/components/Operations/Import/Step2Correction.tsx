@@ -26,6 +26,8 @@ import { MasterSelectField } from './step2/MasterSelectField';
 import { TaxRateCombobox, TaxTypeCombobox, UomCombobox, ItemNameCombobox } from './step2/TaxUomSelectors';
 import { useCorrectionLogic } from './step2/useCorrectionLogic';
 import { Step2CorrectionOther } from './step2/Step2CorrectionOther';
+import { CorrectionGuideVideo } from './step2/CorrectionGuideVideo';
+import { GSTRTextReport } from './step2/GSTRTextReport';
 
 export const Step2Correction: React.FC<Step2CorrectionProps> = ({ 
   vouchers, 
@@ -37,6 +39,8 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
   ledgerMasters, 
   uomMasters, 
   itemMasters,
+  contactMasters = [],
+  setContactMasters = () => {},
   onAddParty, 
   onAddLedger, 
   onAddUom, 
@@ -89,6 +93,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
   if (importCategory === 'other' || importCategory === 'ledger_master' || importCategory === 'item_master' || importCategory === 'master' || importCategory === 'settings') {
     return (
       <Step2CorrectionOther
+        importCategory={importCategory}
         vouchers={vouchers}
         onBack={onBack}
         onSuccess={onOtherImportSuccess}
@@ -100,6 +105,8 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
         setUomMasters={setUomMasters}
         partyMasters={partyMasters}
         setPartyMasters={setPartyMasters}
+        contactMasters={contactMasters}
+        setContactMasters={setContactMasters}
         locationMasters={locationMasters}
         setLocationMasters={setLocationMasters}
         bomMasters={bomMasters}
@@ -250,6 +257,13 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
              </button>
           </div>
         </div>
+
+        {/* Dynamic Walkthrough Tutorial Video just after Header Area (on top) */}
+        <CorrectionGuideVideo />
+
+        {importCategory === 'tax_related' && (
+          <GSTRTextReport voucherType={voucherType} />
+        )}
 
         {/* THREE STAGE TABS */}
         <div className="flex border-b border-gray-200 mb-4 bg-gray-50 rounded-t-lg p-1 dark:border-gray-700 dark:bg-gray-900">
