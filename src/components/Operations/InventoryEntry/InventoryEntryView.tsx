@@ -25,7 +25,7 @@ import { InventoryActionMenu } from './components/InventoryActionMenu';
 import { ItemEditModal } from './components/ItemEditModal';
 import { InventoryEditModal } from './components/InventoryEditModal';
 import { InventoryHelpModal } from './components/InventoryHelpModal';
-import { SystemInfoSection } from '../VoucherEntry/components/SystemInfoSection';
+import { SystemInfo } from '../VoucherEntry/components/SystemInfo';
 
 // Safe JSON parse helper
 const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
@@ -1095,7 +1095,7 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ defaultT
         </div>
 
         <div className="w-full">
-          <SystemInfoSection
+          <SystemInfo
             collapsed={collapsedSections.systemInfo}
             toggleSection={() => toggleSection('systemInfo')}
             createdAt={currentRecordId ? (vouchers?.find(v => v.id === currentRecordId)?.createdAt || new Date().toISOString()) : undefined}

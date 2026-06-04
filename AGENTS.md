@@ -13,6 +13,29 @@ These persistent instructions represent the user's specific rules, project conve
    - Respect visual and functional boundaries: Build exactly what is requested, utilizing deep visual polish and clean negative space instead of adding unsolicited features.
    - Maintain the premium, dense ERP technical style established by Bharat Book.
 
+3. **Code Splitting & Architecture Method (CRITICAL)**
+   - When splitting any large file or folder structure, you **MUST** default to using the **Feature-Based / Modular Architecture** by default.
+   - If a folder structure is not suitable for this method, or if the method is not practical in a specific scenario, you **MUST PAUSE** and provide the user with the **THREE best alternative architecture options** for that specific situation.
+   - You must wait for the user to decide which of those three recommendations to follow before making sweeping architectural changes.
+   - *Feature-Based Structure Example*: Group all related files (Hooks, Views/UI, Types) under the feature's dedicated folder rather than scattering them across global folders.
+     ```
+     src/components/Operations/VoucherEntry/components/SystemInfo/
+      ├── 📄 index.tsx                   (Main Wrapper: यह सभी छोटे components को जोड़ेगा)
+      ├── 📄 types.ts                    (यहाँ AddressData, HistoryEntry, SystemInfoSectionProps होंगे)
+      │
+      ├── 📁 hooks/                      (सिर्फ लॉजिक और स्टेट मैनेजमेंट)
+      │    ├── 📄 useTelemetry.ts        (exportCount, telemetry state का लॉजिक)
+      │    ├── 📄 useVoucherHistory.ts   (History load और update करने का लॉजिक)
+      │    └── 📄 useAddressGeocoder.ts  (Address fetching और geocoding का लॉजिक)
+      │
+      └── 📁 views/                      (छोटे UI Components - Method 1 का हिस्सा)
+           ├── 📄 SystemInfoTabs.tsx     (टैब नेविगेशन UI)
+           ├── 📄 AddressGeocoderView.tsx(एड्रेस दिखाने का UI)
+           ├── 📄 TelemetryDetails.tsx   (टेलीमेट्री डेटा दिखाने का कार्ड)
+           ├── 📄 HistoryLogTable.tsx    (हिस्ट्री एंट्रीज के लिए टेबल UI)
+           └── 📄 PrintExportListeners.tsx (बैकग्राउंड इवेंट लिसनर्स)
+     ```
+
 ## 📐 Import Pipeline Terminology & Architecture Rules (CRITICAL/PERMANENT)
 
 1. **Stages vs. Parts vs. Steps Definition**
@@ -26,3 +49,9 @@ These persistent instructions represent the user's specific rules, project conve
    - Do **NOT** use the term "Sub-step" or "Sub-page". These are strictly styled as "Options" inside the step or page.
    - All interactive paths, data, or screens loaded inside a Step or a Page should be described as **Options** (e.g. Choose Option, Type Option) depending on whatever step or page is currently active.
    - Ensure all future development and code changes respect these boundaries and terminologies explicitly.
+
+## 🧹 Project Cleanup Maintenance (CRITICAL)
+
+1. **Deletion Instructions Consistency**
+   - When asked to delete or clean files for the project, you MUST clean the unrelated files entirely without asking anything.
+   - **EXCEPTION:** You must NEVER delete the `public` folder or its contents under any circumstances.

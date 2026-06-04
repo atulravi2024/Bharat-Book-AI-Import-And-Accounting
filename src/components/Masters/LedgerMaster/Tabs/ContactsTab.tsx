@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { AllContactsTab } from './AllContactsTab';
 import { StaffTab } from './StaffTab';
 
-import { ContactFormModal } from './ContactFormModal';
+import { ContactFormModal } from './ContactFormModal/index';
 
 import { createPortal } from "react-dom";
 import { ImportExportButtons } from "../../../shared/ImportExportButtons";

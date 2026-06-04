@@ -56,6 +56,9 @@ export interface Step2CorrectionProps {
   setVariantMasters?: React.Dispatch<React.SetStateAction<any[]>>;
   setSizeMasters?: React.Dispatch<React.SetStateAction<any[]>>;
   setColorMasters?: React.Dispatch<React.SetStateAction<any[]>>;
+  setWeightMasters?: React.Dispatch<React.SetStateAction<any[]>>;
+  setVolumeMasters?: React.Dispatch<React.SetStateAction<any[]>>;
+  setDimensionMasters?: React.Dispatch<React.SetStateAction<any[]>>;
   onOtherImportSuccess?: (message: string) => void;
   initialSettings?: any;
 }
