@@ -368,7 +368,8 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({
                         if (activeTab === 'choose') setActiveTab('preview');
                         else if (activeTab === 'preview') setActiveTab('upload');
                         else if (activeTab === 'upload') {
-                           if (file && isStructuredFile) setActiveTab('mapping');
+                           if (importCategory === 'tax_related' || importCategory === 'settings') handleSubmit();
+                           else if (file && isStructuredFile) setActiveTab('mapping');
                            else setActiveTab('settings');
                         }
                         else if (activeTab === 'mapping') setActiveTab('settings');
@@ -377,7 +378,7 @@ export const Step1Upload: React.FC<Step1UploadProps> = ({
                   >
                     <span className="truncate sm:hidden">{t("Next")}</span>
                     <span className="hidden sm:inline-flex items-center">
-                      {activeTab === 'choose' ? t("Next: Template") : activeTab === 'preview' ? t("Next: Upload") : activeTab === 'upload' ? (file && isStructuredFile ? t("Next: Map Data") : t("Next: Settings")) : t("Next: Settings")}
+                      {activeTab === 'choose' ? t("Next: Template") : activeTab === 'preview' ? t("Next: Upload") : activeTab === 'upload' ? ((importCategory === 'tax_related' || importCategory === 'settings') ? t("Finish Upload") : (file && isStructuredFile ? t("Next: Map Data") : t("Next: Settings"))) : t("Next: Settings")}
                     </span>
                     <ArrowForwardIcon className="ml-1 sm:ml-1.5 text-sm sm:text-base shrink-0" />
                   </button>

@@ -575,7 +575,7 @@ export const Step2CorrectionOther: React.FC<Step2CorrectionOtherProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-white p-3 sm:p-6 rounded-xl shadow-md border border-gray-100 dark:bg-gray-800 dark:border-gray-700 text-left">
+    <div className="flex-1 flex flex-col min-h-0 overflow-y-auto w-full bg-white p-3 sm:p-6 rounded-xl shadow-md border border-gray-100 dark:bg-gray-800 dark:border-gray-700 text-left">
       {/* Target Category Header */}
       <div className="flex items-center justify-between mb-4 border-b border-gray-100 dark:border-gray-700 pb-3 shrink-0">
         <div className="flex items-center gap-3">

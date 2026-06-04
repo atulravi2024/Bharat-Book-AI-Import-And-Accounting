@@ -142,8 +142,8 @@ User asks: `;
   // API to handle GST Upload Ingestion & Auto-refilling logic
   app.post("/api/gst/upload", (req, res) => {
     try {
-      const { fileName, content, voucherType } = req.body;
-      if (!content || !voucherType) {
+      const { fileName, content, contentBase64, voucherType } = req.body;
+      if (!(content || contentBase64) || !voucherType) {
         return res.status(400).json({ error: "Missing content or voucherType" });
       }
 
@@ -169,6 +169,25 @@ User asks: `;
           fs.mkdirSync(p, { recursive: true });
         }
       });
+
+      // Handle raw file data appropriately based on contentBase64
+      if (contentBase64) {
+        const ext = path.extname(fileName || "").toLowerCase() || ".csv";
+        const safeName = String(voucherType || "GSTR-1").replace(/\s+/g, "_");
+        const targetFilename = `${safeName}${ext}`;
+        const buffer = Buffer.from(contentBase64, 'base64');
+        
+        basePaths.forEach(p => {
+          fs.writeFileSync(path.join(p, targetFilename), buffer);
+        });
+
+        return res.json({
+          status: "success",
+          type: "actual_binary_data",
+          message: `Uploaded format saved as: /Tax_Sample_Data/${typeFolder}/${targetFilename}`,
+          filledPath: `/Tax_Sample_Data/${typeFolder}/${targetFilename}`
+        });
+      }
 
       const lines = content.split("\n").map((l: string) => l.trim()).filter(Boolean);
       const hasDataRows = lines.length > 1;

@@ -142,6 +142,9 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
     );
   }
 
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const voucherNavRef = React.useRef<HTMLDivElement>(null);
+
   // Instantiate all core workflows via the unified correction hook
   const {
     activeVoucherIndex,
@@ -191,9 +194,24 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
     onTabChange
   );
 
+  React.useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    if (voucherNavRef.current) {
+        const activeButton = voucherNavRef.current.querySelector<HTMLButtonElement>(`button[data-active="true"]`);
+        if (activeButton) {
+            const container = voucherNavRef.current;
+            const scrollLeft = activeButton.offsetLeft - container.clientWidth / 2 + activeButton.clientWidth / 2;
+            container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+        }
+    }
+  }, [activeVoucherIndex]);
+
   return (
-    <div className="flex-1 flex flex-col min-h-0">
-      <div className="bg-white p-3 sm:p-4 rounded-xl shadow-md flex-1 flex flex-col min-h-0 overflow-hidden dark:bg-gray-800">
+    <div ref={scrollContainerRef} className="flex-1 flex flex-col min-h-0 overflow-y-auto w-full">
+      <div className="bg-white p-3 sm:p-4 rounded-xl shadow-md flex flex-col w-full dark:bg-gray-800">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 flex-shrink-0 gap-3">
           <div className="flex items-center">
              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 text-white rounded-xl flex flex-col items-center justify-center mr-3 sm:mr-4 shadow-lg shadow-blue-100 shrink-0">
@@ -218,14 +236,38 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                       activeTab === 'missing' ? 'Entries with extracted names but no master match (>75%)' : 
                       'Entries automatically matched with existing masters'}
                    </p>
-                   {vouchers.length > 1 && (
-                      <div className="hidden sm:flex items-center bg-gray-100 px-2 py-0.5 rounded-full border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase mr-2 tracking-wider">{t("Progress")}</span>
-                        <div className="flex items-center space-x-1">
-                           {(vouchers || []).map((v, i) => (
-                              <div key={v.id} className={`w-1.5 h-1.5 rounded-full ${i === activeVoucherIndex ? 'bg-blue-600 scale-125' : 'bg-gray-300'}`} />
-                           ))}
+                   {false && tabVouchers.length > 1 && (
+                      <div className="hidden sm:flex items-center bg-white px-2 py-1 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+                        <button
+                          onClick={() => setActiveVoucherIndex(Math.max(0, activeVoucherIndex - 1))}
+                          disabled={activeVoucherIndex === 0}
+                          className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:hover:text-gray-400 p-1 transition-colors"
+                          title={t("Previous Entry")}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        
+                        <div className="flex flex-col items-center justify-center mx-2 min-w-[100px]">
+                            <div className="w-full bg-gray-100 rounded-full h-1.5 mb-1 dark:bg-gray-700 overflow-hidden shadow-inner">
+                              <div 
+                                className="bg-blue-600 h-1.5 rounded-full transition-all duration-300 ease-in-out" 
+                                style={{ width: `${Math.round(((activeVoucherIndex + 1) / tabVouchers.length) * 100)}%` }}
+                              />
+                            </div>
+                            <div className="flex justify-between w-full text-[9px] font-bold tracking-wider uppercase text-gray-500">
+                               <span>{activeVoucherIndex + 1} OF {tabVouchers.length}</span>
+                               <span className="text-blue-600">{Math.round(((activeVoucherIndex + 1) / tabVouchers.length) * 100)}%</span>
+                            </div>
                         </div>
+                        
+                        <button
+                          onClick={() => setActiveVoucherIndex(Math.min(tabVouchers.length - 1, activeVoucherIndex + 1))}
+                          disabled={activeVoucherIndex === tabVouchers.length - 1}
+                          className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:hover:text-gray-400 p-1 transition-colors"
+                          title={t("Next Entry")}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        </button>
                       </div>
                    )}
                 </div>
@@ -258,8 +300,47 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
           </div>
         </div>
 
-        {/* Dynamic Walkthrough Tutorial Video just after Header Area (on top) */}
-        <CorrectionGuideVideo />
+        {/* Dynamic Walkthrough Tutorial Video and Navigation Controls */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 flex-shrink-0 gap-4 w-full flex-wrap">
+          <div className="flex-1 flex w-full">
+            {tabVouchers.length > 1 && (
+              <div className="flex items-center w-full bg-white px-3 py-1.5 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+                <button
+                  onClick={() => setActiveVoucherIndex(Math.max(0, activeVoucherIndex - 1))}
+                  disabled={activeVoucherIndex === 0}
+                  className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:hover:text-gray-400 p-1 flex-shrink-0 transition-colors"
+                  title={t("Previous Entry")}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                
+                <div className="flex flex-col flex-1 mx-4">
+                    <div className="w-full bg-gray-100 rounded-full h-2 mb-1.5 dark:bg-gray-700 overflow-hidden shadow-inner">
+                      <div 
+                        className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-in-out" 
+                        style={{ width: `${Math.round(((activeVoucherIndex + 1) / tabVouchers.length) * 100)}%` }}
+                      />
+                    </div>
+                    <div className="flex justify-between w-full text-[10px] font-bold tracking-wider uppercase text-gray-500">
+                       <span>{t("File")} {activeVoucherIndex + 1} OF {tabVouchers.length}</span>
+                       <span className="text-blue-600">{Math.round(((activeVoucherIndex + 1) / tabVouchers.length) * 100)}%</span>
+                    </div>
+                </div>
+                
+                <button
+                  onClick={() => setActiveVoucherIndex(Math.min(tabVouchers.length - 1, activeVoucherIndex + 1))}
+                  disabled={activeVoucherIndex === tabVouchers.length - 1}
+                  className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:hover:text-gray-400 p-1 flex-shrink-0 transition-colors"
+                  title={t("Next Entry")}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </button>
+              </div>
+            )}
+          </div>
+          
+          <CorrectionGuideVideo />
+        </div>
 
         {importCategory === 'tax_related' && (
           <GSTRTextReport voucherType={voucherType} />
@@ -291,8 +372,8 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
         </div>
 
         {tabVouchers.length > 0 && (
-            <div className="border-b border-gray-100 mb-4 overflow-x-auto custom-scrollbar flex-shrink-0 bg-white p-1 rounded-lg dark:border-gray-800 dark:bg-gray-850">
-                <nav className="flex space-x-2" aria-label="Tabs">
+            <div ref={voucherNavRef} className="border-b border-gray-100 mb-4 overflow-x-auto custom-scrollbar flex-shrink-0 bg-white p-1 rounded-lg dark:border-gray-800 dark:bg-gray-850">
+                <nav className="flex space-x-2 w-max" aria-label="Tabs">
                     {tabVouchers.map((voucher, index) => {
                         const hasError = Object.values(voucher || {}).some(field => typeof field === 'object' && field !== null && !Array.isArray(field) && (field as any).isMismatch) ||
                                         (hasItems && (voucher.items || []).some(item => Object.values(item || {}).some(field => typeof field === 'object' && field !== null && (field as any).isMismatch)));
@@ -300,6 +381,7 @@ export const Step2Correction: React.FC<Step2CorrectionProps> = ({
                         return (
                           <button
                               key={voucher.id}
+                              data-active={isActive ? "true" : "false"}
                               onClick={() => setActiveVoucherIndex(index)}
                               className={`whitespace-nowrap py-2 px-4 rounded-md text-[10px] font-bold transition-all border ${
                                 isActive 

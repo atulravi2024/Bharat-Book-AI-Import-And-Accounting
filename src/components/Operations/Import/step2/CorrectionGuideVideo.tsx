@@ -8,7 +8,7 @@ export const CorrectionGuideVideo: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
 
   const duration = 45; // 45 seconds total length for walkthrough video
@@ -72,7 +72,7 @@ export const CorrectionGuideVideo: React.FC = () => {
 
   if (!isVisible) {
     return (
-      <div className="flex justify-end mb-4 flex-shrink-0">
+      <div className="flex-shrink-0">
         <button
           onClick={() => setIsVisible(true)}
           className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:hover:bg-blue-900/40 dark:text-blue-400 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm"
@@ -85,7 +85,7 @@ export const CorrectionGuideVideo: React.FC = () => {
   }
 
   return (
-    <div className="mb-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-4 rounded-2xl shadow-xl border border-indigo-900/30 text-white flex-shrink-0 animate-in fade-in duration-500 overflow-hidden relative">
+    <div className="mb-5 w-full bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-4 rounded-2xl shadow-xl border border-indigo-900/30 text-white flex-shrink-0 animate-in fade-in duration-500 overflow-hidden relative">
       {/* Decorative gradient overlay */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
       

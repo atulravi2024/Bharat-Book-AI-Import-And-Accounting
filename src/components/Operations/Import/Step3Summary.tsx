@@ -12,9 +12,11 @@ interface Step3SummaryProps {
   onSubmit: () => void;
   isLoading: boolean;
   onCancel: () => void;
+  importCategory?: string;
+  file?: File | null;
 }
 
-export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherType, onBack, onSubmit, isLoading, onCancel }) => {
+export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherType, onBack, onSubmit, isLoading, onCancel, importCategory, file }) => {
   const { t, formatNumber } = useLanguage();
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -57,49 +59,77 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
       <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md flex-1 overflow-y-auto scrollbar-thin dark:bg-gray-800">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
             <div>
-                <h2 className="text-xl font-bold text-gray-800 mb-1 dark:text-gray-100">Submit & Final Preview</h2>
-                <p className="text-gray-500 text-xs sm:mb-4 dark:text-gray-400">{t("Please confirm the final summary before creating vouchers.")}</p>
+                <h2 className="text-xl font-bold text-gray-800 mb-1 dark:text-gray-100">
+                  {(importCategory === 'tax_related' || importCategory === 'settings') ? t("Upload Confirmation") : t("Submit & Final Preview")}
+                </h2>
+                <p className="text-gray-500 text-xs sm:mb-4 dark:text-gray-400">
+                  {(importCategory === 'tax_related' || importCategory === 'settings') 
+                    ? t("Please confirm to finish uploading the document.")
+                    : t("Please confirm the final summary before creating vouchers.")}
+                </p>
             </div>
             <div className="flex space-x-2">
-                <button className="flex items-center px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-100 flex-1 sm:flex-none justify-center dark:text-gray-300 dark:hover:bg-gray-600">
-                    <DownloadIcon className="mr-2 text-base" /> Export
-                </button>
-                <button className="flex items-center px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-100 flex-1 sm:flex-none justify-center dark:text-gray-300 dark:hover:bg-gray-600">
-                    <PrintIcon className="mr-2 text-base" /> Print
-                </button>
+                {(importCategory !== 'tax_related' && importCategory !== 'settings') && (
+                  <>
+                    <button className="flex items-center px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-100 flex-1 sm:flex-none justify-center dark:text-gray-300 dark:hover:bg-gray-600">
+                        <DownloadIcon className="mr-2 text-base" /> Export
+                    </button>
+                    <button className="flex items-center px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-100 flex-1 sm:flex-none justify-center dark:text-gray-300 dark:hover:bg-gray-600">
+                        <PrintIcon className="mr-2 text-base" /> Print
+                    </button>
+                  </>
+                )}
             </div>
         </div>
 
-        <div className="form-grid gap-4 sm:gap-6 mt-4 sm:mt-0">
-          <div className="bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
-            <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">{t("Voucher Details")}</h3>
+        {(importCategory === 'tax_related' || importCategory === 'settings') ? (
+          <div className="bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900 border border-teal-100 dark:border-teal-900/30 mt-4">
+            <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100 flex items-center gap-2">
+              <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              {importCategory === 'settings' ? t("Configuration Document Ready for Upload") : t("Tax Document Ready for Upload")}
+            </h3>
             <div className="space-y-3">
-              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Voucher Type")}</span><span className="font-medium text-gray-900 dark:text-white">{voucherType}</span></div>
-              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("No. of Vouchers")}</span><span className="font-medium text-gray-900 dark:text-white">{summary.numberOfVouchers}</span></div>
-            </div>
-          </div>
-          <div className="bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
-            <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">{t("Amount Summary")}</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Total Debit")}</span><span className="font-medium text-gray-900 dark:text-white">{summary.totalDebit.toFixed(2)}</span></div>
-              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Total Credit")}</span><span className="font-medium text-gray-900 dark:text-white">{summary.totalCredit.toFixed(2)}</span></div>
-              <div className={`flex justify-between font-bold border-t pt-3 mt-2 ${summary.isBalanced ? 'text-green-600' : 'text-amber-600'}`}>
-                <span>{voucherType === VoucherType.BankStatement ? 'Processed' : 'Balanced'}</span>
-                <span>{summary.isBalanced ? '✓' : '!'}</span>
+              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Document Name")}</span><span className="font-medium text-gray-900 dark:text-white">{file?.name || 'Document.xlsx'}</span></div>
+              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Document Size")}</span><span className="font-medium text-gray-900 dark:text-white">{file ? (file.size / 1024).toFixed(2) + ' KB' : 'Unknown'}</span></div>
+              <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Upload Destination")}</span><span className="font-medium text-gray-900 dark:text-white">{importCategory === 'settings' ? t("Configuration Directory") : t("Tax Records Directory")}</span></div>
+              <div className="flex justify-between font-bold border-t border-gray-200 dark:border-gray-700 pt-3 mt-4 text-green-600 dark:text-green-400">
+                <span>{t("Status")}</span>
+                <span>{t("Ready to Upload")} ✓</span>
               </div>
             </div>
           </div>
-          {(voucherType === VoucherType.Purchase || voucherType === VoucherType.Sales) && (
-            <div className="form-field-wrapper lg:col-span-2 bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
-              <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">{t("Tax Summary")}</h3>
+        ) : (
+          <div className="form-grid gap-4 sm:gap-6 mt-4 sm:mt-0">
+            <div className="bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
+              <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">{t("Voucher Details")}</h3>
               <div className="space-y-3">
-                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Total GST")}</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.gst.toFixed(2)}</span></div>
-                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("CGST")}</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.cgst.toFixed(2)}</span></div>
-                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("SGST")}</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.sgst.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Voucher Type")}</span><span className="font-medium text-gray-900 dark:text-white">{voucherType}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("No. of Vouchers")}</span><span className="font-medium text-gray-900 dark:text-white">{summary.numberOfVouchers}</span></div>
               </div>
             </div>
-          )}
-        </div>
+            <div className="bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
+              <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">{t("Amount Summary")}</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Total Debit")}</span><span className="font-medium text-gray-900 dark:text-white">{summary.totalDebit.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Total Credit")}</span><span className="font-medium text-gray-900 dark:text-white">{summary.totalCredit.toFixed(2)}</span></div>
+                <div className={`flex justify-between font-bold border-t pt-3 mt-2 ${summary.isBalanced ? 'text-green-600' : 'text-amber-600'}`}>
+                  <span>{voucherType === VoucherType.BankStatement ? 'Processed' : 'Balanced'}</span>
+                  <span>{summary.isBalanced ? '✓' : '!'}</span>
+                </div>
+              </div>
+            </div>
+            {(voucherType === VoucherType.Purchase || voucherType === VoucherType.Sales) && (
+              <div className="form-field-wrapper lg:col-span-2 bg-gray-50 p-4 sm:p-6 rounded-lg dark:bg-gray-900">
+                <h3 className="font-semibold text-lg text-gray-800 mb-4 dark:text-gray-100">{t("Tax Summary")}</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("Total GST")}</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.gst.toFixed(2)}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("CGST")}</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.cgst.toFixed(2)}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600 dark:text-gray-300">{t("SGST")}</span><span className="font-medium text-gray-900 dark:text-white">₹{summary.sgst.toFixed(2)}</span></div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="mt-8">
           <label className="flex items-center">
@@ -109,7 +139,9 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
               onChange={(e) => setIsConfirmed(e.target.checked)}
               className="form-input h-4 w-4 text-blue-600 border-gray-300 rounded dark:border-gray-600"
             />
-            <span className="ml-3 text-gray-700 dark:text-gray-200">{t("I confirm the accuracy of these entries.")}</span>
+            <span className="ml-3 text-gray-700 dark:text-gray-200">
+              {(importCategory === 'tax_related' || importCategory === 'settings') ? t("I confirm that I want to upload this document.") : t("I confirm the accuracy of these entries.")}
+            </span>
           </label>
         </div>
       </div>
@@ -144,12 +176,12 @@ export const Step3Summary: React.FC<Step3SummaryProps> = ({ vouchers, voucherTyp
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Submitting...
+                {(importCategory === 'tax_related' || importCategory === 'settings') ? t("Uploading...") : t("Submitting...")}
               </>
             ) : (
                 <>
                   <CheckCircleIcon className="mr-2" />
-                  Submit & Create Vouchers
+                  {(importCategory === 'tax_related' || importCategory === 'settings') ? t("Upload Document") : t("Submit & Create Vouchers")}
                 </>
             )}
           </button>

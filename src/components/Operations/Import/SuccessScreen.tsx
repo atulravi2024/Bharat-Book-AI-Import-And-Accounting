@@ -11,13 +11,15 @@ interface SuccessScreenProps {
   onGoToDashboard: () => void;
   onGoToVouchers: () => void;
   onUndo: (ids: string[]) => void;
+  importCategory?: string;
 }
 
-export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, onGoToDashboard, onGoToVouchers, onUndo }) => {
+export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, onGoToDashboard, onGoToVouchers, onUndo, importCategory }) => {
   const { t, formatNumber } = useLanguage();
 
   const voucherCount = vouchers.length;
   const isBankImport = vouchers.some(v => v.origin === 'bank');
+  const isTaxRelated = importCategory === 'tax_related' || importCategory === 'settings';
 
   const handleExportExcel = () => {
     const exportData = vouchers.flatMap((v): any => {
@@ -89,9 +91,13 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, 
       {/* Top Section: Header & Buttons (Hidden during print) */}
       <div className="shrink-0 bg-white p-6 rounded-xl shadow-md flex flex-col justify-center items-center border border-gray-100 print:hidden dark:bg-gray-800 dark:border-gray-800">
         <CheckCircleIcon className="text-5xl text-green-500 mb-4 shrink-0" />
-        <h2 className="text-2xl font-bold text-gray-800 mb-1 dark:text-gray-100">Success!</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-1 dark:text-gray-100">{isTaxRelated ? 'Document Uploaded!' : 'Success!'}</h2>
         <p className="text-gray-600 text-sm mb-5 dark:text-gray-300">
-          {voucherCount} {isBankImport ? 'bank transactions' : 'vouchers'} {voucherCount > 1 ? 'have' : 'has'} been successfully {isBankImport ? 'integrated' : 'posted'}.
+          {importCategory === 'settings' 
+             ? 'Your configuration document has been successfully imported into the system settings.'
+             : importCategory === 'tax_related'
+             ? 'Your document has been successfully uploaded to the tax records directory.'
+             : `${voucherCount} ${isBankImport ? 'bank transactions' : 'vouchers'} ${voucherCount > 1 ? 'have' : 'has'} been successfully ${isBankImport ? 'integrated' : 'posted'}.`}
         </p>
 
         <div className="flex flex-wrap justify-center items-center gap-2 print:hidden">
@@ -101,87 +107,92 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ vouchers, onDone, 
           >
             <ArrowBackIcon className="mr-2 text-lg" /> New Import
           </button>
-          <button 
-            onClick={handleExportCSV}
-            className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-all shadow-sm dark:border-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-          >
-            <DownloadIcon className="mr-2 text-lg text-green-500" /> CSV
-          </button>
-          <button 
-            onClick={handleExportExcel}
-            className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-green-300 hover:text-green-600 transition-all shadow-sm dark:border-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-          >
-            <DownloadIcon className="mr-2 text-lg text-blue-500" /> Excel
-          </button>
-          <button 
-            onClick={handlePrint}
-            className="flex items-center px-4 py-2 border border-blue-200 rounded-lg text-sm font-bold text-blue-600 bg-blue-50 hover:bg-white hover:border-blue-400 transition-all shadow-sm"
-          >
-            <PrintIcon className="mr-2 text-lg text-blue-500" /> Print
-          </button>
-          <button 
-            onClick={onGoToVouchers}
-            className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-amber-300 hover:text-amber-600 transition-all shadow-sm dark:border-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-          >
-            <VouchersIcon className="mr-2 text-lg text-amber-500" /> History
-          </button>
-          <button 
-            onClick={() => {
-              const ids = vouchers.map(v => v.id);
-              if (ids.length === 0) return;
-              // Removing confirm to avoid browser blocking
-              onUndo(ids);
-              onDone();
-            }}
-            className="flex items-center px-4 py-2 border border-red-100 rounded-lg text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-all shadow-sm active:scale-95"
-          >
-            <UndoIcon className="mr-2 text-lg" /> Undo All
-          </button>
+          {!isTaxRelated && (
+            <>
+              <button 
+                onClick={handleExportCSV}
+                className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-all shadow-sm dark:border-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+              >
+                <DownloadIcon className="mr-2 text-lg text-green-500" /> CSV
+              </button>
+              <button 
+                onClick={handleExportExcel}
+                className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-green-300 hover:text-green-600 transition-all shadow-sm dark:border-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+              >
+                <DownloadIcon className="mr-2 text-lg text-blue-500" /> Excel
+              </button>
+              <button 
+                onClick={handlePrint}
+                className="flex items-center px-4 py-2 border border-blue-200 rounded-lg text-sm font-bold text-blue-600 bg-blue-50 hover:bg-white hover:border-blue-400 transition-all shadow-sm"
+              >
+                <PrintIcon className="mr-2 text-lg text-blue-500" /> Print
+              </button>
+              <button 
+                onClick={onGoToVouchers}
+                className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 hover:border-amber-300 hover:text-amber-600 transition-all shadow-sm dark:border-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+              >
+                <VouchersIcon className="mr-2 text-lg text-amber-500" /> History
+              </button>
+              <button 
+                onClick={() => {
+                  const ids = vouchers.map(v => v.id);
+                  if (ids.length === 0) return;
+                  onUndo(ids);
+                  onDone();
+                }}
+                className="flex items-center px-4 py-2 border border-red-100 rounded-lg text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-all shadow-sm active:scale-95"
+              >
+                <UndoIcon className="mr-2 text-lg" /> Undo All
+              </button>
+            </>
+          )}
         </div>
       </div>
 
       {/* Middle Section: Summary (Stretches to bottom using flex-1) */}
-      <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-left animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col min-h-0 border border-gray-100 print:p-0 print:shadow-none print:border-none print:static dark:bg-gray-800 dark:border-gray-800">
-        <div className="flex items-baseline justify-between mb-4 shrink-0">
-          <h3 className="text-base font-bold text-gray-800 flex items-center justify-between print:mb-2 w-full dark:text-gray-100">
-            Import Summary
-            <div className="flex items-center space-x-2">
-              <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded print:hidden dark:bg-gray-900">System Log ID: {Math.random().toString(36).substring(7).toUpperCase()}</span>
-              <span className="hidden print:block text-[10px] font-mono text-gray-500 dark:text-gray-400">Printed: {new Date().toLocaleString()}</span>
-            </div>
-          </h3>
-        </div>
-        <div className="flex-1 overflow-auto border border-gray-100 rounded-lg custom-scrollbar print:overflow-visible print:border-none print:h-auto dark:border-gray-800">
-          <table className="w-full text-sm text-left print:text-[10pt]">
-            <thead className="sticky top-0 bg-white z-10 shadow-sm print:static print:shadow-none dark:bg-gray-800">
-              <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("ID")}</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Date")}</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Party/Description")}</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Amount")}</th>
-                <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Status")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {vouchers.map(v => (
-                <tr key={v.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors dark:border-gray-800 dark:hover:bg-gray-700">
-                  <td className="px-4 py-3 font-mono text-xs">{v.id.split('-').slice(0, 2).join('-')}</td>
-                  <td className="px-4 py-3 whitespace-nowrap">{v.date?.value || '-'}</td>
-                  <td className="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{String(v.partyName?.value || v.narration?.value || 'N/A')}</td>
-                  <td className="px-4 py-3 text-right font-bold text-blue-600">₹{Number(v?.amount?.value || v?.withdrawalAmount?.value || v?.depositAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                  <td className="px-4 py-3">
-                    {v.origin === 'bank' ? (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 uppercase">{t("Bank Record")}</span>
-                    ) : (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700 uppercase">{t("Posted")}</span>
-                    )}
-                  </td>
+      {!isTaxRelated && (
+        <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-left animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col min-h-0 border border-gray-100 print:p-0 print:shadow-none print:border-none print:static dark:bg-gray-800 dark:border-gray-800">
+          <div className="flex items-baseline justify-between mb-4 shrink-0">
+            <h3 className="text-base font-bold text-gray-800 flex items-center justify-between print:mb-2 w-full dark:text-gray-100">
+              Import Summary
+              <div className="flex items-center space-x-2">
+                <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded print:hidden dark:bg-gray-900">System Log ID: {Math.random().toString(36).substring(7).toUpperCase()}</span>
+                <span className="hidden print:block text-[10px] font-mono text-gray-500 dark:text-gray-400">Printed: {new Date().toLocaleString()}</span>
+              </div>
+            </h3>
+          </div>
+          <div className="flex-1 overflow-auto border border-gray-100 rounded-lg custom-scrollbar print:overflow-visible print:border-none print:h-auto dark:border-gray-800">
+            <table className="w-full text-sm text-left print:text-[10pt]">
+              <thead className="sticky top-0 bg-white z-10 shadow-sm print:static print:shadow-none dark:bg-gray-800">
+                <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                  <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("ID")}</th>
+                  <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Date")}</th>
+                  <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Party/Description")}</th>
+                  <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] text-right dark:text-gray-300">{t("Amount")}</th>
+                  <th className="px-4 py-3 font-bold text-gray-600 uppercase text-[10px] dark:text-gray-300">{t("Status")}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {vouchers.map(v => (
+                  <tr key={v.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors dark:border-gray-800 dark:hover:bg-gray-700">
+                    <td className="px-4 py-3 font-mono text-xs">{v.id.split('-').slice(0, 2).join('-')}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{v.date?.value || '-'}</td>
+                    <td className="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{String(v.partyName?.value || v.narration?.value || 'N/A')}</td>
+                    <td className="px-4 py-3 text-right font-bold text-blue-600">₹{Number(v?.amount?.value || v?.withdrawalAmount?.value || v?.depositAmount?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                    <td className="px-4 py-3">
+                      {v.origin === 'bank' ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 uppercase">{t("Bank Record")}</span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700 uppercase">{t("Posted")}</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
 
     </div>
   );

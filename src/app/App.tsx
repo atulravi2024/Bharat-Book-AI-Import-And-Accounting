@@ -10,6 +10,7 @@ import { Step1Processing } from '../components/Operations/Import/Step1Processing
 import { Step2Correction } from '../components/Operations/Import/Step2Correction';
 import { Step3Summary } from '../components/Operations/Import/Step3Summary';
 import { SuccessScreen } from '../components/Operations/Import/SuccessScreen';
+import { processConfigurationImport } from '../services/import-engine/configurationImport';
 import { MasterView } from '../components/Masters/MasterView';
 import { LedgerReportView } from '../components/Reports/BankVouchers/LedgerReportView';
 import { BankReportView } from '../components/Reports/BankVouchers/BankReportView';
@@ -416,7 +417,13 @@ const AppContent: React.FC = () => {
     setVoucherType(selectedVoucherType);
     if (settings) setParsingSettings(settings);
     setPendingSourceBank(sourceBank);
-    setStep('processing');
+    
+    if (importCategory === 'tax_related' || importCategory === 'settings') {
+      setVouchers([]);
+      setStep('summary');
+    } else {
+      setStep('processing');
+    }
   };
 
   const handleStep2Next = (updatedVouchers: ParsedVoucher[]) => {
@@ -460,6 +467,30 @@ const AppContent: React.FC = () => {
     }
 
     setIsLoading(true);
+
+    if (importCategory === 'settings' && pendingFile) {
+      processConfigurationImport(pendingFile)
+        .then(() => {
+          addNotification({
+            title: 'Document Uploaded',
+            message: `Successfully uploaded and applied configuration document.`,
+            type: 'Alert'
+          });
+          setIsLoading(false);
+          setStep('success');
+        })
+        .catch((error) => {
+          console.error("Failed to parse configuration file:", error);
+          setIsLoading(false);
+          addNotification({
+            title: 'Upload Failed',
+            message: `Could not parse the configuration file.`,
+            type: 'Alert'
+          });
+        });
+      return;
+    }
+
     setTimeout(() => {
       const timestamp = new Date().toLocaleString();
       
@@ -496,10 +527,10 @@ const AppContent: React.FC = () => {
       localStorage.removeItem(DRAFT_KEY);
       
       addNotification({
-        title: 'Vouchers Imported',
-        message: `Successfully processed ${vouchers.length} vouchers via AI Import.`,
+        title: (importCategory === 'tax_related' || importCategory === 'settings') ? 'Document Uploaded' : 'Vouchers Imported',
+        message: (importCategory === 'tax_related' || importCategory === 'settings') ? `Successfully uploaded document.` : `Successfully processed ${vouchers.length} vouchers via AI Import.`,
         type: 'Alert',
-        link: 'vouchers'
+        link: (importCategory === 'tax_related' || importCategory === 'settings') ? undefined : 'vouchers'
       });
       
       setIsLoading(false);
@@ -1739,12 +1770,13 @@ const AppContent: React.FC = () => {
             />
         );
       case 'summary':
-        return <Step3Summary vouchers={vouchers} voucherType={voucherType} onBack={() => setStep('correction')} onSubmit={handleSubmit} isLoading={isLoading} onCancel={resetFlow} />;
+        return <Step3Summary vouchers={vouchers} voucherType={voucherType} onBack={() => setStep((importCategory === 'tax_related' || importCategory === 'settings') ? 'upload' : 'correction')} onSubmit={handleSubmit} isLoading={isLoading} onCancel={resetFlow} importCategory={importCategory} file={pendingFile} />;
       case 'success':
         const isBankImportForSuccess = vouchers.some(v => v.origin === 'bank' || v.type === VoucherType.BankStatement);
         return (
           <SuccessScreen 
             vouchers={vouchers} 
+            importCategory={importCategory}
             onDone={resetFlow} 
             onGoToDashboard={() => {
               setOriginView(null);

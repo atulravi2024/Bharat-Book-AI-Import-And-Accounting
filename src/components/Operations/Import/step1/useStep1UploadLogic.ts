@@ -37,7 +37,7 @@ export const useStep1UploadLogic = ({
   // 2. Voucher Class and Category States (Local)
   const [voucherType, setVoucherType] = useState<VoucherType>(initialVoucherType || VoucherType.Purchase);
   const [selectedBank, setSelectedBank] = useState('');
-  const [importCategory, setImportCategory] = useState<ImportCategory>('voucher');
+  const [importCategory, setImportCategory] = useState<ImportCategory>('bank');
   const [masterType, setMasterType] = useState<MasterType>('ledgers');
   const [selectedOtherCategory, setSelectedOtherCategory] = useState<string>(
     initialSettings?.selectedOtherCategory && [
@@ -146,7 +146,15 @@ export const useStep1UploadLogic = ({
       const reader = new FileReader();
       reader.onload = async (e) => {
         try {
-          const content = e.target?.result as string;
+          const contentDataUrl = e.target?.result as string;
+          let contentBase64 = '';
+          if (contentDataUrl && contentDataUrl.includes('base64,')) {
+            contentBase64 = contentDataUrl.split('base64,')[1];
+          } else {
+            // Fallback for unexpected formats
+            contentBase64 = btoa(unescape(encodeURIComponent(contentDataUrl)));
+          }
+
           const response = await fetch("/api/gst/upload", {
             method: "POST",
             headers: {
@@ -154,7 +162,7 @@ export const useStep1UploadLogic = ({
             },
             body: JSON.stringify({
               fileName: file.name,
-              content: content,
+              contentBase64: contentBase64,
               voucherType: voucherType
             })
           });
@@ -163,7 +171,7 @@ export const useStep1UploadLogic = ({
             setGstSyncStatus({
               status: 'success',
               message: result.message,
-              blankPath: result.blankPath,
+              blankPath: result.blankPath || result.filledPath,
               filledPath: result.filledPath
             });
           } else {
@@ -179,7 +187,7 @@ export const useStep1UploadLogic = ({
           });
         }
       };
-      reader.readAsText(file);
+      reader.readAsDataURL(file);
     } else {
       setGstSyncStatus({ status: 'idle' });
     }
