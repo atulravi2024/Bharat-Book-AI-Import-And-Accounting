@@ -1,36 +1,80 @@
 {
   "sections": [
     {
-      "title": "Eligible ITC",
-      "total_taxable": 1000000,
-      "total_itc": 180000,
-      "cgst": 90000,
-      "sgst": 90000,
+      "title": "Eligible ITC - Inputs (Goods & Services)",
+      "total_taxable": 4765000,
+      "total_itc": 857700,
+      "cgst": 428850,
+      "sgst": 428850,
       "igst": 0
     },
     {
-      "title": "Ineligible ITC",
-      "total_taxable": 200000,
-      "total_itc": 36000,
-      "cgst": 18000,
-      "sgst": 18000,
+      "title": "Eligible ITC - Capital Goods (Plant & Machinery)",
+      "total_taxable": 1250000,
+      "total_itc": 225000,
+      "cgst": 112500,
+      "sgst": 112500,
+      "igst": 0
+    },
+    {
+      "title": "Eligible ITC - Reverse Charge (RCM inward)",
+      "total_taxable": 240000,
+      "total_itc": 12000,
+      "cgst": 6000,
+      "sgst": 6000,
+      "igst": 0
+    },
+    {
+      "title": "Ineligible ITC - Blocked Credits u/s 17(5) (Motor Vehicles & Food)",
+      "total_taxable": 150000,
+      "total_itc": 27000,
+      "cgst": 13500,
+      "sgst": 13500,
       "igst": 0
     }
   ],
   "supplier_wise_details": [
     {
-      "gstin": "27AABBCC1234F1Z5",
-      "name": "Supplier A",
-      "invoices_count": 5,
-      "taxable_value": 800000,
-      "tax": 144000
+      "gstin": "27AAAFB6318C1Z4",
+      "name": "Alpha Traders Pvt Ltd",
+      "invoices_count": 8,
+      "taxable_value": 1250000,
+      "tax": 225000
     },
     {
-      "gstin": "27DDEEFF5678F1Z6",
-      "name": "Supplier B",
-      "invoices_count": 2,
-      "taxable_value": 400000,
-      "tax": 72000
+      "gstin": "27BCCCD1212A1Z1",
+      "name": "Bharat Global Corporation",
+      "invoices_count": 14,
+      "taxable_value": 2550000,
+      "tax": 459000
+    },
+    {
+      "gstin": "07AAACR1214D1ZH",
+      "name": "Delhi Logistics & Warehousing",
+      "invoices_count": 6,
+      "taxable_value": 480000,
+      "tax": 86400
+    },
+    {
+      "gstin": "27KKKLL4455C2Z8",
+      "name": "Kiran Agencies Ltd",
+      "invoices_count": 9,
+      "taxable_value": 945000,
+      "tax": 170100
+    },
+    {
+      "gstin": "27AAAPM4433E1ZM",
+      "name": "Modern Office Supplies",
+      "invoices_count": 3,
+      "taxable_value": 150000,
+      "tax": 27000
+    },
+    {
+      "gstin": "27BBBCY7788A2Z0",
+      "name": "Apex Engineering Solutions",
+      "invoices_count": 5,
+      "taxable_value": 1250000,
+      "tax": 225000
     }
   ]
 }

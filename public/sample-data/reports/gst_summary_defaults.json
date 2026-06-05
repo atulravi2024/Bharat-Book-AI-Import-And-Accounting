@@ -1,0 +1,38 @@
+{
+  "fallbacks": {
+    "salesValue": 185000,
+    "salesTax": 33300,
+    "salesCgst": 16650,
+    "salesSgst": 16650,
+    "salesIgst": 0,
+    "purchaseValue": 95000,
+    "purchaseTax": 17100,
+    "purchaseCgst": 8550,
+    "purchaseSgst": 8550,
+    "purchaseIgst": 0
+  },
+  "reconciliation": {
+    "accuracyScore": "100.00%",
+    "progressPercent": 100,
+    "mismatches": 0,
+    "missingPanIssues": 0,
+    "targetUrl": "POST https://sandbox.gspapi.co.in/gstr1/upload"
+  },
+  "apiPayloadTemplates": {
+    "gstin": "27AAAFB6318C1Z4",
+    "fp": "062026",
+    "version": "GSTR1_API_v2.1",
+    "response": {
+      "status": "SUCCESS",
+      "code": "GSTR1_VAL_000",
+      "message": "GSTR-1 schema validation success. Ready to transmit with OTP authentication.",
+      "data": {
+        "referenceId": "REF-9831948123-C",
+        "arn": "AL270526019485C",
+        "acknowledgement_date": "2026-06-05T02:40:00Z",
+        "mismatch_count": 0,
+        "auto_reconciled_percentage": "100%"
+      }
+    }
+  }
+}

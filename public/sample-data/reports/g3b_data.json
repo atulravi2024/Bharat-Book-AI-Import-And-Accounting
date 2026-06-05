@@ -1,17 +1,107 @@
 {
-  "outward_supplies": {
-    "taxable": 2500000,
-    "cgst": 225000,
-    "sgst": 225000,
-    "igst": 50000
+  "gstin": "27AAAFB6318C1Z4",
+  "fy": "2025-26",
+  "tax_period": "May 2026",
+  "section_3_1": {
+    "outward_taxable_supplies": {
+      "taxable_value": 7850000,
+      "igst": 240000,
+      "cgst": 706500,
+      "sgst": 706500,
+      "cess": 0
+    },
+    "outward_zero_rated": {
+      "taxable_value": 1500000,
+      "igst": 0,
+      "cgst": 0,
+      "sgst": 0,
+      "cess": 0
+    },
+    "other_outward_supplies": {
+      "taxable_value": 350000,
+      "igst": 0,
+      "cgst": 0,
+      "sgst": 0,
+      "cess": 0
+    },
+    "inward_reverse_charge": {
+      "taxable_value": 240000,
+      "igst": 0,
+      "cgst": 6000,
+      "sgst": 6000,
+      "cess": 0
+    },
+    "non_gst_outward": {
+      "taxable_value": 120000,
+      "igst": 0,
+      "cgst": 0,
+      "sgst": 0,
+      "cess": 0
+    }
   },
-  "eligible_itc": {
-    "import_goods": 100000,
-    "import_services": 50000,
-    "inward_supplies": 300000
+  "section_3_2": {
+    "unregistered_persons": [
+      { "state": "Maharashtra (27)", "taxable_val": 450000, "igst": 81000 },
+      { "state": "Gujarat (24)", "taxable_val": 220000, "igst": 39600 }
+    ],
+    "composition_taxable": [
+      { "state": "Maharashtra (27)", "taxable_val": 85000, "igst": 0 }
+    ],
+    "uin_holders": []
   },
-  "payment_of_tax": {
-    "paid_through_itc": 400000,
-    "paid_in_cash": 100000
-  }
+  "section_4": {
+    "itc_available": {
+      "import_goods": { "igst": 450000, "cgst": 0, "sgst": 0, "cess": 0 },
+      "import_services": { "igst": 125000, "cgst": 0, "sgst": 0, "cess": 0 },
+      "inward_rcm": { "igst": 0, "cgst": 6000, "sgst": 6000, "cess": 0 },
+      "isd": { "igst": 0, "cgst": 0, "sgst": 0, "cess": 0 },
+      "all_other_itc": { "igst": 120000, "cgst": 503850, "sgst": 503850, "cess": 0 }
+    },
+    "itc_reversed": {
+      "rule_42_43": { "igst": 0, "cgst": 12500, "sgst": 12500, "cess": 0 },
+      "others": { "igst": 0, "cgst": 4500, "sgst": 4500, "cess": 0 }
+    },
+    "ineligible_itc": {
+      "section_17_5": { "igst": 15000, "cgst": 13500, "sgst": 13500, "cess": 0 },
+      "others": { "igst": 0, "cgst": 0, "sgst": 0, "cess": 0 }
+    }
+  },
+  "section_5": {
+    "inter_state": { "exempt": 150000, "nil_rated": 50000, "non_gst": 120000 },
+    "intra_state": { "exempt": 450000, "nil_rated": 120000, "non_gst": 0 }
+  },
+  "section_6_1": [
+    {
+      "tax_head": "Integrated Tax",
+      "payable": 240000,
+      "paid_by_itc": { "igst": 240000, "cgst": 0, "sgst": 0 },
+      "paid_cash": 0,
+      "interest": 0,
+      "late_fee": 0
+    },
+    {
+      "tax_head": "Central Tax",
+      "payable": 712500,
+      "paid_by_itc": { "igst": 222500, "cgst": 490000, "sgst": 0 },
+      "paid_cash": 0,
+      "interest": 0,
+      "late_fee": 0
+    },
+    {
+      "tax_head": "State Tax",
+      "payable": 712500,
+      "paid_by_itc": { "igst": 32500, "cgst": 0, "sgst": 490000 },
+      "paid_cash": 190000,
+      "interest": 0,
+      "late_fee": 0
+    },
+    {
+      "tax_head": "Cess",
+      "payable": 0,
+      "paid_by_itc": { "igst": 0, "cgst": 0, "sgst": 0 },
+      "paid_cash": 0,
+      "interest": 0,
+      "late_fee": 0
+    }
+  ]
 }

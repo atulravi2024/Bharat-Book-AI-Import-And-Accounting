@@ -1,7 +1,8 @@
-[
+{
+  "reports": [
     {
       "id": "GSTR-1",
-      "name": "Details of outward supplies of goods or services",
+      "name": "Details of Outward Supplies of Goods or Services",
       "due_date": "11th of next month",
       "status": "Filed"
     },
@@ -9,7 +10,13 @@
       "id": "GSTR-3B",
       "name": "Summary Return of Outward & Inward Supplies",
       "due_date": "20th of next month",
-      "status": "Pending"
+      "status": "Filed"
+    },
+    {
+      "id": "GSTR-2B",
+      "name": "Auto-Drafted Inward ITC Statement",
+      "due_date": "14th of next month",
+      "status": "Filed"
     },
     {
       "id": "GSTR-9",
@@ -18,9 +25,28 @@
       "status": "Pending"
     },
     {
-      "id": "CMP-08",
-      "name": "Statement for payment of tax for Composition Dealer",
-      "due_date": "18th of month succeeding quarter",
-      "status": "N/A"
+      "id": "GSTR-9C",
+      "name": "Audited Reconciliation GSTR-9 Reconciliation Statement",
+      "due_date": "31st December of next FY",
+      "status": "Pending"
+    },
+    {
+      "id": "GSTR-7",
+      "name": "Tax Deducted at Source (TDS) Return",
+      "due_date": "10th of next month",
+      "status": "Filed"
+    },
+    {
+      "id": "GSTR-8",
+      "name": "Tax Collected at Source (TCS) Return (E-Commerce)",
+      "due_date": "10th of next month",
+      "status": "Filed"
+    },
+    {
+      "id": "GST ITC-04",
+      "name": "Quarterly Statement for Job Work Deliveries",
+      "due_date": "25th of next quarter",
+      "status": "Filed"
     }
-]
+  ]
+}

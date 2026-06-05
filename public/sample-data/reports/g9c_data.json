@@ -1,17 +1,36 @@
 {
+  "gstin": "27AAAFB6318C1Z4",
+  "fy": "2025-26",
+  "auditor_name": "Mehta & Associates Chartered Accountants",
   "turnover_reconciliation": {
-    "turnover_as_per_audited_financial_statements": 10000000,
-    "unbilled_revenue_beginning": 500000,
-    "unbilled_revenue_end": 700000,
-    "unadjusted_advances_beginning": 100000,
-    "unadjusted_advances_end": 150000,
-    "turnover_declared_in_annual_return": 10050000,
+    "audited_financial_turnover": 84900000,
+    "additions": [
+      { "particulars": "Unbilled revenue at the end of Financial Year", "amount": 4850000 },
+      { "particulars": "Unadjusted advances at the end of Financial Year", "amount": 2200000 },
+      { "particulars": "Deemed supplies under Schedule I", "amount": 850000 }
+    ],
+    "deductions": [
+      { "particulars": "Unbilled revenue at the beginning of Financial Year", "amount": 3600000 },
+      { "particulars": "Unadjusted advances at the beginning of Financial Year", "amount": 1500000 },
+      { "particulars": "Rebate or trade discount adjustments not eligible under GST", "amount": 2250000 }
+    ],
+    "reconciled_turnover": 85450000,
+    "announced_gstr9_turnover": 85450000,
     "unreconciled_turnover": 0
   },
-  "tax_reconciliation": {
-    "taxable_value": 8000000,
-    "tax_liability_as_per_gstr9": 1440000,
-    "tax_paid_through_cash_and_itc": 1440000,
-    "unreconciled_payment": 0
+  "tax_liability_reconciliation": [
+    { "rate": "Percentage of 5%", "taxable_val": 12500000, "liability_paid": 625000, "liability_audited": 625000, "variance": 0 },
+    { "rate": "Percentage of 12%", "taxable_val": 22450000, "liability_paid": 2694000, "liability_audited": 2694000, "variance": 0 },
+    { "rate": "Percentage of 18%", "taxable_val": 31500000, "liability_paid": 5670000, "liability_audited": 5670000, "variance": 0 },
+    { "rate": "Percentage of 28%", "taxable_val": 12000000, "liability_paid": 3332000, "liability_audited": 3332000, "variance": 0 }
+  ],
+  "itc_reconciliation": {
+    "itc_as_per_audited_books": 21850000,
+    "itc_in_transit_prior_fy": 2350000,
+    "itc_in_transit_current_fy": 3100000,
+    "reconciled_books_itc": 21100000,
+    "gstr9_declared_itc": 21100000,
+    "unreconciled_itc": 0,
+    "audit_recommendation": "All credit entries tally with physical invoices and vendor ledger files. No non-reconciled material differences detected."
   }
 }

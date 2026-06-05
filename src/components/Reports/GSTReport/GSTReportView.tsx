@@ -17,6 +17,13 @@ import { GSTR3BReport } from './GSTR3B/GSTR3BReport';
 import { GSTR9Report } from './GSTR9/GSTR9Report';
 import { GSTR9CReport } from './GSTR9C/GSTR9CReport';
 import { OtherGSTReports } from './Others/OtherGSTReports';
+import { CMP08Report } from './Composition/CMP08/CMP08Report';
+import { GSTR4Report } from './Composition/GSTR4/GSTR4Report';
+import { GSTR4AReport } from './Composition/GSTR4A/GSTR4AReport';
+import { CMP02Report } from './Composition/CMP02/CMP02Report';
+import { CMP04Report } from './Composition/CMP04/CMP04Report';
+import { CompositionGuidelines } from './Composition/Guidelines/CompositionGuidelines';
+import { GSTSummary } from './GSTSummary';
 import { DateRangeSelector, calculateDateRange, DateRangeOption } from '../../shared/DateRangeSelector';
 
 interface GSTReportViewProps {
@@ -29,7 +36,7 @@ interface GSTReportViewProps {
 export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSamples, defaultTab, onTabChange }) => {
   const { t, formatNumber  } = useLanguage();
 
-  const [activeTab, setActiveTab] = useState<'filing' | 'summary' | 'invoice_detail' | 'hsn_detail' | 'generate_gst' | 'gstr2b_report' | 'gstr3b_report' | 'gstr9_report' | 'gstr9c_report' | 'others_report'>((defaultTab as any) || 'generate_gst');
+  const [activeTab, setActiveTab] = useState<'filing' | 'summary' | 'gst_summary' | 'invoice_detail' | 'hsn_detail' | 'generate_gst' | 'gstr2b_report' | 'gstr3b_report' | 'gstr9_report' | 'gstr9c_report' | 'cmp08_report_tab' | 'gstr4_report_tab' | 'gstr4a_report_tab' | 'cmp02_report_tab' | 'cmp04_report_tab' | 'composition_rules_tab' | 'others_report'>((defaultTab as any) || 'generate_gst');
   
   useEffect(() => {
     if (defaultTab && defaultTab !== activeTab) {
@@ -323,6 +330,7 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                   <h2 className="text-lg font-bold text-gray-800 flex items-center dark:text-gray-100">
                     <FileText className="mr-2 text-blue-600" size={20} />
                     {activeTab === 'summary' && t('GSTR1 Summary')}
+                    {activeTab === 'gst_summary' && t('GST Summary')}
                     {activeTab === 'filing' && t('GSTR-1 Filing')}
                     {activeTab === 'invoice_detail' && t('GSTR1 Invoices')}
                     {activeTab === 'hsn_detail' && t('GSTR1 HSN')}
@@ -330,6 +338,12 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                     {activeTab === 'gstr3b_report' && t('GSTR-3B Report')}
                     {activeTab === 'gstr9_report' && t('GSTR-9 Report')}
                     {activeTab === 'gstr9c_report' && t('GSTR-9C Report')}
+                    {activeTab === 'cmp08_report_tab' && t('Form GST CMP-08')}
+                    {activeTab === 'gstr4_report_tab' && t('Form GSTR-4 (Annual)')}
+                    {activeTab === 'gstr4a_report_tab' && t('Form GSTR-4A (Inward)')}
+                    {activeTab === 'cmp02_report_tab' && t('Form GST CMP-02 (Opt-In)')}
+                    {activeTab === 'cmp04_report_tab' && t('Form GST CMP-04 (Opt-Out)')}
+                    {activeTab === 'composition_rules_tab' && t('Composition Scheme Rules')}
                     {activeTab === 'others_report' && t('Other GST Reports')}
                     {activeTab === 'generate_gst' && t('Generate GST Report')}
                   </h2>
@@ -357,6 +371,13 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'generate_gst' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
                 >
                     {t('Generate GST')}
+                </button>
+                <button 
+                    id="gst-tab-gst_summary"
+                    onClick={() => handleTabChange('gst_summary')}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gst_summary' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                >
+                    {t('GST Summary')}
                 </button>
                 <button 
                     id="gst-tab-summary"
@@ -415,6 +436,48 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                     {t('GSTR-9C')}
                 </button>
                 <button 
+                    id="gst-tab-cmp08_report_tab"
+                    onClick={() => handleTabChange('cmp08_report_tab')}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'cmp08_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                >
+                    {t('CMP-08')}
+                </button>
+                <button 
+                    id="gst-tab-gstr4_report_tab"
+                    onClick={() => handleTabChange('gstr4_report_tab')}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr4_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                >
+                    {t('GSTR-4')}
+                </button>
+                <button 
+                    id="gst-tab-gstr4a_report_tab"
+                    onClick={() => handleTabChange('gstr4a_report_tab')}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr4a_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                >
+                    {t('GSTR-4A')}
+                </button>
+                <button 
+                    id="gst-tab-cmp02_report_tab"
+                    onClick={() => handleTabChange('cmp02_report_tab')}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'cmp02_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                >
+                    {t('CMP-02')}
+                </button>
+                <button 
+                    id="gst-tab-cmp04_report_tab"
+                    onClick={() => handleTabChange('cmp04_report_tab')}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'cmp04_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                >
+                    {t('CMP-04')}
+                </button>
+                <button 
+                    id="gst-tab-composition_rules_tab"
+                    onClick={() => handleTabChange('composition_rules_tab')}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'composition_rules_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
+                >
+                    {t('Composition Rules')}
+                </button>
+                <button 
                     id="gst-tab-others_report"
                     onClick={() => handleTabChange('others_report')}
                     className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'others_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
@@ -425,15 +488,22 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
             </div>
         </div>
 
+        {activeTab === 'gst_summary' && <GSTSummary vouchers={filteredVouchers} />}
         {activeTab === 'filing' && <GSTR1Report summary={gstr1Summary} />}
         {activeTab === 'summary' && <GSTRR1Summary summary={gstr1Summary} />}
         {activeTab === 'invoice_detail' && <InvoiceDetailReport vouchers={gstr1Data} />}
         {activeTab === 'hsn_detail' && <HSNDetailReport summary={gstr1Summary} />}
-        {activeTab === 'gstr2b_report' && <GSTR2BReport useSampleData={!!activeSamples?.includes('gstr2b')} onToggleSampleData={() => {}} />}
-        {activeTab === 'gstr3b_report' && <GSTR3BReport useSampleData={!!activeSamples?.includes('gstr3b')} onToggleSampleData={() => {}} />}
-        {activeTab === 'gstr9_report' && <GSTR9Report useSampleData={!!activeSamples?.includes('gstr9')} onToggleSampleData={() => {}} />}
-        {activeTab === 'gstr9c_report' && <GSTR9CReport useSampleData={!!activeSamples?.includes('gstr9c')} onToggleSampleData={() => {}} />}
-        {activeTab === 'others_report' && <OtherGSTReports useSampleData={!!activeSamples?.includes('others')} onToggleSampleData={() => {}} />}
+        {activeTab === 'gstr2b_report' && <GSTR2BReport useSampleData={activeSamples ? activeSamples.includes('gstr2b') || true : true} onToggleSampleData={() => {}} />}
+        {activeTab === 'gstr3b_report' && <GSTR3BReport useSampleData={activeSamples ? activeSamples.includes('gstr3b') || true : true} onToggleSampleData={() => {}} />}
+        {activeTab === 'gstr9_report' && <GSTR9Report useSampleData={activeSamples ? activeSamples.includes('gstr9') || true : true} onToggleSampleData={() => {}} />}
+        {activeTab === 'gstr9c_report' && <GSTR9CReport useSampleData={activeSamples ? activeSamples.includes('gstr9c') || true : true} onToggleSampleData={() => {}} />}
+        {activeTab === 'cmp08_report_tab' && <CMP08Report useSampleData={activeSamples ? activeSamples.includes('others') || true : true} />}
+        {activeTab === 'gstr4_report_tab' && <GSTR4Report useSampleData={activeSamples ? activeSamples.includes('others') || true : true} />}
+        {activeTab === 'gstr4a_report_tab' && <GSTR4AReport useSampleData={activeSamples ? activeSamples.includes('others') || true : true} />}
+        {activeTab === 'cmp02_report_tab' && <CMP02Report useSampleData={activeSamples ? activeSamples.includes('others') || true : true} />}
+        {activeTab === 'cmp04_report_tab' && <CMP04Report useSampleData={activeSamples ? activeSamples.includes('others') || true : true} />}
+        {activeTab === 'composition_rules_tab' && <CompositionGuidelines useSampleData={activeSamples ? activeSamples.includes('others') || true : true} />}
+        {activeTab === 'others_report' && <OtherGSTReports useSampleData={activeSamples ? activeSamples.includes('others') || true : true} onToggleSampleData={() => {}} />}
         {activeTab === 'generate_gst' && (
           <div className="p-6 bg-gray-50 rounded-xl border border-dashed border-gray-300 dark:bg-gray-900 dark:border-gray-600">
             <div className="mb-4">
@@ -466,6 +536,12 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                 <option value="GSTR-3B">{t("GSTR-3B")}</option>
                 <option value="GSTR-9">{t("GSTR-9")}</option>
                 <option value="GSTR-9C">{t("GSTR-9C")}</option>
+                <option value="cmp08">{t("Form GST CMP-08")}</option>
+                <option value="gstr4">{t("Form GSTR-4 (Annual)")}</option>
+                <option value="gstr4a">{t("Form GSTR-4A (Inward)")}</option>
+                <option value="cmp02">{t("Form GST CMP-02 (Opt-In)")}</option>
+                <option value="cmp04">{t("Form GST CMP-04 (Opt-Out)")}</option>
+                <option value="comprules">{t("Composition Guidelines")}</option>
                 <option value="others">{t("Others")}</option>
             </select>
             <div className="form-grid gap-2 mb-6">
@@ -476,6 +552,12 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                       else if (selectedReportType === 'GSTR-3B') setActiveTab('gstr3b_report');
                       else if (selectedReportType === 'GSTR-9') setActiveTab('gstr9_report');
                       else if (selectedReportType === 'GSTR-9C') setActiveTab('gstr9c_report');
+                      else if (selectedReportType === 'cmp08') setActiveTab('cmp08_report_tab');
+                      else if (selectedReportType === 'gstr4') setActiveTab('gstr4_report_tab');
+                      else if (selectedReportType === 'gstr4a') setActiveTab('gstr4a_report_tab');
+                      else if (selectedReportType === 'cmp02') setActiveTab('cmp02_report_tab');
+                      else if (selectedReportType === 'cmp04') setActiveTab('cmp04_report_tab');
+                      else if (selectedReportType === 'comprules') setActiveTab('composition_rules_tab');
                       else if (selectedReportType === 'others') setActiveTab('others_report');
                   }}
                   className="px-2 py-2 bg-blue-600 text-white rounded-lg font-bold text-xs hover:bg-blue-700 truncate"

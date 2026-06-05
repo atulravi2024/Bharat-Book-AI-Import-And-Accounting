@@ -1,19 +1,38 @@
 {
-  "details_of_outward_supplies": {
-    "b2c": 1500000,
-    "b2b": 3500000,
-    "exports": 1000000,
-    "sez": 500000
+  "gstin": "27AAAFB6318C1Z4",
+  "fy": "2025-26",
+  "audit_required": true,
+  "outward_supplies": {
+    "b2c": { "taxable_val": 15450000, "cgst": 1390500, "sgst": 1390500, "igst": 0, "cess": 0 },
+    "b2b": { "taxable_val": 48650000, "cgst": 4280500, "sgst": 4280500, "igst": 1580000, "cess": 150000 },
+    "zero_rated_with_pay": { "taxable_val": 12800000, "cgst": 0, "sgst": 0, "igst": 2304000, "cess": 0 },
+    "zero_rated_without_pay": { "taxable_val": 5200000, "cgst": 0, "sgst": 0, "igst": 0, "cess": 0 },
+    "sez_with_pay": { "taxable_val": 8000000, "cgst": 720000, "sgst": 720000, "igst": 0, "cess": 0 },
+    "deemed_exports": { "taxable_val": 1200000, "cgst": 108000, "sgst": 108000, "igst": 0, "cess": 0 },
+    "advances_unadjusted": { "taxable_val": 650000, "cgst": 58500, "sgst": 58500, "igst": 0, "cess": 0 },
+    "inward_rcm_payable": { "taxable_val": 2400000, "cgst": 120000, "sgst": 120000, "igst": 0, "cess": 0 }
   },
-  "details_of_itc": {
-    "inputs": 200000,
-    "capital_goods": 500000,
-    "input_services": 150000
+  "exempt_outward": {
+    "exempted": 2200000,
+    "nil_rated": 450000,
+    "non_gst": 180000
   },
-  "tax_paid": {
-    "cgst": 450000,
-    "sgst": 450000,
-    "igst": 270000,
-    "cess": 0
-  }
+  "availed_itc": {
+    "inputs": { "igst": 4500000, "cgst": 3560000, "sgst": 3560000, "cess": 0 },
+    "capital_goods": { "igst": 1200000, "cgst": 2850000, "sgst": 2850000, "cess": 120000 },
+    "input_services": { "igst": 800000, "cgst": 1420000, "sgst": 1420000, "cess": 0 },
+    "rcm_inputs": { "igst": 0, "cgst": 120000, "sgst": 120000, "cess": 0 }
+  },
+  "itc_comparison": {
+    "as_per_gstr2b": { "igst": 6450000, "cgst": 7650000, "sgst": 7650000 },
+    "availed_in_gstr3b": { "igst": 6500000, "cgst": 7950000, "sgst": 7950000 },
+    "difference": { "igst": -50000, "cgst": -300000, "sgst": -300000 },
+    "remarks": "Slight variance due to timing differences of supplier filing matching Q4 and early provisions."
+  },
+  "tax_payable_vs_paid": [
+    { "head": "Integrated Tax", "payable": 3884000, "paid_cash": 0, "paid_itc": 3884000 },
+    { "head": "Central Tax", "payable": 6677500, "paid_cash": 120000, "paid_itc": 6557500 },
+    { "head": "State Tax", "payable": 6677500, "paid_cash": 120000, "paid_itc": 6557500 },
+    { "head": "Cess", "payable": 270000, "paid_cash": 150000, "paid_itc": 120000 }
+  ]
 }

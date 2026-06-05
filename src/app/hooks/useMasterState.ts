@@ -61,7 +61,8 @@ export const useMasterState = (allVouchers: ParsedVoucher[], setSyncProgress: (p
       'day_book', 'journal_register', 'debit_note_register', 'credit_note_register',
       'payment_register', 'receipt_register', 'contra_register', 'audit_trail',
       'item_vouchers', 'stock_summary', 'item_movement', 'low_stock', 'inventory_valuation',
-      'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile'
+      'bank_vouchers', 'raw_bank', 'auto_match', 'missing_master', 'unidentified', 'to_classify', 'reconcile',
+      'gstr2b', 'gstr3b', 'gstr9', 'gstr9c', 'others'
     ]);
 
   // Sync activeSamples to fetch them if missing
