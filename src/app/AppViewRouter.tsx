@@ -19,6 +19,7 @@ import { SettingsView } from '../components/Settings/SettingsView';
 import { HelpSettings } from '../components/Settings/HelpSettings';
 import { SupportSettings } from '../components/Settings/SupportSettings';
 import { GSTReportView } from '../components/Reports/GSTReport/GSTReportView';
+import { TaxReportView } from '../components/Reports/TaxReport/TaxReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
 import { InfoIcon, UndoIcon } from '../components/icons/IconComponents';
 import { getEffectivePolicy, isWithinAllowedHours } from '../utils/security';
@@ -32,6 +33,7 @@ export const AppViewRouter: React.FC<{ appState: ReturnType<typeof useAppLogic> 
   const { 
     view, setView, activeMasterTab, setActiveMasterTab, reportActiveTab, setReportActiveTab, bankActiveTab, setBankActiveTab,
     dashboardActiveTab, setDashboardActiveTab, vouchersActiveTab, setVouchersActiveTab, gstActiveTab, setGstActiveTab,
+    taxReportActiveTab, setTaxReportActiveTab,
     itemReportActiveTab, setItemReportActiveTab, voucherEntryActiveTab, setVoucherEntryActiveTab, inventoryEntryActiveTab,
     setInventoryEntryActiveTab, settingsActiveTab, setSettingsActiveTab, supportActiveTab, setSupportActiveTab, activeSamples,
     uploadSubStep, correctionSubStep, importCategory, setImportCategory, step, setStep, entryStep, setEntryStep, vouchers, editingVoucher,
@@ -503,6 +505,15 @@ setEditingVoucher
                 activeSamples={activeSamples}
                 defaultTab={gstActiveTab}
                 onTabChange={setGstActiveTab}
+            />
+        );
+    }
+
+    if (view === 'tax-report') {
+        return (
+            <TaxReportView 
+                defaultTab={taxReportActiveTab}
+                onTabChange={setTaxReportActiveTab}
             />
         );
     }

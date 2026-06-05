@@ -235,30 +235,8 @@ export const AppContent: React.FC = () => {
 
   return (
     <>
-      {syncProgress && (
-        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 w-full max-w-sm shadow-2xl border border-gray-100 dark:border-gray-700 flex flex-col items-center text-center">
-            <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 dark:border-blue-800">
-              <RefreshCw className="w-8 h-8 text-blue-600 dark:text-blue-400 animate-spin" />
-            </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{syncProgress.label}</h2>
-            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-8">Please wait while the system synchronizes data.</p>
-            
-            <div className="w-full relative">
-              <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3 mb-2 overflow-hidden shadow-inner flex">
-                <div 
-                  className="bg-blue-500 h-3 rounded-full transition-all duration-300 ease-out flex-shrink-0" 
-                  style={{ width: `${Math.min(100, Math.max(0, (syncProgress.current / syncProgress.total) * 100))}%` }}
-                ></div>
-              </div>
-              <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-gray-400 px-1">
-                <span>{Math.round((syncProgress.current / syncProgress.total) * 100)}%</span>
-                <span>{syncProgress.current} / {syncProgress.total}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Background Syncing (Hidden from UI to prevent blocking and confusion about missing sample counts) */}
+
       <Layout
         pageTitle={view === 'import' ? "Import" : view.charAt(0).toUpperCase() + view.slice(1)}
         activeView={view}

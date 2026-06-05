@@ -117,9 +117,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                 <div className="w-7 h-7 md:w-8 md:h-8 bg-blue-600 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-blue-200 dark:shadow-blue-900/50 shrink-0 group-hover:scale-105 transition-transform">
                     <CheckCircleIcon className="text-white text-base md:text-lg" />
                 </div>
-                <div className={`flex flex-col items-start transition-opacity duration-300 overflow-hidden ${!isSidebarOpen ? 'w-0 opacity-0 md:hidden' : 'opacity-100 flex-1'}`}>
-                    <span className="text-sm md:text-base font-black text-gray-900 dark:text-white leading-none font-display text-nowrap truncate w-full">Bharat Book</span>
-                    <span className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-blue-600 mt-1 text-nowrap">Enterprise</span>
+                <div className={`flex flex-col items-start text-left transition-opacity duration-300 overflow-hidden ${!isSidebarOpen ? 'w-0 opacity-0 md:hidden' : 'opacity-100 flex-1'}`}>
+                    <span className="text-[15px] md:text-[17px] font-black text-gray-900 dark:text-white leading-none font-display text-nowrap truncate w-full text-left">Bharat Book</span>
+                    <span className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-blue-600 mt-1 text-nowrap text-left w-full truncate">Enterprise</span>
                 </div>
             </button>
         </div>
@@ -237,6 +237,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
                         active={activeView === 'gst-report'} 
                         isCollapsed={!isSidebarOpen} 
                         onClick={() => onViewChange('gst-report')}
+                        intent="secondary"
+                    />
+                    <NavItem 
+                        icon={<TaxIcon className="text-xl px-0.5 opacity-90" />} 
+                        label={t("Tax Report")} 
+                        active={activeView === 'tax-report'} 
+                        isCollapsed={!isSidebarOpen} 
+                        onClick={() => onViewChange('tax-report')}
                         intent="secondary"
                     />
                     <NavItem 

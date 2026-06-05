@@ -82,6 +82,7 @@ export const useAppLogic = () => {
   const [dashboardActiveTab, setDashboardActiveTab] = useState<string | null>(() => getSubPageForView('dashboard'));
   const [vouchersActiveTab, setVouchersActiveTab] = useState<string | null>(() => getSubPageForView('vouchers'));
   const [gstActiveTab, setGstActiveTab] = useState<string | null>(() => getSubPageForView('gst-report'));
+  const [taxReportActiveTab, setTaxReportActiveTab] = useState<string | null>(() => getSubPageForView('tax-report'));
   const [itemReportActiveTab, setItemReportActiveTab] = useState<string | null>(() => getSubPageForView('item-report'));
   const [voucherEntryActiveTab, setVoucherEntryActiveTab] = useState<string | null>(() => getSubPageForView('voucher-entry'));
   const [inventoryEntryActiveTab, setInventoryEntryActiveTab] = useState<string | null>(() => getSubPageForView('inventory-entry'));
@@ -554,6 +555,7 @@ export const useAppLogic = () => {
             else if (newView === 'dashboard') setDashboardActiveTab(subPage);
             else if (newView === 'vouchers') setVouchersActiveTab(subPage);
             else if (newView === 'gst-report') setGstActiveTab(subPage);
+            else if (newView === 'tax-report') setTaxReportActiveTab(subPage);
             else if (newView === 'item-report') setItemReportActiveTab(subPage);
             else if (newView === 'voucher-entry') setVoucherEntryActiveTab(subPage);
             else if (newView === 'inventory-entry') setInventoryEntryActiveTab(subPage);
@@ -603,6 +605,8 @@ export const useAppLogic = () => {
     setVouchersActiveTab,
     gstActiveTab,
     setGstActiveTab,
+    taxReportActiveTab,
+    setTaxReportActiveTab,
     itemReportActiveTab,
     setItemReportActiveTab,
     voucherEntryActiveTab,

@@ -27,6 +27,8 @@ export const reports = {
   "trial balance": "ट्रायल बैलेंस",
   "balance sheet": "बैलेंस शीट",
   "GST report": "जीएसटी रिपोर्ट",
+  "Tax Report": "टैक्स रिपोर्ट",
+  "Tax report": "टैक्स रिपोर्ट",
   "Details of outward supplies of goods or services": "माल या सेवाओं की जावक प्रदाय का विवरण",
   "Summary Return of Outward & Inward Supplies": "जावक और आवक प्रदाय का सारांश रिटर्न",
   "Annual Return for Normal Taxpayer": "सामान्य करदाता के लिए वार्षिक रिटर्न",
