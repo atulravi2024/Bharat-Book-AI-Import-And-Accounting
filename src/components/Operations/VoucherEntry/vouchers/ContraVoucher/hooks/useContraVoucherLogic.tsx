@@ -7,6 +7,9 @@ import { VoucherEntryViewProps } from '../types';
 import { VoucherType } from '../../../../../../app/types';
 import { NotificationType } from '../../../../../ui/Notification';
 import { calculateRowAmountBeforePreTaxRoundOff, calculateRowAmount, getRowPostTaxDiscount, getRowRoundOff, getRowPreTaxRoundOff, calculateRowNetAmount } from '../../VoucherCalculations';
+import { useContraBarcodeScanner } from './useContraBarcodeScanner';
+import { useContraVoucherTotals } from './useContraVoucherTotals';
+import { useContraVoucherNavigation } from './useContraVoucherNavigation';
 
 
 const safeJsonParse = <T,>(jsonString: string | null, defaultValue: T): T => {
@@ -26,31 +29,6 @@ export const useContraVoucherLogic = (props: VoucherEntryViewProps) => {
   
 
   const [showNewItemModal, setShowNewItemModal] = useState(false);
-  const [showScanner, setShowScanner] = useState(false);
-  const [scanningRowIndex, setScanningRowIndex] = useState<number | null>(null);
-  
-  const handleBarcodeScanned = (decodedText: string) => {
-    setShowScanner(false);
-    const item = itemMasters?.find(i => 
-      i.name?.toLowerCase() === decodedText.toLowerCase() || 
-      i.sku?.toLowerCase() === decodedText.toLowerCase() ||
-      i.barcode?.toLowerCase() === decodedText.toLowerCase()
-    );
-    const matchedName = item ? (item.name || item.item_name) : decodedText;
-
-    if (scanningRowIndex !== null && scanningRowIndex >= 0) {
-      handleItemOrSkuChange(scanningRowIndex, matchedName, 'itemName');
-    } else {
-      const emptyRowIndex = rows.findIndex(r => !r.itemName);
-      if (emptyRowIndex !== -1) {
-        handleItemOrSkuChange(emptyRowIndex, matchedName, 'itemName');
-      } else {
-        const newIndex = rows.length;
-        setRows([...rows, { id: Date.now(), itemName: matchedName }]);
-        setTimeout(() => handleItemOrSkuChange(newIndex, matchedName, 'itemName'), 0);
-      }
-    }
-  };
   
   React.useEffect(() => {
     if (initialVoucher) {
@@ -176,6 +154,19 @@ export const useContraVoucherLogic = (props: VoucherEntryViewProps) => {
     }
     setRows(newRows);
   };
+
+  const {
+    showScanner,
+    setShowScanner,
+    scanningRowIndex,
+    setScanningRowIndex,
+    handleBarcodeScanned,
+  } = useContraBarcodeScanner({
+    itemMasters,
+    rows,
+    setRows,
+    handleItemOrSkuChange,
+  });
 
   const tabs = [
     { id: 'sales', label: 'Sales', type: VoucherType.Sales },
@@ -477,145 +468,11 @@ export const useContraVoucherLogic = (props: VoucherEntryViewProps) => {
     return isFinite(total) && !isNaN(total) ? total : 0;
   };
 
-  const totals = React.useMemo(() => {
-    if (activeTab === 'sales' || activeTab === 'purchase' || activeTab === 'debit_note' || activeTab === 'credit_note') {
-      const subtotal = rows.reduce((sum, row) => {
-        const qty = parseFloat(row.qty) || 0;
-        const rate = parseFloat(row.rate) || 0;
-        return sum + (qty * rate);
-      }, 0);
-
-      const preTaxDiscount = rows.reduce((sum, row) => {
-        const subtotalRow = (parseFloat(row.qty) || 0) * (parseFloat(row.rate) || 0);
-        const beforeRound = calculateRowAmountBeforePreTaxRoundOff(row);
-        return sum + (subtotalRow - beforeRound);
-      }, 0);
-
-      const amountAfterDiscount = rows.reduce((sum, row) => sum + calculateRowAmount(row), 0);
-
-      const taxAmount = rows.reduce((sum, row) => {
-        const amt = calculateRowAmount(row);
-        const taxPct = parseFloat(row.tax || '18') || 0;
-        return sum + (amt * (taxPct / 100));
-      }, 0);
-
-      // Compute supply type inline from source data — never rely on stale headerDetails.supplyType
-      const _place = String(headerDetails.placeOfSupply?.value || headerDetails.placeOfSupply || '').trim().toLowerCase();
-      const _ledger = (headerDetails.salesLedger || headerDetails.purchaseLedger || '').toLowerCase();
-      const _gstin = String(headerDetails.gstNumber?.value || headerDetails.gstNumber || '').trim();
-      let computedIsInterState = headerDetails.supplyType === 'Inter-State'; // fallback
-      if (_ledger.includes('igst') || _ledger.includes('inter')) {
-        computedIsInterState = true;
-      } else if (_ledger.includes('cgst') || _ledger.includes('sgst') || _ledger.includes('local') || _ledger.includes('intra') || (_ledger.includes('gst') && !_ledger.includes('igst'))) {
-        computedIsInterState = false;
-      } else if (_place) {
-        computedIsInterState = !['maharashtra', 'mh', '27'].some(s => _place.includes(s));
-      } else if (_gstin.length >= 2) {
-        computedIsInterState = _gstin.substring(0, 2) !== '27';
-      } else {
-        computedIsInterState = false;
-      }
-      const isInterState = computedIsInterState;
-      const cgst = isInterState ? 0 : taxAmount / 2;
-      const sgst = isInterState ? 0 : taxAmount / 2;
-      const igst = isInterState ? taxAmount : 0;
-
-      const postTaxDiscountSum = rows.reduce((sum, row) => sum + getRowPostTaxDiscount(row), 0);
-      const rowRoundOffs = rows.reduce((sum, row) => sum + getRowRoundOff(row), 0);
-      const preTaxRoundOffs = rows.reduce((sum, row) => sum + getRowPreTaxRoundOff(row), 0);
-      let taxableOtherAdjustmentAmount = 0;
-      if (headerDetails.taxableOtherAdjustmentPct) {
-        taxableOtherAdjustmentAmount += amountAfterDiscount * (parseFloat(headerDetails.taxableOtherAdjustmentPct) / 100);
-      }
-      if (headerDetails.taxableOtherAdjustment) {
-        taxableOtherAdjustmentAmount += parseFloat(headerDetails.taxableOtherAdjustment) || 0;
-      }
-
-      let nonTaxableOtherAdjustmentAmount = 0;
-      if (headerDetails.nonTaxableOtherAdjustmentPct) {
-        nonTaxableOtherAdjustmentAmount += amountAfterDiscount * (parseFloat(headerDetails.nonTaxableOtherAdjustmentPct) / 100);
-      }
-      if (headerDetails.nonTaxableOtherAdjustment) {
-        nonTaxableOtherAdjustmentAmount += parseFloat(headerDetails.nonTaxableOtherAdjustment) || 0;
-      }
-
-      let nonTaxableVoucherDiscountAmt = 0;
-      if (headerDetails.nonTaxableVoucherDiscountPct) {
-        nonTaxableVoucherDiscountAmt += amountAfterDiscount * (parseFloat(headerDetails.nonTaxableVoucherDiscountPct) / 100);
-      }
-      if (headerDetails.nonTaxableVoucherDiscountAmount) {
-        nonTaxableVoucherDiscountAmt += parseFloat(headerDetails.nonTaxableVoucherDiscountAmount) || 0;
-      }
-
-      let voucherDiscountAmt = 0;
-      if (headerDetails.voucherDiscountPct) {
-        voucherDiscountAmt += amountAfterDiscount * (parseFloat(headerDetails.voucherDiscountPct) / 100);
-      }
-      if (headerDetails.voucherDiscountAmount) {
-        voucherDiscountAmt += parseFloat(headerDetails.voucherDiscountAmount) || 0;
-      }
-
-      const preRoundValue = amountAfterDiscount + taxAmount - postTaxDiscountSum + rowRoundOffs + taxableOtherAdjustmentAmount + nonTaxableOtherAdjustmentAmount - voucherDiscountAmt - nonTaxableVoucherDiscountAmt;
-      let grandTotalRound = Math.round(preRoundValue);
-      let globalRoundOff = grandTotalRound - preRoundValue;
-
-      if (headerDetails.roundingType === 'none') {
-        grandTotalRound = preRoundValue;
-        globalRoundOff = 0;
-      } else if (headerDetails.roundingType === 'manual') {
-        globalRoundOff = parseFloat(headerDetails.roundingValue) || 0;
-        grandTotalRound = preRoundValue + globalRoundOff;
-      } else if (headerDetails.roundingType === 'up') {
-        grandTotalRound = Math.ceil(preRoundValue);
-        globalRoundOff = grandTotalRound - preRoundValue;
-      } else if (headerDetails.roundingType === 'down') {
-        grandTotalRound = Math.floor(preRoundValue);
-        globalRoundOff = grandTotalRound - preRoundValue;
-      }
-
-      return { 
-        subtotal, 
-        amountAfterDiscount,
-        discount: preTaxDiscount, 
-        postTaxDiscount: postTaxDiscountSum,
-        voucherDiscount: voucherDiscountAmt + nonTaxableVoucherDiscountAmt,
-        taxableVoucherDiscount: voucherDiscountAmt,
-        nonTaxableVoucherDiscount: nonTaxableVoucherDiscountAmt,
-        cgst, 
-        sgst, 
-        igst, 
-        roundOff: globalRoundOff + rowRoundOffs + preTaxRoundOffs, 
-        otherAdjustment: taxableOtherAdjustmentAmount,
-        nonTaxableAdjustment: nonTaxableOtherAdjustmentAmount,
-        grandTotal: grandTotalRound,
-        computedSupplyType: isInterState ? 'Inter-State' : 'Intra-State'
-      };
-    } else {
-      const getCrDr = (r: any, i: number) => r.crDr || (activeTab === 'payment' && i === 0 ? 'Cr' : activeTab === 'payment' ? 'Dr' : activeTab === 'receipt' && i === 0 ? 'Dr' : activeTab === 'receipt' ? 'Cr' : activeTab === 'journal' ? 'Dr' : 'Cr');
-      const drTotal = rows.filter((r, i) => getCrDr(r, i) === 'Dr').reduce((s, r) => s + (parseFloat(r.amount) || 0), 0);
-      const crTotal = rows.filter((r, i) => getCrDr(r, i) === 'Cr').reduce((s, r) => s + (parseFloat(r.amount) || 0), 0);
-      
-      const total = activeTab === 'payment' ? crTotal : (activeTab === 'receipt' ? drTotal : Math.max(drTotal, crTotal));
-      return { 
-        subtotal: total, 
-        amountAfterDiscount: total,
-        discount: 0, 
-        postTaxDiscount: 0,
-        voucherDiscount: 0,
-        taxableVoucherDiscount: 0,
-        nonTaxableVoucherDiscount: 0,
-        cgst: 0, 
-        sgst: 0, 
-        igst: 0, 
-        roundOff: 0, 
-        otherAdjustment: 0,
-        nonTaxableAdjustment: 0,
-        grandTotal: total, 
-        drTotal, 
-        crTotal 
-      };
-    }
-  }, [rows, activeTab, headerDetails]);
+  const totals = useContraVoucherTotals({
+    rows,
+    activeTab,
+    headerDetails,
+  });
 
   const handleHeaderChange = (field: string, value: any) => {
     setHeaderDetails(prev => ({ ...prev, [field]: value }));
@@ -799,194 +656,19 @@ export const useContraVoucherLogic = (props: VoucherEntryViewProps) => {
   const [isSection1Collapsed, setIsSection1Collapsed] = useState(true);
   const [isSection2Collapsed, setIsSection2Collapsed] = useState(true);
   const [isSection3Collapsed, setIsSection3Collapsed] = useState(true);
-  const [currentRecordId, setCurrentRecordId] = useState<string | null>(initialVoucher?.id || null);
 
-  const loadRecord = (voucher: any | null) => {
-    if (!voucher) {
-      setCurrentRecordId(null);
-      setHeaderDetails({
-        voucherDate: new Date().toISOString().substring(0, 10),
-        voucherNumber: getNextVoucherNumber(activeTab) || '',
-        referenceNo: '',
-        partyName: '',
-        placeOfSupply: '',
-        cashBankAccount: '',
-        instrumentNo: '',
-        instrumentDate: '',
-        narration: '',
-        taxableOtherAdjustment: '',
-        taxableOtherAdjustmentPct: '',
-        taxableAdjustmentRemarks: '',
-        isEWayBillRequired: false,
-        vehicleNo: '',
-        transporterName: '',
-        distance: '',
-        aadhaarNo: '',
-        panNo: '',
-        billingPartyName: '',
-        billingAddress: '',
-        billingState: '',
-        billingStateCode: '',
-        billingPinCode: '',
-        billingContact: '',
-        shippingPartyName: '',
-        shippingAddress: '',
-        shippingState: '',
-        shippingStateCode: '',
-        shippingPinCode: '',
-        shippingContact: '',
-        shippingContactPerson: '',
-        shippingMobileNumber: '',
-        shippingWhatsappNumber: '',
-        shippingEmailId: '',
-        isShippingSameAsBilling: true,
-        poNumber: '',
-        poDate: '',
-        creditPeriod: '',
-        priceLevel: 'Standard',
-        gstNumber: '',
-        partyType: 'Regular',
-        entityCategory: 'Customer',
-        businessRole: 'Trader',
-        supplyType: 'Intra-State',
-        contactPerson: '',
-        mobileNumber: '',
-        whatsappNumber: '',
-        emailId: '',
-      });
-      setRows([{ id: Date.now() }, { id: Date.now() + 1 }]);
-      return;
-    }
-
-    setCurrentRecordId(voucher.id);
-    if (voucher.header && voucher.rows) {
-      // Re-derive supplyType from placeOfSupply so switching vouchers updates IGST/CGST correctly
-      const loadedHeader = { ...voucher.header };
-      const place = String(loadedHeader.placeOfSupply?.value || loadedHeader.placeOfSupply || '').trim().toLowerCase();
-      const gstin = String(loadedHeader.gstNumber?.value || loadedHeader.gstNumber || '').trim();
-      if (place) {
-        const isLocal = ['maharashtra', 'mh', '27'].some(s => place.includes(s));
-        loadedHeader.supplyType = isLocal ? 'Intra-State' : 'Inter-State';
-      } else if (gstin.length >= 2) {
-        loadedHeader.supplyType = gstin.substring(0, 2) !== '27' ? 'Inter-State' : 'Intra-State';
-      }
-      setHeaderDetails(loadedHeader);
-      setRows(voucher.rows);
-    } else {
-      // For imported vouchers (no header/rows structure):
-      // Extract all GST-critical fields and RESET others to prevent stale data from previous voucher
-      const importedPlaceOfSupply = voucher.placeOfSupply?.value || voucher.placeOfSupply || '';
-      const importedGstin = voucher.gstin?.value || voucher.gstin || voucher.gstNumber?.value || voucher.gstNumber || '';
-      const importedSupplyType = voucher.supplyType?.value || voucher.supplyType || '';
-      
-      // Compute supply type from imported data
-      let computedSupplyType = 'Intra-State';
-      const posLower = String(importedPlaceOfSupply || '').trim().toLowerCase();
-      if (posLower) {
-        const isLocal = ['maharashtra', 'mh', '27'].some(s => posLower.includes(s));
-        computedSupplyType = isLocal ? 'Intra-State' : 'Inter-State';
-      } else if (importedGstin.length >= 2) {
-        computedSupplyType = importedGstin.substring(0, 2) !== '27' ? 'Inter-State' : 'Intra-State';
-      } else if (importedSupplyType) {
-        computedSupplyType = importedSupplyType;
-      }
-
-      setHeaderDetails(prev => ({
-        ...prev,
-        voucherDate: voucher.date?.value || voucher.date || prev.voucherDate,
-        voucherNumber: voucher.invoiceNumber?.value || voucher.invoiceNumber || getNextVoucherNumber(activeTab) || '',
-        partyName: voucher.partyName?.value || voucher.partyName || prev.partyName,
-        narration: voucher.narration?.value || voucher.narration || prev.narration,
-        // Reset GST-critical fields from the imported voucher data
-        placeOfSupply: importedPlaceOfSupply,
-        gstNumber: importedGstin,
-        supplyType: computedSupplyType,
-      }));
-      
-      const isInventoryType = ['sales', 'purchase', 'debit_note', 'credit_note'].includes(activeTab);
-      if (isInventoryType) {
-        if (voucher.items && voucher.items.length > 0) {
-          setRows(voucher.items.map((it: any, i: number) => ({
-            id: Date.now() + i,
-            itemName: it.name?.value || it.name || '',
-            qty: it.quantity?.value || it.quantity || '',
-            rate: it.rate?.value || it.rate || '',
-            amount: it.amount?.value || it.amount || '',
-          })));
-        } else {
-          setRows([{ id: Date.now() }, { id: Date.now() + 1 }]);
-        }
-      } else {
-        if (voucher.items && voucher.items.length > 0) {
-          setRows(voucher.items.map((it: any, i: number) => ({
-            id: Date.now() + i,
-            crDr: it.crDr?.value || it.crDr || (['payment', 'contra'].includes(activeTab) && i === 0 ? 'Cr' : ['receipt'].includes(activeTab) && i === 0 ? 'Dr' : 'Dr'),
-            ledgerName: it.ledgerName?.value || it.ledgerName || it.name?.value || it.name || '',
-            amount: Math.abs(it.amount?.value || it.amount || 0) || '',
-          })));
-        } else {
-          setRows([
-            { id: Date.now(), crDr: ['payment', 'contra'].includes(activeTab) ? 'Cr' : 'Dr', ledgerName: voucher.ledger?.value || voucher.ledger || '', amount: voucher.amount?.value || voucher.amount || '' },
-            { id: Date.now() + 1, crDr: ['payment', 'contra'].includes(activeTab) ? 'Dr' : 'Cr' }
-          ]);
-        }
-      }
-    }
-  };
-
-  const handleNavigate = (direction: 'up' | 'down' | 'first' | 'last') => {
-    const allVouchers = vouchers || [];
-    if (allVouchers.length === 0) return;
-    // Filter by current activeTab type
-    const ofType = allVouchers.filter(v => {
-      const vType = (typeof v.type === 'string' ? v.type.toLowerCase().replace(/ /g, '_') : v.type);
-      return vType === activeTab;
-    });
-
-    if (ofType.length === 0) {
-      if (currentRecordId !== null) loadRecord(null);
-      return;
-    }
-
-    // Sort by date or ID to have a stable order
-    ofType.sort((a, b) => {
-      const dateA = new Date(a.date?.value || a.date || a.createdAt || 0).getTime();
-      const dateB = new Date(b.date?.value || b.date || b.createdAt || 0).getTime();
-      return dateA - dateB;
-    });
-
-    const currentIndex = currentRecordId ? ofType.findIndex(v => v.id === currentRecordId) : -1;
-    
-    // Sequence: [0, 1, 2, ..., N, null (new entry)]
-    let nextIndex: number;
-    if (direction === 'first') {
-      nextIndex = 0;
-    } else if (direction === 'last') {
-      nextIndex = ofType.length - 1;
-    } else if (direction === 'up') { // Previous (older)
-      if (currentIndex === -1) { // We were on new entry
-        nextIndex = ofType.length - 1; // Go to most recent
-      } else if (currentIndex === 0) { // We were on oldest
-        nextIndex = -1; // Go to blank
-      } else {
-        nextIndex = currentIndex - 1;
-      }
-    } else { // Next (newer)
-      if (currentIndex === -1) { // We were on new entry
-        nextIndex = 0; // Go to oldest
-      } else if (currentIndex === ofType.length - 1) { // We were on most recent
-        nextIndex = -1; // Go to blank
-      } else {
-        nextIndex = currentIndex + 1;
-      }
-    }
-
-    if (nextIndex === -1) {
-      loadRecord(null);
-    } else {
-      loadRecord(ofType[nextIndex]);
-    }
-  };
+  const {
+    currentRecordId,
+    setCurrentRecordId,
+    loadRecord,
+    handleNavigate,
+  } = useContraVoucherNavigation({
+    initialVoucher,
+    activeTab,
+    vouchers,
+    setHeaderDetails,
+    setRows,
+  });
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
