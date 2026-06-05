@@ -13,7 +13,7 @@ import {
   LogisticsSection, ItemTableSection, AdjustmentsSection, 
   SummarySection, RemarksSection, InventoryActionMenu, 
   InventoryEditModal, InventoryHelpModal
-} from './views';
+} from './components';
 import { SystemInfo } from '../VoucherEntry/components/SystemInfo';
 import { useInventoryEntry } from './hooks/useInventoryEntry';
 import { InventoryEntryViewProps } from './types';
