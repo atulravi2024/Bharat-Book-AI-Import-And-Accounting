@@ -540,6 +540,8 @@ export const useAppLogic = () => {
            window.dispatchEvent(new Event('bharat_book_support_subtab_trigger'));
         }, 50);
       }
+    } else if (newView === 'support' && settingsTab) {
+      setSupportActiveTab(settingsTab);
     } else {
       // Apply routing defaults if configured
       const savedNav = localStorage.getItem('bharat_book_navigation_defaults');

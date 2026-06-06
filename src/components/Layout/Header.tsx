@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle, onMenuClick, onViewCh
   return (
     <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-premium-slate-100 dark:border-gray-700 sticky top-0 z-[60]">
       <div className="mx-auto px-4 sm:px-6 lg:px-10">
-        <div className="flex items-center justify-between h-12 md:h-14 relative">
+        <div className="flex items-center justify-between h-16 md:h-[72px] pt-2 md:pt-3 relative">
           
           <div className={`flex items-center ${isSearchExpanded ? 'hidden md:flex' : 'flex'}`}>
             {onMenuClick && (

@@ -46,7 +46,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   return (
-    <div className="w-full px-2 sm:px-4 py-6 sm:py-8">
+    <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 sm:py-8">
       <div className="flex flex-col space-y-6">
         <SettingsTabs activeTab={state.activeTab} handleTabChange={handleTabChange} t={state.t} />
 

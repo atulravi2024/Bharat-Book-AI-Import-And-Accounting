@@ -36,12 +36,10 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, activeView,
           }
         }}
       />
-      <div id="main-wrapper" className="flex-1 flex flex-col w-full min-w-0 overflow-hidden relative print-reset-container">
+      <div id="main-wrapper" className="flex-1 flex flex-col w-full min-w-0 overflow-y-auto relative print-reset-container custom-scrollbar">
         <Header pageTitle={pageTitle} onMenuClick={() => setIsSidebarOpen(true)} onViewChange={onViewChange} />
-        <main id="main-content" className="flex-1 min-h-0 bg-gray-100 dark:bg-gray-900 overflow-hidden relative print-reset-main">
-          <div className="absolute inset-0 overflow-y-auto print-reset-content flex flex-col">
-            {children}
-          </div>
+        <main id="main-content" className="flex-1 shrink-0 bg-gray-100 dark:bg-gray-900 flex flex-col relative print-reset-main">
+          {children}
         </main>
       </div>
     </div>

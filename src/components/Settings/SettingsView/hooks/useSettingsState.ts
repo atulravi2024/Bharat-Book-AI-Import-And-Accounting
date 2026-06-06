@@ -115,6 +115,12 @@ export const useSettingsState = (defaultTab: string | null, onTabChange?: (tab: 
   const [isSaved, setIsSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<any>((defaultTab as any) || "about");
 
+  useEffect(() => {
+    if (defaultTab) {
+      setActiveTab(defaultTab);
+    }
+  }, [defaultTab]);
+
   return {
     addNotification, language, setLanguage, t, activeModalDoc, setActiveModalDoc,
     updateStatus, setUpdateStatus, downloadStatus, setDownloadStatus, downloadProgress, setDownloadProgress,

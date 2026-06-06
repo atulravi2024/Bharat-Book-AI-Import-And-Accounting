@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, Settings, LogOut, Shield, Compass, HelpCircle, LifeBuoy } from 'lucide-react';
+import { User, Settings, LogOut, Shield, Compass, HelpCircle, LifeBuoy, Building } from 'lucide-react';
 import { AccountIcon } from '../icons/IconComponents';
 import { MainView } from '../../app/types';
 import { ManagedUser, INITIAL_USERS } from '../Settings/UserSettings';
@@ -92,23 +92,23 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ onViewChange }
               </div>
             </button>
             <button
-              onClick={() => handleNavigate('settings', 'users', 'directory')}
+              onClick={() => handleNavigate('settings', 'firm')}
               className="w-full px-4 py-2 text-left flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
             >
-              <Compass className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+              <Building className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <div>
-                 <p className="text-xs font-bold text-gray-700 dark:text-gray-200">{t("Company Directory")}</p>
-                 <p className="text-[10px] text-gray-400 font-medium">{t("Manage team & invites")}</p>
+                 <p className="text-xs font-bold text-gray-700 dark:text-gray-200">{t("Firm Settings")}</p>
+                 <p className="text-[10px] text-gray-400 font-medium">{t("Billing, taxes, GST & general firm setup")}</p>
               </div>
             </button>
             <button
-              onClick={() => handleNavigate('settings', 'firm')}
+              onClick={() => handleNavigate('settings', 'general')}
               className="w-full px-4 py-2 text-left flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
             >
               <Settings className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <div>
                  <p className="text-xs font-bold text-gray-700 dark:text-gray-200">{t("System Preferences")}</p>
-                 <p className="text-[10px] text-gray-400 font-medium">{t("Billing, taxes & general")}</p>
+                 <p className="text-[10px] text-gray-400 font-medium">{t("Theme, language & environment defaults")}</p>
               </div>
             </button>
           </div>

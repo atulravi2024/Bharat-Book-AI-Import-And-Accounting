@@ -5,10 +5,12 @@ interface NotificationContextType {
   notifications: AppNotification[];
   unreadCount: number;
   markAsRead: (id: string) => void;
+  markAsUnread: (id: string) => void;
   markAllAsRead: () => void;
+  markAllAsUnread: () => void;
   removeNotification: (id: string) => void;
   clearAll: () => void;
-  addNotification: (notification: Omit<AppNotification, 'id' | 'isRead' | 'createdAt'>) => void;
+  addNotification: (notification: Omit<AppNotification, 'id' | 'isRead' | 'createdAt'> & { createdAt?: string }) => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
@@ -70,8 +72,18 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     );
   };
 
+  const markAsUnread = (id: string) => {
+    persistNotifications(
+      notifications.map(n => n.id === id ? { ...n, isRead: false } : n)
+    );
+  };
+
   const markAllAsRead = () => {
     persistNotifications(notifications.map(n => ({ ...n, isRead: true })));
+  };
+
+  const markAllAsUnread = () => {
+    persistNotifications(notifications.map(n => ({ ...n, isRead: false })));
   };
 
   const removeNotification = (id: string) => {
@@ -143,12 +155,12 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
-  const addNotification = (notif: Omit<AppNotification, 'id' | 'isRead' | 'createdAt'>) => {
+  const addNotification = (notif: Omit<AppNotification, 'id' | 'isRead' | 'createdAt'> & { createdAt?: string }) => {
     const newNotification: AppNotification = {
       ...notif,
       id: `notif-${Date.now()}`,
       isRead: false,
-      createdAt: new Date().toISOString(),
+      createdAt: notif.createdAt || new Date().toISOString(),
     };
     persistNotifications([newNotification, ...notifications]);
     playAudioFeedback(notif.type || 'Alert');
@@ -161,7 +173,9 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       notifications,
       unreadCount,
       markAsRead,
+      markAsUnread,
       markAllAsRead,
+      markAllAsUnread,
       removeNotification,
       clearAll,
       addNotification

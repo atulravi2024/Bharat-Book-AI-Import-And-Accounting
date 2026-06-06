@@ -26,13 +26,34 @@ const DEFAULT_TICKETS: Ticket[] = [];
 export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSettings, setAiSettings }) => {
   const { t } = useLanguage();
   const { addNotification } = useNotifications();
-  const [internalTab, setInternalTab] = useState<'chat' | 'integrity' | 'tickets'>('chat');
+  const [internalTab, setInternalTab] = useState<'chat' | 'integrity' | 'tickets'>(() => {
+    const override = localStorage.getItem('bharat_book_support_subtab_override');
+    if (override === 'tickets' || override === 'chat' || override === 'integrity') {
+      localStorage.removeItem('bharat_book_support_subtab_override');
+      return override;
+    }
+    return 'chat';
+  });
   const activeTab = defaultTab === 'diagnostics' ? 'integrity' : (defaultTab || internalTab);
   
   const setActiveTab = (tab: any) => {
     setInternalTab(tab);
     if (onTabChange) onTabChange(tab);
   };
+
+  useEffect(() => {
+    const handleOverride = () => {
+      const override = localStorage.getItem('bharat_book_support_subtab_override');
+      if (override === 'tickets' || override === 'chat' || override === 'integrity') {
+        setInternalTab(override);
+        localStorage.removeItem('bharat_book_support_subtab_override');
+      }
+    };
+    window.addEventListener('bharat_book_support_subtab_trigger', handleOverride);
+    return () => {
+      window.removeEventListener('bharat_book_support_subtab_trigger', handleOverride);
+    };
+  }, []);
 
   const [tickets, setTickets] = useState<Ticket[]>(DEFAULT_TICKETS);
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);

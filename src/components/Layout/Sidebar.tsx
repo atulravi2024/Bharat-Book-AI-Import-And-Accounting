@@ -109,7 +109,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
         ? 'w-64 max-md:translate-x-0'
         : 'w-20 max-md:-translate-x-full md:translate-x-0'
     }`}>
-        <div className={`flex items-center p-3 border-b border-premium-slate-100 dark:border-gray-700 h-12 md:h-14 shrink-0 ${!isSidebarOpen ? 'md:px-0 md:justify-center' : ''}`}>
+        <div className={`flex items-center px-4 border-b border-premium-slate-100 dark:border-gray-700 h-16 md:h-[72px] pt-2 md:pt-3 shrink-0 ${!isSidebarOpen ? 'md:px-0 md:justify-center' : ''}`}>
             <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className={`flex items-center justify-center w-full transition-all group ${!isSidebarOpen ? 'md:space-x-0' : 'space-x-2 justify-start'}`}
