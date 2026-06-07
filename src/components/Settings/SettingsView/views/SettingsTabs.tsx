@@ -8,8 +8,9 @@ import { HelpCircle, LifeBuoy } from "lucide-react";
 export const SettingsTabs = ({ activeTab, handleTabChange, t }: { activeTab: string, handleTabChange: (t: string) => void, t: any }) => {
   const getTabClass = (tab: string) => {
     const base = "flex-shrink-0 flex items-center p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm whitespace-nowrap border border-transparent";
-    if (activeTab === tab) {
-      if (["firm", "general", "navigation", "help", "support", "about"].includes(tab)) {
+    const isActive = activeTab === tab || (tab === "ui" && activeTab?.startsWith("ui_"));
+    if (isActive) {
+      if (["firm", "general", "ui", "navigation", "help", "support", "about"].includes(tab)) {
         return `${base} bg-blue-600 text-white shadow-lg dark:shadow-blue-900/50`;
       }
       return `${base} bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50`;
@@ -20,10 +21,11 @@ export const SettingsTabs = ({ activeTab, handleTabChange, t }: { activeTab: str
   const tabs = [
     { id: "firm", icon: AdminIcon, label: "Firm" },
     { id: "general", icon: SettingsIcon, label: "General" },
+    { id: "ui", icon: LayoutIcon, label: "UI" },
+    { id: "formdetails", icon: LayoutIcon, label: "Form Detail" },
     { id: "navigation", icon: SettingsIcon, label: "App Defaults" },
     { id: "vouchernumbering", icon: SettingsIcon, label: "Voucher Numbering" },
     { id: "invoiceprint", icon: LayoutIcon, label: "Invoice & Print" },
-    { id: "formdetails", icon: LayoutIcon, label: "Form Detail" },
     { id: "users", icon: AccountIcon, label: "Users" },
     { id: "alerts", icon: NotificationsIcon, label: "Alert Channel" },
     { id: "security", icon: SecurityIcon, label: "Security" },

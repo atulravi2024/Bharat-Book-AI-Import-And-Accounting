@@ -14,7 +14,7 @@ import { ReportsView } from '../components/Reports/FinancialReport/FinancialRepo
 import { ItemReportView } from '../components/Reports/Items/ItemReportView';
 import { VoucherEntryView } from '../components/Operations/VoucherEntry/VoucherEntryView';
 import { InventoryEntryView } from '../components/Operations/InventoryEntry/InventoryEntryView';
-import { SystemDecideView } from '../components/Operations/BulkOperation/SystemDecideView';
+import { BulkOperationView } from '../components/Operations/BulkOperation/BulkOperationView';
 import { SettingsView } from '../components/Settings/SettingsView';
 import { HelpSettings } from '../components/Settings/HelpSettings';
 import { SupportSettings } from '../components/Settings/SupportSettings';
@@ -34,7 +34,7 @@ export const AppViewRouter: React.FC<{ appState: ReturnType<typeof useAppLogic> 
     view, setView, activeMasterTab, setActiveMasterTab, reportActiveTab, setReportActiveTab, bankActiveTab, setBankActiveTab,
     dashboardActiveTab, setDashboardActiveTab, vouchersActiveTab, setVouchersActiveTab, gstActiveTab, setGstActiveTab,
     taxReportActiveTab, setTaxReportActiveTab,
-    itemReportActiveTab, setItemReportActiveTab, voucherEntryActiveTab, setVoucherEntryActiveTab, inventoryEntryActiveTab,
+    itemReportActiveTab, setItemReportActiveTab, bulkOperationActiveTab, setBulkOperationActiveTab, voucherEntryActiveTab, setVoucherEntryActiveTab, inventoryEntryActiveTab,
     setInventoryEntryActiveTab, settingsActiveTab, setSettingsActiveTab, supportActiveTab, setSupportActiveTab, activeSamples,
     uploadSubStep, correctionSubStep, importCategory, setImportCategory, step, setStep, entryStep, setEntryStep, vouchers, editingVoucher,
     allVouchers, setAllVouchers, voucherType, setVoucherType, parsingSettings, isLoading, hasDraft, pendingFile,
@@ -530,9 +530,19 @@ setEditingVoucher
 
     if (view === 'bulk-operation') {
         return (
-            <SystemDecideView 
+            <BulkOperationView
                 itemMasters={itemMasters}
                 setItemMasters={setItemMasters}
+                allVouchers={allVouchers}
+                setAllVouchers={setAllVouchers}
+                partyMasters={partyMasters}
+                setPartyMasters={setPartyMasters}
+                ledgerMasters={ledgerMasters}
+                setLedgerMasters={setLedgerMasters}
+                gstMasters={gstMasters}
+                setGstMasters={setGstMasters}
+                defaultTab={bulkOperationActiveTab}
+                onTabChange={setBulkOperationActiveTab}
             />
         );
     }

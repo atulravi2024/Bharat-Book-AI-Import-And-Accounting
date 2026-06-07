@@ -16,12 +16,14 @@ import { AISettings } from "../AISettings";
 import { AdminSettings } from "../AdminSettings";
 import { DataExplorer } from "../DataExplorer";
 import { AppNavigationSettings } from "../AppNavigationSettings";
-import { VoucherNumberingSettings } from "../VoucherNumberingSettings";
+import { VoucherNumberingSettings } from "../VoucherNumbering";
 import { InvoicePrintSettings } from "../InvoicePrintSettings";
 import { FormDetailSettings } from "../FormDetailSettings";
 import { FirmSettings } from "../FirmSettings";
 import { HelpSettings } from "../HelpSettings";
 import { SupportSettings } from "../SupportSettings";
+import { AboutSettings } from "../AboutSettings";
+import { UISettings } from "../UISettings";
 
 // Temporary import for remaining sections
 import { InfoIcon, LayoutIcon } from "../../icons/IconComponents";
@@ -74,6 +76,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               isSaved={state.isSaved}
             />
           )}
+
+          {(state.activeTab === "ui" || state.activeTab?.startsWith("ui_")) && <UISettings defaultSubtab={state.activeTab} />}
 
           {state.activeTab === "vouchernumbering" && <VoucherNumberingSettings />}
           {state.activeTab === "invoiceprint" && <InvoicePrintSettings appMode={state.appMode} />}
@@ -132,27 +136,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             />
           )}
 
-          {state.activeTab === "about" && (
-             <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">About the Applet</h3>
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-                      <div className="flex items-center space-x-4 mb-4">
-                        <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-xl flex items-center justify-center">
-                            <InfoIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                        </div>
-                        <div>
-                           <h4 className="font-semibold text-gray-900 dark:text-white">Bharat Book AI Import System</h4>
-                           <p className="text-sm text-gray-500">Version 2.0.4 (Build 2026.1)</p>
-                        </div>
-                      </div>
-                      <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                          This system handles advanced AI-driven bank statement imports and parsing for the Bharat Book platform. It supports parsing raw CSV and JSON formats, applying structural ML and noise extraction directly in-browser.
-                      </p>
-                  </div>
-                </div>
-             </div>
-          )}
+          {state.activeTab === "about" && <AboutSettings />}
 
         </div>
       </div>

@@ -18,7 +18,6 @@ import { ReportsView } from '../components/Reports/FinancialReport/FinancialRepo
 import { ItemReportView } from '../components/Reports/Items/ItemReportView';
 import { VoucherEntryView } from '../components/Operations/VoucherEntry/VoucherEntryView';
 import { InventoryEntryView } from '../components/Operations/InventoryEntry/InventoryEntryView';
-import { SystemDecideView } from '../components/Operations/BulkOperation/SystemDecideView';
 import { SettingsView } from '../components/Settings/SettingsView';
 import { HelpSettings } from '../components/Settings/HelpSettings';
 import { SupportSettings } from '../components/Settings/SupportSettings';

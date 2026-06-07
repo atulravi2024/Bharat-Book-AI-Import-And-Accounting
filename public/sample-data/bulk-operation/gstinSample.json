@@ -1,0 +1,18 @@
+[
+    {
+        "id": "p-d1",
+        "recordedName": "Balaji & Sons Steel",
+        "registeredGstin": "27AABCBalajiS1ZZ",
+        "portalName": "BALAJI STEEL TRADING PRIVATE LIMITED",
+        "gstStatus": "Active TAXPAYER",
+        "isMismatched": true
+    },
+    {
+        "id": "p-d2",
+        "recordedName": "Vikas Traders",
+        "registeredGstin": "29AAFVikasT3ZZ",
+        "portalName": "VIKAS TRADERS (COMMERCIAL UNION)",
+        "gstStatus": "Active TAXPAYER",
+        "isMismatched": true
+    }
+]

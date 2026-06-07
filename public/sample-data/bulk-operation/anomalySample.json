@@ -1,0 +1,23 @@
+[
+    {
+        "id": "s-1",
+        "type": "Reverse Charge Split Deviation",
+        "severity": "HIGH",
+        "description": "Voucher PV-2026/09 contains an off-ledger 12% RCM split while place of supply is unregistered.",
+        "actionLabel": "Recompute RCM"
+    },
+    {
+        "id": "s-2",
+        "type": "CGST / SGST Asymmetry",
+        "severity": "MEDIUM",
+        "description": "Invoice SG-0941 has unbalanced tax distribution: CGST ₹14,200 vs SGST ₹14,250.",
+        "actionLabel": "Align Balances"
+    },
+    {
+        "id": "s-3",
+        "type": "GSTIN Prefix Mismatch",
+        "severity": "LOW",
+        "description": "Counterparty claims Maharashtra place of supply but provides Karnataka (29) GST prefix.",
+        "actionLabel": "Align POS Codes"
+    }
+]

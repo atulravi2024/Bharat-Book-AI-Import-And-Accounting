@@ -32,6 +32,15 @@ export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSett
       localStorage.removeItem('bharat_book_support_subtab_override');
       return override;
     }
+    try {
+      const saved = localStorage.getItem('bharat_book_navigation_defaults');
+      if (saved) {
+        const { page, subPage, subSubPage } = JSON.parse(saved);
+        if (page === 'settings' && subPage === 'support' && (subSubPage === 'chat' || subSubPage === 'integrity' || subSubPage === 'tickets')) {
+          return subSubPage as 'chat' | 'integrity' | 'tickets';
+        }
+      }
+    } catch (e) {}
     return 'chat';
   });
   const activeTab = defaultTab === 'diagnostics' ? 'integrity' : (defaultTab || internalTab);

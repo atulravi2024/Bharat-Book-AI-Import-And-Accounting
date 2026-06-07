@@ -1,37 +1,115 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLanguage } from "../../../context/LanguageContext";
 import { useFirmSettings } from "./hooks/useFirmSettings";
 import { FirmSettingsProps } from "./types";
 import { ALL_SEARCH_FIELDS } from "./constants";
 
-import { BasicSection } from "../FirmSettingsTabs/BasicSection";
-import { ProfileSection } from "../FirmSettingsTabs/ProfileSection";
-import { ContactsSection } from "../FirmSettingsTabs/ContactsSection";
-import { AddressSection } from "../FirmSettingsTabs/AddressSection";
-import { TaxRegistrationSection } from "../FirmSettingsTabs/TaxRegistrationSection";
-import { LicensesSection } from "../FirmSettingsTabs/LicensesSection";
-import { HrPayrollSection } from "../FirmSettingsTabs/HrPayrollSection";
-import { FinancialGeneralSection } from "../FirmSettingsTabs/FinancialGeneralSection";
-import { FinancialTaxationSection } from "../FirmSettingsTabs/FinancialTaxationSection";
-import { FinancialFormattingSection } from "../FirmSettingsTabs/FinancialFormattingSection";
-import { FinancialAdvancedSection } from "../FirmSettingsTabs/FinancialAdvancedSection";
-import { BankDetailsSection } from "../FirmSettingsTabs/BankDetailsSection";
-import { SocialWebSection } from "../FirmSettingsTabs/SocialWebSection";
-import { OperationalSection } from "../FirmSettingsTabs/OperationalSection";
-import { BillingSalesSection } from "../FirmSettingsTabs/BillingSalesSection";
-import { InventoryLogisticsSection } from "../FirmSettingsTabs/InventoryLogisticsSection";
-import { BrandingAssetsSection } from "../FirmSettingsTabs/BrandingAssetsSection";
-import { LegalRemarksSection } from "../FirmSettingsTabs/LegalRemarksSection";
-import { SystemDataSection } from "../FirmSettingsTabs/SystemDataSection";
-import { AlertChannels } from "../FirmSettingsTabs/AlertChannels";
+import { BasicSection } from "./tab/BasicSection";
+import { ProfileSection } from "./tab/ProfileSection";
+import { ContactsSection } from "./tab/ContactsSection";
+import { AddressSection } from "./tab/AddressSection";
+import { TaxRegistrationSection } from "./tab/TaxRegistrationSection";
+import { LicensesSection } from "./tab/LicensesSection";
+import { HrPayrollSection } from "./tab/HrPayrollSection";
+import { FinancialGeneralSection } from "./tab/FinancialGeneralSection";
+import { FinancialTaxationSection } from "./tab/FinancialTaxationSection";
+import { FinancialFormattingSection } from "./tab/FinancialFormattingSection";
+import { FinancialAdvancedSection } from "./tab/FinancialAdvancedSection";
+import { BankDetailsSection } from "./tab/BankDetailsSection";
+import { SocialWebSection } from "./tab/SocialWebSection";
+import { OperationalSection } from "./tab/OperationalSection";
+import { BillingSalesSection } from "./tab/BillingSalesSection";
+import { InventoryLogisticsSection } from "./tab/InventoryLogisticsSection";
+import { BrandingAssetsSection } from "./tab/BrandingAssetsSection";
+import { LegalRemarksSection } from "./tab/LegalRemarksSection";
+import { SystemDataSection } from "./tab/SystemDataSection";
+import { AlertChannels } from "./tab/AlertChannels";
 
-import { AdminIcon, CheckCircleIcon } from "../../icons/IconComponents";
-import { Search, Download, RotateCcw, Save, Trash2, Upload } from "lucide-react";
+import { SearchIcon, UndoIcon, ClearAllIcon, UploadIcon, CheckCircleIcon, AdminIcon } from "../../icons/IconComponents";
+import { Download, Save, Trash2, RotateCcw, Upload, Building, ShieldCheck, Coins, Cog, MapPin, Briefcase } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = [] }) => {
   const { t } = useLanguage();
   const state = useFirmSettings(ledgerMasters);
+  const [activeTab, setActiveTab] = useState<"identity" | "contacts" | "finance" | "compliance" | "operations" | "system">("identity");
+
+  const tabs = [
+    { id: "identity" as const, label: "Identity & Brand", icon: Building },
+    { id: "contacts" as const, label: "Locations & Contact", icon: MapPin },
+    { id: "finance" as const, label: "Finance & Banking", icon: Coins },
+    { id: "compliance" as const, label: "Legal & Compliance", icon: ShieldCheck },
+    { id: "operations" as const, label: "Operations & HR", icon: Briefcase },
+    { id: "system" as const, label: "System Setup", icon: Cog },
+  ];
+
+  const sectionToTabMap: Record<string, "identity" | "contacts" | "finance" | "compliance" | "operations" | "system"> = {
+    basicCompany: "identity",
+    businessProfile: "identity",
+    branding: "identity",
+    social: "identity",
+
+    addressDetails: "contacts",
+    primaryContacts: "contacts",
+    alertDestinations: "contacts",
+
+    financial_general: "finance",
+    financial_tax: "finance",
+    financial_formatting: "finance",
+    financial_advanced: "finance",
+    bank: "finance",
+
+    statutoryTax: "compliance",
+    businessLicenses: "compliance",
+    "legal Remarks": "compliance",
+
+    operational: "operations",
+    billing: "operations",
+    inventoryLogistics: "operations",
+    hrPayroll: "operations",
+
+    systemCompliance: "system",
+  };
+
+  const handleSearchChange = (val: string) => {
+    state.setSearchTerm(val);
+    if (!val.trim()) return;
+
+    const query = val.toLowerCase().trim();
+    const counts: Record<string, number> = { identity: 0, contacts: 0, finance: 0, compliance: 0, operations: 0, system: 0 };
+    ALL_SEARCH_FIELDS.forEach(field => {
+      const tab = sectionToTabMap[field.id];
+      const translatedLabel = t(field.label).toLowerCase();
+      if (translatedLabel.includes(query) || field.label.toLowerCase().includes(query) || field.id.toLowerCase().includes(query)) {
+         if (tab) counts[tab]++;
+      }
+    });
+
+    if (counts[activeTab] === 0) {
+      if (counts.identity > 0) setActiveTab("identity");
+      else if (counts.contacts > 0) setActiveTab("contacts");
+      else if (counts.finance > 0) setActiveTab("finance");
+      else if (counts.compliance > 0) setActiveTab("compliance");
+      else if (counts.operations > 0) setActiveTab("operations");
+      else if (counts.system > 0) setActiveTab("system");
+    }
+  };
+
+  const isSearching = state.searchTerm.trim() !== "";
+  const matchCounts: Record<string, number> = { identity: 0, contacts: 0, finance: 0, compliance: 0, operations: 0, system: 0 };
+  
+  if (isSearching) {
+    const query = state.searchTerm.toLowerCase().trim();
+    ALL_SEARCH_FIELDS.forEach(field => {
+      const tab = sectionToTabMap[field.id];
+      const translatedLabel = t(field.label).toLowerCase();
+      if (translatedLabel.includes(query) || field.label.toLowerCase().includes(query) || field.id.toLowerCase().includes(query)) {
+         if (tab) matchCounts[tab]++;
+      }
+    });
+  }
+
+  const hasAnyMatch = Object.values(matchCounts).some(c => c > 0);
 
   const SECTIONS = [
     { id: "basicCompany", label: t("Basic Details"), component: BasicSection },
@@ -57,153 +135,214 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
-      <input
-        type="file"
-        accept=".json,.csv"
-        ref={state.fileInputRef}
-        onChange={state.handleCombinedImport}
-        className="hidden"
-        id="globalHiddenFileInput"
-      />
-      <div className="flex flex-col xl:flex-row items-center justify-between p-4 xl:p-6 gap-4 border-b border-gray-50 dark:border-gray-700/50">
-        <div className="flex items-center w-full xl:w-auto shrink-0 justify-between md:justify-start gap-4">
-          <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white flex items-center whitespace-nowrap">
-            <AdminIcon className="mr-3 text-blue-600 w-6 h-6 sm:w-8 sm:h-8" />
-            {t("Firm Details")}
-          </h2>
+    <div className="max-w-6xl mx-auto space-y-4 animate-in fade-in duration-300">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-white dark:bg-gray-900 p-3.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm animate-in fade-in overflow-hidden">
+        <div className="flex items-center gap-3 min-w-0 max-w-full">
+          <div className="w-10 h-10 rounded-[0.6rem] bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-100/50 dark:border-blue-500/20">
+            <AdminIcon className="!text-[20px] text-blue-600 dark:text-blue-400" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight truncate">{t("Firm Details")}</h2>
+            <p className="text-[10px] xs:text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5 truncate whitespace-nowrap" title={t("Configure global firm profiles, taxation, finance, and operations.")}>
+              {t("Configure global firm profiles, taxation, finance, and operations.")}
+            </p>
+          </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center w-full gap-4">
-            <div className="relative w-full md:flex-1" ref={state.searchDropdownRef}>
-              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder={t("Search settings...")}
-                value={state.searchTerm}
-                onChange={(e) => {
-                  state.setSearchTerm(e.target.value);
-                  state.setShowDropdown(true);
-                }}
-                onFocus={() => {
-                  if (state.searchTerm.trim() !== "") state.setShowDropdown(true);
-                }}
-                className="form-input pl-10 pr-4 focus:border-transparent text-sm font-medium"
-              />
-              {state.showDropdown && state.searchTerm.trim() !== "" && (
-                <div className="absolute top-14 left-0 right-0 max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50">
-                  {ALL_SEARCH_FIELDS.filter(field =>
-                     field.label.toLowerCase().includes(state.searchTerm.toLowerCase())
-                  ).map((field, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => state.handleSearchSelect(field)}
-                      className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition-colors"
-                    >
-                      <span className="font-bold">{field.label}</span>
-                      <span className="text-xs text-gray-400 dark:text-gray-500 block">in {SECTIONS.find(s => s.id === field.id)?.label || t("Settings")}</span>
-                    </button>
-                  ))}
-                  {ALL_SEARCH_FIELDS.filter(field => field.label.toLowerCase().includes(state.searchTerm.toLowerCase())).length === 0 && (
-                    <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center font-medium">
-                      {t("No settings found matching")} "{state.searchTerm}"
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className="flex flex-nowrap items-center gap-2 w-full md:w-auto shrink-0 justify-center">
-              <div className="flex shrink-0 items-center bg-gray-50 dark:bg-gray-900 p-1 rounded-xl border border-gray-200 dark:border-gray-700">
-                 <button
-                    onClick={() => state.fileInputRef.current?.click()}
-                    title={t("Import (JSON/CSV)")}
-                    className="px-3 py-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+        <div className="w-full sm:w-auto min-w-0 flex-1 flex justify-center sm:justify-end items-center gap-3">
+          <div className="w-full sm:w-auto flex items-center bg-gray-100/80 dark:bg-gray-800/80 p-1 rounded-xl gap-1 shadow-sm overflow-x-auto custom-scrollbar max-w-full snap-x border border-gray-200/40 dark:border-gray-700/40 justify-start shrink-0">
+             {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const matchCount = matchCounts[tab.id] || 0;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap shrink-0 snap-start ${
+                      activeTab === tab.id 
+                        ? 'bg-white dark:bg-gray-750 text-gray-900 dark:text-white shadow-sm scale-[1.01]' 
+                        : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-700/30'
+                    }`}
                   >
-                    <Upload className="w-4 h-4" /> <span className="hidden xl:inline">{t("Import")}</span>
-                 </button>
-                 <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
-                 <button
-                    onClick={state.handleExportBackup}
-                    title={t("Export JSON")}
-                    className="px-3 py-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                  >
-                    <Download className="w-4 h-4" /> <span className="hidden xl:inline">{t("JSON")}</span>
-                 </button>
-                 <button
-                    onClick={state.handleExportCSV}
-                    title={t("Export CSV")}
-                    className="px-3 py-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                  >
-                    <Download className="w-4 h-4" /> <span className="hidden xl:inline">{t("CSV")}</span>
-                 </button>
-              </div>
-
-              <button
-                onClick={state.handleClear}
-                title={t("Clear All Fields")}
-                className="shrink-0 p-2 xl:px-4 xl:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-orange-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-sm active:scale-95 group"
-              >
-                <Trash2 className="w-5 h-5 text-gray-500 group-hover:text-orange-500 transition-colors xl:mr-2" />
-                <span className="hidden xl:inline">{t("Clear")}</span>
-              </button>
-
-              <button
-                onClick={state.handleResetToDefault}
-                title={t("Reset to Defaults")}
-                className="shrink-0 p-2 xl:px-4 xl:py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-500 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-sm active:scale-95 group"
-              >
-                <RotateCcw className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors xl:mr-2" />
-                <span className="hidden xl:inline">{t("Reset")}</span>
-              </button>
-
-              <button
-                onClick={state.handleSave}
-                title={t("Save Configuration")}
-                className={`shrink-0 p-2.5 xl:px-6 xl:py-2.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center shadow-md active:scale-95 ${
-                  state.isSaved
-                    ? "bg-emerald-500 text-white shadow-emerald-200 dark:shadow-none"
-                    : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200 dark:shadow-none"
-                }`}
-              >
-                {state.isSaved ? (
-                  <>
-                    <CheckCircleIcon className="w-5 h-5 xl:mr-2" />
-                    <span className="hidden xl:inline">{t("Saved!")}</span>
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-5 h-5 xl:mr-2" />
-                    <span className="hidden xl:inline">{t("Save")}</span>
-                  </>
-                )}
-              </button>
-            </div>
+                    <Icon className={`w-3.5 h-3.5 shrink-0 transition-colors ${activeTab === tab.id ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500'}`} />
+                    <span>{t(tab.label)}</span>
+                    {isSearching && (
+                      <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-black ${
+                        activeTab === tab.id 
+                          ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' 
+                          : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+                      }`}>
+                        {matchCount}
+                      </span>
+                    )}
+                  </button>
+                );
+             })}
+          </div>
         </div>
       </div>
 
-      <div className="space-y-0 text-left">
-        {SECTIONS.map(({ id, component: Component }) => (
-          <Component
-            key={id}
-            firmData={state.firmData}
-            setFirmData={state.setFirmData}
-            activeAccordion={state.activeAccordion}
-            toggleAccordion={state.toggleAccordion}
-            bankOptions={state.bankOptions}
-            ledgerMasters={ledgerMasters}
-            {...(id === "systemCompliance"
-              ? {
-                  handleExportBackup: state.handleExportBackup,
-                  handleRestoreBackup: state.handleCombinedImport,
-                  handleFactoryReset: state.handleFactoryReset,
-                  fileInputRef: state.fileInputRef,
-                }
-              : {})}
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 bg-white dark:bg-gray-900 p-2.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm animate-in fade-in">
+        <div className="flex-1 max-w-md relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <SearchIcon className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+          </div>
+          <input 
+            type="text" 
+            placeholder={t("Search firm settings...")} 
+            value={state.searchTerm}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="w-full pl-9 pr-8 py-2 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-xs font-bold text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
           />
-        ))}
+          {state.searchTerm && (
+            <button
+              onClick={() => handleSearchChange("")}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-650 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
+              title={t("Clear search")}
+            >
+              <svg className="w-3.5 h-3.5 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
+
+        <div className="flex flex-row flex-nowrap items-center justify-start gap-1 bg-gray-50 dark:bg-gray-900/50 p-1.5 rounded-xl border border-gray-200 dark:border-gray-700 shrink-0 w-full sm:w-auto overflow-x-auto custom-scrollbar">
+           <button
+             onClick={() => state.fileInputRef.current?.click()}
+             className="px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1.5 shrink-0"
+             title={t("Import (JSON/CSV)")}
+           >
+             <UploadIcon className="!text-[16px] flex items-center justify-center shrink-0" />
+             <span className="hidden sm:inline leading-none">{t("Import")}</span>
+           </button>
+           <button
+             onClick={state.handleExportBackup}
+             className="px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1.5 shrink-0"
+             title={t("Export JSON")}
+           >
+             <Download className="w-4 h-4 shrink-0" />
+             <span className="hidden sm:inline leading-none">{t("JSON")}</span>
+           </button>
+           <button
+             onClick={state.handleClear}
+             className="px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-orange-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1.5 shrink-0"
+             title={t("Clear All Fields")}
+           >
+             <ClearAllIcon className="!text-[16px] flex items-center justify-center shrink-0" />
+             <span className="hidden sm:inline leading-none">{t("Clear")}</span>
+           </button>
+           <button
+             onClick={state.handleResetToDefault}
+             className="px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-red-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700 shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1.5 shrink-0"
+             title={t("Reset to Defaults")}
+           >
+             <UndoIcon className="!text-[16px] flex items-center justify-center shrink-0" />
+             <span className="hidden sm:inline leading-none">{t("Reset")}</span>
+           </button>
+           <div className="hidden sm:block w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1 shrink-0"></div>
+           <button
+             onClick={state.handleSave}
+             className={`flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm active:scale-95 shrink-0 ${state.isSaved ? "bg-emerald-50 text-emerald-600" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+             title={state.isSaved ? t("Saved Configuration") : t("Save Configuration")}
+           >
+             {state.isSaved ? <CheckCircleIcon className="!text-[16px] flex items-center justify-center shrink-0 animate-bounce" /> : <Save className="w-4 h-4 shrink-0" />}
+             <span className="hidden sm:inline leading-none">{state.isSaved ? t("Saved") : t("Save")}</span>
+           </button>
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
+        <input
+          type="file"
+          accept=".json,.csv"
+          ref={state.fileInputRef}
+          onChange={state.handleCombinedImport}
+          className="hidden"
+          id="globalHiddenFileInput"
+        />
+
+        {/* Tabbed Sections Content Rendering */}
+        <div className="space-y-0 text-left min-h-[400px]">
+          {isSearching ? (
+             hasAnyMatch ? (
+               matchCounts[activeTab] > 0 ? (
+                 SECTIONS.filter(({ id }) => sectionToTabMap[id] === activeTab).map(({ id, component: Component }) => {
+                   // We could filter sections if we wanted, but rendering them all keeps the UI identical
+                   return (
+                     <Component
+                       key={id}
+                       firmData={state.firmData}
+                       setFirmData={state.setFirmData}
+                       activeAccordion={state.activeAccordion}
+                       toggleAccordion={state.toggleAccordion}
+                       bankOptions={state.bankOptions}
+                       ledgerMasters={ledgerMasters}
+                       {...(id === "systemCompliance"
+                         ? {
+                             handleExportBackup: state.handleExportBackup,
+                             handleRestoreBackup: state.handleCombinedImport,
+                             handleFactoryReset: state.handleFactoryReset,
+                             fileInputRef: state.fileInputRef,
+                           }
+                         : {})}
+                     />
+                   );
+                 })
+               ) : (
+                 <div className="flex flex-col items-center justify-center py-12 text-center bg-gray-50/50 dark:bg-gray-800/10 border-dashed border-gray-200 dark:border-gray-800 p-6 h-full min-h-[300px]">
+                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-3 border border-blue-100/50 dark:border-blue-500/20">
+                      <SearchIcon className="w-5 h-5" />
+                    </div>
+                    <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t(`No matches in ${tabs.find(t => t.id === activeTab)?.label}`)}</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-sm">{t("However, matches are found in other categories. Select a category below to see its matches:")}</p>
+                    <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+                      {tabs.map(tab => matchCounts[tab.id] > 0 && (
+                        <button key={tab.id} onClick={() => setActiveTab(tab.id)} className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-xs font-bold text-gray-750 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm transition-all active:scale-95">
+                          <tab.icon className="w-3.5 h-3.5" />
+                          <span>{t(tab.label)} ({matchCounts[tab.id]})</span>
+                        </button>
+                      ))}
+                    </div>
+                 </div>
+               )
+             ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-center animate-in fade-in duration-300 min-h-[300px]">
+                  <div className="w-12 h-12 rounded-full bg-gray-50 dark:bg-gray-800/50 flex items-center justify-center text-gray-400 dark:text-gray-500 mb-4 border border-gray-150 dark:border-gray-750">
+                    <SearchIcon className="w-5 h-5 animate-pulse text-gray-400" />
+                  </div>
+                  <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t("No settings found")}</h4>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-xs">{t("No firm settings matched your search query. Try typing another term.")}</p>
+                  <button 
+                    onClick={() => handleSearchChange("")}
+                    className="mt-5 px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold text-xs rounded-lg transition-all shadow-sm active:scale-95"
+                  >
+                    {t("Clear Search")}
+                  </button>
+                </div>
+             )
+          ) : (
+            SECTIONS.filter(({ id }) => sectionToTabMap[id] === activeTab).map(({ id, component: Component }) => (
+              <Component
+                key={id}
+                firmData={state.firmData}
+                setFirmData={state.setFirmData}
+                activeAccordion={state.activeAccordion}
+                toggleAccordion={state.toggleAccordion}
+                bankOptions={state.bankOptions}
+                ledgerMasters={ledgerMasters}
+                {...(id === "systemCompliance"
+                  ? {
+                      handleExportBackup: state.handleExportBackup,
+                      handleRestoreBackup: state.handleCombinedImport,
+                      handleFactoryReset: state.handleFactoryReset,
+                      fileInputRef: state.fileInputRef,
+                    }
+                  : {})}
+              />
+            ))
+          )}
+        </div>
       </div>
 
       <AnimatePresence>
@@ -241,7 +380,7 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
                     state.setConfirmConfig(null);
                   }}
                   className={`px-4 py-2 text-white rounded-xl font-semibold text-sm transition-colors ${
-                    state.confirmConfig.isDanger ? "bg-red-500 hover:bg-red-600" : "bg-blue-600 hover:bg-blue-700"
+                      state.confirmConfig.isDanger ? "bg-red-500 hover:bg-red-600" : "bg-blue-600 hover:bg-blue-700"
                   }`}
                 >
                   {state.confirmConfig.confirmText}

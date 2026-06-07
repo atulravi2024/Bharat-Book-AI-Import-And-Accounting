@@ -1,0 +1,56 @@
+[
+    {
+        "id": "m-1",
+        "bankVoucher": {
+            "id": "bv-1",
+            "date": { "value": "2026-06-02", "confidence": "98%" },
+            "amount": { "value": "45800.00", "confidence": "98%" },
+            "narration": { "value": "FT/SBI/9384/PATEL_ENT", "confidence": "98%" }
+        },
+        "internalVoucher": {
+            "id": "iv-1",
+            "type": "Sales",
+            "date": { "value": "2026-06-01", "confidence": "98%" },
+            "amount": { "value": "45800.00", "confidence": "95%" },
+            "partyName": { "value": "Patel Enterprises", "confidence": "98%" }
+        },
+        "confidence": "98%",
+        "status": "Draft Match"
+    },
+    {
+        "id": "m-2",
+        "bankVoucher": {
+            "id": "bv-2",
+            "date": { "value": "2026-05-28", "confidence": "98%" },
+            "amount": { "value": "12400.00", "confidence": "98%" },
+            "narration": { "value": "MobiKwik/Recharge/Corp", "confidence": "98%" }
+        },
+        "internalVoucher": {
+            "id": "iv-2",
+            "type": "Purchase",
+            "date": { "value": "2026-05-28", "confidence": "98%" },
+            "amount": { "value": "12400.00", "confidence": "98%" },
+            "partyName": { "value": "Mobile World Corp", "confidence": "98%" }
+        },
+        "confidence": "95%",
+        "status": "Draft Match"
+    },
+    {
+        "id": "m-3",
+        "bankVoucher": {
+            "id": "bv-3",
+            "date": { "value": "2026-05-20", "confidence": "98%" },
+            "amount": { "value": "92000.00", "confidence": "98%" },
+            "narration": { "value": "NEFT-AXIS-91928-BALAJI", "confidence": "95%" }
+        },
+        "internalVoucher": {
+            "id": "iv-3",
+            "type": "Sales",
+            "date": { "value": "2026-05-18", "confidence": "98%" },
+            "amount": { "value": "92110.00", "confidence": "98%" },
+            "partyName": { "value": "Balaji Steel Corp", "confidence": "98%" }
+        },
+        "confidence": "78%",
+        "status": "Fuzzy Date Match"
+    }
+]

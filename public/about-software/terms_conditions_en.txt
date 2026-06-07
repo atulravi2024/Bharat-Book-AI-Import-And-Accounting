@@ -1,0 +1,21 @@
+📜 Terms and Conditions
+
+Welcome to Bharat Book AI. By accessing or using this system, you agree to these working terms.
+
+1. 👤 Account Responsibilities
+  • Security: You are responsible for maintaining the confidentiality of your login credentials.
+  • Accuracy: You must ensure that all financial entries, voucher imports, and ledger data are accurate. The system provides AI suggestions, but final verification is your responsibility.
+
+2. ⚖️ Compliance and Law
+  • Legal Usage: You agree to use this platform strictly for lawful accounting and business management purposes.
+  • Tax Regulations: The generated GST reports and tax summaries must be verified by a qualified professional before official submission. We do not act as your legal or tax advisor.
+
+3. 🚫 Acceptable Use
+  • No System Abuse: You must not attempt to disrupt the system’s integrity or bypass administrative security controls.
+  • API Usage: Automated AI requests must remain within the limits defined by the system administrator.
+
+4. 🛑 Termination of Access
+  • The System Administrator reserves the right to suspend or terminate your access at any time if you violate these terms or compromise the system's security.
+
+5. 🔄 Updates to Terms
+  • These terms may be updated periodically by your organization or the system administrators to reflect new operational policies.

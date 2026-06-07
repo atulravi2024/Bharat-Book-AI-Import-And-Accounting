@@ -18,7 +18,6 @@ import { ReportsView } from '../components/Reports/FinancialReport/FinancialRepo
 import { ItemReportView } from '../components/Reports/Items/ItemReportView';
 import { VoucherEntryView } from '../components/Operations/VoucherEntry/VoucherEntryView';
 import { InventoryEntryView } from '../components/Operations/InventoryEntry/InventoryEntryView';
-import { SystemDecideView } from '../components/Operations/BulkOperation/SystemDecideView';
 import { SettingsView } from '../components/Settings/SettingsView';
 import { HelpSettings } from '../components/Settings/HelpSettings';
 import { SupportSettings } from '../components/Settings/SupportSettings';
@@ -56,8 +55,25 @@ export const useAppLogic = () => {
     if (saved) {
       try {
         const savedNav = JSON.parse(saved);
-        const { page, subPage, routing } = savedNav;
-        if (page === viewName && subPage) return subPage;
+        const { page, subPage, subSubPage, routing } = savedNav;
+        if (page === viewName && subPage) {
+          if (viewName === 'settings' && subPage === 'ui' && subSubPage) {
+            return `ui_${subSubPage}`;
+          }
+          if (viewName === 'settings' && subPage === 'users' && subSubPage) {
+            localStorage.setItem('bharat_book_users_subtab_override', subSubPage);
+          }
+          if (viewName === 'settings' && subPage === 'support' && subSubPage) {
+            localStorage.setItem('bharat_book_support_subtab_override', subSubPage);
+          }
+          if (viewName === 'settings' && subPage === 'about' && subSubPage) {
+            localStorage.setItem('bharat_book_about_subtab_override', subSubPage);
+          }
+          if (viewName === 'settings' && subPage === 'vouchernumbering' && subSubPage) {
+            localStorage.setItem('bharat_book_vouchernumbering_subtab_override', subSubPage);
+          }
+          return subPage;
+        }
         if (routing && routing[viewName]) return routing[viewName];
       } catch (e) {}
     }
@@ -84,6 +100,7 @@ export const useAppLogic = () => {
   const [gstActiveTab, setGstActiveTab] = useState<string | null>(() => getSubPageForView('gst-report'));
   const [taxReportActiveTab, setTaxReportActiveTab] = useState<string | null>(() => getSubPageForView('tax-report'));
   const [itemReportActiveTab, setItemReportActiveTab] = useState<string | null>(() => getSubPageForView('item-report'));
+  const [bulkOperationActiveTab, setBulkOperationActiveTab] = useState<string | null>(() => getSubPageForView('bulk-operation'));
   const [voucherEntryActiveTab, setVoucherEntryActiveTab] = useState<string | null>(() => getSubPageForView('voucher-entry'));
   const [inventoryEntryActiveTab, setInventoryEntryActiveTab] = useState<string | null>(() => getSubPageForView('inventory-entry'));
   const [settingsActiveTab, setSettingsActiveTab] = useState<string | null>(() => getSubPageForView('settings'));
@@ -611,6 +628,8 @@ export const useAppLogic = () => {
     setTaxReportActiveTab,
     itemReportActiveTab,
     setItemReportActiveTab,
+    bulkOperationActiveTab,
+    setBulkOperationActiveTab,
     voucherEntryActiveTab,
     setVoucherEntryActiveTab,
     inventoryEntryActiveTab,

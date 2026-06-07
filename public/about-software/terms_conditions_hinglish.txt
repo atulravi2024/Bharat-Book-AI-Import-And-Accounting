@@ -1,0 +1,21 @@
+📜 Terms and Conditions (Niyam aur Shartein)
+
+Bharat Book AI mein aapka swagat hai. Is system ko access ya use karne ka matlab hai ki aap in terms se agree karte hain.
+
+1. 👤 Account Responsibilities
+  • Security: Apne login credentials ki confidentiality maintain karna aapki zimmedari hai.
+  • Accuracy: Aapko ensure karna hoga ki saari financial entries, voucher imports, aur ledger data accurate ho. System AI suggestions deta hai, par final verification aapko khud karna hoga.
+
+2. ⚖️ Compliance aur Law
+  • Legal Usage: Aap is platform ko strictly lawful accounting aur business management ke liye use karne par agree karte hain.
+  • Tax Regulations: Generated GST reports aur tax summaries ko official submission se pehle ek qualified professional se verify karwana zaroori hai.
+
+3. 🚫 Acceptable Use
+  • No System Abuse: Aap system ki integrity ko disrupt karne ya administrative security controls ko bypass karne ki koshish nahi karenge.
+  • API Usage: Automated AI requests ko system administrator dwara define ki gayee limits ke andar hi rehna chahiye.
+
+4. 🛑 Termination of Access
+  • Agar aap in terms ko violate karte hain ya system ki security ko compromise karte hain, toh System Administrator ke paas aapki access suspend ya terminate karne ka right hai.
+
+5. 🔄 Updates to Terms
+  • Nayi operational policies ko reflect karne ke liye in terms ko organization ya system administrators waqt-waqt par update kar sakte hain.

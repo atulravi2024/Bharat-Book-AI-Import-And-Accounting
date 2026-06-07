@@ -3,7 +3,18 @@ import { ARTICLES } from '../constants/helpArticles';
 import { FEATURES_LIST } from '../constants/featuresList';
 
 export const useHelpSearch = () => {
-  const [activeSegment, setActiveSegment] = useState<'faq' | 'explorer' | 'trainer'>('explorer');
+  const [activeSegment, setActiveSegment] = useState<'faq' | 'explorer' | 'trainer'>(() => {
+    try {
+      const saved = localStorage.getItem('bharat_book_navigation_defaults');
+      if (saved) {
+        const { page, subPage, subSubPage } = JSON.parse(saved);
+        if (page === 'settings' && subPage === 'help' && (subSubPage === 'faq' || subSubPage === 'explorer' || subSubPage === 'trainer')) {
+          return subSubPage as 'faq' | 'explorer' | 'trainer';
+        }
+      }
+    } catch (e) {}
+    return 'explorer';
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [expandedArticle, setExpandedArticle] = useState<string | null>(null);

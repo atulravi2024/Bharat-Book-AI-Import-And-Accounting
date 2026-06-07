@@ -1,0 +1,12 @@
+[
+    {
+        "id": "new-1",
+        "description": "Sample row 1 for New bulk operation",
+        "status": "Pending"
+    },
+    {
+        "id": "new-2",
+        "description": "Sample row 2 for New bulk operation",
+        "status": "Processed"
+    }
+]

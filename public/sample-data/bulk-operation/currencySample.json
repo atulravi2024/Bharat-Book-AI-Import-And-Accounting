@@ -1,0 +1,26 @@
+[
+    {
+        "id": "fx-1",
+        "party": "Alpha International Inc.",
+        "currency": "USD",
+        "foreignAmount": 12000,
+        "historicalRate": 81.2,
+        "invoiceRef": "PV-00911A"
+    },
+    {
+        "id": "fx-2",
+        "party": "Beta Global Trading Co.",
+        "currency": "USD",
+        "foreignAmount": 4500,
+        "historicalRate": 82.1,
+        "invoiceRef": "PV-00823F"
+    },
+    {
+        "id": "fx-3",
+        "party": "Zeta Freight Corp.",
+        "currency": "USD",
+        "foreignAmount": 9800,
+        "historicalRate": 84.1,
+        "invoiceRef": "PV-00945G"
+    }
+]

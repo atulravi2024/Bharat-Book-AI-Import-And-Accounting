@@ -1,7 +1,7 @@
 {
   "name": "bharat-book-ai-voucher-import",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.4",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",

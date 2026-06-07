@@ -1,0 +1,32 @@
+[
+    {
+        "id": "dummy-1",
+        "item": { "id": "dummy-1", "name": "Stainless Steel Dinner Set (Heavy-Duty)", "uom": "Pcs", "status": "Active", "taxRate": 18 },
+        "originalCategory": "Unassigned",
+        "originalHsn": "Unassigned",
+        "suggestedCategory": "Steel Utensils & Kitchenware",
+        "suggestedHsn": "73239300",
+        "suggestedTax": 12,
+        "confidence": "98%"
+    },
+    {
+        "id": "dummy-2",
+        "item": { "id": "dummy-2", "name": "Executive Cotton Cotton Linen Fabric", "uom": "Mtr", "status": "Active", "taxRate": 18 },
+        "originalCategory": "General Merchandise",
+        "originalHsn": "Unassigned",
+        "suggestedCategory": "Cotton Textiles",
+        "suggestedHsn": "52081190",
+        "suggestedTax": 5,
+        "confidence": "95%"
+    },
+    {
+        "id": "dummy-3",
+        "item": { "id": "dummy-3", "name": "Offsite Server Integration Advisory hourly", "uom": "Hrs", "status": "Active", "taxRate": 18 },
+        "originalCategory": "Unassigned",
+        "originalHsn": "998311",
+        "suggestedCategory": "IT Consulting Services",
+        "suggestedHsn": "99831300",
+        "suggestedTax": 18,
+        "confidence": "91%"
+    }
+]

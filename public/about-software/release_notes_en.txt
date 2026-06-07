@@ -1,6 +1,6 @@
 🚀 Release Notes: Bharat Book AI Voucher Import & Accounting System
 
-🌟 Version 1.0.0 (Latest Release)
+🌟 Version 2.0.4 (Latest Release)
 
 Welcome to the initial stable release of Bharat Book AI! This update focuses on robust ledger management, advanced data integrity, and intelligent voucher parsing.
 
