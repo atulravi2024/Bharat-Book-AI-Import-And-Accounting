@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Settings } from 'lu
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("financial_advanced")) return null;
+  const isExpanded = activeAccordion === "financial_advanced" || (Boolean(searchTerm) && isSectionVisible("financial_advanced"));
   return (
     <>
       {/* Accordion 10: Financial - Advanced */}
@@ -33,14 +39,14 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                       {t("Financial Advanced")}
                     </h3>
                   </div>
-                  {activeAccordion === "financial_advanced" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "financial_advanced" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -180,6 +186,7 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                         <div className="form-field-wrapper form-grid md:col-span-2 gap-6 pt-6 border-t border-gray-100 dark:border-gray-800">
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("Currency & Exchange")}</h4>
+{isFieldVisible("Exchange Rate Update") && (
                             <div className="space-y-2">
                               <label className="form-label">
                                 {t("Exchange Rate Update")}
@@ -195,11 +202,13 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                 <option value="daily">Auto via API (Daily Avg)</option>
                               </select>
                             </div>
+)}
                           </div>
       
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("TDS / TCS Compliance")}</h4>
                             <div className="form-grid gap-4">
+{isFieldVisible("Default TDS Rate (%)") && (
                               <div className="space-y-2">
                                 <label className="form-label">
                                   Default TDS Rate (%)
@@ -212,6 +221,8 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                   className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200"
                                 />
                               </div>
+)}
+{isFieldVisible("Threshold Limit") && (
                               <div className="space-y-2">
                                 <label className="form-label">
                                   {t("Threshold Limit")}
@@ -224,11 +235,13 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                   className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200"
                                 />
                               </div>
+)}
                             </div>
                           </div>
       
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("Approval Control")}</h4>
+{isFieldVisible("Approval Threshold (₹)") && (
                             <div className="space-y-2">
                               <label className="form-label">
                                 Approval Threshold (₹)
@@ -242,11 +255,13 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                 className={`w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 ${!firmData.requireVoucherApproval ? 'opacity-50 cursor-not-allowed' : ''}`}
                               />
                             </div>
+)}
                           </div>
       
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("Interest Calculation")}</h4>
                             <div className="form-grid gap-4">
+{isFieldVisible("Late Interest (%)") && (
                               <div className="space-y-2">
                                 <label className="form-label">
                                   Late Interest (%)
@@ -259,6 +274,8 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                   className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200"
                                 />
                               </div>
+)}
+{isFieldVisible("Method") && (
                               <div className="space-y-2">
                                 <label className="form-label">
                                   {t("Method")}
@@ -273,12 +290,14 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                   <option value="compound_yearly">Compound (Yr)</option>
                                 </select>
                               </div>
+)}
                             </div>
                           </div>
       
                           <div className="space-y-4">
                             <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{t("Compliance & Closing")}</h4>
                             <div className="form-grid gap-4">
+{isFieldVisible("Soft Close Date") && (
                               <div className="space-y-2">
                                 <label className="form-label">
                                   {t("Soft Close Date")}
@@ -290,6 +309,8 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                   className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200"
                                 />
                               </div>
+)}
+{isFieldVisible("Hard Freeze Date") && (
                               <div className="space-y-2">
                                 <label className="form-label">
                                   {t("Hard Freeze Date")}
@@ -301,12 +322,13 @@ export const FinancialAdvancedSection: React.FC<Props> = ({ firmData, setFirmDat
                                   className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200"
                                 />
                               </div>
+)}
                             </div>
                           </div>
                         </div>
       
                         <div className="form-field-wrapper form-grid md:col-span-2 gap-4 pt-6 border-t border-gray-100 dark:border-gray-800">
-                          {firmData.enableBackdatedGracePeriod && (
+                          {firmData.enableBackdatedGracePeriod && isFieldVisible("Grace Period (Days)") && (
                             <div className="space-y-2">
                               <label className="form-label">
                                 Grace Period (Days)

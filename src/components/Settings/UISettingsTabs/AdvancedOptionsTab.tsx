@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import { useLanguage } from "../../../context/LanguageContext";
 import { Sparkles, Sliders, Zap, Trash2, Check } from "lucide-react";
+import { useSearchFilter } from "./hooks/useSearchFilter";
 
-export const AdvancedOptionsTab: React.FC = () => {
+export const AdvancedOptionsTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible } = useSearchFilter(searchTerm);
   const [hardwareAcceleration, setHardwareAcceleration] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [cacheSize, setCacheSize] = useState<"10" | "50" | "100">("50");
 
+  const showPerf = isFieldVisible("Performance & Heavy Rendering", ["performance", "render", "speed", "hardware", "gpu"]);
+  const showCache = isFieldVisible("Memory Cache & Data Buffers", ["memory", "cache", "buffer"]);
+  const showClear = isFieldVisible("Clear In-Browser Cache Temp Files", ["clear", "purge", "trash", "delete"]);
+
+  if (!showPerf && !showCache && !showClear) return null;
+
   return (
     <div className="space-y-6">
       {/* Performance Toggles */}
+      {showPerf && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -50,8 +59,10 @@ export const AdvancedOptionsTab: React.FC = () => {
           </div>
         </div>
       </div>
+      )}
 
       {/* Local Buffer limit */}
+      {showCache && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -87,8 +98,10 @@ export const AdvancedOptionsTab: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
 
       {/* Clear cached files */}
+      {showClear && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h5 className="text-[13px] font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -104,6 +117,7 @@ export const AdvancedOptionsTab: React.FC = () => {
           {t("Purge Temporary Files")}
         </button>
       </div>
+      )}
     </div>
   );
 };

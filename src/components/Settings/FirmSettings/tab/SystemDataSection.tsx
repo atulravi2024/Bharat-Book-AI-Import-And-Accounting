@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Database } from 'lu
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,6 +14,7 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
   handleExportBackup?: () => void;
   handleRestoreBackup?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleFactoryReset?: () => void;
@@ -20,10 +22,14 @@ interface Props {
 }
 
 export const SystemDataSection: React.FC<Props> = ({ 
-  firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters,
+  firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm,
   handleExportBackup, handleRestoreBackup, handleFactoryReset, fileInputRef
 }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("systemCompliance")) return null;
+  const isExpanded = activeAccordion === "systemCompliance" || (Boolean(searchTerm) && isSectionVisible("systemCompliance"));
   return (
     <>
       {/* Accordion 15: System Data & Compliance */}
@@ -40,14 +46,14 @@ export const SystemDataSection: React.FC<Props> = ({
                       {t("System Backup")}
                     </h3>
                   </div>
-                  {activeAccordion === "systemCompliance" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "systemCompliance" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -133,6 +139,7 @@ export const SystemDataSection: React.FC<Props> = ({
                            </div>
                         </div>
       
+{isFieldVisible("Data Retention Period") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Data Retention Period")}
@@ -153,6 +160,7 @@ export const SystemDataSection: React.FC<Props> = ({
                             <option value="indefinite">Indefinite (Keep forever)</option>
                           </select>
                         </div>
+)}
                         
                         <div className="space-y-2 flex items-center pt-8">
                           <input
@@ -175,7 +183,7 @@ export const SystemDataSection: React.FC<Props> = ({
                           </label>
                         </div>
       
-                        {firmData.autoBackup && (
+                        {firmData.autoBackup && isFieldVisible("Auto Backup Frequency") && (
                           <div className="space-y-2">
                             <label className="form-label">
                               {t("Auto Backup Frequency")}

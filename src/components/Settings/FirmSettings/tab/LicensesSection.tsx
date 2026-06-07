@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Award } from 'lucid
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("businessLicenses")) return null;
+  const isExpanded = activeAccordion === "businessLicenses" || (Boolean(searchTerm) && isSectionVisible("businessLicenses"));
   return (
     <>
       {/* Accordion 5B: Business & Operational Licenses */}
@@ -33,14 +39,14 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                       {t("Operational Licenses")}
                     </h3>
                   </div>
-                  {activeAccordion === "businessLicenses" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "businessLicenses" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("CIN (Corporate Identity Number)") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("CIN (Corporate Identity Number)")}
@@ -73,6 +80,8 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("MSME / Udyam Number") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("MSME / Udyam Number")}
@@ -98,6 +107,8 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("IEC (Import Export Code)") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("IEC (Import Export Code)")}
@@ -123,6 +134,8 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("Trade License Number") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Trade License Number")}
@@ -151,6 +164,8 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("FSSAI License Number (If Applicable)") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("FSSAI License Number (If Applicable)")}
@@ -179,6 +194,8 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("Drug License No. (If applicable)") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Drug License No. (If applicable)")}
@@ -206,6 +223,7 @@ export const LicensesSection: React.FC<Props> = ({ firmData, setFirmData, active
                             />
                           </div>
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

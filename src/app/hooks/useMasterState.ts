@@ -99,6 +99,7 @@ export const useMasterState = (allVouchers: ParsedVoucher[], setSyncProgress: (p
           else if (id === 'accountGroups') hasData = (Array.isArray(accountGroupMasters) ? accountGroupMasters : []).some((m: any) => m.sampleSetId === id);
           else if (id === 'costCenters') hasData = (Array.isArray(costCenterMasters) ? costCenterMasters : []).some((m: any) => m.sampleSetId === id);
           else if (id === 'contacts') hasData = (Array.isArray(contactMasters) ? contactMasters : []).some((m: any) => m.sampleSetId === id);
+          else if (['gstr2b', 'gstr3b', 'gstr9', 'gstr9c', 'others'].includes(id)) hasData = true; // Handled per component
           else hasData = (Array.isArray(allVouchers) ? allVouchers : []).some((v: any) => v.sampleSetId === id);
           return !hasData;
         });

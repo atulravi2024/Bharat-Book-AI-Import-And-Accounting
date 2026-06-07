@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Receipt } from 'luc
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("billing")) return null;
+  const isExpanded = activeAccordion === "billing" || (Boolean(searchTerm) && isSectionVisible("billing"));
   return (
     <>
       {/* Accordion 11: Billing & Sales Preferences */}
@@ -33,14 +39,14 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                       {t("Billing Sales")}
                     </h3>
                   </div>
-                  {activeAccordion === "billing" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "billing" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("Invoice Prefix") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Invoice Prefix")}
@@ -65,6 +72,8 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none uppercase dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Quotation Prefix") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Quotation Prefix")}
@@ -82,6 +91,8 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none uppercase dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Default Payment Terms") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Default Payment Terms")}
@@ -104,6 +115,8 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             <option value="Net 90">{t("Net 90")}</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Late Payment Penalty Rate") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Late Payment Penalty Rate")}
@@ -121,6 +134,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
                         <div className="form-field-wrapper space-y-2 md:col-span-2 flex items-center">
                           <input
                             type="checkbox"
@@ -141,6 +155,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             {t("Prices are Tax Inclusive by default")}
                           </label>
                         </div>
+{isFieldVisible("Default Terms and Conditions") && (
                         <div className="form-field-wrapper space-y-2 md:col-span-2">
                           <label className="form-label">
                             {t("Default Terms and Conditions")}
@@ -158,6 +173,7 @@ export const BillingSalesSection: React.FC<Props> = ({ firmData, setFirmData, ac
                             className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none resize-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

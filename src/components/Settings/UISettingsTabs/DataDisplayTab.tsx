@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import { useLanguage } from "../../../context/LanguageContext";
 import { Eye, DollarSign, Calendar, EyeOff } from "lucide-react";
+import { useSearchFilter } from "./hooks/useSearchFilter";
 
-export const DataDisplayTab: React.FC = () => {
+export const DataDisplayTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible } = useSearchFilter(searchTerm);
   const [currencyStyle, setCurrencyStyle] = useState<"indian" | "intl">("indian");
   const [dateFormat, setDateFormat] = useState<"DD-MM-YYYY" | "YYYY-MM-DD" | "MM-DD-YYYY">("DD-MM-YYYY");
   const [hideSalaries, setHideSalaries] = useState(false);
 
+  const showCurrency = isFieldVisible("Currency & Indian Numbering Style", ["format", "number", "money", "currency", "indian"]);
+  const showDate = isFieldVisible("Business Date Format", ["calendar", "time", "date"]);
+  const showMask = isFieldVisible("Mask Proprietary Balances", ["hide", "censor", "salary", "mask"]);
+
+  if (!showCurrency && !showDate && !showMask) return null;
+
   return (
     <div className="space-y-6">
       {/* Number and Currency Style */}
+      {showCurrency && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -45,8 +54,10 @@ export const DataDisplayTab: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
 
       {/* Date-time Format */}
+      {showDate && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -84,8 +95,10 @@ export const DataDisplayTab: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
 
       {/* Sensitive Ledger masking */}
+      {showMask && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm flex items-center justify-between">
         <div className="max-w-md flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 mt-0.5">
@@ -105,6 +118,7 @@ export const DataDisplayTab: React.FC = () => {
           <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${hideSalaries ? "translate-x-5" : "translate-x-0"}`} />
         </button>
       </div>
+      )}
     </div>
   );
 };

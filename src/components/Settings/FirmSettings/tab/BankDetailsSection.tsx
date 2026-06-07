@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, CreditCard } from '
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("bank")) return null;
+  const isExpanded = activeAccordion === "bank" || (Boolean(searchTerm) && isSectionVisible("bank"));
   return (
     <>
       {/* Accordion 8: Bank Details */}
@@ -33,14 +39,14 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                       {t("Bank Details")}
                     </h3>
                   </div>
-                  {activeAccordion === "bank" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "bank" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("Bank Name") && (
                         <div className="space-y-2 relative">
                           <label className="form-label">
                             {t("Bank Name")}
@@ -77,6 +84,8 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                             buttonClassName="w-full text-left p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Account Number") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Account Number")}
@@ -94,6 +103,8 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("IFSC Code") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("IFSC Code")}
@@ -108,6 +119,8 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none uppercase dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("SWIFT Code") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("SWIFT Code")}
@@ -122,6 +135,8 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none uppercase dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("MICR Code") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("MICR Code")}
@@ -136,6 +151,8 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none uppercase dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Account Type") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Account Type")}
@@ -153,6 +170,8 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                             <option value="Cash Credit">{t("Cash Credit")}</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Branch Name") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Branch Name")}
@@ -167,6 +186,8 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("UPI / VPA ID") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("UPI / VPA ID")}
@@ -181,6 +202,7 @@ export const BankDetailsSection: React.FC<Props> = ({ firmData, setFirmData, act
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

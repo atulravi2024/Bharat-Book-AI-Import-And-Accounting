@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import { useLanguage } from "../../../context/LanguageContext";
 import { Maximize, Grid, Percent, SlidersHorizontal, Sliders } from "lucide-react";
+import { useSearchFilter } from "./hooks/useSearchFilter";
 
-export const MaxCustomizationTab: React.FC = () => {
+export const MaxCustomizationTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible } = useSearchFilter(searchTerm);
   const [maxGridZoom, setMaxGridZoom] = useState<"85" | "100" | "115">("100");
   const [borderWeight, setBorderWeight] = useState<"thin" | "medium" | "thick">("thin");
   const [isMaxMode, setIsMaxMode] = useState(false);
 
+  const showZoom = isFieldVisible("Maximum Sheet Workspace Scaling", ["zoom", "scale", "responsive", "size"]);
+  const showBorder = isFieldVisible("Grid Outline Weight Options", ["border", "grid", "outline", "weight", "thickness"]);
+  const showMax = isFieldVisible("Enable Maximum Performance Mode", ["max", "performance", "mode", "engine"]);
+
+  if (!showZoom && !showBorder && !showMax) return null;
+
   return (
     <div className="space-y-6">
       {/* Maximum Responsive Grid Zoom settings */}
+      {showZoom && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -46,8 +55,10 @@ export const MaxCustomizationTab: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
 
       {/* Grid Border Style & Outline weight */}
+      {showBorder && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -85,8 +96,10 @@ export const MaxCustomizationTab: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
 
       {/* Extreme Max Ingestion Density Switcher */}
+      {showMax && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm flex items-center justify-between">
         <div className="max-w-md flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0 mt-0.5 animate-[pulse_2s_infinite]">
@@ -111,6 +124,7 @@ export const MaxCustomizationTab: React.FC = () => {
           <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${isMaxMode ? "translate-x-5" : "translate-x-0"}`} />
         </button>
       </div>
+      )}
     </div>
   );
 };

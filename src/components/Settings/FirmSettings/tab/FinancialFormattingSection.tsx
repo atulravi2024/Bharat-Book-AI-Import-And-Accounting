@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Hash } from 'lucide
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("financial_formatting")) return null;
+  const isExpanded = activeAccordion === "financial_formatting" || (Boolean(searchTerm) && isSectionVisible("financial_formatting"));
   return (
     <>
       {/* Accordion 9: Financial - Formatting */}
@@ -33,14 +39,14 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                       {t("Financial Formatting")}
                     </h3>
                   </div>
-                  {activeAccordion === "financial_formatting" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "financial_formatting" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("Currency Symbol Position") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Currency Symbol Position")}
@@ -63,6 +70,8 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                             <option value="suffix">Suffix (e.g. 100 ₹)</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Decimal Precision") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Decimal Precision")}
@@ -81,6 +90,8 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                             <option value="4">4 (e.g. 100.0000)</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Rounding Method") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Rounding Method")}
@@ -97,6 +108,8 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                             <option value="down">{t("Round Down")}</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Number System") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Number System")}
@@ -112,6 +125,8 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                             <option value="international">International (123,456.00)</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Thousand Separator") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Thousand Separator")}
@@ -128,6 +143,8 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                             <option value=" ">Space ( )</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Decimal Separator") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Decimal Separator")}
@@ -143,6 +160,7 @@ export const FinancialFormattingSection: React.FC<Props> = ({ firmData, setFirmD
                             <option value=",">Comma (,)</option>
                           </select>
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

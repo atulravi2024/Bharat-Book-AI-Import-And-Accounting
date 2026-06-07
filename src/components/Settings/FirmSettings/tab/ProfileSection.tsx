@@ -5,6 +5,7 @@ import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
 import { useLanguage } from '../../../../context/LanguageContext';
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("businessProfile")) return null;
+  const isExpanded = activeAccordion === "businessProfile" || (Boolean(searchTerm) && isSectionVisible("businessProfile"));
   return (
     <>
       {/* Accordion 2: Business Profile */}
@@ -33,14 +39,14 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                       {t("Business Profile")}
                     </h3>
                   </div>
-                  {activeAccordion === "businessProfile" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "businessProfile" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("Business Constitution") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Business Constitution")}
@@ -70,6 +77,8 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                             <option value="trust">{t("Trust / NGO")}</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Nature of Business") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Nature of Business")}
@@ -97,6 +106,8 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                             <option value="professional">{t("Professional / Consultation")}</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Sales Channel / E-Commerce") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Sales Channel / E-Commerce")}
@@ -116,6 +127,8 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                             <option value="omnichannel">Both Online and Offline (Omnichannel)</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Select the Business Type") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Select the Business Type")}
@@ -137,6 +150,8 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                             ))}
                           </select>
                         </div>
+)}
+{isFieldVisible("What business is involved?") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("What business is involved?")}
@@ -161,29 +176,30 @@ export const ProfileSection: React.FC<Props> = ({ firmData, setFirmData, activeA
                             ))}
                           </select>
                         </div>
-                        {BUSINESS_SUBDOMAINS[firmData.businessDomain] && (
-                          <div className="space-y-2">
-                            <label className="form-label">
-                              {t("Specific Business Type")}
-                            </label>
-                            <select
-                              value={firmData.businessSubDomain}
-                              onChange={(e) =>
-                                setFirmData({
-                                  ...firmData,
-                                  businessSubDomain: e.target.value,
-                                })
-                              }
-                              className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 cursor-pointer dark:bg-gray-900 dark:text-gray-200"
-                            >
-                              {BUSINESS_SUBDOMAINS[firmData.businessDomain].map((subOption) => (
-                                <option key={subOption.value} value={subOption.value}>
-                                  {subOption.label}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        )}
+)}
+                      {BUSINESS_SUBDOMAINS[firmData.businessDomain] && isFieldVisible("Specific Business Type") && (
+                        <div className="space-y-2">
+                          <label className="form-label">
+                            {t("Specific Business Type")}
+                          </label>
+                          <select
+                            value={firmData.businessSubDomain}
+                            onChange={(e) =>
+                              setFirmData({
+                                ...firmData,
+                                businessSubDomain: e.target.value,
+                              })
+                            }
+                            className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none hover:bg-gray-100 cursor-pointer dark:bg-gray-900 dark:text-gray-200"
+                          >
+                            {BUSINESS_SUBDOMAINS[firmData.businessDomain].map((subOption) => (
+                              <option key={subOption.value} value={subOption.value}>
+                                {subOption.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
                       </div>
                     </motion.div>
                   )}

@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Coins } from 'lucid
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("financial_tax")) return null;
+  const isExpanded = activeAccordion === "financial_tax" || (Boolean(searchTerm) && isSectionVisible("financial_tax"));
   return (
     <>
       {/* Accordion 8: Financial - Taxation */}
@@ -33,14 +39,14 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                       {t("Financial Taxation")}
                     </h3>
                   </div>
-                  {activeAccordion === "financial_tax" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "financial_tax" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("Tax Filing Frequency") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Tax Filing Frequency")}
@@ -64,6 +71,8 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                             <option value="annually">{t("Annually")}</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Default Tax System") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Default Tax System")}
@@ -81,6 +90,7 @@ export const FinancialTaxationSection: React.FC<Props> = ({ firmData, setFirmDat
                             <option value="Exempt">{t("Tax Exempt")}</option>
                           </select>
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

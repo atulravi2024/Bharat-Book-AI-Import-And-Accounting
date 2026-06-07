@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Percent } from 'luc
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("statutoryTax")) return null;
+  const isExpanded = activeAccordion === "statutoryTax" || (Boolean(searchTerm) && isSectionVisible("statutoryTax"));
   return (
     <>
       {/* Accordion 5: Statutory & Tax Registrations */}
@@ -33,14 +39,14 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                       {t("Tax Registration")}
                     </h3>
                   </div>
-                  {activeAccordion === "statutoryTax" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "statutoryTax" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("GSTIN / Tax ID") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("GSTIN / Tax ID")}
@@ -73,6 +80,8 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("PAN Number") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("PAN Number")}
@@ -98,6 +107,8 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("TAN Number") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("TAN Number")}
@@ -123,6 +134,8 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("LUT Number (For Exports)") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("LUT Number (For Exports)")}
@@ -148,6 +161,8 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("Professional Tax (PT) Reg No.") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Professional Tax (PT) Reg No.")}
@@ -172,6 +187,7 @@ export const TaxRegistrationSection: React.FC<Props> = ({ firmData, setFirmData,
                             />
                           </div>
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

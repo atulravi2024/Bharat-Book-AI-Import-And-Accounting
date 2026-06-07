@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Globe } from 'lucid
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("social")) return null;
+  const isExpanded = activeAccordion === "social" || (Boolean(searchTerm) && isSectionVisible("social"));
   return (
     <>
       {/* Accordion 9: Social & Web Presence */}
@@ -33,14 +39,14 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                       {t("Social Presence")}
                     </h3>
                   </div>
-                  {activeAccordion === "social" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "social" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("LinkedIn Page") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("LinkedIn Page")}
@@ -62,6 +69,8 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Twitter / X Handle") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Twitter / X Handle")}
@@ -76,6 +85,8 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Facebook Page") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Facebook Page")}
@@ -90,6 +101,8 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Instagram Handle") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Instagram Handle")}
@@ -104,6 +117,8 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("YouTube Channel") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("YouTube Channel")}
@@ -118,6 +133,8 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("WhatsApp Number") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("WhatsApp Number")}
@@ -132,6 +149,7 @@ export const SocialWebSection: React.FC<Props> = ({ firmData, setFirmData, activ
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

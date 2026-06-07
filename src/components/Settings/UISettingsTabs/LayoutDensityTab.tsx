@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import { useLanguage } from "../../../context/LanguageContext";
 import { Layout, Maximize2, Minimize2, Sidebar } from "lucide-react";
+import { useSearchFilter } from "./hooks/useSearchFilter";
 
-export const LayoutDensityTab: React.FC = () => {
+export const LayoutDensityTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible } = useSearchFilter(searchTerm);
   const [density, setDensity] = useState<"compact" | "standard" | "spacious">("compact");
   const [sidebarStyle, setSidebarStyle] = useState<"expanded" | "collapsed" | "hover">("expanded");
   const [showStatusIndicator, setShowStatusIndicator] = useState(true);
 
+  const showDensity = isFieldVisible("Interface Density", ["compact", "standard", "spacious", "layout"]);
+  const showSidebar = isFieldVisible("Sidebar Navigation Behavior", ["expanded", "hover", "collapsed", "sidebar"]);
+  const showStatus = isFieldVisible("Header Environment Details", ["frame", "status", "indicator", "header"]);
+
+  if (!showDensity && !showSidebar && !showStatus) return null;
+
   return (
     <div className="space-y-6">
       {/* Visual Density Selector */}
+      {showDensity && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -56,8 +65,10 @@ export const LayoutDensityTab: React.FC = () => {
           })}
         </div>
       </div>
+      )}
 
       {/* Navigation Layout Choice */}
+      {showSidebar && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -96,8 +107,10 @@ export const LayoutDensityTab: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
 
       {/* Frame Status Lines */}
+      {showStatus && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm flex items-center justify-between">
         <div className="max-w-md">
           <h5 className="text-[13px] font-bold text-gray-900 dark:text-white">{t("Header Environment Details")}</h5>
@@ -112,6 +125,7 @@ export const LayoutDensityTab: React.FC = () => {
           <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${showStatusIndicator ? "translate-x-5" : "translate-x-0"}`} />
         </button>
       </div>
+      )}
     </div>
   );
 };

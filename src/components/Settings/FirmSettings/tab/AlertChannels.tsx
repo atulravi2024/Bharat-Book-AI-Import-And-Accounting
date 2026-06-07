@@ -2,16 +2,22 @@ import React from 'react';
 import { useLanguage } from '../../../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Mail, MessageSquare, Phone, Send } from 'lucide-react';
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
   setFirmData: (data: any) => void;
   activeAccordion: string | null;
   toggleAccordion: (section: string) => void;
+  searchTerm?: string;
 }
 
-export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion }) => {
+export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("alertDestinations")) return null;
+  const isExpanded = activeAccordion === "alertDestinations" || (Boolean(searchTerm) && isSectionVisible("alertDestinations"));
   return (
     <>
       {/* Accordion: Alert Destinations */}
@@ -28,14 +34,14 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
               {t("Alert Channels")}
             </h3>
           </div>
-          {activeAccordion === "alertDestinations" ? (
+          {isExpanded ? (
             <ChevronUp className="w-5 h-5 text-gray-400" />
           ) : (
             <ChevronDown className="w-5 h-5 text-gray-400" />
           )}
         </button>
         <AnimatePresence>
-          {activeAccordion === "alertDestinations" && (
+          {isExpanded && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -52,6 +58,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Email Channel */}
                   <div className="p-5 rounded-2xl border border-gray-150 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/20 space-y-4">
+{isFieldVisible("Email Alerts") && (
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Mail className="w-4 h-4 text-blue-500" />
@@ -67,6 +74,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                         <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
+)}
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">{t("Email for Alert")}</label>
                       <input
@@ -82,6 +90,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
 
                   {/* SMS Channel */}
                   <div className="p-5 rounded-2xl border border-gray-150 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/20 space-y-4">
+{isFieldVisible("SMS Alerts") && (
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4 text-emerald-500" />
@@ -97,6 +106,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                         <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
+)}
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">{t("SMS Number for Alert")}</label>
                       <input
@@ -112,6 +122,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
 
                   {/* WhatsApp Channel */}
                   <div className="p-5 rounded-2xl border border-gray-150 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/20 space-y-4">
+{isFieldVisible("WhatsApp Alerts") && (
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <MessageSquare className="w-4 h-4 text-green-500" />
@@ -127,6 +138,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                         <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
+)}
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">{t("WhatsApp Number for Alert")}</label>
                       <input
@@ -142,6 +154,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
 
                   {/* Telegram Channel */}
                   <div className="p-5 rounded-2xl border border-gray-150 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/20 space-y-4">
+{isFieldVisible("Telegram Alerts") && (
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Send className="w-4 h-4 text-sky-500" />
@@ -157,6 +170,7 @@ export const AlertChannels: React.FC<Props> = ({ firmData, setFirmData, activeAc
                         <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
+)}
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">{t("Telegram handle/ID")}</label>
                       <input

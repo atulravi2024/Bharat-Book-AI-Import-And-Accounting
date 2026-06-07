@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useLanguage } from "../../../context/LanguageContext";
 import { Paintbrush, Moon, Sun, Monitor, Check } from "lucide-react";
+import { useSearchFilter } from "./hooks/useSearchFilter";
 
-export const ColorThemeTab: React.FC = () => {
+export const ColorThemeTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible } = useSearchFilter(searchTerm);
   const [selectedTheme, setSelectedTheme] = useState<"standard" | "coal" | "cobalt" | "emerald">("standard");
   const [colorMode, setColorMode] = useState<"system" | "light" | "dark">("light");
 
@@ -14,9 +16,15 @@ export const ColorThemeTab: React.FC = () => {
     { id: "emerald", name: t("Financial Mint"), primary: "bg-emerald-600", secondary: "bg-cyan-500", colors: ["#059669", "#06b6d4"] },
   ];
 
+  const showPalettes = isFieldVisible("Application Design Palettes", ["color", "theme", "palette", "accent"]);
+  const showContrast = isFieldVisible("Contrast & Dark Theme Support", ["dark mode", "light mode", "system", "contrast", "theme"]);
+
+  if (!showPalettes && !showContrast) return null;
+
   return (
     <div className="space-y-6">
       {/* Palette preset choices */}
+      {showPalettes && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -67,8 +75,10 @@ export const ColorThemeTab: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
 
       {/* Dark/Light mode overrides */}
+      {showContrast && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -109,6 +119,7 @@ export const ColorThemeTab: React.FC = () => {
           })}
         </div>
       </div>
+      )}
     </div>
   );
 };

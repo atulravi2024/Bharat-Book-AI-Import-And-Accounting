@@ -5,6 +5,7 @@ import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
 import { useLanguage } from '../../../../context/LanguageContext';
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+  
+  if (!isSectionVisible("basicCompany")) return null;
+  const isExpanded = activeAccordion === "basicCompany" || (Boolean(searchTerm) && isSectionVisible("basicCompany"));
   return (
     <>
       {/* Accordion 1: Basic Company Details */}
@@ -33,14 +39,14 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                       {t("Basic Details")}
                     </h3>
                   </div>
-                  {activeAccordion === "basicCompany" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "basicCompany" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("Company Name") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Company Name")}
@@ -65,6 +72,8 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Trade Name / Brand Name") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Trade Name / Brand Name")}
@@ -82,6 +91,8 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Business Slogan / Tagline") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Business Slogan / Tagline")}
@@ -99,6 +110,8 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Date of Incorporation") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Date of Incorporation")}
@@ -115,6 +128,8 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                             className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none dark:bg-gray-900 dark:text-gray-200"
                           />
                         </div>
+)}
+{isFieldVisible("Employee Count") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Employee Count")}
@@ -137,6 +152,8 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                             <option value="500+">500+ (Enterprise)</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Annual Turnover") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Annual Turnover")}
@@ -159,6 +176,7 @@ export const BasicSection: React.FC<Props> = ({ firmData, setFirmData, activeAcc
                             <option value=">50Cr">{t("Above ₹50 Crores")}</option>
                           </select>
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

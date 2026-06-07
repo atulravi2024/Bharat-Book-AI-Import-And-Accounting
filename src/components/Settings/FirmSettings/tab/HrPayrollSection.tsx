@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Users } from 'lucid
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("hrPayroll")) return null;
+  const isExpanded = activeAccordion === "hrPayroll" || (Boolean(searchTerm) && isSectionVisible("hrPayroll"));
   return (
     <>
       {/* Accordion 6: HR & Payroll Compliance */}
@@ -33,14 +39,14 @@ export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activ
                       {t("Payroll Setup")}
                     </h3>
                   </div>
-                  {activeAccordion === "hrPayroll" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "hrPayroll" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activ
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("EPF Number (Provident Fund)") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             EPF Number (Provident Fund)
@@ -73,6 +80,8 @@ export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activ
                             />
                           </div>
                         </div>
+)}
+{isFieldVisible("ESIC Number") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("ESIC Number")}
@@ -98,6 +107,7 @@ export const HrPayrollSection: React.FC<Props> = ({ firmData, setFirmData, activ
                             />
                           </div>
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

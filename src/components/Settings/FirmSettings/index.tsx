@@ -33,6 +33,8 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
   const { t } = useLanguage();
   const state = useFirmSettings(ledgerMasters);
   const [activeTab, setActiveTab] = useState<"identity" | "contacts" | "finance" | "compliance" | "operations" | "system">("identity");
+  const [targetFormat, setTargetFormat] = useState<"json" | "csv">("json");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const tabs = [
     { id: "identity" as const, label: "Identity & Brand", icon: Building },
@@ -137,14 +139,14 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
   return (
     <div className="max-w-6xl mx-auto space-y-4 animate-in fade-in duration-300">
       <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-white dark:bg-gray-900 p-3.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm animate-in fade-in overflow-hidden">
-        <div className="flex items-center gap-3 min-w-0 max-w-full">
+        <div className="flex items-center gap-3 min-w-0 sm:max-w-[30%] shrink-0">
           <div className="w-10 h-10 rounded-[0.6rem] bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-100/50 dark:border-blue-500/20">
             <AdminIcon className="!text-[20px] text-blue-600 dark:text-blue-400" />
           </div>
           <div className="min-w-0 flex-1">
             <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight truncate">{t("Firm Details")}</h2>
-            <p className="text-[10px] xs:text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5 truncate whitespace-nowrap" title={t("Configure global firm profiles, taxation, finance, and operations.")}>
-              {t("Configure global firm profiles, taxation, finance, and operations.")}
+            <p className="text-[10px] xs:text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5 truncate whitespace-nowrap" title={t("Configure profiles, taxes, and operations")}>
+              {t("Configure profiles, taxes, and operations")}
             </p>
           </div>
         </div>
@@ -182,72 +184,90 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 bg-white dark:bg-gray-900 p-2.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm animate-in fade-in">
-        <div className="flex-1 max-w-md relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <SearchIcon className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+      <div className="flex flex-row justify-between items-center gap-2 bg-white dark:bg-gray-900 p-1.5 sm:p-2 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm animate-in fade-in overflow-hidden">
+        <div className="flex-1 min-w-0 relative">
+          <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
+            <SearchIcon className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500" />
           </div>
           <input 
             type="text" 
             placeholder={t("Search firm settings...")} 
             value={state.searchTerm}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="w-full pl-9 pr-8 py-2 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-xs font-bold text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => setIsSearchFocused(false)}
+            className="w-full pl-8 pr-7 py-1.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-[11px] font-bold text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
           />
           {state.searchTerm && (
             <button
               onClick={() => handleSearchChange("")}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-650 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
+              className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-400 hover:text-gray-650 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
               title={t("Clear search")}
             >
-              <svg className="w-3.5 h-3.5 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-3 h-3 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           )}
         </div>
 
-        <div className="flex flex-row flex-nowrap items-center justify-start gap-1 bg-gray-50 dark:bg-gray-900/50 p-1.5 rounded-xl border border-gray-200 dark:border-gray-700 shrink-0 w-full sm:w-auto overflow-x-auto custom-scrollbar">
+        <div className={`flex-row flex-nowrap items-center justify-end gap-0.5 sm:gap-1 bg-transparent sm:bg-gray-50 dark:sm:bg-gray-900/50 sm:p-1 rounded-xl sm:border sm:border-gray-200 dark:sm:border-gray-700 shrink-0 overflow-x-auto custom-scrollbar ${(isSearchFocused || state.searchTerm) ? "hidden sm:flex" : "flex"}`}>
+           <div className="relative inline-flex items-center shrink-0">
+             <select
+               value={targetFormat}
+               onChange={(e) => setTargetFormat(e.target.value as "json" | "csv")}
+               className="appearance-none pl-2.5 pr-6 py-1.5 bg-white dark:bg-gray-800 text-[11px] font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 rounded-lg border border-gray-200 dark:border-gray-750 hover:border-gray-300 dark:hover:border-gray-600 transition-colors shadow-sm outline-none cursor-pointer leading-none flex items-center justify-center gap-1.5 shrink-0"
+               title={t("Select format (JSON/CSV)")}
+             >
+               <option value="json" className="bg-white dark:bg-gray-800">{t("JSON")}</option>
+               <option value="csv" className="bg-white dark:bg-gray-800">{t("CSV")}</option>
+             </select>
+             <div className="pointer-events-none absolute inset-y-0 right-1.5 flex items-center text-gray-400 dark:text-gray-500">
+               <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">
+                 <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+               </svg>
+             </div>
+           </div>
            <button
              onClick={() => state.fileInputRef.current?.click()}
-             className="px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1.5 shrink-0"
+             className="px-2 sm:px-3 py-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent shadow-sm active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
              title={t("Import (JSON/CSV)")}
            >
-             <UploadIcon className="!text-[16px] flex items-center justify-center shrink-0" />
-             <span className="hidden sm:inline leading-none">{t("Import")}</span>
+             <UploadIcon className="!text-[14px] flex items-center justify-center shrink-0" />
+             <span className="hidden lg:inline leading-none">{t("Import")}</span>
            </button>
            <button
-             onClick={state.handleExportBackup}
-             className="px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1.5 shrink-0"
-             title={t("Export JSON")}
+             onClick={targetFormat === "json" ? state.handleExportBackup : state.handleExportCSV}
+             className="px-2 sm:px-3 py-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent shadow-sm active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
+             title={targetFormat === "json" ? t("Export JSON") : t("Export CSV")}
            >
-             <Download className="w-4 h-4 shrink-0" />
-             <span className="hidden sm:inline leading-none">{t("JSON")}</span>
+             <Download className="w-3.5 h-3.5 shrink-0" />
+             <span className="hidden lg:inline leading-none">{targetFormat === "json" ? t("JSON") : t("CSV")}</span>
            </button>
            <button
              onClick={state.handleClear}
-             className="px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-orange-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1.5 shrink-0"
+             className="px-2 sm:px-3 py-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-300 hover:text-orange-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent shadow-sm active:scale-95 hidden lg:flex items-center justify-center gap-1.5 shrink-0"
              title={t("Clear All Fields")}
            >
-             <ClearAllIcon className="!text-[16px] flex items-center justify-center shrink-0" />
-             <span className="hidden sm:inline leading-none">{t("Clear")}</span>
+             <ClearAllIcon className="!text-[14px] flex items-center justify-center shrink-0" />
+             <span className="hidden lg:inline leading-none">{t("Clear")}</span>
            </button>
            <button
              onClick={state.handleResetToDefault}
-             className="px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-red-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700 shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1.5 shrink-0"
+             className="px-2 sm:px-3 py-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-300 hover:text-red-600 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700 shadow-sm active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
              title={t("Reset to Defaults")}
            >
-             <UndoIcon className="!text-[16px] flex items-center justify-center shrink-0" />
-             <span className="hidden sm:inline leading-none">{t("Reset")}</span>
+             <UndoIcon className="!text-[14px] flex items-center justify-center shrink-0" />
+             <span className="hidden lg:inline leading-none">{t("Reset")}</span>
            </button>
-           <div className="hidden sm:block w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1 shrink-0"></div>
+           <div className="hidden sm:block w-px h-3.5 bg-gray-300 dark:bg-gray-600 mx-1 shrink-0"></div>
            <button
              onClick={state.handleSave}
-             className={`flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm active:scale-95 shrink-0 ${state.isSaved ? "bg-emerald-50 text-emerald-600" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+             className={`flex items-center justify-center gap-1.5 px-2.5 sm:px-4 py-1.5 rounded-lg text-[11px] font-bold transition-all shadow-sm active:scale-95 shrink-0 ${state.isSaved ? "bg-emerald-50 text-emerald-600" : "bg-blue-600 text-white hover:bg-blue-700"}`}
              title={state.isSaved ? t("Saved Configuration") : t("Save Configuration")}
            >
-             {state.isSaved ? <CheckCircleIcon className="!text-[16px] flex items-center justify-center shrink-0 animate-bounce" /> : <Save className="w-4 h-4 shrink-0" />}
-             <span className="hidden sm:inline leading-none">{state.isSaved ? t("Saved") : t("Save")}</span>
+             {state.isSaved ? <CheckCircleIcon className="!text-[14px] flex items-center justify-center shrink-0 animate-bounce" /> : <Save className="w-3.5 h-3.5 shrink-0" />}
+             <span className="hidden lg:inline leading-none">{state.isSaved ? t("Saved") : t("Save")}</span>
            </button>
         </div>
       </div>
@@ -255,7 +275,7 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
       <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
         <input
           type="file"
-          accept=".json,.csv"
+          accept={targetFormat === "json" ? ".json" : ".csv"}
           ref={state.fileInputRef}
           onChange={state.handleCombinedImport}
           className="hidden"
@@ -278,6 +298,7 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
                        toggleAccordion={state.toggleAccordion}
                        bankOptions={state.bankOptions}
                        ledgerMasters={ledgerMasters}
+                       searchTerm={state.searchTerm}
                        {...(id === "systemCompliance"
                          ? {
                              handleExportBackup: state.handleExportBackup,
@@ -331,6 +352,7 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
                 toggleAccordion={state.toggleAccordion}
                 bankOptions={state.bankOptions}
                 ledgerMasters={ledgerMasters}
+                searchTerm={state.searchTerm}
                 {...(id === "systemCompliance"
                   ? {
                       handleExportBackup: state.handleExportBackup,

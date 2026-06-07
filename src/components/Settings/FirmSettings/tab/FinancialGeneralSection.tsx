@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Upload, CheckCircle2, Copy, Calculator } from '
 import { STATE_DATA } from "../../../../lib/states";
 import { SearchableDropdown } from "../../../ui/SearchableDropdown";
 import { BUSINESS_SUBDOMAINS, DOMAIN_CATEGORIES, BUSINESS_ROLES } from "../../../../lib/firmSettingsConstants";
+import { useSearchFilter } from "../hooks/useSearchFilter";
 
 interface Props {
   firmData: any;
@@ -13,10 +14,15 @@ interface Props {
   toggleAccordion: (section: string) => void;
   bankOptions?: { id: string; name: string }[];
   ledgerMasters?: any[];
+  searchTerm?: string;
 }
 
-export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters }) => {
+export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData, activeAccordion, toggleAccordion, bankOptions, ledgerMasters, searchTerm }) => {
   const { t } = useLanguage();
+  const { isFieldVisible, isSectionVisible } = useSearchFilter(searchTerm);
+
+  if (!isSectionVisible("financial_general")) return null;
+  const isExpanded = activeAccordion === "financial_general" || (Boolean(searchTerm) && isSectionVisible("financial_general"));
   return (
     <>
       {/* Accordion 7: Financial - General */}
@@ -33,14 +39,14 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                       {t("Financial General")}
                     </h3>
                   </div>
-                  {activeAccordion === "financial_general" ? (
+                  {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence>
-                  {activeAccordion === "financial_general" && (
+                  {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -48,6 +54,7 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                       className="overflow-hidden"
                     >
                       <div className="form-grid p-6 sm:px-8 gap-6 bg-white dark:bg-gray-800">
+{isFieldVisible("Financial Year") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Financial Year")}
@@ -68,6 +75,8 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                             <option value="oct-sep">{t("October - September")}</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Base Currency") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Base Currency")}
@@ -88,6 +97,8 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                             <option value="GBP">GBP - British Pound (£)</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Date Format") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Date Format")}
@@ -104,6 +115,8 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                             <option value="YYYY-MM-DD">{t("YYYY-MM-DD")}</option>
                           </select>
                         </div>
+)}
+{isFieldVisible("Accounting Method") && (
                         <div className="space-y-2">
                           <label className="form-label">
                             {t("Accounting Method")}
@@ -119,6 +132,7 @@ export const FinancialGeneralSection: React.FC<Props> = ({ firmData, setFirmData
                             <option value="accrual">{t("Accrual Accounting")}</option>
                           </select>
                         </div>
+)}
                       </div>
                     </motion.div>
                   )}

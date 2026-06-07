@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useLanguage } from "../../../context/LanguageContext";
 import { Globe, Type, Check } from "lucide-react";
+import { useSearchFilter } from "./hooks/useSearchFilter";
 
-export const LocalizationTab: React.FC = () => {
+export const LocalizationTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t, language, setLanguage } = useLanguage();
+  const { isFieldVisible } = useSearchFilter(searchTerm);
   const [fontFamily, setFontFamily] = useState<"inter" | "space" | "jetbrains">("inter");
 
   const fontOptions = [
@@ -12,9 +14,15 @@ export const LocalizationTab: React.FC = () => {
     { id: "jetbrains", label: "JetBrains Mono Technical", desc: "Monospaced technical columns for pristine financial code tags." }
   ];
 
+  const showLanguage = isFieldVisible("System Language & Dialect", ["language", "dialect", "english", "hindi", "hinglish"]);
+  const showTypo = isFieldVisible("Typography Pairings", ["font", "text", "typography", "typeface"]);
+
+  if (!showLanguage && !showTypo) return null;
+
   return (
     <div className="space-y-6">
       {/* Primary Language */}
+      {showLanguage && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -54,8 +62,10 @@ export const LocalizationTab: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
 
       {/* Font Family Preferences */}
+      {showTypo && (
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4">
         <div>
           <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -89,6 +99,7 @@ export const LocalizationTab: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
     </div>
   );
 };
