@@ -5,25 +5,25 @@ import { useSettingsLogic } from "./hooks/useSettingsLogic";
 import { SettingsTabs } from "./views/SettingsTabs";
 
 // Import all setting sections
-import { GeneralSettings } from "../GeneralSettings";
-import { UserSettings } from "../UserSettings";
-import { AlertChannel } from "../AlertChannel";
-import { SecuritySettings } from "../SecuritySettings";
-import { PrivacySettings } from "../PrivacySettings";
-import { ImportSettings } from "../ImportSettings";
-import { MappingSettings } from "../MappingSettings";
-import { AISettings } from "../AISettings";
-import { AdminSettings } from "../AdminSettings";
-import { DataExplorer } from "../DataExplorer";
-import { AppNavigationSettings } from "../AppNavigationSettings";
-import { VoucherNumberingSettings } from "../VoucherNumbering";
-import { InvoicePrintSettings } from "../InvoicePrintSettings";
-import { FormDetailSettings } from "../FormDetailSettings";
-import { FirmSettings } from "../FirmSettings";
-import { HelpSettings } from "../HelpSettings";
-import { SupportSettings } from "../SupportSettings";
-import { AboutSettings } from "../AboutSettings";
-import { UISettings } from "../UISettings";
+import { GeneralSettings } from "../WorkspaceSettings/GeneralSettings";
+import { UserSettings } from "../OrganizationSettings/UserSettings";
+import { AlertChannel } from "../SupportSystemSettings/AlertChannel";
+import { SecuritySettings } from "../OrganizationSettings/SecuritySettings";
+import { PrivacySettings } from "../OrganizationSettings/PrivacySettings";
+import { ImportSettings } from "../DataEngineSettings/ImportSettings";
+import { MappingSettings } from "../DataEngineSettings/MappingSettings";
+import { AISettings } from "../DataEngineSettings/AISettings";
+import { AdminSettings } from "../OrganizationSettings/AdminSettings";
+import { DataExplorer } from "../DataEngineSettings/DataExplorer";
+import { AppNavigationSettings } from "../WorkspaceSettings/AppNavigationSettings";
+import { VoucherNumberingSettings } from "../WorkspaceSettings/VoucherNumbering";
+import { InvoicePrintSettings } from "../WorkspaceSettings/InvoicePrintSettings";
+import { FormDetailSettings } from "../WorkspaceSettings/FormDetailSettings";
+import { FirmSettings } from "../WorkspaceSettings/FirmSettings";
+import { HelpSettings } from "../SupportSystemSettings/HelpSettings";
+import { SupportSettings } from "../SupportSystemSettings/SupportSettings";
+import { AboutSettings } from "../SupportSystemSettings/AboutSettings";
+import { UISettings } from "../WorkspaceSettings/UISettings";
 
 // Temporary import for remaining sections
 import { InfoIcon, LayoutIcon } from "../../icons/IconComponents";
@@ -86,7 +86,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           {state.activeTab === "users" && <UserSettings />}
           
           {state.activeTab === "alerts" && (
-            <AlertChannel toggles={state.toggles} handleToggle={actions.handleToggle} />
+            <AlertChannel 
+              toggles={state.toggles} 
+              handleToggle={actions.handleToggle} 
+              setToggles={state.setToggles}
+              handleSave={actions.handleSave}
+            />
           )}
 
           {state.activeTab === "security" && <SecuritySettings />}
@@ -120,8 +125,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               setCashFlowKeywords={state.setCashFlowKeywords} selfTransferKeywords={state.selfTransferKeywords}
               setSelfTransferKeywords={state.setSelfTransferKeywords} mappingRules={state.mappingRules} setMappingRules={state.setMappingRules}
               missingMasterAction={state.missingMasterAction} setMissingMasterAction={state.setMissingMasterAction} processingPriority={state.processingPriority}
-              setProcessingPriority={state.setProcessingPriority} aliases={state.aliases} setAliases={state.setAliases}
-              fileInputRef={state.fileInputRef} showAliasModal={state.showAliasModal} setShowAliasModal={state.setShowAliasModal}
+              setProcessingPriority={state.setProcessingPriority}
               sandboxInput={state.sandboxInput} setSandboxInput={state.setSandboxInput} runSandboxSimulator={actions.runSandboxSimulator}
               sandboxResult={state.sandboxResult} bulkSandboxResults={state.bulkSandboxResults} setBulkSandboxResults={state.setBulkSandboxResults} runBulkSimulator={actions.runBulkSimulator}
               sourceColumn={state.sourceColumn} setSourceColumn={state.setSourceColumn}

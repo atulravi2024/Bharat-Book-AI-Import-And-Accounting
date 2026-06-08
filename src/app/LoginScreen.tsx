@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Lock } from 'lucide-react';
-import { ManagedUser, INITIAL_USERS } from '../components/Settings/UserSettings';
+import { ManagedUser, INITIAL_USERS } from "../components/Settings/OrganizationSettings/UserSettings";
 import { useLanguage } from '../context/LanguageContext';
 
 interface LoginScreenProps {

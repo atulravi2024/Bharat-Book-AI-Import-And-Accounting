@@ -58,6 +58,11 @@
   }
 }
 
+html, body {
+  @apply overflow-x-hidden;
+  position: relative;
+}
+
 body {
   @apply bg-gray-100;
 }

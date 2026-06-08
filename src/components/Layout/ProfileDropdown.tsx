@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { User, Settings, LogOut, Shield, Compass, HelpCircle, LifeBuoy, Building } from 'lucide-react';
 import { AccountIcon } from '../icons/IconComponents';
 import { MainView } from '../../app/types';
-import { ManagedUser, INITIAL_USERS } from '../Settings/UserSettings';
+import { ManagedUser, INITIAL_USERS } from "../Settings/OrganizationSettings/UserSettings";
 import { useLanguage } from '../../context/LanguageContext';
 
 interface ProfileDropdownProps {

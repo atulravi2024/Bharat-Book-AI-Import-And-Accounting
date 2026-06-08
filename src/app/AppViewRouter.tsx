@@ -16,8 +16,8 @@ import { VoucherEntryView } from '../components/Operations/VoucherEntry/VoucherE
 import { InventoryEntryView } from '../components/Operations/InventoryEntry/InventoryEntryView';
 import { BulkOperationView } from '../components/Operations/BulkOperation/BulkOperationView';
 import { SettingsView } from '../components/Settings/SettingsView';
-import { HelpSettings } from '../components/Settings/HelpSettings';
-import { SupportSettings } from '../components/Settings/SupportSettings';
+import { HelpSettings } from "../components/Settings/SupportSystemSettings/HelpSettings";
+import { SupportSettings } from "../components/Settings/SupportSystemSettings/SupportSettings";
 import { GSTReportView } from '../components/Reports/GSTReport/GSTReportView';
 import { TaxReportView } from '../components/Reports/TaxReport/TaxReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
@@ -614,7 +614,7 @@ setEditingVoucher
 
     if (view === 'support') {
         return (
-            <div className="max-w-7xl mx-auto space-y-6">
+            <div className="max-w-7xl mx-auto space-y-6 flex-1 px-4 sm:px-6 pt-4 sm:pt-6">
                 <SupportSettings 
                     defaultTab={supportActiveTab}
                     onTabChange={setSupportActiveTab}

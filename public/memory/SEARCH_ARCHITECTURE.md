@@ -65,3 +65,7 @@ The search functionality across the application (including Subpages, Settings, D
 - **[Reserved for Global Omni-Search (CMD+K)]**: Future commands for keyboard shortcuts, command palettes, and cross-application global search behavior.
 - **[Reserved for Deep Relationship Searching]**: Future standards for matching related data objects, nested options, and complex object arrays.
 - **[Reserved for Voice Search Command Integration]**: To be defined as the application scales.
+- **[Simple Input and Output Toolbar Logic]**:
+  - The format selection dropdown MUST be named "Simple Input and Output" (configured via tooltips/aria-labels).
+  - The active accept formats for file pickers/uploads and backing parse logic MUST dynamically adapt to the active choice of this dropdown.
+  - The "Export" button's label MUST remain static as "Export" or "Export Settings" (rather than changing to "JSON" or "CSV"), while its underlying download MIME/format logic runs dynamically dependent on the selector's value.

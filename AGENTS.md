@@ -15,7 +15,8 @@ These persistent instructions represent the user's specific rules, project conve
    - **Settings Headers Layout Directive**: The settings page header uses a stacked two-row layout on mobile devices (`flex flex-col sm:flex-row gap-4 items-stretch sm:items-center`), displaying the page title/icon on the first row, and the tab selection on the second row (stacked below). On desktop/tablet, they render on a single horizontal row.
    - **Mobile-Responsive Subpage Headers**: Always display the general settings page header (including title, icon, and the descriptive subheader text or information) on all platforms including mobile to ensure the user receives context. Place the tab selection navigation bar on the second row below the page header in mobile layout. Ensure the descriptive subheader text is styled with micro-responsive text sizes (such as `text-[10px] xs:text-[11px]`) and layout truncation (`truncate whitespace-nowrap`) to guarantee that it strictly resides on a single, clean row without wrapping or spilling onto multiple lines.
    - **Compact Same-Row Action Controls**: All subpage utility actions (Reset, Save, Load, Clear, etc., ranging from 1 to 6 buttons) must occupy a single, continuous, horizontal row without wrapping. On mobile or smaller screens, hide button text labels using `hidden lg:inline` classing (or similar), displaying only icons to ensure all actions fit clearly and perfectly on a single line. See `/public/memory/HEADER_SEARCH_UI.md` for complete compact spacing standards for search bars and button toolbars.
-   - **Responsive Security Badge Directive**: The `t("BHARAT BOOK") SECURE MODE` badge block should be hidden on mobile/tablet/medium screen sizes to preserve space (using `hidden lg:flex`). Only display it when ample visual space is available on desktop monitors (`lg` screens and up).
+   - **Header Selection Alignment Directive**: Subpage tab selections (usually 3 or 4 tabs) must layout and fit perfectly flush against the right-hand alignment. Avoid adding any extra empty space or margins on the right hand side of the selection container to ensure pristine alignments on both desktop and mobile layouts.
+   - **Permanent Security Badge Removal Directive**: The "BHARAT BOOK SECURE MODE" badge block is completely prohibited on all settings sub-pages and modal headers. Since it is not available in mobile responsive mode, it must be removed entirely from all layouts rather than just hidden. Never add or display this custom badge or container anywhere on settings pages.
 
 3. **Code Splitting & Architecture Method (CRITICAL)**
    - When splitting any large file or folder structure, you **MUST** default to using the **Feature-Based / Modular Architecture** by default.
@@ -67,6 +68,10 @@ You **MUST** strictly adhere to the exact background search, dynamic switching, 
 ## 🧠 Memory & Documentation Architecture (CRITICAL)
 
 - **Dedicated Memory Files**: Whenever asked to create a new, separate, and dedicated memory file (for architectural rules, specific features, search logic, splitting instructions, etc.), you **MUST** create it inside the `/public/memory/` directory. Do **NOT** create memory files in the project root.
+- **Routing Indices**:
+  - **Horizontal Search Header & Navigation Controls**: Guidelines are documented in `/public/memory/HEADER_SEARCH_UI.md`.
+  - **Comprehensive Live Filters & Tab Searching**: Architecture is located in `/public/memory/SEARCH_ARCHITECTURE.md`.
+  - **Collapsible Group Containers & Accordions**: Pattern design constraints from the "Firm" settings are located in `/public/memory/COLLAPSIBLE_SECTIONS.md`. Refer to this document before editing collapsible sections.
 
 ## 🧹 Project Cleanup Maintenance (CRITICAL)
 

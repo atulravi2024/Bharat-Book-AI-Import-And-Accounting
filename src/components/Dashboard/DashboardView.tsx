@@ -183,15 +183,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
         <div className="max-w-[1600px] mx-auto space-y-6 sm:space-y-8 pb-12">
           
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-            <div className="flex bg-white dark:bg-gray-800 rounded-2xl p-1 shadow-sm border border-premium-slate-100 dark:border-gray-700 overflow-x-auto custom-scrollbar h-fit snap-x w-full sm:w-auto">
-              <div className="snap-start"><TabButton id="overview" label={t("Overview")} icon={Layers} /></div>
-              <div className="snap-start"><TabButton id="sales" label={t("Sales")} icon={TrendingUp} /></div>
-              <div className="snap-start"><TabButton id="purchase" label={t("Purchase")} icon={Package} /></div>
-              <div className="snap-start"><TabButton id="payment" label={t("Payment")} icon={CreditCard} /></div>
-              <div className="snap-start"><TabButton id="receipts" label={t("Receipt")} icon={Receipt} /></div>
-              <div className="snap-start"><TabButton id="bank" label={t("Bank Report")} icon={ArrowDownRight} /></div>
-              <div className="snap-start"><TabButton id="journal" label={t("Journal")} icon={FileText} /></div>
-              <div className="snap-start"><TabButton id="contra" label={t("Contra")} icon={Repeat} /></div>
+            <div className="flex bg-white dark:bg-gray-800 rounded-2xl p-1 shadow-sm border border-premium-slate-100 dark:border-gray-700 overflow-x-auto custom-scrollbar h-fit w-full sm:w-auto">
+              <div><TabButton id="overview" label={t("Overview")} icon={Layers} /></div>
+              <div><TabButton id="sales" label={t("Sales")} icon={TrendingUp} /></div>
+              <div><TabButton id="purchase" label={t("Purchase")} icon={Package} /></div>
+              <div><TabButton id="payment" label={t("Payment")} icon={CreditCard} /></div>
+              <div><TabButton id="receipts" label={t("Receipt")} icon={Receipt} /></div>
+              <div><TabButton id="bank" label={t("Bank Report")} icon={ArrowDownRight} /></div>
+              <div><TabButton id="journal" label={t("Journal")} icon={FileText} /></div>
+              <div><TabButton id="contra" label={t("Contra")} icon={Repeat} /></div>
             </div>
           </div>
 

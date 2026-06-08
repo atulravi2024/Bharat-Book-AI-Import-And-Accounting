@@ -19,13 +19,13 @@ import { ItemReportView } from '../components/Reports/Items/ItemReportView';
 import { VoucherEntryView } from '../components/Operations/VoucherEntry/VoucherEntryView';
 import { InventoryEntryView } from '../components/Operations/InventoryEntry/InventoryEntryView';
 import { SettingsView } from '../components/Settings/SettingsView';
-import { HelpSettings } from '../components/Settings/HelpSettings';
-import { SupportSettings } from '../components/Settings/SupportSettings';
+import { HelpSettings } from "../components/Settings/SupportSystemSettings/HelpSettings";
+import { SupportSettings } from "../components/Settings/SupportSystemSettings/SupportSettings";
 import { GSTReportView } from '../components/Reports/GSTReport/GSTReportView';
 import { AppStep, ParsedVoucher, VoucherType, ParsingSettings, MainView, AuditLog, Confidence, ColorMaster, SizeMaster, DimensionMaster, BomMaster } from './types';
 import { parseVoucherFile } from '../services/aiService';
 import { InfoIcon, UndoIcon, ErrorIcon } from '../components/icons/IconComponents';
-import { ManagedUser, INITIAL_USERS } from '../components/Settings/UserSettings';
+import { ManagedUser, INITIAL_USERS } from "../components/Settings/OrganizationSettings/UserSettings";
 import { LoginScreen } from './LoginScreen';
 import { getEffectivePolicy, isWithinAllowedHours, getCurrentUser, getVouchersPostedTodayCount } from '../utils/security';
 

@@ -1,4 +1,4 @@
-import { ManagedUser, UserPermissions } from '../components/Settings/UserSettings';
+import { ManagedUser, UserPermissions } from "../components/Settings/OrganizationSettings/UserSettings";
 
 export interface EffectivePolicy {
   inactivityTimeoutMinutes: number;
