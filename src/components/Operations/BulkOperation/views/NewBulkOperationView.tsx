@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Sparkles, CheckCircle, RefreshCw } from 'lucide-react';
 import { useNotifications } from '../../../../context/NotificationContext';
-import newSampleData from '../../../../../public/sample-data/bulk-operation/newSample.json';
 
 interface NewBulkOperationViewProps {}
 
@@ -13,7 +12,10 @@ export const NewBulkOperationView: React.FC<NewBulkOperationViewProps> = () => {
     const [isProcessing, setIsProcessing] = useState(false);
 
     useEffect(() => {
-        setItems(newSampleData);
+        fetch('/sample-data/bulk-operation/newSample.json')
+            .then(res => res.json())
+            .then(data => setItems(data))
+            .catch(err => console.error(err));
     }, []);
 
     const handleToggleSelect = (id: string) => {

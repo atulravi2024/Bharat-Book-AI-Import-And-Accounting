@@ -59,11 +59,13 @@ export const BulkOperationView: React.FC<BulkOperationViewProps> = ({
     useEffect(() => {
         const activeButtonElement = tabsRef.current[activeTab];
         if (activeButtonElement && scrollContainerRef.current) {
-            activeButtonElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center'
-            });
+            // Horizontal scroll tracking without shifting the entire page
+            const container = scrollContainerRef.current;
+            const buttonRect = activeButtonElement.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            
+            const scrollLeft = activeButtonElement.offsetLeft - container.offsetWidth / 2 + activeButtonElement.offsetWidth / 2;
+            container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
         }
     }, [activeTab]);
 

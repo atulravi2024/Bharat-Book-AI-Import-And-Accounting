@@ -10,7 +10,6 @@ import {
     RefreshCw, 
     AlertCircle 
 } from 'lucide-react';
-import categorizationSampleData from '../../../../../public/sample-data/bulk-operation/categorizationSample.json';
 import { useNotifications } from '../../../../context/NotificationContext';
 
 interface SmartCategorizationViewProps {
@@ -39,7 +38,7 @@ export const SmartCategorizationView: React.FC<SmartCategorizationViewProps> = (
     const runCategorization = () => {
         setIsCategorizing(true);
         setSelectedIds([]);
-        setTimeout(() => {
+        setTimeout(async () => {
             const list: any[] = [];
             
             // Loop through itemMasters and check unassigned or missing details
@@ -83,7 +82,11 @@ export const SmartCategorizationView: React.FC<SmartCategorizationViewProps> = (
 
             // Ensure at least some items in sandbox view
             if (list.length === 0) {
-                list.push(...categorizationSampleData);
+                try {
+                    const res = await fetch('/sample-data/bulk-operation/categorizationSample.json');
+                    const data = await res.json();
+                    list.push(...data);
+                } catch(e) { console.error(e); }
             }
 
             setSuggestions(list);

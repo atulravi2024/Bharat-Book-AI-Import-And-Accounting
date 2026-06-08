@@ -11,7 +11,6 @@ import {
     Calculator 
 } from 'lucide-react';
 import { useNotifications } from '../../../../context/NotificationContext';
-import currencySampleData from '../../../../../public/sample-data/bulk-operation/currencySample.json';
 
 interface CurrencyRevaluationViewProps {
     allVouchers: ParsedVoucher[];
@@ -27,10 +26,13 @@ export const CurrencyRevaluationView: React.FC<CurrencyRevaluationViewProps> = (
     const [usdRate, setUsdRate] = useState<number>(83.5);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [isBooking, setIsBooking] = useState(false);
+    const [fxBalances, setFxBalances] = useState<any[]>([]);
 
-    // Mock FX outstanding balances
-    const fxBalances = useMemo(() => {
-        return currencySampleData;
+    React.useEffect(() => {
+        fetch('/sample-data/bulk-operation/currencySample.json')
+            .then(r => r.json())
+            .then(setFxBalances)
+            .catch(console.error);
     }, []);
 
     const handleToggleSelect = (id: string) => {

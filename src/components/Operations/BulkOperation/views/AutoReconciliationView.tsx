@@ -11,7 +11,6 @@ import {
     TrendingUp
 } from 'lucide-react';
 import { useNotifications } from '../../../../context/NotificationContext';
-import reconciliationSampleData from '../../../../../public/sample-data/bulk-operation/reconciliationSample.json';
 
 interface AutoReconciliationViewProps {
     allVouchers: ParsedVoucher[];
@@ -34,7 +33,7 @@ export const AutoReconciliationView: React.FC<AutoReconciliationViewProps> = ({
     const runMatchingEngine = () => {
         setIsMatching(true);
         setSelectedIds([]);
-        setTimeout(() => {
+        setTimeout(async () => {
             const matches: any[] = [];
             const processedInternalIds = new Set<string>();
 
@@ -80,7 +79,11 @@ export const AutoReconciliationView: React.FC<AutoReconciliationViewProps> = ({
 
             // If zero dataset matched in sandbox environment, output standard fuzzy list
             if (matches.length === 0) {
-                matches.push(...reconciliationSampleData);
+                try {
+                    const res = await fetch('/sample-data/bulk-operation/reconciliationSample.json');
+                    const data = await res.json();
+                    matches.push(...data);
+                } catch(e) { console.error(e); }
             }
 
             setMatchedGroups(matches);

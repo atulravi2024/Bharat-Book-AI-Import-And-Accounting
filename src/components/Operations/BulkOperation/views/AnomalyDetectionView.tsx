@@ -11,7 +11,6 @@ import {
     HelpCircle, 
     ArrowRight 
 } from 'lucide-react';
-import anomalySampleData from '../../../../../public/sample-data/bulk-operation/anomalySample.json';
 
 interface AnomalyDetectionViewProps {
     allVouchers: ParsedVoucher[];
@@ -33,7 +32,7 @@ export const AnomalyDetectionView: React.FC<AnomalyDetectionViewProps> = ({
     // AI Anomaly scanner
     const runAnomalyScan = () => {
         setIsScanning(true);
-        setTimeout(() => {
+        setTimeout(async () => {
             const detected: any[] = [];
             
             // Scan vouchers for mathematical/legal anomalies
@@ -113,10 +112,14 @@ export const AnomalyDetectionView: React.FC<AnomalyDetectionViewProps> = ({
 
             // Fallback anomalies to populate sandbox in case of zero source matches
             if (detected.length === 0) {
-                detected.push(...anomalySampleData.map((item: any) => ({
-                    ...item,
-                    resolve: (vList: ParsedVoucher[]) => vList
-                })));
+                try {
+                    const res = await fetch('/sample-data/bulk-operation/anomalySample.json');
+                    const data = await res.json();
+                    detected.push(...data.map((item: any) => ({
+                        ...item,
+                        resolve: (vList: ParsedVoucher[]) => vList
+                    })));
+                } catch(e) { console.error(e); }
             }
 
             setAnomalies(detected);

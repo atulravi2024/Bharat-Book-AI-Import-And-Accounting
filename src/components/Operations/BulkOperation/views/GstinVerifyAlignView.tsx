@@ -10,7 +10,6 @@ import {
     Users 
 } from 'lucide-react';
 import { useNotifications } from '../../../../context/NotificationContext';
-import gstinSampleData from '../../../../../public/sample-data/bulk-operation/gstinSample.json';
 
 interface GstinVerifyAlignViewProps {
     partyMasters: PartyMaster[];
@@ -30,7 +29,7 @@ export const GstinVerifyAlignView: React.FC<GstinVerifyAlignViewProps> = ({
     const runPortalVerification = () => {
         setIsVerifying(true);
         setSelectedIds([]);
-        setTimeout(() => {
+        setTimeout(async () => {
             const list: any[] = [];
             
             // Loop through parties and check GSTIN fields
@@ -57,7 +56,13 @@ export const GstinVerifyAlignView: React.FC<GstinVerifyAlignViewProps> = ({
 
             // Ensure sandbox entries in case no real party items align
             if (list.length === 0) {
-                list.push(...gstinSampleData);
+                try {
+                    const res = await fetch('/sample-data/bulk-operation/gstinSample.json');
+                    const data = await res.json();
+                    list.push(...data);
+                } catch(e) {
+                    console.error(e);
+                }
             }
 
             setVerifiedResults(list);

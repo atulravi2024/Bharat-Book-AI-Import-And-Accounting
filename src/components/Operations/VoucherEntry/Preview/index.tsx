@@ -68,7 +68,7 @@ export const VoucherPreview: React.FC<VoucherPreviewProps> = (props) => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-gray-900/60 backdrop-blur-md flex items-center justify-center p-0 md:p-6 animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-[100vw] lg:max-w-7xl h-[100dvh] md:h-[95dvh] md:rounded-3xl shadow-2xl overflow-hidden flex border border-white/20 relative dark:bg-gray-800">
+      <div className="bg-white w-full max-w-full lg:max-w-7xl h-[100dvh] md:h-[95dvh] md:rounded-3xl shadow-2xl overflow-hidden flex border border-white/20 relative dark:bg-gray-800">
         
         {/* Settings Panel */}
         <SettingsSidePanel 
