@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { 
     FileText, 
     Users, 
@@ -56,6 +56,10 @@ export const useAdminSettings = () => {
     // Feature Toggles
     const [featureGates, setFeatureGates] = useState<FeatureGates>(defaultFeatureGates);
     const [gatesSaved, setGatesSaved] = useState<boolean>(false);
+
+    // Search and Header States
+    const [searchTerm, setSearchTerm] = useState('');
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const calculateStorage = () => {
         let total = 0;
@@ -629,6 +633,9 @@ export const useAdminSettings = () => {
         benchmarkRunning,
         featureGates,
         gatesSaved,
+        searchTerm,
+        setSearchTerm,
+        fileInputRef,
         maxQuotaBytes,
         storagePercent,
         quotaIndicatorColor,

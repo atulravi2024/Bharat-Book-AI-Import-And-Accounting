@@ -108,8 +108,21 @@ export const useSettingsState = (defaultTab: string | null, onTabChange?: (tab: 
   const [bulkSandboxResults, setBulkSandboxResults] = useState<any[]>([]);
 
   const [aiSettings, setAiSettings] = useState({
-    provider: "internal", internalModel: "gemini-2.5-flash", chatModel: "gemini-2.5-flash", bankingModel: "gemini-2.5-flash",
-    voucherModel: "gemini-2.5-flash", externalProvider: "9router", apiKey: "", model: "llama-3-70b", baseUrl: "http://localhost:20128/v1",
+    provider: "internal", 
+    internalModel: "gemini-2.5-flash", 
+    chatModel: "gemini-2.5-flash", 
+    bankingModel: "gemini-2.5-flash",
+    auditModel: "gemini-2.5-flash",
+    voucherModel: "gemini-2.5-flash", 
+    externalProvider: "9router", 
+    apiKey: "", 
+    model: "llama-3-70b", 
+    baseUrl: "http://localhost:20128/v1",
+    systemProvider: "internal",
+    chatProvider: "internal",
+    bankingProvider: "internal",
+    auditProvider: "internal",
+    voucherProvider: "internal",
   });
 
   const [isSaved, setIsSaved] = useState(false);

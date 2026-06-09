@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from "../../../context/LanguageContext";
 import { useNotifications } from "../../../context/NotificationContext";
+import { callExternalAi } from '../../../services/geminiService';
 import { 
   Sparkles, Activity, FileText, Send, Clock, AlertTriangle, HardDrive, 
   Wifi, AlertCircle, RefreshCw, MessageSquare, Terminal, 
@@ -92,19 +93,52 @@ export const SupportSettings: React.FC<any> = ({ defaultTab, onTabChange, aiSett
     setIsAiTyping(true);
 
     try {
-      const response = await fetch('/api/gemini/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, model: aiSettings?.chatModel || 'gemini-2.5-flash' })
-      });
-      const data = await response.json();
+      const chatProvider = aiSettings?.chatProvider || aiSettings?.provider || 'internal';
+      let replyText = "";
+      
+      if (chatProvider === 'external' || chatProvider === 'local') {
+          const sysInstruction = `You are the Technical Analyst Chatbot for Bharat Book AI, an ERP and Voucher Management System. 
+Your primary goal is to provide problem-specific answers related to this software, its functionality, tools, vouchers, accounting, ledgers, or technical analysis.
+If the user asks a question completely unrelated to this system or software, politely decline and state you can only assist with Bharat Book AI.
+Exception: If the user asks about your identity, developer, manufacturer, creation date, or what AI model you are, you must answer this exception strictly by stating:
+- Developer: Developer Manufacturer: Kansya Digital Service
+- Creation Date: 2026
+- AI Model: Real Model which are currently using (Gemini 2.5 Flash)
+Do not provide additional fictional details about this.
+
+Please structure your response strictly into four clearly labeled sections, using clean markdown format (bold headers, bullet points, italics), avoiding excessive unstructured text:
+
+**1. Human-Readable Summary**
+[Explain the core problem or solution in a simple, non-technical, and easily understandable format.]
+
+**2. Feature Analysis**
+[Break down the specific modules, tools, vouchers, or features of Bharat Book AI that relate to the user's query.]
+
+**3. Technical Specifications**
+[Provide the technical details, step-by-step logic, system configurations, or data flow analysis related to the problem.]
+
+**4. Recommended Actions**
+[Provide a concise list of actionable steps or best practices for the user to resolve the issue or optimize their use of the system.]
+
+User asks: ${text}`;
+          
+          const chatModel = aiSettings?.chatModel || aiSettings?.model || 'gpt-4o';
+          replyText = await callExternalAi(sysInstruction, aiSettings, chatModel);
+      } else {
+          const response = await fetch('/api/gemini/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, model: aiSettings?.chatModel || 'gemini-2.5-flash' })
+          });
+          const data = await response.json();
+          replyText = data.reply || 'Sorry, an error occurred in the diagnostics server.';
+      }
       
       const aiMsg = {
         id: Date.now().toString() + 'ai',
         sender: 'ai',
-        text: data.reply || 'Sorry, an error occurred in the diagnostics server.',
+        text: replyText,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        diagnosticResults: data.diagnosticResults
       };
       setChatMessages((prev: any) => [...prev, aiMsg]);
     } catch (e) {
