@@ -24,6 +24,7 @@ import { HelpSettings } from "../SupportSystemSettings/HelpSettings";
 import { SupportSettings } from "../SupportSystemSettings/SupportSettings";
 import { AboutSettings } from "../SupportSystemSettings/AboutSettings";
 import { UISettings } from "../WorkspaceSettings/UISettings";
+import { WorkspaceExplorer } from "../WorkspaceSettings/WorkspaceExplorer";
 
 // Temporary import for remaining sections
 import { InfoIcon, LayoutIcon } from "../../icons/IconComponents";
@@ -76,6 +77,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               isSaved={state.isSaved}
             />
           )}
+
+          {state.activeTab === "workspace" && <WorkspaceExplorer />}
 
           {(state.activeTab === "ui" || state.activeTab?.startsWith("ui_")) && <UISettings defaultSubtab={state.activeTab} />}
 

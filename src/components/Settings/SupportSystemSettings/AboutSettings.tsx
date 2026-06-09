@@ -115,19 +115,19 @@ export const AboutSettings: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-4 animate-in fade-in duration-300">
       {/* Compact Header Row */}
-      <div className="flex flex-row justify-between items-center gap-4 bg-white dark:bg-gray-900 p-3.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm animate-in fade-in overflow-hidden">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-white dark:bg-gray-900 p-3.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm animate-in fade-in overflow-hidden">
         <div className="flex items-center gap-3 shrink-0">
           <div className="w-10 h-10 rounded-[0.6rem] bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-100/50 dark:border-blue-500/20">
             <InfoIcon className="!text-[20px] flex items-center justify-center text-blue-600 dark:text-blue-400" />
           </div>
           <div>
             <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight">{t("About the Applet")}</h2>
-            <p className="hidden sm:block text-[11px] text-gray-500 dark:text-gray-400 font-medium">{t("Application build details and documentation")}</p>
+            <p className="block text-[10px] xs:text-[11px] text-gray-500 dark:text-gray-400 font-medium truncate whitespace-nowrap">{t("Application build details and documentation")}</p>
           </div>
         </div>
 
-        <div className="min-w-0 flex-1 flex justify-end items-center gap-3">
-          <div className="flex items-center bg-gray-100/80 dark:bg-gray-800/80 p-1 rounded-xl gap-1 shadow-sm overflow-x-auto custom-scrollbar max-w-full border border-gray-200/40 dark:border-gray-700/40 shrink-0">
+        <div className="min-w-0 w-full sm:w-auto flex justify-start sm:justify-end items-center gap-3">
+          <div className="w-full sm:w-auto flex items-center bg-gray-100/80 dark:bg-gray-800/80 p-1 rounded-xl gap-1 shadow-sm overflow-x-auto custom-scrollbar border border-gray-200/40 dark:border-gray-700/40 shrink-0">
              {tabs.map(tab => {
                 const Icon = tab.icon;
                 return (

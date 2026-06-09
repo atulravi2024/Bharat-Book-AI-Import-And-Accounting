@@ -237,7 +237,7 @@ export const AppContent: React.FC = () => {
       {/* Background Syncing (Hidden from UI to prevent blocking and confusion about missing sample counts) */}
 
       <Layout
-        pageTitle={view === 'import' ? "Import" : view.charAt(0).toUpperCase() + view.slice(1)}
+        pageTitle={view === 'index' ? "Home" : view === 'import' ? "Import" : view.charAt(0).toUpperCase() + view.slice(1)}
         activeView={view}
         settingsActiveTab={settingsActiveTab}
         onViewChange={handleViewChange}

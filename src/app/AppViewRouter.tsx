@@ -10,6 +10,7 @@ import { MasterView } from '../components/Masters/MasterView';
 import { LedgerReportView } from '../components/Reports/BankVouchers/LedgerReportView';
 import { BankReportView } from '../components/Reports/BankVouchers/BankReportView';
 import { DashboardView } from '../components/Dashboard/DashboardView';
+import { IndexView } from '../components/Index';
 import { ReportsView } from '../components/Reports/FinancialReport/FinancialReportView';
 import { ItemReportView } from '../components/Reports/Items/ItemReportView';
 import { VoucherEntryView } from '../components/Operations/VoucherEntry/VoucherEntryView';
@@ -416,6 +417,18 @@ setEditingVoucher
           </p>
         </div>
       );
+    }
+
+    if (view === 'index') {
+        return (
+            <IndexView 
+              setView={setView}
+              allVouchers={allVouchers}
+              partyMasters={partyMasters}
+              ledgerMasters={ledgerMasters}
+              itemMasters={itemMasters}
+            />
+        );
     }
 
     if (view === 'dashboard') {

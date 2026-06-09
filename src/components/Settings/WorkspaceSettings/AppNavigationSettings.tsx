@@ -23,6 +23,7 @@ export const AppNavigationSettings: React.FC = () => {
   const [routingDefaults, setRoutingDefaults] = useState<
     Record<string, string>
   >({
+    index: "hub",
     dashboard: "overview",
     import: "upload",
     "bulk-operation": "pricing",
@@ -184,6 +185,7 @@ export const AppNavigationSettings: React.FC = () => {
   };
 
     const pages = [
+      { id: "index", label: t("Welcome Hub"), icon: "🏠" },
       { id: "dashboard", label: t("Dashboard"), icon: "📊" },
       { id: "voucher-entry", label: t("Transactions"), icon: "➕" },
       { id: "inventory-entry", label: t("Inventory Trans."), icon: "📦" },
@@ -198,9 +200,17 @@ export const AppNavigationSettings: React.FC = () => {
       { id: "item-report", label: t("Item Report"), icon: "📉" },
       { id: "reports", label: t("Financial Report"), icon: "📑" },
       { id: "settings", label: t("Settings"), icon: "⚙️" },
+      { id: "help", label: t("Help"), icon: "❓" },
+      { id: "support", label: t("Support"), icon: "🎧" },
     ];
 
   const subPages: Record<string, { id: string; label: string }[]> = {
+    index: [
+      { id: "hub", label: t("Navigation Hub") },
+      { id: "info", label: t("System Info") },
+      { id: "telemetry", label: t("Telemetry & Logs") },
+      { id: "security", label: t("Security & Access") },
+    ],
     help: [
       { id: "main", label: t("Help Hub") },
     ],
@@ -397,6 +407,13 @@ export const AppNavigationSettings: React.FC = () => {
   };
 
   const subSubPages: Record<string, { id: string; label: string }[]> = {
+    // 0. Index / Hub Subpages
+    hub: [
+      { id: "modules", label: t("Main Pages") },
+      { id: "drafts", label: t("Subpages") },
+      { id: "archives", label: t("Active Tabs") },
+    ],
+
     // 1. Dashboard Subpages
     overview: [
       { id: "metrics", label: t("Key Performance Indicators") },
@@ -1094,6 +1111,7 @@ export const AppNavigationSettings: React.FC = () => {
       page: "dashboard",
       subPage: "main",
       routing: {
+        index: "hub",
         dashboard: "main",
         import: "upload",
         "bulk-operation": "pricing",

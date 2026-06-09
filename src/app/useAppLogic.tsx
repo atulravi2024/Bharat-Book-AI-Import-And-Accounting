@@ -47,7 +47,7 @@ export const useAppLogic = () => {
         if (page) return page as MainView;
       } catch (e) {}
     }
-    return 'dashboard';
+    return 'index';
   });
   const [originView, setOriginView] = useState<MainView | null>(null);
   const getSubPageForView = (viewName: string) => {
@@ -89,7 +89,7 @@ export const useAppLogic = () => {
           return page;
         } catch (e) {}
       }
-      return 'dashboard';
+      return 'index';
     })();
     return currentView === 'ledger-master' ? getSubPageForView('ledger-master') : getSubPageForView('item-master');
   });

@@ -3,6 +3,7 @@ import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import {
   DashboardIcon,
+  HomeIcon,
   MastersIcon,
   VouchersIcon,
   ReportsIcon,
@@ -124,6 +125,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, setIsSidebarOpe
             </button>
         </div>
         <nav className="flex-1 p-4 overflow-y-auto overflow-x-hidden custom-scrollbar">
+            <NavItem 
+                icon={<HomeIcon className="text-xl" />} 
+                label={t('Home')} 
+                active={activeView === 'index'} 
+                isCollapsed={!isSidebarOpen} 
+                onClick={() => onViewChange('index')}
+            />
+
             <NavItem 
                 icon={<DashboardIcon className="text-xl" />} 
                 label={t('Dashboard')} 

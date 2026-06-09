@@ -138,7 +138,7 @@ export interface ParsingSettings {
   customCategoryName?: string;
 }
 
-export type MainView = 'dashboard' | 'ledger-master' | 'item-master' | 'vouchers' | 'bank' | 'import' | 'reports' | 'gst-report' | 'tax-report' | 'settings' | 'item-report' | 'bulk-operation' | 'voucher-entry' | 'inventory-entry' | 'help' | 'support';
+export type MainView = 'index' | 'dashboard' | 'ledger-master' | 'item-master' | 'vouchers' | 'bank' | 'import' | 'reports' | 'gst-report' | 'tax-report' | 'settings' | 'item-report' | 'bulk-operation' | 'voucher-entry' | 'inventory-entry' | 'help' | 'support';
 
 export interface PartyMaster {
   id: string;

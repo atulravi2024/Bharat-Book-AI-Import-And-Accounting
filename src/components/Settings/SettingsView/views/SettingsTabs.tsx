@@ -19,6 +19,7 @@ export const SettingsTabs = ({ activeTab, handleTabChange, t }: { activeTab: str
   };
 
   const tabs = [
+    { id: "workspace", icon: SettingsIcon, label: "Workspace Explorer" },
     { id: "firm", icon: AdminIcon, label: "Firm" },
     { id: "general", icon: SettingsIcon, label: "General" },
     { id: "ui", icon: LayoutIcon, label: "UI" },

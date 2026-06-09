@@ -6,6 +6,7 @@ const Icon: React.FC<{ name: string; className?: string }> = ({ name, className 
 );
 
 export const DashboardIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="dashboard" className={className} />;
+export const HomeIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="home" className={className} />;
 export const MastersIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="group" className={className} />;
 export const VouchersIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="receipt_long" className={className} />;
 export const ReportsIcon: React.FC<{ className?: string }> = ({ className }) => <Icon name="assessment" className={className} />;

@@ -1,4 +1,5 @@
 export const navigation = {
+  "Home": "मुख्य पृष्ठ",
   "Search transactions...": "लेन-देन खोजें...",
   "Transactions": "लेन-देन",
   "Seed 10 Transactions": "10 लेनदेन दर्ज करें",

@@ -1,4 +1,5 @@
 export const navigation = {
+  "Home": "Home",
   "Search transactions...": "Search transactions...",
   "Transactions": "Transactions",
   "Seed 10 Transactions": "Seed 10 Transactions",
