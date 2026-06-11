@@ -51,14 +51,53 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
       return;
     }
 
-    const lowerQuery = query.toLowerCase();
+    const words = query.toLowerCase().trim().split(/\s+/);
+    const positiveTerms: string[] = [];
+    const negativeTerms: string[] = [];
+
+    for (const word of words) {
+      if (word.startsWith('!') && word.length > 1) {
+        negativeTerms.push(word.substring(1));
+      } else if (word.startsWith('-') && word.length > 1) {
+        negativeTerms.push(word.substring(1));
+      } else if (word.trim()) {
+        positiveTerms.push(word);
+      }
+    }
+
     const results = GLOBAL_SEARCH_DATA.filter((item) => {
       const matchesFilter = activeFilters.includes(item.type);
-      const matchesQuery = !query.trim() || 
-                           item.title.toLowerCase().includes(lowerQuery) || 
-                           (item.keywords && item.keywords.some(k => k.toLowerCase().includes(lowerQuery)));
-                           
-      return matchesFilter && matchesQuery;
+      if (!matchesFilter) return false;
+
+      if (!query.trim()) return true;
+
+      const fieldsToCheck = [
+        item.title,
+        t(item.title),
+        item.type,
+        t(item.type),
+        item.subPage || '',
+        item.subPage ? t(item.subPage.replace(/_/g, ' ')) : '',
+        item.subSubPage || '',
+        item.subSubPage ? t(item.subSubPage.replace(/_/g, ' ')) : '',
+        ...(item.keywords || [])
+      ].map(field => field.toLowerCase());
+
+      if (negativeTerms.length > 0) {
+        const hasNegativeMatch = negativeTerms.some(neg =>
+          fieldsToCheck.some(field => field.includes(neg))
+        );
+        if (hasNegativeMatch) return false;
+      }
+
+      if (positiveTerms.length > 0) {
+        const hasAllPositiveMatches = positiveTerms.every(pos =>
+          fieldsToCheck.some(field => field.includes(pos))
+        );
+        if (!hasAllPositiveMatches) return false;
+      }
+
+      return true;
     });
 
     setFilteredResults(results);
@@ -68,14 +107,14 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
   const handleSelect = (item: SearchItem) => {
     if (onViewChange) {
       // Setup the routing state locally to push into local storage first
-      const navData = {
+      const navOverride: any = {
         page: item.view,
-        subPage: item.subPage,
-        routing: {
-          [item.view]: item.subPage
-        }
+        subPage: item.subPage
       };
-      localStorage.setItem('bharat_book_navigation_defaults', JSON.stringify(navData));
+      if (item.subSubPage) {
+        navOverride.subSubPage = item.subSubPage;
+      }
+      localStorage.setItem('bharat_book_nav_override', JSON.stringify(navOverride));
       onViewChange(item.view);
     }
     

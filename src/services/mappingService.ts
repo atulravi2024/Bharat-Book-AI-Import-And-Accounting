@@ -4,15 +4,19 @@ export let initialMappingRules: any[] = [];
 // Helper to load default mapping rules
 export const loadDefaultMappingRules = async () => {
     try {
-        const response = await fetch('/sample-data/ledger-master/default_mapping_rules.json');
+        const response = await fetch('/sample-data/ledger-master/default_mapping_rules.json').catch(err => {
+            console.warn("Telemetry warning: default mapping rules fetch failed during loadDefaultMappingRules", err);
+            return { ok: false } as Response;
+        });
         if (response.ok) {
             initialMappingRules = await response.json();
             return initialMappingRules;
         }
     } catch (e) {
-        console.error("Failed to load default mapping rules", e);
+        console.warn("Failed to load default mapping rules under catch handler", e);
     }
-    return [];
+    initialMappingRules = [];
+    return initialMappingRules;
 };
 
 export const runMappingSimulation = (input: string, options: any) => {

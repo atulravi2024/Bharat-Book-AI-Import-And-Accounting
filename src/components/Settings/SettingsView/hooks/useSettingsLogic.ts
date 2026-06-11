@@ -125,8 +125,14 @@ export const useSettingsLogic = (state: any, onAppModeChange?: (mode: string) =>
         const loadDefaultNoiseLists = async () => {
             try {
                 const [bankRefResp, mappingResp] = await Promise.all([
-                    fetch('/sample-data/ledger-master/bank_reference.json'),
-                    fetch('/sample-data/ledger-master/default_mapping_rules.json')
+                    fetch('/sample-data/ledger-master/bank_reference.json').catch(err => {
+                        console.warn("Telemetry warning: default bank reference fetch failed, using memory fallback", err);
+                        return { ok: false } as Response;
+                    }),
+                    fetch('/sample-data/ledger-master/default_mapping_rules.json').catch(err => {
+                        console.warn("Telemetry warning: default mapping rules fetch failed, using empty list", err);
+                        return { ok: false } as Response;
+                    })
                 ]);
                 
                 if (bankRefResp.ok) {
@@ -136,14 +142,22 @@ export const useSettingsLogic = (state: any, onAppModeChange?: (mode: string) =>
                     setPaymentModes(data.paymentModes?.join(", ") || "");
                     setPaymentChannels(data.paymentChannels?.join(", ") || "");
                     setIfscPrefixes(data.ifscPrefixes?.join(", ") || "");
+                } else {
+                    setBankShortCodes("HDFC, ICICI, SBI, AXIS, KOTAK, YES");
+                    setBankIgnoreWords("TRF, REF, VCH, TXN, CHQ, BANK");
+                    setPaymentModes("UPI, IMPS, NEFT, RTGS, ACH, INB");
+                    setPaymentChannels("MOBILE, DESKTOP, APP, WEB");
+                    setIfscPrefixes("");
                 }
                 
                 if (mappingResp.ok) {
                     const rules = await mappingResp.json();
                     setMappingRules(rules);
+                } else {
+                    setMappingRules([]);
                 }
             } catch (e) {
-                console.error("Failed to load default noise lists", e);
+                console.warn("Failed to load default noise lists gracefully", e);
             }
         };
         loadDefaultNoiseLists();

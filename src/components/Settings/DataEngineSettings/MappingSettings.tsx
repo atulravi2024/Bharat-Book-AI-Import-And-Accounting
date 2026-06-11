@@ -106,6 +106,27 @@ export const MappingSettings: React.FC<MappingSettingsProps> = ({
     const [searchQuery, setSearchQuery] = React.useState('');
     const [isSearchFocused, setIsSearchFocused] = React.useState(false);
     const [activeTab, setActiveTab] = React.useState<'basic' | 'list' | 'pattern' | 'mappingList' | 'sandbox'>('basic');
+
+    React.useEffect(() => {
+        const checkOverride = () => {
+            const override = localStorage.getItem('bharat_book_mapping_subtab_override');
+            if (override) {
+                let targetTab: any = null;
+                if (override === 'column_align') targetTab = 'basic';
+                else if (override === 'master_link') targetTab = 'list';
+                else if (['basic', 'list', 'pattern', 'mappingList', 'sandbox'].includes(override)) {
+                    targetTab = override;
+                }
+                if (targetTab) {
+                    setActiveTab(targetTab);
+                }
+                localStorage.removeItem('bharat_book_mapping_subtab_override');
+            }
+        };
+        checkOverride();
+        window.addEventListener('bharat_book_mapping_subtab_trigger', checkOverride);
+        return () => window.removeEventListener('bharat_book_mapping_subtab_trigger', checkOverride);
+    }, []);
     const [successMsg, setSuccessMsg] = React.useState('');
     const [errorMsg, setErrorMsg] = React.useState('');
     const [isSaved, setIsSaved] = React.useState(false);
@@ -122,58 +143,86 @@ export const MappingSettings: React.FC<MappingSettingsProps> = ({
 
     const isSectionMatching = (secId: string, query: string) => {
         if (!query) return false;
-        const q = query.toLowerCase().trim();
+        
+        const words = query.toLowerCase().trim().split(/\s+/);
+        const positiveTerms: string[] = [];
+        const negativeTerms: string[] = [];
+
+        for (const word of words) {
+            if (word.startsWith('!') && word.length > 1) {
+                negativeTerms.push(word.substring(1));
+            } else if (word.startsWith('-') && word.length > 1) {
+                negativeTerms.push(word.substring(1));
+            } else if (word.trim()) {
+                positiveTerms.push(word);
+            }
+        }
+
+        let targets: string[] = [];
         if (secId === 'basic') {
-            return [
-                'basic', 'default', 'rule', 'rules', 'contra', 'detection', 'auto', 'mobile', 'transfer', 'gstin', 'pan', 'tan', 'master', 'action', 'priority', 'processing'
-            ].some(k => k.includes(q)) || 
-            t("Basic Rules").toLowerCase().includes(q) ||
-            t("Auto Contra Detection").toLowerCase().includes(q) ||
-            t("Identify Mobile Transfer").toLowerCase().includes(q) ||
-            t("Auto Detect GSTIN").toLowerCase().includes(q) ||
-            t("Auto Detect PAN TAN").toLowerCase().includes(q) ||
-            missingMasterAction.toLowerCase().includes(q) ||
-            processingPriority.toLowerCase().includes(q);
+            targets = [
+                'basic', 'default', 'rule', 'rules', 'contra', 'detection', 'auto', 'mobile', 'transfer', 'gstin', 'pan', 'tan', 'master', 'action', 'priority', 'processing',
+                t("Basic Rules"),
+                t("Auto Contra Detection"),
+                t("Identify Mobile Transfer"),
+                t("Auto Detect GSTIN"),
+                t("Auto Detect PAN TAN"),
+                missingMasterAction,
+                processingPriority
+            ];
+        } else if (secId === 'list') {
+            targets = [
+                'list', 'lists', 'exclusion', 'exclusions', 'short', 'code', 'codes', 'ignore', 'payment', 'mode', 'modes', 'channel', 'channels', 'ifsc', 'prefix', 'prefixes', 'bank',
+                t("List Exclusions"),
+                bankShortCodes,
+                bankIgnoreWords,
+                paymentModes,
+                paymentChannels,
+                ifscPrefixes
+            ];
+        } else if (secId === 'pattern') {
+            targets = [
+                'pattern', 'extraction', 'advanced', 'parse', 'parsing', 'delimiter', 'source', 'column', 'party', 'utr', 'account', 'alias', 'aliases', 'regexp', 'regex',
+                t("Advanced Parsing & Extraction"),
+                sourceColumn,
+                splitDelimiter,
+                ignoreExtractionKeywords,
+                partyNameLocation,
+                utrExtractorType,
+                accountNumberDetection
+            ];
+        } else if (secId === 'mappingList') {
+            targets = [
+                'mapping', 'mappings', 'custom', 'charge', 'charges', 'cash', 'flow', 'self', 'transfer', 'keyword', 'keywords',
+                t("Custom Settings List"),
+                bankChargesKeywords,
+                cashFlowKeywords,
+                selfTransferKeywords
+            ];
+        } else if (secId === 'sandbox') {
+            targets = [
+                'sandbox', 'simulator', 'bulk', 'test', 'run', 'preview', 'trial',
+                t("Simulator Sandbox")
+            ];
         }
-        if (secId === 'list') {
-            return [
-                'list', 'lists', 'exclusion', 'exclusions', 'short', 'code', 'codes', 'ignore', 'payment', 'mode', 'modes', 'channel', 'channels', 'ifsc', 'prefix', 'prefixes', 'bank'
-            ].some(k => k.includes(q)) ||
-            t("List Exclusions").toLowerCase().includes(q) ||
-            bankShortCodes.toLowerCase().includes(q) ||
-            bankIgnoreWords.toLowerCase().includes(q) ||
-            paymentModes.toLowerCase().includes(q) ||
-            paymentChannels.toLowerCase().includes(q) ||
-            ifscPrefixes.toLowerCase().includes(q);
+
+        const lowerTargets = targets.map(t => (t || '').toLowerCase());
+
+        if (negativeTerms.length > 0) {
+            const hasNegativeMatch = negativeTerms.some(neg =>
+                lowerTargets.some(target => target.includes(neg))
+            );
+            if (hasNegativeMatch) return false;
         }
-        if (secId === 'pattern') {
-            return [
-                'pattern', 'extraction', 'advanced', 'parse', 'parsing', 'delimiter', 'source', 'column', 'party', 'utr', 'account', 'alias', 'aliases', 'regexp', 'regex'
-            ].some(k => k.includes(q)) ||
-            t("Advanced Parsing & Extraction").toLowerCase().includes(q) ||
-            sourceColumn.toLowerCase().includes(q) ||
-            splitDelimiter.toLowerCase().includes(q) ||
-            ignoreExtractionKeywords.toLowerCase().includes(q) ||
-            partyNameLocation.toLowerCase().includes(q) ||
-            utrExtractorType.toLowerCase().includes(q) ||
-            accountNumberDetection.toLowerCase().includes(q);
+
+        if (positiveTerms.length > 0) {
+            const hasAllPositive = positiveTerms.every(pos =>
+                lowerTargets.some(target => target.includes(pos))
+            );
+            if (!hasAllPositive) return false;
         }
-        if (secId === 'mappingList') {
-            return [
-                'mapping', 'mappings', 'custom', 'charge', 'charges', 'cash', 'flow', 'self', 'transfer', 'keyword', 'keywords'
-            ].some(k => k.includes(q)) ||
-            t("Custom Settings List").toLowerCase().includes(q) ||
-            bankChargesKeywords.toLowerCase().includes(q) ||
-            cashFlowKeywords.toLowerCase().includes(q) ||
-            selfTransferKeywords.toLowerCase().includes(q);
-        }
-        if (secId === 'sandbox') {
-            return [
-                'sandbox', 'simulator', 'bulk', 'test', 'run', 'preview', 'trial'
-            ].some(k => k.includes(q)) ||
-            t("Simulator Sandbox").toLowerCase().includes(q);
-        }
-        return false;
+
+        return true;
     };
 
     const basicBadgeCount = searchQuery ? (isSectionMatching('basic', searchQuery) ? 1 : 0) : 0;

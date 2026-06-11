@@ -10,7 +10,7 @@ import { MasterView } from '../components/Masters/MasterView';
 import { LedgerReportView } from '../components/Reports/BankVouchers/LedgerReportView';
 import { BankReportView } from '../components/Reports/BankVouchers/BankReportView';
 import { DashboardView } from '../components/Dashboard/DashboardView';
-import { IndexView } from '../components/Index';
+import { HomeView } from '../components/Home';
 import { ReportsView } from '../components/Reports/FinancialReport/FinancialReportView';
 import { ItemReportView } from '../components/Reports/Items/ItemReportView';
 import { VoucherEntryView } from '../components/Operations/VoucherEntry/VoucherEntryView';
@@ -45,7 +45,7 @@ export const AppViewRouter: React.FC<{ appState: ReturnType<typeof useAppLogic> 
     weightMasters, setWeightMasters, volumeMasters, setVolumeMasters, colorMasters, setColorMasters, sizeMasters, setSizeMasters,
     variantMasters, setVariantMasters, dimensionMasters, setDimensionMasters, locationMasters, setLocationMasters, bomMasters, setBomMasters,
     stockGroupMasters, setStockGroupMasters, costCenterMasters, setCostCenterMasters, accountGroupMasters, setAccountGroupMasters,
-    customMasters, setCustomMasters, resetFlow, handleBulkDeleteVouchers, handleSubmit, setOriginView, handleAppModeChange,
+    customMasters, setCustomMasters, resetFlow, handleBulkDeleteVouchers, handleSubmit, setOriginView, handleAppModeChange, handleViewChange,
   setUploadSubStep,
 setCorrectionSubStep,
 language,
@@ -421,8 +421,8 @@ setEditingVoucher
 
     if (view === 'index') {
         return (
-            <IndexView 
-              setView={setView}
+            <HomeView 
+              setView={handleViewChange || setView}
               allVouchers={allVouchers}
               partyMasters={partyMasters}
               ledgerMasters={ledgerMasters}
@@ -563,7 +563,8 @@ setEditingVoucher
     if (view === 'voucher-entry') {
         return (
             <VoucherEntryView 
-              defaultType={voucherEntryActiveTab || 'all'}
+              defaultType={voucherEntryActiveTab || 'sales'}
+              onTabChange={setVoucherEntryActiveTab}
               initialVoucher={editingVoucher}
               itemMasters={itemMasters}
               ledgerMasters={ledgerMasters}
@@ -598,6 +599,8 @@ setEditingVoucher
         return (
             <InventoryEntryView 
                 vouchers={allVouchers} 
+                defaultType={inventoryEntryActiveTab}
+                onTabChange={setInventoryEntryActiveTab}
             />
         );
     }

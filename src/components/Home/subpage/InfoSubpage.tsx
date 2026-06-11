@@ -15,7 +15,7 @@ import {
 import { ParsedVoucher } from '../../../app/types';
 import { getCurrentUser } from '../../../utils/security';
 
-interface SystemInfoSubpageProps {
+interface InfoSubpageProps {
   allVouchers: ParsedVoucher[];
   partyMasters: any[];
   ledgerMasters: any[];
@@ -23,7 +23,7 @@ interface SystemInfoSubpageProps {
   searchTerm?: string;
 }
 
-export const SystemInfoSubpage: React.FC<SystemInfoSubpageProps> = ({
+export const InfoSubpage: React.FC<InfoSubpageProps> = ({
   allVouchers = [],
   partyMasters = [],
   ledgerMasters = [],

@@ -199,6 +199,31 @@ export const WorkspaceExplorer: React.FC = () => {
   const [activeLevelOneId, setActiveLevelOneId] = useState<string>("general");
   const [activeLevelTwoId, setActiveLevelTwoId] = useState<string>("general_pref");
 
+  useEffect(() => {
+    const checkOverride = () => {
+      const override = localStorage.getItem('bharat_book_workspace_subtab_override');
+      if (override) {
+        if (["general", "ui", "firm"].includes(override)) {
+          setActiveLevelOneId(override);
+        } else {
+          // If it matches a subpage id, let's find which LevelOne has it
+          for (const l1 of levels) {
+            const found = l1.subpages.find(s => s.id === override);
+            if (found) {
+              setActiveLevelOneId(l1.id);
+              setActiveLevelTwoId(override);
+              break;
+            }
+          }
+        }
+        localStorage.removeItem('bharat_book_workspace_subtab_override');
+      }
+    };
+    checkOverride();
+    window.addEventListener('bharat_book_workspace_subtab_trigger', checkOverride);
+    return () => window.removeEventListener('bharat_book_workspace_subtab_trigger', checkOverride);
+  }, [levels]);
+
   const activeLevelOne = levels.find(l => l.id === activeLevelOneId) || levels[0];
   const activeLevelTwo = activeLevelOne?.subpages.find(s => s.id === activeLevelTwoId) || activeLevelOne?.subpages[0];
 

@@ -57,20 +57,16 @@ export const useAppLogic = () => {
         const savedNav = JSON.parse(saved);
         const { page, subPage, subSubPage, routing } = savedNav;
         if (page === viewName && subPage) {
-          if (viewName === 'settings' && subPage === 'ui' && subSubPage) {
-            return `ui_${subSubPage}`;
-          }
-          if (viewName === 'settings' && subPage === 'users' && subSubPage) {
-            localStorage.setItem('bharat_book_users_subtab_override', subSubPage);
-          }
-          if (viewName === 'settings' && subPage === 'support' && subSubPage) {
-            localStorage.setItem('bharat_book_support_subtab_override', subSubPage);
-          }
-          if (viewName === 'settings' && subPage === 'about' && subSubPage) {
-            localStorage.setItem('bharat_book_about_subtab_override', subSubPage);
-          }
-          if (viewName === 'settings' && subPage === 'vouchernumbering' && subSubPage) {
-            localStorage.setItem('bharat_book_vouchernumbering_subtab_override', subSubPage);
+          if (viewName === 'settings') {
+            if (subPage === 'ui' && subSubPage) {
+              return `ui_${subSubPage}`;
+            }
+            if (subSubPage) {
+              localStorage.setItem(`bharat_book_${subPage}_subtab_override`, subSubPage);
+              setTimeout(() => {
+                window.dispatchEvent(new Event(`bharat_book_${subPage}_subtab_trigger`));
+              }, 50);
+            }
           }
           return subPage;
         }
@@ -546,28 +542,37 @@ export const useAppLogic = () => {
 
     if (newView === 'settings' && settingsTab) {
       setSettingsActiveTab(settingsTab);
-      if (settingsTab === 'users' && usersSubTab) {
-        localStorage.setItem('bharat_book_users_subtab_override', usersSubTab);
+      if (usersSubTab) {
+        localStorage.setItem(`bharat_book_${settingsTab}_subtab_override`, usersSubTab);
         setTimeout(() => {
-           window.dispatchEvent(new Event('bharat_book_users_subtab_trigger'));
-        }, 50);
-      } else if (settingsTab === 'support' && usersSubTab) {
-        localStorage.setItem('bharat_book_support_subtab_override', usersSubTab);
-        setTimeout(() => {
-           window.dispatchEvent(new Event('bharat_book_support_subtab_trigger'));
+           window.dispatchEvent(new Event(`bharat_book_${settingsTab}_subtab_trigger`));
         }, 50);
       }
     } else if (newView === 'support' && settingsTab) {
       setSupportActiveTab(settingsTab);
     } else {
+      // Check for temporary one-time routing override
+      let overrideObj: any = null;
+      try {
+         const tempNav = localStorage.getItem('bharat_book_nav_override');
+         if (tempNav) {
+             overrideObj = JSON.parse(tempNav);
+             localStorage.removeItem('bharat_book_nav_override');
+         }
+      } catch (e) {}
+
       // Apply routing defaults if configured
-      const savedNav = localStorage.getItem('bharat_book_navigation_defaults');
-      if (savedNav) {
+      const savedNavStr = localStorage.getItem('bharat_book_navigation_defaults');
+      const savedNav = savedNavStr ? JSON.parse(savedNavStr) : null;
+      
+      if (overrideObj?.page === newView || savedNav) {
         try {
-          const { routing } = JSON.parse(savedNav);
-          if (routing && routing[newView]) {
-            const subPage = routing[newView];
-            
+          const subPage = overrideObj?.page === newView ? overrideObj.subPage : (savedNav ? savedNav.routing?.[newView] : undefined);
+          const subSubPage = overrideObj?.page === newView 
+                             ? overrideObj.subSubPage 
+                             : (savedNav && savedNav.page === newView && savedNav.subPage === subPage ? savedNav.subSubPage : undefined);
+          
+          if (subPage) {
             if (newView === 'reports') setReportActiveTab(subPage);
             else if (newView === 'bank') setBankActiveTab(subPage);
             else if (newView === 'ledger-master' || newView === 'item-master') setActiveMasterTab(subPage);
@@ -576,10 +581,37 @@ export const useAppLogic = () => {
             else if (newView === 'gst-report') setGstActiveTab(subPage);
             else if (newView === 'tax-report') setTaxReportActiveTab(subPage);
             else if (newView === 'item-report') setItemReportActiveTab(subPage);
+            else if (newView === 'bulk-operation') setBulkOperationActiveTab(subPage);
             else if (newView === 'voucher-entry') setVoucherEntryActiveTab(subPage);
             else if (newView === 'inventory-entry') setInventoryEntryActiveTab(subPage);
-            else if (newView === 'settings') setSettingsActiveTab(subPage);
+            else if (newView === 'settings') {
+                if (subPage === 'ui') {
+                   setSettingsActiveTab('ui');
+                   if (subSubPage) localStorage.setItem('bharat_book_ui_subtab_override', subSubPage); // if ui needs it
+                } else {
+                   setSettingsActiveTab(subPage);
+                   if (subSubPage) {
+                        localStorage.setItem(`bharat_book_${subPage}_subtab_override`, subSubPage);
+                        setTimeout(() => window.dispatchEvent(new Event(`bharat_book_${subPage}_subtab_trigger`)), 50);
+                   }
+                }
+            }
             else if (newView === 'support') setSupportActiveTab(subPage);
+            else if (newView === 'index') {
+                if (subPage) {
+                    localStorage.setItem('bharat_book_index_subpage_override', subPage);
+                    setTimeout(() => window.dispatchEvent(new Event('bharat_book_index_subpage_trigger')), 50);
+                }
+                if (subSubPage) {
+                    localStorage.setItem('bharat_book_index_subsubpage_override', subSubPage);
+                    setTimeout(() => window.dispatchEvent(new Event('bharat_book_index_subsubpage_trigger')), 50);
+                }
+            }
+            else if (newView === 'import') {
+                setStep(subPage as any);
+                if (subPage === 'upload' && subSubPage) setUploadSubStep(subSubPage as any);
+                if (subPage === 'correction' && subSubPage) setCorrectionSubStep(subSubPage as any);
+            }
           }
         } catch (e) {
           console.error("Error applying routing defaults", e);

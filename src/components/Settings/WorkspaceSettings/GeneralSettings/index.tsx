@@ -61,7 +61,22 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
     handleSave, handleLoad, handleDeleteAll, handleReset, handleClear, isSaved
 }) => {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<"appearance" | "regional" | "system">("appearance");
+  const [activeTab, setActiveTab ] = useState<"appearance" | "regional" | "system">("appearance");
+
+  React.useEffect(() => {
+    const checkOverride = () => {
+      const override = localStorage.getItem('bharat_book_general_subtab_override');
+      if (override) {
+        if (override === "company" || override === "appearance") setActiveTab("appearance");
+        else if (override === "preferences" || override === "regional") setActiveTab("regional");
+        else if (override === "defaults" || override === "system") setActiveTab("system");
+        localStorage.removeItem('bharat_book_general_subtab_override');
+      }
+    };
+    checkOverride();
+    window.addEventListener('bharat_book_general_subtab_trigger', checkOverride);
+    return () => window.removeEventListener('bharat_book_general_subtab_trigger', checkOverride);
+  }, []);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [targetFormat, setTargetFormat] = useState<"json" | "csv">("json");
@@ -192,13 +207,42 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({
 
   const isFieldVisible = (labelKey: string, extraTerms: string[] = []) => {
     if (!searchQuery.trim()) return true;
-    const query = searchQuery.toLowerCase().trim();
-    const labelText = t(labelKey).toLowerCase();
-    if (labelText.includes(query)) return true;
-    return extraTerms.some(term => {
-      const termTranslated = t(term).toLowerCase();
-      return term.toLowerCase().includes(query) || termTranslated.includes(query);
-    });
+    
+    const words = searchQuery.toLowerCase().trim().split(/\s+/);
+    const positiveTerms: string[] = [];
+    const negativeTerms: string[] = [];
+
+    for (const word of words) {
+      if (word.startsWith('!') && word.length > 1) {
+        negativeTerms.push(word.substring(1));
+      } else if (word.startsWith('-') && word.length > 1) {
+        negativeTerms.push(word.substring(1));
+      } else if (word.trim()) {
+        positiveTerms.push(word);
+      }
+    }
+
+    const allTermsToCheck = [
+      labelKey,
+      t(labelKey),
+      ...(extraTerms || [])
+    ].map(term => term.toLowerCase());
+
+    if (negativeTerms.length > 0) {
+      const hasNegativeMatch = negativeTerms.some(neg =>
+        allTermsToCheck.some(term => term.includes(neg))
+      );
+      if (hasNegativeMatch) return false;
+    }
+
+    if (positiveTerms.length > 0) {
+      const hasAllPositiveMatches = positiveTerms.every(pos =>
+        allTermsToCheck.some(term => term.includes(pos))
+      );
+      if (!hasAllPositiveMatches) return false;
+    }
+
+    return true;
   };
 
   const showTheme = isFieldVisible("Theme Mode", ["theme", "mode", "color", "dark", "light", "system", "default", "थीम", "लाइट", "डार्क"]);

@@ -94,6 +94,20 @@ export const AboutSettings: React.FC = () => {
     };
   }, [activeTab, language]);
 
+  useEffect(() => {
+    const handleOverride = () => {
+      const override = localStorage.getItem('bharat_book_about_subtab_override');
+      if (override === "about" || override === "release" || override === "privacy" || override === "license" || override === "terms") {
+        setActiveTab(override);
+        localStorage.removeItem('bharat_book_about_subtab_override');
+      }
+    };
+    window.addEventListener('bharat_book_about_subtab_trigger', handleOverride);
+    return () => {
+      window.removeEventListener('bharat_book_about_subtab_trigger', handleOverride);
+    };
+  }, []);
+
   const DotIcon = ({ className }: { className?: string }) => (
     <svg 
       className={className} 

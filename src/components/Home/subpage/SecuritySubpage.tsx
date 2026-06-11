@@ -2,11 +2,11 @@ import React from 'react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { ShieldCheck, Lock, CheckCircle, Globe, Settings } from 'lucide-react';
 
-interface SecurityVaultSubpageProps {
+interface SecuritySubpageProps {
   searchTerm?: string;
 }
 
-export const SecurityVaultSubpage: React.FC<SecurityVaultSubpageProps> = ({ searchTerm = "" }) => {
+export const SecuritySubpage: React.FC<SecuritySubpageProps> = ({ searchTerm = "" }) => {
   const { language, setLanguage } = useLanguage();
 
   const term = searchTerm.toLowerCase();
@@ -76,22 +76,34 @@ export const SecurityVaultSubpage: React.FC<SecurityVaultSubpageProps> = ({ sear
                 <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-gray-700/60">
                   <div className="flex justify-between items-center text-xs justify-wrap gap-2">
                     <span className="text-slate-400 font-bold">{language === 'hi' ? 'सक्रिय प्रणाली भाषा' : 'Current Codec Dialect'}</span>
-                    <div className="flex gap-1.5 flex-wrap">
+                    <div className="flex items-center bg-gray-50/85 dark:bg-gray-800/80 p-1 rounded-lg gap-1 border border-gray-200/40 dark:border-gray-700/40 overflow-x-auto custom-scrollbar shrink-0">
                       <button 
                         onClick={() => setLanguage('en')}
-                        className={`px-3 py-1.5 text-[10px] font-black rounded-lg uppercase tracking-wider transition-all border ${language === 'en' ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-50 dark:bg-gray-700 text-slate-600 dark:text-slate-300 border-slate-100 dark:border-gray-600 hover:text-slate-900 hover:bg-slate-100'}`}
+                        className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                          language === 'en'
+                            ? 'bg-white dark:bg-gray-750 text-slate-900 dark:text-white shadow-xs'
+                            : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+                        }`}
                       >
                         English (EN)
                       </button>
                       <button 
                         onClick={() => setLanguage('hi')}
-                        className={`px-3 py-1.5 text-[10px] font-black rounded-lg uppercase tracking-wider transition-all border ${language === 'hi' ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-50 dark:bg-gray-700 text-slate-600 dark:text-slate-300 border-slate-100 dark:border-gray-600 hover:text-slate-900 hover:bg-slate-100'}`}
+                        className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                          language === 'hi'
+                            ? 'bg-white dark:bg-gray-750 text-slate-900 dark:text-white shadow-xs'
+                            : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+                        }`}
                       >
                         हिंदी (HI)
                       </button>
                       <button 
                         onClick={() => setLanguage('hinglish')}
-                        className={`px-3 py-1.5 text-[10px] font-black rounded-lg uppercase tracking-wider transition-all border ${language === 'hinglish' ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-50 dark:bg-gray-700 text-slate-600 dark:text-slate-300 border-slate-100 dark:border-gray-600 hover:text-slate-900 hover:bg-slate-100'}`}
+                        className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                          language === 'hinglish'
+                            ? 'bg-white dark:bg-gray-750 text-slate-900 dark:text-white shadow-xs'
+                            : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+                        }`}
                       >
                         Hinglish (HNG)
                       </button>

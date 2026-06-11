@@ -6,6 +6,7 @@ export interface SearchItem {
   type: 'Page' | 'Master' | 'Report' | 'Operation' | 'Dashboard';
   view: MainView;
   subPage?: string;
+  subSubPage?: string;
   keywords?: string[];
 }
 
@@ -72,4 +73,16 @@ export const GLOBAL_SEARCH_DATA: SearchItem[] = [
   { id: 'r1', title: 'Financial Reports', type: 'Report', view: 'reports', subPage: 'balance-sheet' },
   { id: 'r2', title: 'Item & Stock Reports', type: 'Report', view: 'item-report', subPage: 'stock-summary' },
   { id: 'r3', title: 'GST Reports', type: 'Report', view: 'gst-report', subPage: 'gstr1' },
+
+  // Tab-Level (subSubPage) Settings & Hub items
+  { id: 'ts1', title: 'Active Users', type: 'Page', view: 'settings', subPage: 'users', subSubPage: 'active-users', keywords: ['staff', 'active', 'accounts'] },
+  { id: 'ts2', title: 'Company Directory', type: 'Page', view: 'settings', subPage: 'users', subSubPage: 'directory', keywords: ['staff', 'employees'] },
+  { id: 'ts3', title: 'Group Rules', type: 'Page', view: 'settings', subPage: 'users', subSubPage: 'group-rules', keywords: ['permission', 'security'] },
+  { id: 'ts4', title: 'Release Notes', type: 'Page', view: 'settings', subPage: 'about', subSubPage: 'release', keywords: ['upgrade', 'latest'] },
+  { id: 'ts5', title: 'Privacy Policy', type: 'Page', view: 'settings', subPage: 'about', subSubPage: 'privacy', keywords: ['gdpr', 'safety'] },
+  { id: 'ts6', title: 'Software License', type: 'Page', view: 'settings', subPage: 'about', subSubPage: 'license' },
+  { id: 'ts7', title: 'Terms & Conditions', type: 'Page', view: 'settings', subPage: 'about', subSubPage: 'terms', keywords: ['usage', 'rules'] },
+  { id: 'ts8', title: 'Index Main Modules', type: 'Page', view: 'index', subPage: 'hub', subSubPage: 'modules' },
+  { id: 'ts9', title: 'Index Saved Drafts', type: 'Page', view: 'index', subPage: 'hub', subSubPage: 'drafts' },
+  { id: 'ts10', title: 'Index Active Archives', type: 'Page', view: 'index', subPage: 'hub', subSubPage: 'archives' }
 ];

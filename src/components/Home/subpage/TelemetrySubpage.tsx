@@ -3,7 +3,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { Activity, ShieldAlert, Cpu, CheckCircle } from 'lucide-react';
 import { ParsedVoucher } from '../../../app/types';
 
-interface SystemTelemetrySubpageProps {
+interface TelemetrySubpageProps {
   allVouchers: ParsedVoucher[];
   partyMasters: any[];
   ledgerMasters: any[];
@@ -11,7 +11,7 @@ interface SystemTelemetrySubpageProps {
   searchTerm?: string;
 }
 
-export const SystemTelemetrySubpage: React.FC<SystemTelemetrySubpageProps> = ({
+export const TelemetrySubpage: React.FC<TelemetrySubpageProps> = ({
   allVouchers = [],
   partyMasters = [],
   ledgerMasters = [],

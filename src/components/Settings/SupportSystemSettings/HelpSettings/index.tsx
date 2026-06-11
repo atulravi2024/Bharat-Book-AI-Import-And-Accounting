@@ -15,6 +15,21 @@ export const HelpSettings: React.FC = () => {
     setActiveSegment,
   } = searchProps;
 
+  React.useEffect(() => {
+    const handleOverride = () => {
+      const override = localStorage.getItem('bharat_book_help_subtab_override');
+      if (override === "faq" || override === "explorer" || override === "trainer") {
+        setActiveSegment(override);
+        localStorage.removeItem('bharat_book_help_subtab_override');
+      }
+    };
+    handleOverride();
+    window.addEventListener('bharat_book_help_subtab_trigger', handleOverride);
+    return () => {
+      window.removeEventListener('bharat_book_help_subtab_trigger', handleOverride);
+    };
+  }, []);
+
   return (
     <div className="max-w-6xl mx-auto space-y-4 animate-in fade-in duration-300">
       {/* Compact Header Row */}

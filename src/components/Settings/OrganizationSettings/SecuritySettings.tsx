@@ -18,6 +18,24 @@ export const SecuritySettings: React.FC = () => {
 
     // Layout states matching HEADER_SEARCH_UI and COLLAPSIBLE_SECTIONS
     const [activeTab, setActiveTab] = useState<'policies' | 'users'>('policies');
+
+    useEffect(() => {
+        const checkOverride = () => {
+            const override = localStorage.getItem('bharat_book_security_subtab_override');
+            if (override) {
+                let targetTab: any = null;
+                if (['passwords', 'mfa', 'ip_restrict', 'policies'].includes(override)) targetTab = 'policies';
+                else if (override === 'users' || override === 'audit_logs') targetTab = 'users';
+                if (targetTab) {
+                    setActiveTab(targetTab);
+                }
+                localStorage.removeItem('bharat_book_security_subtab_override');
+            }
+        };
+        checkOverride();
+        window.addEventListener('bharat_book_security_subtab_trigger', checkOverride);
+        return () => window.removeEventListener('bharat_book_security_subtab_trigger', checkOverride);
+    }, []);
     const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
     const [fileFormat, setFileFormat] = useState<'JSON' | 'CSV'>('JSON');
     const [searchQuery, setSearchQuery] = useState('');

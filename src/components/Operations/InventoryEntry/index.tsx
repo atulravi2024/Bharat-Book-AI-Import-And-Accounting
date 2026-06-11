@@ -22,7 +22,7 @@ import { jsPDF } from 'jspdf';
 import { X, HelpCircle } from 'lucide-react';
 
 export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({ 
-  defaultType, itemMasters = [], warehouseMasters = [], 
+  defaultType, onTabChange, itemMasters = [], warehouseMasters = [], 
   ledgerMasters = [], partyMasters = [], vouchers = [], 
   onUpdateItemMaster, onAddItemMaster, onSaveEntry, 
   onDeleteEntry, onOpenPrintSettings 
@@ -233,7 +233,11 @@ export const InventoryEntryView: React.FC<InventoryEntryViewProps> = ({
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => { setActiveTab(tab.id); setRows([{id: Date.now()}, {id: Date.now() + 1}]); }}
+                onClick={() => { 
+                  setActiveTab(tab.id); 
+                  setRows([{id: Date.now()}, {id: Date.now() + 1}]); 
+                  if (onTabChange) onTabChange(tab.id);
+                }}
                 className={`
                   whitespace-nowrap py-2.5 px-5 rounded-xl font-black text-[11px] uppercase tracking-[0.15em] transition-all flex items-center
                   ${activeTab === tab.id 

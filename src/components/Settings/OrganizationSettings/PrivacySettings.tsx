@@ -18,7 +18,21 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({ toggles, handl
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [targetFormat, setTargetFormat] = useState<"json" | "csv">("json");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const [activeSubTab, setActiveSubTab] = useState<"gdpr" | "data_consent">("gdpr");
+  const [activeSubTab, setActiveSubTab ] = useState<"gdpr" | "data_consent">("gdpr");
+
+  useEffect(() => {
+    const checkOverride = () => {
+      const override = localStorage.getItem('bharat_book_privacy_subtab_override');
+      if (override) {
+        if (override === "gdpr" || override === "compliance") setActiveSubTab("gdpr");
+        else if (override === "data_consent" || override === "consent") setActiveSubTab("data_consent");
+        localStorage.removeItem('bharat_book_privacy_subtab_override');
+      }
+    };
+    checkOverride();
+    window.addEventListener('bharat_book_privacy_subtab_trigger', checkOverride);
+    return () => window.removeEventListener('bharat_book_privacy_subtab_trigger', checkOverride);
+  }, []);
   const [isSaved, setIsSaved] = useState(false);
 
   // Privacy specific settings states
@@ -94,13 +108,42 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({ toggles, handl
 
   const isFieldVisible = (labelKey: string, extraTerms: string[] = []) => {
     if (!searchQuery.trim()) return true;
-    const query = searchQuery.toLowerCase().trim();
-    const labelText = t(labelKey).toLowerCase();
-    if (labelText.includes(query)) return true;
-    return extraTerms.some(term => {
-      const termTranslated = t(term).toLowerCase();
-      return term.toLowerCase().includes(query) || termTranslated.includes(query);
-    });
+    
+    const words = searchQuery.toLowerCase().trim().split(/\s+/);
+    const positiveTerms: string[] = [];
+    const negativeTerms: string[] = [];
+
+    for (const word of words) {
+      if (word.startsWith('!') && word.length > 1) {
+        negativeTerms.push(word.substring(1));
+      } else if (word.startsWith('-') && word.length > 1) {
+        negativeTerms.push(word.substring(1));
+      } else if (word.trim()) {
+        positiveTerms.push(word);
+      }
+    }
+
+    const allTermsToCheck = [
+      labelKey,
+      t(labelKey),
+      ...(extraTerms || [])
+    ].map(term => term.toLowerCase());
+
+    if (negativeTerms.length > 0) {
+      const hasNegativeMatch = negativeTerms.some(neg =>
+        allTermsToCheck.some(term => term.includes(neg))
+      );
+      if (hasNegativeMatch) return false;
+    }
+
+    if (positiveTerms.length > 0) {
+      const hasAllPositiveMatches = positiveTerms.every(pos =>
+        allTermsToCheck.some(term => term.includes(pos))
+      );
+      if (!hasAllPositiveMatches) return false;
+    }
+
+    return true;
   };
 
   const showRetention = isFieldVisible("Keep audit logs for", ["audit", "retention", "logs", "duration", "history", "keep audit logs for", "retention period"]);

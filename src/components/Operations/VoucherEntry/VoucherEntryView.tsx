@@ -12,6 +12,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 
 interface VoucherEntryViewProps {
   defaultType?: string;
+  onTabChange?: (tab: string) => void;
   initialVoucher?: any;
   itemMasters?: any[];
   ledgerMasters?: any[];
@@ -88,7 +89,7 @@ export const VoucherEntryView: React.FC<VoucherEntryViewProps> = (props) => {
                 {tabs.map((tab) => (
                 <button
                     key={tab.id}
-                    onClick={() => { setActiveTabWrapper(tab.id); }}
+                    onClick={() => { setActiveTabWrapper(tab.id); if (props.onTabChange) props.onTabChange(tab.id); }}
                     className={`
                     whitespace-nowrap py-2.5 px-5 rounded-xl font-black text-[11px] uppercase tracking-[0.15em] transition-all
                     ${activeTab === tab.id 

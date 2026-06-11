@@ -1,5 +1,6 @@
 export interface InventoryEntryViewProps {
   defaultType?: string;
+  onTabChange?: (tab: string) => void;
   itemMasters?: any[];
   warehouseMasters?: any[];
   ledgerMasters?: any[];

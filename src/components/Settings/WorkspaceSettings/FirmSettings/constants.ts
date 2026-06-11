@@ -12,7 +12,6 @@ export const ALL_SEARCH_FIELDS: SearchField[] = [
     { id: 'businessProfile', label: 'Business Profile Information' },
     { id: 'branding', label: 'Branding & Visual Identity' },
     { id: 'social', label: 'Social Media & Web Links' },
-    { id: 'addressDetails', label: 'Primary Location Address' },
     { id: 'primaryContacts', label: 'Primary Point of Contacts' },
     { id: 'alertDestinations', label: 'System Alert Destinations' },
     { id: 'financial_general', label: 'General Accounting System' },

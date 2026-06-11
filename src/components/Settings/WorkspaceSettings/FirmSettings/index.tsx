@@ -7,7 +7,6 @@ import { ALL_SEARCH_FIELDS } from "./constants";
 import { BasicSection } from "./tab/BasicSection";
 import { ProfileSection } from "./tab/ProfileSection";
 import { ContactsSection } from "./tab/ContactsSection";
-import { AddressSection } from "./tab/AddressSection";
 import { TaxRegistrationSection } from "./tab/TaxRegistrationSection";
 import { LicensesSection } from "./tab/LicensesSection";
 import { HrPayrollSection } from "./tab/HrPayrollSection";
@@ -51,7 +50,6 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
     branding: "identity",
     social: "identity",
 
-    addressDetails: "contacts",
     primaryContacts: "contacts",
     alertDestinations: "contacts",
 
@@ -118,7 +116,6 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
     { id: "businessProfile", label: t("Profile Details"), component: ProfileSection },
     { id: "primaryContacts", label: t("Primary Contacts"), component: ContactsSection },
     { id: "alertDestinations", label: t("Alert Channels"), component: AlertChannels },
-    { id: "addressDetails", label: t("Registered Address"), component: AddressSection },
     { id: "statutoryTax", label: t("Tax Registrations"), component: TaxRegistrationSection },
     { id: "businessLicenses", label: t("Business Licenses"), component: LicensesSection },
     { id: "hrPayroll", label: t("Payroll Setup"), component: HrPayrollSection },
