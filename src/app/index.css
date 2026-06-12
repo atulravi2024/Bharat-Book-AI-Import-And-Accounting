@@ -13,6 +13,17 @@
   --color-premium-slate-200: #e2e8f0;
   --color-premium-blue-500: #3b82f6;
   --color-premium-blue-600: #2563eb;
+
+  /* Custom intermediate color definitions for pristine dark mode/technical theme support */
+  --color-gray-750: #222c3a;
+  --color-gray-755: #1c2531;
+  --color-gray-850: #151c27;
+  --color-gray-905: #0a0e16;
+
+  --color-slate-350: #b2c1d3;
+  --color-slate-450: #78889b;
+  --color-slate-455: #68788c;
+  --color-slate-850: #172033;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));

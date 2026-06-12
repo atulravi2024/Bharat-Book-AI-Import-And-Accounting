@@ -1,0 +1,27 @@
+{
+  "weeklyConfigurations": [
+    { "id": "week-4", "label_en": "Current Week (W5)", "label_hi": "इस सप्ताह", "dateRange": "Jun 08 - Jun 14" },
+    { "id": "week-3", "label_en": "1 Week Ago (W4)", "label_hi": "१ सप्ताह पहले", "dateRange": "Jun 01 - Jun 07" },
+    { "id": "week-2", "label_en": "2 Weeks Ago (W3)", "label_hi": "२ सप्ताह पहले", "dateRange": "May 25 - May 31" },
+    { "id": "week-1", "label_en": "3 Weeks Ago (W2)", "label_hi": "३ सप्ताह पहले", "dateRange": "May 18 - May 24" },
+    { "id": "week-0", "label_en": "4 Weeks Ago (W1)", "label_hi": "४ सप्ताह पहले", "dateRange": "May 11 - May 17" }
+  ],
+  "biweeklyConfigurations": [
+    { "id": "biweekly-jun-first", "label_en": "Fortnightly June H1", "label_hi": "जून पखवाड़ा १", "period": "Jun 01 - Jun 15" },
+    { "id": "biweekly-jun-second", "label_en": "Fortnightly June H2", "label_hi": "जून पखवाड़ा २", "period": "Jun 16 - Jun 30" },
+    { "id": "biweekly-may-first", "label_en": "Fortnightly May H1", "label_hi": "मई पखवाड़ा १", "period": "May 01 - May 15" },
+    { "id": "biweekly-may-second", "label_en": "Fortnightly May H2", "label_hi": "मई पखवाड़ा २", "period": "मई पखवाड़ा २" }
+  ],
+  "shiftConfigurations": [
+    { "id": "morning", "label_en": "Morning Core (Shift A)", "label_hi": "प्रातःकालीन पाली (Shift A)", "period": "08:00 AM - 04:00 PM" },
+    { "id": "afternoon", "label_en": "Afternoon High (Shift B)", "label_hi": "मध्याह्न पाली (Shift B)", "period": "04:00 PM - 12:00 AM" },
+    { "id": "night", "label_en": "Night Audit (Shift C)", "label_hi": "रात्रिकालीन पाली (Shift C)", "period": "12:00 AM - 08:00 AM" }
+  ],
+  "deviceConfigurations": [
+    { "key": "mobile", "label_en": "Mobile App Sync", "label_hi": "मोबाइल डिवाइस", "version": "BharatBook v10.4", "color": "text-yellow-500 bg-yellow-50 dark:bg-yellow-900/10" },
+    { "key": "web", "label_en": "Web Portal Desktop", "label_hi": "वेब ब्राउज़र पोर्टल", "version": "Firefox/Chrome Sync", "color": "text-blue-500 bg-blue-50 dark:bg-blue-900/10" },
+    { "key": "excel", "label_en": "Excel Ledger Import", "label_hi": "एक्सेल इम्पोर्ट सिंक", "version": "MS-Excel Native Parser", "color": "text-green-500 bg-green-50 dark:bg-green-900/10" },
+    { "key": "api", "label_en": "Rest API ERP Sync", "label_hi": "क्लाउड एपीआई कनेक्टर", "version": "OAuth API Connect", "color": "text-purple-500 bg-purple-50 dark:bg-purple-900/10" },
+    { "key": "desktop", "label_en": "Desktop ERP Offline", "label_hi": "विंडोज़ डेस्कटॉप", "version": "WinOS Native Exe", "color": "text-indigo-500 bg-indigo-50 dark:bg-indigo-900/10" }
+  ]
+}

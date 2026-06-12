@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TXN-9021-X",
+    "type": "voucher",
+    "name": "Sales PV-2026-1029",
+    "details": "M/S Radhe Radhe Inks - Value: ₹2,45,900.00",
+    "relativeMinutesAgo": 45,
+    "status": "offline_created",
+    "reason": "Connection timeout during invoice generation process.",
+    "confidence": 100
+  },
+  {
+    "id": "MST-PRTY-102",
+    "type": "party",
+    "name": "Guru Kripa Logistics Pvt Ltd",
+    "details": "GSTIN: 07AAGCV4382B1Z4 - State Code: 07 (Delhi)",
+    "relativeMinutesAgo": 120,
+    "status": "offline_modified",
+    "reason": "User created contact during offline transit on train/flight.",
+    "confidence": 95
+  },
+  {
+    "id": "TXN-4029-A",
+    "type": "voucher",
+    "name": "Payment PMT-2026-0041",
+    "details": "Paid to HDFC Bank Cash Account - Value: ₹18,500.00",
+    "relativeMinutesAgo": 15,
+    "status": "diff_detected",
+    "reason": "Conflict: Voucher date differs from standard closed financial lock period.",
+    "confidence": 84
+  },
+  {
+    "id": "MST-LDGR-402",
+    "type": "ledger",
+    "name": "Office Rent & Auxiliary Expenses",
+    "details": "Group: Indirect Expenses - Cost Center Enabled: Yes",
+    "relativeMinutesAgo": 250,
+    "status": "offline_created",
+    "reason": "Local structure setup offline during client premises setup.",
+    "confidence": 99
+  },
+  {
+    "id": "MST-ITEM-902",
+    "type": "item",
+    "name": "Bharat Book Premium Bond Paper (A4)",
+    "details": "HSN: 4802 - GST Rate: 12% - Base UOM: Reams",
+    "relativeMinutesAgo": 60000,
+    "status": "offline_created",
+    "reason": "Catalog sync failure. Warehouse stock scanner entry.",
+    "confidence": 90
+  }
+]

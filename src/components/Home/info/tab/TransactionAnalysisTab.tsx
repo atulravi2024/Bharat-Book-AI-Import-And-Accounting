@@ -61,6 +61,12 @@ export const TransactionAnalysisTab: React.FC<TransactionAnalysisTabProps> = ({
   const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'web' | 'excel' | 'api' | 'desktop' | null>(null);
   const [isChartReady, setIsChartReady] = useState<boolean>(false);
 
+  // Schema configurations loaded dynamically from transaction-analysis.json
+  const [weeklyConfigs, setWeeklyConfigs] = useState<any[]>([]);
+  const [biweeklyConfigs, setBiweeklyConfigs] = useState<any[]>([]);
+  const [shiftConfigs, setShiftConfigs] = useState<any[]>([]);
+  const [deviceConfigs, setDeviceConfigs] = useState<any[]>([]);
+
   // Automatically reset selection when grouping or type filters change
   useEffect(() => {
     setSelectedId(null);
@@ -72,6 +78,25 @@ export const TransactionAnalysisTab: React.FC<TransactionAnalysisTabProps> = ({
     const t = setTimeout(() => setIsChartReady(true), 150);
     return () => clearTimeout(t);
   }, []);
+
+  useEffect(() => {
+    const fetchAnalysisConfigs = async () => {
+      try {
+        const response = await fetch('/sample-data/transaction-analysis.json');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.weeklyConfigurations) setWeeklyConfigs(data.weeklyConfigurations);
+          if (data.biweeklyConfigurations) setBiweeklyConfigs(data.biweeklyConfigurations);
+          if (data.shiftConfigurations) setShiftConfigs(data.shiftConfigurations);
+          if (data.deviceConfigurations) setDeviceConfigs(data.deviceConfigurations);
+        }
+      } catch (err) {
+        console.error("Failed to load transaction-analysis schema configs", err);
+      }
+    };
+    fetchAnalysisConfigs();
+  }, []);
+
 
   // Helper date parsing with multi-format support
   const getParsedDate = (val: string): Date | null => {
@@ -304,19 +329,19 @@ export const TransactionAnalysisTab: React.FC<TransactionAnalysisTabProps> = ({
   };
 
   const getActiveWeekBreakdown = () => {
-    const list = [
-      { id: 'week-4', label: language === 'hi' ? 'इस सप्ताह' : 'Current Week (W5)', dateRange: 'Jun 08 - Jun 14', count: 0 },
-      { id: 'week-3', label: language === 'hi' ? '१ सप्ताह पहले' : '1 Week Ago (W4)', dateRange: 'Jun 01 - Jun 07', count: 0 },
-      { id: 'week-2', label: language === 'hi' ? '२ सप्ताह पहले' : '2 Weeks Ago (W3)', dateRange: 'May 25 - May 31', count: 0 },
-      { id: 'week-1', label: language === 'hi' ? '३ सप्ताह पहले' : '3 Weeks Ago (W2)', dateRange: 'May 18 - May 24', count: 0 },
-      { id: 'week-0', label: language === 'hi' ? '४ सप्ताह पहले' : '4 Weeks Ago (W1)', dateRange: 'May 11 - May 17', count: 0 }
-    ];
+    const activeConfigs = weeklyConfigs;
+    const list = activeConfigs.map(item => ({
+      id: item.id,
+      label: language === 'hi' ? item.label_hi : item.label_en,
+      dateRange: item.dateRange,
+      count: 0
+    }));
     
     vouchersForBreakdown.forEach(v => {
       const stableIdx = getStableIndex(v, 5);
       const d = getParsedDate(String(v.date?.value || ''));
       if (!d) {
-        list[stableIdx].count++;
+        if (list[stableIdx]) list[stableIdx].count++;
         return;
       }
       const now = new Date();
@@ -324,7 +349,8 @@ export const TransactionAnalysisTab: React.FC<TransactionAnalysisTabProps> = ({
       const diffTime = now.getTime() - d.getTime();
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
       const weekDiff = Math.max(0, Math.min(4, Math.floor(diffDays / 7)));
-      list[4 - weekDiff].count++;
+      const targetIdx = 4 - weekDiff;
+      if (list[targetIdx]) list[targetIdx].count++;
     });
 
     list.forEach(item => {
@@ -461,18 +487,20 @@ export const TransactionAnalysisTab: React.FC<TransactionAnalysisTabProps> = ({
   };
 
   const getActiveBiweeklyBreakdown = () => {
-    const list = [
-      { id: 'biweekly-jun-first', label: language === 'hi' ? 'जून पखवाड़ा १' : 'Fortnightly June H1', period: 'Jun 01 - Jun 15', count: 0, percentage: 0 },
-      { id: 'biweekly-jun-second', label: language === 'hi' ? 'जून पखवाड़ा २' : 'Fortnightly June H2', period: 'Jun 16 - Jun 30', count: 0, percentage: 0 },
-      { id: 'biweekly-may-first', label: language === 'hi' ? 'मई पखवाड़ा १' : 'Fortnightly May H1', period: 'May 01 - May 15', count: 0, percentage: 0 },
-      { id: 'biweekly-may-second', label: language === 'hi' ? 'मई पखवाड़ा २' : 'Fortnightly May H2', period: 'May 16 - May 31', count: 0, percentage: 0 }
-    ];
+    const activeConfigs = biweeklyConfigs;
+    const list = activeConfigs.map(item => ({
+      id: item.id,
+      label: language === 'hi' ? item.label_hi : item.label_en,
+      period: item.period,
+      count: 0,
+      percentage: 0
+    }));
     
     vouchersForBreakdown.forEach(v => {
       const stableIdx = getStableIndex(v, 4);
       const d = getParsedDate(String(v.date?.value || ''));
       if (!d) {
-        list[stableIdx].count++;
+        if (list[stableIdx]) list[stableIdx].count++;
         return;
       }
       const day = d.getDate();
@@ -480,11 +508,12 @@ export const TransactionAnalysisTab: React.FC<TransactionAnalysisTabProps> = ({
       const halfIdx = day <= 15 ? 0 : 1;
       
       if (month === 5) { // June
-        list[halfIdx].count++;
+        if (list[halfIdx]) list[halfIdx].count++;
       } else if (month === 4) { // May
-        list[2 + halfIdx].count++;
+        const targetIdx = 2 + halfIdx;
+        if (list[targetIdx]) list[targetIdx].count++;
       } else {
-        list[stableIdx].count++;
+        if (list[stableIdx]) list[stableIdx].count++;
       }
     });
 
@@ -558,15 +587,18 @@ export const TransactionAnalysisTab: React.FC<TransactionAnalysisTabProps> = ({
   };
 
   const getActiveShiftBreakdown = () => {
-    const list = [
-      { id: 'morning', label: language === 'hi' ? 'प्रातःकालीन पाली (Shift A)' : 'Morning Core (Shift A)', period: '08:00 AM - 04:00 PM', count: 0, percentage: 0 },
-      { id: 'afternoon', label: language === 'hi' ? 'मध्याह्न पाली (Shift B)' : 'Afternoon High (Shift B)', period: '04:00 PM - 12:00 AM', count: 0, percentage: 0 },
-      { id: 'night', label: language === 'hi' ? 'रात्रिकालीन पाली (Shift C)' : 'Night Audit (Shift C)', period: '12:00 AM - 08:00 AM', count: 0, percentage: 0 }
-    ];
+    const activeConfigs = shiftConfigs;
+    const list = activeConfigs.map(item => ({
+      id: item.id,
+      label: language === 'hi' ? item.label_hi : item.label_en,
+      period: item.period,
+      count: 0,
+      percentage: 0
+    }));
     
     vouchersForBreakdown.forEach(v => {
       const stableIdx = getStableIndex(v, 3);
-      list[stableIdx].count++;
+      if (list[stableIdx]) list[stableIdx].count++;
     });
 
     list.forEach(item => {
@@ -601,13 +633,33 @@ export const TransactionAnalysisTab: React.FC<TransactionAnalysisTabProps> = ({
     const total = mobile + web + excel + api + desktop;
     const getPercent = (v: number) => total > 0 ? Math.round((v / total) * 100) : 0;
     
-    const list = [
-      { key: 'mobile', label: language === 'hi' ? 'मोबाइल डिवाइस' : 'Mobile App Sync', count: mobile, percentage: getPercent(mobile), icon: Smartphone, color: 'text-emerald-500 border-emerald-100 bg-emerald-50/50 dark:bg-emerald-900/10', version: 'BharatBook v10.4' },
-      { key: 'web', label: language === 'hi' ? 'वेब ब्राउज़र पोर्टल' : 'Web Portal Desktop', count: web, percentage: getPercent(web), icon: Globe, color: 'text-blue-500 border-blue-100 bg-blue-50/50 dark:bg-blue-900/10', version: 'Firefox/Chrome Sync' },
-      { key: 'excel', label: language === 'hi' ? 'एक्सेल इम्पोर्ट सिंक' : 'Excel Ledger Import', count: excel, percentage: getPercent(excel), icon: FileSpreadsheet, color: 'text-green-500 border-green-100 bg-green-50/50 dark:bg-green-900/10', version: 'MS-Excel Native Parser' },
-      { key: 'api', label: language === 'hi' ? 'क्लाउड एपीआई कनेक्टर' : 'Rest API ERP Sync', count: api, percentage: getPercent(api), icon: Fingerprint, color: 'text-purple-500 border-purple-100 bg-purple-50/50 dark:bg-purple-900/10', version: 'OAuth API Connect' },
-      { key: 'desktop', label: language === 'hi' ? 'विंडोज़ डेस्कटॉप' : 'Desktop ERP Offline', count: desktop, percentage: getPercent(desktop), icon: Laptop, color: 'text-indigo-500 border-indigo-100 bg-indigo-50/50 dark:bg-indigo-900/10', version: 'WinOS Native Exe' }
-    ];
+    const activeConfigs = deviceConfigs;
+    const iconsMap: Record<string, any> = {
+      mobile: Smartphone,
+      web: Globe,
+      excel: FileSpreadsheet,
+      api: Fingerprint,
+      desktop: Laptop
+    };
+
+    const list = activeConfigs.map(item => {
+      let count = 0;
+      if (item.key === 'mobile') count = mobile;
+      else if (item.key === 'web') count = web;
+      else if (item.key === 'excel') count = excel;
+      else if (item.key === 'api') count = api;
+      else count = desktop;
+
+      return {
+        key: item.key,
+        label: language === 'hi' ? item.label_hi : item.label_en,
+        count,
+        percentage: getPercent(count),
+        icon: iconsMap[item.key] || Smartphone,
+        color: item.color || 'text-slate-500 border-slate-100 bg-slate-50/50 dark:bg-slate-900/10',
+        version: item.version || 'v1.0'
+      };
+    });
     
     return { list, total };
   };

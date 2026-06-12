@@ -1,0 +1,33 @@
+{
+  "assumedTaxableRate": 0.847,
+  "defaultCgstRate": 0.09,
+  "defaultSgstRate": 0.09,
+  "defaultIgstRate": 0.18,
+  "eligibleItcRate": 0.72,
+  "standards": [
+    {
+      "key": "cgst",
+      "name_en": "Central GST (CGST)",
+      "name_hi": "केंद्रीय जीएसटी (CGST)",
+      "rate": "9%",
+      "complianceRule_en": "Applicable on intrastate supply of goods and services.",
+      "complianceRule_hi": "राज्य के भीतर वस्तुओं और सेवाओं की आपूर्ति पर लागू।"
+    },
+    {
+      "key": "sgst",
+      "name_en": "State GST (SGST)",
+      "name_hi": "राज्य जीएसटी (SGST)",
+      "rate": "9%",
+      "complianceRule_en": "Collected by state governments on intrastate sales.",
+      "complianceRule_hi": "राज्य के भीतर बिक्री पर राज्य सरकारों द्वारा एकत्र किया जाता है।"
+    },
+    {
+      "key": "igst",
+      "name_en": "Integrated GST (IGST)",
+      "name_hi": "एकीकृत जीएसटी (IGST)",
+      "rate": "18%",
+      "complianceRule_en": "Levied on interstate transactions and imports.",
+      "complianceRule_hi": "अंतरराज्यीय लेनदेन और आयात पर लगाया गया।"
+    }
+  ]
+}

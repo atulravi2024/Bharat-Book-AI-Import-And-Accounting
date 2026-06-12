@@ -56,14 +56,16 @@ export const DraftsTab: React.FC<DraftsTabProps> = ({
             </h4>
           </div>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {availableSubpages.map((sub, index) => {
+          {availableSubpages.length > 0 ? (
+            availableSubpages.map((sub, index) => {
               const SubIcon = sub.icon || FolderOpen;
               const theme = colorThemes[index % colorThemes.length];
               return (
                 <div
                   key={`${sub.parentModuleId || ''}-${sub.id}-${index}`}
-                  className="flex flex-col text-left bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-750 hover:border-blue-500/40 rounded-2xl transition-all duration-300 hover:shadow-md relative overflow-hidden group h-full justify-between"
+                  className={`flex flex-col text-left bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-750 ${theme.hoverBorder} rounded-2xl transition-all duration-300 hover:shadow-md relative overflow-hidden group h-full justify-between`}
                 >
                   {/* Card Interactive Area for Drill-down / Exploration */}
                   <button 
@@ -77,7 +79,7 @@ export const DraftsTab: React.FC<DraftsTabProps> = ({
                       </div>
                       <div className="space-y-1.5 flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <h4 className={`text-sm font-black text-slate-800 dark:text-white flex items-center gap-1 transition-colors ${theme.text.startsWith('text-') ? `group-hover:${theme.text} dark:group-hover:${theme.text.replace('text-', 'text-')}` : theme.text} truncate`}>
+                          <h4 className={`text-sm font-black text-slate-800 dark:text-white flex items-center gap-1 transition-colors ${theme.text.split(' ').map((c: string) => `group-hover:${c}`).join(' ')} truncate`}>
                             {sub.title}
                           </h4>
                           {!selectedMainPageId && sub.parentModuleTitle && (
@@ -105,16 +107,16 @@ export const DraftsTab: React.FC<DraftsTabProps> = ({
                         localStorage.setItem('bharat_book_nav_override', JSON.stringify(navOverride));
                         setView(targetPageId as MainView);
                       }}
-                      className={`${sub.tabs.length > 0 ? 'w-1/2' : 'w-full'} py-2 ${theme.bg} ${theme.hover} ${theme.text.startsWith('text-') ? theme.text : 'text-blue-600'} dark:text-blue-400 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer`}
+                      className={`${sub.tabs.length > 0 ? 'w-1/2' : 'w-full'} py-2 ${theme.bg} ${theme.hover} text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer`}
                       title={language === 'hi' ? 'उपपृष्ठ लॉन्च करें' : 'Launch Subpage'}
                     >
-                      <span>{language === 'hi' ? 'उपपृष्ठ पर जाएं' : 'Go to Sub Page'}</span>
+                      <span className="truncate">{language === 'hi' ? 'उपपृष्ठ पर जाएं' : 'Go to Sub Page'}</span>
                       <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                     </button>
                     {sub.tabs.length > 0 && (
                       <button 
                         onClick={() => handleExploreSubpage(selectedMainPageId, sub)}
-                        className="w-1/2 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg transition-all border border-slate-200/50 dark:border-gray-700 flex items-center justify-center gap-1.5 cursor-pointer"
+                        className={`w-1/2 py-2 ${theme.btnSecondary} text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer`}
                         title={language === 'hi' ? 'टैब खोजें' : 'Explore Tabs'}
                       >
                         <FolderOpen className="w-3.5 h-3.5 shrink-0" />
@@ -124,9 +126,16 @@ export const DraftsTab: React.FC<DraftsTabProps> = ({
                   </div>
                 </div>
               );
-            })}
-          </div>
+            })
+          ) : (
+            <div className="col-span-full bg-slate-50/50 dark:bg-gray-800/40 p-12 text-center rounded-2xl border border-dashed border-gray-200 dark:border-slate-750">
+              <p className="text-sm font-bold text-gray-500 dark:text-gray-400 animate-pulse">
+                {language === 'hi' ? 'कोई उपपृष्ठ नहीं मिला।' : 'No subpages available.'}
+              </p>
+            </div>
+          )}
         </div>
+      </div>
     </motion.div>
   );
 };

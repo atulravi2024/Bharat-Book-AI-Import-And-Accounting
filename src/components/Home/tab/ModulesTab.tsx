@@ -38,7 +38,7 @@ export const ModulesTab: React.FC<ModulesTabProps> = ({
             return (
               <div
                 key={tile.id}
-                className="flex flex-col text-left bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-750 hover:border-blue-500/40 rounded-2xl transition-all duration-300 hover:shadow-md relative overflow-hidden group h-full justify-between"
+                className={`flex flex-col text-left bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-750 ${theme.hoverBorder} rounded-2xl transition-all duration-300 hover:shadow-md relative overflow-hidden group h-full justify-between`}
               >
                 {/* Clickable Card Body for Subpage Drill-down */}
                 <button 
@@ -51,7 +51,7 @@ export const ModulesTab: React.FC<ModulesTabProps> = ({
                       <IconComponent className="w-5 h-5" />
                     </div>
                     <div className="space-y-1.5 flex-1 min-w-0">
-                      <h4 className={`text-sm font-black text-slate-800 dark:text-white flex items-center gap-1 transition-colors ${theme.text.startsWith('text-') ? `group-hover:${theme.text} dark:group-hover:${theme.text.replace('text-', 'text-')}` : theme.text} truncate`}>
+                      <h4 className={`text-sm font-black text-slate-800 dark:text-white flex items-center gap-1 transition-colors ${theme.text.split(' ').map((c: string) => `group-hover:${c}`).join(' ')} truncate`}>
                         {tile.title}
                       </h4>
                       <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed font-semibold">
@@ -65,7 +65,7 @@ export const ModulesTab: React.FC<ModulesTabProps> = ({
                 <div className="px-6 pb-4 pt-3 flex items-center gap-3 w-full animate-fade-in">
                   <button 
                     onClick={tile.onClick}
-                    className={`${(schema.subPages[tile.id] || []).length > 0 ? 'w-1/2' : 'w-full'} py-2 ${theme.bg} ${theme.hover} ${theme.text} text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer`}
+                    className={`${(schema.subPages[tile.id] || []).length > 0 ? 'w-1/2' : 'w-full'} py-2 ${theme.bg} ${theme.hover} text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer`}
                     title={language === 'hi' ? 'मुख्य पृष्ठ लॉन्च करें' : 'Launch Main Page'}
                   >
                     <span className="truncate">{language === 'hi' ? 'मुख्य पृष्ठ पर जाएं' : 'Go to Main Page'}</span>
@@ -74,7 +74,7 @@ export const ModulesTab: React.FC<ModulesTabProps> = ({
                   {(schema.subPages[tile.id] || []).length > 0 && (
                     <button 
                       onClick={() => handleExploreMainPage(tile.id)}
-                      className="w-1/2 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg transition-all border border-slate-200/50 dark:border-gray-700 flex items-center justify-center gap-1.5 cursor-pointer"
+                      className={`w-1/2 py-2 ${theme.btnSecondary} text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer`}
                       title={language === 'hi' ? 'उपपृष्ठ खोजें' : 'Explore Subpages'}
                     >
                       <FolderOpen className="w-3.5 h-3.5 shrink-0" />

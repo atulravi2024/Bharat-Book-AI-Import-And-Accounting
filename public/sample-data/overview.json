@@ -1,0 +1,32 @@
+[
+  {
+    "id": "ACT-001",
+    "type": "sync",
+    "title_en": "Replication Matrix Synchronized",
+    "title_hi": "प्रतिकृति मैट्रिक्स सिंक्रोनाइज़ किया गया",
+    "desc_en": "Double-entry ledger states pushed to Cloud databases successfully.",
+    "desc_hi": "क्लाउड डेटाबेस पर बहीखाता सफलतापूर्वक सिंक किया गया।",
+    "timestamp_en": "10 minutes ago",
+    "timestamp_hi": "10 मिनट पहले"
+  },
+  {
+    "id": "ACT-002",
+    "type": "audit",
+    "title_en": "Tax Compliance Audit Completed",
+    "title_hi": "कर अनुपालन ऑडिट संपन्न",
+    "desc_en": "Verified active ledger vouchers; conform with average 18% GST.",
+    "desc_hi": "सक्रिय बही खातों का सत्यापन; 18% औसत शुल्क पर आधारित नियम अनुपालन।",
+    "timestamp_en": "1 hour ago",
+    "timestamp_hi": "1 घंटा पहले"
+  },
+  {
+    "id": "ACT-003",
+    "type": "master",
+    "title_en": "Party Masters Inventory Rebuilt",
+    "title_hi": "पार्टी मास्टर इन्वेंट्री का पुनर्निर्माण",
+    "desc_en": "Successfully imported 40 contact records into the offline cache.",
+    "desc_hi": "ऑफ़लाइन कैश में 40 संपर्क रिकॉर्ड सफलतापूर्वक आयात किए गए।",
+    "timestamp_en": "2 hours ago",
+    "timestamp_hi": "2 घंटे पहले"
+  }
+]
