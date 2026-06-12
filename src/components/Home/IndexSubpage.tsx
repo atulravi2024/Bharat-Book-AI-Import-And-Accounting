@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useLanguage } from '../../../context/LanguageContext';
-import { useNotifications } from '../../../context/NotificationContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { useNotifications } from '../../context/NotificationContext';
 import { Layers } from 'lucide-react';
-import { MainView } from '../../../app/types';
+import { MainView } from '../../app/types';
 import { AnimatePresence } from 'motion/react';
-import { getNavigationSchema } from '../../../app/navigationSchema';
+import { getNavigationSchema } from '../../app/navigationSchema';
 
 // Subpage Tab Imports
 import { ModulesTab } from './tab/ModulesTab';
@@ -74,6 +74,8 @@ export const IndexSubpage: React.FC<IndexSubpageProps> = ({
           title: sp.label,
           desc: descText,
           icon: getSubIcon(sp.id),
+          parentModuleId: page.id,
+          parentModuleTitle: page.label,
           tabs: (schema.subSubPages[sp.id] || []).map(ssp => {
             const sspDesc = language === 'hi'
               ? `${ssp.label} के लिए विस्तृत क्रेडेंशियल रजिस्टर डेटा`
@@ -124,23 +126,25 @@ export const IndexSubpage: React.FC<IndexSubpageProps> = ({
     setActiveSubTab?.('drafts'); // Subpages tab
   };
 
-  const handleExploreSubpage = (mainPageId: string, subpage: any) => {
+  const handleExploreSubpage = (mainPageId: string | null, subpage: any) => {
+    const actualMainPageId = mainPageId || subpage.parentModuleId;
     if (subpage.tabs.length === 0) {
       // Direct jump
       const navOverride = {
-        page: mainPageId,
+        page: actualMainPageId,
         subPage: subpage.id
       };
       localStorage.setItem('bharat_book_nav_override', JSON.stringify(navOverride));
-      setView(mainPageId as MainView);
+      setView(actualMainPageId as MainView);
     } else {
       setSelectedSubpageId(subpage.id);
       setActiveSubTab?.('archives'); // Tabs tab
     }
   };
 
+  const allSubpagesFromAllTiles = allTiles.flatMap(tile => tile.subpages);
   const selectedMainPage = allTiles.find(t => t.id === selectedMainPageId);
-  const availableSubpages = selectedMainPage ? selectedMainPage.subpages : [];
+  const availableSubpages = selectedMainPage ? selectedMainPage.subpages : allSubpagesFromAllTiles;
 
   // Filter Subpages (Drafts)
   const filteredSubpages = availableSubpages.filter(sub => {
@@ -293,7 +297,7 @@ export const IndexSubpage: React.FC<IndexSubpageProps> = ({
 
           {/* ----- Subpages Tab (Level 2) ----- */}
           {activeSubTab === 'drafts' && (
-            selectedMainPageId && !hasSubpagesMatch ? (
+            !hasSubpagesMatch ? (
               renderZeroMatchesCard(language === 'hi' ? 'उपपृष्ठ' : 'Subpages')
             ) : (
               <DraftsTab

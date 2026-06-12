@@ -1,7 +1,7 @@
 import React from 'react';
-import { useLanguage } from '../../../context/LanguageContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { Activity, ShieldAlert, Cpu, CheckCircle } from 'lucide-react';
-import { ParsedVoucher } from '../../../app/types';
+import { ParsedVoucher } from '../../app/types';
 
 interface TelemetrySubpageProps {
   allVouchers: ParsedVoucher[];

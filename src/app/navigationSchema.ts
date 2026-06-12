@@ -24,14 +24,6 @@ export const getNavigationSchema = (t: (key: string) => string) => {
       { id: "telemetry", label: t("Telemetry & Logs") },
       { id: "security", label: t("Security & Access") },
     ],
-    help: [
-      { id: "main", label: t("Help Hub") },
-    ],
-    support: [
-      { id: "chat", label: t("AI Diagnostic Chat") },
-      { id: "diagnostics", label: t("Systems Integrity Suite") },
-      { id: "tickets", label: t("Submit & Track Tickets") },
-    ],
     dashboard: [
       { id: "overview", label: t("Overview") },
       { id: "sales", label: t("Sales") },

@@ -25,10 +25,10 @@ import { useNotifications } from '../../context/NotificationContext';
 import { getNavigationSchema } from '../../app/navigationSchema';
 
 // Subpage imports
-import { IndexSubpage } from './subpage/IndexSubpage';
-import { TelemetrySubpage } from './subpage/TelemetrySubpage';
-import { SecuritySubpage } from './subpage/SecuritySubpage';
-import { InfoSubpage } from './subpage/InfoSubpage';
+import { IndexSubpage } from './IndexSubpage';
+import { TelemetrySubpage } from './TelemetrySubpage';
+import { SecuritySubpage } from './SecuritySubpage';
+import { InfoSubpage } from './InfoSubpage';
 
 interface HomeViewProps {
   setView: (view: MainView) => void;
@@ -56,6 +56,19 @@ export const HomeView: React.FC<HomeViewProps> = ({
   });
 
   const [hubActiveSubTab, setHubActiveSubTab] = useState<'modules' | 'drafts' | 'archives'>('modules');
+
+  const [infoActiveSubTab, setInfoActiveSubTab] = useState<'overview' | 'analysis'>(() => {
+    const saved = localStorage.getItem('bharat_book_info_active_subtab');
+    if (saved === 'overview' || saved === 'analysis') {
+      return saved;
+    }
+    return 'overview';
+  });
+
+  const handleInfoSubTabChange = (tab: 'overview' | 'analysis') => {
+    setInfoActiveSubTab(tab);
+    localStorage.setItem('bharat_book_info_active_subtab', tab);
+  };
 
   useEffect(() => {
     const checkNav = () => {
@@ -476,6 +489,52 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       )}
 
+      {activeSubpage === 'info' && (
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-white dark:bg-gray-900 p-3.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm overflow-hidden animate-fade-in">
+          <div className="flex items-center gap-3 shrink-0 min-w-0 md:max-w-md">
+            <div className="p-2 bg-blue-50 dark:bg-blue-950/40 rounded-xl mr-1 text-blue-600 dark:text-blue-400 border border-blue-100/50 dark:border-blue-900/30">
+              <Sparkles className="w-5 h-5 animate-pulse" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight truncate">
+                {language === 'hi' ? 'एंटरप्राइज एनालिटिक्स' : 'Enterprise Analytics'}
+              </h2>
+              <p className="text-[10px] xs:text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5 truncate whitespace-nowrap" title={language === 'hi' ? 'विविध समय सीमाओं और उपकरणों की प्रविष्टि मात्रा' : 'Accrued transactional volume & temporal classifications'}>
+                {language === 'hi' ? 'विविध समय सीमाओं और उपकरणों की प्रविष्टि मात्रा' : 'Accrued transactional volume & temporal classifications'}
+              </p>
+            </div>
+          </div>
+
+          {/* Dense Tabs Selector Header Selections (flush right) */}
+          <div className="min-w-0 flex-1 flex items-center justify-end">
+            <div className="flex bg-gray-100/80 dark:bg-gray-800/80 p-1 rounded-xl gap-1 shadow-sm border border-gray-200/40 dark:border-gray-700/40 shrink-0">
+              <button
+                id="info-overview-tab-btn"
+                onClick={() => handleInfoSubTabChange('overview')}
+                className={`flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                  infoActiveSubTab === 'overview'
+                    ? 'bg-white dark:bg-gray-750 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-750/30'
+                }`}
+              >
+                {language === 'hi' ? 'अवलोकन' : 'Overview'}
+              </button>
+              <button
+                id="info-analysis-tab-btn"
+                onClick={() => handleInfoSubTabChange('analysis')}
+                className={`flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                  infoActiveSubTab === 'analysis'
+                    ? 'bg-white dark:bg-gray-750 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-750/30'
+                }`}
+              >
+                {language === 'hi' ? 'लेनदेन विश्लेषण' : 'Transaction Analysis'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Row 2: Comprehensive Search Routing & Action Control Toolbar */}
       <div className="bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800 p-1.5 sm:p-2 rounded-xl shadow-sm flex flex-row justify-between items-center gap-2">
         
@@ -608,6 +667,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 ledgerMasters={ledgerMasters}
                 itemMasters={itemMasters}
                 searchTerm={searchTerm}
+                activeTab={infoActiveSubTab}
               />
             )}
             

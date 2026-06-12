@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, FolderOpen, Layers } from 'lucide-react';
-import { MainView } from '../../../../app/types';
+import { MainView } from '../../../app/types';
 import { colorThemes } from './utils';
 
 interface DraftsTabProps {
@@ -11,7 +11,7 @@ interface DraftsTabProps {
   availableSubpages: any[];
   setView: (view: MainView) => void;
   setActiveSubTab?: (tab: 'modules' | 'drafts' | 'archives') => void;
-  handleExploreSubpage: (mainPageId: string, subpage: any) => void;
+  handleExploreSubpage: (mainPageId: string | null, subpage: any) => void;
   getSubTheme: (id: string) => { gradient: string; text: string; bg: string; hover: string };
 }
 
@@ -34,51 +34,35 @@ export const DraftsTab: React.FC<DraftsTabProps> = ({
       transition={{ duration: 0.18 }}
       className="space-y-4"
     >
-      {!selectedMainPageId ? (
-        <div className="bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-750 p-8 sm:p-12 text-center rounded-2xl space-y-5 shadow-xs">
-          <div className="w-14 h-14 rounded-full bg-blue-50 dark:bg-blue-950/35 border border-blue-100 dark:border-blue-900/20 text-blue-600 dark:text-blue-450 flex items-center justify-center mx-auto shadow-xs">
-            <Layers className="w-6 h-6 animate-pulse" />
-          </div>
-          <div className="max-w-md mx-auto space-y-2">
-            <h4 className="text-base font-black text-slate-800 dark:text-white">
-              {language === 'hi' ? 'कोई मुख्य पृष्ठ चयनित नहीं है' : 'No Main Page Selected'}
-            </h4>
-            <p className="text-slate-500 dark:text-slate-400 text-xs font-semibold leading-relaxed">
-              {language === 'hi' 
-                ? 'उपपृष्ठों को देखने के लिए कृपया \'Main Page\' टैब से किसी का चयन करें।' 
-                : 'Please select from the \'Main Page\' tab to explore its subpages.'}
-            </p>
-          </div>
-          <button
-            onClick={() => setActiveSubTab?.('modules')}
-            className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all inline-flex items-center gap-1.5 cursor-pointer"
-          >
-            <ArrowRight className="w-4 h-4 rotate-180" />
-            <span>{language === 'hi' ? 'मुख्य पृष्ठ पर लौटें' : 'Return to Main Page'}</span>
-          </button>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
+      <div className="space-y-4">
+        <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
+          {selectedMainPageId && (
             <button 
               onClick={() => setActiveSubTab?.('modules')}
               className="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer text-slate-500 dark:text-slate-400"
             >
               <ArrowRight className="w-4 h-4 rotate-180" />
             </button>
-            <div>
-              <h4 className="text-xs font-black uppercase text-slate-800 dark:text-slate-200 tracking-wider">
-                {selectedMainPage?.title} <span className="text-slate-400 dark:text-slate-500 mx-1">›</span> {language === 'hi' ? 'उपपृष्ठ सूची' : 'Subpages List'}
-              </h4>
-            </div>
+          )}
+          <div>
+            <h4 className="text-xs font-black uppercase text-slate-800 dark:text-slate-200 tracking-wider">
+              {selectedMainPageId ? (
+                <>
+                  {selectedMainPage?.title} <span className="text-slate-400 dark:text-slate-500 mx-1">›</span> {language === 'hi' ? 'उपपृष्ठ सूची' : 'Subpages List'}
+                </>
+              ) : (
+                <>{language === 'hi' ? 'सभी प्रोजेक्ट उपपृष्ठ' : 'All Project Subpages'}</>
+              )}
+            </h4>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {availableSubpages.map((sub, index) => {
               const SubIcon = sub.icon || FolderOpen;
               const theme = colorThemes[index % colorThemes.length];
               return (
                 <div
-                  key={sub.id}
+                  key={`${sub.parentModuleId || ''}-${sub.id}-${index}`}
                   className="flex flex-col text-left bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-750 hover:border-blue-500/40 rounded-2xl transition-all duration-300 hover:shadow-md relative overflow-hidden group h-full justify-between"
                 >
                   {/* Card Interactive Area for Drill-down / Exploration */}
@@ -92,9 +76,16 @@ export const DraftsTab: React.FC<DraftsTabProps> = ({
                         <SubIcon className="w-5 h-5" />
                       </div>
                       <div className="space-y-1.5 flex-1 min-w-0">
-                        <h4 className={`text-sm font-black text-slate-800 dark:text-white flex items-center gap-1 transition-colors ${theme.text.startsWith('text-') ? `group-hover:${theme.text} dark:group-hover:${theme.text.replace('text-', 'text-')}` : theme.text} truncate`}>
-                          {sub.title}
-                        </h4>
+                        <div className="flex items-center justify-between gap-2">
+                          <h4 className={`text-sm font-black text-slate-800 dark:text-white flex items-center gap-1 transition-colors ${theme.text.startsWith('text-') ? `group-hover:${theme.text} dark:group-hover:${theme.text.replace('text-', 'text-')}` : theme.text} truncate`}>
+                            {sub.title}
+                          </h4>
+                          {!selectedMainPageId && sub.parentModuleTitle && (
+                            <span className="text-[9px] bg-slate-50 dark:bg-gray-750 text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-gray-700 px-2 py-0.5 rounded-full font-black uppercase tracking-wider shrink-0 overflow-hidden text-ellipsis whitespace-nowrap max-w-[120px]">
+                              {sub.parentModuleTitle}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed font-semibold">
                           {sub.desc}
                         </p>
@@ -106,12 +97,13 @@ export const DraftsTab: React.FC<DraftsTabProps> = ({
                   <div className="px-6 pb-4 pt-3 flex items-center gap-3 w-full animate-fade-in">
                     <button 
                       onClick={() => {
+                        const targetPageId = selectedMainPageId || sub.parentModuleId;
                         const navOverride = {
-                          page: selectedMainPageId,
+                          page: targetPageId,
                           subPage: sub.id
                         };
                         localStorage.setItem('bharat_book_nav_override', JSON.stringify(navOverride));
-                        setView(selectedMainPageId as MainView);
+                        setView(targetPageId as MainView);
                       }}
                       className={`${sub.tabs.length > 0 ? 'w-1/2' : 'w-full'} py-2 ${theme.bg} ${theme.hover} ${theme.text.startsWith('text-') ? theme.text : 'text-blue-600'} dark:text-blue-400 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer`}
                       title={language === 'hi' ? 'उपपृष्ठ लॉन्च करें' : 'Launch Subpage'}
@@ -135,7 +127,6 @@ export const DraftsTab: React.FC<DraftsTabProps> = ({
             })}
           </div>
         </div>
-      )}
     </motion.div>
   );
 };

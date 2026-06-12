@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, FolderOpen, Layers } from 'lucide-react';
-import { MainView } from '../../../../app/types';
+import { MainView } from '../../../app/types';
 import { colorThemes } from './utils';
 
 interface ModulesTabProps {
