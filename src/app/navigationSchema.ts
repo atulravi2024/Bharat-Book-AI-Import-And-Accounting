@@ -1,6 +1,6 @@
 export const getNavigationSchema = (t: (key: string) => string) => {
   const pages = [
-    { id: "index", label: t("Welcome Hub"), icon: "🏠" },
+    { id: "index", label: t("Home"), icon: "🏠" },
       { id: "dashboard", label: t("Dashboard"), icon: "📊" },
       { id: "voucher-entry", label: t("Transactions"), icon: "➕" },
       { id: "inventory-entry", label: t("Inventory Trans."), icon: "📦" },
@@ -189,6 +189,8 @@ export const getNavigationSchema = (t: (key: string) => string) => {
       { id: "purchase", label: t("Purchase Register") },
     ],
     settings: [
+      { id: "setting_categories", label: t("Category Settings") },
+      { id: "workspace", label: t("Setting Explorer") },
       { id: "firm", label: t("Firm") },
       { id: "general", label: t("General") },
       { id: "ui", label: t("UI") },
@@ -197,7 +199,7 @@ export const getNavigationSchema = (t: (key: string) => string) => {
       { id: "invoiceprint", label: t("Invoice & Print") },
       { id: "vouchernumbering", label: t("Voucher Numbering") },
       { id: "users", label: t("Users") },
-      { id: "alerts", label: t("Alerts") },
+      { id: "alerts", label: t("Alert Channel") },
       { id: "security", label: t("Security") },
       { id: "privacy", label: t("Privacy") },
       { id: "imports", label: t("Import Rules") },
@@ -771,9 +773,9 @@ export const getNavigationSchema = (t: (key: string) => string) => {
       { id: "routing", label: t("Contextual Routing Settings") },
     ],
     invoiceprint: [
-      { id: "pdf_header", label: t("Invoice PDF Banner & Header") },
-      { id: "letterhead", label: t("Standard Letterhead Margins") },
-      { id: "receipt_print", label: t("POS & Invoice Receipt Print") },
+      { id: "design", label: t("Design") },
+      { id: "structure", label: t("Layout") },
+      { id: "content", label: t("Data") },
     ],
     formdetails: [
       { id: "desktop", label: t("Desktop") },

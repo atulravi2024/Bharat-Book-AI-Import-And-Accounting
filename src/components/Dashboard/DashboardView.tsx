@@ -29,12 +29,49 @@ type DashboardTab = 'overview' | 'sales' | 'purchase' | 'payment' | 'receipts' |
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNavigateToView, defaultTab, onTabChange }) => {
   const { t, formatNumber } = useLanguage();
+  const [hiddenTabs, setHiddenTabs] = useState<string[]>([]);
+
+  React.useEffect(() => {
+    const loadHidden = () => {
+      const stored = localStorage.getItem("bharat_book_hidden_report_tabs");
+      if (stored) {
+        try {
+          setHiddenTabs(JSON.parse(stored));
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        setHiddenTabs([]);
+      }
+    };
+    loadHidden();
+    window.addEventListener("bharat_book_report_tabs_trigger", loadHidden);
+    return () => {
+      window.removeEventListener("bharat_book_report_tabs_trigger", loadHidden);
+    };
+  }, []);
+
   const getInitialTab = (): DashboardTab => {
     let tab = defaultTab as string;
     if (tab === 'main') tab = 'overview';
     return (tab as DashboardTab) || 'overview';
   };
-  const [activeTab, setActiveTab] = useState<DashboardTab>(getInitialTab());
+  const [activeTab, setActiveTab ] = useState<DashboardTab>(getInitialTab());
+
+  React.useEffect(() => {
+    const checkId = `dash_${activeTab === 'receipts' ? 'receipts' : activeTab}`;
+    if (hiddenTabs.includes(checkId)) {
+      const order: DashboardTab[] = ['overview', 'sales', 'purchase', 'payment', 'receipts', 'bank', 'journal', 'contra'];
+      for (const tId of order) {
+        const oId = `dash_${tId === 'receipts' ? 'receipts' : tId}`;
+        if (!hiddenTabs.includes(oId)) {
+          setActiveTab(tId);
+          break;
+        }
+      }
+    }
+  }, [hiddenTabs, activeTab]);
+
   const [colors, setColors] = useState<string[]>(['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6B7280', '#14B8A6']);
 
   React.useEffect(() => {
@@ -184,14 +221,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ vouchers, onNaviga
           
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
             <div className="flex bg-white dark:bg-gray-800 rounded-2xl p-1 shadow-sm border border-premium-slate-100 dark:border-gray-700 overflow-x-auto custom-scrollbar h-fit w-full sm:w-auto">
-              <div><TabButton id="overview" label={t("Overview")} icon={Layers} /></div>
-              <div><TabButton id="sales" label={t("Sales")} icon={TrendingUp} /></div>
-              <div><TabButton id="purchase" label={t("Purchase")} icon={Package} /></div>
-              <div><TabButton id="payment" label={t("Payment")} icon={CreditCard} /></div>
-              <div><TabButton id="receipts" label={t("Receipt")} icon={Receipt} /></div>
-              <div><TabButton id="bank" label={t("Bank Report")} icon={ArrowDownRight} /></div>
-              <div><TabButton id="journal" label={t("Journal")} icon={FileText} /></div>
-              <div><TabButton id="contra" label={t("Contra")} icon={Repeat} /></div>
+              {!hiddenTabs.includes("dash_overview") && <div><TabButton id="overview" label={t("Overview")} icon={Layers} /></div>}
+              {!hiddenTabs.includes("dash_sales") && <div><TabButton id="sales" label={t("Sales")} icon={TrendingUp} /></div>}
+              {!hiddenTabs.includes("dash_purchase") && <div><TabButton id="purchase" label={t("Purchase")} icon={Package} /></div>}
+              {!hiddenTabs.includes("dash_payment") && <div><TabButton id="payment" label={t("Payment")} icon={CreditCard} /></div>}
+              {!hiddenTabs.includes("dash_receipts") && <div><TabButton id="receipts" label={t("Receipt")} icon={Receipt} /></div>}
+              {!hiddenTabs.includes("dash_bank") && <div><TabButton id="bank" label={t("Bank Report")} icon={ArrowDownRight} /></div>}
+              {!hiddenTabs.includes("dash_journal") && <div><TabButton id="journal" label={t("Journal")} icon={FileText} /></div>}
+              {!hiddenTabs.includes("dash_contra") && <div><TabButton id="contra" label={t("Contra")} icon={Repeat} /></div>}
             </div>
           </div>
 

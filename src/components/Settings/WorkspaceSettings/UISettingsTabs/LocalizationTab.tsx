@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import { useLanguage } from "../../../../context/LanguageContext";
 import { Globe, Type, Check } from "lucide-react";
 import { useSearchFilter } from "./hooks/useSearchFilter";
+import { useUISettings } from "../hooks/useUISettings";
 
 export const LocalizationTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t, language, setLanguage } = useLanguage();
   const { isFieldVisible } = useSearchFilter(searchTerm);
-  const [fontFamily, setFontFamily] = useState<"inter" | "space" | "jetbrains">("inter");
+  const { settings, setSettings } = useUISettings();
+  const { fontFamily } = settings;
+
+  const setFontFamily = (val: any) => setSettings(prev => ({ ...prev, fontFamily: val }));
 
   const fontOptions = [
     { id: "inter", label: "Inter UI & Systems", desc: "Clean modern, highly readable sans-serif optimized for numbers." },

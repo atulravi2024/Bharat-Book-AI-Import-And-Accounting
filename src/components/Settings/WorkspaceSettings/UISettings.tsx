@@ -8,6 +8,7 @@ import { DataDisplayTab } from "./UISettingsTabs/DataDisplayTab";
 import { LocalizationTab } from "./UISettingsTabs/LocalizationTab";
 import { AdvancedOptionsTab } from "./UISettingsTabs/AdvancedOptionsTab";
 import { MaxCustomizationTab } from "./UISettingsTabs/MaxCustomizationTab";
+import { useUISettings } from "./hooks/useUISettings";
 
 export interface UISettingsProps {
   defaultSubtab?: string;
@@ -25,15 +26,40 @@ const getInitialSubtab = (tabProp?: string) => {
 
 export const UISettings: React.FC<UISettingsProps> = ({ defaultSubtab }) => {
   const { t } = useLanguage();
-  const [activeSubtab, setActiveSubtab] = useState<"layout" | "color" | "data" | "localization" | "more" | "maximum">(() =>
-    getInitialSubtab(defaultSubtab)
-  );
+  const [activeSubtab, setActiveSubtab] = useState<"layout" | "color" | "data" | "localization" | "more" | "maximum">(() => {
+    const override = localStorage.getItem('bharat_book_ui_subtab_override');
+    if (override) {
+      const cleaned = override.replace("ui_", "");
+      if (["layout", "color", "data", "localization", "more", "maximum"].includes(cleaned)) {
+        localStorage.removeItem('bharat_book_ui_subtab_override');
+        return cleaned as any;
+      }
+    }
+    return getInitialSubtab(defaultSubtab);
+  });
 
+  const { settings, setSettings, resetSettings } = useUISettings();
   const [searchTerm, setSearchTerm] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [targetFormat, setTargetFormat] = useState<"json" | "csv">("json");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  useEffect(() => {
+    const checkOverride = () => {
+      const override = localStorage.getItem('bharat_book_ui_subtab_override');
+      if (override) {
+        const cleaned = override.replace("ui_", "");
+        if (["layout", "color", "data", "localization", "more", "maximum"].includes(cleaned)) {
+          setActiveSubtab(cleaned as any);
+        }
+        localStorage.removeItem('bharat_book_ui_subtab_override');
+      }
+    };
+    checkOverride();
+    window.addEventListener('bharat_book_ui_subtab_trigger', checkOverride);
+    return () => window.removeEventListener('bharat_book_ui_subtab_trigger', checkOverride);
+  }, []);
 
   useEffect(() => {
     if (defaultSubtab) {
@@ -54,12 +80,46 @@ export const UISettings: React.FC<UISettingsProps> = ({ defaultSubtab }) => {
     setSearchTerm(val);
   };
 
-  const handleClear = () => {};
-  const handleResetToDefault = () => {};
-  const handleExportBackup = () => {};
-  const handleCombinedImport = () => {};
+  const handleClear = () => {
+    setSearchTerm("");
+  };
+
+  const handleResetToDefault = () => {
+    resetSettings();
+  };
+
+  const handleExportBackup = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(settings, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "bharat_book_ui_settings.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  const handleCombinedImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const jsonObj = JSON.parse(e.target?.result as string);
+        setSettings(prev => ({ ...prev, ...jsonObj }));
+        setIsSaved(true);
+        setTimeout(() => setIsSaved(false), 2000);
+      } catch (error) {
+        console.error("Error parsing settings JSON", error);
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  };
 
   const handleSave = () => {
+    localStorage.setItem('bharat_book_ui_settings', JSON.stringify(settings));
+    window.dispatchEvent(new Event('ui_settings_changed'));
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   };

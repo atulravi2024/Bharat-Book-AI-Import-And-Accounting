@@ -1,0 +1,37 @@
+{
+  "cacheSize": 1.8,
+  "recordCount": 312,
+  "quotaLimit": 5.0,
+  "desc_en": "HTML Local Storage quota utilized dynamically nested within browser limits.",
+  "desc_hi": "यह ब्राउज़र की इन-मेमोरी सीमा के भीतर सुरक्षित संग्रहण का उपयोग करता है।",
+  "dbs": [
+    {
+      "id": "sqlite",
+      "name_en": "Local SQLite Database",
+      "name_hi": "स्थानीय SQLite डेटाबेस",
+      "type_en": "Relational Client Storage",
+      "type_hi": "रिलेशनल क्लाइंट स्टोरेज",
+      "size": 1.25,
+      "sizeLimit": 10.0,
+      "records": 8420,
+      "status_en": "Active (Demo)",
+      "status_hi": "सक्रिय (डेमो)",
+      "syncTime_en": "Checked 2 mins ago",
+      "syncTime_hi": "२ मिनट पहले चेक किया गया"
+    },
+    {
+      "id": "firebase",
+      "name_en": "Cloud Firebase Firestore",
+      "name_hi": "क्लाउड फायरबेस फायरस्टोर",
+      "type_en": "NoSQL Remote Storage",
+      "type_hi": "NoSQL रिमोट स्टोरेज",
+      "size": 0.45,
+      "sizeLimit": 50.0,
+      "records": 312,
+      "status_en": "Synchronized (Demo)",
+      "status_hi": "सिंक्रोनाइज़्ड (डेमो)",
+      "syncTime_en": "Synced active now",
+      "syncTime_hi": "अभी सक्रिय रूप से सिंक किया गया"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "id": "fb-1",
+    "action": "System Synced",
+    "action_hi": "सिस्टम सिंक किया गया",
+    "time_en": "Active now",
+    "time_hi": "सक्रिय अब",
+    "type": "SECURE UNIT",
+    "type_hi": "सुरक्षित इकाई",
+    "info_en": "Enterprise ledger engines securely synchronized with in-memory cloud backup storage.",
+    "info_hi": "एंटरप्राइज बहीखाता इंजन इन-मेमोरी क्लाउड बैकअप स्टोरेज के साथ सुरक्षित रूप से सिंक्रोनाइज़ किए गए।",
+    "details_en": "Sync integrity check code: BD76-90AF. Consensus verified successfully.",
+    "details_hi": "सिंक अखंडता जांच कोड: BD76-90AF। सर्वसम्मति सफलतापूर्वक सत्यापित की गई।"
+  },
+  {
+    "id": "fb-2",
+    "action": "Master Audit",
+    "action_hi": "मास्टर ऑडिट",
+    "time_en": "7 minutes ago",
+    "time_hi": "7 मिनट पहले",
+    "type": "INTEGRITY",
+    "type_hi": "अखंडता",
+    "info_en": "General ledger rules and vendors checked automatically.",
+    "info_hi": "सामान्य बहीखाता नियम और विक्रेता स्वचालित रूप से जाँचे गए।",
+    "details_en": "Self-healing validation: No broken parent references or orphaned accounting tax tags found.",
+    "details_hi": "स्व-उपचार सत्यापन: कोई टूटे हुए मूल संदर्भ या अनाथ लेखांकन कर टैग नहीं मिले।"
+  },
+  {
+    "id": "fb-3",
+    "action": "GDPR Policy Checked",
+    "action_hi": "जीडीपीआर नीति जांची गई",
+    "time_en": "1 hour ago",
+    "time_hi": "1 घंटा पहले",
+    "type": "COMPLIANCE",
+    "type_hi": "अनुपालन",
+    "info_en": "Organization double-encryption consensus protocol and data consent verification active.",
+    "info_hi": "संगठन दोहरा-एन्क्रिप्शन सर्वसम्मति प्रोटोकॉल और डेटा सहमति सत्यापन सक्रिय।",
+    "details_en": "Algorithm: AES-GCM-256 with secondary state backup hashing protocol.",
+    "details_hi": "एल्गोरिदम: माध्यमिक स्थिति बैकअप हैशिंग प्रोटोकॉल के साथ AES-GCM-256।"
+  },
+  {
+    "id": "fb-4",
+    "action": "Cache Cleared",
+    "action_hi": "कैश साफ किया गया",
+    "time_en": "3 hours ago",
+    "time_hi": "3 घंटे पहले",
+    "type": "STABILITY",
+    "type_hi": "स्थिरता",
+    "info_en": "Temporary PDF rendering canvases and redundant OCR bounding layers successfully purged.",
+    "info_hi": "अस्थायी पीडीएफ रेंडरिंग कैनवस और अनावश्यक ओसीआर बाउंडिंग परतों को सफलतापूर्वक साफ किया गया।",
+    "details_en": "Freed memory: 18.4 MB of transient image buffers from RAM heap.",
+    "details_hi": "मुक्त मेमोरी: रैम हीप से 18.4 एमबी के अस्थायी छवि बफ़र्स।"
+  }
+]

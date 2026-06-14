@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { useLanguage } from "../../../../context/LanguageContext";
 import { Maximize, Grid, Percent, SlidersHorizontal, Sliders } from "lucide-react";
 import { useSearchFilter } from "./hooks/useSearchFilter";
+import { useUISettings } from "../hooks/useUISettings";
 
 export const MaxCustomizationTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
   const { isFieldVisible } = useSearchFilter(searchTerm);
-  const [maxGridZoom, setMaxGridZoom] = useState<"85" | "100" | "115">("100");
-  const [borderWeight, setBorderWeight] = useState<"thin" | "medium" | "thick">("thin");
-  const [isMaxMode, setIsMaxMode] = useState(false);
+  const { settings, setSettings } = useUISettings();
+  const { maxGridZoom, borderWeight, isMaxMode } = settings;
+
+  const setMaxGridZoom = (val: any) => setSettings(prev => ({ ...prev, maxGridZoom: val }));
+  const setBorderWeight = (val: any) => setSettings(prev => ({ ...prev, borderWeight: val }));
+  const setIsMaxMode = (val: any) => setSettings(prev => ({ ...prev, isMaxMode: val }));
 
   const showZoom = isFieldVisible("Maximum Sheet Workspace Scaling", ["zoom", "scale", "responsive", "size"]);
   const showBorder = isFieldVisible("Grid Outline Weight Options", ["border", "grid", "outline", "weight", "thickness"]);

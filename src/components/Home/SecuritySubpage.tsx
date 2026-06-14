@@ -99,6 +99,62 @@ export const SecuritySubpage: React.FC<SecuritySubpageProps> = () => {
         className="hidden" 
       />
 
+      {/* Security Subpage Header & Tabs */}
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-white dark:bg-gray-900 p-3.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm overflow-hidden animate-fade-in">
+        <div className="flex items-center gap-3 shrink-0 min-w-0 md:max-w-md">
+          <div className="p-2 bg-blue-50 dark:bg-blue-950/40 rounded-xl mr-1 text-blue-600 dark:text-blue-400 border border-blue-100/50 dark:border-blue-900/30">
+            <ShieldCheck className="w-5 h-5 animate-pulse" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight truncate">
+              {language === 'hi' ? 'सुरक्षा एवं नियंत्रण' : 'Security & Workspace Control'}
+            </h2>
+            <p className="text-[10px] xs:text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5 truncate whitespace-nowrap" title={language === 'hi' ? 'सुरक्षा प्रोटोकॉल क्रेडेंशियल्स और अनुपालन' : 'Active encryption keys, locale translation, and sandbox parameters'}>
+              {language === 'hi' ? 'सुरक्षा प्रोटोकॉल क्रेडेंशियल्स और अनुपालन' : 'Active encryption keys, locale translation, and sandbox parameters'}
+            </p>
+          </div>
+        </div>
+
+        {/* Dense Tabs Selector Header Selections (flush right) */}
+        <div className="min-w-0 flex-1 flex items-center justify-end">
+          <div className="flex bg-slate-100 dark:bg-gray-950 p-1.5 rounded-xl gap-1.5 shadow-sm border border-slate-200/50 dark:border-gray-800 shrink-0">
+            <button
+              id="security-encryption-tab-btn"
+              onClick={() => setActiveTab('encryption')}
+              className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                activeTab === 'encryption'
+                  ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
+              }`}
+            >
+              {language === 'hi' ? 'एन्क्रिप्शन' : 'Encryption'}
+            </button>
+            <button
+              id="security-language-tab-btn"
+              onClick={() => setActiveTab('language')}
+              className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                activeTab === 'language'
+                  ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
+              }`}
+            >
+              {language === 'hi' ? 'भाषा' : 'Language'}
+            </button>
+            <button
+              id="security-compliance-tab-btn"
+              onClick={() => setActiveTab('compliance')}
+              className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                activeTab === 'compliance'
+                  ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
+              }`}
+            >
+              {language === 'hi' ? 'अनुपालन' : 'Compliance'}
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Action Control Toolbar */}
       <div className="bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800 p-1.5 sm:p-2 rounded-xl shadow-sm flex flex-row justify-between items-center gap-2">
         <div className="flex-1 min-w-0 relative">
@@ -123,7 +179,7 @@ export const SecuritySubpage: React.FC<SecuritySubpageProps> = () => {
           )}
         </div>
 
-        <div className={`flex items-center gap-1.5 shrink-0 transition-all duration-200 ${
+        <div className={`flex items-center gap-1.5 shrink-0 transition-all duration-250 ${
           (isSearchFocused || searchTerm.length > 0) ? 'hidden sm:flex' : 'flex'
         }`}>
           <div className="relative inline-flex items-center bg-slate-50 dark:bg-gray-800 border border-gray-200/60 dark:border-gray-750 px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-300 shrink-0 select-none cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all">
@@ -154,7 +210,7 @@ export const SecuritySubpage: React.FC<SecuritySubpageProps> = () => {
           </button>
           <button
             onClick={handleClearInput}
-            className="p-1.5 sm:px-3 sm:py-1.5 bg-slate-50 dark:bg-gray-800 border border-gray-200/60 dark:border-gray-750 hover:bg-red-50 dark:hover:bg-red-950/20 text-red-600 dark:text-red-400 rounded-lg text-xs font-bold transition-all cursor-pointer items-center gap-1.5 hidden lg:flex"
+            className="p-1.5 sm:px-3 sm:py-1.5 bg-slate-50 dark:bg-gray-800 border border-gray-200/60 dark:border-gray-750 hover:bg-red-50 dark:hover:bg-red-950/20 text-red-650 dark:text-red-400 rounded-lg text-xs font-bold transition-all cursor-pointer items-center gap-1.5 hidden lg:flex"
           >
             <Trash2 className="w-3.5 h-3.5 shrink-0" />
             <span>{language === 'hi' ? 'साफ़' : 'Clear Input'}</span>
@@ -172,45 +228,6 @@ export const SecuritySubpage: React.FC<SecuritySubpageProps> = () => {
           >
             <Save className="w-3.5 h-3.5 shrink-0 text-white" />
             <span className="hidden lg:inline">{language === 'hi' ? 'सहेजें' : 'Save'}</span>
-          </button>
-        </div>
-      </div>
-      
-      {/* Sub-Tabs selection bar */}
-      <div className="flex justify-start">
-        <div className="flex bg-slate-100 dark:bg-gray-950 p-1.5 rounded-xl gap-1.5 shadow-sm border border-slate-200/50 dark:border-gray-800 shrink-0">
-          <button
-            onClick={() => setActiveTab('encryption')}
-            className={`flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'encryption'
-                ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
-                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
-            }`}
-          >
-            <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-            {language === 'hi' ? 'एन्क्रिप्शन' : 'Encryption'}
-          </button>
-          <button
-            onClick={() => setActiveTab('language')}
-            className={`flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'language'
-                ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
-                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
-            }`}
-          >
-            <Globe className="w-3.5 h-3.5 shrink-0" />
-            {language === 'hi' ? 'भाषा' : 'Language'}
-          </button>
-          <button
-            onClick={() => setActiveTab('compliance')}
-            className={`flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'compliance'
-                ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
-                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
-            }`}
-          >
-            <Lock className="w-3.5 h-3.5 shrink-0" />
-            {language === 'hi' ? 'अनुपालन' : 'Compliance'}
           </button>
         </div>
       </div>

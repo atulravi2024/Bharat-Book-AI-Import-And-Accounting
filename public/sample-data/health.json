@@ -1,0 +1,38 @@
+[
+  {
+    "id": "cpu",
+    "name_en": "CPU Processing Load",
+    "name_hi": "सीपीयू प्रोसेसिंग लोड",
+    "value": "0.02%",
+    "status_en": "Optimized",
+    "status_hi": "अनुकूलित",
+    "percentage": 3,
+    "barColor": "bg-blue-500",
+    "description_en": "Extremely fast parsing times with minimal background script overhead.",
+    "description_hi": "इन-मेमोरी इंडेक्सिंग बहुत स्थिर है, कोई ओवरहेड नहीं पाया गया।"
+  },
+  {
+    "id": "sync",
+    "name_en": "In-Memory Sync State",
+    "name_hi": "इन-मेमोरी सिंक स्थिति",
+    "value": "Connected",
+    "status_en": "Pristine",
+    "status_hi": "सर्वोत्तम",
+    "percentage": 100,
+    "barColor": "bg-emerald-500",
+    "description_en": "Real-time state keeps persistent caches mirrored flawlessly.",
+    "description_hi": "सुरक्षित स्थानीय बफर क्लाउड सिंक्रोनाइजेशन के साथ लाइव जुड़ा हुआ है।"
+  },
+  {
+    "id": "integrity",
+    "name_en": "Ledger Reconciliation Integrity",
+    "name_hi": "बही मिलान अखंडता",
+    "value": "100.0%",
+    "status_en": "Verified",
+    "status_hi": "सत्यापित",
+    "percentage": 100,
+    "barColor": "bg-indigo-500",
+    "description_en": "Double-entry constraints are strictly synchronized without orphans.",
+    "description_hi": "सभी बहीखाते डबल-एंट्री नियमों के अनुकूल हैं।"
+  }
+]

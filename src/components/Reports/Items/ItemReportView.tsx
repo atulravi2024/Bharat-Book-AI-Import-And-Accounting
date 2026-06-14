@@ -31,6 +31,62 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
   const { t, formatNumber  } = useLanguage();
 
   const [activeTab, setActiveTab] = useState<ItemReportTab>((defaultTab as any) || 'analysis');
+  const [hiddenReports, setHiddenReports] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadHidden = () => {
+      const stored = localStorage.getItem("bharat_book_hidden_report_tabs");
+      if (stored) {
+        try {
+          setHiddenReports(JSON.parse(stored));
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        setHiddenReports([]);
+      }
+    };
+    loadHidden();
+    window.addEventListener("bharat_book_report_tabs_trigger", loadHidden);
+    return () => {
+      window.removeEventListener("bharat_book_report_tabs_trigger", loadHidden);
+    };
+  }, []);
+
+  const allTabs = [
+    { id: 'summary', label: 'Stock Summary', icon: List },
+    { id: 'analysis', label: 'Rate Analysis', icon: TrendingUp },
+    { id: 'movement', label: 'Stock Movement', icon: History },
+    { id: 'aging', label: 'Stock Aging', icon: Clock },
+    { id: 'reorder', label: 'Reorder List', icon: AlertTriangle },
+    { id: 'category', label: 'Category View', icon: Layers },
+    { id: 'hsn', label: 'HSN/SAC Summary', icon: Tag },
+    { id: 'tax', label: 'Tax Rate Wise', icon: Database },
+    { id: 'brand', label: 'Brand Analysis', icon: ShieldCheck },
+    { id: 'location', label: 'Location View', icon: MapPin },
+    { id: 'unit', label: 'Unit Wise', icon: Box },
+    { id: 'batch', label: 'Batch Wise', icon: Clock },
+    { id: 'negative', label: 'Negative Stock', icon: AlertCircle },
+    { id: 'fast_moving', label: 'Fast Moving', icon: TrendingUp },
+    { id: 'slow_moving', label: 'Slow Moving', icon: History },
+    { id: 'profitability', label: 'Item Profitability', icon: TrendingUp },
+    { id: 'valuation', label: 'Stock Valuation', icon: Database },
+    { id: 'top_selling', label: 'Top Selling', icon: TrendingUp },
+    { id: 'dead_stock', label: 'Dead Stock', icon: AlertCircle },
+    { id: 'reconciliation', label: 'Reconciliation', icon: ShieldCheck },
+    { id: 'procurement', label: 'Procurement', icon: Box },
+    { id: 'price_list', label: 'Price List', icon: Tag },
+    { id: 'lead_time', label: 'Lead Time', icon: Clock },
+  ];
+
+  const visibleTabs = allTabs.filter(tab => !hiddenReports.includes(`item_${tab.id}`));
+
+  useEffect(() => {
+    if (visibleTabs.length > 0 && !visibleTabs.some(t => t.id === activeTab)) {
+      setActiveTab(visibleTabs[0].id as ItemReportTab);
+    }
+  }, [visibleTabs, activeTab]);
+
   const [dateRange, setDateRange] = useState(() => {
     let fmt = 'April to March (Indian Standard)';
     try {
@@ -176,31 +232,7 @@ export const ItemReportView: React.FC<ItemReportViewProps> = ({ vouchers, defaul
       {/* Sub-page Navigation Tabs */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-800">
         <div className="flex border-b overflow-x-auto whitespace-nowrap bg-gray-50/50 custom-scrollbar">
-          {[
-            { id: 'summary', label: 'Stock Summary', icon: List },
-            { id: 'analysis', label: 'Rate Analysis', icon: TrendingUp },
-            { id: 'movement', label: 'Stock Movement', icon: History },
-            { id: 'aging', label: 'Stock Aging', icon: Clock },
-            { id: 'reorder', label: 'Reorder List', icon: AlertTriangle },
-            { id: 'category', label: 'Category View', icon: Layers },
-            { id: 'hsn', label: 'HSN/SAC Summary', icon: Tag },
-            { id: 'tax', label: 'Tax Rate Wise', icon: Database },
-            { id: 'brand', label: 'Brand Analysis', icon: ShieldCheck },
-            { id: 'location', label: 'Location View', icon: MapPin },
-            { id: 'unit', label: 'Unit Wise', icon: Box },
-            { id: 'batch', label: 'Batch Wise', icon: Clock },
-            { id: 'negative', label: 'Negative Stock', icon: AlertCircle },
-            { id: 'fast_moving', label: 'Fast Moving', icon: TrendingUp },
-            { id: 'slow_moving', label: 'Slow Moving', icon: History },
-            { id: 'profitability', label: 'Item Profitability', icon: TrendingUp },
-            { id: 'valuation', label: 'Stock Valuation', icon: Database },
-            { id: 'top_selling', label: 'Top Selling', icon: TrendingUp },
-            { id: 'dead_stock', label: 'Dead Stock', icon: AlertCircle },
-            { id: 'reconciliation', label: 'Reconciliation', icon: ShieldCheck },
-            { id: 'procurement', label: 'Procurement', icon: Box },
-            { id: 'price_list', label: 'Price List', icon: Tag },
-            { id: 'lead_time', label: 'Lead Time', icon: Clock },
-          ].map(tab => (
+          {visibleTabs.map(tab => (
             <button
               key={tab.id}
               id={`item-tab-${tab.id}`}

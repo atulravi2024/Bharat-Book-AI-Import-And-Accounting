@@ -467,7 +467,7 @@ export const AdminSettings: React.FC = () => {
                                             <button onClick={handleDatabaseRepairAudit} className="flex-1 md:flex-initial px-3.5 py-1.5 text-xs font-semibold border border-indigo-100 dark:border-indigo-900 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/10 rounded-lg transition">
                                                 {t("Repair DB Integrity")}
                                             </button>
-                                            <button onClick={runPerformanceProbe} disabled={benchmarkRunning} className="flex-1 md:flex-initial px-3.5 py-1.5 text-xs font-bold bg-indigo-650 hover:bg-indigo-700 text-white rounded-lg transition shadow-xs flex items-center justify-center gap-1 disabled:opacity-50">
+                                            <button onClick={runPerformanceProbe} disabled={benchmarkRunning} className="flex-1 md:flex-initial px-3.5 py-1.5 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition shadow-xs flex items-center justify-center gap-1 disabled:opacity-50">
                                                 <Play className="w-3 h-3 fill-current" />
                                                 {benchmarkRunning ? t('Auditing...') : t('Run Performance Audit')}
                                             </button>
@@ -508,7 +508,7 @@ export const AdminSettings: React.FC = () => {
                                                     <CheckCircle2 className="w-3.5 h-3.5 animate-bounce" /> {t("Changes Committed to LocalStorage!")}
                                                 </span>
                                             )}
-                                            <button onClick={handleSaveJson} className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-indigo-650 hover:bg-indigo-700 text-white shadow-xs transition">
+                                            <button onClick={handleSaveJson} className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition">
                                                 {t("Commit Changes")}
                                             </button>
                                         </div>

@@ -39,6 +39,57 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
 
   const [activeTab, setActiveTab] = useState<'filing' | 'summary' | 'gst_summary' | 'invoice_detail' | 'hsn_detail' | 'generate_gst' | 'gstr2b_report' | 'gstr3b_report' | 'gstr9_report' | 'gstr9c_report' | 'cmp08_report_tab' | 'gstr4_report_tab' | 'gstr4a_report_tab' | 'cmp02_report_tab' | 'cmp04_report_tab' | 'composition_rules_tab' | 'regular_rules_tab' | 'compliance_registries_tab' | 'others_report'>((defaultTab as any) || 'generate_gst');
   
+  const [hiddenReports, setHiddenReports] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadHidden = () => {
+      const stored = localStorage.getItem("bharat_book_hidden_report_tabs");
+      if (stored) {
+        try {
+          setHiddenReports(JSON.parse(stored));
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        setHiddenReports([]);
+      }
+    };
+    loadHidden();
+    window.addEventListener("bharat_book_report_tabs_trigger", loadHidden);
+    return () => {
+      window.removeEventListener("bharat_book_report_tabs_trigger", loadHidden);
+    };
+  }, []);
+
+  const gstTabs = [
+    { id: 'generate_gst', label: 'Generate GST' },
+    { id: 'gst_summary', label: 'GST Summary' },
+    { id: 'summary', label: 'GSTR1 Summary' },
+    { id: 'filing', label: 'GSTR1 Filing' },
+    { id: 'invoice_detail', label: 'GSTR1 Invoice' },
+    { id: 'hsn_detail', label: 'GSTR1 HSN' },
+    { id: 'gstr2b_report', label: 'GSTR-2B' },
+    { id: 'gstr3b_report', label: 'GSTR-3B' },
+    { id: 'gstr9_report', label: 'GSTR-9' },
+    { id: 'gstr9c_report', label: 'GSTR-9C' },
+    { id: 'cmp08_report_tab', label: 'CMP-08' },
+    { id: 'gstr4_report_tab', label: 'GSTR-4' },
+    { id: 'gstr4a_report_tab', label: 'GSTR-4A' },
+    { id: 'cmp02_report_tab', label: 'CMP-02' },
+    { id: 'cmp04_report_tab', label: 'CMP-04' },
+    { id: 'composition_rules_tab', label: 'Composition Rules' },
+    { id: 'regular_rules_tab', label: 'Regular Rules' },
+    { id: 'compliance_registries_tab', label: 'Compliance Registries' },
+  ];
+
+  const visibleGstTabs = gstTabs.filter(t => !hiddenReports.includes(`gst_${t.id}`));
+
+  useEffect(() => {
+    if (visibleGstTabs.length > 0 && !visibleGstTabs.some(t => t.id === activeTab)) {
+      setActiveTab(visibleGstTabs[0].id as any);
+    }
+  }, [visibleGstTabs, activeTab]);
+
   useEffect(() => {
     if (defaultTab && defaultTab !== activeTab) {
       setActiveTab(defaultTab as any);
@@ -367,132 +418,20 @@ export const GSTReportView: React.FC<GSTReportViewProps> = ({ vouchers, activeSa
                   </div>
               </div>
               <div className="flex bg-gray-100 p-1 rounded-lg mt-3 w-full gap-1 overflow-x-auto custom-scrollbar dark:bg-gray-800">
-                <button 
-                    id="gst-tab-generate_gst"
-                    onClick={() => handleTabChange('generate_gst')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'generate_gst' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('Generate GST')}
-                </button>
-                <button 
-                    id="gst-tab-gst_summary"
-                    onClick={() => handleTabChange('gst_summary')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gst_summary' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GST Summary')}
-                </button>
-                <button 
-                    id="gst-tab-summary"
-                    onClick={() => handleTabChange('summary')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'summary' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR1 Summary')}
-                </button>
-                <button 
-                    id="gst-tab-filing"
-                    onClick={() => handleTabChange('filing')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'filing' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR1 Filing')}
-                </button>
-                <button 
-                    id="gst-tab-invoice_detail"
-                    onClick={() => handleTabChange('invoice_detail')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'invoice_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR1 Invoice')}
-                </button>
-                <button 
-                    id="gst-tab-hsn_detail"
-                    onClick={() => handleTabChange('hsn_detail')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'hsn_detail' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR1 HSN')}
-                </button>
-                <button 
-                    id="gst-tab-gstr2b_report"
-                    onClick={() => handleTabChange('gstr2b_report')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr2b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR-2B')}
-                </button>
-                <button 
-                    id="gst-tab-gstr3b_report"
-                    onClick={() => handleTabChange('gstr3b_report')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr3b_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR-3B')}
-                </button>
-                <button 
-                    id="gst-tab-gstr9_report"
-                    onClick={() => handleTabChange('gstr9_report')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR-9')}
-                </button>
-                <button 
-                    id="gst-tab-gstr9c_report"
-                    onClick={() => handleTabChange('gstr9c_report')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr9c_report' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR-9C')}
-                </button>
-                <button 
-                    id="gst-tab-cmp08_report_tab"
-                    onClick={() => handleTabChange('cmp08_report_tab')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'cmp08_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('CMP-08')}
-                </button>
-                <button 
-                    id="gst-tab-gstr4_report_tab"
-                    onClick={() => handleTabChange('gstr4_report_tab')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr4_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR-4')}
-                </button>
-                <button 
-                    id="gst-tab-gstr4a_report_tab"
-                    onClick={() => handleTabChange('gstr4a_report_tab')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'gstr4a_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('GSTR-4A')}
-                </button>
-                <button 
-                    id="gst-tab-cmp02_report_tab"
-                    onClick={() => handleTabChange('cmp02_report_tab')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'cmp02_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('CMP-02')}
-                </button>
-                <button 
-                    id="gst-tab-cmp04_report_tab"
-                    onClick={() => handleTabChange('cmp04_report_tab')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'cmp04_report_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('CMP-04')}
-                </button>
-                <button 
-                    id="gst-tab-composition_rules_tab"
-                    onClick={() => handleTabChange('composition_rules_tab')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'composition_rules_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('Composition Rules')}
-                </button>
-                <button 
-                    id="gst-tab-regular_rules_tab"
-                    onClick={() => handleTabChange('regular_rules_tab')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'regular_rules_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('Regular Rules')}
-                </button>
-                <button 
-                    id="gst-tab-compliance_registries_tab"
-                    onClick={() => handleTabChange('compliance_registries_tab')}
-                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${activeTab === 'compliance_registries_tab' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} dark:bg-gray-800`}
-                >
-                    {t('Compliance Registries')}
-                </button>
+                {visibleGstTabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    id={`gst-tab-${tab.id}`}
+                    onClick={() => handleTabChange(tab.id as any)}
+                    className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap ${
+                      activeTab === tab.id 
+                        ? 'bg-white text-blue-600 shadow-sm' 
+                        : 'text-gray-400 hover:text-gray-600'
+                    } dark:bg-gray-800`}
+                  >
+                    {t(tab.label)}
+                  </button>
+                ))}
               </div>
             </div>
         </div>

@@ -190,7 +190,7 @@ export const GSTR4Report: React.FC<GSTR4ReportProps> = ({ useSampleData }) => {
 
                                                 alert(t("Annual return GSTR-4 filed successfully with ARN {arn}!", { arn: randArn }));
                                             }}
-                                            className="w-full py-2 bg-indigo-650 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-lg transition-all"
+                                            className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-lg transition-all"
                                         >
                                             {t("Verify OTP & Submit Return")}
                                         </button>

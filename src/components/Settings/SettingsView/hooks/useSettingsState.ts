@@ -126,7 +126,7 @@ export const useSettingsState = (defaultTab: string | null, onTabChange?: (tab: 
   });
 
   const [isSaved, setIsSaved] = useState(false);
-  const [activeTab, setActiveTab] = useState<any>((defaultTab as any) || "about");
+  const [activeTab, setActiveTab] = useState<any>((defaultTab as any) || "setting_categories");
 
   useEffect(() => {
     if (defaultTab) {

@@ -15,7 +15,7 @@ import {
 } from "../../icons/IconComponents";
 
 export const AppNavigationSettings: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState<"priority" | "routing">("priority");
 
   useEffect(() => {
@@ -198,8 +198,8 @@ export const AppNavigationSettings: React.FC = () => {
     }, 1000);
   };
 
-    const pages = [
-      { id: "index", label: t("Welcome Hub"), icon: "🏠" },
+     const pages = [
+      { id: "index", label: t("Home"), icon: "🏠" },
       { id: "dashboard", label: t("Dashboard"), icon: "📊" },
       { id: "voucher-entry", label: t("Transactions"), icon: "➕" },
       { id: "inventory-entry", label: t("Inventory Trans."), icon: "📦" },
@@ -214,16 +214,14 @@ export const AppNavigationSettings: React.FC = () => {
       { id: "item-report", label: t("Item Report"), icon: "📉" },
       { id: "reports", label: t("Financial Report"), icon: "📑" },
       { id: "settings", label: t("Settings"), icon: "⚙️" },
-      { id: "help", label: t("Help"), icon: "❓" },
-      { id: "support", label: t("Support"), icon: "🎧" },
     ];
 
   const subPages: Record<string, { id: string; label: string }[]> = {
     index: [
-      { id: "hub", label: t("Navigation Hub") },
-      { id: "info", label: t("System Info") },
-      { id: "telemetry", label: t("Telemetry & Logs") },
-      { id: "security", label: t("Security & Access") },
+      { id: "hub", label: language === 'hi' ? 'इंडेक्स' : 'INDEX' },
+      { id: "info", label: language === 'hi' ? 'आंकड़े' : 'INFO' },
+      { id: "telemetry", label: language === 'hi' ? 'गतिविधि' : 'ACTIVITY' },
+      { id: "security", label: language === 'hi' ? 'सुरक्षा' : 'SECURITY' },
     ],
     help: [
       { id: "main", label: t("Help Hub") },
@@ -398,6 +396,8 @@ export const AppNavigationSettings: React.FC = () => {
       { id: "purchase", label: t("Purchase Register") },
     ],
     settings: [
+      { id: "setting_categories", label: t("Category Settings") },
+      { id: "workspace", label: t("Setting Explorer") },
       { id: "firm", label: t("Firm") },
       { id: "general", label: t("General") },
       { id: "ui", label: t("UI") },
@@ -406,7 +406,7 @@ export const AppNavigationSettings: React.FC = () => {
       { id: "invoiceprint", label: t("Invoice & Print") },
       { id: "vouchernumbering", label: t("Voucher Numbering") },
       { id: "users", label: t("Users") },
-      { id: "alerts", label: t("Alerts") },
+      { id: "alerts", label: t("Alert Channel") },
       { id: "security", label: t("Security") },
       { id: "privacy", label: t("Privacy") },
       { id: "imports", label: t("Import Rules") },
@@ -417,6 +417,7 @@ export const AppNavigationSettings: React.FC = () => {
       { id: "help", label: t("Help Center") },
       { id: "support", label: t("Support") },
       { id: "about", label: t("About") },
+      { id: "uifilter", label: t("UI Filter") },
     ],
   };
 
@@ -939,49 +940,52 @@ export const AppNavigationSettings: React.FC = () => {
     ],
 
     // 14. Settings Subpages
+    setting_categories: [
+      { id: "all", label: t("All Setting Subpages") },
+      { id: "subpages", label: t("Subpages Settings Level") },
+      { id: "tab", label: t("Tab Settings Level") },
+      { id: "ui", label: t("UI Related") },
+      { id: "general", label: t("General Settings") },
+      { id: "layout", label: t("Layout & Defaults") },
+      { id: "data", label: t("Data, Mapping & AI") },
+      { id: "security", label: t("Security, Users & System") },
+    ],
     ui: [
-      { id: "color", label: t("Colors & Themes") },
-      { id: "layout", label: t("Layout Density") },
-      { id: "data", label: t("Data Fonts & Formats") },
-      { id: "localization", label: t("Localization") },
-      { id: "more", label: t("More Options") },
-      { id: "maximum", label: t("Maximum Design") },
+      { id: "ui_sub_layout", label: t("Core Layouts & Grids Tab") },
+      { id: "ui_sub_colors", label: t("Color Palette & Dark Schemes Tab") },
+      { id: "ui_sub_formats", label: t("Data Formats & Precision Tab") },
+      { id: "ui_sub_localization", label: t("Locale & Language Selection Tab") },
+      { id: "ui_sub_more", label: t("Advanced Transition Options Tab") },
+      { id: "ui_sub_maximum", label: t("Maximum Density Mode Settings Tab") },
     ],
     firm: [
-      { id: "basicCompany", label: t("Basic Details") },
-      { id: "businessProfile", label: t("Profile Details") },
-      { id: "primaryContacts", label: t("Primary Contacts") },
-      { id: "alertDestinations", label: t("Alert Channels") },
-      { id: "addressDetails", label: t("Registered Address") },
-      { id: "statutoryTax", label: t("Tax Registrations") },
-      { id: "businessLicenses", label: t("Business Licenses") },
-      { id: "hrPayroll", label: t("Payroll Setup") },
-      { id: "financial_general", label: t("Financial General") },
-      { id: "financial_tax", label: t("Financial Taxation") },
-      { id: "financial_formatting", label: t("Financial Formatting") },
-      { id: "financial_advanced", label: t("Financial Advanced") },
-      { id: "bank", label: t("Bank Details") },
-      { id: "social", label: t("Social Presence") },
-      { id: "operational", label: t("Operational Preferences") },
-      { id: "billing", label: t("Billing Sales") },
-      { id: "inventoryLogistics", label: t("Inventory Logistics") },
-      { id: "branding", label: t("Branding Assets") },
-      { id: "legal Remarks", label: t("Legal Remarks") },
-      { id: "systemCompliance", label: t("System Backup") },
+      { id: "firm_sub_brand", label: t("Brand Identity Setup Tab") },
+      { id: "firm_sub_contact", label: t("Regional Office Contact Tab") },
+      { id: "firm_sub_finance", label: t("Finance & Currency Details Tab") },
+      { id: "firm_sub_legal", label: t("Legal & Auditing Guidelines Tab") },
+      { id: "firm_sub_ops", label: t("Operation Divisions Hub Tab") },
+      { id: "firm_sub_system", label: t("System Integration Links Tab") },
     ],
     general: [
-      { id: "company", label: t("Company & Fiscal Year") },
-      { id: "preferences", label: t("Decimal & Global Options") },
-      { id: "defaults", label: t("Predefined Ledger defaults") },
+      { id: "gen_sub_sound", label: t("Sound & Accessibility Tab") },
+      { id: "gen_sub_timezone", label: t("Timezone & Locale Tab") },
+      { id: "gen_sub_safety", label: t("Auto-locks & Safeguards Tab") },
     ],
     navigation: [
-      { id: "priority", label: t("Main Landing Default") },
-      { id: "routing", label: t("Contextual Routing Settings") },
+      { id: "nav_sub_priority", label: t("Landing & Startup Priority Tab") },
+      { id: "nav_sub_routing", label: t("Custom Routing Adjusters Tab") },
+    ],
+    uifilter: [
+      { id: "masters", label: t("Masters") },
+      { id: "transactions", label: t("Transactions") },
+      { id: "operations", label: t("Operations") },
+      { id: "reports", label: t("Reports") },
+      { id: "settings", label: t("Settings") },
     ],
     invoiceprint: [
-      { id: "pdf_header", label: t("Invoice PDF Banner & Header") },
-      { id: "letterhead", label: t("Standard Letterhead Margins") },
-      { id: "receipt_print", label: t("POS & Invoice Receipt Print") },
+      { id: "print_sub_design", label: t("Design Styles Sheet Tab") },
+      { id: "print_sub_structure", label: t("Invoicing Layout Framework Tab") },
+      { id: "print_sub_content", label: t("Tax Columns and Descriptions Tab") },
     ],
     formdetails: [
       { id: "desktop", label: t("Desktop") },
@@ -990,50 +994,55 @@ export const AppNavigationSettings: React.FC = () => {
       { id: "behaviors", label: t("Behaviors") },
     ],
     vouchernumbering: [
-      { id: "accounting", label: t("Accounting Vouchers") },
-      { id: "inventory", label: t("Inventory Vouchers") },
+      { id: "voucher_sub_account", label: t("Accounting Vouchers Tab") },
+      { id: "voucher_sub_inventory", label: t("Inventory Vouchers Tab") },
     ],
     users: [
-      { id: "active-users", label: t("Active Users") },
-      { id: "my-account", label: t("My Account") },
-      { id: "directory", label: t("Company Directory") },
-      { id: "group-rules", label: t("Group Rules") },
-      { id: "profile", label: t("Super Admin") },
-      { id: "help", label: t("User Help Center") },
+      { id: "active-users", label: t("Active") },
+      { id: "my-account", label: t("Account") },
+      { id: "directory", label: t("Directory") },
+      { id: "group-rules", label: t("Rules") },
+      { id: "profile", label: t("Root") },
+      { id: "help", label: t("Help") },
     ],
     alerts: [
-      { id: "sms_mail", label: t("SMS & Email Notification Gateways") },
-      { id: "in_app", label: t("Real-time In-App Flags") },
+      { id: "inApp", label: t("In-App") },
+      { id: "email", label: t("Email") },
+      { id: "sms", label: t("SMS") },
+      { id: "whatsapp", label: t("WhatsApp") },
+      { id: "telegram", label: t("Telegram") },
     ],
     security: [
-      { id: "passwords", label: t("Advanced Password Rules") },
-      { id: "mfa", label: t("Multi-Factor Setup") },
-      { id: "ip_restrict", label: t("Secure IP Access Restrictions") },
+      { id: "policies", label: t("Policies & Thresholds") },
+      { id: "users", label: t("User Specific Locks") },
     ],
     privacy: [
       { id: "gdpr", label: t("Core Integrity Rules") },
       { id: "data_consent", label: t("Data Processing Consent Forms") },
     ],
     imports: [
-      { id: "pipeline", label: t("Import Pipeline Defaults") },
-      { id: "rules", label: t("Data Validation Failure Flags") },
+      { id: "global", label: t("Global Rules") },
+      { id: "vouchers", label: t("Voucher Specific") },
     ],
     mapping: [
-      { id: "column_align", label: t("Automatic Headers Auto-alignment") },
-      { id: "master_link", label: t("Fallback Reconciliation Mapping") },
+      { id: "basic", label: t("Basic Rules") },
+      { id: "list", label: t("Lists & Exclusions") },
+      { id: "pattern", label: t("Patterns") },
+      { id: "mappingList", label: t("Direct Mappings") },
+      { id: "sandbox", label: t("Sandbox") },
     ],
     ai: [
-      { id: "ingestion", label: t("Transcription Ingestion Models") },
-      { id: "verification", label: t("Auto-repair Verification Tuning") },
+      { id: "internal", label: t("Google Gemini") },
+      { id: "external", label: t("Custom Provider") },
+      { id: "local", label: t("Local Host Provider") },
+      { id: "ai_engine", label: t("ActiveProvider") },
+      { id: "api_keys", label: t("API Keys") },
     ],
     admin: [
-      { id: "db_tune", label: t("Database Index Tune") },
-      { id: "backup_now", label: t("Manual Snapshots & Restore") },
+      { id: "operations", label: t("System Operations") },
+      { id: "tools", label: t("Developer Tools") },
     ],
-    data: [
-      { id: "exports", label: t("Universal Data Exporters") },
-      { id: "api_keys", label: t("Custom Application API Integrations") },
-    ],
+    data: [],
     help: [
       { id: "explorer", label: t("Explorer") },
       { id: "trainer", label: t("Trainer") },
@@ -1118,13 +1127,39 @@ export const AppNavigationSettings: React.FC = () => {
     }
   }, [searchQuery, priorityMatchCount, routingMatchCount, activeTab]);
 
+  const getAvailableSubSubPages = (pageId: string, subPageId: string) => {
+    if (pageId === "index" && subPageId === "security") {
+      return [
+        { id: "encryption", label: language === 'hi' ? 'एन्क्रिप्शन' : 'Encryption' },
+        { id: "language", label: language === 'hi' ? 'भाषा' : 'Language' },
+        { id: "compliance", label: language === 'hi' ? 'अनुपालन' : 'Compliance' },
+      ];
+    }
+    if (pageId === "index" && subPageId === "info") {
+      return [
+        { id: "overview", label: language === 'hi' ? 'अवलोकन' : 'Overview' },
+        { id: "analysis", label: language === 'hi' ? 'लेनदेन विश्लेषण' : 'Transaction Analysis' },
+        { id: "pending-sync", label: language === 'hi' ? 'लंबित सिंक' : 'Pending Sync' },
+        { id: "tax-summary", label: language === 'hi' ? 'कर सारांश' : 'Tax Summary' },
+      ];
+    }
+    if (pageId === "index" && subPageId === "telemetry") {
+      return [
+        { id: "audit", label: language === 'hi' ? 'गतिविधि' : 'Activity Logs' },
+        { id: "health", label: language === 'hi' ? 'स्वास्थ्य' : 'System Health' },
+        { id: "storage", label: language === 'hi' ? 'भंडारण' : 'Storage' },
+      ];
+    }
+    return subSubPages[subPageId] || [];
+  };
+
   const handlePageChange = (val: string) => {
     setDefaultPage(val);
     const subs = subPages[val];
     if (subs && subs.length > 0) {
       const firstSub = subs[0].id;
       setDefaultSubPage(firstSub);
-      const options = subSubPages[firstSub];
+      const options = getAvailableSubSubPages(val, firstSub);
       if (options && options.length > 0) {
         setDefaultSubSubPage(options[0].id);
       } else {
@@ -1137,8 +1172,9 @@ export const AppNavigationSettings: React.FC = () => {
   };
 
   const handleSubPageChange = (val: string) => {
+    setDefaultPage(defaultPage); // Keep page consistent
     setDefaultSubPage(val);
-    const options = subSubPages[val];
+    const options = getAvailableSubSubPages(defaultPage, val);
     if (options && options.length > 0) {
       setDefaultSubSubPage(options[0].id);
     } else {
@@ -1435,7 +1471,7 @@ export const AppNavigationSettings: React.FC = () => {
                       className="w-full bg-slate-50 dark:bg-gray-850 border border-slate-205 dark:border-gray-700 rounded-lg px-3.5 py-2 text-xs font-bold text-gray-700 dark:text-gray-100 focus:bg-white dark:focus:bg-gray-800 focus:border-blue-500 outline-none transition-all shadow-sm cursor-pointer h-10"
                     >
                       <option value="" className="font-bold py-2">--</option>
-                      {subSubPages[defaultSubPage]?.map((ssp) => (
+                      {getAvailableSubSubPages(defaultPage, defaultSubPage).map((ssp) => (
                         <option key={ssp.id} value={ssp.id} className="font-bold py-2">
                           {ssp.label}
                         </option>
@@ -1445,9 +1481,44 @@ export const AppNavigationSettings: React.FC = () => {
                   <p className="text-[9px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider text-right">
                     {t("Focus View")}:{" "}
                     <span className="text-purple-500">
-                      {subSubPages[defaultSubPage]?.find((ssp) => ssp.id === defaultSubSubPage)?.label || t("None")}
+                      {getAvailableSubSubPages(defaultPage, defaultSubPage).find((ssp) => ssp.id === defaultSubSubPage)?.label || t("None")}
                     </span>
                   </p>
+
+                  {/* Redirect directly to set selected filter if setting categories is chosen */}
+                  {defaultPage === "settings" && defaultSubPage === "setting_categories" && defaultSubSubPage && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        // 1. Save navigation defaults
+                        localStorage.setItem(
+                          "bharat_book_navigation_defaults",
+                          JSON.stringify({
+                            page: defaultPage,
+                            subPage: defaultSubPage,
+                            subSubPage: defaultSubSubPage,
+                            routing: routingDefaults,
+                          }),
+                        );
+
+                        // 2. Set categories subtab override
+                        localStorage.setItem("bharat_book_setting_categories_subtab_override", defaultSubSubPage);
+                        
+                        // 3. Dispatch category reset override trigger
+                        window.dispatchEvent(new Event("bharat_book_setting_categories_subtab_trigger"));
+
+                        // 4. Dispatch parent active tab changer to redirect to Category Settings Filter page
+                        const event = new CustomEvent("bharat_book_active_tab_change", { detail: "setting_categories" });
+                        window.dispatchEvent(event);
+                      }}
+                      className="mt-2.5 w-full py-2.5 px-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg text-[10px] font-black tracking-wider uppercase shadow-sm transition-all flex items-center justify-center gap-1.5 active:scale-95 border border-purple-500/20 cursor-pointer"
+                    >
+                      <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                      {t("Redirect directly to selected filter")}
+                    </button>
+                  )}
                 </div>
               )}
             </div>

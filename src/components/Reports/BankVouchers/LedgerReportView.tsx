@@ -66,6 +66,45 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
     const [activeTab, setActiveTab] = useState<string>((defaultTab as string) || 'standard');
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
+    const [hiddenReports, setHiddenReports] = useState<string[]>([]);
+
+    React.useEffect(() => {
+        const loadHidden = () => {
+          const stored = localStorage.getItem("bharat_book_hidden_report_tabs");
+          if (stored) {
+            try {
+              setHiddenReports(JSON.parse(stored));
+            } catch (e) {
+              console.error(e);
+            }
+          } else {
+            setHiddenReports([]);
+          }
+        };
+        loadHidden();
+        window.addEventListener("bharat_book_report_tabs_trigger", loadHidden);
+        return () => {
+          window.removeEventListener("bharat_book_report_tabs_trigger", loadHidden);
+        };
+    }, []);
+
+    const voucherTabs = [
+        { id: 'standard', label: 'General Ledger' },
+        { id: 'purchase', label: 'Purchase Register' },
+        { id: 'sales', label: 'Sales Register' },
+        { id: 'payment', label: 'Payment Register' },
+        { id: 'receipt', label: 'Receipt Register' },
+        { id: 'journal', label: 'Journal Register' },
+        { id: 'contra', label: 'Contra Register' },
+        { id: 'debit_note', label: 'Debit Note' },
+        { id: 'credit_note', label: 'Credit Note' },
+        { id: 'inventory', label: 'Inventory Register' },
+        { id: 'day_book', label: 'Day Book' },
+        { id: 'audit_trail', label: 'Audit Trail' }
+    ];
+
+    const visibleVoucherTabs = voucherTabs.filter(t => !hiddenReports.includes(`voucher_${t.id}`));
+
     React.useEffect(() => {
         if (defaultTab && defaultTab !== activeTab) {
             setActiveTab(defaultTab);
@@ -76,6 +115,12 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
         setActiveTab(tab);
         if (onTabChange) onTabChange(tab);
     };
+
+    React.useEffect(() => {
+        if (visibleVoucherTabs.length > 0 && !visibleVoucherTabs.some(t => t.id === activeTab)) {
+            handleTabChange(visibleVoucherTabs[0].id);
+        }
+    }, [visibleVoucherTabs, activeTab]);
     const [selectedAuditVoucher, setSelectedAuditVoucher] = useState<ParsedVoucher | null>(null);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [deleteConfirmation, setDeleteConfirmation] = useState<{ 
@@ -280,21 +325,6 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
         return { summary, discrepancies, keyExtraction };
     };
 
-    const tabs = [
-        { id: 'standard', label: 'General Ledger' },
-        { id: 'purchase', label: 'Purchase Register' },
-        { id: 'sales', label: 'Sales Register' },
-        { id: 'payment', label: 'Payment Register' },
-        { id: 'receipt', label: 'Receipt Register' },
-        { id: 'journal', label: 'Journal Register' },
-        { id: 'contra', label: 'Contra Register' },
-        { id: 'debit_note', label: 'Debit Note' },
-        { id: 'credit_note', label: 'Credit Note' },
-        { id: 'inventory', label: 'Inventory Register' },
-        { id: 'day_book', label: 'Day Book' },
-        { id: 'audit_trail', label: 'Audit Trail' }
-    ];
-
     const completeSave = (data: any[]) => {
         if (!setVouchers) return;
         const bankVouchers = vouchers.filter(v => v.type === VoucherType.BankStatement || v.origin === 'bank');
@@ -305,7 +335,7 @@ export const LedgerReportView: React.FC<LedgerReportViewProps> = ({
         <div className="max-w-7xl mx-auto p-4 animate-in fade-in duration-500 print-area">
             <div className="mb-6 border-b border-gray-200 dark:border-gray-700 overflow-x-auto no-print">
                 <nav className="-mb-px flex space-x-6 min-w-max" aria-label="Tabs">
-                    {tabs.map(tab => (
+                    {visibleVoucherTabs.map(tab => (
                         <button
                             key={tab.id}
                             onClick={() => handleTabChange(tab.id)}

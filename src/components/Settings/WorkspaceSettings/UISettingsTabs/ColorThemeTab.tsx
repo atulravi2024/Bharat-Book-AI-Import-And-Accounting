@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { useLanguage } from "../../../../context/LanguageContext";
 import { Paintbrush, Moon, Sun, Monitor, Check } from "lucide-react";
 import { useSearchFilter } from "./hooks/useSearchFilter";
+import { useUISettings } from "../hooks/useUISettings";
 
 export const ColorThemeTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
   const { isFieldVisible } = useSearchFilter(searchTerm);
-  const [selectedTheme, setSelectedTheme] = useState<"standard" | "coal" | "cobalt" | "emerald">("standard");
-  const [colorMode, setColorMode] = useState<"system" | "light" | "dark">("light");
+  const { settings, setSettings } = useUISettings();
+  const { selectedTheme, colorMode } = settings;
+
+  const setSelectedTheme = (val: any) => setSettings(prev => ({ ...prev, selectedTheme: val }));
+  const setColorMode = (val: any) => setSettings(prev => ({ ...prev, colorMode: val }));
 
   const themesPreset = [
     { id: "standard", name: t("Classic Amber-Blue"), primary: "bg-blue-600", secondary: "bg-amber-500", colors: ["#2563eb", "#d97706"] },

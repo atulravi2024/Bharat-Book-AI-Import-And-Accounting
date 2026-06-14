@@ -423,7 +423,7 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onVi
                     onClick={() => setSelectedType(tab)}
                     className={`flex-1 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md transition-all ${
                       selectedType === tab 
-                        ? 'bg-white text-indigo-650 dark:bg-gray-800 dark:text-indigo-400 shadow-2xs font-extrabold'
+                        ? 'bg-white text-indigo-600 dark:bg-gray-800 dark:text-indigo-400 shadow-2xs font-extrabold'
                         : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                     }`}
                   >
@@ -553,7 +553,7 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onVi
   
                               {/* Unread Glowing marker */}
                               {!notif.isRead && (
-                                <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-indigo-650 ring-4 ring-indigo-50 dark:bg-indigo-500 dark:ring-indigo-950/50"></span>
+                                <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-indigo-600 ring-4 ring-indigo-50 dark:bg-indigo-500 dark:ring-indigo-950/50"></span>
                               )}
                             </div>
                           );
@@ -625,7 +625,7 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onVi
                           onClick={() => setSimulationOffset(opt.value)}
                           className={`px-1.5 py-0.5 rounded-md text-[8.5px] font-black tracking-normal transition-all cursor-pointer ${
                             simulationOffset === opt.value
-                              ? 'bg-indigo-650 text-white shadow-3xs'
+                              ? 'bg-indigo-600 text-white shadow-3xs'
                               : 'bg-white dark:bg-gray-800 text-slate-600 dark:text-gray-300 border border-slate-200 dark:border-gray-700 hover:bg-slate-100 dark:hover:bg-gray-700'
                           }`}
                         >

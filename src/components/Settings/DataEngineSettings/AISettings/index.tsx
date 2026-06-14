@@ -152,6 +152,28 @@ export const AISettings: React.FC<AISettingsProps> = ({
     // but can also independently select the 'ai_engine' or 'api_keys' tab.
     const [activeSubTab, setActiveSubTab] = React.useState<"internal" | "external" | "local" | "ai_engine" | "api_keys">("internal");
 
+    React.useEffect(() => {
+        const checkOverride = () => {
+            const override = localStorage.getItem('bharat_book_ai_subtab_override');
+            if (override) {
+                if (['internal', 'external', 'local', 'ai_engine', 'api_keys'].includes(override)) {
+                    setActiveSubTab(override as any);
+                    if (override === 'internal') {
+                        setAiSettings(prev => ({ ...prev, provider: 'internal' }));
+                    } else if (override === 'external') {
+                        setAiSettings(prev => ({ ...prev, provider: 'external', systemProvider: 'external', chatProvider: 'external', bankingProvider: 'external', auditProvider: 'external', voucherProvider: 'external' }));
+                    } else if (override === 'local') {
+                        setAiSettings(prev => ({ ...prev, provider: 'local', systemProvider: 'local', chatProvider: 'local', bankingProvider: 'local', auditProvider: 'local', voucherProvider: 'local' }));
+                    }
+                }
+                localStorage.removeItem('bharat_book_ai_subtab_override');
+            }
+        };
+        checkOverride();
+        window.addEventListener('bharat_book_ai_subtab_trigger', checkOverride);
+        return () => window.removeEventListener('bharat_book_ai_subtab_trigger', checkOverride);
+    }, []);
+
     // Sync sub-tab if aiSettings.provider changes (unless we are viewing ai_engine or api_keys tab)
     React.useEffect(() => {
         if (activeSubTab !== "ai_engine" && activeSubTab !== "api_keys" && aiSettings.provider !== activeSubTab) {

@@ -65,6 +65,46 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
     };
 
     const [activeTab, setActiveTab ] = useState<MasterTab>(parseTab(initialTab));
+    const [hiddenMasters, setHiddenMasters] = useState<string[]>([]);
+
+    useEffect(() => {
+        const loadHidden = () => {
+            const stored = localStorage.getItem("bharat_book_hidden_masters_tabs");
+            if (stored) {
+                try {
+                    setHiddenMasters(JSON.parse(stored));
+                } catch (e) {
+                    console.error(e);
+                }
+            } else {
+                setHiddenMasters([]);
+            }
+        };
+
+        loadHidden();
+        window.addEventListener("bharat_book_masters_tabs_trigger", loadHidden);
+        return () => {
+            window.removeEventListener("bharat_book_masters_tabs_trigger", loadHidden);
+        };
+    }, []);
+
+    const allTabs = [
+        { id: 'contacts', label: 'Contacts', idKey: "ledger_contacts" },
+        { id: 'ledgers', label: 'General Ledgers', idKey: "ledger_ledgers" },
+        { id: 'banks', label: 'Bank Masters', idKey: "ledger_banks" },
+        { id: 'accountGroups', label: 'Groups', idKey: "ledger_accountGroups" },
+        { id: 'locations', label: 'Locations', idKey: "ledger_locations" },
+        { id: 'costCenters', label: 'Cost Centers', idKey: "ledger_costCenters" },
+    ];
+
+    const displayedTabs = allTabs.filter(t => !hiddenMasters.includes(t.idKey));
+
+    // Reset active tab to first displayed tab if active tab gets hidden
+    useEffect(() => {
+        if (displayedTabs.length > 0 && !displayedTabs.find(t => t.id === activeTab)) {
+            setActiveTab(displayedTabs[0].id as MasterTab);
+        }
+    }, [hiddenMasters, activeTab, displayedTabs]);
 
     useEffect(() => {
         const parsed = parseTab(initialTab);
@@ -136,14 +176,7 @@ export const LedgerMasterView: React.FC<LedgerMasterViewProps> = ({
                 <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex items-center pr-4 relative">
                     <HorizontalScrollArea className="flex-1 min-w-0">
                         <div className="flex">
-                            {[
-                                { id: 'contacts', label: 'Contacts' },
-                                { id: 'ledgers', label: 'General Ledgers' },
-                                { id: 'banks', label: 'Bank Masters' },
-                                { id: 'accountGroups', label: 'Groups' },
-                                { id: 'locations', label: 'Locations' },
-                                { id: 'costCenters', label: 'Cost Centers' },
-                            ].map(tab => (
+                            {displayedTabs.map(tab => (
                                 <button
                                     key={tab.id}
                                     id={`ledger-master-tab-${tab.id}`}

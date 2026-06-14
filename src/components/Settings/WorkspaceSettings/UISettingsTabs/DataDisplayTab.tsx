@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { useLanguage } from "../../../../context/LanguageContext";
 import { Eye, DollarSign, Calendar, EyeOff } from "lucide-react";
 import { useSearchFilter } from "./hooks/useSearchFilter";
+import { useUISettings } from "../hooks/useUISettings";
 
 export const DataDisplayTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
   const { isFieldVisible } = useSearchFilter(searchTerm);
-  const [currencyStyle, setCurrencyStyle] = useState<"indian" | "intl">("indian");
-  const [dateFormat, setDateFormat] = useState<"DD-MM-YYYY" | "YYYY-MM-DD" | "MM-DD-YYYY">("DD-MM-YYYY");
-  const [hideSalaries, setHideSalaries] = useState(false);
+  const { settings, setSettings } = useUISettings();
+  const { currencyStyle, dateFormat, hideSalaries } = settings;
+
+  const setCurrencyStyle = (val: any) => setSettings(prev => ({ ...prev, currencyStyle: val }));
+  const setDateFormat = (val: any) => setSettings(prev => ({ ...prev, dateFormat: val }));
+  const setHideSalaries = (val: any) => setSettings(prev => ({ ...prev, hideSalaries: val }));
 
   const showCurrency = isFieldVisible("Currency & Indian Numbering Style", ["format", "number", "money", "currency", "indian"]);
   const showDate = isFieldVisible("Business Date Format", ["calendar", "time", "date"]);

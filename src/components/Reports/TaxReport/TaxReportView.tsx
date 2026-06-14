@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { 
   Percent, ShieldCheck, CheckCircle2, Coins, Calculator, FileText, Download, Printer
@@ -41,6 +41,51 @@ export const TaxReportView: React.FC<TaxReportViewProps> = ({ defaultTab, onTabC
       setActiveTabState(tab);
     }
   };
+
+  const [hiddenReports, setHiddenReports] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadHidden = () => {
+      const stored = localStorage.getItem("bharat_book_hidden_report_tabs");
+      if (stored) {
+        try {
+          setHiddenReports(JSON.parse(stored));
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        setHiddenReports([]);
+      }
+    };
+    loadHidden();
+    window.addEventListener("bharat_book_report_tabs_trigger", loadHidden);
+    return () => {
+      window.removeEventListener("bharat_book_report_tabs_trigger", loadHidden);
+    };
+  }, []);
+
+  const taxTabs = [
+    { id: 'kpis', label: 'Tax KPIs' },
+    { id: 'advance-tax', label: 'Advance Tax' },
+    { id: 'tds-ledger', label: 'TDS Ledger' },
+    { id: 'tax-projection', label: 'Projections' },
+    { id: 'tds-tcs-calculator', label: 'TDS/TCS Calc' },
+    { id: 'presumptive-tax', label: 'Presumptive Tax' },
+    { id: 'depreciation-schedule', label: 'Depreciation' },
+    { id: 'compliance-tracker', label: 'Expense Audit' },
+    { id: 'tax-loss-tracker', label: 'Loss Set-Off' },
+    { id: 'lut-application', label: 'LUT Application' },
+    { id: 'eledger-simulator', label: 'e-Ledger Sim' },
+    { id: 'info', label: 'Workspace Guide' },
+  ];
+
+  const visibleTaxTabs = taxTabs.filter(t => !hiddenReports.includes(`tax_${t.id}`));
+
+  useEffect(() => {
+    if (visibleTaxTabs.length > 0 && !visibleTaxTabs.some(t => t.id === activeTab)) {
+      setActiveTab(visibleTaxTabs[0].id as TaxTab);
+    }
+  }, [visibleTaxTabs, activeTab]);
 
   // Projection States (kept in sync in parent so metrics remain dynamically reactive!)
   const [salesRevenue, setSalesRevenue] = useState<number>(45000000);
@@ -177,153 +222,28 @@ export const TaxReportView: React.FC<TaxReportViewProps> = ({ defaultTab, onTabC
               className="flex flex-nowrap items-center bg-gray-100 p-1.5 rounded-lg mt-4 w-full gap-1.5 overflow-x-auto custom-scrollbar dark:bg-gray-900 border border-transparent dark:border-gray-700 select-none scroll-smooth"
               style={{ WebkitOverflowScrolling: 'touch' }}
             >
-              <button 
-                id="tax-tab-kpis"
-                type="button"
-                onClick={() => setActiveTab('kpis')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'kpis' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('Tax KPIs')}
-              </button>
-              <button 
-                id="tax-tab-advance-tax"
-                type="button"
-                onClick={() => setActiveTab('advance-tax')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'advance-tax' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('Advance Tax')}
-              </button>
-              <button 
-                id="tax-tab-tds-ledger"
-                type="button"
-                onClick={() => setActiveTab('tds-ledger')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'tds-ledger' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('TDS Ledger')}
-              </button>
-              <button 
-                id="tax-tab-tax-projection"
-                type="button"
-                onClick={() => setActiveTab('tax-projection')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'tax-projection' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('Projections')}
-              </button>
-              <button 
-                id="tax-tab-tds-tcs-calculator"
-                type="button"
-                onClick={() => setActiveTab('tds-tcs-calculator')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'tds-tcs-calculator' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                <span className="flex items-center gap-1">
-                  <Calculator size={10} />
-                  {t('TDS/TCS Calc')}
-                </span>
-              </button>
-              <button 
-                id="tax-tab-presumptive-tax"
-                type="button"
-                onClick={() => setActiveTab('presumptive-tax')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'presumptive-tax' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('Presumptive Tax')}
-              </button>
-              <button 
-                id="tax-tab-depreciation-schedule"
-                type="button"
-                onClick={() => setActiveTab('depreciation-schedule')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'depreciation-schedule' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('Depreciation')}
-              </button>
-              <button 
-                id="tax-tab-compliance-tracker"
-                type="button"
-                onClick={() => setActiveTab('compliance-tracker')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'compliance-tracker' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-650 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('Expense Audit')}
-              </button>
-              <button 
-                id="tax-tab-tax-loss-tracker"
-                type="button"
-                onClick={() => setActiveTab('tax-loss-tracker')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'tax-loss-tracker' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-650 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('Loss Set-Off')}
-              </button>
-              <button 
-                id="tax-tab-lut-application"
-                type="button"
-                onClick={() => setActiveTab('lut-application')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'lut-application' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-605 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('LUT Application')}
-              </button>
-              <button 
-                id="tax-tab-eledger-simulator"
-                type="button"
-                onClick={() => setActiveTab('eledger-simulator')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'eledger-simulator' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-605 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('e-Ledger Sim')}
-              </button>
-              <button 
-                id="tax-tab-info"
-                type="button"
-                onClick={() => setActiveTab('info')}
-                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
-                  activeTab === 'info' 
-                    ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
-                    : 'text-gray-400 hover:text-gray-605 dark:text-gray-400 dark:hover:text-gray-200'
-                }`}
-              >
-                {t('Workspace Guide')}
-              </button>
+              {visibleTaxTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  id={`tax-tab-${tab.id}`}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id as TaxTab)}
+                  className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[10px] uppercase font-black tracking-widest transition-all whitespace-nowrap cursor-pointer ${
+                    activeTab === tab.id 
+                      ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-800 dark:text-blue-400' 
+                      : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200'
+                  }`}
+                >
+                  {tab.id === 'tds-tcs-calculator' ? (
+                    <span className="flex items-center gap-1">
+                      <Calculator size={10} />
+                      {t(tab.label)}
+                    </span>
+                  ) : (
+                    t(tab.label)
+                  )}
+                </button>
+              ))}
             </div>
           </div>
         </div>

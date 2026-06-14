@@ -2,13 +2,23 @@ import React, { useState } from "react";
 import { useLanguage } from "../../../../context/LanguageContext";
 import { Sparkles, Sliders, Zap, Trash2, Check } from "lucide-react";
 import { useSearchFilter } from "./hooks/useSearchFilter";
+import { useUISettings } from "../hooks/useUISettings";
 
 export const AdvancedOptionsTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
   const { isFieldVisible } = useSearchFilter(searchTerm);
-  const [hardwareAcceleration, setHardwareAcceleration] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [cacheSize, setCacheSize] = useState<"10" | "50" | "100">("50");
+  const { settings, setSettings, resetSettings } = useUISettings();
+  const { hardwareAcceleration, reducedMotion, cacheSize } = settings;
+
+  const setHardwareAcceleration = (val: any) => setSettings(prev => ({ ...prev, hardwareAcceleration: val }));
+  const setReducedMotion = (val: any) => setSettings(prev => ({ ...prev, reducedMotion: val }));
+  const setCacheSize = (val: any) => setSettings(prev => ({ ...prev, cacheSize: val }));
+
+  const handlePurgeCache = () => {
+    localStorage.removeItem("bharat_book_ui_settings");
+    resetSettings();
+    window.location.reload();
+  };
 
   const showPerf = isFieldVisible("Performance & Heavy Rendering", ["performance", "render", "speed", "hardware", "gpu"]);
   const showCache = isFieldVisible("Memory Cache & Data Buffers", ["memory", "cache", "buffer"]);
@@ -112,7 +122,7 @@ export const AdvancedOptionsTab: React.FC<{ searchTerm?: string }> = ({ searchTe
             {t("Purge all locally saved UI state data, and stored JSON configurations, reclaiming critical resources.")}
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 text-xs font-bold font-mono text-red-600 hover:text-white hover:bg-red-500 bg-red-50 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-600 border border-red-200/50 rounded-xl transition-all">
+        <button onClick={handlePurgeCache} className="flex items-center gap-2 px-4 py-2 text-xs font-bold font-mono text-red-600 hover:text-white hover:bg-red-500 bg-red-50 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-600 border border-red-200/50 rounded-xl transition-all">
           <Trash2 className="w-3.5 h-3.5" />
           {t("Purge Temporary Files")}
         </button>

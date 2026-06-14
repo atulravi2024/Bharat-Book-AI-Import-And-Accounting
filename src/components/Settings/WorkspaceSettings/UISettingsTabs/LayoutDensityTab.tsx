@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { useLanguage } from "../../../../context/LanguageContext";
 import { Layout, Maximize2, Minimize2, Sidebar } from "lucide-react";
 import { useSearchFilter } from "./hooks/useSearchFilter";
+import { useUISettings } from "../hooks/useUISettings";
 
 export const LayoutDensityTab: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { t } = useLanguage();
   const { isFieldVisible } = useSearchFilter(searchTerm);
-  const [density, setDensity] = useState<"compact" | "standard" | "spacious">("compact");
-  const [sidebarStyle, setSidebarStyle] = useState<"expanded" | "collapsed" | "hover">("expanded");
-  const [showStatusIndicator, setShowStatusIndicator] = useState(true);
+  const { settings, setSettings } = useUISettings();
+  const { density, sidebarStyle, showStatusIndicator } = settings;
+
+  const setDensity = (val: any) => setSettings(prev => ({ ...prev, density: val }));
+  const setSidebarStyle = (val: any) => setSettings(prev => ({ ...prev, sidebarStyle: val }));
+  const setShowStatusIndicator = (val: any) => setSettings(prev => ({ ...prev, showStatusIndicator: val }));
 
   const showDensity = isFieldVisible("Interface Density", ["compact", "standard", "spacious", "layout"]);
   const showSidebar = isFieldVisible("Sidebar Navigation Behavior", ["expanded", "hover", "collapsed", "sidebar"]);

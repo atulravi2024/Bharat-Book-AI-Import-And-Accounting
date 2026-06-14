@@ -142,7 +142,20 @@ export const IndexSubpage: React.FC<IndexSubpageProps> = ({
           icon: getSubIcon(sp.id),
           parentModuleId: page.id,
           parentModuleTitle: page.label,
-          tabs: (schema.subSubPages[sp.id] || []).map(ssp => {
+          tabs: (page.id === 'index' && sp.id === 'security' ? [
+            { id: "encryption", label: language === 'hi' ? 'एन्क्रिप्शन' : 'Encryption' },
+            { id: "language", label: language === 'hi' ? 'भाषा' : 'Language' },
+            { id: "compliance", label: language === 'hi' ? 'अनुपालन' : 'Compliance' },
+          ] : page.id === 'index' && sp.id === 'info' ? [
+            { id: "overview", label: language === 'hi' ? 'अवलोकन' : 'Overview' },
+            { id: "analysis", label: language === 'hi' ? 'लेनदेन विश्लेषण' : 'Transaction Analysis' },
+            { id: "pending-sync", label: language === 'hi' ? 'लंबित सिंक' : 'Pending Sync' },
+            { id: "tax-summary", label: language === 'hi' ? 'कर सारांश' : 'Tax Summary' },
+          ] : page.id === 'index' && sp.id === 'telemetry' ? [
+            { id: "audit", label: language === 'hi' ? 'गतिविधि' : 'Activity Logs' },
+            { id: "health", label: language === 'hi' ? 'स्वास्थ्य' : 'System Health' },
+            { id: "storage", label: language === 'hi' ? 'भंडारण' : 'Storage' },
+          ] : (schema.subSubPages[sp.id] || [])).map(ssp => {
             const sspDesc = language === 'hi'
               ? `${ssp.label} के लिए विस्तृत क्रेडेंशियल रजिस्टर डेटा`
               : `Access detailed bookkeeping logs for ${ssp.label}.`;

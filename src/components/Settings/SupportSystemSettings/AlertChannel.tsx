@@ -103,6 +103,22 @@ export const AlertChannel: React.FC<AlertChannelProps> = ({
     }
   }, [subTab]);
 
+  // Support subtab override trigger
+  useEffect(() => {
+    const handleOverride = () => {
+      const override = localStorage.getItem('bharat_book_alerts_subtab_override');
+      if (override) {
+        if (['inApp', 'email', 'sms', 'whatsapp', 'telegram'].includes(override)) {
+          setSubTab(override as any);
+        }
+        localStorage.removeItem('bharat_book_alerts_subtab_override');
+      }
+    };
+    handleOverride();
+    window.addEventListener('bharat_book_alerts_subtab_trigger', handleOverride);
+    return () => window.removeEventListener('bharat_book_alerts_subtab_trigger', handleOverride);
+  }, []);
+
   // Toolbar state toggling logic for mobile search focus expansion
   const isToolbarHiddenOnMobile = isSearchFocused || !!searchQuery;
 

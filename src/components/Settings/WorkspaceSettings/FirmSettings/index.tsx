@@ -35,6 +35,21 @@ export const FirmSettingsView: React.FC<FirmSettingsProps> = ({ ledgerMasters = 
   const [targetFormat, setTargetFormat] = useState<"json" | "csv">("json");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
+  React.useEffect(() => {
+    const checkOverride = () => {
+      const override = localStorage.getItem('bharat_book_firm_subtab_override');
+      if (override) {
+        if (["identity", "contacts", "finance", "compliance", "operations", "system"].includes(override)) {
+          setActiveTab(override as any);
+        }
+        localStorage.removeItem('bharat_book_firm_subtab_override');
+      }
+    };
+    checkOverride();
+    window.addEventListener('bharat_book_firm_subtab_trigger', checkOverride);
+    return () => window.removeEventListener('bharat_book_firm_subtab_trigger', checkOverride);
+  }, []);
+
   const tabs = [
     { id: "identity" as const, label: "Identity & Brand", icon: Building },
     { id: "contacts" as const, label: "Locations & Contact", icon: MapPin },

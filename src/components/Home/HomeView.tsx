@@ -48,12 +48,54 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const { language, setLanguage } = useLanguage();
   const { addNotification } = useNotifications();
   
+  const [hiddenTabs, setHiddenTabs] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadHidden = () => {
+      const stored = localStorage.getItem("bharat_book_hidden_operations_tabs");
+      if (stored) {
+        try {
+          setHiddenTabs(JSON.parse(stored));
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        setHiddenTabs([]);
+      }
+    };
+    loadHidden();
+    window.addEventListener("bharat_book_operations_tabs_trigger", loadHidden);
+    return () => {
+      window.removeEventListener("bharat_book_operations_tabs_trigger", loadHidden);
+    };
+  }, []);
+
   // State-driven subpage routing (hub is the first view / index)
   const [activeSubpage, setActiveSubpage] = useState<'hub' | 'info' | 'telemetry' | 'security'>(() => {
     const saved = localStorage.getItem('bharat_book_home_active_tab');
     if (saved === 'info' || saved === 'telemetry' || saved === 'security') return saved;
     return 'hub';
   });
+
+  useEffect(() => {
+    const isCurrentHidden = 
+      (activeSubpage === 'hub' && hiddenTabs.includes('home_hub')) ||
+      (activeSubpage === 'info' && hiddenTabs.includes('home_info')) ||
+      (activeSubpage === 'telemetry' && hiddenTabs.includes('home_telemetry')) ||
+      (activeSubpage === 'security' && hiddenTabs.includes('home_security'));
+      
+    if (isCurrentHidden) {
+      if (!hiddenTabs.includes('home_hub')) {
+        setActiveSubpage('hub');
+      } else if (!hiddenTabs.includes('home_info')) {
+        setActiveSubpage('info');
+      } else if (!hiddenTabs.includes('home_telemetry')) {
+        setActiveSubpage('telemetry');
+      } else if (!hiddenTabs.includes('home_security')) {
+        setActiveSubpage('security');
+      }
+    }
+  }, [hiddenTabs, activeSubpage]);
 
   useEffect(() => {
     const checkNav = () => {
@@ -114,65 +156,73 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* Row 1: Premium Dynamic Compact Tab Selection Header */}
       <div className="border-b border-gray-200 dark:border-gray-800 overflow-x-auto overflow-y-hidden custom-scrollbar pb-3 w-full flex items-center justify-start shrink-0 mb-5 bg-transparent">
         <div className="flex flex-row space-x-2 min-w-max px-1">
-          <button
-            onClick={() => {
-              setActiveSubpage('hub');
-              localStorage.setItem('bharat_book_home_active_tab', 'hub');
-            }}
-            className={`flex-shrink-0 flex items-center gap-3 p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm uppercase tracking-wider whitespace-nowrap border border-transparent cursor-pointer ${
-              activeSubpage === 'hub'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50'
-                : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 shadow-sm border border-gray-150/40 dark:border-gray-750/30'
-            }`}
-          >
-            <LayoutGrid className="w-4 h-4" />
-            <span>{language === 'hi' ? 'इंडेक्स' : 'INDEX'}</span>
-          </button>
+          {!hiddenTabs.includes("home_hub") && (
+            <button
+              onClick={() => {
+                setActiveSubpage('hub');
+                localStorage.setItem('bharat_book_home_active_tab', 'hub');
+              }}
+              className={`flex-shrink-0 flex items-center gap-3 p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm uppercase tracking-wider whitespace-nowrap border border-transparent cursor-pointer ${
+                activeSubpage === 'hub'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50'
+                  : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 shadow-sm border border-gray-150/40 dark:border-gray-750/30'
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span>{language === 'hi' ? 'इंडेक्स' : 'INDEX'}</span>
+            </button>
+          )}
 
-          <button
-            onClick={() => {
-              setActiveSubpage('info');
-              localStorage.setItem('bharat_book_home_active_tab', 'info');
-            }}
-            className={`flex-shrink-0 flex items-center gap-3 p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm uppercase tracking-wider whitespace-nowrap border border-transparent cursor-pointer ${
-              activeSubpage === 'info'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50'
-                : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 shadow-sm border border-gray-150/40 dark:border-gray-750/30'
-            }`}
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>{language === 'hi' ? 'आंकड़े' : 'INFO'}</span>
-          </button>
+          {!hiddenTabs.includes("home_info") && (
+            <button
+              onClick={() => {
+                setActiveSubpage('info');
+                localStorage.setItem('bharat_book_home_active_tab', 'info');
+              }}
+              className={`flex-shrink-0 flex items-center gap-3 p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm uppercase tracking-wider whitespace-nowrap border border-transparent cursor-pointer ${
+                activeSubpage === 'info'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50'
+                  : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 shadow-sm border border-gray-150/40 dark:border-gray-750/30'
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>{language === 'hi' ? 'आंकड़े' : 'INFO'}</span>
+            </button>
+          )}
 
-          <button
-            onClick={() => {
-              setActiveSubpage('telemetry');
-              localStorage.setItem('bharat_book_home_active_tab', 'telemetry');
-            }}
-            className={`flex-shrink-0 flex items-center gap-3 p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm uppercase tracking-wider whitespace-nowrap border border-transparent cursor-pointer ${
-              activeSubpage === 'telemetry'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50'
-                : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 shadow-sm border border-gray-150/40 dark:border-gray-750/30'
-            }`}
-          >
-            <Activity className="w-4 h-4" />
-            <span>{language === 'hi' ? 'गतिविधि' : 'ACTIVITY'}</span>
-          </button>
+          {!hiddenTabs.includes("home_telemetry") && (
+            <button
+              onClick={() => {
+                setActiveSubpage('telemetry');
+                localStorage.setItem('bharat_book_home_active_tab', 'telemetry');
+              }}
+              className={`flex-shrink-0 flex items-center gap-3 p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm uppercase tracking-wider whitespace-nowrap border border-transparent cursor-pointer ${
+                activeSubpage === 'telemetry'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50'
+                  : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 shadow-sm border border-gray-150/40 dark:border-gray-750/30'
+              }`}
+            >
+              <Activity className="w-4 h-4" />
+              <span>{language === 'hi' ? 'गतिविधि' : 'ACTIVITY'}</span>
+            </button>
+          )}
 
-          <button
-            onClick={() => {
-              setActiveSubpage('security');
-              localStorage.setItem('bharat_book_home_active_tab', 'security');
-            }}
-            className={`flex-shrink-0 flex items-center gap-3 p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm uppercase tracking-wider whitespace-nowrap border border-transparent cursor-pointer ${
-              activeSubpage === 'security'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50'
-                : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 shadow-sm border border-gray-150/40 dark:border-gray-750/30'
-            }`}
-          >
-            <ShieldCheck className="w-4 h-4" />
-            <span>{language === 'hi' ? 'सुरक्षा' : 'SECURITY'}</span>
-          </button>
+          {!hiddenTabs.includes("home_security") && (
+            <button
+              onClick={() => {
+                setActiveSubpage('security');
+                localStorage.setItem('bharat_book_home_active_tab', 'security');
+              }}
+              className={`flex-shrink-0 flex items-center gap-3 p-3 px-6 rounded-2xl transition-all font-sans font-bold text-sm uppercase tracking-wider whitespace-nowrap border border-transparent cursor-pointer ${
+                activeSubpage === 'security'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/50'
+                  : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 shadow-sm border border-gray-150/40 dark:border-gray-750/30'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span>{language === 'hi' ? 'सुरक्षा' : 'SECURITY'}</span>
+            </button>
+          )}
         </div>
       </div>
 

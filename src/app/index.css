@@ -67,6 +67,36 @@
   .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #6b7280;
   }
+
+  /* Explicit visible custom scrollbar for horizontal UI filter tabs on mobile and tablets */
+  .ui-filter-scroll::-webkit-scrollbar {
+    height: 5px !important;
+    display: block !important;
+  }
+  .ui-filter-scroll::-webkit-scrollbar-track {
+    background: #f1f5f9 !important;
+    border-radius: 9999px !important;
+  }
+  .ui-filter-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1 !important;
+    border-radius: 9999px !important;
+  }
+  .dark .ui-filter-scroll::-webkit-scrollbar-track {
+    background: #1f2937 !important;
+  }
+  .dark .ui-filter-scroll::-webkit-scrollbar-thumb {
+    background: #4b5563 !important;
+  }
+  
+  @media (max-width: 1023px) {
+    .ui-filter-scroll {
+      scrollbar-width: thin !important;
+      scrollbar-color: #94a3b8 #f1f5f9 !important;
+    }
+    .dark .ui-filter-scroll {
+      scrollbar-color: #6b7280 #1f2937 !important;
+    }
+  }
 }
 
 html, body {

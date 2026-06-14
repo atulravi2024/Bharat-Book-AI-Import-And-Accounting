@@ -46,13 +46,13 @@ export const LevelTwoTab: React.FC<LevelTwoTabProps> = ({
             <button
               key={sub.id}
               onClick={() => onSelectLevelTwo(sub.id)}
-              className={`text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer group flex flex-col justify-between h-32 ${
+              className={`text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer group flex flex-col justify-between h-auto min-h-[140px] ${
                 isSelected 
                   ? "bg-emerald-50/20 dark:bg-emerald-900/10 border-emerald-500/50 shadow-sm ring-1 ring-emerald-500/25" 
                   : "bg-white dark:bg-gray-850 hover:bg-gray-50/50 dark:hover:bg-gray-800 border-gray-200/50 dark:border-gray-800/70"
               }`}
             >
-              <div className="w-full">
+              <div className="w-full flex-1 flex flex-col">
                 <div className="flex items-center justify-between gap-2 mb-1.5">
                   <h4 className="text-[12px] font-black text-slate-800 dark:text-white leading-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                     {sub.label}
@@ -69,12 +69,26 @@ export const LevelTwoTab: React.FC<LevelTwoTabProps> = ({
                     </div>
                   </div>
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight mb-2.5">
                   {sub.description}
                 </p>
+
+                {/* Maximum parameters preview */}
+                <div className="flex flex-wrap gap-1 mt-auto pb-3">
+                  {sub.tabs.slice(0, 3).map(tab => (
+                    <span key={tab.id} className="text-[9px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-gray-800 px-1.5 py-0.5 rounded-md truncate max-w-[100px] border border-slate-200/50 dark:border-gray-700/50" title={tab.label}>
+                      {tab.label}
+                    </span>
+                  ))}
+                  {sub.tabs.length > 3 && (
+                    <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 px-1 py-0.5 flex items-center">
+                      +{sub.tabs.length - 3}
+                    </span>
+                  )}
+                </div>
               </div>
 
-              <div className="w-full flex items-center justify-between pt-2 border-t border-slate-200/50 bg-transparent text-[9px] font-mono text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">
+              <div className="w-full flex items-center justify-between pt-2 border-t border-slate-200/50 bg-transparent text-[9px] font-mono text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 mt-auto">
                 <span className="flex items-center gap-1">
                   <Layers className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                   {activeTabsCount} {language === "hi" ? "कॉन्फ़िगरेशन टैब" : "Interactive Tabs"}

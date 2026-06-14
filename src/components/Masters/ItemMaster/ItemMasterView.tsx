@@ -107,6 +107,59 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
     const [activeTab, setActiveTab] = useState<string>(
         (initialTab && validTabs.includes(initialTab)) ? initialTab : 'items'
     );
+    const [hiddenMasters, setHiddenMasters] = useState<string[]>([]);
+
+    useEffect(() => {
+        const loadHidden = () => {
+            const stored = localStorage.getItem("bharat_book_hidden_masters_tabs");
+            if (stored) {
+                try {
+                    setHiddenMasters(JSON.parse(stored));
+                } catch (e) {
+                    console.error(e);
+                }
+            } else {
+                setHiddenMasters([]);
+            }
+        };
+
+        loadHidden();
+        window.addEventListener("bharat_book_masters_tabs_trigger", loadHidden);
+        return () => {
+            window.removeEventListener("bharat_book_masters_tabs_trigger", loadHidden);
+        };
+    }, []);
+
+    const allTabs = [
+        { id: 'items', label: 'Item Hub', icon: InventoryIcon, idKey: "item_items" },
+        { id: 'basic_items', label: 'Basic Item', icon: InventoryIcon, idKey: "item_basic_items" },
+        { id: 'bom', label: 'Bill of Materials', icon: FilterListIcon, idKey: "item_bom" },
+        { id: 'warehouses', label: 'Warehouses', icon: CategoryIcon, idKey: "item_warehouses" },
+        { id: 'uoms', label: 'UOMs', icon: UomIcon, idKey: "item_uoms" },
+        { id: 'stockGroups', label: 'Stock Groups', icon: CategoryIcon, idKey: "item_stockGroups" },
+        { id: 'gst', label: 'HSN', icon: TaxIcon, idKey: "item_gst" },
+        { id: 'brands', label: 'Brands', icon: BrandIcon, idKey: "item_brands" },
+        { id: 'categories', label: 'Categories', icon: CategoryIcon, idKey: "item_categories" },
+        { id: 'assertionCategories', label: 'Assertion Categories', icon: CategoryIcon, idKey: "item_assertionCategories" },
+        { id: 'assertionCodes', label: 'Assertion Codes', icon: CategoryIcon, idKey: "item_assertionCodes" },
+        { id: 'colors', label: 'Colors', icon: CategoryIcon, idKey: "item_colors" },
+        { id: 'sizes', label: 'Sizes', icon: FilterListIcon, idKey: "item_sizes" },
+        { id: 'variants', label: 'Variants', icon: FilterListIcon, idKey: "item_variants" },
+        { id: 'dimensions', label: 'Dimensions', icon: FilterListIcon, idKey: "item_dimensions" },
+        { id: 'skus', label: 'SKUs', icon: FilterListIcon, idKey: "item_skus" },
+        { id: 'priceList', label: 'Price List', icon: TrendingUpIcon, idKey: "item_priceList" },
+        { id: 'weights', label: 'Weights', icon: FilterListIcon, idKey: "item_weights" },
+        { id: 'volumes', label: 'Volumes', icon: FilterListIcon, idKey: "item_volumes" },
+        { id: 'grades', label: 'Grades', icon: FilterListIcon, idKey: "item_grades" },
+    ];
+
+    const displayedTabs = allTabs.filter(t => !hiddenMasters.includes(t.idKey));
+
+    useEffect(() => {
+        if (displayedTabs.length > 0 && !displayedTabs.find(t => t.id === activeTab)) {
+            setActiveTab(displayedTabs[0].id);
+        }
+    }, [hiddenMasters, activeTab, displayedTabs]);
     
     useEffect(() => {
         if (initialTab && validTabs.includes(initialTab) && initialTab !== activeTab) {
@@ -211,28 +264,7 @@ export const ItemMasterView: React.FC<ItemMasterViewProps> = (props) => {
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col h-[calc(100vh-140px)]">
                 <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-x-auto custom-scrollbar items-center pr-4 flex-shrink-0 justify-between">
                     <div className="flex">
-                        {[
-                            { id: 'items', label: 'Item Hub', icon: InventoryIcon },
-                            { id: 'basic_items', label: 'Basic Item', icon: InventoryIcon },
-                            { id: 'bom', label: 'Bill of Materials', icon: FilterListIcon },
-                            { id: 'warehouses', label: 'Warehouses', icon: CategoryIcon },
-                            { id: 'uoms', label: 'UOMs', icon: UomIcon },
-                            { id: 'stockGroups', label: 'Stock Groups', icon: CategoryIcon },
-                            { id: 'gst', label: 'HSN', icon: TaxIcon },
-                            { id: 'brands', label: 'Brands', icon: BrandIcon },
-                            { id: 'categories', label: 'Categories', icon: CategoryIcon },
-                            { id: 'assertionCategories', label: 'Assertion Categories', icon: CategoryIcon },
-                            { id: 'assertionCodes', label: 'Assertion Codes', icon: CategoryIcon },
-                            { id: 'colors', label: 'Colors', icon: CategoryIcon },
-                            { id: 'sizes', label: 'Sizes', icon: FilterListIcon },
-                            { id: 'variants', label: 'Variants', icon: FilterListIcon },
-                            { id: 'dimensions', label: 'Dimensions', icon: FilterListIcon },
-                            { id: 'skus', label: 'SKUs', icon: FilterListIcon },
-                            { id: 'priceList', label: 'Price List', icon: TrendingUpIcon },
-                            { id: 'weights', label: 'Weights', icon: FilterListIcon },
-                            { id: 'volumes', label: 'Volumes', icon: FilterListIcon },
-                            { id: 'grades', label: 'Grades', icon: FilterListIcon },
-                        ].map(tab => (
+                        {displayedTabs.map(tab => (
                             <button key={tab.id} id={`item-master-tab-${tab.id}`} onClick={() => setActiveTab(tab.id)} className={`px-6 py-4 text-sm font-bold relative transition-all whitespace-nowrap flex items-center ${activeTab === tab.id ? 'text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-700' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
                                 <tab.icon className="w-4 h-4 mr-2 opacity-70" />
                                 {t(tab.label)}

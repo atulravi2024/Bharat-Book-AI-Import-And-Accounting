@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { 
@@ -30,6 +30,22 @@ export const ActivitySubpage: React.FC<ActivitySubpageProps> = ({
 
   // Tab State
   const [activeTab, setActiveTab] = useState<'audit' | 'health' | 'storage'>('audit');
+  const [auditConfigs, setAuditConfigs] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchAuditConfigs = async () => {
+      try {
+        const response = await fetch('/sample-data/audit.json');
+        if (response.ok) {
+          const data = await response.json();
+          setAuditConfigs(data);
+        }
+      } catch (err) {
+        console.error("Failed to load audit logging configs", err);
+      }
+    };
+    fetchAuditConfigs();
+  }, []);
 
   // Toolbar state
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -110,41 +126,23 @@ export const ActivitySubpage: React.FC<ActivitySubpageProps> = ({
       });
     }
 
-    // Default system fallback items
-    const fallbacks = [
-      {
-        id: 'fb-1',
-        action: 'System Synced',
-        time: 'Active now',
-        type: 'SECURE UNIT',
-        info: 'Enterprise ledger engines securely synchronized with in-memory cloud backup storage.',
-        details: 'Sync integrity check code: BD76-90AF. Consensus verified successfully.'
-      },
-      {
-        id: 'fb-2',
-        action: 'Master Audit',
-        time: '7 minutes ago',
-        type: 'INTEGRITY',
-        info: `${ledgerMasters.length} general ledger rules and ${partyMasters.length} vendors checked automatically.`,
-        details: 'Self-healing validation: No broken parent references or orphaned accounting tax tags found.'
-      },
-      {
-        id: 'fb-3',
-        action: 'GDPR Policy Checked',
-        time: '1 hour ago',
-        type: 'COMPLIANCE',
-        info: 'Organization double-encryption consensus protocol and data consent verification active.',
-        details: 'Algorithm: AES-GCM-256 with secondary state backup hashing protocol.'
-      },
-      {
-        id: 'fb-4',
-        action: 'Cache Cleared',
-        time: '3 hours ago',
-        type: 'STABILITY',
-        info: 'Temporary PDF rendering canvases and redundant OCR bounding layers successfully purged.',
-        details: 'Freed memory: 18.4 MB of transient image buffers from RAM heap.'
+    // Default system fallback items loaded dynamically from audit.json
+    const fallbacks = auditConfigs.map(item => {
+      let info = language === 'hi' ? item.info_hi : item.info_en;
+      if (item.id === 'fb-2') {
+        info = language === 'hi'
+          ? `${ledgerMasters.length} सामान्य बहीखाता नियम और ${partyMasters.length} विक्रेता स्वचालित रूप से जाँचे गए।`
+          : `${ledgerMasters.length} general ledger rules and ${partyMasters.length} vendors checked automatically.`;
       }
-    ];
+      return {
+        id: item.id,
+        action: language === 'hi' ? (item.action_hi || item.action) : item.action,
+        time: language === 'hi' ? item.time_hi : item.time_en,
+        type: language === 'hi' ? (item.type_hi || item.type) : item.type,
+        info: info,
+        details: language === 'hi' ? item.details_hi : item.details_en
+      };
+    });
     return [...activities, ...fallbacks].slice(0, 6);
   };
 
@@ -168,6 +166,62 @@ export const ActivitySubpage: React.FC<ActivitySubpageProps> = ({
         className="hidden" 
       />
 
+      {/* Activity Subpage Header & Tabs */}
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-white dark:bg-gray-900 p-3.5 rounded-xl border border-gray-200/60 dark:border-gray-800 shadow-sm overflow-hidden animate-fade-in">
+        <div className="flex items-center gap-3 shrink-0 min-w-0 md:max-w-md">
+          <div className="p-2 bg-blue-50 dark:bg-blue-950/40 rounded-xl mr-1 text-blue-600 dark:text-blue-400 border border-blue-100/50 dark:border-blue-900/30">
+            <Activity className="w-5 h-5 animate-pulse" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-[15px] font-bold text-gray-900 dark:text-white leading-tight truncate">
+              {language === 'hi' ? 'सिस्टम गतिविधि लॉग' : 'System Activity Logs'}
+            </h2>
+            <p className="text-[10px] xs:text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5 truncate whitespace-nowrap" title={language === 'hi' ? 'ऑडिट ट्रेल इतिहास, नैदानिक ​​सिस्टम स्वास्थ्य, और डेटाबेस भंडारण सीमाएं' : 'Audit trail history, diagnostic system health, and database storage limits'}>
+              {language === 'hi' ? 'ऑडिट ट्रेल इतिहास, नैदानिक ​​सिस्टम स्वास्थ्य, और डेटाबेस भंडारण सीमाएं' : 'Audit trail history, diagnostic system health, and database storage limits'}
+            </p>
+          </div>
+        </div>
+
+        {/* Dense Tabs Selector Header Selections (flush right) */}
+        <div className="min-w-0 flex-1 flex items-center justify-end">
+          <div className="flex bg-slate-100 dark:bg-gray-950 p-1.5 rounded-xl gap-1.5 shadow-sm border border-slate-200/50 dark:border-gray-800 shrink-0">
+            <button
+              id="activity-audit-tab-btn"
+              onClick={() => setActiveTab('audit')}
+              className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                activeTab === 'audit'
+                  ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
+              }`}
+            >
+              {language === 'hi' ? 'गतिविधि' : 'Activity Logs'}
+            </button>
+            <button
+              id="activity-health-tab-btn"
+              onClick={() => setActiveTab('health')}
+              className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                activeTab === 'health'
+                  ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
+              }`}
+            >
+              {language === 'hi' ? 'स्वास्थ्य' : 'System Health'}
+            </button>
+            <button
+              id="activity-storage-tab-btn"
+              onClick={() => setActiveTab('storage')}
+              className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                activeTab === 'storage'
+                  ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
+              }`}
+            >
+              {language === 'hi' ? 'भंडारण' : 'Storage'}
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Action Control Toolbar */}
       <div className="bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800 p-1.5 sm:p-2 rounded-xl shadow-sm flex flex-row justify-between items-center gap-2">
         <div className="flex-1 min-w-0 relative">
@@ -179,7 +233,7 @@ export const ActivitySubpage: React.FC<ActivitySubpageProps> = ({
             onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={language === 'hi' ? 'गतिविधि और ऑडिट खोजें...' : 'Search audit activity logs...'}
-            className="w-full pl-9 pr-8 py-1.5 bg-gray-50/50 dark:bg-gray-800/40 border border-gray-200/60 dark:border-gray-700/60 rounded-lg text-xs font-semibold text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 transition-all font-mono tracking-tight"
+            className="w-full pl-9 pr-8 py-1.5 bg-gray-50/50 dark:bg-gray-800/40 border border-gray-200/60 dark:border-gray-750/60 rounded-lg text-xs font-semibold text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 transition-all font-mono tracking-tight"
           />
           {searchTerm && (
             <button
@@ -241,45 +295,6 @@ export const ActivitySubpage: React.FC<ActivitySubpageProps> = ({
           >
             <Save className="w-3.5 h-3.5 shrink-0 text-white" />
             <span className="hidden lg:inline">{language === 'hi' ? 'सहेजें' : 'Save'}</span>
-          </button>
-        </div>
-      </div>
-      
-      {/* Sub-Tabs selection bar */}
-      <div className="flex justify-start">
-        <div className="flex bg-slate-100 dark:bg-gray-950 p-1.5 rounded-xl gap-1.5 shadow-sm border border-slate-200/50 dark:border-gray-800 shrink-0">
-          <button
-            onClick={() => setActiveTab('audit')}
-            className={`flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'audit'
-                ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
-                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
-            }`}
-          >
-            <Activity className="w-3.5 h-3.5 shrink-0" />
-            {language === 'hi' ? 'गतिविधि' : 'Activity Logs'}
-          </button>
-          <button
-            onClick={() => setActiveTab('health')}
-            className={`flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'health'
-                ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
-                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
-            }`}
-          >
-            <Cpu className="w-3.5 h-3.5 shrink-0" />
-            {language === 'hi' ? 'स्वास्थ्य' : 'System Health'}
-          </button>
-          <button
-            onClick={() => setActiveTab('storage')}
-            className={`flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-[11px] font-black transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'storage'
-                ? 'bg-blue-600 text-white dark:bg-blue-600 dark:text-white shadow-md'
-                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-gray-800/60'
-            }`}
-          >
-            <Database className="w-3.5 h-3.5 shrink-0" />
-            {language === 'hi' ? 'भंडारण' : 'Storage'}
           </button>
         </div>
       </div>
